@@ -44,7 +44,7 @@ class MangaMakerExtensionScript(scripts.Script):
                                                                 show_share_button="false",
                                                                 elem_id='manga_panel_gallary', 
                                                                 columns=6,
-                                                                height=280,
+                                                                height=310,
                                                                 value=ImageManager.get_panel_paths, type="image")
                         with gr.Row():
                                 gr.Markdown(f"<small>**Panels folder:** {ImageManager.manga_panels_image_path}</small>", show_label=False)
