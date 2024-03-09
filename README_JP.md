@@ -31,7 +31,9 @@
 ![ローカルイメージ](readme_image/MangaMaker_20240310_021817.png"manga_2")  
   
 ![ローカルイメージ](readme_image/MangaMaker_20240310_020432.png"manga_3")  
+
   
+機能強化の要望、バグの連絡等頂けると助かります。  
   
 Developers  
 https://twitter.com/hypersankaku2  
