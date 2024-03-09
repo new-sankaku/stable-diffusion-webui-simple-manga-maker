@@ -28,17 +28,17 @@ https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker
   
 ## 操作画面  
 コマ割り画像を選択します。  
-<img src="readme_image/SC_2024-03-10%20022306.png" width="400" alt="SC1">  
+<img src="readme_image/SC_2024-03-10%20022306.jpg" width="400" alt="SC1">  
   
 後は任意の画像をApplyするだけです。  
-<img src="readme_image/SC_2024-03-10%20022314.png" width="400" alt="SC2">  
+<img src="readme_image/SC_2024-03-10%20022314.jpg" width="400" alt="SC2">  
   
 ## サンプル画像  
-<img src="readme_image/MangaMaker_20240310_022346.png" width="400" alt="manga_1">  
+<img src="readme_image/MangaMaker_20240310_022346.jpg" width="400" alt="manga_1">  
 <hr>
-<img src="readme_image/MangaMaker_20240310_021817.png" width="400" alt="manga_2">  
+<img src="readme_image/MangaMaker_20240310_021817.jpg" width="400" alt="manga_2">  
 <hr>
-<img src="readme_image/MangaMaker_20240310_020432.png" width="400" alt="manga_3">  
+<img src="readme_image/MangaMaker_20240310_020432.jpg" width="400" alt="manga_3">  
 <hr>
   
 Developers  

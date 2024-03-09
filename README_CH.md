@@ -28,17 +28,17 @@
 
 ## 操作界面  
 选择一个漫画面板图片。  
-<img src="readme_image/SC_2024-03-10%20022306.png" width="400" alt="SC1">  
+<img src="readme_image/SC_2024-03-10%20022306.jpg" width="400" alt="SC1">  
 <hr>
 接下来，只需应用任何您想要的图片。  
-<img src="readme_image/SC_2024-03-10%20022314.png" width="400" alt="SC2">  
+<img src="readme_image/SC_2024-03-10%20022314.jpg" width="400" alt="SC2">  
 <hr>
 ## 样本图片  
-<img src="readme_image/MangaMaker_20240310_022346.png" width="400" alt="manga_1">  
+<img src="readme_image/MangaMaker_20240310_022346.jpg" width="400" alt="manga_1">  
 <hr>
-<img src="readme_image/MangaMaker_20240310_021817.png" width="400" alt="manga_2">  
+<img src="readme_image/MangaMaker_20240310_021817.jpg" width="400" alt="manga_2">  
 <hr>
-<img src="readme_image/MangaMaker_20240310_020432.png" width="400" alt="manga_3">  
+<img src="readme_image/MangaMaker_20240310_020432.jpg" width="400" alt="manga_3">  
 <hr>
 
 开发者  
