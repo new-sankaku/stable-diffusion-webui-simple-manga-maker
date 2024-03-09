@@ -10,30 +10,28 @@
 画像の生成完了後に自動で漫画風画像を作成はできません。あくまで任意の画像を選ぶ必要があります。  
 自動化は技術的には可能ですが、必ずしも思った画像が生成できるわけではないため、実用的ではないと判断しました。  
   
-・使用方法  
+## 使用方法  
 使用方法は簡単です。  
   
-1.コマ割り画像が用意されているので選択します  
-2.New Imageボタンをクリックします。  
-3.適用したい画像を選びます。   
-4.Apply Imageボタンをクリックします。  
+1. コマ割り画像が用意されているので選択します  
+2. New Imageボタンをクリックします。  
+3. 適用したい画像を選びます。   
+4. Apply Imageボタンをクリックします。  
   
-・操作画面  
+## 操作画面  
 コマ割り画像を選択します。  
-![ローカルイメージ](readme_image/SC_2024-03-10 022306.png"SC1")  
+<img src="readme_image/SC_2024-03-10%20022306.png" width="400" alt="SC1">  
   
 後は任意の画像をApplyするだけです。  
-![ローカルイメージ](readme_image/SC_2024-03-10 022314.png"SC2")  
+<img src="readme_image/SC_2024-03-10%20022314.png" width="400" alt="SC2">  
   
-・サンプル画像  
-![ローカルイメージ](readme_image/MangaMaker_20240310_022346.png"manga_1")  
-  
-![ローカルイメージ](readme_image/MangaMaker_20240310_021817.png"manga_2")  
-  
-![ローカルイメージ](readme_image/MangaMaker_20240310_020432.png"manga_3")  
-
-  
-機能強化の要望、バグの連絡等頂けると助かります。  
+## サンプル画像  
+<img src="readme_image/MangaMaker_20240310_022346.png" width="400" alt="manga_1">  
+<hr>
+<img src="readme_image/MangaMaker_20240310_021817.png" width="400" alt="manga_2">  
+<hr>
+<img src="readme_image/MangaMaker_20240310_020432.png" width="400" alt="manga_3">  
+<hr>
   
 Developers  
-https://twitter.com/hypersankaku2  
+[https://twitter.com/hypersankaku2](https://twitter.com/hypersankaku2)  
