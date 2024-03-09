@@ -112,7 +112,6 @@ def apply_image() :
     return final_image, result
 
 def save_image():
-    print(f"save_image:{scripts.basedir()}")
     fileName = "MangaMaker"
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     fileName = f"{fileName}_{current_time}.png"
