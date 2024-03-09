@@ -1,57 +1,36 @@
-For emergencies, please click here.
-https://twitter.com/hypersankaku2
+[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README.md) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) : [中文](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CH.md)
 
-install
-・For Stable Diffusion WebUI
-Click the Extensions tab, then click the Install from URL inner tab. Paste the repository URL below and click Install.
-https://github.com/new-sankaku/stable-diffusion-webui-metadata-marker.git
+# Stable Diffusion Web UI 扩展  
+这是一个用于创建简单漫画风格图片的扩展。  
+该扩展旨在简化创建漫画风格图片的过程，无需进行高级操作或拥有图像编辑软件。  
 
-・When downloading directly:
-Unzip the downloaded zip file to the "extensions" folder of WebUI.
+请注意，此扩展允许您手动将选定的图片适配到漫画面板布局中。  
 
-Explanation of Extensions
-Images create files starting with the name "metadata_" in the "txt2img-images" folder.
-Draw generation information and system information on the output image.
-The generation time is about 1 second shorter than the number of seconds displayed on the Web UI, so please treat it as a reference.
-Also, you can add any text.
-This extension is effective when it is troublesome to open an image file as a text file. I think it is useful when pasting images to Twitter or Discord, which deletes the generation information in the image file.
-Any text may include information such as copyright.
-The generated information to be drawn is as follows.
-Prompt, Nefative Prompt, Steps, Sampler, CFG scale, Seed, Size ,Model, Model hash
-The drawing is the following 6 patterns.
-Overlay, Overlay Center on the image.
-Create margins on either the top, bottom, left, or right.
-You can change the following when drawing:
-Font, font size, font color, background color, background color opacity, arbitrary text.
-If there is a feature you would like to add, please request it.
-I will respond if possible.
+图片生成完成后，无法自动创建漫画风格图片。您必须手动选择图片。  
+虽然技术上可以实现自动化，但由于不总是能生成预期的图片，因此认为这不是实际可行的。  
 
-ーー
+## 如何使用  
+使用方法很简单：  
 
-急用の際はこちらにどうぞ。
-https://twitter.com/hypersankaku2
+1. 选择提供的漫画面板图片。  
+2. 点击“New Image”按钮。  
+3. 选择您想要应用的图片。   
+4. 点击“Apply Image”按钮。  
 
-インストール
-・Stable Diffusion WebUIの場合
-[拡張機能] タブをクリックし、 [URL からインストール] 内部タブをクリックします。 以下のリポジトリの URL を貼り付け、「インストール」をクリックします。
-https://github.com/new-sankaku/stable-diffusion-webui-metadata-marker.git
+## 操作界面  
+选择一个漫画面板图片。  
+<img src="readme_image/SC_2024-03-10%20022306.png" width="400" alt="SC1">  
+<hr>
+接下来，只需应用任何您想要的图片。  
+<img src="readme_image/SC_2024-03-10%20022314.png" width="400" alt="SC2">  
+<hr>
+## 样本图片  
+<img src="readme_image/MangaMaker_20240310_022346.png" width="400" alt="manga_1">  
+<hr>
+<img src="readme_image/MangaMaker_20240310_021817.png" width="400" alt="manga_2">  
+<hr>
+<img src="readme_image/MangaMaker_20240310_020432.png" width="400" alt="manga_3">  
+<hr>
 
-・直接ダウンロードする場合:
-ダウンロードしたZipファイルをWebUIの「extensions」フォルダに解凍します。
-
-Extensionの説明
-画像は"txt2img-images"フォルダに”metadata_”という名前から始まるファイルを作成します。
-出力する画像に生成情報、システム情報を描画します。
-生成時間はWeb UIで表示される秒数より1秒程度短いので、参考程度に扱ってください。
-また、任意のテキストを追加できます。
-画像ファイルをテキストファイルとして開くのがめんどくさい場合、このExtensionは有効です。画像ファイル内の生成情報を削除してしまうTwitterやDiscordに画像を貼り付ける場合、役に立つと思います。
-任意のテキストにコピーライトのような情報を含めても良いでしょう。
-描画される生成情報は以下です。
-Prompt, Nefative Prompt, Steps, Sampler, CFG scale, Seed, Size ,Model, Model hash
-描画は以下の6パターンです。
-画像にOverlay, Overlay Centerします。
-上下左右のいずれかに余白を作ります。
-描画時に以下を変更できます。
-フォント、フォントサイズ、フォント色、背景色、背景色不透明度、任意のテキスト。
-追加したい機能があればリクエストしてください。
-私に可能であれば対応します。
+开发者  
+[https://twitter.com/hypersankaku2](https://twitter.com/hypersankaku2)  

@@ -1,30 +1,36 @@
-[English](https://www.google.com) : [日本語](https://www.google.com) : [中国語](https://www.google.com)
+[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README.md) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) : [中国語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CH.md)
 
-# Stable Diffusion Web UI Extension
-シンプルな漫画風画像を作るためのExtensionです。
-このExtensionは手軽に漫画風の画像を作るための機能です。
-高度な操作を求めている方や、画像編集ソフトを持っている方にこのExtensionは必要ないかもしれません。
+# Stable Diffusion Web UI Extension  
+This extension is for creating simple manga-style images.  
+It's meant for easily creating manga-style images without the need for advanced operations or owning image editing software.  
 
-なお、このExtensionで行えるのはコマ割り画像に手動で選んだ画像を当てはめるという操作です。
+Note that this extension allows for manually fitting selected images into comic panel layouts.  
 
-画像の生成完了後に自動で漫画風画像を作成はできません。あくまで任意の画像を選ぶ必要があります。
-自動化は技術的には可能ですが、必ずしも思った画像が生成できるわけではないため、実用的ではないと判断しました。
+It does not support automatically creating manga-style images after image generation. You must manually select the images.  
+Although automation is technically possible, it was deemed impractical as it may not always generate the desired images.  
 
-・使用方法
-使用方法は簡単です。
+## How to Use  
+Using it is simple:  
 
-1.コマ割り画像が用意されているので選択します
-2.New Imageボタンをクリックします。
-3.適用したい画像を選びます。 
-4.Apply Imageボタンをクリックします。
+1. Select a comic panel image that is provided.  
+2. Click the 'New Image' button.  
+3. Choose the image you wish to apply.   
+4. Click the 'Apply Image' button.  
 
-・操作画面
+## Operation Screen  
+Select a comic panel image.  
+<img src="readme_image/SC_2024-03-10%20022306.png" width="400" alt="SC1">  
+<hr>
+Simply apply any desired image next.  
+<img src="readme_image/SC_2024-03-10%20022314.png" width="400" alt="SC2">  
+<hr>
+## Sample Images  
+<img src="readme_image/MangaMaker_20240310_022346.png" width="400" alt="manga_1">  
+<hr>
+<img src="readme_image/MangaMaker_20240310_021817.png" width="400" alt="manga_2">  
+<hr>
+<img src="readme_image/MangaMaker_20240310_020432.png" width="400" alt="manga_3">  
+<hr>
 
-
-
-・サンプル画像
-
-
-
-Developers
-https://twitter.com/hypersankaku2
+Developers  
+[https://twitter.com/hypersankaku2](https://twitter.com/hypersankaku2)  
