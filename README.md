@@ -9,6 +9,11 @@ Note that this extension allows for manually fitting selected images into comic 
 It does not support automatically creating manga-style images after image generation. You must manually select the images.  
 Although automation is technically possible, it was deemed impractical as it may not always generate the desired images.  
 
+## Install
+・For Stable Diffusion WebUI
+Click the Extensions tab, then click the Install from URL inner tab. Paste the repository URL below and click Install.
+https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker
+
 ## How to Use  
 Using it is simple:  
 

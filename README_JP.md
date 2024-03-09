@@ -10,6 +10,14 @@
 画像の生成完了後に自動で漫画風画像を作成はできません。あくまで任意の画像を選ぶ必要があります。  
 自動化は技術的には可能ですが、必ずしも思った画像が生成できるわけではないため、実用的ではないと判断しました。  
   
+
+## インストール
+・Stable Diffusion WebUIで操作します。
+
+「Extensions」タブを選択、「Install from URL」タブを選択、  
+「URL for extension's git repository」に以下のURLを貼り付けてInstallを選択します。  
+https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker
+
 ## 使用方法  
 使用方法は簡単です。  
   
