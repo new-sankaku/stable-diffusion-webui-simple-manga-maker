@@ -112,6 +112,7 @@ def apply_image() :
     return final_image, result
 
 def save_image():
+    print(f"save_image:{scripts.basedir()}")
     fileName = "MangaMaker"
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     fileName = f"{fileName}_{current_time}.png"
@@ -128,7 +129,7 @@ def save_image():
     # RGB画像を保存
     cv2.imwrite(fullPath, rgb_image)
     
-    return f"Save:{fullPath}"
+    return f"Save:\n{fullPath}"
 
 def revert_image() :
     print("revert_image")
