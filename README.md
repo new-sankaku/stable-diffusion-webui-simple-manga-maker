@@ -1,5 +1,15 @@
 [English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README.md) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) : [中国語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CH.md)
-
+  
+Features  
+  - Simple and easy manga style image creation function.  
+  - Multiple Manga Panel images are available.  
+  - You can also add your own Manga Panel images.  
+  - Frames are automatically detected and numbers are assigned.  
+  - Apply images according to number.  
+  - Supports PNG images.  
+  - Also supports transparent images.  
+  - In the future, we plan to add speech bubbles, add text, and apply overlay images.  
+  
 # Stable Diffusion Web UI Extension  
 This extension is for creating simple manga-style images.  
 It's meant for easily creating manga-style images without the need for advanced operations or owning image editing software.  

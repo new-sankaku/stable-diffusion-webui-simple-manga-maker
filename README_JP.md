@@ -1,5 +1,15 @@
 [English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README.md) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) : [中国語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CH.md)
-
+  
+特徴  
+ - シンプルで簡単なマンガ風画像作成機能。  
+ - マンガのコマ画像は複数用意されています。  
+ - 独自のマンガパネル画像を追加することもできます。  
+ - フレームを自動的に検出し、番号が割り当てられます。  
+ - 番号に従って画像を適用します。  
+ - PNG画像をサポートします。  
+ - 透過画像にも対応。  
+ - 将来的には吹き出しの追加、テキストの追加、オーバーレイ画像の適用などを予定しております。  
+  
 # Stable Diffusion Web UI Extension  
 シンプルな漫画風画像を作るためのExtensionです。  
 このExtensionは手軽に漫画風の画像を作るための機能です。  
