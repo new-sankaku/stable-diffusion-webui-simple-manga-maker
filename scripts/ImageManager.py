@@ -1,7 +1,8 @@
 import sys
 import os
 sys.path.append(os.path.dirname(__file__))
-
+from PIL import Image
+import numpy as np
 from modules import scripts
 import random
 import os
@@ -76,8 +77,11 @@ def new_image() :
     return now_working_image, result
 
 def select_image_gallary(image):
-    print("select_image_gallary")
     global select_apply_image
+    
+    # Convert PIL Image to NumPy array if it's not already
+    if isinstance(image, Image.Image):
+        image = np.array(image.convert('RGBA'))
     select_apply_image = image
 
 def apply_image() :

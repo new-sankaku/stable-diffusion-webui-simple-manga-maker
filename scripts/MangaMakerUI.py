@@ -52,12 +52,14 @@ def on_ui_tabs():
                                 work_img_component = gr.Image(interactive=False,
                                                               height=600,
                                                               width=300, 
-                                                              show_label=False)
+                                                              show_label=False,
+                                                              image_mode="RGBA")
                         with gr.Row():
                                 image_gallary_component = gr.Image(label="select apply image", 
-                                                              height=600,
-                                                              width=300, 
-                                                                   show_label=True)
+                                                                        height=600,
+                                                                        width=300,
+                                                                        show_label=True,
+                                                                        image_mode="RGBA")
                 with gr.Row():
                         with gr.Row():
                                         str = ""

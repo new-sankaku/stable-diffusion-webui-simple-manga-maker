@@ -9,7 +9,6 @@ import json
 import math
 from datetime import datetime
 
-
 def createInfomation(jsonFile, next_working_number, now_working_max_number):
 
     if next_working_number > now_working_max_number : 
@@ -230,58 +229,91 @@ def resize_fill_panel(img, target_width, target_height):
 
     return cv2.resize(img, (new_width, new_height), interpolation=interpolation)
 
+def create_mask(image_shape, panel_coords):
+    mask = np.zeros(image_shape[:2], dtype=np.uint8)
+    cv2.fillPoly(mask, [panel_coords], 255)
+    return mask, cv2.bitwise_not(mask)
+
+def insert_image(comic_img, insert_img, x, y, w, h, mask, mask_inv):
+
+    insert_region = comic_img[y:y+h, x:x+w]
+    mask_resized = mask[y:y+h, x:x+w] / 255.0
+    mask_inv_resized = mask_inv[y:y+h, x:x+w] / 255.0
+
+    if insert_img.shape[2] == 4:
+        alpha_s = insert_img[:, :, 3] / 255.0
+        alpha_l = 1.0 - alpha_s
+
+        for color in range(0, 3):
+            insert_region[:, :, color] = (insert_img[:, :, color] * alpha_s + insert_region[:, :, color] * (1 - alpha_s)) * mask_resized + insert_region[:, :, color] * mask_inv_resized
+    else:
+        print("RGB")
+        # Convert RGB to RGBA
+        insert_img = cv2.cvtColor(insert_img, cv2.COLOR_RGB2RGBA)
+        alpha_s = insert_img[:, :, 3] / 255.0
+        alpha_l = 1.0 - alpha_s
+        for color in range(0, 3):
+            # Apply alpha blending
+            insert_region[:, :, color] = (insert_img[:, :, color] * alpha_s + insert_region[:, :, color] * alpha_l) * mask_resized + insert_region[:, :, color] * mask_inv_resized
+        insert_img = cv2.cvtColor(insert_img, cv2.COLOR_RGBA2RGB)
+
+    comic_img[y:y+h, x:x+w] = insert_region
+    return comic_img
+
+def resize_and_clip_image(insert_img, target_width, target_height):
+    insert_img_resized = resize_fill_panel(insert_img, target_width, target_height) # resize_fill_panelは既存の関数を使用
+    insert_img_clipped = clip_image_center(insert_img_resized, target_width, target_height)
+    return insert_img_clipped
+
+def clip_image_center(img, target_width, target_height):
+    # 幅に関する切り取り
+    if img.shape[1] > target_width:
+        center_x = img.shape[1] // 2
+        start_x = max(center_x - target_width // 2, 0)
+        end_x = start_x + target_width
+        img = img[:, start_x:end_x]
+    # 高さに関する切り取り
+    if img.shape[0] > target_height:
+        center_y = img.shape[0] // 2
+        start_y = max(center_y - target_height // 2, 0)
+        end_y = start_y + target_height
+        img = img[start_y:end_y, :]
+    return img
+
 
 def warp_insert_image_improved(comic_img, insert_img, panel_coords):
-
     temp_image = comic_img.copy()
+    temp_image = convertRGBA(temp_image)
+    insert_img = convertRGBA(insert_img)
 
-    # マスクを作成
-    mask = np.zeros(temp_image.shape[:2], dtype=np.uint8)
-    cv2.fillPoly(mask, [panel_coords], 255)
+    # マスクと逆マスクの作成
+    mask, mask_inv = create_mask(temp_image.shape, panel_coords)
 
-    # マスクの反転
-    mask_inv = cv2.bitwise_not(mask)
-    
     # 挿入する画像のための領域を計算
-    (x, y, w, h) = cv2.boundingRect(panel_coords)
-    print(f"x:{x} y:{y} w:{w} h:{h}")
+    x, y, w, h = cv2.boundingRect(panel_coords)
+    # 画像リサイズと中心からの切り取り
+    insert_img_clipped = resize_and_clip_image(insert_img, w, h)
 
-    # 挿入する画像をリサイズ（パネルを完全に埋めるように）
-    insert_img_resized = resize_fill_panel(insert_img, w, h)
 
-    # 挿入画像を中心から切り取る処理を追加
-    if insert_img_resized.shape[1] > w:
-        # 新しい画像がパネルの幅よりも広い場合、中央から切り取る
-        center_x = insert_img_resized.shape[1] // 2
-        start_x = max(center_x - w // 2, 0)
-        end_x = start_x + w
-        insert_img_clipped = insert_img_resized[:, start_x:end_x]
-    else:
-        insert_img_clipped = insert_img_resized
 
-    if insert_img_resized.shape[0] > h:
-        # 新しい画像がパネルの高さよりも高い場合、中央から切り取る
-        center_y = insert_img_resized.shape[0] // 2
-        start_y = max(center_y - h // 2, 0)
-        end_y = start_y + h
-        insert_img_clipped = insert_img_clipped[start_y:end_y, :]
+    # 画像挿入の準備
+    final_image = insert_image(temp_image, insert_img_clipped, x, y, w, h, mask, mask_inv)
 
-    # # 挿入画像をパネルの大きさにクリップ（はみ出さないように）
-    # insert_img_clipped = insert_img_resized[:h, :w]
+    # # 最終画像に結果を反映
+    # final_image = comic_img.copy()
+    # final_image = convertRGBA(final_image)
 
-    # 挿入画像をパネル位置に合わせて配置
-    insert_region = comic_img[y:y+h, x:x+w]
-    insert_region_masked = cv2.bitwise_and(insert_region, insert_region, mask=mask_inv[y:y+h, x:x+w])
-    insert_img_clipped_masked = cv2.bitwise_and(insert_img_clipped, insert_img_clipped, mask=mask[y:y+h, x:x+w])
-
-    # マスクされた挿入画像と元の画像領域をブレンド
-    result_region = cv2.add(insert_region_masked, insert_img_clipped_masked)
-
-    # 最終画像に挿入画像を合成
-    final_image = comic_img.copy()
-    final_image[y:y+h, x:x+w] = result_region
+    # final_image[y:y+h, x:x+w] = result_region
 
     return final_image
+
+def convertRGBA( image ) :
+    if len(image.shape) == 2:  # グレースケールの場合
+        image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGRA)
+    elif image.shape[2] == 3:  # RGB
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)
+
+    return image
 
 def extract_black_lines(comic_img):
     """
@@ -295,9 +327,11 @@ def extract_black_lines(comic_img):
 def apply_black_lines(final_img, black_lines_mask):
     """
     最終的な画像に黒線を適用します。
+    RGBA画像で黒線を適用する際には、アルファチャネルを考慮する。
     """
-    final_img[black_lines_mask] = 0  # 黒色で上書き
+    final_img[black_lines_mask, 0:3] = 0
     return final_img
+
 
 def remove_black_lines_in_insert_area(black_lines_mask, x, y, w, h):
     """
