@@ -10,19 +10,30 @@ import math
 from datetime import datetime
 
 def createInfomation(jsonFile, next_working_number, now_working_max_number):
-
-    if next_working_number > now_working_max_number : 
-        return f"completed."
+    # Noneチェック
+    if jsonFile is None:
+        return "Next Number 1."
+    if next_working_number is None or not isinstance(next_working_number, int):
+        return "Next Number 1."
+    if now_working_max_number is None or not isinstance(now_working_max_number, int):
+        return "Next Number 1."
+    if next_working_number == 0:
+        return "Next Number 1."
+    if next_working_number > now_working_max_number: 
+        return "completed."
 
     width, height = get_dimensions(jsonFile, next_working_number)
-    simplified_width, simplified_height = get_aspect_ratio(width, height)
+    if width is None or height is None:
+        return "Error: Failed to get dimensions."
 
-    # suggestionWidth, suggestionHeight = adjust_dimensions(simplified_width, simplified_height)
+    simplified_width, simplified_height = get_aspect_ratio(width, height)
+    if simplified_width is None or simplified_height is None:
+        return "Error: Failed to get aspect ratio."
 
     result = ""
-    result = result + f"Next Number : {next_working_number}\n"
-    result = result + f"Next Panel Size : X={width}, Y={height}\n"
-    result = result + f"Next Accept Ratio : X={simplified_width}, Y={simplified_height}\n"
+    result += f"Next Number : {next_working_number}\n"
+    result += f"Next Panel Size : X={width}, Y={height}\n"
+    result += f"Next Accept Ratio : X={simplified_width}, Y={simplified_height}\n"
     return result
 
 # 簡素化された幅と高さを元に、それらが一定のサイズを超えるまで倍増させる

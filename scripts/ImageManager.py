@@ -1,7 +1,7 @@
 import sys
 import os
 sys.path.append(os.path.dirname(__file__))
-from PIL import Image
+from PIL import Image, ImageFilter, ImageDraw
 import numpy as np
 from modules import scripts
 import random
@@ -17,7 +17,6 @@ manga_panels_image_info_path = scripts.basedir() + '\mangaPanelsImage_Info'
 manga_panels_image_paths = None
 
 now_manga_panel_image_path = None
-now_working_image = None
 now_working_number = None
 now_working_max_number = None
 now_numbers_panel_json_path = None
@@ -27,6 +26,8 @@ now_black_lines_plus_number_mask = None
 select_apply_image = None
 
 black_line = "BlackLine"
+
+image_history = []
 
 def on_manga_panel_gallary_selected(evt: gr.SelectData):
     global now_manga_panel_image_path
@@ -43,19 +44,19 @@ def new_image() :
     global now_numbers_panel_json_path
     global now_working_number
     global now_working_max_number
-    global now_working_image
     global now_black_lines_plus_number_mask
     global now_black_lines_mask
 
-
     if now_manga_panel_image_path is None:
         print("Worning:please select manga panel image.")
-        return now_working_image, None
+        return None, None
     
     print(f"now_manga_panel_image_path:{now_manga_panel_image_path}")
 
     json_filename = ImageProcessing.getImagePlusJsonFileName(now_manga_panel_image_path)
     image_filename = ImageProcessing.getImagePlusNumberFileName(now_manga_panel_image_path)
+
+    now_working_image = None
 
     if os.path.exists(json_filename):
         now_numbers_panel_json_path = json_filename
@@ -74,26 +75,37 @@ def new_image() :
 
     result = ImageProcessing.createInfomation( now_numbers_panel_json_path, now_working_number, now_working_max_number )
 
+    global image_history
+    print(f"image_history count: {len(image_history)}")
+    image_history = []
+    print(f"image_history count: {len(image_history)}")
+    image_history.append(now_working_image)
+    print(f"image_history count: {len(image_history)}")
     return now_working_image, result
 
 def select_image_gallary(image):
     global select_apply_image
-    
-    # Convert PIL Image to NumPy array if it's not already
+
     if isinstance(image, Image.Image):
         image = np.array(image.convert('RGBA'))
+
     select_apply_image = image
 
-def apply_image() :
-    print("apply_image")
+def apply_image(now_working_image) :
+    print("apply_image now_working_image:", type(now_working_image))
+
     global select_apply_image
     global now_working_number
     global now_working_max_number
     global now_manga_panel_image_path
-    global now_working_image
     global now_black_lines_plus_number_mask
     global now_black_lines_mask
-    
+
+    global image_history
+    print(f"image_history count: {len(image_history)}")
+    image_history.append(now_working_image)
+    print(f"image_history count: {len(image_history)}")
+
     center_x, center_y = ImageProcessing.get_panel_center(now_numbers_panel_json_path, now_working_number)
     seed_point = (center_x, center_y)
 
@@ -109,13 +121,14 @@ def apply_image() :
     final_image = ImageProcessing.apply_black_lines(combined_image, now_black_lines_plus_number_mask)
     final_image = ImageProcessing.apply_black_lines(combined_image, now_black_lines_mask)
 
-    now_working_image = final_image
     now_working_number = now_working_number + 1;
 
-    result = ImageProcessing.createInfomation( now_numbers_panel_json_path, now_working_number, now_working_max_number )
-    return final_image, result
+    resultInfomation = ImageProcessing.createInfomation( now_numbers_panel_json_path, now_working_number, now_working_max_number )
 
-def save_image():
+    return final_image, resultInfomation
+
+def save_image( work_img_component ):
+    print("save_image image_apply_component:", type(work_img_component))
     print(f"save_image:{scripts.basedir()}")
     fileName = "MangaMaker"
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -128,17 +141,54 @@ def save_image():
         os.makedirs(outputPath)
     
     # BGRからRGBに画像を変換
-    rgb_image = cv2.cvtColor(now_working_image, cv2.COLOR_BGR2RGB)
+    rgb_image = cv2.cvtColor(work_img_component, cv2.COLOR_BGR2RGB)
     
     # RGB画像を保存
     cv2.imwrite(fullPath, rgb_image)
-    
     return f"Save:\n{fullPath}"
 
-def revert_image() :
+def revert_image():
     print("revert_image")
-    #TODO 
-    return None, None
+    
+    global image_history
+    global now_working_number, now_working_max_number, now_numbers_panel_json_path
+
+    previous_image = None
+
+    print(f"image_history count: {len(image_history)}")
+    if image_history:
+        previous_image = image_history.pop()
+        if not image_history:
+            image_history.append(previous_image)
+        now_working_number = now_working_number - 1
+        if now_working_number < 1 :
+            now_working_number = 1
+    else:
+        previous_image = None
+        print("Reverted to the initial image.")
+
+    print(f"image_history count: {len(image_history)}")
+    resultInfomation = ImageProcessing.createInfomation( now_numbers_panel_json_path, now_working_number, now_working_max_number )
+    return previous_image, resultInfomation
+
+
+def flipH_image(image_apply_component):
+    print("flipH_image image_apply_component:", type(image_apply_component))
+
+    if isinstance(image_apply_component, np.ndarray):
+        flipped_image = np.flip(image_apply_component, axis=1)
+        return flipped_image
+    else:
+        print("flipH_image error, not found image.")
+        return image_apply_component  # 変更なしで返す
+
+def apply_overray(image_apply_component, slider) :
+    print("apply_overray image_apply_component:", type(image_apply_component))
+    print("apply_overray slider       :", type(slider))
+    # apply_overray image_apply_component: <class 'numpy.ndarray'>
+    # apply_overray slider       : <class 'float'>
+
+    return image_apply_component
 
 def skip_apply_number() :
     global now_numbers_panel_json_path
