@@ -1,14 +1,20 @@
 [English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README.md) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) : [中文](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CH.md)
   
 特征  
- - 简单易用的漫画风格图像创建功能。  
- - 提供多个漫画面板图像。  
- - 您还可以添加自己的漫画面板图像。  
- - 自动检测帧并分配一个编号。  
- - 根据编号应用图像。  
- - 支持 PNG 图像。  
- - 还支持透明图像。  
- - 未来，我们计划添加对话气泡、添加文本、应用叠加图像等。  
+    - 简单易用的漫画风格图像创建功能。  
+    - 提供多个漫画面板图像。  
+    - 您还可以添加自己的漫画面板图像。  
+    - 自动检测框架并分配编号。  
+    - 根据编号应用图像。 
+    - 支持 PNG 图像。 
+    - 还支持透明图像。  
+   -水平翻转图像  
+   - 恢复更改的图像  
+计划实施的功能  
+   - 添加标注、添加文本、应用覆盖图像  
+   - 图像缩小、裁剪  
+     Web UI 端需要兼容 Gradio4。  
+     有一个 PR，所以我认为它很快就会得到解决。  
   
 # Stable Diffusion Web UI 扩展  
 这是一个用于创建简单漫画风格图片的扩展。  
