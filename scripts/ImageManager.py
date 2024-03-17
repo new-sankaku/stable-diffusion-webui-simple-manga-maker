@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(__file__))
 from PIL import Image, ImageFilter, ImageDraw
 import numpy as np
-from modules import scripts
+from modules import scripts, shared
 import random
 import os
 import cv2
@@ -133,7 +133,7 @@ def save_image( work_img_component ):
     fileName = "MangaMaker"
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     fileName = f"{fileName}_{current_time}.png"
-    outputPath = os.path.join(scripts.basedir(), "output", "manga-maker")
+    outputPath = os.path.join(shared.opts.outdir_save, "manga-maker")
     fullPath = os.path.join(outputPath, fileName)
     
     # 指定したパスにフォルダが存在しない場合は作成
