@@ -78,11 +78,8 @@ def new_image() :
     result = ImageProcessing.createInfomation( now_numbers_panel_json_path, now_working_number, now_working_max_number )
 
     global image_history
-    print(f"image_history count: {len(image_history)}")
     image_history = []
-    print(f"image_history count: {len(image_history)}")
     image_history.append(now_working_image)
-    print(f"image_history count: {len(image_history)}")
     return now_working_image, result
 
 def select_image_gallary(image):
@@ -104,9 +101,7 @@ def apply_image(now_working_image) :
     global now_black_lines_mask
 
     global image_history
-    print(f"image_history count: {len(image_history)}")
     image_history.append(now_working_image)
-    print(f"image_history count: {len(image_history)}")
 
     center_x, center_y = ImageProcessing.get_panel_center(now_numbers_panel_json_path, now_working_number)
     seed_point = (center_x, center_y)
@@ -133,11 +128,13 @@ def save_image( work_img_component ):
     print("save_image image_apply_component:", type(work_img_component))
     print(f"save_image:{scripts.basedir()}")
     fileName = "MangaMaker"
+
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     fileName = f"{fileName}_{current_time}.png"
     outputPath = os.path.join(shared.opts.outdir_save, "manga-maker")
     fullPath = os.path.join(outputPath, fileName)
-    
+    fullPath = os.path.abspath(fullPath)
+
     # 指定したパスにフォルダが存在しない場合は作成
     if not os.path.exists(outputPath):
         os.makedirs(outputPath)
@@ -147,7 +144,13 @@ def save_image( work_img_component ):
     
     # RGB画像を保存
     cv2.imwrite(fullPath, rgb_image)
-    return f"Save:\n{fullPath}"
+
+    result = f"Save:{fullPath}"
+    result = result + "\n"
+    result = result + "\n" + "If you want to change the save destination, please change the following."
+    result = result + "\n" + "\"Settings\" tab, \"Paths for saving\", \"Directory for saving images using the Save button\""
+
+    return result
 
 def revert_image():
     print("revert_image")

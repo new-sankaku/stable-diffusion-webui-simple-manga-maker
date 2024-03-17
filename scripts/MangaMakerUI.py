@@ -2,15 +2,48 @@ import sys
 import os
 sys.path.append(os.path.dirname(__file__))
 
-from modules import scripts
+from modules import scripts, shared
 import gradio as gr
 import ImageManager
+import platform
+import subprocess as sp
 
+from modules.ui_components import ToolButton
 from modules import script_callbacks
 
 komaGallary: gr.Gallery = None
 work_img_component: gr.Image = None
 
+
+def open_folder(f):
+    if shared.cmd_opts.hide_ui_dir_config:
+        return
+
+    if not os.path.exists(f):
+        msg = f'Folder "{f}" does not exist. After you create an image, the folder will be created.'
+        print(msg)
+        # gr.Info(msg)  # gr.Infoを使用している場合、適切なUIライブラリのインポートが必要です。
+        return
+    elif not os.path.isdir(f):
+        msg = f"""
+WARNING
+An open_folder request was made with an argument that is not a folder.
+This could be an error or a malicious attempt to run code on your computer.
+Requested path was: {f}
+"""
+        print(msg, file=sys.stderr)
+        # gr.Warning(msg)  # gr.Warningを使用している場合、適切なUIライブラリのインポートが必要です。
+        return
+
+    path = os.path.normpath(f)
+    if platform.system() == "Windows":
+        os.startfile(path)
+    elif platform.system() == "Darwin":
+        sp.Popen(["open", path])
+    elif "microsoft-standard-WSL2" in platform.uname().release:
+        sp.Popen(["wsl-open", path])
+    else:
+        sp.Popen(["xdg-open", path])
  
 def on_ui_tabs():
         print("[ui] Creating UI components")
@@ -60,6 +93,17 @@ def on_ui_tabs():
                                                                         width=300,
                                                                         show_label=True,
                                                                         image_mode="RGBA")
+                with gr.Row(): 
+                        with gr.Row():
+                                folder_symbol = '\U0001f4c2'  # 📂
+                                open_folder_button = ToolButton(folder_symbol, elem_id='MangaMaker_open_folder', 
+                                                                visible=not shared.cmd_opts.hide_ui_dir_config,        tooltip="Open images output directory.")
+                        with gr.Row():
+                                gr.Markdown("")
+                                
+
+                
+
                 # with gr.Row():
                 #         with gr.Row():
                 #                 slider = gr.Slider(value=75, minimum=1, maximum=100, label="Overlay X-Point", info="1-100")
@@ -85,6 +129,12 @@ def on_ui_tabs():
                 revert_button.click(fn=ImageManager.revert_image, inputs=[], outputs=[work_img_component, infomationTextBox] )
                 flipH_button.click(fn=ImageManager.flipH_image, inputs=[image_apply_component], outputs=[image_apply_component] )
                 # apply_overray_button.click(fn=ImageManager.apply_overray, inputs=[image_apply_component, slider], outputs=[image_apply_component] )
+
+                open_folder_button.click(
+                fn=lambda: open_folder(shared.opts.outdir_save),
+                inputs=[],
+                outputs=[],
+                )
 
         return [(ui_component, "Manga Maker", "manga_maker_tab")]
 
