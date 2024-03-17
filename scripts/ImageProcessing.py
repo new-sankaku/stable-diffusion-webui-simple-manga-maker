@@ -66,21 +66,21 @@ def getBlackLineFileName(image_path):
     print(f"getBlackLineFileName image_path:{image_path}")
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     image_filename = f"{base_name}_black_line.png"
-    return ImageManager.manga_panels_image_info_path + "\\" + image_filename
+    return ImageManager.manga_panels_image_info_path / image_filename
 
 # 通し番号が追加された画像のファイル名を生成する
 def getImagePlusNumberFileName(image_path):
     print(f"getImagePlusNumberFileName image_path:{image_path}")
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     image_filename = f"{base_name}_plus_number.png"
-    return ImageManager.manga_panels_image_info_path + "\\" + image_filename
+    return ImageManager.manga_panels_image_info_path / image_filename
 
 # パネル情報が含まれるJSONファイルの名前を生成する
 def getImagePlusJsonFileName(image_path):
     print(f"getImagePlusJsonFileName image_path:{image_path}")
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     json_filename = f"{base_name}_plus_panel.json"
-    return ImageManager.manga_panels_image_info_path + "\\" + json_filename
+    return ImageManager.manga_panels_image_info_path / json_filename
 
 # 現在の日時を含んだ画像ファイル名を生成する
 def getImageFileNamePlusyyyyMMddhhmmss(image_path):
@@ -88,7 +88,7 @@ def getImageFileNamePlusyyyyMMddhhmmss(image_path):
     print(f"getImageFileNamePlusyyyyMMddhhmmss image_path:{image_path}")
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     json_filename = f"{base_name}_Insert_{current_time}.png"
-    return ImageManager.manga_panels_image_info_path + "\\" + json_filename
+    return ImageManager.manga_panels_image_info_path / json_filename
 
 # JSONファイルから指定された番号のパネルの幅と高さを計算します。
 def get_dimensions(json_file_path, number):
@@ -184,7 +184,7 @@ def find_comic_panel_coords_and_save(image_path):
     print(f"save image_filename:{image_filename}")
 
     if panels_info:
-        cv2.imwrite(image_filename, temp_img)
+        cv2.imwrite(str(image_filename), temp_img)
         with open(json_filename, 'w') as file:
             json.dump(panels_info, file, indent=4)
 

@@ -1,5 +1,6 @@
 import sys
 import os
+from pathlib import Path
 sys.path.append(os.path.dirname(__file__))
 from PIL import Image, ImageFilter, ImageDraw
 import numpy as np
@@ -11,8 +12,9 @@ import gradio as gr
 import ImageProcessing
 from datetime import datetime
 
-manga_panels_image_path = scripts.basedir() + '\mangaPanelsImage'
-manga_panels_image_info_path = scripts.basedir() + '\mangaPanelsImage_Info'
+base_dir = Path(scripts.basedir())
+manga_panels_image_path = base_dir / 'mangaPanelsImage'
+manga_panels_image_info_path = base_dir / 'mangaPanelsImage_Info'
 
 manga_panels_image_paths = None
 
@@ -60,7 +62,7 @@ def new_image() :
 
     if os.path.exists(json_filename):
         now_numbers_panel_json_path = json_filename
-        now_working_image = cv2.imread(image_filename)
+        now_working_image = cv2.imread(str(image_filename))
     else:
         numbers_panel_image, json_filename = ImageProcessing.find_comic_panel_coords_and_save(now_manga_panel_image_path);
         now_numbers_panel_json_path = json_filename
