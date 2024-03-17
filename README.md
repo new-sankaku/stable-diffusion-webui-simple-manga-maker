@@ -9,7 +9,8 @@ Features
    - Supports PNG images.  
    - Also supports transparent images.  
   - Flip image horizontally  
-  - Restore changed images  
+  - Restore changed images
+
 Features planned for implementation  
   - Add callouts, add text, apply overlay images  
   - Image reduction, cropping  
