@@ -62,7 +62,7 @@ def new_image() :
 
     if os.path.exists(json_filename):
         now_numbers_panel_json_path = json_filename
-        now_working_image = cv2.imread(image_filename)
+        now_working_image = cv2.imread(str(image_filename))
     else:
         numbers_panel_image, json_filename = ImageProcessing.find_comic_panel_coords_and_save(now_manga_panel_image_path);
         now_numbers_panel_json_path = json_filename
