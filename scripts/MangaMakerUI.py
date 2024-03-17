@@ -1,10 +1,9 @@
 import sys
 import os
-sys.path.append(os.path.dirname(__file__))
 
 from modules import scripts, shared
 import gradio as gr
-import ImageManager
+from scripts import ImageManager  # noqa
 import platform
 import subprocess as sp
 

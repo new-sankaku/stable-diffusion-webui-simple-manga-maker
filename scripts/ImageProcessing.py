@@ -1,8 +1,6 @@
-import sys
 import os
-sys.path.append(os.path.dirname(__file__))
 
-import ImageManager
+from scripts import ImageManager  # noqa
 import cv2
 import numpy as np
 import json

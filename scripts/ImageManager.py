@@ -1,7 +1,4 @@
-import sys
-import os
 from pathlib import Path
-sys.path.append(os.path.dirname(__file__))
 from PIL import Image, ImageFilter, ImageDraw
 import numpy as np
 from modules import scripts, shared
@@ -9,7 +6,7 @@ import random
 import os
 import cv2
 import gradio as gr
-import ImageProcessing
+from scripts import ImageProcessing  # noqa
 from datetime import datetime
 
 base_dir = Path(scripts.basedir())
