@@ -87,7 +87,7 @@ def select_image_gallary(image):
 
     select_apply_image = image
 
-def apply_image(now_working_image) :
+def apply_image(now_working_image, position_dropdown) :
     print("apply_image now_working_image:", type(now_working_image))
 
     global select_apply_image
@@ -102,11 +102,11 @@ def apply_image(now_working_image) :
 
     center_x, center_y = ImageProcessing.get_panel_center(now_numbers_panel_json_path, now_working_number)
     seed_point = (center_x, center_y)
-
     manga_panel_image = cv2.imread(now_manga_panel_image_path)
 
     panel_coords = ImageProcessing.find_comic_panel_coords(manga_panel_image, seed_point)
-    combined_image = ImageProcessing.warp_insert_image_improved(now_working_image, select_apply_image, panel_coords)
+
+    combined_image = ImageProcessing.warp_insert_image_improved(now_working_image, select_apply_image, panel_coords, position_dropdown)
 
     (x, y, w, h) = cv2.boundingRect(panel_coords)
     now_black_lines_plus_number_mask = ImageProcessing.remove_black_lines_in_insert_area(now_black_lines_plus_number_mask, 

@@ -1,17 +1,44 @@
 import sys
 import os
-
 from modules import scripts, shared
 import gradio as gr
 from scripts import ImageManager  # noqa
 import platform
 import subprocess as sp
+import pathlib
+import typing
+import html
+import urllib.parse
 
 from modules.ui_components import ToolButton
 from modules import script_callbacks
 
 komaGallary: gr.Gallery = None
 work_img_component: gr.Image = None
+
+try:
+    root_path = pathlib.Path(__file__).resolve().parents[1]
+except NameError:
+    import inspect
+
+    root_path = pathlib.Path(inspect.getfile(lambda: None)).resolve().parents[1]
+
+def get_asset_url(
+    file_path: pathlib.Path, append: typing.Optional[dict[str, str]] = None
+) -> str:
+    if append is None:
+        append = {"v": str(os.path.getmtime(file_path))}
+    else:
+        append = append.copy()
+        append["v"] = str(os.path.getmtime(file_path))
+    return f"/file={file_path.absolute()}?{urllib.parse.urlencode(append)}"
+
+
+# def write_config_file() -> pathlib.Path:
+#     config_dir = root_path / "downloads"
+#     config_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+#     config_path = config_dir / "config.json"
+#     return config_path
 
 
 def open_folder(f):
@@ -46,6 +73,16 @@ Requested path was: {f}
  
 def on_ui_tabs():
         print("[ui] Creating UI components")
+        folder_symbol = '\U0001f4c2'  # 📂
+        skip_symbol = '\U000023e9'  # ⏩
+        new_symbol = '\U0001F195'  # 🆕
+        apply_symbol = '\U00002714'  # ✔️
+        flip_H_symbol = '\U00002194'  # ↔️
+        reverse_symbol = '\U0001F501'  # 🔁
+        save_symbol = '\U0001F4BE'  # 💾
+
+
+ 
         with gr.Blocks(analytics_enabled=False) as ui_component:
                 with gr.Row():
                         infomation = ""
@@ -63,22 +100,26 @@ def on_ui_tabs():
                                                         show_share_button="false",
                                                         elem_id='manga_panel_gallary', 
                                                         columns=12,
-                                                        height=270,
+                                                        height=250,
                                                         value=ImageManager.get_panel_paths, type="image")
                 with gr.Row():
                         gr.Markdown(f"<small>**Panels folder:** {ImageManager.manga_panels_image_path}</small>", 
                                         show_label=False)
                 with gr.Row():
                         with gr.Row():
-                                new_image_button =  gr.Button(value="New Image", size="sm", min_width=150)
-                                skip_button     =  gr.Button(value="Skip Number", size="sm", min_width=150)
-                        with gr.Row():
-                                apply_button    = gr.Button(value="Apply Image", size="sm", min_width=150)
-                                flipH_button    = gr.Button(value="Flip Horizontal", size="sm", min_width=150)
-                        with gr.Row():
-                                # apply_overray_button   = gr.Button(value="Apply Overray(Transparency)", size="sm", min_width=150)
-                                revert_button   = gr.Button(value="Revert Changes", size="sm", min_width=150)
-                                save_button   = gr.Button(value="Save Image", size="sm", min_width=150)
+                                with gr.Row():
+                                        new_image_button =  gr.Button(value=new_symbol+"New Image", size="sm", min_width=120)
+                                        skip_button     =  gr.Button(value=skip_symbol+"Skip Number", size="sm", min_width=120)
+                                        revert_button   = gr.Button(value=reverse_symbol+"Revert Change", size="sm", min_width=120)
+                                        gr.Markdown("")
+                                with gr.Row():
+                                        # apply_overray_button   = gr.Button(value="Apply Overray(Transparency)", size="sm", min_width=150)
+                                        apply_button    = gr.Button(value=apply_symbol+"Apply Image", size="sm", min_width=120)
+                                        position_dropdown = gr.Dropdown(["Center", "Top-Left", "Top-Center", "Top-Right"
+                                                                        , "Bottom-Left", "Bottom-Center", "Bottom-Right"], 
+                                                                        value="Center", show_label=False, info="Clip Position", interactive=True)
+                                        flipH_button    = gr.Button(value=flip_H_symbol+"Flip Horizontal", size="sm", min_width=120)
+                                        gr.Markdown("")
                 with gr.Row(): 
                         with gr.Row():
                                 work_img_component = gr.Image(interactive=False,
@@ -92,42 +133,54 @@ def on_ui_tabs():
                                                                         width=300,
                                                                         show_label=True,
                                                                         image_mode="RGBA")
-                with gr.Row(): 
-                        with gr.Row():
-                                folder_symbol = '\U0001f4c2'  # 📂
-                                open_folder_button = ToolButton(folder_symbol, elem_id='MangaMaker_open_folder', 
-                                                                visible=not shared.cmd_opts.hide_ui_dir_config,        tooltip="Open images output directory.")
-                        with gr.Row():
-                                gr.Markdown("")
-                                
-
-                
-
-                # with gr.Row():
-                #         with gr.Row():
-                #                 slider = gr.Slider(value=75, minimum=1, maximum=100, label="Overlay X-Point", info="1-100")
-                #         with gr.Row():
-                #                 gr.Markdown( "" )
                 with gr.Row():
                         with gr.Row():
-                                        str = ""
-                                        str = str + "Next Number:" + "1\n"
-                                        infomationTextBox = gr.Textbox(value=str, lines=4, interactive="False", label="Infomation")
+                                with gr.Row():
+                                        with gr.Column():
+                                                save_button   = gr.Button(value=save_symbol+"Save Image", size="sm", min_width=70)                        
+                                                open_folder_button = ToolButton(folder_symbol, elem_id='MangaMaker_open_folder', 
+                                                                        visible=not shared.cmd_opts.hide_ui_dir_config, tooltip="Open images output directory.")
+                                with gr.Row():
+                                        gr.Markdown("")
+                                        gr.Markdown("")
+                                with gr.Row():
+                                        gr.Markdown("")
+                                        gr.Markdown("")
+                        with gr.Row():
+                                str = ""
+                                str = str + "Next Number:" + "1\n"
+                                infomationTextBox = gr.Textbox(value=str, lines=2, interactive="False", label="Infomation")
 
-                apply_button.click(fn=ImageManager.apply_image, inputs=[work_img_component], outputs=[work_img_component, infomationTextBox])
-                save_button.click(fn=ImageManager.save_image, inputs=[work_img_component], outputs=[infomationTextBox])
-                skip_button.click(fn=ImageManager.skip_apply_number, inputs=[], outputs=[infomationTextBox])
+                # with gr.Row():
+                #         information = "\n"
+                #         information += "1.You can edit it below.  "
+                #         information += "2.Make any edits.  "
+                #         information += '3.Click <span style="font-weight:bold; color:red;">Send to Manga</span> in the Menu.  '
+                #         gr.Markdown(f'<small>{information}</small>', show_label=False)
+
+                # with gr.Row():
+                #         # config = {"config": get_asset_url(write_config_file()) or ""}
+                #         html_url = get_asset_url(root_path / "miniPaint-minimum" / "index.html", None)
+                #         gr.HTML(
+                #         f"""
+                #         <iframe id="manga_minipaint_iframe" src="{html.escape(html_url)}" style="height:800px; width:100%;" onload="a1111minipaint.onload()"></iframe>
+                #         """
+                #         )
+
                 new_image_button.click(fn=ImageManager.new_image, inputs=[], outputs=[work_img_component, infomationTextBox])
-                
+                skip_button.click(fn=ImageManager.skip_apply_number, inputs=[], outputs=[infomationTextBox])
+                apply_button.click(fn=ImageManager.apply_image, inputs=[work_img_component, position_dropdown], outputs=[work_img_component, infomationTextBox])
+                # apply_overray_button.click(fn=ImageManager.apply_overray, inputs=[image_apply_component, slider], outputs=[image_apply_component] )
+                save_button.click(fn=ImageManager.save_image, inputs=[work_img_component], outputs=[infomationTextBox])
+
                 manga_panel_gallary.select(fn=ImageManager.on_manga_panel_gallary_selected, inputs=[], outputs=[infomationTextBox])
-                
+
                 image_apply_component.select(fn=ImageManager.select_image_gallary, inputs=[image_apply_component], outputs=[])
                 image_apply_component.change(fn=ImageManager.select_image_gallary, inputs=[image_apply_component], outputs=[])
                 image_apply_component.upload(fn=ImageManager.select_image_gallary, inputs=[image_apply_component], outputs=[])
                 
                 revert_button.click(fn=ImageManager.revert_image, inputs=[], outputs=[work_img_component, infomationTextBox] )
                 flipH_button.click(fn=ImageManager.flipH_image, inputs=[image_apply_component], outputs=[image_apply_component] )
-                # apply_overray_button.click(fn=ImageManager.apply_overray, inputs=[image_apply_component, slider], outputs=[image_apply_component] )
 
                 open_folder_button.click(
                 fn=lambda: open_folder(shared.opts.outdir_save),

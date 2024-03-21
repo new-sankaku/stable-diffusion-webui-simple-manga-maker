@@ -29,9 +29,8 @@ def createInfomation(jsonFile, next_working_number, now_working_max_number):
         return "Error: Failed to get aspect ratio."
 
     result = ""
-    result += f"Next Number : {next_working_number}\n"
-    result += f"Next Panel Size : X={width}, Y={height}\n"
-    result += f"Next Accept Ratio : X={simplified_width}, Y={simplified_height}\n"
+    result += f"Next Number : {next_working_number}  "
+    result += f"Next Panel Size : X={width}, Y={height}  "
     return result
 
 # 簡素化された幅と高さを元に、それらが一定のサイズを超えるまで倍増させる
@@ -269,28 +268,47 @@ def insert_image(comic_img, insert_img, x, y, w, h, mask, mask_inv):
     comic_img[y:y+h, x:x+w] = insert_region
     return comic_img
 
-def resize_and_clip_image(insert_img, target_width, target_height):
-    insert_img_resized = resize_fill_panel(insert_img, target_width, target_height) # resize_fill_panelは既存の関数を使用
-    insert_img_clipped = clip_image_center(insert_img_resized, target_width, target_height)
+def resize_and_clip_image(insert_img, target_width, target_height, position_dropdown):
+    insert_img_resized = resize_fill_panel(insert_img, target_width, target_height)
+    insert_img_clipped = clip_image(insert_img_resized, target_width, target_height, position_dropdown)
     return insert_img_clipped
 
-def clip_image_center(img, target_width, target_height):
-    # 幅に関する切り取り
-    if img.shape[1] > target_width:
-        center_x = img.shape[1] // 2
-        start_x = max(center_x - target_width // 2, 0)
-        end_x = start_x + target_width
-        img = img[:, start_x:end_x]
-    # 高さに関する切り取り
-    if img.shape[0] > target_height:
-        center_y = img.shape[0] // 2
-        start_y = max(center_y - target_height // 2, 0)
-        end_y = start_y + target_height
-        img = img[start_y:end_y, :]
-    return img
+def clip_image(img, target_width, target_height, position):
+    start_x, start_y = 0, 0
+    end_x = start_x + target_width
+    end_y = start_y + target_height
+
+    if position == "Center":
+        start_x = (img.shape[1] - target_width) // 2
+        start_y = (img.shape[0] - target_height) // 2
+    elif position == "Top-Left":
+        start_x, start_y = 0, 0
+    elif position == "Top-Center":
+        start_x = (img.shape[1] - target_width) // 2
+        start_y = 0
+    elif position == "Top-Right":
+        start_x = img.shape[1] - target_width
+        start_y = 0
+    elif position == "Bottom-Left":
+        start_x = 0
+        start_y = img.shape[0] - target_height
+    elif position == "Bottom-Center":
+        start_x = (img.shape[1] - target_width) // 2
+        start_y = img.shape[0] - target_height
+    elif position == "Bottom-Right":
+        start_x = img.shape[1] - target_width
+        start_y = img.shape[0] - target_height
+
+    # 範囲の調整
+    end_x = start_x + target_width
+    end_y = start_y + target_height
+
+    # 画像のクリップ
+    clipped_img = img[start_y:end_y, start_x:end_x]
+    return clipped_img
 
 
-def warp_insert_image_improved(comic_img, insert_img, panel_coords):
+def warp_insert_image_improved(comic_img, insert_img, panel_coords, position_dropdown):
     temp_image = comic_img.copy()
     temp_image = convertRGBA(temp_image)
     insert_img = convertRGBA(insert_img)
@@ -300,19 +318,12 @@ def warp_insert_image_improved(comic_img, insert_img, panel_coords):
 
     # 挿入する画像のための領域を計算
     x, y, w, h = cv2.boundingRect(panel_coords)
+    
     # 画像リサイズと中心からの切り取り
-    insert_img_clipped = resize_and_clip_image(insert_img, w, h)
-
-
+    insert_img_clipped = resize_and_clip_image(insert_img, w, h, position_dropdown)
 
     # 画像挿入の準備
     final_image = insert_image(temp_image, insert_img_clipped, x, y, w, h, mask, mask_inv)
-
-    # # 最終画像に結果を反映
-    # final_image = comic_img.copy()
-    # final_image = convertRGBA(final_image)
-
-    # final_image[y:y+h, x:x+w] = result_region
 
     return final_image
 
