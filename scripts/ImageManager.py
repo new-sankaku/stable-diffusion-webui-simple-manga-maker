@@ -208,7 +208,6 @@ def resize_and_maintain_aspect_ratio(image, base_height, base_width, zoom_percen
 
 def apply_overray(work_img_component, xSlider, ySlider, zoomSlider):
     print("apply_overray work_img_component:", type(work_img_component))
-
     print("apply_overray xSlider:", xSlider)
     print("apply_overray ySlider:", ySlider)
     print("apply_overray zoomSlider:", zoomSlider)
@@ -257,38 +256,10 @@ def apply_overray(work_img_component, xSlider, ySlider, zoomSlider):
 
     # 調整した位置でapply_image_zoomedをoverlay_imageに貼り付ける
     overlay_image.paste(apply_image_zoomed, (adjusted_x, adjusted_y), apply_image_zoomed)
-
-
-    # 最終的な画像を合成
     final_image = Image.alpha_composite(work_image, overlay_image)
-
-    # 結果をnumpy配列に変換して返す
     final_img_array = np.array(final_image)
     return final_img_array
 
-    image_history.append(work_img_component)
-
-    print("apply_overray image_apply_component select_apply_image:", type(select_apply_image))
-    work_image = ImageProcessing.convertRGBA(work_img_component)
-    apply_image = ImageProcessing.convertRGBA(select_apply_image)
-
-    workHeight, workWidth = ImageProcessing.get_height_and_width(work_image)
-    applyHeight, applyWidth = ImageProcessing.get_height_and_width(apply_image)
-
-    #★apply_imageの縮尺を変更します。
-    #★apply_imageのサイズをwork_imageの縦横いずれか大きい方に合わせてアクセプト比を保ったままサイズを変更します。
-    #★変更したapply_imageのサイズをwork_imageのサイズのzoomSliderの数値％にします。
-    #★zoomSliderは80等の数値が入ります。
-    #★縮尺の変更では縦長、横長の画像に対応してください。
-
-    #★work_imageにapply_imageを上書きします。
-    #★上書き位置はX軸がxSlider、Y軸がySliderです。
-    #★上書き時にwork_imageの領域をはみ出ないように対応してください。
-    #★また、アルファブレンディングを行ってください。
-
-    #★出来上がった画像をfinal_img_arrayに入れて返します。
-    final_img_array = None
-    return final_img_array
 
 
 def skip_apply_number() :
