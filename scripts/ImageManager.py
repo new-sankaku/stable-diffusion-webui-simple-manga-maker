@@ -173,7 +173,6 @@ def revert_image():
     resultInfomation = ImageProcessing.createInfomation( now_numbers_panel_json_path, now_working_number, now_working_max_number )
     return previous_image, resultInfomation
 
-
 def flipH_image(image_apply_component):
     print("flipH_image image_apply_component:", type(image_apply_component))
 
@@ -184,13 +183,113 @@ def flipH_image(image_apply_component):
         print("flipH_image error, not found image.")
         return image_apply_component  # 変更なしで返す
 
-def apply_overray(image_apply_component, slider) :
-    print("apply_overray image_apply_component:", type(image_apply_component))
-    print("apply_overray slider       :", type(slider))
-    # apply_overray image_apply_component: <class 'numpy.ndarray'>
-    # apply_overray slider       : <class 'float'>
+def resize_and_maintain_aspect_ratio(image, base_height, base_width, zoom_percentage):
+    """
+    画像のサイズを変更し、アスペクト比を保ちます。
+    """
+    height, width = image.shape[:2]
+    if height > width:
+        scale = base_height / height
+    else:
+        scale = base_width / width
+    
+    # Zoom factorを考慮してscaleを調整
+    scale *= zoom_percentage / 100
+    
+    new_width = int(width * scale)
+    new_height = int(height * scale)
+    
+    resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
+    return resized_image
 
-    return image_apply_component
+
+
+
+
+def apply_overray(work_img_component, xSlider, ySlider, zoomSlider):
+    print("apply_overray work_img_component:", type(work_img_component))
+
+    print("apply_overray xSlider:", xSlider)
+    print("apply_overray ySlider:", ySlider)
+    print("apply_overray zoomSlider:", zoomSlider)
+
+    global select_apply_image
+    global image_history
+    image_history.append(work_img_component)
+
+    # 画像をPIL.Imageオブジェクトに変換
+    work_image = Image.fromarray(work_img_component).convert("RGBA")
+    apply_image = Image.fromarray(select_apply_image).convert("RGBA")
+
+    # apply_imageのリサイズ（アスペクト比を維持）
+    ratio = max(work_image.width / apply_image.width, work_image.height / apply_image.height)
+    new_size = (int(apply_image.width * ratio), int(apply_image.height * ratio))
+    apply_image_resized = apply_image.resize(new_size, Image.ANTIALIAS)
+
+    # zoomSliderを適用してさらにリサイズ
+    zoom_factor = zoomSlider / 100
+    zoomed_size = (int(new_size[0] * zoom_factor), int(new_size[1] * zoom_factor))
+    apply_image_zoomed = apply_image_resized.resize(zoomed_size, Image.ANTIALIAS)
+
+    # apply_imageをwork_imageの指定位置に合成するための準備
+    # まずはwork_imageと同じサイズの透明画像を作成
+    overlay_image = Image.new("RGBA", work_image.size, (255, 255, 255, 0))
+
+    # overlay_image とapply_image_zoomedの縦横サイズを取得
+    overlay_height, overlay_width = overlay_image.size
+    apply_zoomed_height, apply_zoomed_width = apply_image_zoomed.size
+
+    # overlay_image とapply_image_zoomedの縦横サイズをprintで出力
+    print(f"overlay_image      height_width {overlay_height}_{overlay_width}")
+    print(f"apply_image_zoomed height_width {apply_zoomed_height}_{apply_zoomed_width}")
+
+    print(f"xSlider_ySlider {xSlider}_{ySlider}")
+
+    x = int(overlay_height * (xSlider / 100))
+    y = int(overlay_width * (ySlider / 100))
+
+    # apply_image_zoomedの幅と高さを取得
+    apply_width, apply_height = apply_image_zoomed.size
+
+    # apply_image_zoomedの中心が(x, y)に来るように調整
+    adjusted_x = x - (apply_width // 2)
+    adjusted_y = y - (apply_height // 2)
+
+    # 調整した位置でapply_image_zoomedをoverlay_imageに貼り付ける
+    overlay_image.paste(apply_image_zoomed, (adjusted_x, adjusted_y), apply_image_zoomed)
+
+
+    # 最終的な画像を合成
+    final_image = Image.alpha_composite(work_image, overlay_image)
+
+    # 結果をnumpy配列に変換して返す
+    final_img_array = np.array(final_image)
+    return final_img_array
+
+    image_history.append(work_img_component)
+
+    print("apply_overray image_apply_component select_apply_image:", type(select_apply_image))
+    work_image = ImageProcessing.convertRGBA(work_img_component)
+    apply_image = ImageProcessing.convertRGBA(select_apply_image)
+
+    workHeight, workWidth = ImageProcessing.get_height_and_width(work_image)
+    applyHeight, applyWidth = ImageProcessing.get_height_and_width(apply_image)
+
+    #★apply_imageの縮尺を変更します。
+    #★apply_imageのサイズをwork_imageの縦横いずれか大きい方に合わせてアクセプト比を保ったままサイズを変更します。
+    #★変更したapply_imageのサイズをwork_imageのサイズのzoomSliderの数値％にします。
+    #★zoomSliderは80等の数値が入ります。
+    #★縮尺の変更では縦長、横長の画像に対応してください。
+
+    #★work_imageにapply_imageを上書きします。
+    #★上書き位置はX軸がxSlider、Y軸がySliderです。
+    #★上書き時にwork_imageの領域をはみ出ないように対応してください。
+    #★また、アルファブレンディングを行ってください。
+
+    #★出来上がった画像をfinal_img_arrayに入れて返します。
+    final_img_array = None
+    return final_img_array
+
 
 def skip_apply_number() :
     global now_numbers_panel_json_path

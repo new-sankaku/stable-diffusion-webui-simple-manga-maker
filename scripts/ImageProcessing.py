@@ -327,13 +327,27 @@ def warp_insert_image_improved(comic_img, insert_img, panel_coords, position_dro
 
     return final_image
 
-def convertRGBA( image ) :
-    if len(image.shape) == 2:  # グレースケールの場合
+def convertRGBA(image):
+    if len(image.shape) == 2:  # Gray
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGRA)
     elif image.shape[2] == 3:  # RGB
         image = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)
+    elif image.shape[2] == 4:  # RGBA
+        pass
+    else:
+        raise ValueError("Unsupported image format. Image must be grayscale, RGB, or RGBA.")
 
     return image
+
+def get_height_and_width(image):
+    if len(image.shape) == 2:  # Gray
+        return image.shape
+    elif image.shape[2] == 3:  # RGB
+        return image.shape[:2]
+    elif image.shape[2] == 4:  # RGBA
+        return image.shape[:2]
+    else:
+        raise ValueError("Unsupported image format. Image must be grayscale, RGB, or RGBA.")
 
 def extract_black_lines(comic_img):
     """

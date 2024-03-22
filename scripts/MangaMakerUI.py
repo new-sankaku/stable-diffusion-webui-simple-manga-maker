@@ -77,6 +77,7 @@ def on_ui_tabs():
         skip_symbol = '\U000023e9'  # ⏩
         new_symbol = '\U0001F195'  # 🆕
         apply_symbol = '\U00002714'  # ✔️
+        apply_over_lay_symbol = '\U0001F5D7'  # 🗗
         flip_H_symbol = '\U00002194'  # ↔️
         reverse_symbol = '\U0001F501'  # 🔁
         save_symbol = '\U0001F4BE'  # 💾
@@ -92,7 +93,6 @@ def on_ui_tabs():
                         infomation = infomation + "4.Click Apply Image. "
                         gr.Markdown(f"<small>{infomation}</small>", show_label=False)       
                 with gr.Row():
-
                         manga_panel_gallary = gr.Gallery(label='select manga panel image.', 
                                                         object_fit="contain",
                                                         show_label=True,
@@ -108,18 +108,53 @@ def on_ui_tabs():
                 with gr.Row():
                         with gr.Row():
                                 with gr.Row():
-                                        new_image_button =  gr.Button(value=new_symbol+"New Image", size="sm", min_width=120)
-                                        skip_button     =  gr.Button(value=skip_symbol+"Skip Number", size="sm", min_width=120)
-                                        revert_button   = gr.Button(value=reverse_symbol+"Revert Change", size="sm", min_width=120)
-                                        gr.Markdown("")
+                                        with gr.Group():
+                                                new_image_button =  gr.Button(value=new_symbol+"New Image", size="sm")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                        with gr.Group():
+                                                skip_button     =  gr.Button(value=skip_symbol+"Skip Number", size="sm")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                        with gr.Group():
+                                                revert_button   = gr.Button(value=reverse_symbol+"Revert Change", size="sm")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                        with gr.Group():
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
                                 with gr.Row():
-                                        # apply_overray_button   = gr.Button(value="Apply Overray(Transparency)", size="sm", min_width=150)
-                                        apply_button    = gr.Button(value=apply_symbol+"Apply Image", size="sm", min_width=120)
-                                        position_dropdown = gr.Dropdown(["Center", "Top-Left", "Top-Center", "Top-Right"
-                                                                        , "Bottom-Left", "Bottom-Center", "Bottom-Right"], 
-                                                                        value="Center", show_label=False, info="Clip Position", interactive=True)
-                                        flipH_button    = gr.Button(value=flip_H_symbol+"Flip Horizontal", size="sm", min_width=120)
-                                        gr.Markdown("")
+                                        with gr.Group():
+                                                apply_button    = gr.Button(value=apply_symbol+"Apply Image", size="sm")
+                                                with gr.Accordion(label="Settings", open=True):
+                                                        position_dropdown = gr.Dropdown(["Center", "Top-Left", "Top-Center", "Top-Right"
+                                                                                        , "Bottom-Left", "Bottom-Center", "Bottom-Right"], 
+                                                                                        value="Center", show_label=False, info="Clip Position", interactive=True)
+                                        with gr.Group():
+                                                flipH_button    = gr.Button(value=flip_H_symbol+"Flip Horizontal", size="sm")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                        with gr.Group():
+                                                apply_overray_button   = gr.Button(value=apply_over_lay_symbol+"Apply Overray", size="sm")
+                                                with gr.Accordion(label="Settings", open=False):
+                                                        xSlider = gr.Slider(info="x axis", value=75, show_label=False, interactive=True)
+                                                        ySlider = gr.Slider(info="Y axis", value=75, show_label=False, interactive=True)
+                                                        zoomSlider = gr.Slider(info="Zoom",  value=80, show_label=False, interactive=True)
+                                                        infomation = infomation + "x and y are the coordinates to which the center point of Apply Image is applied."
+                                                        infomation = infomation + "It is assumed that transparent images will be used."
+                                                        infomation = infomation + "The method for specifying x and y is difficult to use, so we may need to recreate it."
+                                                        gr.Markdown(f"<small>{infomation}</small>", show_label=False)       
+                                        with gr.Group():
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
+                                                gr.Markdown("")
                 with gr.Row(): 
                         with gr.Row():
                                 work_img_component = gr.Image(interactive=False,
@@ -135,16 +170,17 @@ def on_ui_tabs():
                                                                         image_mode="RGBA")
                 with gr.Row():
                         with gr.Row():
-                                with gr.Row():
-                                        with gr.Column():
+                                with gr.Group():
+                                        with gr.Row():
                                                 save_button   = gr.Button(value=save_symbol+"Save Image", size="sm", min_width=70)                        
+                                        with gr.Row():
                                                 open_folder_button = ToolButton(folder_symbol, elem_id='MangaMaker_open_folder', 
                                                                         visible=not shared.cmd_opts.hide_ui_dir_config, tooltip="Open images output directory.")
-                                with gr.Row():
+                                with gr.Group():
                                         gr.Markdown("")
+                                with gr.Group():
                                         gr.Markdown("")
-                                with gr.Row():
-                                        gr.Markdown("")
+                                with gr.Group():
                                         gr.Markdown("")
                         with gr.Row():
                                 str = ""
@@ -170,7 +206,7 @@ def on_ui_tabs():
                 new_image_button.click(fn=ImageManager.new_image, inputs=[], outputs=[work_img_component, infomationTextBox])
                 skip_button.click(fn=ImageManager.skip_apply_number, inputs=[], outputs=[infomationTextBox])
                 apply_button.click(fn=ImageManager.apply_image, inputs=[work_img_component, position_dropdown], outputs=[work_img_component, infomationTextBox])
-                # apply_overray_button.click(fn=ImageManager.apply_overray, inputs=[image_apply_component, slider], outputs=[image_apply_component] )
+                apply_overray_button.click(fn=ImageManager.apply_overray, inputs=[work_img_component, xSlider, ySlider, zoomSlider], outputs=[work_img_component] )
                 save_button.click(fn=ImageManager.save_image, inputs=[work_img_component], outputs=[infomationTextBox])
 
                 manga_panel_gallary.select(fn=ImageManager.on_manga_panel_gallary_selected, inputs=[], outputs=[infomationTextBox])
