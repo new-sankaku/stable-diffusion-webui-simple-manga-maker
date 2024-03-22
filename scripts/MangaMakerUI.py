@@ -146,9 +146,10 @@ def on_ui_tabs():
                                                         xSlider = gr.Slider(info="x axis", value=75, show_label=False, interactive=True)
                                                         ySlider = gr.Slider(info="Y axis", value=75, show_label=False, interactive=True)
                                                         zoomSlider = gr.Slider(info="Zoom",  value=80, show_label=False, interactive=True)
-                                                        infomation = infomation + "x and y are the coordinates to which the center point of Apply Image is applied."
-                                                        infomation = infomation + "It is assumed that transparent images will be used."
-                                                        infomation = infomation + "The method for specifying x and y is difficult to use, so we may need to recreate it."
+                                                        infomation = ""
+                                                        infomation = infomation + "The center point of Apply Image becomes the x and y coordinates.\n"
+                                                        infomation = infomation + "using transparent images"
+
                                                         gr.Markdown(f"<small>{infomation}</small>", show_label=False)       
                                         with gr.Group():
                                                 gr.Markdown("")
