@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SP-MangaEditer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        
+    </script>
+</head>
+
+<body>
+    <div style="display: flex; flex-grow: 1;">
+        <div id="sidebar">
+            <i class="fas fa-book-open" onclick="toggleVisibility('svg-container');"></i>
+            <i class="fas fa-comments" onclick="toggleVisibility('speech-bubble-area1');"></i>
+            <div id="dummy-area2" style="display:none;">Area 2 content here</div>
+            <div id="dummy-area3" style="display:none;">Area 3 content here</div>
+            <div id="dummy-area4" style="display:none;">Area 4 content here</div>
+        </div>
+        <div id="svg-container" style="display: none;">
+            <div id="area-header">Panels(Click only)</div>
+            <div id="svg-preview-area"></div>
+        </div>
+        <div id="speech-bubble-area1" style="display: none;">
+            <div id="area-header">dummy1</div>
+            <div id="speech-bubble-svg-preview-area1"></div>
+        </div>
+        <div id="dummy-area2" style="display: none;">
+            <div id="area-header">dummy2</div>
+            <div id="dummy-svg-preview-area2"></div>
+        </div>
+        <div id="dummy-area3" style="display: none;">
+            <div id="area-header">dummy3</div>
+            <div id="dummy-svg-preview-area3"></div>
+        </div>
+        <div id="dummy-area4" style="display: none;">
+            <div id="area-header">Infomation</div>
+            <div id="dummy-svg-preview-area4">
+
+
+            </div>
+        </div>
+
+        <div id="canvas-area">
+            <div id="area-header">Canvas</div>
+            <div id="canvas-container">
+                <canvas id="mangaImageCanvas" width="750" height="750" style="position: absolute;"></canvas>
+            </div>
+            <div id="canvas-buttons">
+                <button onclick="allRemove()"><i class="fas fa-trash-alt"></i> All Remove</button>
+                <button onclick="flipHorizontally()"><i class="fas fa-arrows-alt-h"></i> Flip</button>
+                <button onclick="flipVertically()"><i class="fas fa-arrows-alt-v"></i> Flip</button>
+                <button onclick="cropAndDownload()"><i class="fas fa-download"></i> Download</button>
+                <button onclick="undo()"><i class="fas fa-undo-alt"></i> Undo</button>
+                <button onclick="redo()"><i class="fas fa-redo-alt"></i> Redo</button>
+            </div>
+        </div>
+        <div id="layer-panel">
+            <div id="area-header">Layers</div>
+            <div id="layer-content"></div>
+        </div>
+        <div id="controls">
+            <div class="control"><label>Angle: <input type="range" id="angle-control" min="0" max="360"
+                        value="0"></label>
+            </div>
+            <div class="control"><label>Scale: <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01"
+                        value="1"></label></div>
+            <div class="control"><label>Top: <input type="range" id="top-control" min="-1200" max="1200"
+                        value="100"></label></div>
+            <div class="control"><label>Left: <input type="range" id="left-control" min="-1200" max="1200"
+                        value="100"></label></div>
+            <div class="control"><label>Skew X: <input type="range" id="skewX-control" min="-30" max="30"
+                        value="0"></label>
+            </div>
+            <div class="control"><label>Skew Y: <input type="range" id="skewY-control" min="-30" max="30"
+                        value="0"></label>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/svg/MangaPanelsImage.js" defer></script>
+    <script src="js/svg/SpeechBubble.js" defer></script>
+    <script src="js/Settings.js" defer></script>
+    <script src="js/CanvasSetup.js" defer></script>
+    <script src="js/LayerManagement.js" defer></script>
+    <script src="js/ControleManagement.js" defer></script>
+    <script src="js/ImageTransformation.js" defer></script>
+    <script src="js/ImageHistoryManagement.js" defer></script>
+    <script src="js/SvgHelper.js" defer></script>
+    <script src="js/Sidebar.js" defer></script>
+</body>
+
+</html>
