@@ -4,63 +4,109 @@
 <head>
     <meta charset="UTF-8">
     <title>SP-MangaEditer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-    <script>
-        
-    </script>
+    <script src="third/Fabric.js/fabric.min.js"></script>
 </head>
 
 <body>
     <div style="display: flex; flex-grow: 1;">
         <div id="sidebar">
-            <i class="fas fa-book-open" onclick="toggleVisibility('svg-container');"></i>
-            <i class="fas fa-comments" onclick="toggleVisibility('speech-bubble-area1');"></i>
-            <div id="dummy-area2" style="display:none;">Area 2 content here</div>
-            <div id="dummy-area3" style="display:none;">Area 3 content here</div>
-            <div id="dummy-area4" style="display:none;">Area 4 content here</div>
+            <div class="logo-container">
+                <img src="02_images_svg/Logo/00000_mini.png" alt="SP-MangaEditer Logo">
+            </div>
+            <i class="material-icons" onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
+            <i class="material-icons" onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
+            <i class="material-icons" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
+            <i class="material-icons" onclick="toggleVisibility('text-area');">text_fields</i>
+            <i class="material-icons" style="display: none;" onclick="toggleVisibility('dummy-area3');">settings</i>
+            <i class="material-icons" onclick="toggleVisibility('dummy-area4');">info</i>
         </div>
-        <div id="svg-container" style="display: none;">
-            <div id="area-header">Panels(Click only)</div>
-            <div id="svg-preview-area"></div>
+
+        <div id="svg-container-vertical" style="display: none;">
+            <div class="area-header">Panels(Click only)</div>
+            <div id="svg-preview-area-vertical"></div>
         </div>
+        <div id="svg-container-landscape" style="display: none;">
+            <div class="area-header">Panels(Click only)</div>
+            <div id="svg-preview-area-landscape"></div>
+        </div>
+
         <div id="speech-bubble-area1" style="display: none;">
-            <div id="area-header">dummy1</div>
+            <div class="area-header">Bubble(Click only)</div>
             <div id="speech-bubble-svg-preview-area1"></div>
         </div>
-        <div id="dummy-area2" style="display: none;">
-            <div id="area-header">dummy2</div>
-            <div id="dummy-svg-preview-area2"></div>
+        <div id="text-area" style="display: none;">
+            <div class="area-header">Text and Effect</div>
+            <div id="text-preview-area">
+                <button onclick="createTextbox()"><i class="material-icons">text_fields</i> New Text</button>
+                <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
+                <button onclick="toggleShadow()"><i class="material-icons">highlight</i> Shadow</button>
+                <button onclick="applyInnerShadow()"><i class="material-icons">format_paint</i> Inner Shadow</button>
+                <hr>
+                <label>Text Color:</label>
+                <input type="color" id="colorPicker" value="#000000" oninput="changeTextColor(this.value)">
+                <label style="display: none;">Neon Color:</label>
+                <input style="display: none;" type="color" id="neonColorPicker" value="#ff8080" oninput="changeNeonColor(this.value)">
+                <label>Font Size:</label>
+                <input type="range" id="fontSizeSlider" min="10" max="100" value="20" oninput="changeFontSize(this.value)">
+                <label style="display: none;">Neon Intensity:</label>
+                <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2" value="2" oninput="changeNeonIntensity(this.value)">
+                <hr style="display: none;">
+                <label style="display: none;">Effects:</label>
+                <button style="display: none;" onclick="applyCSSTextEffect()"><i class="material-icons">format_shapes</i> CSS Text</button>
+                <button style="display: none;" onclick="applyPhotoshopTextEffect()"><i class="material-icons">filter</i> Photoshop Text</button>
+                <button style="display: none;" onclick="applySpaceAgeEffect()"><i class="material-icons">space_bar</i> Space Age</button>
+                <button style="display: none;" onclick="applySpaceAgeEffect2()"><i class="material-icons">space_bar</i> Space Age2</button>
+                <button style="display: none;" onclick="applyGeneratorBasedEffect()"><i class="material-icons">transform</i> Generator Based</button>
+                <button style="display: none;" onclick="applyNeonEffect()"><i class="material-icons">flare</i> Neon</button>
+                <button style="display: none;" onclick="applyNeonJitterEffect()"><i class="material-icons">vibration</i> Neon Jitter</button>
+                <button style="display: none;" onclick="applyZebraReflectionEffect()"><i class="material-icons">view_compact</i> Reflection</button>
+            </div>
         </div>
         <div id="dummy-area3" style="display: none;">
-            <div id="area-header">dummy3</div>
+            <div class="area-header">dummy3</div>
             <div id="dummy-svg-preview-area3"></div>
         </div>
         <div id="dummy-area4" style="display: none;">
-            <div id="area-header">Infomation</div>
+            <div class="area-header">Information</div>
             <div id="dummy-svg-preview-area4">
-
-
+              <!-- License Information -->
+              <div id="license-info">
+                <div class="info-section">
+                  <p>Libraries:</p>
+                  <div class="info-item"><i class="material-icons">brush</i> <a href="http://fabricjs.com/" target="_blank">Fabric.js</a></div>
+                  <div class="info-item"><i class="material-icons">text_format</i> <a href="https://fonts.google.com/icons" target="_blank">Material Icons</a></div>
+                </div>
+                <div class="info-section">
+                  <p>Materials:</p>
+                  <div class="info-item"><i class="material-icons">image</i> <a href="https://fukidesign.com" target="_blank">Speech Bubble</a></div>
+                </div>
+                <div class="info-section">
+                  <p>Additional links:</p>
+                  <div class="info-item"><i class="material-icons">alternate_email</i> <a href="https://twitter.com/hypersankaku2" target="_blank">Twitter</a></div>
+                  <div class="info-item"><i class="material-icons">code</i> <a href="https://github.com/new-sankaku/SP-MangaEditer" target="_blank">GitHub</a></div>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
 
         <div id="canvas-area">
-            <div id="area-header">Canvas</div>
+            <div class="area-header">Canvas</div>
             <div id="canvas-container">
-                <canvas id="mangaImageCanvas" width="750" height="750" style="position: absolute;"></canvas>
+                <canvas id="mangaImageCanvas" width="750" height="750"></canvas>
             </div>
             <div id="canvas-buttons">
-                <button onclick="allRemove()"><i class="fas fa-trash-alt"></i> All Remove</button>
-                <button onclick="flipHorizontally()"><i class="fas fa-arrows-alt-h"></i> Flip</button>
-                <button onclick="flipVertically()"><i class="fas fa-arrows-alt-v"></i> Flip</button>
-                <button onclick="cropAndDownload()"><i class="fas fa-download"></i> Download</button>
-                <button onclick="undo()"><i class="fas fa-undo-alt"></i> Undo</button>
-                <button onclick="redo()"><i class="fas fa-redo-alt"></i> Redo</button>
+                <button onclick="allRemove()"><i class="material-icons">delete</i> All Remove</button>
+                <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> Flip</button>
+                <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> Flip</button>
+                <button onclick="cropAndDownload()"><i class="material-icons">file_download</i> Download</button>
+                <button onclick="undo()"><i class="material-icons">undo</i> Undo</button>
+                <button onclick="redo()"><i class="material-icons">redo</i> Redo</button>
             </div>
         </div>
         <div id="layer-panel">
-            <div id="area-header">Layers</div>
+            <div class="area-header">Layers</div>
             <div id="layer-content"></div>
         </div>
         <div id="controls">
@@ -82,7 +128,8 @@
         </div>
     </div>
 
-    <script src="js/svg/MangaPanelsImage.js" defer></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js" defer></script>
     <script src="js/svg/SpeechBubble.js" defer></script>
     <script src="js/Settings.js" defer></script>
     <script src="js/CanvasSetup.js" defer></script>
@@ -92,6 +139,7 @@
     <script src="js/ImageHistoryManagement.js" defer></script>
     <script src="js/SvgHelper.js" defer></script>
     <script src="js/Sidebar.js" defer></script>
+    <script src="js/TextEffect.js" defer></script>
 </body>
 
 </html>

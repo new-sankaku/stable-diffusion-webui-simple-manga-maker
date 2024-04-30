@@ -1,6 +1,4 @@
 function loadSVGPlusReset(svgString) {
-  console.log("loadSVGPlusReset")
-
   allRemove();
   fabric.loadSVGFromString(svgString, function (objects, options) {
     var canvasUsableHeight = canvas.height - svgPagging;
@@ -15,11 +13,6 @@ function loadSVGPlusReset(svgString) {
     clipAreaCoords.width = options.width * scaleToFit;
     clipAreaCoords.height = options.height * scaleToFit;
     canvas.backgroundColor = 'white';
-
-    console.log("loadSVGPlusReset clipAreaCoords.left",clipAreaCoords.left)
-    console.log("loadSVGPlusReset clipAreaCoords.top",clipAreaCoords.top)
-    console.log("loadSVGPlusReset clipAreaCoords.width",clipAreaCoords.width)
-    console.log("loadSVGPlusReset clipAreaCoords.height",clipAreaCoords.height)
 
     objects.forEach(function (obj) {
       obj.scaleX = scaleToFit;
@@ -45,9 +38,6 @@ function loadSVGPlusReset(svgString) {
 };
 
 function loadSVGReadOnly(svgString) {
-  console.log("loadSVGReadOnly")
-
-
   fabric.loadSVGFromString(svgString, function (objects, options) {
     var canvasUsableHeight = canvas.height - svgPagging;
     var overallScaleX = canvas.width / options.width;
@@ -64,7 +54,6 @@ function loadSVGReadOnly(svgString) {
       return obj;
     });
 
-    // Create a group from the scaled objects
     var group = new fabric.Group(scaledObjects, {
       left: offsetX,
       top: offsetY,
@@ -85,13 +74,14 @@ function loadSVGReadOnly(svgString) {
 };
 
 
-const previewArea = document.getElementById("svg-preview-area");
-const speechBubbleArea = document.getElementById("speech-bubble-area1");
+const previewAreaVertical = document.getElementById("svg-preview-area-vertical");
+const previewAreaLandscape = document.getElementById("svg-preview-area-landscape");
+const speechBubbleArea = document.getElementById("speech-bubble-svg-preview-area1");
 
 window.onload = function() {
 
-  previewArea.innerHTML = "";
-  MangaPanelsImage.forEach(item => {
+  previewAreaVertical.innerHTML = "";
+  MangaPanelsImage_Vertical.forEach(item => {
     const img = document.createElement("img");
     img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg);
     img.classList.add("svg-preview");
@@ -99,9 +89,20 @@ window.onload = function() {
     img.addEventListener("click", function() {
       loadSVGPlusReset(item.svg);
     });
-    previewArea.appendChild(img);
+    previewAreaVertical.appendChild(img);
   });
 
+  previewAreaLandscape.innerHTML = "";
+  MangaPanelsImage_Landscape.forEach(item => {
+    const img = document.createElement("img");
+    img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg);
+    img.classList.add("svg-preview");
+    img.alt = item.name;
+    img.addEventListener("click", function() {
+      loadSVGPlusReset(item.svg);
+    });
+    previewAreaLandscape.appendChild(img);
+  });
 
   speechBubbleArea.innerHTML = "";
   SpeechBubble.forEach(item => {
@@ -119,7 +120,16 @@ window.onload = function() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  var svgPreviewArea = document.getElementById('svg-preview-area');
+  var svgPreviewArea = document.getElementById('svg-container-vertical');
+  svgPreviewArea.addEventListener('mousedown', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+  }, false);
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  var svgPreviewArea = document.getElementById('svg-container-landscape');
   svgPreviewArea.addEventListener('mousedown', function(event) {
       event.preventDefault();
       event.stopPropagation();
