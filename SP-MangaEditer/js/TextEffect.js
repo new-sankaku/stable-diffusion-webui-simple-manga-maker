@@ -288,7 +288,6 @@ function createTextbox() {
   });
   canvas.add(textbox);
   canvas.setActiveObject(textbox);
-  saveState();
   updateLayerPanel();
 }
 
@@ -370,15 +369,15 @@ function updateNeonEffect(activeObject) {
 }
 
 function isText(activeObject) {
-  console.log("isText(activeObject) start");
+  // console.log("isText(activeObject) start");
 
   if (activeObject && (activeObject.type === "text" || activeObject.type === "textbox") ) {
-    console.log("isText(activeObject) true");
+    // console.log("isText(activeObject) true");
     return true;
   } else {
-    console.log("isText(activeObject) false", activeObject);
+    // console.log("isText(activeObject) false", activeObject);
     if (activeObject){
-      console.log("isText(activeObject) ", activeObject.type);
+      // console.log("isText(activeObject) ", activeObject.type);
     }
     return false;
   }

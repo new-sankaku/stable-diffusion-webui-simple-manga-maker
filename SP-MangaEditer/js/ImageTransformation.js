@@ -4,7 +4,6 @@ function flipHorizontally() {
 	if (activeObject && activeObject.type === 'image') {
 		activeObject.set('flipX', !activeObject.flipX);
 		canvas.renderAll();
-		saveState();
 	}
 }
 
@@ -13,7 +12,6 @@ function flipVertically() {
 	if (activeObject && activeObject.type === 'image') {
 		activeObject.set('flipY', !activeObject.flipY);
 		canvas.renderAll();
-		saveState();
 	}
 }
 
@@ -37,5 +35,4 @@ function allRemove() {
 	canvas.clear();
 	updateLayerPanel();
 	currentImage = null;
-	saveState();
 }

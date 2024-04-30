@@ -6,7 +6,8 @@ body, div, input, button, label {
 body {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 20px);
+    height: calc(100vh - 7vh);
+    max-height: calc(100vh - 7vh);
     margin: 20px;
     background-color: #FFFFFF;
     box-sizing: border-box;
@@ -15,7 +16,8 @@ body {
 #svg-container-vertical, #svg-container-landscape, #speech-bubble-area1, #text-area, #dummy-area3, #dummy-area4{
   margin-right: 10px;
   min-width: 200px;
-  height: 100%;
+  height: calc(100vh - 7vh);
+    max-height: calc(100vh - 7vh);
   background: #F9F9F9;
   border: 1px solid #ffc560;
   box-sizing: border-box;
@@ -24,14 +26,14 @@ body {
 
 
 #svg-preview-area-vertical, #svg-preview-area-landscape, #speech-bubble-svg-preview-area1, #text-preview-area, #dummy-svg-preview-area3, #dummy-svg-preview-area4 {
-  margin-right: 10px;
-  width: 200px;
-  height: 100%;
-  background: #F9F9F9;
-  border: 1px solid #ffc560;
-  box-sizing: border-box;
-  overflow-y: overlay;
+    width: 200px;
+    height: 97%;
+    background: #F9F9F9;
+    border: 1px solid #ffc560;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
+  
 
 
 #text-preview-area button, #text-preview-area hr, #text-preview-area label, #text-preview-area input[type="color"], #text-preview-area input[type="range"] {
@@ -59,7 +61,7 @@ button, .custom-file-upload {
     padding: 5px;
     font-size: 15px;
     color: #000000;
-    background: #ffd9a5;
+    background: #ffe1b7;
     border: 1px solid #ffc560;
     border-radius: 4px;
     cursor: pointer;
@@ -171,7 +173,8 @@ input[type="range"] {
 #sidebar {
     margin-right: 15px;
     width: 50px;
-    height: 100%;
+    height: calc(100vh - 9vh);
+    max-height: calc(100vh - 9vh);
     background: linear-gradient(145deg, #ffddbc, #ffe0ad);
     box-shadow: 2px 0 5px rgba(82, 40, 0, 0.1);
     display: flex;
@@ -235,3 +238,24 @@ input[type="range"] {
 }
 
 
+/* スクロールバー全体の幅を設定 */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* スクロールバーのトラック（スライダーが動く背景部分）のスタイル */
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+}
+
+/* スクロールバーのサム（動かせる部分）のスタイル */
+::-webkit-scrollbar-thumb {
+    background-color: #ffedd3;
+    border-radius: 10px;
+}
+
+/* スクロールバーのサムにホバーした時のスタイル */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #ffedd3;
+}

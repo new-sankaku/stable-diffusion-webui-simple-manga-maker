@@ -30,8 +30,12 @@ def create_ui():
             <style>
                 #sp_manga_editer_iframe {{
                     width: 100%;
-                    height: 82vh;
+                    height: 80vh;
                     border: none;
+                }}
+                #sp_manga_editer_main{{
+                    overflow-y: hidden;
+                    overflow-x: hidden;
                 }}
             </style>
             <iframe id="sp_manga_editer_iframe" src="{html.escape(html_url)}"></iframe>

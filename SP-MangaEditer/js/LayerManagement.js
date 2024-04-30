@@ -72,7 +72,6 @@ function removeLayer(layer) {
     canvas.discardActiveObject();
     canvas.requestRenderAll();
   }
-	saveState();
 }
 
 function highlightActiveLayer(activeIndex) {

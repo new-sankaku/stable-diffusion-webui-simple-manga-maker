@@ -33,14 +33,13 @@ function loadSVGPlusReset(svgString) {
     });
 
     canvas.renderAll();
-    saveState();
   });
 };
 
 function loadSVGReadOnly(svgString) {
   fabric.loadSVGFromString(svgString, function (objects, options) {
-    var canvasUsableHeight = canvas.height - svgPagging;
-    var overallScaleX = canvas.width / options.width;
+    var canvasUsableHeight = (canvas.height*0.3) - svgPagging;
+    var overallScaleX = (canvas.width*0.3) / options.width;
     var overallScaleY = canvasUsableHeight / options.height;
     var scaleToFit = Math.min(overallScaleX, overallScaleY);
     var offsetX = (canvas.width - options.width * scaleToFit) / 2;
@@ -68,7 +67,6 @@ function loadSVGReadOnly(svgString) {
 
     canvas.add(group);
     canvas.renderAll();
-    saveState();
     updateLayerPanel()
   });
 };
