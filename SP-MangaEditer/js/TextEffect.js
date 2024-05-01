@@ -283,7 +283,7 @@ function createTextbox() {
     width: 300,
     top: 50,
     left: 50,
-    fontSize: 20,
+    fontSize: 30,
     fill: document.getElementById("colorPicker").value,
   });
   canvas.add(textbox);

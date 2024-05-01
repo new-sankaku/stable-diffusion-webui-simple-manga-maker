@@ -104,3 +104,29 @@ function updateControls(activeObject) {
   document.getElementById("skewX-control").value = activeObject.skewX;
   document.getElementById("skewY-control").value = activeObject.skewY;
 }
+
+
+function LayersUp() {
+  console.log("LayersUp ");
+
+  var activeObject = canvas.getActiveObject();
+  if (activeObject) {
+    console.log("LayersUp exec");
+
+    activeObject.bringForward();
+    canvas.renderAll();
+    updateLayerPanel();
+  }
+}
+
+function LayersDown() {
+  console.log("LayersDown ");
+
+  var activeObject = canvas.getActiveObject();
+  if (activeObject) {
+    console.log("LayersDown exec");
+    activeObject.sendBackwards();
+    canvas.renderAll();
+    updateLayerPanel();
+  }
+}
