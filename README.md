@@ -26,7 +26,6 @@ Editor Interface
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/Editer.png" width="450">
 
 Sample Image 1
-![Cropped Image Example](SP-MangaEditer/99_sample_image/)
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/cropped-image.png" width="450">
 
 Sample Image 2
