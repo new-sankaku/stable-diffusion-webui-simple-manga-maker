@@ -7,9 +7,21 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <script src="third/Fabric.js/fabric.min.js"></script>
+
 </head>
 
 <body>
+    <div class="floating-window" id="myWindow">
+        <div class="header">
+            <span class="close-btn" onclick="closeWindow()">×</span>
+            <textarea id="textInput"></textarea>
+            <div class="button-container">
+                <button id="updateButton">Submit</button>
+                <button id="cancelButton">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div style="display: flex; flex-grow: 1;">
         <div id="sidebar">
             <div class="logo-container">
@@ -39,20 +51,27 @@
         <div id="text-area" style="display: none;">
             <div class="area-header">Text and Effect</div>
             <div id="text-preview-area">
-                <button onclick="createTextbox()"><i class="material-icons">text_fields</i> New Text</button>
+
+                <label>Text Color:</label>
+                <input type="color" id="colorPicker" value="#000000" oninput="changeTextColor(this.value)">
+
+                <label>Size(Vertical unsupport):</label>
+                <input type="range" id="fontSizeSlider" min="7" max="150" value="30" oninput="changeFontSize(this.value)">
+
+                <label style="display: none;">Neon Color:</label>
+                <input style="display: none;" type="color" id="neonColorPicker" value="#ff8080" oninput="changeNeonColor(this.value)">
+                <label style="display: none;">Neon Intensity:</label>
+                <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2" value="2" oninput="changeNeonIntensity(this.value)">
+                <hr>
+
+                <button onclick="createTextbox()"><i class="material-icons">text_fields</i><i class="material-icons">east</i> New Text</button>
+
+                <button id="openWindow"><i class="material-icons">text_fields</i><i class="material-icons">south</i> New Vertical Text</button>
+
                 <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
                 <button onclick="toggleShadow()"><i class="material-icons">highlight</i> Shadow</button>
                 <button onclick="applyInnerShadow()"><i class="material-icons">format_paint</i> Inner Shadow</button>
                 <hr>
-                <label>Text Color:</label>
-                <input type="color" id="colorPicker" value="#000000" oninput="changeTextColor(this.value)">
-                <label style="display: none;">Neon Color:</label>
-                <input style="display: none;" type="color" id="neonColorPicker" value="#ff8080" oninput="changeNeonColor(this.value)">
-                <label>Font Size:</label>
-                <input type="range" id="fontSizeSlider" min="10" max="100" value="20" oninput="changeFontSize(this.value)">
-                <label style="display: none;">Neon Intensity:</label>
-                <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2" value="2" oninput="changeNeonIntensity(this.value)">
-                <hr style="display: none;">
                 <label style="display: none;">Effects:</label>
                 <button style="display: none;" onclick="applyCSSTextEffect()"><i class="material-icons">format_shapes</i> CSS Text</button>
                 <button style="display: none;" onclick="applyPhotoshopTextEffect()"><i class="material-icons">filter</i> Photoshop Text</button>
@@ -83,9 +102,11 @@
                   <div class="info-item"><i class="material-icons">image</i> <a href="https://fukidesign.com" target="_blank">Speech Bubble</a></div>
                 </div>
                 <div class="info-section">
-                  <p>Additional links:</p>
+                  <p>Developer links:</p>
                   <div class="info-item"><i class="material-icons">alternate_email</i> <a href="https://twitter.com/hypersankaku2" target="_blank">Twitter</a></div>
                   <div class="info-item"><i class="material-icons">code</i> <a href="https://github.com/new-sankaku/SP-MangaEditer" target="_blank">GitHub</a></div>
+
+                  <div class="info-item"><i class="material-icons">send</i> <a href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues" target="_blank">Bug report / Feature add request</a></div>
                 </div>
               </div>
             </div>
@@ -108,24 +129,47 @@
         <div id="layer-panel">
             <div class="area-header">Layers</div>
             <div id="layer-content"></div>
-            <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
-            <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
+            <div id="layer-buttons">
+                <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
+                <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
+            </div>
         </div>
-        <div id="controls">
-            <div class="control"><label>Angle: <input type="range" id="angle-control" min="0" max="360"
-                        value="0"></label>
+        <div>
+            <div id="controls">
+                <div class="area-header">Common controle</div>
+                <div id="controle-content">
+                    <div class="control"><label>Angle: <input type="range" id="angle-control" min="0" max="360"
+                                value="0"></label>
+                    </div>
+                    <div class="control"><label>Scale: <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01"
+                                value="1"></label></div>
+                    <div class="control"><label>Top: <input type="range" id="top-control" min="-1200" max="1200"
+                                value="100"></label></div>
+                    <div class="control"><label>Left: <input type="range" id="left-control" min="-1200" max="1200"
+                                value="100"></label></div>
+                    <div class="control"><label>Skew X: <input type="range" id="skewX-control" min="-30" max="30"
+                                value="0"></label></div>
+                    <div class="control"><label>Skew Y: <input type="range" id="skewY-control" min="-30" max="30"
+                                value="0"></label></div>
+                </div>
             </div>
-            <div class="control"><label>Scale: <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01"
-                        value="1"></label></div>
-            <div class="control"><label>Top: <input type="range" id="top-control" min="-1200" max="1200"
-                        value="100"></label></div>
-            <div class="control"><label>Left: <input type="range" id="left-control" min="-1200" max="1200"
-                        value="100"></label></div>
-            <div class="control"><label>Skew X: <input type="range" id="skewX-control" min="-30" max="30"
-                        value="0"></label>
+            <div style="display: none;" id="panel-item-controls">
+                <div class="area-header">Panel controle</div>
+                <div id="panel-item-content">
+                    <label>test</label>
+                </div>
             </div>
-            <div class="control"><label>Skew Y: <input type="range" id="skewY-control" min="-30" max="30"
-                        value="0"></label>
+            <div style="display: none;" id="image-item-controls">
+                <div class="area-header">Image controle</div>
+                <div id="image-item-content">
+                    <label>test</label>
+                </div>
+            </div>
+            <div style="display: none;" id="text-item-controls">
+                <div class="area-header">Panel controle</div>
+                <div id="text-item-content">
+                    <label>test</label>
+                </div>
             </div>
         </div>
     </div>
@@ -142,6 +186,8 @@
     <script src="js/SvgHelper.js" defer></script>
     <script src="js/Sidebar.js" defer></script>
     <script src="js/TextEffect.js" defer></script>
+    <script src="js/VerticalText.js" defer></script>
+    
 </body>
 
 </html>

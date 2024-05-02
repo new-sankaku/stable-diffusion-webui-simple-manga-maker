@@ -6,3 +6,4 @@ var clipAreaCoords = { left: 50, top: 50, width: maxAreaWidth, height: maxAreaHe
 var svgPagging = 50;
 
 var canvas = new fabric.Canvas("mangaImageCanvas");
+

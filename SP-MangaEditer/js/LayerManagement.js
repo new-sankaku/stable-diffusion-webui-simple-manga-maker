@@ -1,42 +1,57 @@
 function updateLayerPanel() {
-  console.log( "updateLayerPanel" );
+  console.log("updateLayerPanel");
   var layers = canvas.getObjects();
   var layerContent = document.getElementById("layer-content");
   layerContent.innerHTML = "";
 
   layers.slice().reverse().forEach(function (layer, index) {
     if (!layer.excludeFromLayerPanel) {
-      console.log("if (!layer.excludeFromLayerPanel) { : layer.excludeFromLayerPanel", layer.excludeFromLayerPanel );
       var layerDiv = document.createElement("div");
       var previewDiv = document.createElement("div");
       var nameDiv = document.createElement("div");
       var deleteButton = document.createElement("button");
 
-      var tempCanvas = document.createElement("canvas");
-      tempCanvas.width = 100;
-      tempCanvas.height = 100;
-      var tempCtx = tempCanvas.getContext("2d");
+      if (["image", "rect", "circle", "path", "group"].includes(layer.type)) {
+        var tempCanvas = document.createElement("canvas");
+        tempCanvas.width = 100;
+        tempCanvas.height = 100;
+        var tempCtx = tempCanvas.getContext("2d");
 
-      if (layer.type === "image" && typeof layer.getElement === "function") {
-        tempCtx.drawImage(layer.getElement(), 0, 0, 100, 100);
-      } else if (
-        layer.type === "rect" ||
-        layer.type === "circle" ||
-        layer.type === "path"
-      ) {
-        layer.render(tempCtx);
+        console.log("layer.type", layer.type);
+        if (layer.type === "image" && typeof layer.getElement === "function") {
+          tempCtx.drawImage(layer.getElement(), 0, 0, 100, 100);
+
+        } else if (layer.type === "group") {
+          var groupScaleFactor = Math.min(100 / layer.width, 100 / layer.height);
+          tempCtx.save();
+          tempCtx.translate(50, 50);
+          tempCtx.scale(groupScaleFactor, groupScaleFactor);
+          tempCtx.translate(-layer.width / 2, -layer.height / 2);
+          layer.render(tempCtx);
+          tempCtx.restore();
+
+        } else {
+          layer.render(tempCtx);
+
+        }
+
+        var imageUrl = tempCanvas.toDataURL();
+        previewDiv.style.backgroundImage = "url(" + imageUrl + ")";
+        previewDiv.style.backgroundSize = "contain";
+        previewDiv.style.backgroundPosition = "center";
+        previewDiv.style.backgroundRepeat = "no-repeat";
+        previewDiv.className = "layer-preview";
+        layerDiv.appendChild(previewDiv);
+      } else if (layer.type === "text" || layer.type === "textbox") {
+        var fullText = layer.text;
+        nameDiv.textContent = fullText.substring(0, 20);
+      } else if (layer.type === "verticalText") {
+        var fullText = layer.getObjects().map(obj => obj.text).join('');
+        nameDiv.textContent = fullText.substring(0, 15);
       }
 
-      var imageUrl = tempCanvas.toDataURL();
-
-      previewDiv.style.backgroundImage = "url(" + imageUrl + ")";
-      previewDiv.style.backgroundSize = "contain"; 
-      previewDiv.style.backgroundPosition = "center";
-      previewDiv.style.backgroundRepeat = "no-repeat"; 
-      previewDiv.className = "layer-preview";
-      nameDiv.textContent =
-        layer.fileName || layer.imgUrl || "Layer " + (index + 1);
       nameDiv.className = "layer-name";
+      nameDiv.textContent = nameDiv.textContent || layer.name || `Layer ${index + 1}`;
 
       deleteButton.textContent = "✕";
       deleteButton.className = "delete-layer-button";
@@ -47,7 +62,6 @@ function updateLayerPanel() {
 
       layerDiv.setAttribute("data-id", layer.id);
       layerDiv.className = "layer-item";
-      layerDiv.appendChild(previewDiv);
       layerDiv.appendChild(nameDiv);
       layerDiv.appendChild(deleteButton);
       layerDiv.onclick = function () {
@@ -56,11 +70,11 @@ function updateLayerPanel() {
         highlightActiveLayer(index);
         updateControls(layer);
       };
+
       layerContent.appendChild(layerDiv);
     }
   });
 }
-
 
 function removeLayer(layer) {
   canvas.remove(layer);
@@ -75,7 +89,7 @@ function removeLayer(layer) {
 }
 
 function highlightActiveLayer(activeIndex) {
-  console.log("Activating layer at index:", activeIndex);
+  //console.log("Activating layer at index:", activeIndex);
   var layerItems = document.querySelectorAll(".layer-item");
   layerItems.forEach((layer, index) => {
     if (index === activeIndex) {
@@ -107,11 +121,11 @@ function updateControls(activeObject) {
 
 
 function LayersUp() {
-  console.log("LayersUp ");
+  //console.log("LayersUp ");
 
   var activeObject = canvas.getActiveObject();
   if (activeObject) {
-    console.log("LayersUp exec");
+    //console.log("LayersUp exec");
 
     activeObject.bringForward();
     canvas.renderAll();
@@ -120,11 +134,11 @@ function LayersUp() {
 }
 
 function LayersDown() {
-  console.log("LayersDown ");
+  //console.log("LayersDown ");
 
   var activeObject = canvas.getActiveObject();
   if (activeObject) {
-    console.log("LayersDown exec");
+    //console.log("LayersDown exec");
     activeObject.sendBackwards();
     canvas.renderAll();
     updateLayerPanel();

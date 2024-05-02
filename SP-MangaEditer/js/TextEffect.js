@@ -16,13 +16,30 @@ canvas.on('selection:updated', function(event) {
   }
 });
 
+function rgbToHex(rgb) {
+  let match = rgb.match(/^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$/);
+  if (!match) {
+    return rgb;
+  }
+  function convert(color) {
+    let hex = parseInt(color).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  }
+  return '#' + convert(match[1]) + convert(match[2]) + convert(match[3]);
+}
+
 function updateControls(object) {
-  if (isText(object)) {
-    document.getElementById('colorPicker').value = object.fill;
+
+  if(isVerticalText(object)){
+    let firstText = object.getObjects('text')[0];
+    let inheritedColor = firstText ? firstText.fill : document.getElementById("colorPicker").value;
+    document.getElementById('colorPicker').value = inheritedColor;
+  }else if (isText(object)) {
+    let hexColor = rgbToHex(object.fill);
+    document.getElementById('colorPicker').value = hexColor;
     document.getElementById('fontSizeSlider').value = object.fontSize;
   }
 }
-
 
 function applyCSSTextEffect() {
   const activeObject = canvas.getActiveObject();
@@ -305,7 +322,16 @@ function toggleShadow() {
 
 function toggleBold() {
   var activeObject = canvas.getActiveObject();
-  if (isText(activeObject)) {
+
+  if( isVerticalText(activeObject) ){
+    activeObject.getObjects().forEach(function(obj) {
+      if (obj.type === 'text') {
+        var isBold = obj.fontWeight === "bold";
+        obj.set("fontWeight", isBold ? "" : "bold");
+      }
+    });
+    canvas.renderAll();
+  }else if(isText(activeObject)) {
     var isBold = activeObject.fontWeight === "bold";
     activeObject.set("fontWeight", isBold ? "" : "bold");
     canvas.renderAll();
@@ -314,6 +340,7 @@ function toggleBold() {
 
 function changeFontSize(size) {
   var activeObject = canvas.getActiveObject();
+  
   if (isText(activeObject)) {
     activeObject.set("fontSize", parseInt(size));
     canvas.renderAll();
@@ -322,7 +349,15 @@ function changeFontSize(size) {
 
 function changeTextColor(color) {
   var activeObject = canvas.getActiveObject();
-  if (isText(activeObject)) {
+
+  if( isVerticalText(activeObject) ){
+    activeObject.getObjects().forEach(function(obj) {
+      if (obj.type === 'text') {
+        obj.set("fill", color);
+      }
+    });
+    canvas.renderAll();
+  }else if(isText(activeObject)) {
     activeObject.set("fill", color);
     canvas.renderAll();
   }
@@ -368,10 +403,18 @@ function updateNeonEffect(activeObject) {
   }
 }
 
+function isVerticalText(activeObject) {
+  if (activeObject && (activeObject.type === "verticalText") ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function isText(activeObject) {
   // console.log("isText(activeObject) start");
 
-  if (activeObject && (activeObject.type === "text" || activeObject.type === "textbox") ) {
+  if (activeObject && (activeObject.type === "text" || activeObject.type === "textbox"|| activeObject.type === "verticalText") ) {
     // console.log("isText(activeObject) true");
     return true;
   } else {

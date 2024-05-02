@@ -1,3 +1,4 @@
+/** Load SVG(Verfical, Landscope) */
 function loadSVGPlusReset(svgString) {
   allRemove();
   fabric.loadSVGFromString(svgString, function (objects, options) {
@@ -36,6 +37,7 @@ function loadSVGPlusReset(svgString) {
   });
 };
 
+/** Sppech bubble */
 function loadSVGReadOnly(svgString) {
   fabric.loadSVGFromString(svgString, function (objects, options) {
     var canvasUsableHeight = (canvas.height*0.3) - svgPagging;
@@ -71,14 +73,15 @@ function loadSVGReadOnly(svgString) {
   });
 };
 
-
+/** load svg. */
 const previewAreaVertical = document.getElementById("svg-preview-area-vertical");
 const previewAreaLandscape = document.getElementById("svg-preview-area-landscape");
 const speechBubbleArea = document.getElementById("speech-bubble-svg-preview-area1");
 
 window.onload = function() {
-
   previewAreaVertical.innerHTML = "";
+
+/** Load vertical manga panel image. */
   MangaPanelsImage_Vertical.forEach(item => {
     const img = document.createElement("img");
     img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg);
@@ -90,7 +93,8 @@ window.onload = function() {
     previewAreaVertical.appendChild(img);
   });
 
-  previewAreaLandscape.innerHTML = "";
+/** Load landscape manga panel image. */
+previewAreaLandscape.innerHTML = "";
   MangaPanelsImage_Landscape.forEach(item => {
     const img = document.createElement("img");
     img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg);
@@ -102,7 +106,8 @@ window.onload = function() {
     previewAreaLandscape.appendChild(img);
   });
 
-  speechBubbleArea.innerHTML = "";
+/** Load speech bubble manga panel image. */
+speechBubbleArea.innerHTML = "";
   SpeechBubble.forEach(item => {
     const img = document.createElement("img");
     img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(item.svg);
@@ -116,7 +121,7 @@ window.onload = function() {
 };
 
 
-
+/** Disallow drag-on-drop. */
 document.addEventListener('DOMContentLoaded', function() {
   var svgPreviewArea = document.getElementById('svg-container-vertical');
   svgPreviewArea.addEventListener('mousedown', function(event) {
@@ -125,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }, false);
 });
 
-
+/** Disallow drag-on-drop. */
 document.addEventListener('DOMContentLoaded', function() {
   var svgPreviewArea = document.getElementById('svg-container-landscape');
   svgPreviewArea.addEventListener('mousedown', function(event) {
@@ -133,8 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
       event.stopPropagation();
   }, false);
 });
-
-
+/** Disallow drag-on-drop. */
 document.addEventListener('DOMContentLoaded', function() {
   var svgPreviewArea = document.getElementById('speech-bubble-area1');
   svgPreviewArea.addEventListener('mousedown', function(event) {
