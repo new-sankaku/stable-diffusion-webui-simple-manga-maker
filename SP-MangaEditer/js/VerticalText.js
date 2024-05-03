@@ -5,7 +5,7 @@ const textInput = document.getElementById("textInput");
 let isDragging = false;
 let offsetX, offsetY;
 
-console.log("openButton", openButton);
+// console.log("openButton", openButton);
 openButton.addEventListener("click", function () {
   const selectedObject = canvas.getActiveObject();
   if (selectedObject && selectedObject.type === "verticalText") {

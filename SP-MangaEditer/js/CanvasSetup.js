@@ -51,30 +51,43 @@ document.getElementById("canvas-container").addEventListener(
           var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / img.height;
           var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
 
-          var clipPath = new fabric.Path(targetFrame.path);
+          var clipPath;
+          if (targetFrame.type === "polygon") {
+            clipPath = new fabric.Polygon(targetFrame.points);
+            clipPath.set({
+              left: targetFrame.left + (targetFrame.strokeWidth * targetFrame.scaleX),
+              top: targetFrame.top + (targetFrame.strokeWidth * targetFrame.scaleY),
+              scaleX: targetFrame.scaleX - ( (targetFrame.strokeWidth * targetFrame.scaleX) / targetFrame.width  ) - 0.001,
+              scaleY: targetFrame.scaleY - ( (targetFrame.strokeWidth * targetFrame.scaleY) / targetFrame.height  ) - 0.001,
+              absolutePositioned: true,
+            });
+          } else {
+
+            clipPath = new fabric.Path(targetFrame.path);
+            clipPath.set({
+              left: targetFrame.left + (targetFrame.strokeWidth),
+              top: targetFrame.top + (targetFrame.strokeWidth),
+              scaleX: targetFrame.scaleX - ( (targetFrame.strokeWidth) / targetFrame.width  ),
+              scaleY: targetFrame.scaleY - ( (targetFrame.strokeWidth) / targetFrame.height  ),
+              absolutePositioned: true,
+            });
+          }
           img.set({
             left: frameCenterX - (img.width * scaleToFit) / 2,
             top: frameCenterY - (img.height * scaleToFit) / 2,
-            scaleX: scaleToFit,
-            scaleY: scaleToFit,
+            scaleX: scaleToFit * 1.05,
+            scaleY: scaleToFit * 1.05,
           });
 
-          clipPath.set({
-            left: targetFrame.left + 1,
-            top: targetFrame.top + 1,
-            scaleX: targetFrame.scaleX * 0.998,
-            scaleY: targetFrame.scaleY * 0.998,
-            absolutePositioned: true,
-          });
           img.clipPath = clipPath;
         } else {
-          var scaleToCanvasWidth = 0.8 * canvasWidth / img.width;
-          var scaleToCanvasHeight = 0.8 * canvasHeight / img.height;
+          var scaleToCanvasWidth = 300 / img.width;
+          var scaleToCanvasHeight = 300 / img.height;
           var scaleToCanvas = Math.min(scaleToCanvasWidth, scaleToCanvasHeight);
 
           img.set({
-            left: (canvasWidth - img.width * scaleToCanvas) / 2,
-            top: (canvasHeight - img.height * scaleToCanvas) / 2,
+            left: 50,
+            top: 50,
             scaleX: scaleToCanvas,
             scaleY: scaleToCanvas,
           });
@@ -90,11 +103,11 @@ document.getElementById("canvas-container").addEventListener(
   false
 );
 
-
 function findTargetFrame(x, y) {
-  let objects = canvas.getObjects();
+  let objects = canvas.getObjects().reverse();
   for (let i = 0; i < objects.length; i++) {
-    if (objects[i].type === "path" || objects[i].type === "rect") {
+    if (objects[i].type === "path" || objects[i].type === "rect" || objects[i].type === "polygon") {
+      console.log("findTargetFrame(x, y)", findTargetFrame);
       let frameBounds = objects[i].getBoundingRect(true);
       if (
         x >= frameBounds.left &&
@@ -102,10 +115,11 @@ function findTargetFrame(x, y) {
         y >= frameBounds.top &&
         y <= frameBounds.top + frameBounds.height
       ) {
-        return i;
+        return canvas.getObjects().length - 1 - i;
       }
     }
   }
+  console.log("findTargetFrame(x, y) NO HIT.");
   return -1;
 }
 

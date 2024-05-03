@@ -29,9 +29,9 @@
             </div>
             <i class="material-icons" onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
             <i class="material-icons" onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
+            <i class="material-icons" onclick="toggleVisibility('panel-manager-area');">dashboard</i>
             <i class="material-icons" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
             <i class="material-icons" onclick="toggleVisibility('text-area');">text_fields</i>
-            <i class="material-icons" style="display: none;" onclick="toggleVisibility('dummy-area3');">settings</i>
             <i class="material-icons" onclick="toggleVisibility('dummy-area4');">info</i>
         </div>
 
@@ -43,10 +43,27 @@
             <div class="area-header">Panels(Click only)</div>
             <div id="svg-preview-area-landscape"></div>
         </div>
+        
+        <div id="panel-manager-area" style="display: none;">
+            <div class="area-header">Panel Manager</div>
+            <div id="panel-manager-items">
+                <label for="strokeColor">Line Color:</label>
+                <input type="color" id="strokeColor" name="strokeColor" value="#000000" onchange="changeStrokeColor(this.value)">
+                <label for="strokeWidth">Line Width:</label>
+                <input type="range" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2" onchange="changeStrokeWidth(this.value)">
+                <hr>
+                <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i>New Square</button>
+                <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i>Editing Mode</button>
+            </div>
+        </div>
 
         <div id="speech-bubble-area1" style="display: none;">
             <div class="area-header">Bubble(Click only)</div>
-            <div id="speech-bubble-svg-preview-area1"></div>
+            <div id="speech-bubble-svg-preview-area1">
+                <label style="display: none;">Line Size</label>
+                <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10" value="3">
+                <hr style="display: none;">
+            </div>
         </div>
         <div id="text-area" style="display: none;">
             <div class="area-header">Text and Effect</div>
@@ -83,10 +100,7 @@
                 <button style="display: none;" onclick="applyZebraReflectionEffect()"><i class="material-icons">view_compact</i> Reflection</button>
             </div>
         </div>
-        <div id="dummy-area3" style="display: none;">
-            <div class="area-header">dummy3</div>
-            <div id="dummy-svg-preview-area3"></div>
-        </div>
+
         <div id="dummy-area4" style="display: none;">
             <div class="area-header">Information</div>
             <div id="dummy-svg-preview-area4">
@@ -187,6 +201,8 @@
     <script src="js/Sidebar.js" defer></script>
     <script src="js/TextEffect.js" defer></script>
     <script src="js/VerticalText.js" defer></script>
+    <script src="js/PanelManager.js" defer></script>
+    
     
 </body>
 

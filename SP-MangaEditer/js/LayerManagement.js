@@ -1,3 +1,5 @@
+
+
 function updateLayerPanel() {
   console.log("updateLayerPanel");
   var layers = canvas.getObjects();
@@ -11,13 +13,15 @@ function updateLayerPanel() {
       var nameDiv = document.createElement("div");
       var deleteButton = document.createElement("button");
 
-      if (["image", "rect", "circle", "path", "group"].includes(layer.type)) {
+      console.log("layer.type", layer.type);
+
+      if (["image", "rect", "circle", "path", "group", "polygon"].includes(layer.type)) {
         var tempCanvas = document.createElement("canvas");
         tempCanvas.width = 100;
         tempCanvas.height = 100;
         var tempCtx = tempCanvas.getContext("2d");
 
-        console.log("layer.type", layer.type);
+        // console.log("layer.type", layer.type);
         if (layer.type === "image" && typeof layer.getElement === "function") {
           tempCtx.drawImage(layer.getElement(), 0, 0, 100, 100);
 
@@ -32,7 +36,6 @@ function updateLayerPanel() {
 
         } else {
           layer.render(tempCtx);
-
         }
 
         var imageUrl = tempCanvas.toDataURL();
@@ -99,6 +102,37 @@ function highlightActiveLayer(activeIndex) {
     }
   });
 }
+
+
+function highlightActiveLayer() {
+  var activeIndex = getActiveObjectIndex(canvas);
+  var layers = document.querySelectorAll(".layer-item");
+
+  var reverseIndex = layers.length - 1 - activeIndex;
+  layers.forEach(function(layerDiv, index) {
+    if (index === reverseIndex) {
+      layerDiv.classList.add("active");
+    } else {
+      layerDiv.classList.remove("active");
+    }
+  });
+}
+
+function getActiveObjectIndex(canvas) {
+  var activeObject = canvas.getActiveObject();
+  var objects = canvas.getObjects();
+  var index = objects.indexOf(activeObject);
+  return index;
+}
+
+// Canvas のオブジェクト選択イベントに反応する
+canvas.on('selection:created', highlightActiveLayerByCanvas);
+canvas.on('selection:updated', highlightActiveLayerByCanvas);
+canvas.on('selection:cleared', function() {
+  var layers = document.querySelectorAll(".layer-item");
+  layers.forEach(layer => layer.classList.remove("active"));
+});
+
 
 function updateControls(activeObject) {
   if (!activeObject) {

@@ -13,7 +13,7 @@ body {
     box-sizing: border-box;
 }
 
-#svg-container-vertical, #svg-container-landscape, #speech-bubble-area1, #text-area, #dummy-area3, #dummy-area4{
+#svg-container-vertical, #svg-container-landscape, #speech-bubble-area1, #text-area, #panel-manager-area, #dummy-area4{
   margin-right: 10px;
   min-width: 200px;
   height: calc(100vh - 7vh);
@@ -25,7 +25,7 @@ body {
 }
 
 
-#svg-preview-area-vertical, #svg-preview-area-landscape, #speech-bubble-svg-preview-area1, #text-preview-area, #dummy-svg-preview-area3, #dummy-svg-preview-area4 {
+#svg-preview-area-vertical, #svg-preview-area-landscape, #speech-bubble-svg-preview-area1, #text-preview-area, #panel-manager-items, #dummy-svg-preview-area4 {
     width: 200px;
     height: 97%;
     background: #F9F9F9;
@@ -36,17 +36,32 @@ body {
   
 
 
-#text-preview-area button, #text-preview-area hr, #text-preview-area label, #text-preview-area input[type="color"], #text-preview-area input[type="range"] {
-    margin: 7px;
-}
+#text-preview-area button, 
+#text-preview-area hr, 
+#text-preview-area label, 
+#text-preview-area input[type="color"], 
+#text-preview-area input[type="range"], 
+#panel-manager-items button, 
+#panel-manager-items hr, 
+#panel-manager-items label, 
+#panel-manager-items input[type="color"], 
+#panel-manager-items input[type="range"], 
 
-#text-preview-area input[type="range"], #text-preview-area button {
+#speech-bubble-svg-preview-area1 button, 
+#speech-bubble-svg-preview-area1 hr, 
+#speech-bubble-svg-preview-area1 label, 
+#speech-bubble-svg-preview-area1 input[type="color"], 
+#speech-bubble-svg-preview-area1 input[type="range"]
+{
     display: block;
     width: 92%;
     margin: 7px;
+    text-align: left; 
 }
 
-#text-preview-area button .material-icons {
+#text-preview-area button .material-icons,
+#panel-manager-items button .material-icons
+{
     vertical-align: middle;
 }
 
@@ -197,6 +212,7 @@ input[type="range"] {
 #sidebar {
     margin-right: 15px;
     width: 50px;
+    min-width: 50px;
     height: calc(100vh - 9vh);
     max-height: calc(100vh - 9vh);
     background: linear-gradient(145deg, #ffddbc, #ffe0ad);
