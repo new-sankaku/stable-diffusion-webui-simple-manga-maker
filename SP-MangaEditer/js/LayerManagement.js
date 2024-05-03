@@ -104,7 +104,7 @@ function highlightActiveLayer(activeIndex) {
 }
 
 
-function highlightActiveLayer() {
+function highlightActiveLayerByCanvas() {
   var activeIndex = getActiveObjectIndex(canvas);
   var layers = document.querySelectorAll(".layer-item");
 
