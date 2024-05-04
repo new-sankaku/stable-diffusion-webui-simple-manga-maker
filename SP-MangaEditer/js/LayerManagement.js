@@ -1,7 +1,7 @@
 
 
 function updateLayerPanel() {
-  console.log("updateLayerPanel");
+  // console.log("updateLayerPanel");
   var layers = canvas.getObjects();
   var layerContent = document.getElementById("layer-content");
   layerContent.innerHTML = "";
@@ -13,7 +13,7 @@ function updateLayerPanel() {
       var nameDiv = document.createElement("div");
       var deleteButton = document.createElement("button");
 
-      console.log("layer.type", layer.type);
+      // console.log("layer.type", layer.type);
 
       if (["image", "rect", "circle", "path", "group", "polygon"].includes(layer.type)) {
         var tempCanvas = document.createElement("canvas");
