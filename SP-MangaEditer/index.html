@@ -75,6 +75,16 @@
                 <label>Size(Vertical unsupport):</label>
                 <input type="range" id="fontSizeSlider" min="7" max="150" value="30" oninput="changeFontSize(this.value)">
 
+                <label>Font:</label>
+                <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
+                    <option style="font-family: 'KleeOne';">KleeOne</option>
+                    <option style="font-family: 'Arial';">Arial</option>
+                    <option style="font-family: 'Comic Sans MS';">Comic Sans MS</option>
+                    <option style="font-family: 'DotGothic16';">DotGothic16</option>
+                    <option style="font-family: 'Stick';">Stick</option>
+                </select>
+                
+
                 <label style="display: none;">Neon Color:</label>
                 <input style="display: none;" type="color" id="neonColorPicker" value="#ff8080" oninput="changeNeonColor(this.value)">
                 <label style="display: none;">Neon Intensity:</label>

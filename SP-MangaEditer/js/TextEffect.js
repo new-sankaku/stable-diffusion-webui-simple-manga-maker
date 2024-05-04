@@ -30,6 +30,8 @@ function rgbToHex(rgb) {
 
 function updateControls(object) {
 
+  var selectedFont = document.getElementById('fontSelector').value;
+
   if(isVerticalText(object)){
     let firstText = object.getObjects('text')[0];
     let inheritedColor = firstText ? firstText.fill : document.getElementById("colorPicker").value;
@@ -295,14 +297,22 @@ function applyNeonEffect() {
 }
 
 function createTextbox() {
-
-  var textbox = new fabric.Textbox("This is new text.", {
+  var selectedFont = document.getElementById('fontSelector').value;
+  console.log( "selectedFont", selectedFont )
+  var textbox = new fabric.Textbox("This is new text. 人類普遍のうんぬん。", {
     width: 300,
     top: 50,
     left: 50,
     fontSize: 30,
+    fontFamily: selectedFont, 
     fill: document.getElementById("colorPicker").value,
   });
+  
+  textbox.on('text:changed', function() {
+    textbox.set({ fontFamily: selectedFont });
+    canvas.requestRenderAll();
+  });
+
   canvas.add(textbox);
   canvas.setActiveObject(textbox);
   updateLayerPanel();
@@ -423,5 +433,15 @@ function isText(activeObject) {
       // console.log("isText(activeObject) ", activeObject.type);
     }
     return false;
+  }
+}
+
+
+function changeFont(font) {
+  document.getElementById("text-preview-area").style.fontFamily = font;
+  var select = document.getElementById("fontSelector");
+  var options = select.options;
+  for (var i = 0; i < options.length; i++) {
+      options[i].style.fontFamily = font; // ドロップボックス内のフォントを変更
   }
 }

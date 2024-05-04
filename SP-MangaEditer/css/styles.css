@@ -334,3 +334,27 @@ textarea {
     writing-mode: vertical-rl;
     text-orientation: upright;
 }
+
+.dynamic-font {
+    font-family: 'Arial',
+}
+@font-face {
+    font-family: 'DotGothic16';
+    src: url('../font/DotGothic16/DotGothic16-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Stick';
+    src: url('../font/Stick/Stick-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'KleeOne';
+    src: url('../font/Klee_One/KleeOne-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
