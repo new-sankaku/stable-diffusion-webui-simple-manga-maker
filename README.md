@@ -10,13 +10,17 @@ A simple manga editor built with HTML, CSS, and JavaScript. It operates directly
 
 ## Features
 
-- **Manga Panel**: Prepared manga panel pages for easy comic creation.
-- **Speech Bubble Insertion**: Speech bubbles are available as materials for easy insertion.
-- **Overlay Display**: Items can be displayed as overlays by dragging and dropping outside the frame area.
-- **Layer Display**: Manage multiple images and texts as layers.
-- **Image Editing Features**: Supports changing image angles, positions, scale, and movements along the X and Y axes, including horizontal and vertical image flipping.
-- **Undo/Redo Functionality**: Easily undo or redo editing actions.
-- **Image Saving**: Edited images can be directly saved to the download folder.
+- **Manga panel**: Standard comic panel page.
+- **Panel**: Adding frames and editing frames.
+- **Insert speech bubble**: Standard equipped speech bubble.
+- **Automatic application within a frame**: Automatically applied by dropping within a frame.
+- **Overlay display**: Overlay items by dropping them outside the frame.
+- **Layer display**: Images/text/frames can be managed as layers.
+- **Image editing features**: angle, position, scale, changes along the X and Y axes, horizontal flip, vertical flip of the image.
+- **Image Effects**: Sepia, Grayscale, Gamma, Blur, Vibrance, Pixelate.
+- **Text**: Vertical, horizontal, bold, shadow, and manga-friendly fonts.
+- **Undo/forward function**: You can rewind or postpone editing.
+- **Image saving**: Edited images can be saved directly to the download folder.
 
 ## Screenshots
 
