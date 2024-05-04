@@ -73,6 +73,9 @@ body {
     margin: 7px;
     text-align: left; 
 }
+#text-preview-area select{
+    font-size: 20px;
+}
 
 #text-preview-area button .material-icons,
 #panel-manager-items button .material-icons
@@ -191,29 +194,62 @@ button:active, .custom-file-upload:active {
     white-space: nowrap;
 }
 
+#image-item-controls {
+    margin-top: 20px;
+}
 
-#controls .control, 
+#common-controls .control, 
 #text-item-controls .control, 
-#image-item-controls .control, 
-#panel-item-controls .control {
+#panel-item-controls .control,
+#image-item-controls .control {
     margin: 5px;
 }
 
-#controle-content, 
-#image-item-controls, 
 #text-item-controls, 
 #panel-item-controls{
     overflow-y: auto;
     border: 2px solid #4D4D4D;
-    height: 500px;
+    height: 350px;
 }
 
-#layer-panel, #controls {
+
+.control {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    width: 95%;
+}
+
+.control label {
+    white-space: nowrap;
+    flex-shrink: 0;
+    width: 20%; 
+    text-align: left;
+    margin-right: 5px;
+}
+
+.control input[type="range"] {
+    flex-basis: 50%;
+}
+
+.control input[type="checkbox"],
+.control input[type="radio"] {
+    width: auto;
+}
+
+#layer-panel {
     flex: 0 0 20%;
     margin-right: 10px;
     max-width: 200px;
 }
-#image-item-controls, #text-item-controls, #panel-item-controls {
+
+
+
+
+
+#text-item-controls, 
+#panel-item-controls {
     flex: 0 0 20%;
     margin-right: 10px;
     margin-bottom: 10px;
@@ -226,9 +262,9 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="range"] {
+/* input[type="range"] {
     width: 100%;
-}
+} */
 
 #sidebar {
     margin-right: 15px;
@@ -256,7 +292,6 @@ input[type="range"] {
     transform: scale(1.1);
 }
  
-#controle-content button .material-icons,
 #canvas-buttons button .material-icons, 
 #layer-buttons  button .material-icons{
     font-size: 18px;

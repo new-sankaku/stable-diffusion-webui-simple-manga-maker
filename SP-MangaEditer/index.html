@@ -43,14 +43,16 @@
             <div class="area-header">Panels(Click only)</div>
             <div id="svg-preview-area-landscape"></div>
         </div>
-        
+
         <div id="panel-manager-area" style="display: none;">
             <div class="area-header">Panel Manager</div>
             <div id="panel-manager-items">
                 <label for="strokeColor">Line Color:</label>
-                <input type="color" id="strokeColor" name="strokeColor" value="#000000" onchange="changeStrokeColor(this.value)">
+                <input type="color" id="strokeColor" name="strokeColor" value="#000000"
+                    onchange="changeStrokeColor(this.value)">
                 <label for="strokeWidth">Line Width:</label>
-                <input type="range" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2" onchange="changeStrokeWidth(this.value)">
+                <input type="range" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2"
+                    onchange="changeStrokeWidth(this.value)">
                 <hr>
                 <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i>New Square</button>
                 <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i>Editing Mode</button>
@@ -73,7 +75,8 @@
                 <input type="color" id="colorPicker" value="#000000" oninput="changeTextColor(this.value)">
 
                 <label>Size(Vertical unsupport):</label>
-                <input type="range" id="fontSizeSlider" min="7" max="150" value="30" oninput="changeFontSize(this.value)">
+                <input type="range" id="fontSizeSlider" min="7" max="150" value="30"
+                    oninput="changeFontSize(this.value)">
 
                 <label>Font:</label>
                 <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
@@ -83,59 +86,79 @@
                     <option style="font-family: 'DotGothic16';">DotGothic16</option>
                     <option style="font-family: 'Stick';">Stick</option>
                 </select>
-                
+
 
                 <label style="display: none;">Neon Color:</label>
-                <input style="display: none;" type="color" id="neonColorPicker" value="#ff8080" oninput="changeNeonColor(this.value)">
+                <input style="display: none;" type="color" id="neonColorPicker" value="#ff8080"
+                    oninput="changeNeonColor(this.value)">
                 <label style="display: none;">Neon Intensity:</label>
-                <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2" value="2" oninput="changeNeonIntensity(this.value)">
+                <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2" value="2"
+                    oninput="changeNeonIntensity(this.value)">
                 <hr>
 
-                <button onclick="createTextbox()"><i class="material-icons">text_fields</i><i class="material-icons">east</i> New Text</button>
+                <button onclick="createTextbox()"><i class="material-icons">text_fields</i><i
+                        class="material-icons">east</i> New Text</button>
 
-                <button id="openWindow"><i class="material-icons">text_fields</i><i class="material-icons">south</i> New Vertical Text</button>
+                <button id="openWindow"><i class="material-icons">text_fields</i><i class="material-icons">south</i> New
+                    Vertical Text</button>
 
                 <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
                 <button onclick="toggleShadow()"><i class="material-icons">highlight</i> Shadow</button>
                 <button onclick="applyInnerShadow()"><i class="material-icons">format_paint</i> Inner Shadow</button>
                 <hr>
                 <label style="display: none;">Effects:</label>
-                <button style="display: none;" onclick="applyCSSTextEffect()"><i class="material-icons">format_shapes</i> CSS Text</button>
-                <button style="display: none;" onclick="applyPhotoshopTextEffect()"><i class="material-icons">filter</i> Photoshop Text</button>
-                <button style="display: none;" onclick="applySpaceAgeEffect()"><i class="material-icons">space_bar</i> Space Age</button>
-                <button style="display: none;" onclick="applySpaceAgeEffect2()"><i class="material-icons">space_bar</i> Space Age2</button>
-                <button style="display: none;" onclick="applyGeneratorBasedEffect()"><i class="material-icons">transform</i> Generator Based</button>
-                <button style="display: none;" onclick="applyNeonEffect()"><i class="material-icons">flare</i> Neon</button>
-                <button style="display: none;" onclick="applyNeonJitterEffect()"><i class="material-icons">vibration</i> Neon Jitter</button>
-                <button style="display: none;" onclick="applyZebraReflectionEffect()"><i class="material-icons">view_compact</i> Reflection</button>
+                <button style="display: none;" onclick="applyCSSTextEffect()"><i
+                        class="material-icons">format_shapes</i> CSS Text</button>
+                <button style="display: none;" onclick="applyPhotoshopTextEffect()"><i class="material-icons">filter</i>
+                    Photoshop Text</button>
+                <button style="display: none;" onclick="applySpaceAgeEffect()"><i class="material-icons">space_bar</i>
+                    Space Age</button>
+                <button style="display: none;" onclick="applySpaceAgeEffect2()"><i class="material-icons">space_bar</i>
+                    Space Age2</button>
+                <button style="display: none;" onclick="applyGeneratorBasedEffect()"><i
+                        class="material-icons">transform</i> Generator Based</button>
+                <button style="display: none;" onclick="applyNeonEffect()"><i class="material-icons">flare</i>
+                    Neon</button>
+                <button style="display: none;" onclick="applyNeonJitterEffect()"><i class="material-icons">vibration</i>
+                    Neon Jitter</button>
+                <button style="display: none;" onclick="applyZebraReflectionEffect()"><i
+                        class="material-icons">view_compact</i> Reflection</button>
             </div>
         </div>
 
         <div id="dummy-area4" style="display: none;">
             <div class="area-header">Information</div>
             <div id="dummy-svg-preview-area4">
-              <!-- License Information -->
-              <div id="license-info">
-                <div class="info-section">
-                  <p>Libraries:</p>
-                  <div class="info-item"><i class="material-icons">brush</i> <a href="http://fabricjs.com/" target="_blank">Fabric.js</a></div>
-                  <div class="info-item"><i class="material-icons">add_reaction</i> <a href="https://fonts.google.com/icons" target="_blank">Google Icons</a></div>
-                  <div class="info-item"><i class="material-icons">font_download</i> <a href="https://fonts.google.com" target="_blank">Google Font</a></div>
-                </div>
-                <div class="info-section">
-                  <p>Materials:</p>
-                  <div class="info-item"><i class="material-icons">image</i> <a href="https://fukidesign.com" target="_blank">Speech Bubble</a></div>
-                </div>
-                <div class="info-section">
-                  <p>Developer links:</p>
-                  <div class="info-item"><i class="material-icons">alternate_email</i> <a href="https://twitter.com/hypersankaku2" target="_blank">Twitter</a></div>
-                  <div class="info-item"><i class="material-icons">code</i> <a href="https://github.com/new-sankaku/SP-MangaEditer" target="_blank">GitHub</a></div>
+                <!-- License Information -->
+                <div id="license-info">
+                    <div class="info-section">
+                        <p>Libraries:</p>
+                        <div class="info-item"><i class="material-icons">brush</i> <a href="http://fabricjs.com/"
+                                target="_blank">Fabric.js</a></div>
+                        <div class="info-item"><i class="material-icons">add_reaction</i> <a
+                                href="https://fonts.google.com/icons" target="_blank">Google Icons</a></div>
+                        <div class="info-item"><i class="material-icons">font_download</i> <a
+                                href="https://fonts.google.com" target="_blank">Google Font</a></div>
+                    </div>
+                    <div class="info-section">
+                        <p>Materials:</p>
+                        <div class="info-item"><i class="material-icons">image</i> <a href="https://fukidesign.com"
+                                target="_blank">Speech Bubble</a></div>
+                    </div>
+                    <div class="info-section">
+                        <p>Developer links:</p>
+                        <div class="info-item"><i class="material-icons">alternate_email</i> <a
+                                href="https://twitter.com/hypersankaku2" target="_blank">Twitter</a></div>
+                        <div class="info-item"><i class="material-icons">code</i> <a
+                                href="https://github.com/new-sankaku/SP-MangaEditer" target="_blank">GitHub</a></div>
 
-                  <div class="info-item"><i class="material-icons">send</i> <a href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues" target="_blank">Bug report / Feature add request</a></div>
+                        <div class="info-item"><i class="material-icons">send</i> <a
+                                href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues"
+                                target="_blank">Bug report / Feature add request</a></div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
+        </div>
 
         <div id="canvas-area">
             <div class="area-header">Canvas</div>
@@ -160,34 +183,92 @@
             </div>
         </div>
         <div>
-            <div id="controls">
+            <div id="common-controls">
                 <div class="area-header">Controle</div>
-                <div id="controle-content">
-                    <div class="control"><label>Angle: <input type="range" id="angle-control" min="0" max="360"
-                                value="0"></label>
+                <div id="common-content">
+                    <div class="control">
+                        <label>Angle</label>
+                        <input type="range" id="angle-control" min="0" max="360" value="0">
                     </div>
-                    <div class="control"><label>Scale: <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01"
-                                value="1"></label></div>
-                    <div class="control"><label>Top: <input type="range" id="top-control" min="-1200" max="1200"
-                                value="100"></label></div>
-                    <div class="control"><label>Left: <input type="range" id="left-control" min="-1200" max="1200"
-                                value="100"></label></div>
-                    <div class="control"><label>Skew X: <input type="range" id="skewX-control" min="-30" max="30"
-                                value="0"></label></div>
-                    <div class="control"><label>Skew Y: <input type="range" id="skewY-control" min="-30" max="30"
-                                value="0"></label></div>
+                    <div class="control">
+                        <label>Scale</label>
+                        <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01" value="1">
+                    </div>
+                    <div class="control">
+                        <label>Top</label>
+                        <input type="range" id="top-control" min="-1200" max="1200" value="100">
+                    </div>
+                    <div class="control">
+                        <label>Left</label>
+                        <input type="range" id="left-control" min="-1200" max="1200" value="100">
+                    </div>
+                    <div class="control">
+                        <label>SkewX</label>
+                        <input type="range" id="skewX-control" min="-30" max="30" value="0">
+                    </div>
+                    <div class="control">
+                        <label>SkewY</label>
+                        <input type="range" id="skewY-control" min="-30" max="30" value="0">
+                    </div>
+
                 </div>
             </div>
             <div style="display: none;" id="panel-item-controls">
-                <div class="area-header">Panel controle</div>
+                <div class="area-header">Panel Controle</div>
                 <div id="panel-item-content">
                     <label>test</label>
                 </div>
             </div>
-            <div style="display: none;" id="image-item-controls">
-                <div class="area-header">Image controle</div>
+
+            <div id="image-item-controls">
+                <div class="area-header">Image Controle</div>
                 <div id="image-item-content">
-                    <label>test</label>
+                    <div class="control">
+                        <label><input type="checkbox" id="sepia"> Sepia</label>
+                        <label></label>
+                    </div>
+                    <hr>
+                    <div class="control">
+                        <label><input type="checkbox" id="grayscale"> Grayscale</label>
+                        <label></label>
+                    </div>
+                    <div class="control" id="grayscale-mode">
+                        <label><input type="radio" name="grayscale-mode" value="average" checked> Ave</label>
+                        <label><input type="radio" name="grayscale-mode" value="luminosity"> Lum</label>
+                        <label style="display: none;" ><input style="display: none;" type="radio" name="grayscale-mode" value="lightness"> Light</label>
+                    </div>
+                    <hr>
+
+                    <div class="control">
+                        <label>Gamma:</label>
+                        <label></label>
+                    </div>
+                    <div class="control">
+                        <label>Red</label>
+                        <input type="range" id="gamma-red" min="0" max="2.2" step="0.003921" value="1">
+                    </div>
+                    <div class="control">
+                        <label>Green</label>
+                        <input type="range" id="gamma-green" min="0" max="2.2" step="0.003921" value="1">
+                    </div>
+                    <div class="control">
+                        <label>Blue</label>
+                        <input type="range" id="gamma-blue" min="0" max="2.2" step="0.003921" value="1">
+                    </div>
+                    <hr>
+
+                    <div class="control">
+                        <label>Vibra</label>
+                        <input type="range" id="vibrance-value" min="-1" max="1" step="0.003921" value="0">
+                    </div>
+                    <div class="control">
+                        <label>Blur</label>
+                        <input type="range" id="blur-value" min="0" max="0.3" step="0.003921" value="0">
+                    </div>
+                    <div class="control">
+                        <label>Pixel</label>
+                        <input type="range" id="pixelate-value" min="1" max="20" step="1" value="1">
+                    </div>
                 </div>
             </div>
             <div style="display: none;" id="text-item-controls">
@@ -212,9 +293,10 @@
     <script src="js/Sidebar.js" defer></script>
     <script src="js/TextEffect.js" defer></script>
     <script src="js/VerticalText.js" defer></script>
+    <script src="js/EffectManager.js" defer></script>
     <script src="js/PanelManager.js" defer></script>
-    
-    
+
+
 </body>
 
 </html>

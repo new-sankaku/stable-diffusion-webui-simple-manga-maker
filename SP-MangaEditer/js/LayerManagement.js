@@ -108,9 +108,9 @@ function updateLayerPanel() {
 
 function removeLayer(layer) {
   canvas.remove(layer);
-  if (layer === currentImage) {
-    currentImage = null;
-  }
+  // if (layer === currentImage) {
+  //   currentImage = null;
+  // }
   updateLayerPanel();
   if (canvas.getActiveObject() === layer) {
     canvas.discardActiveObject();
