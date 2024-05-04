@@ -299,7 +299,7 @@ function applyNeonEffect() {
 function createTextbox() {
   var selectedFont = document.getElementById('fontSelector').value;
   console.log( "selectedFont", selectedFont )
-  var textbox = new fabric.Textbox("This is new text. 人類普遍のうんぬん。", {
+  var textbox = new fabric.Textbox("New Text.", {
     width: 300,
     top: 50,
     left: 50,
