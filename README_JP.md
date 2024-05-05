@@ -2,7 +2,8 @@
 
 # シンプル漫画エディタ
 
-HTML、CSS、JavaScriptで構築されたシンプルな漫画エディタです。ブラウザ動きます。
+HTML、CSS、JavaScriptで構築されたシンプルな漫画エディタです。ブラウザ動きます。  
+Stable diffusion web ui、Stable diffusion forgeをサポートしています。また、デモサイト上のみでも全ての機能が動きます。
 
 # デモサイト
 
