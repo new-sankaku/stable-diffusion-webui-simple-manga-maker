@@ -2,11 +2,16 @@
 
 # Simple Manga Editor
 
-A simple manga editor built with HTML, CSS, and JavaScript. It operates directly in your browser.
+A simple manga editor built with HTML, CSS, and JavaScript. It operates directly in your browser.  
+Supports Stable diffusion web ui, Stable diffusion forge. Also, all functions work only on the demo site.
 
 # Demo Site
 
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)
+
+# Install
+
+![image](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/assets/133557155/1c2afeed-b009-4b8e-b51a-8d5e99ec48a5)
 
 ## Features
 
