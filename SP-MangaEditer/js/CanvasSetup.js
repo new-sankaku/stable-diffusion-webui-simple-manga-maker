@@ -55,10 +55,10 @@ document.getElementById("canvas-container").addEventListener(
           if (targetFrame.type === "polygon") {
             clipPath = new fabric.Polygon(targetFrame.points);
             clipPath.set({
-              left: targetFrame.left + (targetFrame.strokeWidth * targetFrame.scaleX),
-              top: targetFrame.top + (targetFrame.strokeWidth * targetFrame.scaleY),
-              scaleX: targetFrame.scaleX - ( (targetFrame.strokeWidth * targetFrame.scaleX) / targetFrame.width  ) - 0.001,
-              scaleY: targetFrame.scaleY - ( (targetFrame.strokeWidth * targetFrame.scaleY) / targetFrame.height  ) - 0.001,
+              left: targetFrame.left + (targetFrame.strokeWidth/2),
+              top: targetFrame.top + (targetFrame.strokeWidth/2),
+              scaleX: targetFrame.scaleX - ( (targetFrame.strokeWidth * targetFrame.scaleX) / targetFrame.width  ),
+              scaleY: targetFrame.scaleY - ( (targetFrame.strokeWidth * targetFrame.scaleY) / targetFrame.height  ),
               absolutePositioned: true,
             });
           } else {

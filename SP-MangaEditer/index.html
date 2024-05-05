@@ -3,30 +3,39 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SP-MangaEditer</title>
+    <title>SP-MangaEditer: The Premier Standalone Manga Editing Platform</title>
+
+    <meta name="description" content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects. Perfect for both beginners and professional artists.">
+    <meta name="keywords" content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, stable diffusion Forge, stable-diffusion-webui-simple-manga-maker
+    ">
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="third/Fabric.js/fabric.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <script src="third/Fabric.js/fabric.min.js?v=1.0"></script>
 
 </head>
 
 <body>
-    <div class="floating-window" id="myWindow">
-        <div class="header">
-            <span class="close-btn" onclick="closeWindow()">×</span>
-            <textarea id="textInput"></textarea>
-            <div class="button-container">
-                <button id="updateButton">Submit</button>
-                <button id="cancelButton">Cancel</button>
+    <div itemscope itemtype="http://schema.org/SoftwareApplication">
+        <meta itemprop="name" content="SP-MangaEditer">
+        <meta itemprop="description" content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects.">
+        <meta itemprop="applicationCategory" content="Multimedia">
+        <div class="floating-window" id="myWindow">
+            <div class="header">
+                <span class="close-btn" onclick="closeWindow()">×</span>
+                <textarea id="textInput"></textarea>
+                <div class="button-container">
+                    <button id="updateButton">Submit</button>
+                    <button id="cancelButton">Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
 
     <div style="display: flex; flex-grow: 1;">
         <div id="sidebar">
             <div class="logo-container">
-                <img src="02_images_svg/Logo/00000_mini.png" alt="SP-MangaEditer Logo">
+                <img src="02_images_svg/Logo/00000_mini.png" alt="SP-MangaEditer Official Logo">
             </div>
             <i class="material-icons" onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
             <i class="material-icons" onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
@@ -180,10 +189,14 @@
                 <button onclick="allRemove()"><i class="material-icons">delete</i> All Remove</button>
                 <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> Flip</button>
                 <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> Flip</button>
-                <button onclick="cropAndDownload()"><i class="material-icons">file_download</i> Download</button>
                 <button onclick="undo()"><i class="material-icons">undo</i> Undo</button>
                 <button onclick="redo()"><i class="material-icons">redo</i> Redo</button>
             </div>
+            <div id="download-buttons">
+                <button onclick="cropAndDownload()"><i class="material-icons">file_download</i> Download</button>
+                <button onclick="clipCopy()"><i class="material-icons">content_copy</i> Copy</button>
+            </div>
+
         </div>
         <div id="layer-panel">
             <div class="area-header">Layers</div>
@@ -290,23 +303,22 @@
             </div>
         </div>
     </div>
-
-    <script src="js/svg/MangaPanelsImage_Landscape.js" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js" defer></script>
-    <script src="js/svg/SpeechBubble.js" defer></script>
-    <script src="js/Settings.js" defer></script>
-    <script src="js/CanvasSetup.js" defer></script>
-    <script src="js/LayerManagement.js" defer></script>
-    <script src="js/ControleManagement.js" defer></script>
-    <script src="js/ImageTransformation.js" defer></script>
-    <script src="js/ImageHistoryManagement.js" defer></script>
-    <script src="js/SvgHelper.js" defer></script>
-    <script src="js/Sidebar.js" defer></script>
-    <script src="js/TextEffect.js" defer></script>
-    <script src="js/VerticalText.js" defer></script>
-    <script src="js/EffectManager.js" defer></script>
-    <script src="js/PanelManager.js" defer></script>
-    <script src="js/SvgEffect.js" defer></script>
+</div>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.0" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.0" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=1.0" defer></script>
+    <script src="js/Settings.js?v=1.0" defer></script>
+    <script src="js/CanvasSetup.js?v=1.0" defer></script>
+    <script src="js/LayerManagement.js?v=1.0" defer></script>
+    <script src="js/ControleManagement.js?v=1.0" defer></script>
+    <script src="js/ImageTransformation.js?v=1.0" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=1.0" defer></script>
+    <script src="js/Sidebar.js?v=1.0" defer></script>
+    <script src="js/TextEffect.js?v=1.0" defer></script>
+    <script src="js/VerticalText.js?v=1.0" defer></script>
+    <script src="js/EffectManager.js?v=1.0" defer></script>
+    <script src="js/PanelManager.js?v=1.0" defer></script>
+    <script src="js/SvgEffect.js?v=1.0" defer></script>
 </body>
 
 </html>

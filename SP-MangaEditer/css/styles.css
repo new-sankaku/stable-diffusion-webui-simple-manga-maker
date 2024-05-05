@@ -135,10 +135,7 @@ button:active, .custom-file-upload:active {
     max-width: 750px;
   }
 
-#canvas-buttons {
-    margin-top: 15px;
-    margin-right: 20px;
-}
+
 
 #layer-buttons {
     margin-top: 13px;
@@ -161,9 +158,7 @@ button:active, .custom-file-upload:active {
   width: 100%;
   height: 100%;
 }
-#canvas-buttons button:hover {
-    color: #FFFFFF;
-}
+
 
 .area-header {
     font-size: 18px;
@@ -306,7 +301,26 @@ label {
     color: #000;
     transform: scale(1.1);
 }
- 
+
+#download-buttons {
+    margin-top: 5px;
+    margin-right: 20px;
+}
+#download-buttons button:hover {
+    color: #FFFFFF;
+}
+#download-buttons button .material-icons{
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+#canvas-buttons {
+    margin-top: 15px;
+    margin-right: 20px;
+}
+#canvas-buttons button:hover {
+    color: #FFFFFF;
+}
 #canvas-buttons button .material-icons, 
 #layer-buttons  button .material-icons{
     font-size: 18px;

@@ -1,3 +1,261 @@
+/** Load SVG(Verfical, Landscope) */
+function loadSVGPlusReset(svgString) {
+  allRemove();
+  fabric.loadSVGFromString(svgString, function (objects, options) {
+    var canvasUsableHeight = canvas.height - svgPagging;
+    var overallScaleX = canvas.width / options.width;
+    var overallScaleY = canvasUsableHeight / options.height;
+    var scaleToFit = Math.min(overallScaleX, overallScaleY);
+    var offsetX = (canvas.width - options.width * scaleToFit) / 2;
+    var offsetY =
+      svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+
+    clipAreaCoords.left = offsetX;
+    clipAreaCoords.top = offsetY;
+    clipAreaCoords.width = options.width * scaleToFit + 4;
+    clipAreaCoords.height = options.height * scaleToFit + 4;
+    canvas.backgroundColor = "white";
+
+    objects.forEach(function (obj) {
+      if (obj.type === 'path') {
+        var points = obj.path.map(function (item) {
+          return { x: item[item.length - 2], y: item[item.length - 1], command: item[0] };
+        });
+
+        var threshold = Math.max(obj.width, obj.height) * 0.004;
+        var startX = 0;
+        var startY = 0;
+
+        var vertices = points.filter(function (point, index, self) {
+          if (point.command === 'M') {
+            startX = point.x;
+            startY = point.y;
+            return true;
+          } else if (point.command === 'C') {
+            if (index === 0) {
+              return true;
+            }
+            var prevPoint = self[index - 1];
+            var xDiff = Math.abs(point.x - prevPoint.x);
+            var yDiff = Math.abs(point.y - prevPoint.y);
+            // console.log("DIFF:", "xDiff", xDiff, "yDiff", yDiff, "threshold",threshold, "RESULT",!((xDiff < threshold) && (yDiff < threshold)), "point.x",point.x, "point.y",point.y, "prevPoint",prevPoint);
+
+            if( (xDiff < threshold) && (yDiff < threshold) ){
+              return false;
+            }
+
+            var xDiff = Math.abs(point.x - startX);
+            var yDiff = Math.abs(point.y - startY);
+            if( (xDiff < threshold) && (yDiff < threshold) ){
+              return false;
+            }
+
+            return true;
+          }
+          return false;
+        });
+
+        // console.log("threshold, vertices", threshold, ":", vertices);
+
+        var polygon = new fabric.Polygon(vertices, {
+          scaleX: scaleToFit,
+          scaleY: scaleToFit,
+          top: obj.top * scaleToFit + offsetY,
+          left: obj.left * scaleToFit + offsetX,
+          fill: 'transparent',
+          stroke: obj.stroke,
+          strokeWidth: obj.strokeWidth,
+          selectable: true,
+          hasControls: true,
+          lockMovementX: false,
+          lockMovementY: false,
+          lockRotation: false,
+          lockScalingX: false,
+          lockScalingY: false,
+          edit: false,
+          hasBorders: true,
+          cornerStyle: 'rect',
+          controls: fabric.Object.prototype.controls
+        });
+
+        // polygon.points = vertices;
+        canvas.add(polygon);
+      } else {
+        obj.scaleX = scaleToFit;
+        obj.scaleY = scaleToFit;
+        obj.top = obj.top * scaleToFit + offsetY;
+        obj.left = obj.left * scaleToFit + offsetX;
+        obj.setCoords();
+
+        obj.selectable = true;
+        obj.hasControls = true;
+        obj.lockMovementX = false;
+        obj.lockMovementY = false;
+        obj.lockRotation = false;
+        obj.lockScalingX = false;
+        obj.lockScalingY = false;
+
+        canvas.add(obj);
+      }
+    });
+    changeStrokeWidth( document.getElementById("strokeWidth").value );
+    canvas.renderAll();
+  });
+}
+
+
+
+
+
+/** Sppech bubble */
+function loadSVGReadOnly(svgString) {
+
+  var applyColor = document.getElementById('applyColorChange').checked;
+  var fillColor = document.getElementById('bubbleFillColor').value;
+  var strokeColor = document.getElementById('bubbleStrokeColor').value;
+
+  fabric.loadSVGFromString(svgString, function (objects, options) {
+    var canvasUsableHeight = canvas.height * 0.3 - svgPagging;
+    var overallScaleX = (canvas.width * 0.3) / options.width;
+    var overallScaleY = canvasUsableHeight / options.height;
+    var scaleToFit = Math.min(overallScaleX, overallScaleY);
+    var offsetX = (canvas.width - options.width * scaleToFit) / 2;
+    var offsetY =
+      svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+
+    var scaledObjects = objects.map(function (obj) {
+      obj.scaleX = scaleToFit;
+      obj.scaleY = scaleToFit;
+      obj.top = obj.top * scaleToFit + offsetY;
+      obj.left = obj.left * scaleToFit + offsetX;
+      
+      if (applyColor) {
+        obj.set({
+          fill: fillColor,
+          stroke: strokeColor
+        });
+      }
+      
+
+
+      return obj;
+    });
+
+    var group = new fabric.Group(scaledObjects, {
+      left: offsetX,
+      top: offsetY,
+      selectable: true,
+      hasControls: true,
+      lockMovementX: false,
+      lockMovementY: false,
+      lockRotation: false,
+      lockScalingX: false,
+      lockScalingY: false,
+    });
+
+    canvas.add(group);
+    canvas.renderAll();
+    updateLayerPanel();
+  });
+}
+
+/** load svg. */
+const previewAreaVertical = document.getElementById(
+  "svg-preview-area-vertical"
+);
+const previewAreaLandscape = document.getElementById(
+  "svg-preview-area-landscape"
+);
+const speechBubbleArea = document.getElementById(
+  "speech-bubble-svg-preview-area1"
+);
+
+window.onload = function () {
+  previewAreaVertical.innerHTML = "";
+
+  /** Load vertical manga panel image. */
+  MangaPanelsImage_Vertical.forEach((item) => {
+    const img = document.createElement("img");
+    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(item.svg);
+    img.classList.add("svg-preview");
+    img.alt = item.name;
+    img.addEventListener("click", function () {
+      loadSVGPlusReset(item.svg);
+    });
+    previewAreaVertical.appendChild(img);
+  });
+
+  /** Load landscape manga panel image. */
+  previewAreaLandscape.innerHTML = "";
+  MangaPanelsImage_Landscape.forEach((item) => {
+    const img = document.createElement("img");
+    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(item.svg);
+    img.classList.add("svg-preview");
+    img.alt = item.name;
+    img.addEventListener("click", function () {
+      loadSVGPlusReset(item.svg);
+    });
+    previewAreaLandscape.appendChild(img);
+  });
+
+  /** Load speech bubble manga panel image. */
+  // speechBubbleArea.innerHTML = "";
+  SpeechBubble.forEach((item) => {
+    const img = document.createElement("img");
+    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(item.svg);
+    img.classList.add("svg-preview");
+    img.alt = item.name;
+    img.addEventListener("click", function () {
+      loadSVGReadOnly(item.svg);
+    });
+    speechBubbleArea.appendChild(img);
+  });
+};
+
+/** Disallow drag-on-drop. */
+document.addEventListener("DOMContentLoaded", function () {
+  var svgPreviewArea = document.getElementById("svg-container-vertical");
+  svgPreviewArea.addEventListener(
+    "mousedown",
+    function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    false
+  );
+});
+
+/** Disallow drag-on-drop. */
+document.addEventListener("DOMContentLoaded", function () {
+  var svgPreviewArea = document.getElementById("svg-container-landscape");
+  svgPreviewArea.addEventListener(
+    "mousedown",
+    function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    false
+  );
+});
+
+/** Disallow drag-on-drop. */
+document.addEventListener("DOMContentLoaded", function () {
+  var svgPreviewArea = document.getElementById("speech-bubble-area1");
+
+  svgPreviewArea.addEventListener(
+    "mousedown",
+    function (event) {
+      // スライダーの要素上でのマウスダウンイベントは許可する
+      if (!event.target.closest("input[type='range']")) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    false
+  );
+});
+
+
 function addSquare() {
   var square = new fabric.Polygon([
     { x: 0, y: 0 },
@@ -17,6 +275,38 @@ function addSquare() {
   });
   canvas.add(square);
 }
+
+
+function Edit() {
+  var poly = canvas.getActiveObject();
+  // console.log("poly", poly);
+  if (!poly) return;
+  
+  // console.log("poly.edit", poly.edit);
+  poly.edit = !poly.edit;
+  if (poly.edit) {
+    var lastControl = poly.points.length - 1;
+    poly.cornerStyle = 'circle';
+    poly.cornerColor = 'rgba(0,0,255,0.5)';
+    poly.controls = poly.points.reduce(function (acc, point, index) {
+      acc['p' + index] = new fabric.Control({
+        positionHandler: polygonPositionHandler,
+        actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
+        actionName: 'modifyPolygon',
+        pointIndex: index
+      });
+      return acc;
+    }, {});
+  } else {
+    poly.cornerStyle = 'rect';
+    poly.controls = fabric.Object.prototype.controls;
+  }
+  poly.hasBorders = !poly.edit;
+  canvas.requestRenderAll();
+}
+
+
+
 
 function changeStrokeWidth(value) {
   canvas.getObjects().forEach(function(obj) {
@@ -86,28 +376,3 @@ function anchorWrapper(anchorIndex, fn) {
   }
 }
 
-function Edit() {
-  var poly = canvas.getActiveObject();
-  if (!poly) return;
-  
-  poly.edit = !poly.edit;
-  if (poly.edit) {
-    var lastControl = poly.points.length - 1;
-    poly.cornerStyle = 'circle';
-    poly.cornerColor = 'rgba(0,0,255,0.5)';
-    poly.controls = poly.points.reduce(function (acc, point, index) {
-      acc['p' + index] = new fabric.Control({
-        positionHandler: polygonPositionHandler,
-        actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
-        actionName: 'modifyPolygon',
-        pointIndex: index
-      });
-      return acc;
-    }, {});
-  } else {
-    poly.cornerStyle = 'rect';
-    poly.controls = fabric.Object.prototype.controls;
-  }
-  poly.hasBorders = !poly.edit;
-  canvas.requestRenderAll();
-}
