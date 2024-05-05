@@ -8,6 +8,10 @@ A simple manga editor built with HTML, CSS, and JavaScript. It operates directly
 
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)
 
+# Install
+
+![image](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/assets/133557155/1c2afeed-b009-4b8e-b51a-8d5e99ec48a5)
+
 ## Features
 
 - **Manga panel**: Standard comic panel page.
