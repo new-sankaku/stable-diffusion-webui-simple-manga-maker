@@ -18,13 +18,15 @@ function flipVertically() {
 
 
 function getCropAndDownloadLink() {
+	var strokeWidth = document.getElementById("strokeWidth").value;
+
 	var cropped = canvas.toDataURL({
 		format: 'png',
 		multiplier: 3, 
 		left: clipAreaCoords.left,
 		top: clipAreaCoords.top,
-		width: clipAreaCoords.width,
-		height: clipAreaCoords.height
+		width: clipAreaCoords.width + (strokeWidth/2),
+		height: clipAreaCoords.height + (strokeWidth/2)
 	});
 
 	var link = document.createElement('a');
