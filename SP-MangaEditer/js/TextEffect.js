@@ -1,4 +1,4 @@
-var neonColor = document.getElementById("neonColorPicker").value;
+
 var neonIntensity = parseFloat(
   document.getElementById("neonIntensitySlider").value
 );
@@ -17,6 +17,11 @@ canvas.on('selection:updated', function(event) {
 });
 
 function rgbToHex(rgb) {
+  if( rgb ){
+    return;
+  }
+
+
   let match = rgb.match(/^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$/);
   if (!match) {
     return rgb;
@@ -29,26 +34,32 @@ function rgbToHex(rgb) {
 }
 
 function updateControls(object) {
-
-  var selectedFont = document.getElementById('fontSelector').value;
-
   if(isVerticalText(object)){
     let firstText = object.getObjects('text')[0];
-    let inheritedColor = firstText ? firstText.fill : document.getElementById("colorPicker").value;
-    document.getElementById('colorPicker').value = inheritedColor;
+    let inheritedColor = firstText ? firstText.fill : document.getElementById("textColorPicker").value;
+    document.getElementById('textColorPicker').value = inheritedColor;
   }else if (isText(object)) {
-    let hexColor = rgbToHex(object.fill);
-    document.getElementById('colorPicker').value = hexColor;
+    if( object.fill ){
+      return ;
+    }else{
+      let hexColor = rgbToHex(object.fill);
+      document.getElementById('textColorPicker').value = hexColor;
+    }
     document.getElementById('fontSizeSlider').value = object.fontSize;
   }
 }
 
 function applyCSSTextEffect() {
+  var firstTextEffectColorPicker = document.getElementById('firstTextEffectColorPicker').value;
+  var secondTextEffectColorPicker = document.getElementById('secondTextEffectColorPicker').value;
+
   const activeObject = canvas.getActiveObject();
   if (isText(activeObject)) {
     if (!activeObject.shadow) {
-      activeObject.set("shadow", "rgba(0, 100, 255, 0.5) 5px 5px 10px");
+      // Apply a shadow using the first color picker's value
+      activeObject.set("shadow", firstTextEffectColorPicker + " 5px 5px 10px");
     } else {
+      // Toggle shadow off
       activeObject.set("shadow", null);
     }
     canvas.renderAll();
@@ -56,24 +67,30 @@ function applyCSSTextEffect() {
 }
 
 
-function applyPhotoshopTextEffect() {
+function applyVividGradientEffect() {
   const activeObject = canvas.getActiveObject();
   if (isText(activeObject)) {
-    if (!activeObject.fill) {
-      const gradient = new fabric.Gradient({
-        type: "linear",
-        gradientUnits: "pixels",
-        coords: { x1: 0, y1: 0, x2: canvas.width, y2: 0 },
-        colorStops: [
-          { offset: 0, color: "red" },
-          { offset: 1, color: "blue" },
-        ],
-      });
+    var firstTextEffectColorPicker = document.getElementById('firstTextEffectColorPicker').value;
+    var secondTextEffectColorPicker = document.getElementById('secondTextEffectColorPicker').value;
+
+    const gradient = new fabric.Gradient({
+      type: "linear",
+      gradientUnits: "pixels",
+      coords: { x1: 0, y1: activeObject.height / 2, x2: activeObject.width, y2: activeObject.height / 2 },
+      colorStops: [
+        { offset: 0, color: firstTextEffectColorPicker },
+        { offset: 0.5, color: secondTextEffectColorPicker, opacity: 0.5 },
+        { offset: 1, color: firstTextEffectColorPicker }
+      ]
+    });
+
+    if (activeObject && activeObject.type === 'verticalText') {
+      activeObject.setGradientFill(gradient);
+      canvas.renderAll();
+    }else{
       activeObject.set("fill", gradient);
-    } else {
-      activeObject.set("fill", null);
+      canvas.renderAll();
     }
-    canvas.renderAll();
   }
 }
 
@@ -280,32 +297,39 @@ function applyGeneratorBasedEffect() {
 function applyNeonEffect() {
   const activeObject = canvas.getActiveObject();
   if (isText(activeObject)) {
+
+    var firstTextEffectColorPicker = document.getElementById('firstTextEffectColorPicker').value;
+    var secondTextEffectColorPicker = document.getElementById('secondTextEffectColorPicker').value;
+
     if (!activeObject.fill || !activeObject.shadow) {
       activeObject.set({
-        fill: "pink",
+        fill: firstTextEffectColorPicker,
         shadow: {
-          color: "red",
+          color: secondTextEffectColorPicker,
           blur: 20,
         },
       });
-    } else {
-      activeObject.set("fill", null);
-      activeObject.set("shadow", null);
-    }
+    } 
     canvas.renderAll();
   }
 }
 
+
 function createTextbox() {
   var selectedFont = document.getElementById('fontSelector').value;
+  var fontsize = document.getElementById("fontSizeSlider").value
+  var fontStrokeWidth = document.getElementById("fontStrokeWidthSlider").value
+
   console.log( "selectedFont", selectedFont )
   var textbox = new fabric.Textbox("New Text.", {
-    width: 300,
+    width: 150,
     top: 50,
     left: 50,
-    fontSize: 30,
+    fontSize: parseInt(fontsize),
     fontFamily: selectedFont, 
-    fill: document.getElementById("colorPicker").value,
+    fill: document.getElementById("textColorPicker").value,
+    stroke: document.getElementById("textOutlineColorPicker").value,
+    strokeWidth: parseInt(fontStrokeWidth),
   });
   
   textbox.on('text:changed', function() {
@@ -350,12 +374,27 @@ function toggleBold() {
 
 function changeFontSize(size) {
   var activeObject = canvas.getActiveObject();
-  
   if (isText(activeObject)) {
     activeObject.set("fontSize", parseInt(size));
     canvas.renderAll();
   }
 }
+
+function changeStrokeWidthSize(size) {
+  var activeObject = canvas.getActiveObject();
+  if( isVerticalText(activeObject) ){
+    activeObject.getObjects().forEach(function(obj) {
+      if (obj.type === 'text') {
+        obj.set("strokeWidth", parseInt(size));
+      }
+    });
+    canvas.renderAll();
+  }else if (isText(activeObject)) {
+    activeObject.set("strokeWidth", parseInt(size));
+    canvas.renderAll();
+  }
+}
+
 
 function changeTextColor(color) {
   var activeObject = canvas.getActiveObject();
@@ -369,6 +408,21 @@ function changeTextColor(color) {
     canvas.renderAll();
   }else if(isText(activeObject)) {
     activeObject.set("fill", color);
+    canvas.renderAll();
+  }
+}
+function changeOutlineTextColor(color) {
+  var activeObject = canvas.getActiveObject();
+
+  if( isVerticalText(activeObject) ){
+    activeObject.getObjects().forEach(function(obj) {
+      if (obj.type === 'text') {
+        obj.set("stroke", color);
+      }
+    });
+    canvas.renderAll();
+  }else if(isText(activeObject)) {
+    activeObject.set("stroke", color);
     canvas.renderAll();
   }
 }
@@ -395,6 +449,7 @@ function updateNeonEffect(activeObject) {
       activeObject.set("shadow", null);
       activeObject.set("stroke", null);
     } else {
+      var neonColor = document.getElementById("firstTextEffectColorPicker").value;
       activeObject.set(
         "shadow",
         new fabric.Shadow({

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>SP-MangaEditer</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/styles.css">
     <script src="third/Fabric.js/fabric.min.js"></script>
 
@@ -47,9 +48,9 @@
         <div id="panel-manager-area" style="display: none;">
             <div class="area-header">Panel Manager</div>
             <div id="panel-manager-items">
-                <label for="strokeColor">Line Color:</label>
+                <label for="strokeColor">Line:
                 <input type="color" id="strokeColor" name="strokeColor" value="#000000"
-                    onchange="changeStrokeColor(this.value)">
+                    onchange="changeStrokeColor(this.value)"></label>
                 <label for="strokeWidth">Line Width:</label>
                 <input type="range" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2"
                     onchange="changeStrokeWidth(this.value)">
@@ -62,21 +63,29 @@
         <div id="speech-bubble-area1" style="display: none;">
             <div class="area-header">Bubble(Click only)</div>
             <div id="speech-bubble-svg-preview-area1">
+                <input type="checkbox" id="applyColorChange"> Enable Color
+                <label>Background: <input type="color" id="bubbleFillColor" value="#FAFAFA"></label>
+                <label>Line: <input type="color" id="bubbleStrokeColor" value="#404040"></label>
+                <button onclick="updatebubbleObjectColors()"><i class="material-icons">format_color_fill</i>Color Change</button>
                 <label style="display: none;">Line Size</label>
                 <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10" value="3">
-                <hr style="display: none;">
+                <hr>
             </div>
         </div>
         <div id="text-area" style="display: none;">
             <div class="area-header">Text and Effect</div>
             <div id="text-preview-area">
 
-                <label>Text Color:</label>
-                <input type="color" id="colorPicker" value="#000000" oninput="changeTextColor(this.value)">
-
-                <label>Size(Vertical unsupport):</label>
+                <label>Text :
+                    <input type="color" id="textColorPicker" value="#000000" oninput="changeTextColor(this.value)"></label>
+                <label>Outline :
+                    <input type="color" id="textOutlineColorPicker" value="#E6E6E6" oninput="changeOutlineTextColor(this.value)"></label>
+                <label>Size(Vertical unsupport)
                 <input type="range" id="fontSizeSlider" min="7" max="150" value="30"
-                    oninput="changeFontSize(this.value)">
+                    oninput="changeFontSize(this.value)"></label>
+                    <label>Outline Size
+                <input type="range" id="fontStrokeWidthSlider" min="1" max="5" value="1"
+                    oninput="changeStrokeWidthSize(this.value)"></label>
 
                 <label>Font:</label>
                 <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
@@ -87,41 +96,43 @@
                     <option style="font-family: 'Stick';">Stick</option>
                 </select>
 
-
-                <label style="display: none;">Neon Color:</label>
-                <input style="display: none;" type="color" id="neonColorPicker" value="#ff8080"
-                    oninput="changeNeonColor(this.value)">
-                <label style="display: none;">Neon Intensity:</label>
-                <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2" value="2"
-                    oninput="changeNeonIntensity(this.value)">
-                <hr>
-
                 <button onclick="createTextbox()"><i class="material-icons">text_fields</i><i
                         class="material-icons">east</i> New Text</button>
 
                 <button id="openWindow"><i class="material-icons">text_fields</i><i class="material-icons">south</i> New
                     Vertical Text</button>
 
-                <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
-                <button onclick="toggleShadow()"><i class="material-icons">highlight</i> Shadow</button>
-                <button onclick="applyInnerShadow()"><i class="material-icons">format_paint</i> Inner Shadow</button>
                 <hr>
-                <label style="display: none;">Effects:</label>
-                <button style="display: none;" onclick="applyCSSTextEffect()"><i
-                        class="material-icons">format_shapes</i> CSS Text</button>
-                <button style="display: none;" onclick="applyPhotoshopTextEffect()"><i class="material-icons">filter</i>
-                    Photoshop Text</button>
-                <button style="display: none;" onclick="applySpaceAgeEffect()"><i class="material-icons">space_bar</i>
+                <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
+
+                <hr>
+                <label >Effects</label>
+                <label >First Color
+                    <input type="color" id="firstTextEffectColorPicker" value="#F58220" oninput="changeNeonColor(this.value)">
+                </label>
+                <label >Second Color
+                    <input type="color" id="secondTextEffectColorPicker" value="#ff8080" oninput="changeNeonColor(this.value)">
+                </label>
+                
+                <hr>
+                <label style="display: none;">Neon Intensity:</label>
+                <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2" value="2" oninput="changeNeonIntensity(this.value)">
+                <button  onclick="applyCSSTextEffect()"><i
+                        class="material-icons">deblur</i> Shadow</button>
+                <button  onclick="applyVividGradientEffect()"><i class="material-icons">filter</i>
+                    Vivid Gradient</button>
+                <button  onclick="applyNeonEffect()"><i class="material-icons">flare</i>
+                    Neon</button>
+
+                <button  style="display: none;"  onclick="applySpaceAgeEffect()"><i class="material-icons">space_bar</i>
                     Space Age</button>
-                <button style="display: none;" onclick="applySpaceAgeEffect2()"><i class="material-icons">space_bar</i>
+                <button  style="display: none;"  onclick="applySpaceAgeEffect2()"><i class="material-icons">space_bar</i>
                     Space Age2</button>
                 <button style="display: none;" onclick="applyGeneratorBasedEffect()"><i
                         class="material-icons">transform</i> Generator Based</button>
-                <button style="display: none;" onclick="applyNeonEffect()"><i class="material-icons">flare</i>
-                    Neon</button>
                 <button style="display: none;" onclick="applyNeonJitterEffect()"><i class="material-icons">vibration</i>
                     Neon Jitter</button>
-                <button style="display: none;" onclick="applyZebraReflectionEffect()"><i
+                <button  style="display: none;" onclick="applyZebraReflectionEffect()"><i
                         class="material-icons">view_compact</i> Reflection</button>
             </div>
         </div>
@@ -295,8 +306,7 @@
     <script src="js/VerticalText.js" defer></script>
     <script src="js/EffectManager.js" defer></script>
     <script src="js/PanelManager.js" defer></script>
-
-
+    <script src="js/SvgEffect.js" defer></script>
 </body>
 
 </html>

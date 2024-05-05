@@ -52,32 +52,47 @@ body {
 #text-preview-area button, 
 #text-preview-area hr, 
 #text-preview-area label, 
-#text-preview-area input[type="color"], 
 #text-preview-area input[type="range"], 
 #text-preview-area select, 
 
 #panel-manager-items button, 
 #panel-manager-items hr, 
 #panel-manager-items label, 
-#panel-manager-items input[type="color"], 
 #panel-manager-items input[type="range"], 
 
 #speech-bubble-svg-preview-area1 button, 
 #speech-bubble-svg-preview-area1 hr, 
 #speech-bubble-svg-preview-area1 label, 
-#speech-bubble-svg-preview-area1 input[type="color"], 
 #speech-bubble-svg-preview-area1 input[type="range"]
 {
     display: block;
     width: 92%;
-    margin: 7px;
+    margin: 4px;
     text-align: left; 
 }
+
+#text-preview-area label, 
+#panel-manager-items label, 
+#speech-bubble-svg-preview-area1 label{
+    white-space: nowrap; 
+}
+
+#text-preview-area input[type="color"], 
+#panel-manager-items input[type="color"], 
+#speech-bubble-svg-preview-area1 input[type="color"]
+{
+    width: 15%;
+    margin: 4px;
+    text-align: left; 
+}
+
+
 #text-preview-area select{
-    font-size: 20px;
+    font-size: 16px;
 }
 
 #text-preview-area button .material-icons,
+#speech-bubble-svg-preview-area1 button .material-icons,
 #panel-manager-items button .material-icons
 {
     vertical-align: middle;

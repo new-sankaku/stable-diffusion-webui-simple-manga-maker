@@ -40,6 +40,11 @@ function loadSVGPlusReset(svgString) {
 
 /** Sppech bubble */
 function loadSVGReadOnly(svgString) {
+
+  var applyColor = document.getElementById('applyColorChange').checked;
+  var fillColor = document.getElementById('bubbleFillColor').value;
+  var strokeColor = document.getElementById('bubbleStrokeColor').value;
+
   fabric.loadSVGFromString(svgString, function (objects, options) {
     var canvasUsableHeight = canvas.height * 0.3 - svgPagging;
     var overallScaleX = (canvas.width * 0.3) / options.width;
@@ -54,6 +59,16 @@ function loadSVGReadOnly(svgString) {
       obj.scaleY = scaleToFit;
       obj.top = obj.top * scaleToFit + offsetY;
       obj.left = obj.left * scaleToFit + offsetX;
+      
+      if (applyColor) {
+        obj.set({
+          fill: fillColor,
+          stroke: strokeColor
+        });
+      }
+      
+
+
       return obj;
     });
 

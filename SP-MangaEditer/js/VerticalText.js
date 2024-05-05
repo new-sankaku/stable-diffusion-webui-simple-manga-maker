@@ -51,8 +51,15 @@ fabric.VerticalText = fabric.util.createClass(fabric.Group, {
     return fabric.util.object.extend(this.callSuper('toObject'), {
       type: 'verticalText'
     });
+  },
+
+  setGradientFill: function(gradient) {
+    this.getObjects().forEach(function(obj) {
+      obj.set('fill', gradient);
+    });
   }
 });
+
 
 fabric.VerticalText.fromObject = function(object, callback) {
   fabric.util.enlivenObjects(object.objects, function(enlivenedObjects) {
@@ -91,6 +98,8 @@ function createVerticalText(textString, options) {
       fill: options.color,
       fontFamily: selectedFont, 
       angle: isIgnored ? 90 : 0,
+      stroke: document.getElementById("textOutlineColorPicker").value,
+      strokeWidth: 1,
     });
 
     canvas.add(text);
@@ -136,7 +145,7 @@ function updateVerticalText() {
 
     let firstText = selectedObject.getObjects('text')[0];
     let inheritedFontSize = firstText ? firstText.fontSize : parseInt(document.getElementById('fontSizeSlider').value);
-    let inheritedColor = firstText ? firstText.fill : document.getElementById("colorPicker").value;
+    let inheritedColor = firstText ? firstText.fill : document.getElementById("textColorPicker").value;
 
     console.log("selectedObject.left", selectedObject.left);
     console.log("selectedObject.top", selectedObject.top);
@@ -153,7 +162,7 @@ function updateVerticalText() {
       top: 50,
       left: 300,
       fontSize: parseInt(document.getElementById('fontSizeSlider').value),
-      color: document.getElementById("colorPicker").value
+      color: document.getElementById("textColorPicker").value
     });
     canvas.add(newTextGroup);
   }
