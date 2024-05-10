@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.2.4/fabric.min.js"></script>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="800"></canvas>
+  <button id="drawLineBtn">対角線を引く</button>
+
+  <script>
+    const canvas = new fabric.Canvas('canvas');
+
+    // 白い四角形の長方形を描画
+    const rect = new fabric.Polygon([
+      { x: 50, y: 100 },
+      { x: 250, y: 100 },
+      { x: 200, y: 300 },
+      { x: 100, y: 300 }
+    ], {
+      fill: 'white',
+      stroke: 'black',
+      strokeWidth: 2
+    });
+    canvas.add(rect);
+
+    // 対角線を引く関数
+    function drawDiagonalLine() {
+      const x1 = 50, y1 = 100;
+      const x2 = 250, y2 = 100;
+      const x3 = 100, y3 = 300;
+      const x4 = 200, y4 = 300;
+
+      // 上辺または左辺をランダムに選択
+      const isTopEdge = Math.random() < 0.5;
+      
+      console.log( "isTopEdge", isTopEdge );
+
+	if (isTopEdge) {
+	  // 上辺の中央50％のランダムな位置を計算
+	  const width = x2 - x1; // 上辺の全幅
+	  const margin = width * 0.25;
+	  const x = x1 + margin + Math.random() * (width - 2 * margin);
+	  const y = y1;
+
+	  while(true){
+	    // 角度をランダムに設定
+	    var angle = Math.random() * 20;
+	    if (x > (x2 - x1)/2) {
+	      angle = Math.random() * 90;
+	    }
+
+	    // 対角線の交点の座標を計算
+	    const xi = calculateIntersection(x1, y1, x3, y3, x4, y4, angle);
+	    
+	    if(xi == null){
+	      continue;
+	    }
+	    if( width*0.25 > xi.x-x1 || width*0.75 < xi.x-x1 ){
+	      continue;
+	    }
+	    
+	    // 対角線を描画
+	    const line = new fabric.Line([x, y, xi.x, xi.y], {
+	      stroke: 'red',
+	      strokeWidth: 2
+	    });
+	    canvas.add(line);
+	    break;
+	  }
+	} else {
+        // 左辺の中央50%のランダムな位置を計算
+		const height = y3 - y1; // 左辺の全高さ
+		const margin = height * 0.25;
+		const y = y1 + margin + Math.random() * (height - 2 * margin);
+
+
+        // 左辺の傾きを計算
+        const leftEdgeSlope = (x3 - x1) / (y3 - y1);
+
+        // 開始点のX座標を計算
+        const x = x1 + (y - y1) * leftEdgeSlope;
+		
+		while(true){
+			//Angle
+			var angle = Math.random() * 20;
+			if( y > (y3 - y1)/2 ){
+				angle = Math.random() * 90;
+			}
+			
+	        // 対角線の交点のx座標を計算
+			const xi = calculateIntersection(x1, y1, x2, y2, x4, y4, angle);
+			
+			if(xi == null){
+				continue;
+			}
+			if( height*0.25 > xi.y-y1 || height*0.75 < xi.y-y1 ){
+				continue;
+			}
+			
+		    // 対角線を描画
+		    const line = new fabric.Line([x, y, xi.x, xi.y], {
+		      stroke: 'red',
+		      strokeWidth: 2
+		    });
+		    canvas.add(line);
+			break
+		}
+      }
+    }
+
+    // 対角線を引くボタンのクリックイベント
+    document.getElementById('drawLineBtn').addEventListener('click', drawDiagonalLine);
+
+	function calculateIntersection(x1, y1, x3, y3, x4, y4, angleDegrees) {
+	    // 角度をラジアンに変換
+	    const angleRadians = angleDegrees * (Math.PI / 180);
+
+	    // 傾きと切片を計算
+	    const slope = Math.tan(angleRadians);
+	    const intercept = y1 - slope * x1;
+
+	    // 台形の右辺CDの方程式
+	    const slopeCD = (y4 - y3) / (x4 - x3);
+	    const interceptCD = y3 - slopeCD * x3;
+
+	    // 交点のx座標を求める
+	    const x = (interceptCD - intercept) / (slope - slopeCD);
+	    const y = slope * x + intercept;
+
+	    // 交点が右辺の範囲内にあるか確認
+	    const minX = Math.min(x3, x4);
+	    const maxX = Math.max(x3, x4);
+	    if (x < minX || x > maxX) {
+	        return null;
+	    }
+
+	    return { x, y };
+	}
+
+	
+  </script>
+</body>
+</html>

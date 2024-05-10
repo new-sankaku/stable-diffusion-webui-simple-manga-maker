@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Image Fetch and Display Example</title>
+</head>
+<body>
+<canvas id="imageCanvas"></canvas>
+
+<script>
+async function fetchImageData() {
+    const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img';
+    const requestData = {
+        "prompt": "1girl",
+        "negative_prompt": "low quality",
+        "seed": -1,
+        "sampler_name": "DPM++ 2M",
+        "scheduler": "Automatic",
+        "steps": 25,
+        "cfg_scale": 7,
+        "width": 512,
+        "height": 512,
+        "do_not_save_grid": true,
+        "hr_upscaler": "R-ESRGAN 4x+ Anime6B"
+    };
+    
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+        const data = await response.json();
+        return data.images[0];
+    } catch (error) {
+        console.error('Error fetching image:', error);
+    }
+}
+
+async function displayImage() {
+    const base64ImageData = await fetchImageData();
+    if (!base64ImageData) return;  // Exit if no image data
+
+    const canvas = document.getElementById('imageCanvas');
+    const context = canvas.getContext('2d');
+    
+    const image = new Image();
+    image.onload = function() {
+        canvas.width = image.width;
+        canvas.height = image.height;
+        context.drawImage(image, 0, 0);
+    };
+    image.src = 'data:image/png;base64,' + base64ImageData;
+}
+
+displayImage();  // Call function to fetch and display the image
+</script>
+</body>
+</html>

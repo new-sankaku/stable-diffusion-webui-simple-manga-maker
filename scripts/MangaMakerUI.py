@@ -30,7 +30,7 @@ def create_ui():
             <style>
                 #sp_manga_editer_iframe {{
                     width: 100%;
-                    height: 80vh;
+                    height: 85vh;
                     border: none;
                 }}
                 #sp_manga_editer_main{{

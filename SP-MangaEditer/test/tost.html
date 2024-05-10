@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Dynamic Toast with Timer</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="p-3">
+    <button id="showToastBtn" class="btn btn-primary">Show Toast</button>
+</div>
+
+<!-- トーストを格納するコンテナ -->
+<div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
+
+<script>
+document.getElementById('showToastBtn').addEventListener('click', function() {
+    createToast('Example message', 'This is a dynamically created toast.');
+});
+
+function createToast(title, message) {
+    const container = document.getElementById('toastContainer');
+    const toastId = `toast-${Date.now()}`;
+
+    // トーストのHTML要素を生成
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.id = toastId;
+    toast.innerHTML = `
+        <div class="toast-header">
+            <strong class="me-auto">${title}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            ${message}
+            <div class="progress" style="height: 5px;">
+                <div class="progress-bar" role="progressbar" style="width: 100%;"></div>
+            </div>
+        </div>
+    `;
+
+    // トースト要素をコンテナに追加
+    container.appendChild(toast);
+
+    // トーストを初期化して表示
+    const bsToast = new bootstrap.Toast(toast, {
+        autohide: true,
+        delay: 3500
+    });
+    bsToast.show();
+
+    // プログレスバーのアニメーション
+    const progressBar = toast.querySelector('.progress-bar');
+    const interval = 50; // ミリ秒
+    const totalDuration = 3500; // ミリ秒
+    let width = 100;
+    const timer = setInterval(() => {
+        width -= (interval / totalDuration * 100);
+        progressBar.style.width = `${width}%`;
+        if (width <= 0) clearInterval(timer);
+    }, interval);
+
+    toast.addEventListener('hidden.bs.toast', function () {
+        clearInterval(timer);
+    });
+}
+</script>
+
+</body>
+</html>

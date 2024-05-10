@@ -1,7 +1,4 @@
-
-
 function updateLayerPanel() {
-  // console.log("updateLayerPanel");
   var layers = canvas.getObjects();
   var layerContent = document.getElementById("layer-content");
   layerContent.innerHTML = "";
@@ -9,69 +6,11 @@ function updateLayerPanel() {
   layers.slice().reverse().forEach(function (layer, index) {
     if (!layer.excludeFromLayerPanel) {
       var layerDiv = document.createElement("div");
-      var previewDiv = document.createElement("div");
       var nameDiv = document.createElement("div");
       var deleteButton = document.createElement("button");
 
-      // console.log("layer.type", layer.type);
-
       if (["image", "rect", "circle", "path", "group", "polygon"].includes(layer.type)) {
-        var tempCanvas = document.createElement("canvas");
-        tempCanvas.width = 100;
-        tempCanvas.height = 100;
-        var tempCtx = tempCanvas.getContext("2d");
-
-        // console.log("layer.type", layer.type);
-        if (layer.type === "image" && typeof layer.getElement === "function") {
-          tempCtx.drawImage(layer.getElement(), 0, 0, 100, 100);
-
-        } else if (layer.type === "group") {
-          var groupScaleFactor = Math.min(100 / layer.width, 100 / layer.height);
-          tempCtx.save();
-          tempCtx.translate(50, 50);
-          tempCtx.scale(0.1,0.1);
-          tempCtx.translate(-layer.width / 2, -layer.height / 2);
-        
-          layer.getObjects().forEach(function (obj) {
-            tempCtx.save();
-            tempCtx.translate(obj.left, obj.top);
-        
-            if (["rect", "circle", "polygon"].includes(obj.type)) {
-              var tempCanvas = obj.toCanvasElement();
-              tempCtx.drawImage(tempCanvas, -obj.width / 2, -obj.height / 2, obj.width, obj.height);
-            } else if (obj.type === "path") {
-              var path = new fabric.Path(obj.path);
-              path.left = -obj.width / 2;
-              path.top = -obj.height / 2;
-              path.render(tempCtx);
-            } else {
-              tempCtx.translate(-obj.width / 2, -obj.height / 2);
-              obj.render(tempCtx);
-            }
-        
-            tempCtx.restore();
-          });
-        
-          tempCtx.restore();
-        } else if (layer.type === "rect" || layer.type === "circle" || layer.type === "path" || layer.type === "polygon"  ) {
-          var tempCanvas = layer.toCanvasElement();
-          tempCtx.drawImage(tempCanvas, 0, 0, 100, 100);
-
-        }else if (layer.type === "path"  ) {
-          var path = new fabric.Path(layer.path);
-          path.render(tempCtx);
-        
-        }else {
-          layer.render(tempCtx);
-        }
-
-        var imageUrl = tempCanvas.toDataURL();
-        previewDiv.style.backgroundImage = "url(" + imageUrl + ")";
-        previewDiv.style.backgroundSize = "contain";
-        previewDiv.style.backgroundPosition = "center";
-        previewDiv.style.backgroundRepeat = "no-repeat";
-        previewDiv.className = "layer-preview";
-        layerDiv.appendChild(previewDiv);
+        putPreviewImage(layer, layerDiv);
       } else if (layer.type === "text" || layer.type === "textbox") {
         var fullText = layer.text;
         nameDiv.textContent = fullText.substring(0, 20);
@@ -82,7 +21,6 @@ function updateLayerPanel() {
 
       nameDiv.className = "layer-name";
       nameDiv.textContent = nameDiv.textContent || layer.name || layer.type + ` ${index + 1}`;
-
       deleteButton.textContent = "✕";
       deleteButton.className = "delete-layer-button";
       deleteButton.onclick = function (e) {
@@ -93,7 +31,37 @@ function updateLayerPanel() {
       layerDiv.setAttribute("data-id", layer.id);
       layerDiv.className = "layer-item";
       layerDiv.appendChild(nameDiv);
+
+      if (layer.isPanel) {
+        var t2iButton = document.createElement("button");
+        t2iButton.innerHTML = '<i class="material-icons">settings</i> T2I';
+        t2iButton.onclick = function (e) {
+          e.stopPropagation();
+          openfloatingWindowItem(layer);
+        };
+        layerDiv.appendChild(t2iButton);
+
+        var runButton = document.createElement("button");
+        runButton.id = 'runButton-' + index;
+        runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
+        runButton.onclick = function (e) {
+            e.stopPropagation();
+            var areaHeader = document.querySelector('#layer-panel .area-header');
+            var spinner = document.createElement('span');
+            spinner.id = 'spinner-' + index;
+            spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
+            areaHeader.appendChild(spinner);
+    
+            StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
+            index++;
+        };
+    
+        
+        layerDiv.appendChild(runButton);
+      }
+
       layerDiv.appendChild(deleteButton);
+
       layerDiv.onclick = function () {
         canvas.setActiveObject(layer);
         canvas.renderAll();
@@ -105,6 +73,82 @@ function updateLayerPanel() {
     }
   });
 }
+
+function calculateCenter(layer) {
+  //console.log("calculateCenter:", layer.left, layer.width, layer.top, layer.height );
+
+  const centerX = layer.left + (layer.width / 2) * layer.scaleX;
+  const centerY = layer.top + (layer.height / 2) * layer.scaleY;
+  
+ return { centerX, centerY };
+}
+
+
+
+
+
+
+function putPreviewImage( layer, layerDiv ){
+  var previewDiv = document.createElement("div");
+
+  var tempCanvas = document.createElement("canvas");
+  tempCanvas.width = 100;
+  tempCanvas.height = 100;
+  var tempCtx = tempCanvas.getContext("2d");
+
+  // console.log("layer.type", layer.type);
+  if (layer.type === "image" && typeof layer.getElement === "function") {
+    tempCtx.drawImage(layer.getElement(), 0, 0, 100, 100);
+
+  } else if (layer.type === "group") {
+    var groupScaleFactor = Math.min(100 / layer.width, 100 / layer.height);
+    tempCtx.save();
+    tempCtx.translate(50, 50);
+    tempCtx.scale(0.1,0.1);
+    tempCtx.translate(-layer.width / 2, -layer.height / 2);
+  
+    layer.getObjects().forEach(function (obj) {
+      tempCtx.save();
+      tempCtx.translate(obj.left, obj.top);
+  
+      if (["rect", "circle", "polygon"].includes(obj.type)) {
+        var tempCanvas = obj.toCanvasElement();
+        tempCtx.drawImage(tempCanvas, -obj.width / 2, -obj.height / 2, obj.width, obj.height);
+      } else if (obj.type === "path") {
+        var path = new fabric.Path(obj.path);
+        path.left = -obj.width / 2;
+        path.top = -obj.height / 2;
+        path.render(tempCtx);
+      } else {
+        tempCtx.translate(-obj.width / 2, -obj.height / 2);
+        obj.render(tempCtx);
+      }
+  
+      tempCtx.restore();
+    });
+  
+    tempCtx.restore();
+  } else if (layer.type === "rect" || layer.type === "circle" || layer.type === "path" || layer.type === "polygon"  ) {
+    var tempCanvas = layer.toCanvasElement();
+    tempCtx.drawImage(tempCanvas, 0, 0, 100, 100);
+
+  }else if (layer.type === "path"  ) {
+    var path = new fabric.Path(layer.path);
+    path.render(tempCtx);
+  
+  }else {
+    layer.render(tempCtx);
+  }
+
+  var imageUrl = tempCanvas.toDataURL();
+  previewDiv.style.backgroundImage = "url(" + imageUrl + ")";
+  previewDiv.style.backgroundSize = "contain";
+  previewDiv.style.backgroundPosition = "center";
+  previewDiv.style.backgroundRepeat = "no-repeat";
+  previewDiv.className = "layer-preview";
+  layerDiv.appendChild(previewDiv);
+}
+
 
 function removeLayer(layer) {
   canvas.remove(layer);

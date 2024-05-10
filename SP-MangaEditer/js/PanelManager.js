@@ -75,6 +75,16 @@ function loadSVGPlusReset(svgString) {
           edit: false,
           hasBorders: true,
           cornerStyle: 'rect',
+
+          isPanel: true,
+          text2img_prompt: '',
+          text2img_negativePrompt: '',
+          text2img_seed: -2,
+          text2img_width: -1,
+          text2img_height: -1,
+          text2img_samplingMethod: "DPM++ 2M",
+          text2img_samplingSteps: 0,
+      
           controls: fabric.Object.prototype.controls
         });
 
@@ -272,6 +282,15 @@ function addSquare() {
     objectCaching: false,
     transparentCorners: false,
     cornerColor: 'Blue',
+
+    isPanel: text2img_initPrompt.isPanel,
+    text2img_prompt: text2img_initPrompt.text2img_prompt ,
+    text2img_negativePrompt: text2img_initPrompt.text2img_negativePrompt,
+    text2img_seed: text2img_initPrompt.text2img_seed,
+    text2img_width: text2img_initPrompt.text2img_width,
+    text2img_height: text2img_initPrompt.text2img_height,
+    text2img_samplingSteps: text2img_initPrompt.text2img_samplingSteps,
+
   });
   canvas.add(square);
 }

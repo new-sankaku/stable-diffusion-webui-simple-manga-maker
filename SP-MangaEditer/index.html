@@ -6,14 +6,22 @@
     <title>SP-MangaEditer: The Premier Standalone Manga Editing Platform</title>
 
     <meta name="description" content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects. Perfect for both beginners and professional artists.">
-    <meta name="keywords" content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, stable diffusion Forge, stable-diffusion-webui-simple-manga-maker
+    <meta name="keywords" content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, Stable diffusion Forge, stable-diffusion-webui-simple-manga-maker
     ">
     
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <link rel="stylesheet" href="css/styles.css?v=1.0">
-    <script src="third/Fabric.js/fabric.min.js?v=1.0"></script>
 
+    <link rel="stylesheet" href="css/styles.css?v=1.1">
+    <link href="third/Bootstrup/bootstrap.min.css?v=1.1" rel="stylesheet">
+    <script src="third/Fabric.js/fabric.min.js?v=1.1"></script>
+    <script>
+
+        //When starting from the Stable diffusion web ui Extension, 
+        //replace Port and Host. When you change this code, it will also affect MangaMaker.py.
+        var stableDiffusionWebUIPort=7860;
+        var stableDiffusionWebUIHost='127.0.0.1';
+    </script>
 </head>
 
 <body>
@@ -21,10 +29,12 @@
         <meta itemprop="name" content="SP-MangaEditer">
         <meta itemprop="description" content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects.">
         <meta itemprop="applicationCategory" content="Multimedia">
+
+
         <div class="floating-window" id="myWindow">
             <div class="header">
-                <span class="close-btn" onclick="closeWindow()">×</span>
-                <textarea id="textInput"></textarea>
+                <span class="close-btn" onclick="closeWindow()"></span>
+                <textarea id="vertical_textInput"></textarea>
                 <div class="button-container">
                     <button id="updateButton">Submit</button>
                     <button id="cancelButton">Cancel</button>
@@ -32,11 +42,69 @@
             </div>
         </div>
 
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+            <a class="navbar-brand" href="#">
+                <img src="02_images_svg/Logo/00000_mini_white.png" alt="SP-MangaEditer Official Logo" class="navbar-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul  style="display: none;" class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            File
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#"><i class="material-icons">file_download</i> Project Save</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="material-icons">file_upload</i> Project Load</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Prompt
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" onclick="openPromptChangeFloatingWindow()"><i class="material-icons">manage_search</i> Search & Replace</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            SD WebUI
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a id="Stable_Diffusion_WebUI_Status" class="dropdown-item" href="#"><i class="material-icons">manage_search</i> Checking...</a>
+                            </li>
+                            <li class="dropdown-item">
+                                <div>
+                                    <label for="Stable_Diffusion_WebUI_apiHost">API Host:</label>
+                                    <input type="text" id="Stable_Diffusion_WebUI_apiHost">
+                                </div>
+                                <div>
+                                    <label for="Stable_Diffusion_WebUI_apiPort">API Port:</label>
+                                    <input type="text" id="Stable_Diffusion_WebUI_apiPort">
+                                </div>
+                            </li>
+                            <li>
+                                <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank"><i class="material-icons">help_outline</i> Help:API Connect Settings</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+
+
+
     <div style="display: flex; flex-grow: 1;">
         <div id="sidebar">
-            <div class="logo-container">
-                <img src="02_images_svg/Logo/00000_mini.png" alt="SP-MangaEditer Official Logo">
-            </div>
             <i class="material-icons" onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
             <i class="material-icons" onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
             <i class="material-icons" onclick="toggleVisibility('panel-manager-area');">dashboard</i>
@@ -159,7 +227,9 @@
                                 href="https://fonts.google.com/icons" target="_blank">Google Icons</a></div>
                         <div class="info-item"><i class="material-icons">font_download</i> <a
                                 href="https://fonts.google.com" target="_blank">Google Font</a></div>
-                    </div>
+                        <div class="info-item"><i class="material-icons">view_comfy</i> <a
+                                href="https://getbootstrap.jp" target="_blank">Bootstrup</a></div>
+                        </div>
                     <div class="info-section">
                         <p>Materials:</p>
                         <div class="info-item"><i class="material-icons">image</i> <a href="https://fukidesign.com"
@@ -181,9 +251,9 @@
         </div>
 
         <div id="canvas-area">
-            <div class="area-header">Canvas</div>
+            <div class="area-header">Canvas : Panel click or Drop image </div>
             <div id="canvas-container">
-                <canvas id="mangaImageCanvas" width="750" height="750"></canvas>
+                <canvas id="mangaImageCanvas" width="750" height="850"></canvas>
             </div>
             <div id="canvas-buttons">
                 <button onclick="allRemove()"><i class="material-icons">delete</i> All Remove</button>
@@ -193,18 +263,20 @@
                 <button onclick="redo()"><i class="material-icons">redo</i> Redo</button>
             </div>
             <div id="download-buttons">
-                <button onclick="cropAndDownload()"><i class="material-icons">file_download</i> Download</button>
-                <button onclick="clipCopy()"><i class="material-icons">content_copy</i> Copy</button>
+                <button onclick="cropAndDownload()"><span class="material-symbols-outlined">imagesmode</span> Image Download</button>
+                <button onclick="clipCopy()"><i class="material-icons">content_copy</i> Image Copy</button>
             </div>
-
         </div>
         <div id="layer-panel">
-            <div class="area-header">Layers</div>
+            <div class="area-header">Layers </div>
             <div id="layer-content"></div>
             <div id="layer-buttons">
                 <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
                 <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
+                <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> Base T2I</button>
+                <button style="display: none;" onclick="openBaseText2ImagefloatingWindow()"><i class="material-icons">collections</i> All Run T2I</button>
             </div>
+
         </div>
         <div>
             <div id="common-controls">
@@ -304,21 +376,29 @@
         </div>
     </div>
 </div>
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.0" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.0" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=1.0" defer></script>
-    <script src="js/Settings.js?v=1.0" defer></script>
-    <script src="js/CanvasSetup.js?v=1.0" defer></script>
-    <script src="js/LayerManagement.js?v=1.0" defer></script>
-    <script src="js/ControleManagement.js?v=1.0" defer></script>
-    <script src="js/ImageTransformation.js?v=1.0" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=1.0" defer></script>
-    <script src="js/Sidebar.js?v=1.0" defer></script>
-    <script src="js/TextEffect.js?v=1.0" defer></script>
-    <script src="js/VerticalText.js?v=1.0" defer></script>
-    <script src="js/EffectManager.js?v=1.0" defer></script>
-    <script src="js/PanelManager.js?v=1.0" defer></script>
-    <script src="js/SvgEffect.js?v=1.0" defer></script>
+<div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
+
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=1.1"></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.1" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.1" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=1.1" defer></script>
+    <script src="js/Settings.js?v=1.1" defer></script>
+    <script src="js/Toast.js?v=1.1" defer></script>
+    <script src="js/FloatingWindowManagement.js?v=1.1" defer></script>
+    <script src="js/PromptManager.js?v=1.1" defer></script>
+    <script src="js/CanvasSetup.js?v=1.1" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=1.1" defer></script>
+    <script src="js/LayerManagement.js?v=1.1" defer></script>
+    <script src="js/CommonControleManagement.js?v=1.1" defer></script>
+    <script src="js/ImageTransformation.js?v=1.1" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=1.1" defer></script>
+    <script src="js/Sidebar.js?v=1.1" defer></script>
+    <script src="js/TextEffect.js?v=1.1" defer></script>
+    <script src="js/VerticalText.js?v=1.1" defer></script>
+    <script src="js/ImageControleManager.js?v=1.1" defer></script>
+    <script src="js/PanelManager.js?v=1.1" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=1.1" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=1.1" defer></script>
 </body>
 
 </html>

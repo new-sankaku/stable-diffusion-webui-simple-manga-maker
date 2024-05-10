@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Image on Canvas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.2.4/fabric.min.js"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <br>
+    <form>
+        <select name="mosaicSize">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+        </select>
+        <input type="button" value="Mosaic" onclick="mosaicRefined()">
+    </form>
+    <span id="timeSpan"></span>ms
+
+    <script>
+        const canvas = new fabric.Canvas('canvas');
+        let img;
+
+        canvas.on('drop', (e) => {
+            e.e.preventDefault();
+            const file = e.e.dataTransfer.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const imgObj = new Image();
+                imgObj.src = event.target.result;
+
+                imgObj.onload = () => {
+                    const aspectRatio = imgObj.width / imgObj.height;
+                    let imgWidth = canvas.width;
+                    let imgHeight = imgWidth / aspectRatio;
+
+                    if (imgHeight > canvas.height) {
+                        imgHeight = canvas.height;
+                        imgWidth = imgHeight * aspectRatio;
+                    }
+
+                    img = new fabric.Image(imgObj, {
+                        left: (canvas.width - imgWidth) / 2,
+                        top: (canvas.height - imgHeight) / 2,
+                        scaleX: imgWidth / imgObj.width,
+                        scaleY: imgHeight / imgObj.height
+                    });
+                    canvas.add(img);
+                    canvas.renderAll();
+
+                    console.log('Image added to canvas:');
+                    console.log('Image width:', img.width);
+                    console.log('Image height:', img.height);
+                    console.log('Image scaleX:', img.scaleX);
+                    console.log('Image scaleY:', img.scaleY);
+                    console.log('Image left:', img.left);
+                    console.log('Image top:', img.top);
+                };
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        canvas.on('dragover', (e) => {
+            e.e.preventDefault();
+            e.e.stopPropagation();
+            e.e.dataTransfer.dropEffect = 'copy';
+        });
+
+        function mosaicRefined() {
+            if (!img) return;
+
+            const size = parseInt(document.forms[0].mosaicSize.value);
+            const startTime = new Date();
+
+            const scaledWidth = img.width * img.scaleX;
+            const scaledHeight = img.height * img.scaleY;
+
+            console.log('Before mosaic processing:');
+            console.log('Scaled width:', scaledWidth);
+            console.log('Scaled height:', scaledHeight);
+
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = scaledWidth;
+            tempCanvas.height = scaledHeight;
+            tempCtx.drawImage(img.getElement(), 0, 0, scaledWidth, scaledHeight);
+            const imgData = tempCtx.getImageData(0, 0, scaledWidth, scaledHeight);
+            const data = imgData.data;
+
+            for (let y = 0; y < scaledHeight - size; y += size) {
+                for (let x = 0; x < scaledWidth; x += size) {
+                    let r = 0, g = 0, b = 0, count = 0;
+                    for (let i = y; i < y + size; i++) {
+                        for (let j = x; j < Math.min(x + size, scaledWidth); j++) {
+                            const index = (i * scaledWidth + j) * 4;
+                            r += data[index];
+                            g += data[index + 1];
+                            b += data[index + 2];
+                            count++;
+                        }
+                    }
+                    r = Math.floor(r / count);
+                    g = Math.floor(g / count);
+                    b = Math.floor(b / count);
+                    console.log('Block average color:', [r, g, b]);
+                    for (let i = y; i < y + size; i++) {
+                        for (let j = x; j < Math.min(x + size, scaledWidth); j++) {
+                            const index = (i * scaledWidth + j) * 4;
+                            data[index] = r;
+                            data[index + 1] = g;
+                            data[index + 2] = b;
+                        }
+                    }
+                }
+            }
+
+            // Process the last row separately
+            const lastRowHeight = scaledHeight % size;
+            if (lastRowHeight > 0) {
+                const y = scaledHeight - lastRowHeight;
+                for (let x = 0; x < scaledWidth; x += size) {
+                    let r = 0, g = 0, b = 0, count = 0;
+                    for (let i = y; i < scaledHeight; i++) {
+                        for (let j = x; j < Math.min(x + size, scaledWidth); j++) {
+                            const index = (i * scaledWidth + j) * 4;
+                            r += data[index];
+                            g += data[index + 1];
+                            b += data[index + 2];
+                            count++;
+                        }
+                    }
+                    r = Math.floor(r / count);
+                    g = Math.floor(g / count);
+                    b = Math.floor(b / count);
+                    console.log('Last row block average color:', [r, g, b]);
+                    for (let i = y; i < scaledHeight; i++) {
+                        for (let j = x; j < Math.min(x + size, scaledWidth); j++) {
+                            const index = (i * scaledWidth + j) * 4;
+                            data[index] = r;
+                            data[index + 1] = g;
+                            data[index + 2] = b;
+                        }
+                    }
+                }
+            }
+
+            tempCtx.putImageData(imgData, 0, 0);
+            img.setSrc(tempCanvas.toDataURL(), (newImg) => {
+                newImg.scaleToWidth(scaledWidth);
+                newImg.scaleToHeight(scaledHeight);
+                canvas.renderAll();
+                const endTime = new Date();
+                document.getElementById('timeSpan').innerHTML = (endTime - startTime);
+
+                console.log('After mosaic processing:');
+                console.log('Image width:', newImg.width);
+                console.log('Image height:', newImg.height);
+                console.log('Image scaleX:', newImg.scaleX);
+                console.log('Image scaleY:', newImg.scaleY);
+                console.log('Image left:', newImg.left);
+                console.log('Image top:', newImg.top);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -15,47 +15,6 @@ function flipVertically() {
 	}
 }
 
-
-
-function getCropAndDownloadLink() {
-	var strokeWidth = document.getElementById("strokeWidth").value;
-
-	var cropped = canvas.toDataURL({
-		format: 'png',
-		multiplier: 3, 
-		left: clipAreaCoords.left,
-		top: clipAreaCoords.top,
-		width: clipAreaCoords.width + (strokeWidth/2),
-		height: clipAreaCoords.height + (strokeWidth/2)
-	});
-
-	var link = document.createElement('a');
-	link.download = 'cropped-image.png';
-	link.href = cropped;
-	return link;
-}
-
-function clipCopy() {
-	var link = getCropAndDownloadLink();
-	fetch(link.href)
-	.then(res => res.blob())
-	.then(blob => {
-			const item = new ClipboardItem({ "image/png": blob });
-			navigator.clipboard.write([item]).then(function() {
-					console.log('Image copied to clipboard successfully!');
-					alert('Image copied to clipboard successfully!');
-			}, function(error) {
-					console.error('Unable to write to clipboard. Error:', error);
-					alert('Failed to copy image to clipboard.');
-			});
-	});
-}
-
-function cropAndDownload() {
-	var link = getCropAndDownloadLink();
-	link.click();
-}
-
 function allRemove() {
 	canvas.clear();
 	updateLayerPanel();

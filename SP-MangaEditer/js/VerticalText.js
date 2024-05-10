@@ -1,6 +1,6 @@
 const openButton = document.getElementById("openWindow");
 const myWindow = document.getElementById("myWindow");
-const textInput = document.getElementById("textInput");
+const textInput = document.getElementById("vertical_textInput");
 
 let isDragging = false;
 let offsetX, offsetY;
@@ -137,7 +137,7 @@ function createVerticalText(textString, options) {
 }
 
 function updateVerticalText() {
-  const textString = document.getElementById("textInput").value;
+  const textString = document.getElementById("vertical_textInput").value;
   const selectedObject = canvas.getActiveObject();
 
   if ( isVerticalText(selectedObject) ) {
