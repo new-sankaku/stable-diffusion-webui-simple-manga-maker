@@ -103,8 +103,8 @@ function getCropAndDownloadLink() {
 		multiplier: 3, 
 		left: clipAreaCoords.left,
 		top: clipAreaCoords.top,
-		width: clipAreaCoords.width + (strokeWidth/2),
-		height: clipAreaCoords.height + (strokeWidth/2)
+		width: clipAreaCoords.width - (strokeWidth/2),
+		height: clipAreaCoords.height - (strokeWidth/2)
 	});
 
 	var link = document.createElement('a');

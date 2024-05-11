@@ -113,6 +113,7 @@ function loadSVGPlusReset(svgString) {
     canvas.renderAll();
   });
   isUndoRedoOperation = true;
+  updateLayerPanel();
 }
 
 
