@@ -1,7 +1,6 @@
 [English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [Japanese](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
-# Simple Manga Editor
-This is a simple manga editor.  
+# Manga editor equipped with AI generation function!
 It supports Stable Diffusion WebUI and Stable Diffusion Forge as extensions.  
 The Text2Image feature is supported through the Stable Diffusion WebUI API.  
 Forge is not supported because its API was removed (currently checking whether to directly hit it without the API).
