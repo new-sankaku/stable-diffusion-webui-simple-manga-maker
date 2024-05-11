@@ -16,7 +16,7 @@ function openPromptChangeFloatingWindow() {
   `;
 
   document.body.appendChild(floatingWindow);
-  makeDraggable(floatingWindow); 
+  makeDraggable(floatingWindow);
 }
 
 function createPromptPair(oldLabel, newLabel) {
@@ -53,6 +53,9 @@ function applyChanges() {
       }
     });
   });
+  
+  console.log("applyChanges", "saveState");
+  saveState();
 }
 
 function closePromptChangeFloatingWindow() {

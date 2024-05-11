@@ -78,6 +78,15 @@ function restoreImage(json) {
         if (obj.type === 'image' && imageMap.has(obj.src)) {
             obj.src = imageMap.get(obj.src); // ハッシュキーに基づき画像データを復元
         }
+        const props = ['excludeFromLayerPanel', 'isPanel', 'text2img_prompt', 'text2img_negativePrompt',
+        'text2img_seed', 'text2img_width', 'text2img_height', 'text2img_samplingMethod',
+        'text2img_samplingSteps'];
+        props.forEach(prop => {
+            if (obj[prop] !== undefined) {
+                obj[prop] = obj[prop]; 
+            }
+        });
+        
         return obj;
     });
 

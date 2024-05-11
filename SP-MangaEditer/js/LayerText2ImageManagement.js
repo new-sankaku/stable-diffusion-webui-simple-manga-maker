@@ -97,6 +97,8 @@ function saveLayerText2ImageAttributes(layer) {
   layer.text2img_height = parseInt(document.getElementById("text2img_height").value);
 
   console.log("Saved layer attributes:", layer);
+  console.log("applyChanges", "saveState");
+  saveState();
 }
 
 function closefloatingWindowItem() {
