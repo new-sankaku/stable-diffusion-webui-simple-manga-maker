@@ -23,64 +23,106 @@ function saveStateByManual() {
     //console.log("saveState end.   currentStateIndex:stateStack.length", "Manual", currentStateIndex, ":", stateStack.length);
 }
 
+
+
+
+// ハッシュ化関数と画像データマップ
+const imageMap = new Map();
+
+function generateHash(imageData) {
+    return CryptoJS.SHA256(imageData).toString(CryptoJS.enc.Hex);
+}
+
+function customToJSON() {
+    const json = canvas.toJSON(['excludeFromLayerPanel', 
+                                'isPanel', 
+                                'text2img_prompt', 
+                                'text2img_negativePrompt', 
+                                'text2img_seed', 
+                                'text2img_width', 
+                                'text2img_height', 
+                                'text2img_samplingMethod', 
+                                'text2img_samplingSteps']);
+    
+    json.objects = json.objects.map(obj => {
+        if (obj.type === 'image' && obj.src.startsWith('data:')) {
+            const hash = generateHash(obj.src);
+            if (!imageMap.has(hash)) {
+                imageMap.set(hash, obj.src);
+            }
+            obj.src = hash;
+        }
+        return obj;
+    });
+
+    return json;
+}
+
+
 function saveState() {
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }
     canvas.renderAll();
-    //console.log("saveState save json", JSON.stringify(canvas.toJSON(['excludeFromLayerPanel'])));
-    stateStack.push(JSON.stringify(canvas.toJSON(['excludeFromLayerPanel', 
-                                                  'isPanel', 
-                                                  'text2img_prompt', 
-                                                  'text2img_negativePrompt', 
-                                                  'text2img_seed', 
-                                                  'text2img_width', 
-                                                  'text2img_height', 
-                                                  'text2img_samplingMethod', 
-                                                  'text2img_samplingSteps'])));
 
-
+    const json = JSON.stringify(customToJSON()); // カスタム JSON 処理を呼び出す
+    stateStack.push(json);
     currentStateIndex++;
     updateLayerPanel();
-    // //console.log("saveState end.   currentStateIndex:stateStack.length", "saveState", currentStateIndex, ":", stateStack.length);
+}
+
+// JSON からの画像データの復元処理
+function restoreImage(json) {
+    const parsedJson = JSON.parse(json);
+    parsedJson.objects = parsedJson.objects.map(obj => {
+        if (obj.type === 'image' && imageMap.has(obj.src)) {
+            obj.src = imageMap.get(obj.src); // ハッシュキーに基づき画像データを復元
+        }
+        return obj;
+    });
+
+    return parsedJson;
 }
 
 function undo() {
-    //console.log("undo start.   currentStateIndex:stateStack.length", currentStateIndex, ":", stateStack.length);
-    
     if (currentStateIndex >= 1) {
         isUndoRedoOperation = true;
         currentStateIndex--;
-        canvas.loadFromJSON(stateStack[currentStateIndex], function () {
+        canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
             isUndoRedoOperation = false;
         });
-    } else {
-        //console.log("No more states to undo");
     }
-
-    //console.log("undo end  .   currentStateIndex:stateStack.length", currentStateIndex, ":", stateStack.length);
 }
 
 function redo() {
-    //console.log("redo start.   currentStateIndex:stateStack.length", currentStateIndex, ":", stateStack.length);
-
     if (currentStateIndex < stateStack.length - 1) {
         isUndoRedoOperation = true;
         currentStateIndex++;
-        //console.log("redo", stateStack[currentStateIndex]);
-        canvas.loadFromJSON(stateStack[currentStateIndex], function () {
+        canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
             isUndoRedoOperation = false;
         });
-    } else {
-        //console.log("No more states to redo");
     }
-
-    //console.log("redo end  .   currentStateIndex:stateStack.length", currentStateIndex, ":", stateStack.length);
 }
+
+function lastRedo() {
+    isUndoRedoOperation = true;
+    currentStateIndex = stateStack.length - 1;
+    canvas.loadFromJSON(restoreImage(stateStack[stateStack.length - 1]), function () {
+        canvas.renderAll();
+        updateLayerPanel();
+        isUndoRedoOperation = false;
+    });
+}
+
+
+
+
+
+
 
 // Event listeners setup
 canvas.on('object:modified', function(e) { saveStateByListener(e, 'object:modified'); });
@@ -91,52 +133,4 @@ canvas.on('canvas:cleared', function(e) { saveStateByListener(e, 'canvas:cleared
 
 saveState();
 
-
-
-
-
-function getCropAndDownloadLink() {
-	var strokeWidth = document.getElementById("strokeWidth").value;
-
-	var cropped = canvas.toDataURL({
-		format: 'png',
-		multiplier: 3, 
-		left: clipAreaCoords.left,
-		top: clipAreaCoords.top,
-		width: clipAreaCoords.width - (strokeWidth/2),
-		height: clipAreaCoords.height - (strokeWidth/2)
-	});
-
-	var link = document.createElement('a');
-	link.download = 'cropped-image.png';
-	link.href = cropped;
-	return link;
-}
-
-function clipCopy() {
-	var link = getCropAndDownloadLink();
-	fetch(link.href)
-	.then(res => res.blob())
-	.then(blob => {
-			const item = new ClipboardItem({ "image/png": blob });
-			navigator.clipboard.write([item]).then(function() {
-                createToast("Success", "Image copied to clipboard successfully!");
-			}, function(error) {
-                createErrorToast("Error", "Unable to write to clipboard. Error");
-			});
-	});
-}
-
-function cropAndDownload() {
-	var link = getCropAndDownloadLink();
-	link.click();
-}
-
-
-function saveProject(){
-
-}
-function loadProject(){
-
-}
 
