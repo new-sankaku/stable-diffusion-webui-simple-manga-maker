@@ -5,9 +5,12 @@
 HTML、CSS、JavaScriptで構築されたシンプルな漫画エディタです。ブラウザ動きます。  
 Stable diffusion web ui、Stable diffusion forgeをサポートしています。また、デモサイト上のみでも全ての機能が動きます。
 
-# デモサイト
-
+# デモサイト  
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)
+
+# Install
+https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
+![image](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/assets/133557155/1c2afeed-b009-4b8e-b51a-8d5e99ec48a5)
 
 ## 機能
 
