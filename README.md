@@ -31,16 +31,22 @@ Supports Stable diffusion web ui, Stable diffusion forge. Also, all functions wo
 
 Below are screenshots demonstrating the use of the editor.
 
-Editor Interface
+Demo movie(Youtube).  
+<a href="https://youtu.be/-H4IYfimToo">
+  <img src="https://img.youtube.com/vi/-H4IYfimToo/maxresdefault.jpg" width="480" alt="Text2Image">
+</a>
+
+
+Editor Interface  
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/Editer.png" width="450">
 
-Sample Image 1
+Sample Image 1  
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/cropped-image.png" width="450">
 
-Sample Image 2
+Sample Image 2  
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/cropped-image_2.png" width="450">
 
-Sample Image 3
+Sample Image 3  
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/cropped-image_3.png" width="450">
 
 # Contributions Welcome!
