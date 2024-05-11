@@ -1,6 +1,8 @@
 /** Load SVG(Verfical, Landscope) */
 function loadSVGPlusReset(svgString) {
   allRemove();
+
+  isUndoRedoOperation = true;
   fabric.loadSVGFromString(svgString, function (objects, options) {
     var canvasUsableHeight = canvas.height - svgPagging;
     var overallScaleX = canvas.width / options.width;
@@ -49,7 +51,6 @@ function loadSVGPlusReset(svgString) {
             if( (xDiff < threshold) && (yDiff < threshold) ){
               return false;
             }
-
             return true;
           }
           return false;
@@ -111,6 +112,7 @@ function loadSVGPlusReset(svgString) {
     changeStrokeWidth( document.getElementById("strokeWidth").value );
     canvas.renderAll();
   });
+  isUndoRedoOperation = true;
 }
 
 
@@ -294,6 +296,43 @@ function addSquare() {
   });
   canvas.add(square);
 }
+
+function addPentagon() {
+  var side = 250; // 五角形の一辺の長さ
+  var angle = 54; // 中心から頂点までの角度（度数法）
+
+  // 五角形の各頂点の計算
+  var points = [];
+  for (var i = 0; i < 5; i++) {
+    // 角度をラジアンに変換し、頂点の座標を計算
+    var x = side * Math.cos((Math.PI / 180) * (angle + i * 72));
+    var y = side * Math.sin((Math.PI / 180) * (angle + i * 72));
+    points.push({ x: x, y: y });
+  }
+
+  var pentagon = new fabric.Polygon(points, {
+    left: 150,
+    top: 150,
+    fill: '#FFFFFF',
+    strokeWidth: 2,
+    strokeUniform: true,
+    stroke: 'black',
+    objectCaching: false,
+    transparentCorners: false,
+    cornerColor: 'blue',
+
+    isPanel: text2img_initPrompt.isPanel,
+    text2img_prompt: text2img_initPrompt.text2img_prompt,
+    text2img_negativePrompt: text2img_initPrompt.text2img_negativePrompt,
+    text2img_seed: text2img_initPrompt.text2img_seed,
+    text2img_width: text2img_initPrompt.text2img_width,
+    text2img_height: text2img_initPrompt.text2img_height,
+    text2img_samplingSteps: text2img_initPrompt.text2img_samplingSteps,
+  });
+
+  canvas.add(pentagon);
+}
+
 
 
 function Edit() {

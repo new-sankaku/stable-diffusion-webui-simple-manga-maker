@@ -1,6 +1,8 @@
+fabric.Object.NUM_FRACTION_DIGITS = 100;
+
 var canvas = new fabric.Canvas('mangaImageCanvas', {
   renderOnAddRemove: false,
-  skipOffscreen: true,
+  skipOffscreen: false,
   renderer: fabric.isWebglSupported ? 'webgl' : 'canvas'
 });
 canvas.backgroundColor = "white";

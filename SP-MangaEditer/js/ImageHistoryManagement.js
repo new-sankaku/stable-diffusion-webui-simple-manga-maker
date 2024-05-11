@@ -29,7 +29,15 @@ function saveState() {
     }
     canvas.renderAll();
     //console.log("saveState save json", JSON.stringify(canvas.toJSON(['excludeFromLayerPanel'])));
-    stateStack.push(JSON.stringify(canvas.toJSON(['excludeFromLayerPanel', 'isPanel', 'text2img_prompt', 'text2img_negativePrompt', 'text2img_seed', 'text2img_width', 'text2img_height', 'text2img_samplingMethod', 'text2img_samplingSteps'])));
+    stateStack.push(JSON.stringify(canvas.toJSON(['excludeFromLayerPanel', 
+                                                  'isPanel', 
+                                                  'text2img_prompt', 
+                                                  'text2img_negativePrompt', 
+                                                  'text2img_seed', 
+                                                  'text2img_width', 
+                                                  'text2img_height', 
+                                                  'text2img_samplingMethod', 
+                                                  'text2img_samplingSteps'])));
 
 
     currentStateIndex++;
@@ -112,11 +120,9 @@ function clipCopy() {
 	.then(blob => {
 			const item = new ClipboardItem({ "image/png": blob });
 			navigator.clipboard.write([item]).then(function() {
-					console.log('Image copied to clipboard successfully!');
-					alert('Image copied to clipboard successfully!');
+                createToast("Success", "Image copied to clipboard successfully!");
 			}, function(error) {
-					console.error('Unable to write to clipboard. Error:', error);
-					alert('Failed to copy image to clipboard.');
+                createErrorToast("Error", "Unable to write to clipboard. Error");
 			});
 	});
 }

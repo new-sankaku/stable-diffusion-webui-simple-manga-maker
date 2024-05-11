@@ -78,7 +78,7 @@ function putImageInFrame(img, x, y) {
         scaleY: targetFrame.scaleY - ( targetFrame.strokeWidth / targetFrame.height ),
         absolutePositioned: true,
       });
-      //console.log("clipPath", clipPath);
+      // console.log("putImageInFrame clipPath", clipPath);
     } else {
       clipPath = new fabric.Path(targetFrame.path);
       clipPath.set({
