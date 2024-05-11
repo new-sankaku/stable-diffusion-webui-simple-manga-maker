@@ -10,7 +10,7 @@ Supports Stable diffusion web ui, Stable diffusion forge. Also, all functions wo
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)
 
 # Install
-
+https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
 ![image](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/assets/133557155/1c2afeed-b009-4b8e-b51a-8d5e99ec48a5)
 
 ## Features
