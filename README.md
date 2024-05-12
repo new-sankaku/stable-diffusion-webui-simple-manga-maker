@@ -1,43 +1,44 @@
-[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
+[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [Japanese](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
-# Simple Manga Editor
+# Manga editor equipped with AI generation function!
+It supports Stable Diffusion WebUI and Stable Diffusion Forge as extensions.  
+The Text2Image feature is supported through the Stable Diffusion WebUI API.  
+Forge is not supported because its API was removed (currently checking whether to directly hit it without the API).
 
-A simple manga editor built with HTML, CSS, and JavaScript. It operates directly in your browser.  
-Supports Stable diffusion web ui, Stable diffusion forge. Also, all functions work only on the demo site.
-
-# Demo Site
-
-[SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)
+# Demo Site  
+[SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)  
+Launching Stable Diffusion WebUI enables the Text2Image feature.  
+All other features work on the demo site alone.
 
 # Install
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
-![image](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/assets/133557155/1c2afeed-b009-4b8e-b51a-8d5e99ec48a5)
+<img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/install.png" width="620">
+
 
 ## Features
+- **Manga Panels**: Standard manga page layouts.
+- **Panels**: Add and edit manga panels.
+- **Speech Bubble Insertion**: Standard speech bubbles.
+- **Automatic Application Within Panel**: Automatically applies dropped items within a panel.
+- **Overlay Display**: Displays items as overlays when dropped outside the frame.
+- **Layer Display**: Manage images, text, and panels as layers.
+- **Image Editing Features**: Adjust angle, position, scale, changes along X and Y axis, horizontal flip, vertical flip.
+- **Image Effects**: Sepia, grayscale, gamma, blur, vibrance, pixelation.
+- **Text**: Vertical and horizontal writing, bold, shadow, fonts suitable for comics.
+- **Undo/Redo Function**: Ability to rewind or fast-forward edits.
+- **Image Saving**: Save to the download folder or copy as a clip.
+- **Project Save/Load**: Save and load project functionality.
+- **Text2Image**: Generates images for each panel via Stable Diffusion WebUI.
+- **Prompt Replacement**: Bulk replacement of prompts makes it easy to generate different character versions on the same page.
 
-- **Manga panel**: Standard comic panel page.
-- **Panel**: Adding frames and editing frames.
-- **Insert speech bubble**: Standard equipped speech bubble.
-- **Automatic application within a frame**: Automatically applied by dropping within a frame.
-- **Overlay display**: Overlay items by dropping them outside the frame.
-- **Layer display**: Images/text/frames can be managed as layers.
-- **Image editing features**: angle, position, scale, changes along the X and Y axes, horizontal flip, vertical flip of the image.
-- **Image Effects**: Sepia, Grayscale, Gamma, Blur, Vibrance, Pixelate.
-- **Text**: Vertical, horizontal, bold, shadow, and manga-friendly fonts.
-- **Undo/forward function**: You can rewind or postpone editing.
-- **Image saving**: Edited images can be saved directly to the download folder.
 
-## Screenshots
-
-Below are screenshots demonstrating the use of the editor.
-
-Demo movie(Youtube).  
+## Text2Image Demo Video (Youtube).  
 <a href="https://youtu.be/-H4IYfimToo">
   <img src="https://img.youtube.com/vi/-H4IYfimToo/maxresdefault.jpg" width="480" alt="Text2Image">
 </a>
 
-
-Editor Interface  
+## Screenshots
+Editor  
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/Editer.png" width="450">
 
 Sample Image 1  
@@ -50,17 +51,16 @@ Sample Image 3
 <img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/cropped-image_3.png" width="450">
 
 # Contributions Welcome!
-
-This project is open source. We welcome contributions from people of all backgrounds. Anyone interested in contributing is encouraged to send a pull request.
+This project is open source. We welcome contributions from people of all backgrounds. Anyone interested in contributing can submit a pull request.
 
 ## How to Contribute
-- **Bug Reporting**: If you find a bug, please create a new issue at [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues).
-- **Feature Suggestions**: If you have an idea for a new feature, please create a new issue at [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues).
-- **Documentation Improvement**: If there are typos or insufficient explanations in the documentation, please send a pull request to correct them.   
+- **Bug Reports**: If you find a bug, please create a new issue in [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues).
+- **Feature Suggestions**: If you have an idea for a new feature, please create a new issue in [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues).
+- **Documentation Improvements**: If there are typos or insufficient explanations in the documentation, please send a pull request with corrections. You may also add to [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues) if necessary.
 
-You can also add it to [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues) if you prefer. This project is small, so using [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues) is appropriate.
+Since this project is small-scale, let's use [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues) for now (we might not need other features...).
 
 ## Communication
-If you have questions or would like to discuss the project, please post in [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues).
+If you have questions or discussions about the project, please post in [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues).
 
 Thank you for your cooperation.
