@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Exact Copy Rough Polygon with Fabric.js and Rough.js</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.2.4/fabric.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.5.0/bundled/rough.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="800" height="600" style="border:1px solid #ccc"></canvas>
+<script>
+window.onload = function() {
+  console.log("Window loaded and scripts ready.");
+  const canvas = new fabric.Canvas('canvas');
+  console.log("Fabric canvas initialized.");
+
+  const existingPolygon = new fabric.Polygon([
+    {x: 200, y: 200}, 
+    {x: 300, y: 100}, 
+    {x: 400, y: 200}, 
+    {x: 350, y: 300}, 
+    {x: 250, y: 300}
+  ], {
+    fill: 'white',
+    stroke: 'blue',
+    strokeWidth: 1,
+    left: 50,
+    top: 50,
+    scaleX: 1.5,
+    scaleY: 1.5,
+    angle: 30,
+    selectable: false
+  });
+  canvas.add(existingPolygon);
+  canvas.renderAll();
+
+
+
+  function roughenPolygon(polygon) {
+  const roughCanvas = rough.canvas(document.getElementById('canvas'));
+  const points = polygon.points.map(p => [p.x, p.y]);
+  const roughPolygon = roughCanvas.polygon(points, {
+    roughness: 2.5,
+    bowing: 1,
+    stroke: 'blue',
+    strokeWidth: 3,
+    fillStyle: 'none'  // 塗りつぶし無しで線のみを表示
+  });
+
+  let pathData = '';
+  roughPolygon.sets.forEach(set => {
+    set.ops.forEach(op => {
+      switch (op.op) {
+        case 'move':
+          pathData += `M ${op.data[0]} ${op.data[1]} `;
+          break;
+        case 'bcurveTo':
+          pathData += `C ${op.data[0]}, ${op.data[1]}, ${op.data[2]}, ${op.data[3]}, ${op.data[4]}, ${op.data[5]} `;
+          break;
+        // 他のSVGパスコマンドに対応する場合はここに追加
+      }
+    });
+  });
+
+  if (pathData.length > 0) {
+    const newPolygon = new fabric.Path(pathData, {
+      left: polygon.left,
+      top: polygon.top,
+      scaleX: polygon.scaleX,
+      scaleY: polygon.scaleY,
+      angle: polygon.angle,
+      stroke: 'blue',
+      strokeWidth: 1,
+      fill: 'none'  // 塗りつぶしをなしに設定
+    });
+    canvas.add(newPolygon);
+    canvas.remove(polygon);
+    canvas.renderAll();
+  } else {
+    console.error("Generated path data is invalid.");
+  }
+}
+
+setTimeout(() => roughenPolygon(existingPolygon), 1000);
+
+}
+</script>
+</body>
+</html>

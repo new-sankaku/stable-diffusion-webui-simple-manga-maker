@@ -159,6 +159,7 @@ function removeLayer(layer) {
   if (canvas.getActiveObject() === layer) {
     canvas.discardActiveObject();
     canvas.requestRenderAll();
+    canvas.renderAll();
   }
 }
 

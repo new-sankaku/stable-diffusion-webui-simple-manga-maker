@@ -1,3 +1,234 @@
+canvas.on("selection:created", handleSelection);
+canvas.on("selection:updated", handleSelection);
+
+document.getElementById("canvas-container").addEventListener(
+  "dragover",
+  function (e) {
+    e.preventDefault();
+  },
+  false
+);
+
+function handleSelection(e) {
+  var selectedObject = e.target;
+  var layers = canvas.getObjects();
+  var activeIndex = layers.indexOf(selectedObject);
+  highlightActiveLayer(activeIndex);
+  updateControls(selectedObject);
+}
+
+document.getElementById("canvas-container").addEventListener(
+  "drop",
+  function (e) {
+    e.preventDefault();
+    var file = e.dataTransfer.files[0];
+    var canvasElement = canvas.getElement();
+    var rect = canvasElement.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+
+    var reader = new FileReader();
+    reader.onload = function (f) {
+      var data = f.target.result;
+      fabric.Image.fromURL(data, function (img) {
+        var canvasWidth = canvasElement.width;
+        var canvasHeight = canvasElement.height;
+
+        putImageInFrame(img, x, y);
+      });
+    };
+
+    reader.readAsDataURL(file);
+  },
+  false
+);
+
+
+
+        // ペーストイベントをキャプチャ
+        document.addEventListener('paste', function(event) {
+          const items = event.clipboardData.items;
+          var isActive = true;
+          for (let i = 0; i < items.length; i++) {
+              if (items[i].kind === 'file' && items[i].type.startsWith('image/')) {
+                  const blob = items[i].getAsFile();
+                  const reader = new FileReader();
+                  
+                  reader.onload = function(event) {
+                      const data = event.target.result;
+                      fabric.Image.fromURL(data, function(img) {
+                          const activeObject = canvas.getActiveObject();
+
+                          if (activeObject && isActive) {
+                              // アクティブオブジェクトの中央座標を使用
+                              const x = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
+                              const y = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
+                              putImageInFrame(img, x, y);
+                          } else {
+                              isActive = false;
+                              const canvasWidth = canvas.width/2;
+                              const canvasHeight = canvas.height/2;
+                              const scaleToFitX = canvasWidth / img.width;
+                              const scaleToFitY = canvasHeight / img.height;
+                              const scaleToFit = Math.min(scaleToFitX, scaleToFitY);
+
+                              img.set({
+                                  scaleX: scaleToFit,
+                                  scaleY: scaleToFit,
+                                  left: (canvasWidth - img.width * scaleToFit) / 2,
+                                  top: (canvasHeight - img.height * scaleToFit) / 2,
+                              });
+                              canvas.add(img);
+                              canvas.setActiveObject(img);
+                              canvas.renderAll();
+                              saveStateByManual();
+                          }
+                      });
+                  };
+                  reader.readAsDataURL(blob);
+                  updateLayerPanel();
+              }
+          }
+      });
+
+
+
+function putImageInFrame(img, x, y) {
+  isUndoRedoOperation = true;
+
+  img.set({
+    left: x,
+    top: y,
+  });
+  canvas.add(img);
+  canvas.setActiveObject(img);
+
+  var targetFrameIndex = findTargetFrame(x, y);
+  if (targetFrameIndex !== -1) {
+    var targetFrame = canvas.item(targetFrameIndex);
+    var frameCenterX =
+      targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
+    var frameCenterY =
+      targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
+    var scaleToFitX = (targetFrame.width * targetFrame.scaleX) / img.width;
+    var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / img.height;
+    var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
+
+    var clipPath;
+    if (targetFrame.type === "polygon") {
+      clipPath = new fabric.Polygon(targetFrame.points);
+      clipPath.set({
+        left:
+          targetFrame.left +
+          targetFrame.strokeWidth -
+          0.45 * targetFrame.scaleX,
+        top:
+          targetFrame.top + targetFrame.strokeWidth - 0.45 * targetFrame.scaleY,
+        wight:
+          targetFrame.wight -
+          targetFrame.strokeWidth -
+          0.45 * targetFrame.scaleX,
+        height: targetFrame.height,
+        scaleX:
+          targetFrame.scaleX - targetFrame.strokeWidth / targetFrame.width,
+        scaleY:
+          targetFrame.scaleY - targetFrame.strokeWidth / targetFrame.height,
+        absolutePositioned: true,
+      });
+      // console.log("putImageInFrame clipPath", clipPath);
+    } else {
+      clipPath = new fabric.Path(targetFrame.path);
+      clipPath.set({
+        left: targetFrame.left + targetFrame.strokeWidth,
+        top: targetFrame.top + targetFrame.strokeWidth,
+        scaleX:
+          targetFrame.scaleX - targetFrame.strokeWidth / targetFrame.width,
+        scaleY:
+          targetFrame.scaleY - targetFrame.strokeWidth / targetFrame.height,
+        absolutePositioned: true,
+      });
+    }
+    img.set({
+      left: frameCenterX - (img.width * scaleToFit) / 2,
+      top: frameCenterY - (img.height * scaleToFit) / 2,
+      scaleX: scaleToFit * 1.05,
+      scaleY: scaleToFit * 1.05,
+    });
+
+    img.clipPath = clipPath;
+  } else {
+    var scaleToCanvasWidth = 300 / img.width;
+    var scaleToCanvasHeight = 300 / img.height;
+    var scaleToCanvas = Math.min(scaleToCanvasWidth, scaleToCanvasHeight);
+
+    img.set({
+      left: 50,
+      top: 50,
+      scaleX: scaleToCanvas,
+      scaleY: scaleToCanvas,
+    });
+  }
+  canvas.renderAll();
+  updateLayerPanel();
+
+  isUndoRedoOperation = false;
+  saveStateByManual();
+}
+
+function findTargetFrame(x, y) {
+  //console.log( "findTargetFrame:x y, ", x, " ", y );
+
+  let objects = canvas.getObjects().reverse();
+  for (let i = 0; i < objects.length; i++) {
+    if (
+      objects[i].type === "path" ||
+      objects[i].type === "rect" ||
+      objects[i].type === "polygon"
+    ) {
+      // console.log("findTargetFrame(x, y)", findTargetFrame);
+      let frameBounds = objects[i].getBoundingRect(true);
+      if (
+        x >= frameBounds.left &&
+        x <= frameBounds.left + frameBounds.width &&
+        y >= frameBounds.top &&
+        y <= frameBounds.top + frameBounds.height
+      ) {
+        return canvas.getObjects().length - 1 - i;
+      }
+    }
+  }
+  //console.log("findTargetFrame(x, y) NO HIT.");
+  return -1;
+}
+
+function isWithin(image, frame) {
+  let frameBounds = frame.getBoundingRect(true);
+  let imageBounds = image.getBoundingRect(true);
+
+  let within =
+    imageBounds.left >= frameBounds.left &&
+    imageBounds.top >= frameBounds.top &&
+    imageBounds.left + imageBounds.width * image.scaleX <=
+      frameBounds.left + frameBounds.width &&
+    imageBounds.top + imageBounds.height * image.scaleY <=
+      frameBounds.top + frameBounds.height;
+  return within;
+}
+
+function adjustImageToFitFrame(image, frame) {
+  let frameBounds = frame.getBoundingRect();
+  let scale = Math.min(
+    frameBounds.width / image.getScaledWidth(),
+    frameBounds.height / image.getScaledHeight()
+  );
+  image.set({
+    left: frameBounds.left + (frameBounds.width - image.width * scale) / 2,
+    top: frameBounds.top + (frameBounds.height - image.height * scale) / 2,
+    scaleX: scale,
+    scaleY: scale,
+  });
+}
+
 /** Load SVG(Verfical, Landscope) */
 function loadSVGPlusReset(svgString) {
   allRemove();
@@ -19,9 +250,13 @@ function loadSVGPlusReset(svgString) {
     canvas.backgroundColor = "white";
 
     objects.forEach(function (obj) {
-      if (obj.type === 'path') {
+      if (obj.type === "path") {
         var points = obj.path.map(function (item) {
-          return { x: item[item.length - 2], y: item[item.length - 1], command: item[0] };
+          return {
+            x: item[item.length - 2],
+            y: item[item.length - 1],
+            command: item[0],
+          };
         });
 
         var threshold = Math.max(obj.width, obj.height) * 0.004;
@@ -29,11 +264,11 @@ function loadSVGPlusReset(svgString) {
         var startY = 0;
 
         var vertices = points.filter(function (point, index, self) {
-          if (point.command === 'M') {
+          if (point.command === "M") {
             startX = point.x;
             startY = point.y;
             return true;
-          } else if (point.command === 'C') {
+          } else if (point.command === "C") {
             if (index === 0) {
               return true;
             }
@@ -42,13 +277,13 @@ function loadSVGPlusReset(svgString) {
             var yDiff = Math.abs(point.y - prevPoint.y);
             // console.log("DIFF:", "xDiff", xDiff, "yDiff", yDiff, "threshold",threshold, "RESULT",!((xDiff < threshold) && (yDiff < threshold)), "point.x",point.x, "point.y",point.y, "prevPoint",prevPoint);
 
-            if( (xDiff < threshold) && (yDiff < threshold) ){
+            if (xDiff < threshold && yDiff < threshold) {
               return false;
             }
 
             var xDiff = Math.abs(point.x - startX);
             var yDiff = Math.abs(point.y - startY);
-            if( (xDiff < threshold) && (yDiff < threshold) ){
+            if (xDiff < threshold && yDiff < threshold) {
               return false;
             }
             return true;
@@ -63,7 +298,7 @@ function loadSVGPlusReset(svgString) {
           scaleY: scaleToFit,
           top: obj.top * scaleToFit + offsetY,
           left: obj.left * scaleToFit + offsetX,
-          fill: 'transparent',
+          fill: "transparent",
           stroke: obj.stroke,
           strokeWidth: obj.strokeWidth,
           selectable: true,
@@ -75,18 +310,18 @@ function loadSVGPlusReset(svgString) {
           lockScalingY: false,
           edit: false,
           hasBorders: true,
-          cornerStyle: 'rect',
+          cornerStyle: "rect",
 
           isPanel: true,
-          text2img_prompt: '',
-          text2img_negativePrompt: '',
+          text2img_prompt: "",
+          text2img_negativePrompt: "",
           text2img_seed: -2,
           text2img_width: -1,
           text2img_height: -1,
           text2img_samplingMethod: "DPM++ 2M",
           text2img_samplingSteps: 0,
-      
-          controls: fabric.Object.prototype.controls
+
+          controls: fabric.Object.prototype.controls,
         });
 
         // polygon.points = vertices;
@@ -109,23 +344,18 @@ function loadSVGPlusReset(svgString) {
         canvas.add(obj);
       }
     });
-    changeStrokeWidth( document.getElementById("strokeWidth").value );
+    changeStrokeWidth(document.getElementById("strokeWidth").value);
     canvas.renderAll();
   });
   isUndoRedoOperation = true;
   updateLayerPanel();
 }
 
-
-
-
-
 /** Sppech bubble */
 function loadSVGReadOnly(svgString) {
-
-  var applyColor = document.getElementById('applyColorChange').checked;
-  var fillColor = document.getElementById('bubbleFillColor').value;
-  var strokeColor = document.getElementById('bubbleStrokeColor').value;
+  var applyColor = document.getElementById("applyColorChange").checked;
+  var fillColor = document.getElementById("bubbleFillColor").value;
+  var strokeColor = document.getElementById("bubbleStrokeColor").value;
 
   fabric.loadSVGFromString(svgString, function (objects, options) {
     var canvasUsableHeight = canvas.height * 0.3 - svgPagging;
@@ -141,15 +371,13 @@ function loadSVGReadOnly(svgString) {
       obj.scaleY = scaleToFit;
       obj.top = obj.top * scaleToFit + offsetY;
       obj.left = obj.left * scaleToFit + offsetX;
-      
+
       if (applyColor) {
         obj.set({
           fill: fillColor,
-          stroke: strokeColor
+          stroke: strokeColor,
         });
       }
-      
-
 
       return obj;
     });
@@ -268,33 +496,34 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 });
 
-
 function addSquare() {
-  var square = new fabric.Polygon([
-    { x: 0, y: 0 },
-    { x: 250, y: 0 },
-    { x: 250, y: 250 },
-    { x: 0, y: 250 }
-  ], {
-    left: 50,
-    top: 50,
-    fill: '#FFFFFF',
-    strokeWidth: 2,
-    strokeUniform: true,
-    stroke: 'black',
-    objectCaching: false,
-    transparentCorners: false,
-    cornerColor: 'Blue',
+  var square = new fabric.Polygon(
+    [
+      { x: 0, y: 0 },
+      { x: 250, y: 0 },
+      { x: 250, y: 250 },
+      { x: 0, y: 250 },
+    ],
+    {
+      left: 50,
+      top: 50,
+      fill: "#FFFFFF",
+      strokeWidth: 2,
+      strokeUniform: true,
+      stroke: "black",
+      objectCaching: false,
+      transparentCorners: false,
+      cornerColor: "Blue",
 
-    isPanel: text2img_initPrompt.isPanel,
-    text2img_prompt: text2img_initPrompt.text2img_prompt ,
-    text2img_negativePrompt: text2img_initPrompt.text2img_negativePrompt,
-    text2img_seed: text2img_initPrompt.text2img_seed,
-    text2img_width: text2img_initPrompt.text2img_width,
-    text2img_height: text2img_initPrompt.text2img_height,
-    text2img_samplingSteps: text2img_initPrompt.text2img_samplingSteps,
-
-  });
+      isPanel: text2img_initPrompt.isPanel,
+      text2img_prompt: text2img_initPrompt.text2img_prompt,
+      text2img_negativePrompt: text2img_initPrompt.text2img_negativePrompt,
+      text2img_seed: text2img_initPrompt.text2img_seed,
+      text2img_width: text2img_initPrompt.text2img_width,
+      text2img_height: text2img_initPrompt.text2img_height,
+      text2img_samplingSteps: text2img_initPrompt.text2img_samplingSteps,
+    }
+  );
   canvas.add(square);
 }
 
@@ -314,13 +543,13 @@ function addPentagon() {
   var pentagon = new fabric.Polygon(points, {
     left: 150,
     top: 150,
-    fill: '#FFFFFF',
+    fill: "#FFFFFF",
     strokeWidth: 2,
     strokeUniform: true,
-    stroke: 'black',
+    stroke: "black",
     objectCaching: false,
     transparentCorners: false,
-    cornerColor: 'blue',
+    cornerColor: "blue",
 
     isPanel: text2img_initPrompt.isPanel,
     text2img_prompt: text2img_initPrompt.text2img_prompt,
@@ -334,59 +563,57 @@ function addPentagon() {
   canvas.add(pentagon);
 }
 
-
-
 function Edit() {
   var poly = canvas.getActiveObject();
   // console.log("poly", poly);
   if (!poly) return;
-  
+
   // console.log("poly.edit", poly.edit);
   poly.edit = !poly.edit;
   if (poly.edit) {
     var lastControl = poly.points.length - 1;
-    poly.cornerStyle = 'circle';
-    poly.cornerColor = 'rgba(0,0,255,0.5)';
+    poly.cornerStyle = "circle";
+    poly.cornerColor = "rgba(0,0,255,0.5)";
     poly.controls = poly.points.reduce(function (acc, point, index) {
-      acc['p' + index] = new fabric.Control({
+      acc["p" + index] = new fabric.Control({
         positionHandler: polygonPositionHandler,
-        actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
-        actionName: 'modifyPolygon',
-        pointIndex: index
+        actionHandler: anchorWrapper(
+          index > 0 ? index - 1 : lastControl,
+          actionHandler
+        ),
+        actionName: "modifyPolygon",
+        pointIndex: index,
       });
       return acc;
     }, {});
   } else {
-    poly.cornerStyle = 'rect';
+    poly.cornerStyle = "rect";
     poly.controls = fabric.Object.prototype.controls;
   }
   poly.hasBorders = !poly.edit;
   canvas.requestRenderAll();
 }
 
-
-
-
 function changeStrokeWidth(value) {
-  canvas.getObjects().forEach(function(obj) {
+  canvas.getObjects().forEach(function (obj) {
     obj.set({
       strokeWidth: parseFloat(value),
-      strokeUniform: true
+      strokeUniform: true,
     });
   });
   canvas.requestRenderAll();
 }
 
 function changeStrokeColor(value) {
-  canvas.getObjects().forEach(function(obj) {
-    obj.set('stroke', value);
+  canvas.getObjects().forEach(function (obj) {
+    obj.set("stroke", value);
   });
   canvas.requestRenderAll();
 }
 
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
-  var x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x),
-    y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y);
+  var x = fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x,
+    y = fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y;
   return fabric.util.transformPoint(
     { x: x, y: y },
     fabric.util.multiplyTransformMatrices(
@@ -407,12 +634,20 @@ function getObjectSizeWithStroke(object) {
 function actionHandler(eventData, transform, x, y) {
   var polygon = transform.target,
     currentControl = polygon.controls[polygon.__corner],
-    mouseLocalPosition = polygon.toLocalPoint(new fabric.Point(x, y), 'center', 'center'),
+    mouseLocalPosition = polygon.toLocalPoint(
+      new fabric.Point(x, y),
+      "center",
+      "center"
+    ),
     polygonBaseSize = getObjectSizeWithStroke(polygon),
     size = polygon._getTransformedDimensions(0, 0),
     finalPointPosition = {
-      x: mouseLocalPosition.x * polygonBaseSize.x / size.x + polygon.pathOffset.x,
-      y: mouseLocalPosition.y * polygonBaseSize.y / size.y + polygon.pathOffset.y
+      x:
+        (mouseLocalPosition.x * polygonBaseSize.x) / size.x +
+        polygon.pathOffset.x,
+      y:
+        (mouseLocalPosition.y * polygonBaseSize.y) / size.y +
+        polygon.pathOffset.y,
     };
   polygon.points[currentControl.pointIndex] = finalPointPosition;
   return true;
@@ -421,17 +656,23 @@ function actionHandler(eventData, transform, x, y) {
 function anchorWrapper(anchorIndex, fn) {
   return function (eventData, transform, x, y) {
     var fabricObject = transform.target,
-      absolutePoint = fabric.util.transformPoint({
-        x: (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x),
-        y: (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y),
-      }, fabricObject.calcTransformMatrix()),
+      absolutePoint = fabric.util.transformPoint(
+        {
+          x: fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x,
+          y: fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y,
+        },
+        fabricObject.calcTransformMatrix()
+      ),
       actionPerformed = fn(eventData, transform, x, y),
       newDim = fabricObject._setPositionDimensions({}),
       polygonBaseSize = getObjectSizeWithStroke(fabricObject),
-      newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x,
-      newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y;
+      newX =
+        (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) /
+        polygonBaseSize.x,
+      newY =
+        (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) /
+        polygonBaseSize.y;
     fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5);
     return actionPerformed;
-  }
+  };
 }
-

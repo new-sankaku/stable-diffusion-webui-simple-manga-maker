@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Fabric.js Snap to Gap Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+<body>
+    <canvas id="c" width="800" height="600" style="border:1px solid #ccc"></canvas>
+    <script>
+        var canvas = new fabric.Canvas('c');
+
+        var rect1 = new fabric.Rect({
+            left: 100,
+            top: 100,
+            fill: 'red',
+            width: 200,
+            height: 200,
+            hasControls: true
+        });
+
+        var rect2 = new fabric.Rect({
+            left: 370,
+            top: 300,
+            fill: 'blue',
+            width: 200,
+            height: 200,
+            hasControls: true
+        });
+
+        canvas.add(rect1, rect2);
+
+        var snapGap = 30; // スナップする隙間の幅
+        var range = 10;    // 調整範囲 (+/-)
+
+        canvas.on('object:moving', function(e) {
+            var target = e.target;
+            var objects = canvas.getObjects();
+
+            objects.forEach(function(obj) {
+                if (obj === target) return;
+
+                var distanceX = Math.abs(obj.left - target.left - target.width);
+                if (distanceX >= snapGap - range && distanceX <= snapGap + range) {
+                    if (target.left > obj.left) {
+                        target.left = obj.left + obj.width + snapGap;
+                    } else {
+                        target.left = obj.left - target.width - snapGap;
+                    }
+                }
+
+                var distanceY = Math.abs(obj.top - target.top - target.height);
+                if (distanceY >= snapGap - range && distanceY <= snapGap + range) {
+                    if (target.top > obj.top) {
+                        target.top = obj.top + obj.height + snapGap;
+                    } else {
+                        target.top = obj.top - target.height - snapGap;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

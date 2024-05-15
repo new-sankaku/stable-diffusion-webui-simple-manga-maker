@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Fabric.js Canvas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.2.4/fabric.min.js"></script>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+
+    <script>
+        // Fabric.jsのキャンバスを初期化
+        const canvas = new fabric.Canvas('canvas');
+
+        // ペーストイベントをキャプチャ
+        document.addEventListener('paste', function(event) {
+            const items = event.clipboardData.items;
+
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].kind === 'file' && items[i].type.startsWith('image/')) {
+                    const blob = items[i].getAsFile();
+                    const reader = new FileReader();
+
+                    reader.onload = function(event) {
+                        fabric.Image.fromURL(event.target.result, function(img) {
+                            img.set({
+                                left: 100,
+                                top: 100,
+                                angle: 0,
+                                padding: 10,
+                                cornersize: 10
+                            });
+                            canvas.add(img);
+                            canvas.renderAll();
+                        });
+                    };
+
+                    reader.readAsDataURL(blob);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
