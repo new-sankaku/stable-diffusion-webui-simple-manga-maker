@@ -584,7 +584,10 @@ function Edit() {
       });
       return acc;
     }, {});
-  } 
+  }else {
+    poly.cornerStyle = "rect";
+    poly.controls = fabric.Object.prototype.controls;
+  }
   poly.hasBorders = !poly.edit;
   canvas.requestRenderAll();
 }
