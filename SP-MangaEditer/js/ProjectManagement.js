@@ -22,8 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
       zip.file(`${key}.img`, value);
     });
 
+    removeGrid();
     var previewLink = getCropAndDownloadLink();
     zip.file("preview-image.png", previewLink.href.substring(previewLink.href.indexOf('base64,') + 7), {base64: true});
+    if (isGridVisible) {
+      drawGrid();
+      isGridVisible = true;
+    }
 
     zip.generateAsync({ type: "blob" }).then(function (content) {
       var url = window.URL.createObjectURL(content);

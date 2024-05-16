@@ -676,3 +676,133 @@ function anchorWrapper(anchorIndex, fn) {
     return actionPerformed;
   };
 }
+
+
+
+var gridSize = 10;
+var snapTimeout;
+var isGridVisible = false;
+
+
+
+  // グリッド線を描画する関数
+  function drawGrid() {
+    var gridCanvas = document.createElement('canvas');
+    gridCanvas.width = canvas.width;
+    gridCanvas.height = canvas.height;
+    var gridCtx = gridCanvas.getContext('2d');
+    gridCtx.strokeStyle = '#ccc';
+
+    for (var i = 0; i <= (canvas.width / gridSize); i++) {
+        gridCtx.beginPath();
+        gridCtx.moveTo(i * gridSize, 0);
+        gridCtx.lineTo(i * gridSize, canvas.height);
+        gridCtx.stroke();
+    }
+
+    for (var i = 0; i <= (canvas.height / gridSize); i++) {
+        gridCtx.beginPath();
+        gridCtx.moveTo(0, i * gridSize);
+        gridCtx.lineTo(canvas.width, i * gridSize);
+        gridCtx.stroke();
+    }
+
+    canvas.setBackgroundImage(gridCanvas.toDataURL(), canvas.renderAll.bind(canvas));
+}
+
+// グリッド線を削除する関数
+function removeGrid() {
+    canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
+}
+
+// グリッド線の表示/非表示を切り替える関数
+function toggleGrid() {
+    if (isGridVisible) {
+        removeGrid();
+        isGridVisible = false;
+    } else {
+        drawGrid();
+        isGridVisible = true;
+    }
+    canvas.renderAll();
+}
+
+
+  
+  // ボタンクリックでグリッド線の表示/非表示を切り替え
+  document.getElementById('toggleGridButton').addEventListener('click', toggleGrid);
+
+  // グリッド線の幅を更新する関数
+  function updateGridSize() {
+      var newGridSize = parseInt(document.getElementById('gridSizeInput').value, 10);
+      if (newGridSize > 0) {
+          gridSize = newGridSize;
+          if (isGridVisible) {
+              removeGrid();
+              drawGrid();
+          }
+      }
+  }
+
+  // グリッド線の幅を変更する際に自動更新
+  document.getElementById('gridSizeInput').addEventListener('input', updateGridSize);
+
+  // オブジェクトをグリッド線にスナップさせる関数
+  function snapToGrid(target) {
+      if (isGridVisible) {
+          target.set({
+              left: Math.round(target.left / gridSize) * gridSize,
+              top: Math.round(target.top / gridSize) * gridSize
+          });
+          canvas.renderAll();
+      }
+  }
+
+  // デバウンスされたスナップ関数
+  function debounceSnapToGrid(target) {
+      clearTimeout(snapTimeout);
+      snapTimeout = setTimeout(function() {
+          snapToGrid(target);
+      }, 50);
+  }
+
+  // オブジェクト移動イベントリスナーを追加
+  canvas.on('object:moving', function (e) {
+      if (isGridVisible) {
+          debounceSnapToGrid(e.target);
+      }
+  });
+
+
+  document.addEventListener('keydown', function (e) {
+      var activeObject = canvas.getActiveObject();
+
+      if (e.key === 'g' && e.ctrlKey) {
+        toggleGrid();
+        e.preventDefault();
+      }
+
+      if (activeObject) {
+          var moveDistance = isGridVisible ? gridSize : 1;
+          switch (e.key) {
+              case 'ArrowLeft':
+                  activeObject.left -= moveDistance;
+                  break;
+              case 'ArrowUp':
+                  activeObject.top -= moveDistance;
+                  break;
+              case 'ArrowRight':
+                  activeObject.left += moveDistance;
+                  break;
+              case 'ArrowDown':
+                  activeObject.top += moveDistance;
+                  break;
+              default:
+                  return;
+          }
+          activeObject.setCoords();
+          canvas.renderAll();
+          e.preventDefault();
+      }
+
+  });

@@ -3,7 +3,7 @@
 
 function getCropAndDownloadLink() {
 	var strokeWidth = document.getElementById("strokeWidth").value;
-
+	
 	var cropped = canvas.toDataURL({
 		format: 'png',
 		multiplier: 3, 
@@ -20,6 +20,7 @@ function getCropAndDownloadLink() {
 }
 
 function clipCopy() {
+	removeGrid();
 	var link = getCropAndDownloadLink();
 	fetch(link.href)
 	.then(res => res.blob())
@@ -31,9 +32,18 @@ function clipCopy() {
                 createErrorToast("Error", "Unable to write to clipboard. Error");
 			});
 	});
+	if (isGridVisible) {
+		drawGrid();
+		isGridVisible = true;
+	}
 }
 
 function cropAndDownload() {
+	removeGrid();
 	var link = getCropAndDownloadLink();
 	link.click();
+	if (isGridVisible) {
+		drawGrid();
+		isGridVisible = true;
+	}
 }

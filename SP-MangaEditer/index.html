@@ -44,11 +44,11 @@
             </div>
         </div>
 
+        
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
             <a class="navbar-brand" href="#">
-                <img src="02_images_svg/Logo/00000_mini_white.png" alt="SP-MangaEditer Official Logo"
-                    class="navbar-logo">
+                <img src="02_images_svg/Logo/00000_mini_white.png" alt="SP-MangaEditer Official Logo" class="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,10 +62,16 @@
                             File
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#" id="projectSave"><i
-                                        class="material-icons">file_download</i> Project Save</a></li>
-                            <li><a class="dropdown-item" href="#" id="projectLoad"><i
-                                        class="material-icons">file_upload</i> Project Load</a></li>
+                            <li>
+                                <a class="dropdown-item" href="#" id="projectSave">
+                                    <i class="material-icons">file_download</i> Project Save
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" id="projectLoad">
+                                    <i class="material-icons">file_upload</i> Project Load
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -76,8 +82,11 @@
                             Prompt
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" onclick="openPromptChangeFloatingWindow()"><i
-                                        class="material-icons">manage_search</i> Search & Replace</a></li>
+                            <li>
+                                <a class="dropdown-item" onclick="openPromptChangeFloatingWindow()">
+                                    <i class="material-icons">manage_search</i> Search & Replace
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -89,8 +98,9 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
-                                <a id="Stable_Diffusion_WebUI_Status" class="dropdown-item" href="#"><i
-                                        class="material-icons">manage_search</i> Checking...</a>
+                                <label id="Stable_Diffusion_WebUI_Status" >
+                                    <i class="material-icons">manage_search</i> Checking...
+                                </label>
                             </li>
                             <li class="dropdown-item">
                                 <div>
@@ -103,15 +113,34 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank"><i
-                                        class="material-icons">help_outline</i> Help:API Connect Settings</a>
+                                <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank">
+                                    <i class="material-icons">help_outline</i> Help:API Connect Settings
+                                </a>
                             </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Canvas
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#" id="toggleGridButton">
+                                <i class="material-icons">grid_4x4</i> Grid Line (Ctrl+G)
+                            </a>
+                            <a class="dropdown-item">
+                                <i class="material-icons">format_line_spacing</i> Grid Line Size
+                                <input type="number" id="gridSizeInput" value="10" min="1">
+                            </a>
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
-
+        
+        
 
 
 
@@ -420,6 +449,8 @@
     <script src="js/svg/SpeechBubble.js?v=1.2" defer></script>
 
     <script src="js/Settings.js?v=1.2" defer></script>
+    <script src="js/PanelManager.js?v=1.2" defer></script>
+
     <script src="js/Toast.js?v=1.2" defer></script>
     <script src="js/FloatingWindowManagement.js?v=1.2" defer></script>
     <script src="js/PromptManager.js?v=1.2" defer></script>
@@ -432,7 +463,6 @@
     <script src="js/TextEffect.js?v=1.2" defer></script>
     <script src="js/VerticalText.js?v=1.2" defer></script>
     <script src="js/ImageControleManager.js?v=1.2" defer></script>
-    <script src="js/PanelManager.js?v=1.2" defer></script>
     <script src="js/SpeechBubbleEffect.js?v=1.2" defer></script>
     <script src="js/StablediffusionWebUIManagement.js?v=1.2" defer></script>
     <script src="js/ProjectManagement.js?v=1.2" defer></script>

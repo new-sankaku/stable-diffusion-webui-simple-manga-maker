@@ -535,26 +535,52 @@ label {
     max-height: 30px;
     width: auto;
     margin-left: 5px;
+    vertical-align: middle;
 }
-
+.navbar-nav .nav-link i {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+.navbar-nav .dropdown-item i {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+.dropdown-menu .dropdown-item div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.dropdown-menu .dropdown-item label {
+    flex: 1;
+    margin-right: 10px;
+}
+.dropdown-menu label {
+    flex: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.dropdown-menu .dropdown-item input {
+    flex: 2;
+}
+.navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+}
 .navbar {
     padding: 0;
 }
-
 .form-row {
     display: flex;
-    align-items: center; /* 中央揃えにする */
-    justify-content: space-between; /* スペースを均等に分配 */
-    margin-bottom: 10px; /* 余白を設定 */
-  }
-  
-  .form-row label {
-    flex: 1; /* ラベルはフレキシブルに幅を取る */
-    margin-right: 20px; /* ラベルと入力エリアの間に余白を設定 */
-  }
-  
-  .form-row input,
-  .form-row select {
-    flex: 2; /* 入力エリアはラベルの2倍の幅を取る */
-  }
-  
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.form-row label {
+    flex: 1;
+    margin-right: 20px;
+}
+.form-row input,
+.form-row select {
+    flex: 2;
+    margin-left: 10px;
+}
