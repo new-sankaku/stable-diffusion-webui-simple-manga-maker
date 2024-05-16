@@ -565,10 +565,8 @@ function addPentagon() {
 
 function Edit() {
   var poly = canvas.getActiveObject();
-  // console.log("poly", poly);
   if (!poly) return;
 
-  // console.log("poly.edit", poly.edit);
   poly.edit = !poly.edit;
   if (poly.edit) {
     var lastControl = poly.points.length - 1;
@@ -586,10 +584,7 @@ function Edit() {
       });
       return acc;
     }, {});
-  } else {
-    poly.cornerStyle = "rect";
-    poly.controls = fabric.Object.prototype.controls;
-  }
+  } 
   poly.hasBorders = !poly.edit;
   canvas.requestRenderAll();
 }
@@ -650,6 +645,7 @@ function actionHandler(eventData, transform, x, y) {
         polygon.pathOffset.y,
     };
   polygon.points[currentControl.pointIndex] = finalPointPosition;
+  polygon.dirty = true;
   return true;
 }
 
