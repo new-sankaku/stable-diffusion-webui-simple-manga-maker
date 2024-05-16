@@ -127,13 +127,21 @@
                             Canvas
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item">
+                                <i class="material-icons">photo_size_select_large</i> Download Size
+                                <input type="number" id="multiplierImageSize" class="dropdown-item-mini-text" value="3" min="0.1" step="0.1" >
+                                <label id="outputImageSizeHeight">100</label> × 
+                                <label id="outputImageSizeWidth">100</label>
+                            </a>
+                            <hr>
                             <a class="dropdown-item" href="#" id="toggleGridButton">
                                 <i class="material-icons">grid_4x4</i> Grid Line (Ctrl+G)
                             </a>
                             <a class="dropdown-item">
                                 <i class="material-icons">format_line_spacing</i> Grid Line Size
-                                <input type="number" id="gridSizeInput" value="10" min="1">
+                                <input type="number" id="gridSizeInput" class="dropdown-item-mini-text" value="10" min="1">
                             </a>
+
                         </ul>
                     </li>
                 </ul>

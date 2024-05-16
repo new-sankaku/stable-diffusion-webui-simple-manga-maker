@@ -3,10 +3,10 @@
 
 function getCropAndDownloadLink() {
 	var strokeWidth = document.getElementById("strokeWidth").value;
-	
+	var newMultiplierImageSize = parseFloat(document.getElementById('multiplierImageSize').value);
 	var cropped = canvas.toDataURL({
 		format: 'png',
-		multiplier: 3, 
+		multiplier: newMultiplierImageSize, 
 		left: clipAreaCoords.left,
 		top: clipAreaCoords.top,
 		width: clipAreaCoords.width - (strokeWidth/2),
@@ -47,3 +47,17 @@ function cropAndDownload() {
 		isGridVisible = true;
 	}
 }
+
+
+
+
+// Exportサイズの変更。
+function updateMultiplierImageSize() {
+  var newMultiplierImageSize = parseFloat(document.getElementById('multiplierImageSize').value);
+  const canvasWidth  = Math.floor(canvas.width  * newMultiplierImageSize);
+	const canvasHeight = Math.floor(canvas.height * newMultiplierImageSize);
+  document.getElementById('outputImageSizeHeight').textContent = 'H' + canvasHeight;
+  document.getElementById('outputImageSizeWidth').textContent  = 'W' + canvasWidth;
+}
+document.getElementById('multiplierImageSize').addEventListener('input', updateMultiplierImageSize);
+updateMultiplierImageSize();

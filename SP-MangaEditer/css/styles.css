@@ -562,6 +562,20 @@ label {
 .dropdown-menu .dropdown-item input {
     flex: 2;
 }
+
+.tight-text{
+    flex: 1;
+}
+
+.tight-text label{
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.dropdown-item-mini-text {
+    width: 65px;
+}
+
 .navbar-nav .nav-link {
     display: flex;
     align-items: center;

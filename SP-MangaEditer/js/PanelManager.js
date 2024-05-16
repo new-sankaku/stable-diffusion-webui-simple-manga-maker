@@ -528,7 +528,7 @@ function addSquare() {
 }
 
 function addPentagon() {
-  var side = 250; // 五角形の一辺の長さ
+  var side = 150; // 五角形の一辺の長さ
   var angle = 54; // 中心から頂点までの角度（度数法）
 
   // 五角形の各頂点の計算
