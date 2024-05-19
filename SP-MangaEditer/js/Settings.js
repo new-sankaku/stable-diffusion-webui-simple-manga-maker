@@ -34,6 +34,7 @@ const text2img_basePrompt = {
   text2img_model: "",
   text2img_hr_upscaler: "None",
   text2img_basePrompt_hr_scale: "1.3",
+  text2img_basePrompt_hr_step: 20,
   text2img_basePrompt_hr_denoising_strength: "0.7",
 };
 

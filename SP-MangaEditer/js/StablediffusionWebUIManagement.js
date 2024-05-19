@@ -241,6 +241,7 @@ async function sdwebui_fetchText2Image(layer) {
       enable_hr: true,
       hr_upscaler: text2img_basePrompt.text2img_hr_upscaler,
       hr_scale:text2img_basePrompt.text2img_basePrompt_hr_scale,
+      hr_second_pass_steps:text2img_basePrompt.text2img_basePrompt_hr_step,
       denoising_strength:text2img_basePrompt.text2img_basePrompt_hr_denoising_strength,
     });
   }

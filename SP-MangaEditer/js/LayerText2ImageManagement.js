@@ -179,6 +179,11 @@ function openText2ImageBaseFloatingWindow() {
         <label>Denoising Strength:</label>
         <input type="number" id="text2img_basePrompt_hr_denoising_strength" step="0.01" min="0" max="1.0" value="${text2img_basePrompt.text2img_basePrompt_hr_denoising_strength}">
       </div>
+      <div class="form-group form-row">
+        <label>Step:</label>
+        <input type="number" id="text2img_basePrompt_hr_step" step="1" min="1" max="150" value="${text2img_basePrompt.text2img_basePrompt_hr_step}">
+      </div>
+
       <button onclick="updateText2ImgBasePrompt()">Save</button>
       <button onclick="closeFloatingWindowPromptClass()">Close</button>
   `;
@@ -208,16 +213,17 @@ function openText2ImageBaseFloatingWindow() {
 function updateText2ImgBasePrompt() {
   adjustToMultipleOfEight('text2img_basePrompt_width');
   adjustToMultipleOfEight('text2img_basePrompt_height');
-  text2img_basePrompt.text2img_prompt = document.getElementById('text2img_basePrompt_prompt').value;
-  text2img_basePrompt.text2img_negativePrompt = document.getElementById('text2img_basePrompt_negativePrompt').value;
-  text2img_basePrompt.text2img_seed = parseInt(document.getElementById('text2img_basePrompt_seed').value, 10);
-  text2img_basePrompt.text2img_cfg_scale = parseInt(document.getElementById('text2img_basePrompt_cfg_scale').value, 10);
-  text2img_basePrompt.text2img_width = parseInt(document.getElementById('text2img_basePrompt_width').value, 10);
-  text2img_basePrompt.text2img_height = parseInt(document.getElementById('text2img_basePrompt_height').value, 10);
-  text2img_basePrompt.text2img_samplingSteps = parseInt(document.getElementById('text2img_basePrompt_samplingSteps').value, 10);
-  text2img_basePrompt.text2img_hr_upscaler = document.getElementById('text2img_basePrompt_hr_upscaler').value;
-  text2img_basePrompt.text2img_basePrompt_hr_scale = document.getElementById('text2img_basePrompt_hr_scale').value;
+  text2img_basePrompt.text2img_prompt                           = document.getElementById('text2img_basePrompt_prompt').value;
+  text2img_basePrompt.text2img_negativePrompt                   = document.getElementById('text2img_basePrompt_negativePrompt').value;
+  text2img_basePrompt.text2img_seed                             = parseInt(document.getElementById('text2img_basePrompt_seed').value, 10);
+  text2img_basePrompt.text2img_cfg_scale                        = parseInt(document.getElementById('text2img_basePrompt_cfg_scale').value, 10);
+  text2img_basePrompt.text2img_width                            = parseInt(document.getElementById('text2img_basePrompt_width').value, 10);
+  text2img_basePrompt.text2img_height                           = parseInt(document.getElementById('text2img_basePrompt_height').value, 10);
+  text2img_basePrompt.text2img_samplingSteps                    = parseInt(document.getElementById('text2img_basePrompt_samplingSteps').value, 10);
+  text2img_basePrompt.text2img_hr_upscaler                      = document.getElementById('text2img_basePrompt_hr_upscaler').value;
+  text2img_basePrompt.text2img_basePrompt_hr_scale              = document.getElementById('text2img_basePrompt_hr_scale').value;
   text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = document.getElementById('text2img_basePrompt_hr_denoising_strength').value;
+  text2img_basePrompt.text2img_basePrompt_hr_step               = document.getElementById('text2img_basePrompt_hr_step').value;
 
   var selectedModel = document.getElementById('text2img_basePrompt_model').value;
   text2img_basePrompt.text2img_model = selectedModel;
