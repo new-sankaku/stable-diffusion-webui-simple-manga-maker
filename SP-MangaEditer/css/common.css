@@ -1,0 +1,183 @@
+body, div, input, button, label {
+  font-family: 'Open Sans', Arial, sans-serif;
+  color: #333; /* Dark grey for readability on white background */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+button, .custom-file-upload {
+  padding: 5px;
+  font-size: 15px;
+  color: #000000;
+  background: #ffe1b7;
+  border: 1px solid #ffc560;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover, .custom-file-upload:hover {
+  background: #555;
+}
+
+button:active, .custom-file-upload:active {
+  background: #111;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.logo-container img {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ffedd3;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ffedd3;
+}
+
+.floating-windowPromptClass {
+  width: 30%;
+  position: fixed;
+  right: 0;
+  top: 10%;
+  background-color: #f8f9fa;
+  border: 2px solid #007bff;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+  padding: 5px;
+  z-index: 1000;
+  font-family: Arial, sans-serif;
+  transition: transform 0.3s ease-in-out;
+}
+
+.floating-windowPromptClass h4 {
+  margin-top: 0;
+  background-color: #007bff; /* ヘッダーの背景色をブルーに */
+  color: white; /* ヘッダーの文字色を白に */
+  padding: 5px;
+}
+
+.floating-windowPromptClass .form-group {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.floating-windowPromptClass label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.floating-windowPromptClass input[type="number"],
+.floating-windowPromptClass select,
+.floating-windowPromptClass textarea {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #007bff; /* 入力フィールドのボーダー色を変更 */
+  border-radius: 4px;
+}
+
+.floating-windowPromptClass .button-group {
+  text-align: right;
+  margin-top: 5px;
+}
+
+.floating-windowPromptClass button {
+  margin-left: 5px;
+  padding: 5px 5px;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+}
+
+.floating-windowPromptClass button:hover {
+  background-color: #218838;
+}
+
+.prompt-replace-form-group {
+  display: flex;
+  margin-bottom: 10px;
+}
+.prompt-replace-form-group textarea {
+  flex: 1;
+  margin-right: 5px; 
+  resize: none;
+}
+.prompt-replace-form-group textarea:last-child {
+  margin-right: 0;
+}
+
+.floating-window {
+  position: fixed;
+  width: 315px;
+  height: 450px;
+  bottom: 100px;
+  left: 100px;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none;
+  padding: 10px;
+}
+
+.header {
+  cursor: move;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.close-btn {
+  float: right;
+  cursor: pointer;
+  padding: 0 5px;
+  line-height: 20px;
+}
+
+.dynamic-font {
+  font-family: 'Arial',
+}
+
+@font-face {
+  font-family: 'DotGothic16';
+  src: url('../font/DotGothic16/DotGothic16-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Stick';
+  src: url('../font/Stick/Stick-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KleeOne';
+  src: url('../font/Klee_One/KleeOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

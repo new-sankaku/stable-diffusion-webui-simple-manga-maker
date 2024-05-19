@@ -13,14 +13,10 @@ function saveStateByListener(event, eventType) {
     if (!event || isUndoRedoOperation) {
         return;
     }
-    //console.log("saveStateByListener start.", eventType);
     saveState();
-    //console.log("saveState end.   currentStateIndex:stateStack.length", eventType, currentStateIndex, ":", stateStack.length);
 }
 function saveStateByManual() {
-    //console.log("saveStateByManual start.");
     saveState();
-    //console.log("saveState end.   currentStateIndex:stateStack.length", "Manual", currentStateIndex, ":", stateStack.length);
 }
 
 
@@ -42,7 +38,9 @@ function customToJSON() {
                                 'text2img_width', 
                                 'text2img_height', 
                                 'text2img_samplingMethod', 
-                                'text2img_samplingSteps']);
+                                'text2img_samplingSteps',
+                                'initial', 
+                                'clipPath.initial']);
     
     json.objects = json.objects.map(obj => {
         if (obj.type === 'image' && obj.src.startsWith('data:')) {
@@ -65,7 +63,7 @@ function saveState() {
     }
     canvas.renderAll();
 
-    const json = JSON.stringify(customToJSON()); // カスタム JSON 処理を呼び出す
+    const json = JSON.stringify(customToJSON());
     stateStack.push(json);
     currentStateIndex++;
     updateLayerPanel();
@@ -79,8 +77,8 @@ function restoreImage(json) {
             obj.src = imageMap.get(obj.src); // ハッシュキーに基づき画像データを復元
         }
         const props = ['excludeFromLayerPanel', 'isPanel', 'text2img_prompt', 'text2img_negativePrompt',
-        'text2img_seed', 'text2img_width', 'text2img_height', 'text2img_samplingMethod',
-        'text2img_samplingSteps'];
+                       'text2img_seed', 'text2img_width', 'text2img_height', 'text2img_samplingMethod',
+                       'text2img_samplingSteps', 'initial', 'clipPath.initial'];
         props.forEach(prop => {
             if (obj[prop] !== undefined) {
                 obj[prop] = obj[prop]; 
@@ -126,11 +124,6 @@ function lastRedo() {
         isUndoRedoOperation = false;
     });
 }
-
-
-
-
-
 
 
 // Event listeners setup

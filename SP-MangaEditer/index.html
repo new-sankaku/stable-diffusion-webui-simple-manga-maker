@@ -7,22 +7,20 @@
 
     <meta name="description"
         content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects. Perfect for both beginners and professional artists.">
-    <meta name="keywords" content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, Stable diffusion Forge, stable-diffusion-webui-simple-manga-maker
-    ">
+    <meta name="keywords"
+        content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, Stable diffusion Forge, stable-diffusion-webui-simple-manga-maker">
 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/styles.css?v=1.2">
-    <link href="third/Bootstrup/bootstrap.min.css?v=1.2" rel="stylesheet">
-    <script src="third/Fabric.js/fabric.min.js?v=1.2"></script>
-    <script>
+    <link rel="stylesheet" href="css/common.css?v=1.3">
+    <link rel="stylesheet" href="css/components.css?v=1.3">
+    <link rel="stylesheet" href="css/layout.css?v=1.3">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=1.3">
+    
+    <link href="third/Bootstrup/bootstrap.min.css?v=1.3" rel="stylesheet">   
+    <script src="third/Fabric.js/fabric.min.js?v=1.3"></script>
 
-        //When starting from the Stable diffusion web ui Extension, 
-        //replace Port and Host. When you change this code, it will also affect MangaMaker.py.
-        var stableDiffusionWebUIPort = 7860;
-        var stableDiffusionWebUIHost = '127.0.0.1';
-    </script>
 </head>
 
 <body>
@@ -31,7 +29,6 @@
         <meta itemprop="description"
             content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects.">
         <meta itemprop="applicationCategory" content="Multimedia">
-
 
         <div class="floating-window" id="myWindow">
             <div class="header">
@@ -44,11 +41,10 @@
             </div>
         </div>
 
-        
-
         <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
             <a class="navbar-brand" href="#">
-                <img src="02_images_svg/Logo/00000_mini_white.png" alt="SP-MangaEditer Official Logo" class="navbar-logo">
+                <img src="02_images_svg/Logo/00000_mini_white.png" alt="SP-MangaEditer Official Logo"
+                    class="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,8 +93,11 @@
                             SD WebUI
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li>
-                                <label id="Stable_Diffusion_WebUI_Status" >
+                            <li>   
+                                <label>
+                                    <input type="checkbox" id="SD_WebUI_pingCheck"> Ping
+                                </label>
+                                <label id="Stable_Diffusion_WebUI_Status">
                                     <i class="material-icons">manage_search</i> Checking...
                                 </label>
                             </li>
@@ -128,10 +127,8 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item">
-                                <i class="material-icons">photo_size_select_large</i> Download Size
-                                <input type="number" id="multiplierImageSize" class="dropdown-item-mini-text" value="3" min="0.1" step="0.1" >
-                                <label id="outputImageSizeHeight">100</label> × 
-                                <label id="outputImageSizeWidth">100</label>
+                                <i class="material-icons">photo_size_select_large</i> Download Dpi
+                                <input type="number" id="outputDpi" class="dropdown-item-mini-text" value="300" min="96" step="1">
                             </a>
                             <hr>
                             <a class="dropdown-item" href="#" id="toggleGridButton">
@@ -139,18 +136,14 @@
                             </a>
                             <a class="dropdown-item">
                                 <i class="material-icons">format_line_spacing</i> Grid Line Size
-                                <input type="number" id="gridSizeInput" class="dropdown-item-mini-text" value="10" min="1">
+                                <input type="number" id="gridSizeInput" class="dropdown-item-mini-text" value="10"
+                                    min="1">
                             </a>
-
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
-        
-        
-
-
 
         <div style="display: flex; flex-grow: 1;">
             <div id="sidebar">
@@ -205,20 +198,14 @@
             <div id="text-area" style="display: none;">
                 <div class="area-header">Text and Effect</div>
                 <div id="text-preview-area">
-
-                    <label>Text :
-                        <input type="color" id="textColorPicker" value="#000000"
+                    <label>Text : <input type="color" id="textColorPicker" value="#000000"
                             oninput="changeTextColor(this.value)"></label>
-                    <label>Outline :
-                        <input type="color" id="textOutlineColorPicker" value="#E6E6E6"
+                    <label>Outline : <input type="color" id="textOutlineColorPicker" value="#E6E6E6"
                             oninput="changeOutlineTextColor(this.value)"></label>
-                    <label>Size(Vertical unsupport)
-                        <input type="range" id="fontSizeSlider" min="7" max="150" value="30"
+                    <label>Size(Vertical unsupport) <input type="range" id="fontSizeSlider" min="7" max="150" value="30"
                             oninput="changeFontSize(this.value)"></label>
-                    <label>Outline Size
-                        <input type="range" id="fontStrokeWidthSlider" min="1" max="5" value="1"
+                    <label>Outline Size <input type="range" id="fontStrokeWidthSlider" min="1" max="5" value="1"
                             oninput="changeStrokeWidthSize(this.value)"></label>
-
                     <label>Font:</label>
                     <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
                         <option style="font-family: 'KleeOne';">KleeOne</option>
@@ -230,46 +217,33 @@
 
                     <button onclick="createTextbox()"><i class="material-icons">text_fields</i><i
                             class="material-icons">east</i> New Text</button>
-
                     <button id="openWindow"><i class="material-icons">text_fields</i><i class="material-icons">south</i>
-                        New
-                        Vertical Text</button>
+                        New Vertical Text</button>
 
                     <hr>
                     <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
-
                     <hr>
                     <label>Effects</label>
-                    <label>First Color
-                        <input type="color" id="firstTextEffectColorPicker" value="#F58220"
-                            oninput="changeNeonColor(this.value)">
-                    </label>
-                    <label>Second Color
-                        <input type="color" id="secondTextEffectColorPicker" value="#ff8080"
-                            oninput="changeNeonColor(this.value)">
-                    </label>
-
+                    <label>First Color <input type="color" id="firstTextEffectColorPicker" value="#F58220"
+                            oninput="changeNeonColor(this.value)"></label>
+                    <label>Second Color <input type="color" id="secondTextEffectColorPicker" value="#ff8080"
+                            oninput="changeNeonColor(this.value)"></label>
                     <hr>
                     <label style="display: none;">Neon Intensity:</label>
                     <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2"
                         value="2" oninput="changeNeonIntensity(this.value)">
                     <button onclick="applyCSSTextEffect()"><i class="material-icons">deblur</i> Shadow</button>
-                    <button onclick="applyVividGradientEffect()"><i class="material-icons">filter</i>
-                        Vivid Gradient</button>
-                    <button onclick="applyNeonEffect()"><i class="material-icons">flare</i>
-                        Neon</button>
-
+                    <button onclick="applyVividGradientEffect()"><i class="material-icons">filter</i> Vivid
+                        Gradient</button>
+                    <button onclick="applyNeonEffect()"><i class="material-icons">flare</i> Neon</button>
                     <button style="display: none;" onclick="applySpaceAgeEffect()"><i
-                            class="material-icons">space_bar</i>
-                        Space Age</button>
+                            class="material-icons">space_bar</i> Space Age</button>
                     <button style="display: none;" onclick="applySpaceAgeEffect2()"><i
-                            class="material-icons">space_bar</i>
-                        Space Age2</button>
+                            class="material-icons">space_bar</i> Space Age2</button>
                     <button style="display: none;" onclick="applyGeneratorBasedEffect()"><i
                             class="material-icons">transform</i> Generator Based</button>
                     <button style="display: none;" onclick="applyNeonJitterEffect()"><i
-                            class="material-icons">vibration</i>
-                        Neon Jitter</button>
+                            class="material-icons">vibration</i> Neon Jitter</button>
                     <button style="display: none;" onclick="applyZebraReflectionEffect()"><i
                             class="material-icons">view_compact</i> Reflection</button>
                 </div>
@@ -278,7 +252,6 @@
             <div id="dummy-area4" style="display: none;">
                 <div class="area-header">Information</div>
                 <div id="dummy-svg-preview-area4">
-                    <!-- License Information -->
                     <div id="license-info">
                         <div class="info-section">
                             <p>Libraries:</p>
@@ -291,11 +264,10 @@
                             <div class="info-item"><i class="material-icons">view_comfy</i> <a
                                     href="https://getbootstrap.jp" target="_blank">Bootstrup</a></div>
                             <div class="info-item"><i class="material-icons">folder_zip</i> <a
-                                href="https://github.com/Stuk/jszip" target="_blank">jsZip</a></div>
+                                    href="https://github.com/Stuk/jszip" target="_blank">jsZip</a></div>
                             <div class="info-item"><i class="material-icons">enhanced_encryption</i> <a
-                                href="https://github.com/brix/crypto-js" target="_blank">crypto-js</a></div>
+                                    href="https://github.com/brix/crypto-js" target="_blank">crypto-js</a></div>
                         </div>
-
                         <div class="info-section">
                             <p>Materials:</p>
                             <div class="info-item"><i class="material-icons">image</i> <a href="https://fukidesign.com"
@@ -308,7 +280,6 @@
                             <div class="info-item"><i class="material-icons">code</i> <a
                                     href="https://github.com/new-sankaku/SP-MangaEditer" target="_blank">GitHub</a>
                             </div>
-
                             <div class="info-item"><i class="material-icons">send</i> <a
                                     href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues"
                                     target="_blank">Bug report / Feature add request</a></div>
@@ -320,7 +291,7 @@
             <div id="canvas-area">
                 <div class="area-header">Canvas : Panel click or Drop image </div>
                 <div id="canvas-container">
-                    <canvas id="mangaImageCanvas" width="750" height="850"></canvas>
+                    <canvas id="mangaImageCanvas"></canvas>
                 </div>
                 <div id="canvas-buttons">
                     <button onclick="allRemove()"><i class="material-icons">delete</i> All Remove</button>
@@ -335,6 +306,7 @@
                     <button onclick="clipCopy()"><i class="material-icons">content_copy</i> Image Copy</button>
                 </div>
             </div>
+
             <div id="layer-panel">
                 <div class="area-header">Layers </div>
                 <div id="layer-content"></div>
@@ -346,135 +318,141 @@
                     <button style="display: none;" onclick="openBaseText2ImagefloatingWindow()"><i
                             class="material-icons">collections</i> All Run T2I</button>
                 </div>
-
             </div>
-            <div>
-                <div id="common-controls">
-                    <div class="area-header">Controle</div>
-                    <div id="common-content">
-                        <div class="control">
+            
+            <div id="controls">
+                <div class="panel" id="commonControlsPanel">
+                    <div class="area-header" onclick="imageControleTogglePanel('commonControlsPanel', this)">
+                        ▼ Common Controls
+                    </div>
+                    <div class="control-content">
+                        <div class="control-row">
                             <label>Angle</label>
                             <input type="range" id="angle-control" min="0" max="360" value="0">
+                            <span id="angleValue">0</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>Scale</label>
                             <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01" value="1">
+                            <span id="scaleValue">1.0</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>Top</label>
-                            <input type="range" id="top-control" min="-1200" max="1200" value="100">
+                            <input type="range" id="top-control" min="-300" max="600" value="100">
+                            <span id="topValue">100</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>Left</label>
-                            <input type="range" id="left-control" min="-1200" max="1200" value="100">
+                            <input type="range" id="left-control" min="-300" max="600" value="100">
+                            <span id="leftValue">100</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>SkewX</label>
-                            <input type="range" id="skewX-control" min="-30" max="30" value="0">
+                            <input type="range" id="skewX-control" min="-60" max="60" value="0">
+                            <span id="skewXValue">0</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>SkewY</label>
-                            <input type="range" id="skewY-control" min="-30" max="30" value="0">
+                            <input type="range" id="skewY-control" min="-60" max="60" value="0">
+                            <span id="skewYValue">0</span>
                         </div>
-
                     </div>
                 </div>
-                <div style="display: none;" id="panel-item-controls">
-                    <div class="area-header">Panel Controle</div>
-                    <div id="panel-item-content">
-                        <label>test</label>
+                <div class="panel" id="imageControlPanel">
+                    <div class="area-header" onclick="imageControleTogglePanel('imageControlPanel', this)">
+                        ▼ Image Controls
                     </div>
-                </div>
-
-                <div id="image-item-controls">
-                    <div class="area-header">Image Controle</div>
-                    <div id="image-item-content">
-                        <div class="control">
-                            <label><input type="checkbox" id="sepia"> Sepia</label>
-                            <label></label>
+                    <div class="control-content">
+                        <div class="control-item">
+                            <label><input type="checkbox" id="sepiaEffect"> Sepia</label>
                         </div>
-                        <hr>
-                        <div class="control">
-                            <label><input type="checkbox" id="grayscale"> Grayscale</label>
-                            <label></label>
+                        <hr class="separator">
+                        <div class="control-item">
+                            <label><input type="checkbox" id="grayscaleEffect"> Grayscale</label>
                         </div>
-                        <div class="control" id="grayscale-mode">
-                            <label><input type="radio" name="grayscale-mode" value="average" checked> Ave</label>
-                            <label><input type="radio" name="grayscale-mode" value="luminosity"> Lum</label>
-                            <label style="display: none;"><input style="display: none;" type="radio"
-                                    name="grayscale-mode" value="lightness"> Light</label>
+                        <div class="control-item radio-options" id="grayscaleOptions">
+                            <label><input type="radio" name="grayscaleMode" value="average" checked> Average</label>
+                            <label><input type="radio" name="grayscaleMode" value="luminosity"> Luminosity</label>
                         </div>
-                        <hr>
-
-                        <div class="control">
-                            <label>Gamma:</label>
-                            <label></label>
-                        </div>
-                        <div class="control">
+                        <hr class="separator">
+                        <div class="control-row">
                             <label>Red</label>
-                            <input type="range" id="gamma-red" min="0" max="2.2" step="0.003921" value="1">
+                            <input type="range" id="gammaRed" min="0" max="2.2" step="0.003921" value="1">
+                            <span id="gammaRedValue">1.0</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>Green</label>
-                            <input type="range" id="gamma-green" min="0" max="2.2" step="0.003921" value="1">
+                            <input type="range" id="gammaGreen" min="0" max="2.2" step="0.003921" value="1">
+                            <span id="gammaGreenValue">1.0</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>Blue</label>
-                            <input type="range" id="gamma-blue" min="0" max="2.2" step="0.003921" value="1">
+                            <input type="range" id="gammaBlue" min="0" max="2.2" step="0.003921" value="1">
+                            <span id="gammaBlueValue">1.0</span>
                         </div>
-                        <hr>
-
-                        <div class="control">
-                            <label>Vibra</label>
-                            <input type="range" id="vibrance-value" min="-1" max="1" step="0.003921" value="0">
+                        <hr class="separator">
+                        <div class="control-row">
+                            <label>Vibrance</label>
+                            <input type="range" id="vibranceValue" min="-1" max="1" step="0.003921" value="0">
+                            <span id="vibranceValueDisplay">0.0</span>
                         </div>
-                        <div class="control">
+                        <div class="control-row">
                             <label>Blur</label>
-                            <input type="range" id="blur-value" min="0" max="0.3" step="0.003921" value="0">
+                            <input type="range" id="blurValue" min="0" max="0.3" step="0.003921" value="0">
+                            <span id="blurValueDisplay">0.0</span>
                         </div>
-                        <div class="control">
-                            <label>Pixel</label>
-                            <input type="range" id="pixelate-value" min="1" max="20" step="1" value="1">
+                        <div class="control-row">
+                            <label>Pixelate</label>
+                            <input type="range" id="pixelateValue" min="1" max="20" step="1" value="1">
+                            <span id="pixelateValueDisplay">1</span>
                         </div>
                     </div>
                 </div>
-                <div style="display: none;" id="text-item-controls">
-                    <div class="area-header">Panel controle</div>
-                    <div id="text-item-content">
-                        <label>test</label>
-                    </div>
-                </div>
+
             </div>
+
+
         </div>
     </div>
+
+    <!-- <div class="bottom-bar">
+        <div class="bottom-bar-content">
+            ここに下部の横長エリアの内容を追加します。
+        </div>
+    </div> -->
+
     <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
-    <script src="third/jszip/jszip.min.js?v=1.2" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=1.2"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=1.2"></script>
+    <script src="third/jszip/jszip.min.js?v=1.3" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=1.3"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=1.3"></script>
 
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.2" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.2" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=1.2" defer></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.3" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.3" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=1.3" defer></script>
 
-    <script src="js/Settings.js?v=1.2" defer></script>
-    <script src="js/PanelManager.js?v=1.2" defer></script>
+    <script src="js/Settings.js?v=1.3" defer></script>
+    <script src="js/CanvasManager.js?v=1.3" defer></script>
+    <script src="js/Shortcut.js?v=1.3" defer></script>    
+    <script src="js/PanelManager.js?v=1.3" defer></script>
 
-    <script src="js/Toast.js?v=1.2" defer></script>
-    <script src="js/FloatingWindowManagement.js?v=1.2" defer></script>
-    <script src="js/PromptManager.js?v=1.2" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=1.2" defer></script>
-    <script src="js/LayerManagement.js?v=1.2" defer></script>
-    <script src="js/CommonControleManagement.js?v=1.2" defer></script>
-    <script src="js/ImageTransformation.js?v=1.2" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=1.2" defer></script>
-    <script src="js/Sidebar.js?v=1.2" defer></script>
-    <script src="js/TextEffect.js?v=1.2" defer></script>
-    <script src="js/VerticalText.js?v=1.2" defer></script>
-    <script src="js/ImageControleManager.js?v=1.2" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=1.2" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=1.2" defer></script>
-    <script src="js/ProjectManagement.js?v=1.2" defer></script>
-    <script src="js/ImageDownload.js?v=1.2" defer></script>
+    <script src="js/Toast.js?v=1.3" defer></script>
+    
+    <script src="js/FloatingWindowManagement.js?v=1.3" defer></script>
+
+    <script src="js/PromptManager.js?v=1.3" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=1.3" defer></script>
+    <script src="js/LayerManagement.js?v=1.3" defer></script>
+    <script src="js/CommonControleManagement.js?v=1.3" defer></script>
+    <script src="js/ImageTransformation.js?v=1.3" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=1.3" defer></script>
+    <script src="js/Sidebar.js?v=1.3" defer></script>
+    <script src="js/TextEffect.js?v=1.3" defer></script>
+    <script src="js/VerticalText.js?v=1.3" defer></script>
+    <script src="js/ImageControleManager.js?v=1.3" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=1.3" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=1.3" defer></script>
+    <script src="js/ProjectManagement.js?v=1.3" defer></script>
+    <script src="js/ImageDownload.js?v=1.3" defer></script>
 </body>
 
 </html>

@@ -1,0 +1,106 @@
+#svg-container-vertical, 
+#svg-container-landscape, 
+#speech-bubble-area1, 
+#text-area, 
+#panel-manager-area, 
+#dummy-area4{
+  font-size: 14px;
+  margin-right: 10px;
+  max-width: 150px;
+  min-width: 150px;
+  height: auto;
+  max-height: auto;
+  background: #F9F9F9;
+  border: 1px solid #ffc560;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+#dummy-area4 {
+    font-size: 12px;
+}
+
+#svg-preview-area-vertical, 
+#svg-preview-area-landscape, 
+#speech-bubble-svg-preview-area1, 
+#text-preview-area, 
+#panel-manager-items, 
+#dummy-svg-preview-area4 {
+    max-width: 150px;
+    min-width: 150px;
+    height: calc(100vh - 12vh);
+    max-height: calc(100vh - 12vh);
+    background: #F9F9F9;
+    border: 1px solid #ffc560;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#text-preview-area button, 
+#text-preview-area hr, 
+#text-preview-area label, 
+#text-preview-area input[type="range"], 
+#text-preview-area select, 
+#panel-manager-items button, 
+#panel-manager-items hr, 
+#panel-manager-items label, 
+#panel-manager-items input[type="range"], 
+#speech-bubble-svg-preview-area1 button, 
+#speech-bubble-svg-preview-area1 hr, 
+#speech-bubble-svg-preview-area1 label, 
+#speech-bubble-svg-preview-area1 input[type="range"] {
+    display: block;
+    width: 92%;
+    margin: 4px;
+    text-align: left; 
+}
+
+#text-preview-area label, 
+#panel-manager-items label, 
+#speech-bubble-svg-preview-area1 label {
+    white-space: nowrap; 
+}
+
+#text-preview-area input[type="color"], 
+#panel-manager-items input[type="color"], 
+#speech-bubble-svg-preview-area1 input[type="color"] {
+    width: 15%;
+    margin: 4px;
+    text-align: left; 
+}
+
+#text-preview-area select {
+    font-size: 16px;
+}
+
+#layer-content button .material-icons,
+#text-preview-area button .material-icons,
+#speech-bubble-svg-preview-area1 button .material-icons,
+#panel-manager-items button .material-icons {
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+#layer-content button {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.svg-preview {
+    width: 45%;
+    margin-left: 5px;
+    margin-top: 5px;
+    background: #fff6ee;
+}
+
+#vertical_textInput {
+    width: 100%;
+    height: 90%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 14px;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+}

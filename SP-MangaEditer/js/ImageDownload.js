@@ -1,17 +1,9 @@
 
+function getCropAndDownloadLinkByMultiplier( multiplier, format ) {
 
-
-function getCropAndDownloadLink() {
-	var strokeWidth = document.getElementById("strokeWidth").value;
-	var newMultiplierImageSize = parseFloat(document.getElementById('multiplierImageSize').value);
-	var cropped = canvas.toDataURL({
-		format: 'png',
-		multiplier: newMultiplierImageSize, 
-		left: clipAreaCoords.left,
-		top: clipAreaCoords.top,
-		width: clipAreaCoords.width - (strokeWidth/2),
-		height: clipAreaCoords.height - (strokeWidth/2)
-	});
+	var cropped = canvas.toDataURL({ 
+		format: format, 
+		multiplier: multiplier });
 
 	var link = document.createElement('a');
 	link.download = 'cropped-image.png';
@@ -19,19 +11,43 @@ function getCropAndDownloadLink() {
 	return link;
 }
 
+function getCropAndDownloadLink() {
+	var a5WidthInches = 148 / 25.4;
+	var a5HeightInches = 210 / 25.4;
+	
+	var dpi = parseFloat(document.getElementById('outputDpi').value);
+	var canvasWidthPixels = canvas.width;
+	var canvasHeightPixels = canvas.height;
+	
+	var targetWidthPixels = a5WidthInches * dpi;
+	var targetHeightPixels = a5HeightInches * dpi;
+	
+	if (canvasWidthPixels > canvasHeightPixels) {
+		targetWidthPixels = a5HeightInches * dpi;
+		targetHeightPixels = a5WidthInches * dpi;
+	}
+	
+	var multiplierWidth = targetWidthPixels / canvasWidthPixels;
+	var multiplierHeight = targetHeightPixels / canvasHeightPixels;
+	var multiplier = Math.max(multiplierWidth, multiplierHeight);
+	
+	return getCropAndDownloadLinkByMultiplier(multiplier, 'png');
+}
+
+
 function clipCopy() {
 	removeGrid();
 	var link = getCropAndDownloadLink();
 	fetch(link.href)
-	.then(res => res.blob())
-	.then(blob => {
+		.then(res => res.blob())
+		.then(blob => {
 			const item = new ClipboardItem({ "image/png": blob });
-			navigator.clipboard.write([item]).then(function() {
-                createToast("Success", "Image copied to clipboard successfully!");
-			}, function(error) {
-                createErrorToast("Error", "Unable to write to clipboard. Error");
+			navigator.clipboard.write([item]).then(function () {
+				createToast("Success", "Image copied to clipboard successfully!");
+			}, function (error) {
+				createErrorToast("Error", "Unable to write to clipboard. Error");
 			});
-	});
+		});
 	if (isGridVisible) {
 		drawGrid();
 		isGridVisible = true;
@@ -47,17 +63,3 @@ function cropAndDownload() {
 		isGridVisible = true;
 	}
 }
-
-
-
-
-// Exportサイズの変更。
-function updateMultiplierImageSize() {
-  var newMultiplierImageSize = parseFloat(document.getElementById('multiplierImageSize').value);
-  const canvasWidth  = Math.floor(canvas.width  * newMultiplierImageSize);
-	const canvasHeight = Math.floor(canvas.height * newMultiplierImageSize);
-  document.getElementById('outputImageSizeHeight').textContent = 'H' + canvasHeight;
-  document.getElementById('outputImageSizeWidth').textContent  = 'W' + canvasWidth;
-}
-document.getElementById('multiplierImageSize').addEventListener('input', updateMultiplierImageSize);
-updateMultiplierImageSize();

@@ -6,13 +6,13 @@ var isNeonEnabled = false;
 
 canvas.on('selection:created', function(event) {
   if (event.selected && event.selected[0]) {
-      updateControls(event.selected[0]);
+    updateTextControls(event.selected[0]);
   }
 });
 
 canvas.on('selection:updated', function(event) {
   if (event.selected && event.selected[0]) {
-      updateControls(event.selected[0]);
+    updateTextControls(event.selected[0]);
   }
 });
 
@@ -33,7 +33,7 @@ function rgbToHex(rgb) {
   return '#' + convert(match[1]) + convert(match[2]) + convert(match[3]);
 }
 
-function updateControls(object) {
+function updateTextControls(object) {
   if(isVerticalText(object)){
     let firstText = object.getObjects('text')[0];
     let inheritedColor = firstText ? firstText.fill : document.getElementById("textColorPicker").value;

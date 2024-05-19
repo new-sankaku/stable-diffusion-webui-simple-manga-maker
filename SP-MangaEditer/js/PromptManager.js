@@ -20,7 +20,6 @@ function openPromptChangeFloatingWindow() {
 }
 
 function createPromptPair(oldLabel, newLabel) {
-  // IDのスペースをハイフンに置き換える
   const oldId = oldLabel.replace(/\s/g, '-').toLowerCase();
   const newId = newLabel.replace(/\s/g, '-').toLowerCase();
 

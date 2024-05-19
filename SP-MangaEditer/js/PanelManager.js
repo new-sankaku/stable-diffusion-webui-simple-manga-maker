@@ -43,56 +43,6 @@ document.getElementById("canvas-container").addEventListener(
   false
 );
 
-
-
-        // ペーストイベントをキャプチャ
-        document.addEventListener('paste', function(event) {
-          const items = event.clipboardData.items;
-          var isActive = true;
-          for (let i = 0; i < items.length; i++) {
-              if (items[i].kind === 'file' && items[i].type.startsWith('image/')) {
-                  const blob = items[i].getAsFile();
-                  const reader = new FileReader();
-                  
-                  reader.onload = function(event) {
-                      const data = event.target.result;
-                      fabric.Image.fromURL(data, function(img) {
-                          const activeObject = canvas.getActiveObject();
-
-                          if (activeObject && isActive) {
-                              // アクティブオブジェクトの中央座標を使用
-                              const x = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
-                              const y = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
-                              putImageInFrame(img, x, y);
-                          } else {
-                              isActive = false;
-                              const canvasWidth = canvas.width/2;
-                              const canvasHeight = canvas.height/2;
-                              const scaleToFitX = canvasWidth / img.width;
-                              const scaleToFitY = canvasHeight / img.height;
-                              const scaleToFit = Math.min(scaleToFitX, scaleToFitY);
-
-                              img.set({
-                                  scaleX: scaleToFit,
-                                  scaleY: scaleToFit,
-                                  left: (canvasWidth - img.width * scaleToFit) / 2,
-                                  top: (canvasHeight - img.height * scaleToFit) / 2,
-                              });
-                              canvas.add(img);
-                              canvas.setActiveObject(img);
-                              canvas.renderAll();
-                              saveStateByManual();
-                          }
-                      });
-                  };
-                  reader.readAsDataURL(blob);
-                  updateLayerPanel();
-              }
-          }
-      });
-
-
-
 function putImageInFrame(img, x, y) {
   isUndoRedoOperation = true;
 
@@ -101,7 +51,7 @@ function putImageInFrame(img, x, y) {
     top: y,
   });
   canvas.add(img);
-  canvas.setActiveObject(img);
+  
 
   var targetFrameIndex = findTargetFrame(x, y);
   if (targetFrameIndex !== -1) {
@@ -168,6 +118,10 @@ function putImageInFrame(img, x, y) {
       scaleY: scaleToCanvas,
     });
   }
+  
+  canvas.setActiveObject(img);
+  saveInitialState(img)
+  
   canvas.renderAll();
   updateLayerPanel();
 
@@ -218,7 +172,7 @@ function isWithin(image, frame) {
 function adjustImageToFitFrame(image, frame) {
   let frameBounds = frame.getBoundingRect();
   let scale = Math.min(
-    frameBounds.width / image.getScaledWidth(),
+    frameBounds.width / image.getScaledWidth(), 
     frameBounds.height / image.getScaledHeight()
   );
   image.set({
@@ -232,16 +186,24 @@ function adjustImageToFitFrame(image, frame) {
 /** Load SVG(Verfical, Landscope) */
 function loadSVGPlusReset(svgString) {
   allRemove();
-
+  stateStack = [];
+  imageMap.clear();
+  
   isUndoRedoOperation = true;
   fabric.loadSVGFromString(svgString, function (objects, options) {
+    resizeCanvasToObject(options.width , options.height);
+
     var canvasUsableHeight = canvas.height - svgPagging;
     var overallScaleX = canvas.width / options.width;
     var overallScaleY = canvasUsableHeight / options.height;
     var scaleToFit = Math.min(overallScaleX, overallScaleY);
     var offsetX = (canvas.width - options.width * scaleToFit) / 2;
-    var offsetY =
-      svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+    var offsetY = svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+
+    var strokeWidthScale = canvas.width / 700;
+    var strokeWidth = 2 * strokeWidthScale;
+
+    console.log("strokeWidth", strokeWidth);
 
     clipAreaCoords.left = offsetX;
     clipAreaCoords.top = offsetY;
@@ -300,7 +262,7 @@ function loadSVGPlusReset(svgString) {
           left: obj.left * scaleToFit + offsetX,
           fill: "transparent",
           stroke: obj.stroke,
-          strokeWidth: obj.strokeWidth,
+          strokeWidth: strokeWidth,
           selectable: true,
           hasControls: true,
           lockMovementX: false,
@@ -323,7 +285,6 @@ function loadSVGPlusReset(svgString) {
 
           controls: fabric.Object.prototype.controls,
         });
-
         // polygon.points = vertices;
         canvas.add(polygon);
       } else {
@@ -332,7 +293,7 @@ function loadSVGPlusReset(svgString) {
         obj.top = obj.top * scaleToFit + offsetY;
         obj.left = obj.left * scaleToFit + offsetX;
         obj.setCoords();
-
+        obj.strokeWidth = strokeWidth;
         obj.selectable = true;
         obj.hasControls = true;
         obj.lockMovementX = false;
@@ -347,6 +308,10 @@ function loadSVGPlusReset(svgString) {
     changeStrokeWidth(document.getElementById("strokeWidth").value);
     canvas.renderAll();
   });
+
+  resizeCanvas(canvas.width, canvas.height);
+
+  saveState();
   isUndoRedoOperation = true;
   updateLayerPanel();
 }
@@ -363,15 +328,14 @@ function loadSVGReadOnly(svgString) {
     var overallScaleY = canvasUsableHeight / options.height;
     var scaleToFit = Math.min(overallScaleX, overallScaleY);
     var offsetX = (canvas.width - options.width * scaleToFit) / 2;
-    var offsetY =
-      svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+    var offsetY = svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
 
     var scaledObjects = objects.map(function (obj) {
       obj.scaleX = scaleToFit;
       obj.scaleY = scaleToFit;
       obj.top = obj.top * scaleToFit + offsetY;
       obj.left = obj.left * scaleToFit + offsetX;
-
+      obj.strokeWidth = 2;
       if (applyColor) {
         obj.set({
           fill: fillColor,
@@ -392,6 +356,7 @@ function loadSVGReadOnly(svgString) {
       lockRotation: false,
       lockScalingX: false,
       lockScalingY: false,
+      
     });
 
     canvas.add(group);
@@ -584,7 +549,7 @@ function Edit() {
       });
       return acc;
     }, {});
-  }else {
+  } else {
     poly.cornerStyle = "rect";
     poly.controls = fabric.Object.prototype.controls;
   }
@@ -676,132 +641,102 @@ function anchorWrapper(anchorIndex, fn) {
   };
 }
 
-
-
 var gridSize = 10;
 var snapTimeout;
 var isGridVisible = false;
 
+// グリッド線を描画する関数
+function drawGrid() {
+  var gridCanvas = document.createElement("canvas");
+  gridCanvas.width = canvas.width;
+  gridCanvas.height = canvas.height;
+  var gridCtx = gridCanvas.getContext("2d");
+  gridCtx.strokeStyle = "#ccc";
 
+  for (var i = 0; i <= canvas.width / gridSize; i++) {
+    gridCtx.beginPath();
+    gridCtx.moveTo(i * gridSize, 0);
+    gridCtx.lineTo(i * gridSize, canvas.height);
+    gridCtx.stroke();
+  }
 
-  // グリッド線を描画する関数
-  function drawGrid() {
-    var gridCanvas = document.createElement('canvas');
-    gridCanvas.width = canvas.width;
-    gridCanvas.height = canvas.height;
-    var gridCtx = gridCanvas.getContext('2d');
-    gridCtx.strokeStyle = '#ccc';
+  for (var i = 0; i <= canvas.height / gridSize; i++) {
+    gridCtx.beginPath();
+    gridCtx.moveTo(0, i * gridSize);
+    gridCtx.lineTo(canvas.width, i * gridSize);
+    gridCtx.stroke();
+  }
 
-    for (var i = 0; i <= (canvas.width / gridSize); i++) {
-        gridCtx.beginPath();
-        gridCtx.moveTo(i * gridSize, 0);
-        gridCtx.lineTo(i * gridSize, canvas.height);
-        gridCtx.stroke();
-    }
-
-    for (var i = 0; i <= (canvas.height / gridSize); i++) {
-        gridCtx.beginPath();
-        gridCtx.moveTo(0, i * gridSize);
-        gridCtx.lineTo(canvas.width, i * gridSize);
-        gridCtx.stroke();
-    }
-
-    canvas.setBackgroundImage(gridCanvas.toDataURL(), canvas.renderAll.bind(canvas));
+  canvas.setBackgroundImage(
+    gridCanvas.toDataURL(),
+    canvas.renderAll.bind(canvas)
+  );
 }
 
 // グリッド線を削除する関数
 function removeGrid() {
-    canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
+  canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
 }
 
 // グリッド線の表示/非表示を切り替える関数
 function toggleGrid() {
-    if (isGridVisible) {
-        removeGrid();
-        isGridVisible = false;
-    } else {
-        drawGrid();
-        isGridVisible = true;
-    }
-    canvas.renderAll();
+  if (isGridVisible) {
+    removeGrid();
+    isGridVisible = false;
+  } else {
+    drawGrid();
+    isGridVisible = true;
+  }
+  canvas.renderAll();
 }
 
+// ボタンクリックでグリッド線の表示/非表示を切り替え
+document
+  .getElementById("toggleGridButton")
+  .addEventListener("click", toggleGrid);
 
-  
-  // ボタンクリックでグリッド線の表示/非表示を切り替え
-  document.getElementById('toggleGridButton').addEventListener('click', toggleGrid);
-
-  // グリッド線の幅を更新する関数
-  function updateGridSize() {
-      var newGridSize = parseInt(document.getElementById('gridSizeInput').value, 10);
-      if (newGridSize > 0) {
-          gridSize = newGridSize;
-          if (isGridVisible) {
-              removeGrid();
-              drawGrid();
-          }
-      }
+// グリッド線の幅を更新する関数
+function updateGridSize() {
+  var newGridSize = parseInt(
+    document.getElementById("gridSizeInput").value,
+    10
+  );
+  if (newGridSize > 0) {
+    gridSize = newGridSize;
+    if (isGridVisible) {
+      removeGrid();
+      drawGrid();
+    }
   }
+}
 
-  // グリッド線の幅を変更する際に自動更新
-  document.getElementById('gridSizeInput').addEventListener('input', updateGridSize);
+// グリッド線の幅を変更する際に自動更新
+document
+  .getElementById("gridSizeInput")
+  .addEventListener("input", updateGridSize);
 
-  // オブジェクトをグリッド線にスナップさせる関数
-  function snapToGrid(target) {
-      if (isGridVisible) {
-          target.set({
-              left: Math.round(target.left / gridSize) * gridSize,
-              top: Math.round(target.top / gridSize) * gridSize
-          });
-          canvas.renderAll();
-      }
+// オブジェクトをグリッド線にスナップさせる関数
+function snapToGrid(target) {
+  if (isGridVisible) {
+    target.set({
+      left: Math.round(target.left / gridSize) * gridSize,
+      top: Math.round(target.top / gridSize) * gridSize,
+    });
+    canvas.renderAll();
   }
+}
 
-  // デバウンスされたスナップ関数
-  function debounceSnapToGrid(target) {
-      clearTimeout(snapTimeout);
-      snapTimeout = setTimeout(function() {
-          snapToGrid(target);
-      }, 50);
+// デバウンスされたスナップ関数
+function debounceSnapToGrid(target) {
+  clearTimeout(snapTimeout);
+  snapTimeout = setTimeout(function () {
+    snapToGrid(target);
+  }, 50);
+}
+
+// オブジェクト移動イベントリスナーを追加
+canvas.on("object:moving", function (e) {
+  if (isGridVisible) {
+    debounceSnapToGrid(e.target);
   }
-
-  // オブジェクト移動イベントリスナーを追加
-  canvas.on('object:moving', function (e) {
-      if (isGridVisible) {
-          debounceSnapToGrid(e.target);
-      }
-  });
-
-
-  document.addEventListener('keydown', function (e) {
-      var activeObject = canvas.getActiveObject();
-
-      if (e.key === 'g' && e.ctrlKey) {
-        toggleGrid();
-        e.preventDefault();
-      }
-
-      if (activeObject) {
-          var moveDistance = isGridVisible ? gridSize : 1;
-          switch (e.key) {
-              case 'ArrowLeft':
-                  activeObject.left -= moveDistance;
-                  break;
-              case 'ArrowUp':
-                  activeObject.top -= moveDistance;
-                  break;
-              case 'ArrowRight':
-                  activeObject.left += moveDistance;
-                  break;
-              case 'ArrowDown':
-                  activeObject.top += moveDistance;
-                  break;
-              default:
-                  return;
-          }
-          activeObject.setCoords();
-          canvas.renderAll();
-          e.preventDefault();
-      }
-
-  });
+});

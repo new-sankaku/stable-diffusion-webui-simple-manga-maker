@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
       createErrorToast("Save Error", "Not Found.");
       return;
     }
-    createToast("Save Start!", "")
+    createToast("Save Start!", "");
     const startTime = performance.now();
     var zip = new JSZip();
 
@@ -22,9 +22,16 @@ document.addEventListener("DOMContentLoaded", function () {
       zip.file(`${key}.img`, value);
     });
 
+    // Canvasの縦横情報を追加
+    var canvasInfo = {
+      width: canvas.width,
+      height: canvas.height
+    };
+    zip.file("canvas_info.json", JSON.stringify(canvasInfo));
+
     removeGrid();
-    var previewLink = getCropAndDownloadLink();
-    zip.file("preview-image.png", previewLink.href.substring(previewLink.href.indexOf('base64,') + 7), {base64: true});
+    var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
+    zip.file("preview-image.jpeg", previewLink.href.substring(previewLink.href.indexOf('base64,') + 7), { base64: true });
     if (isGridVisible) {
       drawGrid();
       isGridVisible = true;
@@ -54,13 +61,13 @@ document.addEventListener("DOMContentLoaded", function () {
     fileInput.onchange = function () {
       var file = this.files[0];
       if (file) {
-        createToast("Load Start!", "")
+        createToast("Load Start!", "");
         const startTime = performance.now();
         JSZip.loadAsync(file).then(function (zip) {
           stateStack = [];
           imageMap.clear();
 
-          // text2img_basePromptをロード
+
           var text2imgBasePromptFile = zip.file("text2img_basePrompt.json");
           if (text2imgBasePromptFile) {
             text2imgBasePromptFile.async("string").then(function (content) {
@@ -68,25 +75,44 @@ document.addEventListener("DOMContentLoaded", function () {
             });
           }
 
-          var sortedFiles = Object.keys(zip.files)
-            .sort();
+
+          var canvasInfoFile = zip.file("canvas_info.json");
+
+          var canvasInfoPromise = canvasInfoFile
+            ? canvasInfoFile.async("string").then(function (content) {
+                return JSON.parse(content);
+              })
+            : Promise.resolve({ width: 750, height: 850 });
+
+          var sortedFiles = Object.keys(zip.files).sort();
           var promises = sortedFiles.map(function (fileName) {
             return zip.file(fileName).async("string").then(function (content) {
               if (fileName.endsWith(".img")) {
-                let hash = fileName.split('.')[0]; // ファイル名からハッシュ値を取得
+                let hash = fileName.split('.')[0];
                 imageMap.set(hash, content);
-              } else if (fileName.endsWith(".json") && fileName !== "text2img_basePrompt.json") {
+              } else if (fileName.endsWith(".json") && fileName !== "text2img_basePrompt.json" && fileName !== "canvas_info.json") {
                 return JSON.parse(content);
               }
             });
           });
 
-          Promise.all(promises).then(function (allData) {
-            stateStack = allData.filter(data => data !== undefined);
+          Promise.all([canvasInfoPromise, ...promises]).then(function (allData) {
+            var canvasInfo = allData[0];
+            stateStack = allData.slice(1).filter(data => data !== undefined);
+
             console.log("Loaded states:", stateStack);
+            console.log("Loaded canvasInfo:", canvasInfo);
+
             document.body.removeChild(fileInput);
             currentStateIndex = stateStack.length - 1;
+
+            resizeCanvasByNum(canvasInfo.width, canvasInfo.height)
+
             lastRedo();
+
+            // Canvasのリサイズ
+            // adjustCanvasSize();
+
             const endTime = performance.now();
             console.log(`Load operation took ${endTime - startTime} milliseconds`);
           });
@@ -94,4 +120,5 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     };
   });
+
 });

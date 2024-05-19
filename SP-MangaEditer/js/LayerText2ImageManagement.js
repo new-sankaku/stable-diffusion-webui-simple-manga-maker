@@ -122,7 +122,7 @@ function openText2ImageBaseFloatingWindow() {
   floatingWindow.className = "floating-windowPromptClass";
   floatingWindow.style.cursor = "move"; 
   floatingWindow.innerHTML = `
-      <h4>Text2Image Base Settings</h4>
+      <h5>Text2Image Base Settings</h5>
       <div class="form-group">
           <label>Prompt:</label>
           <textarea id="text2img_basePrompt_prompt" rows="3">${text2img_basePrompt.text2img_prompt}</textarea>
@@ -131,6 +131,9 @@ function openText2ImageBaseFloatingWindow() {
           <label>Negative Prompt:</label>
           <textarea id="text2img_basePrompt_negativePrompt" rows="3">${text2img_basePrompt.text2img_negativePrompt}</textarea>
       </div>
+      
+      <hr>
+
       <div class="form-group form-row">
           <label>Seed:</label>
           <input type="number" id="text2img_basePrompt_seed"  min="-2" value="${text2img_basePrompt.text2img_seed}">
@@ -156,15 +159,26 @@ function openText2ImageBaseFloatingWindow() {
           <input type="number" id="text2img_basePrompt_samplingSteps" value="${text2img_basePrompt.text2img_samplingSteps}">
       </div>
       <div class="form-group form-row">
-          <label>HR Upscaler:</label>
-          <input type="text" id="text2img_basePrompt_hr_upscaler" value="${text2img_basePrompt.text2img_hr_upscaler}">
-      </div>
-
-      <div class="form-group form-row">
         <label>Model:</label>
         <select id="text2img_basePrompt_model"></select>
       </div>
 
+      <hr>
+
+      <h7>Hires. fix</h7>
+      <div class="form-group form-row">
+          <label>Upscaler:</label>
+          <select id="text2img_basePrompt_hr_upscaler"></select>
+      </div>
+
+      <div class="form-group form-row">
+        <label>Scale:</label>
+        <input type="number" id="text2img_basePrompt_hr_scale" step="0.1"  min="1.0" max="4" value="${text2img_basePrompt.text2img_basePrompt_hr_scale}">
+      </div>
+      <div class="form-group form-row">
+        <label>Denoising Strength:</label>
+        <input type="number" id="text2img_basePrompt_hr_denoising_strength" step="0.01" min="0" max="1.0" value="${text2img_basePrompt.text2img_basePrompt_hr_denoising_strength}">
+      </div>
       <button onclick="updateText2ImgBasePrompt()">Save</button>
       <button onclick="closeFloatingWindowPromptClass()">Close</button>
   `;
@@ -188,6 +202,7 @@ function openText2ImageBaseFloatingWindow() {
   makeDraggable(floatingWindow); 
   fetchModels();
   fetchSampler();
+  fetchUpscaler();
 }
 
 function updateText2ImgBasePrompt() {
@@ -201,6 +216,8 @@ function updateText2ImgBasePrompt() {
   text2img_basePrompt.text2img_height = parseInt(document.getElementById('text2img_basePrompt_height').value, 10);
   text2img_basePrompt.text2img_samplingSteps = parseInt(document.getElementById('text2img_basePrompt_samplingSteps').value, 10);
   text2img_basePrompt.text2img_hr_upscaler = document.getElementById('text2img_basePrompt_hr_upscaler').value;
+  text2img_basePrompt.text2img_basePrompt_hr_scale = document.getElementById('text2img_basePrompt_hr_scale').value;
+  text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = document.getElementById('text2img_basePrompt_hr_denoising_strength').value;
 
   var selectedModel = document.getElementById('text2img_basePrompt_model').value;
   text2img_basePrompt.text2img_model = selectedModel;

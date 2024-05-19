@@ -1,0 +1,265 @@
+#canvas-container, #mangaImageCanvas {
+  margin-right: 10px;
+}
+
+#canvas-area {
+  min-width: 600px;
+  width: 50%;
+  margin-right: 10px;
+}
+
+#layer-buttons {
+  margin-top: 13px;
+  margin-right: 10px;
+}
+
+#canvas-container {
+  width: 100%;
+  min-width: 600px;
+  max-width: 65vw;
+  height: 85%;
+  min-height: 400px;
+  max-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; 
+  box-sizing: border-box;  
+}
+
+#mangaImageCanvas {
+  transform-origin: 0 0; 
+  border: 3px dashed #4D4D4D;
+}
+
+.area-header {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px;
+  background-color: #ffe9cb;
+  text-align: center;
+}
+
+#layer-content {
+  overflow-y: auto;
+  border: 2px solid #4D4D4D;
+  height: 750px;
+}
+
+.layer-item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #EEE;
+  transition: background-color 0.3s;
+}
+
+.layer-item:hover, .layer-item.active {
+  background-color: #ffdfa7;
+}
+
+.layer-preview {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  background-size: cover;
+  border: 1px solid #ffc560;
+}
+
+.layer-name {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+#layer-panel {
+  min-width: 10%;
+  max-width: 18%;
+  flex: 0 0 20%;
+  max-width: 25%;
+  min-width: 15%;
+}
+
+
+#sidebar {
+  margin-right: 10px;
+  width: 50px;
+  min-width: 50px;
+  height: auto;
+  max-height: auto;
+  background: linear-gradient(145deg, #ffe0ad, #ffe0ad);
+  box-shadow: 2px 0 5px rgba(82, 40, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+}
+
+#sidebar i {
+  padding: 10px;
+  margin: 20px 0;
+  color: #555;
+  transition: color 0.3s, transform 0.3s;
+}
+
+#sidebar i:hover, #sidebar i.active {
+  color: #000;
+  transform: scale(1.1);
+}
+
+#download-buttons {
+  margin-top: 5px;
+  margin-right: 20px;
+}
+
+#download-buttons button:hover {
+  color: #FFFFFF;
+}
+
+#download-buttons button .material-icons,
+#download-buttons button .material-symbols-outlined{
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+#canvas-buttons {
+  margin-top: 15px;
+  margin-right: 20px;
+}
+
+#canvas-buttons button:hover {
+  color: #FFFFFF;
+}
+
+#canvas-buttons button .material-icons, 
+#layer-buttons  button .material-icons{
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+#license-info p {
+  font-size: 12px;
+}
+
+.info-section {
+  border-top: 1px solid #ffc560;
+  padding: 5px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.info-item .material-icons {
+  margin-right: 5px;
+}
+
+.info-item a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.info-item a:hover {
+  text-decoration: underline;
+}
+
+#file-input {
+  display: none;
+}
+
+.navbar-logo {
+  height: auto;
+  max-height: 30px;
+  width: auto;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.navbar-nav .nav-link i {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.navbar-nav .dropdown-item i {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.dropdown-menu .dropdown-item div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dropdown-menu .dropdown-item label {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.dropdown-menu label {
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.dropdown-menu .dropdown-item input {
+  flex: 2;
+}
+
+.tight-text{
+  flex: 1;
+}
+
+.tight-text label{
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.dropdown-item-mini-text {
+  width: 65px;
+}
+
+.navbar-nav .nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.navbar {
+  padding: 0;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.form-row label {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.form-row input,
+.form-row select {
+  flex: 2;
+  margin-left: 10px;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  height: 10%;
+  width: 100%;
+  background-color: #f8f9fa; /* 背景色を設定 */
+  border-top: 1px solid #dee2e6; /* 上部に境界線を追加 */
+}
+
+.bottom-bar-content {
+  padding: 10px;
+  text-align: center; /* 中央揃え */
+}

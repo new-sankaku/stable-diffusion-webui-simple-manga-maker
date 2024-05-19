@@ -1,0 +1,78 @@
+#controls {
+  font-size: 12px;
+  min-width: 180px;
+  max-width: 10%;
+  margin-left: 5px;
+}
+
+.panel {
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-bottom: 10px;
+}
+
+.control-item {
+  margin-top: 5px;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.control-row label {
+  flex: 0 0 50px; /* ラベルの幅を調整 */
+  margin: 0;
+}
+
+.control-row input[type="range"] {
+  flex: 1;
+  width: 80%;
+}
+
+.control-row span {
+  flex: 0 0 30px;
+  text-align: right;
+  margin-left: 5px;
+}
+
+.panel-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.separator {
+  margin: 5px 0;
+}
+
+.radio-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.radio-options label {
+  margin-right: 5px;
+}
+
+.collapse-icon {
+  margin-left: 5px;
+  transition: transform 0.3s;
+}
+
+.collapsed .collapse-icon {
+  transform: rotate(180deg);
+}
+
+.control-content {
+  display: block;
+}
+.control-content.hidden {
+  display: none;
+}
+.toggle-button {
+  cursor: pointer;
+  margin-left: 10px;
+}

@@ -27,6 +27,7 @@ var StableDiffusionWebUI_API_T2I       = 'http://' + stableDiffusionWebUIHost + 
 var StableDiffusionWebUI_API_options   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/options'
 var StableDiffusionWebUI_API_samplers  = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/samplers'
 
+
 function StableDiffusionWebUI_reBuild_URL(){
   StableDiffusionWebUI_API_ping      = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/internal/ping'
   StableDiffusionWebUI_API_sampler   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/samplers'
@@ -92,6 +93,13 @@ async function fetchSampler() {
   updateSamplerDropdown(models);
 }
 
+async function fetchUpscaler() {
+  console.log("fetchUpscaler");
+  const response = await fetch(StableDiffusionWebUI_API_upscaler, { method: 'GET' });
+  const models = await response.json();
+  updateUpscalerDropdown(models);
+}
+
 async function fetchModels() {
 
   fetchOptions();
@@ -99,6 +107,22 @@ async function fetchModels() {
   const response = await fetch(StableDiffusionWebUI_API_sdModel, { method: 'GET' });
   const models = await response.json();
   updateModelDropdown(models);
+}
+
+function updateUpscalerDropdown(models) {
+  const modelDropdown = document.getElementById('text2img_basePrompt_hr_upscaler');
+  modelDropdown.innerHTML = '';
+
+  models.forEach(model => {
+    const option = document.createElement('option');
+    option.value = model.name;
+    option.textContent = model.name;
+
+    if (text2img_basePrompt.text2img_hr_upscaler === model.name) {
+      option.selected = true;
+    }
+    modelDropdown.appendChild(option);
+  });
 }
 
 function updateSamplerDropdown(models) {
@@ -139,6 +163,13 @@ function updateModelDropdown(models) {
 
 
 function sdwebui_checkAPIStatus() {
+
+  const pingCheck = document.getElementById('SD_WebUI_pingCheck');
+  if (pingCheck.checked) {
+    
+  } else {
+    return;
+  }
   fetch(StableDiffusionWebUI_API_ping, {
     method: 'GET',
     headers: {'Accept': 'application/json'}
@@ -193,19 +224,27 @@ async function sdwebui_fetchText2Image(layer) {
   }
 
   const requestData = {
-      "prompt":           text2img_basePrompt.text2img_prompt         + layer.text2img_prompt,
-      "negative_prompt":  text2img_basePrompt.text2img_negativePrompt + layer.text2img_negativePrompt,
-      "seed":             seed,
-      "width":            width,
-      "height":           height,
-      "sampler_name":     text2img_basePrompt.text2img_samplingMethod,
-      "steps":            text2img_basePrompt.text2img_samplingSteps,
-      "cfg_scale":        text2img_basePrompt.text2img_cfg_scale,
-      "scheduler":        text2img_basePrompt.text2img_scheduler,
-      "hr_upscaler":      text2img_basePrompt.text2img_hr_upscaler,
-      "do_not_save_grid": true,
+    "prompt":           text2img_basePrompt.text2img_prompt         + layer.text2img_prompt,
+    "negative_prompt":  text2img_basePrompt.text2img_negativePrompt + layer.text2img_negativePrompt,
+    "seed":             seed,
+    "width":            width,
+    "height":           height,
+    "sampler_name":     text2img_basePrompt.text2img_samplingMethod,
+    "steps":            text2img_basePrompt.text2img_samplingSteps,
+    "cfg_scale":        text2img_basePrompt.text2img_cfg_scale,
+    "scheduler":        text2img_basePrompt.text2img_scheduler,
+    "do_not_save_grid": true,
   };
-  // console.log("sdwebui_fetchText2Image", requestData);
+
+  if( text2img_basePrompt.text2img_hr_upscaler && text2img_basePrompt.text2img_hr_upscaler != 'None' ){
+    Object.assign(requestData, {
+      enable_hr: true,
+      hr_upscaler: text2img_basePrompt.text2img_hr_upscaler,
+      hr_scale:text2img_basePrompt.text2img_basePrompt_hr_scale,
+      denoising_strength:text2img_basePrompt.text2img_basePrompt_hr_denoising_strength,
+    });
+  }
+  console.log("requestData", requestData);
   
   try {
       const response = await fetch(url, {
@@ -217,6 +256,7 @@ async function sdwebui_fetchText2Image(layer) {
           body: JSON.stringify(requestData)
       });
       const data = await response.json();
+      console.log("response", data);
       return data.images[0];
   } catch (error) {
       createToast("Text2Image Error.", "check SD WebUI!")
