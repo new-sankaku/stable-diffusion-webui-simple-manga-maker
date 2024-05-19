@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">Shortcut Function Introduction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p, td {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+        code {
+            display: block;
+            background-color: #eee;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        strong {
+            color: #333;
+        }
+        select {
+            font-family: Arial, sans-serif;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .btn-group {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="../../third/i18next/i18next.min.js"></script>
+</head>
+<body>
+    <div>Translation is Chat GPT4. English 日本語 한국어 中文 Français</div>
+    <div class="container">
+        <div class="btn-group" role="group" aria-label="Language switcher">
+            <button type="button" class="btn btn-primary" onclick="changeLanguage('en')">English</button>
+            <button type="button" class="btn btn-secondary" onclick="changeLanguage('ja')">日本語</button>
+            <button type="button" class="btn btn-secondary" onclick="changeLanguage('ko')">한국어</button>
+            <button type="button" class="btn btn-secondary" onclick="changeLanguage('zh')">中文</button>
+            <button type="button" class="btn btn-secondary" onclick="changeLanguage('fr')">Français</button>
+        </div>
+        <h1 data-i18n="title">Shortcut Function Introduction</h1>
+        <p data-i18n="description">This page introduces the shortcut key functions available on the canvas.</p>
+
+        <h2 data-i18n="shortcutListTitle">Shortcut Key List</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th data-i18n="shortcutKeys">Shortcut Keys</th>
+                    <th data-i18n="function">Function</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ctrl + G</td>
+                    <td data-i18n="toggleGrid">Toggle grid display</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Z</td>
+                    <td data-i18n="undo">Undo</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Y</td>
+                    <td data-i18n="redo">Redo</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + C</td>
+                    <td data-i18n="copy">Copy</td>
+                </tr>
+                <tr>
+                    <td>Delete</td>
+                    <td data-i18n="deleteLayer">Delete selected layer</td>
+                </tr>
+                <tr>
+                    <td data-i18n="arrowKeys">Arrow Keys</td>
+                    <td data-i18n="moveObject">Move selected object</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const resources = {
+            en: {
+                translation: {
+                    "title": "Shortcut Function Introduction",
+                    "description": "This page introduces the shortcut key functions available on the canvas.",
+                    "shortcutListTitle": "Shortcut Key List",
+                    "shortcutKeys": "Shortcut Keys",
+                    "function": "Function",
+                    "toggleGrid": "Toggle grid display",
+                    "undo": "Undo",
+                    "redo": "Redo",
+                    "copy": "Copy",
+                    "deleteLayer": "Delete selected layer",
+                    "arrowKeys": "Arrow Keys",
+                    "moveObject": "Move selected object"
+                }
+            },
+            ja: {
+                translation: {
+                    "title": "ショートカット機能の紹介",
+                    "description": "このページでは、キャンバス上で使用できるショートカットキーの機能を紹介します。",
+                    "shortcutListTitle": "ショートカットキー一覧",
+                    "shortcutKeys": "ショートカットキー",
+                    "function": "機能",
+                    "toggleGrid": "グリッドの表示/非表示を切り替える",
+                    "undo": "元に戻す",
+                    "redo": "やり直す",
+                    "copy": "コピー",
+                    "deleteLayer": "選択したレイヤーを削除する",
+                    "arrowKeys": "矢印キー",
+                    "moveObject": "選択したオブジェクトを移動する"
+                }
+            },
+            ko: {
+                translation: {
+                    "title": "단축키 기능 소개",
+                    "description": "이 페이지에서는 캔버스에서 사용할 수 있는 단축키 기능을 소개합니다.",
+                    "shortcutListTitle": "단축키 목록",
+                    "shortcutKeys": "단축키",
+                    "function": "기능",
+                    "toggleGrid": "그리드 표시 전환",
+                    "undo": "실행 취소",
+                    "redo": "다시 실행",
+                    "copy": "복사",
+                    "deleteLayer": "선택한 레이어 삭제",
+                    "arrowKeys": "화살표 키",
+                    "moveObject": "선택한 객체 이동"
+                }
+            },
+            zh: {
+                translation: {
+                    "title": "快捷键功能介绍",
+                    "description": "本页面介绍了画布上可用的快捷键功能。",
+                    "shortcutListTitle": "快捷键列表",
+                    "shortcutKeys": "快捷键",
+                    "function": "功能",
+                    "toggleGrid": "切换网格显示",
+                    "undo": "撤销",
+                    "redo": "重做",
+                    "copy": "复制",
+                    "deleteLayer": "删除选定的图层",
+                    "arrowKeys": "方向键",
+                    "moveObject": "移动选定的对象"
+                }
+            },
+            fr: {
+                translation: {
+                    "title": "Présentation des fonctions de raccourcis",
+                    "description": "Cette page présente les fonctions des raccourcis clavier disponibles sur le canevas.",
+                    "shortcutListTitle": "Liste des raccourcis clavier",
+                    "shortcutKeys": "Raccourcis clavier",
+                    "function": "Fonction",
+                    "toggleGrid": "Basculer l'affichage de la grille",
+                    "undo": "Annuler",
+                    "redo": "Rétablir",
+                    "copy": "Copier",
+                    "deleteLayer": "Supprimer le calque sélectionné",
+                    "arrowKeys": "Touches fléchées",
+                    "moveObject": "Déplacer l'objet sélectionné"
+                }
+            }
+        };
+
+        i18next.init({
+            lng: 'en', // 初期言語設定
+            debug: true,
+            resources: resources
+        }, function(err, t) {
+            // 初期化完了後にコンテンツを更新
+            updateContent();
+        });
+
+        function updateContent() {
+            document.title = i18next.t('title');
+            document.querySelectorAll('[data-i18n]').forEach(function(elem) {
+                elem.textContent = i18next.t(elem.getAttribute('data-i18n'));
+            });
+        }
+
+        // 言語切り替え機能
+        function changeLanguage(lng) {
+            i18next.changeLanguage(lng, function(err, t) {
+                updateContent();
+            });
+        }
+    </script>
+</body>
+</html>
