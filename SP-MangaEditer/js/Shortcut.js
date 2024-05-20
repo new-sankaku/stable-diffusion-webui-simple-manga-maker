@@ -26,7 +26,7 @@ document.addEventListener("keydown", function (e) {
     }
   }
 
-  if (activeObject) {
+  if (activeObject && isNotVisibleFloatingWindow()) {
     var moveDistance = isGridVisible ? gridSize : 1;
     switch (e.key) {
       case "ArrowLeft":

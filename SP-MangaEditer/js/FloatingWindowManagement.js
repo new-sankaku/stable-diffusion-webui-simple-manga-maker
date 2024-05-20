@@ -46,3 +46,40 @@ function closeFloatingWindowPromptClass() {
     const floatingWindow = document.querySelector('.floating-windowPromptClass');
     document.body.removeChild(floatingWindow);
 }
+
+
+function isNotVisibleFloatingWindow() {
+    return !(isVisibleFloatingWindow());
+}
+
+function isVisibleFloatingWindow() {
+    const classNames = [
+      'floating-window',            //vertical text
+      'floating-windowPromptClass'  //base and text2image and Prompt Replace.
+    ];
+  
+    const ids = [
+      'aaaaaaaaaaaaaaaId',
+      'aaaaaaaaaaaaaaaId'
+    ];
+    for (let className of classNames) {
+      const windows = document.querySelectorAll(`.${className}`);
+      for (let i = 0; i < windows.length; i++) {
+        const win = windows[i];
+        const style = window.getComputedStyle(win);
+        if (style.display !== 'none' && style.visibility !== 'hidden') {
+          return true;
+        }
+      }
+    }
+    for (let id of ids) {
+      const win = document.getElementById(id);
+      if (win) {
+        const style = window.getComputedStyle(win);
+        if (style.display !== 'none' && style.visibility !== 'hidden') {
+          return true;
+        }
+      }
+    }
+    return false;
+  }

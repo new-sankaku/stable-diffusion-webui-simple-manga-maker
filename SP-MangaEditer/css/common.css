@@ -56,7 +56,7 @@ button:active, .custom-file-upload:active {
 }
 
 .floating-windowPromptClass {
-  width: 30%;
+  width: 40%;
   position: fixed;
   right: 0;
   top: 10%;
