@@ -67,6 +67,7 @@
 }
 
 .layer-name {
+  font-size: 13px;
   flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;

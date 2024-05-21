@@ -1,3 +1,5 @@
+
+
 function updateLayerPanel() {
   var layers = canvas.getObjects();
   var layerContent = document.getElementById("layer-content");
@@ -20,7 +22,15 @@ function updateLayerPanel() {
       }
 
       nameDiv.className = "layer-name";
-      nameDiv.textContent = nameDiv.textContent || layer.name || layer.type + ` ${index + 1}`;
+      nameDiv.textContent = layer.name || nameDiv.textContent || layer.type + ` ${index + 1}`;
+      nameDiv.contentEditable = true; // テキストを編集可能にする
+
+      // テキストが変更されたときの処理
+      nameDiv.onblur = function () {
+        layer.name = nameDiv.textContent;
+        saveState();
+      };
+
       deleteButton.textContent = "✕";
       deleteButton.className = "delete-layer-button";
       deleteButton.onclick = function (e) {
@@ -88,23 +98,37 @@ function calculateCenter(layer) {
 
 
 
-function putPreviewImage( layer, layerDiv ){
+function putPreviewImage(layer, layerDiv) {
   var previewDiv = document.createElement("div");
 
+  var canvasSize = 120;
+  var imageSize = 100;
+  var margin = (canvasSize - imageSize) / 2;
+
   var tempCanvas = document.createElement("canvas");
-  tempCanvas.width = 100;
-  tempCanvas.height = 100;
+  tempCanvas.width = canvasSize;
+  tempCanvas.height = canvasSize;
   var tempCtx = tempCanvas.getContext("2d");
 
-  // console.log("layer.type", layer.type);
   if (layer.type === "image" && typeof layer.getElement === "function") {
-    tempCtx.drawImage(layer.getElement(), 0, 0, 100, 100);
+    var imgElement = layer.getElement();
+    var imgWidth = imgElement.width;
+    var imgHeight = imgElement.height;
+
+    var scale = Math.min(canvasSize / imgWidth, canvasSize / imgHeight);
+    var drawWidth = imgWidth * scale;
+    var drawHeight = imgHeight * scale;
+
+    var offsetX = (canvasSize - drawWidth) / 2;
+    var offsetY = (canvasSize - drawHeight) / 2;
+
+    tempCtx.drawImage(imgElement, offsetX, offsetY, drawWidth, drawHeight);
 
   } else if (layer.type === "group") {
-    var groupScaleFactor = Math.min(100 / layer.width, 100 / layer.height);
+    var groupScaleFactor = Math.min(120 / layer.width, 120 / layer.height);
     tempCtx.save();
-    tempCtx.translate(50, 50);
-    tempCtx.scale(0.1,0.1);
+    tempCtx.translate(60, 60);
+    tempCtx.scale(0.12,0.12);
     tempCtx.translate(-layer.width / 2, -layer.height / 2);
   
     layer.getObjects().forEach(function (obj) {
@@ -128,15 +152,25 @@ function putPreviewImage( layer, layerDiv ){
     });
   
     tempCtx.restore();
-  } else if (layer.type === "rect" || layer.type === "circle" || layer.type === "path" || layer.type === "polygon"  ) {
-    var tempCanvas = layer.toCanvasElement();
-    tempCtx.drawImage(tempCanvas, 0, 0, 100, 100);
+  }  else if (["rect", "circle", "polygon"].includes(layer.type)) {
+    var layerCanvas = layer.toCanvasElement();
+    var layerWidth = layer.width;
+    var layerHeight = layer.height;
 
-  }else if (layer.type === "path"  ) {
+    var layerScale = Math.min(imageSize / layerWidth, imageSize / layerHeight);
+    var layerDrawWidth = layerWidth * layerScale;
+    var layerDrawHeight = layerHeight * layerScale;
+
+    var layerOffsetX = (canvasSize - layerDrawWidth) / 2;
+    var layerOffsetY = (canvasSize - layerDrawHeight) / 2;
+
+    tempCtx.drawImage(layerCanvas, layerOffsetX, layerOffsetY, layerDrawWidth, layerDrawHeight);
+
+  } else if (layer.type === "path") {
     var path = new fabric.Path(layer.path);
     path.render(tempCtx);
-  
-  }else {
+
+  } else {
     layer.render(tempCtx);
   }
 
@@ -148,6 +182,8 @@ function putPreviewImage( layer, layerDiv ){
   previewDiv.className = "layer-preview";
   layerDiv.appendChild(previewDiv);
 }
+
+
 
 
 function removeLayer(layer) {
@@ -317,6 +353,7 @@ function LayersUp() {
     activeObject.bringForward();
     canvas.renderAll();
     updateLayerPanel();
+    saveState();
   }
 }
 
@@ -327,5 +364,6 @@ function LayersDown() {
     activeObject.sendBackwards();
     canvas.renderAll();
     updateLayerPanel();
+    saveState();
   }
 }

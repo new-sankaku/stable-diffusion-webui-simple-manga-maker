@@ -14,9 +14,3 @@ function flipVertically() {
 		canvas.renderAll();
 	}
 }
-
-function allRemove() {
-	canvas.clear();
-	updateLayerPanel();
-	currentImage = null;
-}

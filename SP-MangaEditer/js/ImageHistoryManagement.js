@@ -40,7 +40,9 @@ function customToJSON() {
                                 'text2img_samplingMethod', 
                                 'text2img_samplingSteps',
                                 'initial', 
-                                'clipPath.initial']);
+                                'clipPath.initial',
+                                'name'
+                            ]);
     
     json.objects = json.objects.map(obj => {
         if (obj.type === 'image' && obj.src.startsWith('data:')) {
@@ -58,27 +60,32 @@ function customToJSON() {
 
 
 function saveState() {
+    // console.log("saveState START currentStateIndex:StackLenght ", currentStateIndex, ":", stateStack.length);
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }
     canvas.renderAll();
+    const state = customToJSON();
+    const json = JSON.stringify(state);
 
-    const json = JSON.stringify(customToJSON());
     stateStack.push(json);
     currentStateIndex++;
     updateLayerPanel();
+    // console.log("saveState END currentStateIndex:StackLenght ", currentStateIndex, ":", stateStack.length,"count:", json.length);
 }
 
 // JSON からの画像データの復元処理
 function restoreImage(json) {
+
+    // console.log("restoreImage json", json);
     const parsedJson = JSON.parse(json);
     parsedJson.objects = parsedJson.objects.map(obj => {
         if (obj.type === 'image' && imageMap.has(obj.src)) {
             obj.src = imageMap.get(obj.src); // ハッシュキーに基づき画像データを復元
         }
         const props = ['excludeFromLayerPanel', 'isPanel', 'text2img_prompt', 'text2img_negativePrompt',
-                       'text2img_seed', 'text2img_width', 'text2img_height', 'text2img_samplingMethod',
-                       'text2img_samplingSteps', 'initial', 'clipPath.initial'];
+        'text2img_seed', 'text2img_width', 'text2img_height', 'text2img_samplingMethod',
+        'text2img_samplingSteps', 'initial', 'clipPath.initial', 'name'];
         props.forEach(prop => {
             if (obj[prop] !== undefined) {
                 obj[prop] = obj[prop]; 
@@ -95,11 +102,13 @@ function undo() {
     if (currentStateIndex >= 1) {
         isUndoRedoOperation = true;
         currentStateIndex--;
+        // console.log("undo currentStateIndex", currentStateIndex);
         canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
             isUndoRedoOperation = false;
         });
+        // forcedAdjustCanvasSize();
     }
 }
 
@@ -107,11 +116,13 @@ function redo() {
     if (currentStateIndex < stateStack.length - 1) {
         isUndoRedoOperation = true;
         currentStateIndex++;
+        // console.log("redo currentStateIndex", currentStateIndex);
         canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
             isUndoRedoOperation = false;
         });
+        // forcedAdjustCanvasSize();
     }
 }
 
@@ -134,5 +145,18 @@ canvas.on('path:created', function(e) { saveStateByListener(e, 'path:created'); 
 canvas.on('canvas:cleared', function(e) { saveStateByListener(e, 'canvas:cleared'); });
 
 saveState();
+
+
+function allRemove() {
+	canvas.clear();
+	updateLayerPanel();
+	currentImage = null;
+}
+function initImageHistory(){
+	allRemove();
+    imageMap.clear();
+    stateStack = [];
+    currentStateIndex = -1;
+}
 
 

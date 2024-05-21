@@ -38,9 +38,13 @@ function resizeCanvas(newWidth, newHeight) {
 
   canvas.setDimensions({ width: newWidth, height: newHeight });
   canvas.getObjects().forEach((obj) => {
-
+    
     var scaleX = newWidth / obj.initial.canvasWidth;
     var scaleY = newHeight / obj.initial.canvasHeight;
+
+    // console.log("resizeCanvas newWidth ",newWidth, ":", newHeight );
+    // console.log("resizeCanvas initial ",obj.initial.canvasWidth, ":", obj.initial.canvasHeight );
+    // console.log("resizeCanvas scaleX ",scaleX, ":", scaleY );
 
     obj.set({
       scaleX: obj.initial.scaleX * scaleX,
@@ -69,7 +73,15 @@ function resizeCanvas(newWidth, newHeight) {
   canvas.renderAll();
 }
 
+function forcedAdjustCanvasSize() {
+  adjustCanvasSize( true );
+}
+
 function adjustCanvasSize() {
+  adjustCanvasSize( false );
+}
+
+function adjustCanvasSize( forced ) {
   var container = document.getElementById("canvas-container");
   var windowWidth = container.clientWidth;
   var windowHeight = container.clientHeight;
@@ -84,7 +96,11 @@ function adjustCanvasSize() {
     newHeight = windowWidth / aspectRatio;
   }
 
-  if (newWidth == canvas.getWidth() && newHeight == canvas.getHeight()) {
+  if( forced ){
+    //next
+    // console.log( "adjustCanvasSize forced true" );
+  }else if (newWidth == canvas.getWidth() && newHeight == canvas.getHeight()) {
+    // console.log( "adjustCanvasSize forced false" );
     return;
   }
 
@@ -118,13 +134,16 @@ function saveInitialState(obj) {
 }
 
 canvas.on("object:added", (e) => {
+  // console.log( "object:added" );
   const obj = e.target;
   if (!obj.initial) {
     saveInitialState(obj);
   }
+  forcedAdjustCanvasSize();
 });
 
 canvas.on("object:modified", (e) => {
+  // console.log( "object:modified" );
   const obj = e.target;
   saveInitialState(obj);
 });

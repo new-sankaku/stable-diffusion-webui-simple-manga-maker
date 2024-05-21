@@ -185,9 +185,8 @@ function adjustImageToFitFrame(image, frame) {
 
 /** Load SVG(Verfical, Landscope) */
 function loadSVGPlusReset(svgString) {
-  allRemove();
-  stateStack = [];
-  imageMap.clear();
+  initImageHistory();
+  saveState();
   
   isUndoRedoOperation = true;
   fabric.loadSVGFromString(svgString, function (objects, options) {
