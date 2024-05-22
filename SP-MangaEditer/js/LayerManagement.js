@@ -267,7 +267,7 @@ function updateControls(activeObject) {
     document.getElementById("skewY-control").value = 0;
     
     document.getElementById("angleValue").innerText = 0.0.toFixed(1);
-    document.getElementById("scaleValue").innerText = 1.0.toFixed(1);
+    document.getElementById("scaleValue").innerText = 1.0.toFixed(2);
     document.getElementById("topValue").innerText = 0.0.toFixed(1);
     document.getElementById("leftValue").innerText = 0.0.toFixed(1);
     document.getElementById("skewXValue").innerText = 0.0.toFixed(1);
@@ -306,7 +306,7 @@ function updateControls(activeObject) {
   document.getElementById("skewY-control").value = activeObject.skewY || 0;
   
   document.getElementById("angleValue").innerText = (activeObject.angle || 0).toFixed(1);
-  document.getElementById("scaleValue").innerText = (activeObject.scaleX || 1.0).toFixed(1);
+  document.getElementById("scaleValue").innerText = (activeObject.scaleX || 1.0).toFixed(2);
   document.getElementById("topValue").innerText = (activeObject.top || 0).toFixed(1);
   document.getElementById("leftValue").innerText = (activeObject.left || 0).toFixed(1);
   document.getElementById("skewXValue").innerText = (activeObject.skewX || 0).toFixed(1);

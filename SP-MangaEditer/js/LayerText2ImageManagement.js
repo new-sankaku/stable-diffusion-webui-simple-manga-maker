@@ -212,7 +212,7 @@ function openText2ImageBaseFloatingWindow() {
 
 function updateText2ImgBasePrompt() {
   adjustToMultipleOfEight('text2img_basePrompt_width');
-  adjustToMultipleOfEight('text2img_basePrompt_height');
+  adjustToMultipleOfEight('text2img_basePrompt_height');                                                           
   text2img_basePrompt.text2img_prompt                           = document.getElementById('text2img_basePrompt_prompt').value;
   text2img_basePrompt.text2img_negativePrompt                   = document.getElementById('text2img_basePrompt_negativePrompt').value;
   text2img_basePrompt.text2img_seed                             = parseInt(document.getElementById('text2img_basePrompt_seed').value, 10);

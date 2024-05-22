@@ -1,13 +1,72 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var saveButton = document.getElementById("projectSave"); // Saveボタンを正確に選択
-  var loadButton = document.getElementById("projectLoad"); // Loadボタンを正確に選択
+  var saveButton = document.getElementById("projectSave");
+  var loadButton = document.getElementById("projectLoad");
+
+  var settingsSave = document.getElementById("settingsSave");
+  var settingsLoad = document.getElementById("settingsLoad");
+
+
+
+  settingsSave.addEventListener("click", function () {
+    createToast("Settings Save Start! (Local storage)", "");
+    const localSettingsData = {
+        Stable_Diffusion_WebUI_apiPort:                                 document.getElementById('Stable_Diffusion_WebUI_apiPort').value,
+        Stable_Diffusion_WebUI_apiHost:                                 document.getElementById('Stable_Diffusion_WebUI_apiHost').value,
+        text2img_basePrompt_text2img_prompt:                            text2img_basePrompt.text2img_prompt, 
+        text2img_basePrompt_text2img_negativePrompt:                    text2img_basePrompt.text2img_negativePrompt, 
+        text2img_basePrompt_text2img_seed:                              text2img_basePrompt.text2img_seed, 
+        text2img_basePrompt_text2img_cfg_scale:                         text2img_basePrompt.text2img_cfg_scale, 
+        text2img_basePrompt_text2img_width:                             text2img_basePrompt.text2img_width, 
+        text2img_basePrompt_text2img_height:                            text2img_basePrompt.text2img_height, 
+        text2img_basePrompt_text2img_samplingMethod:                    text2img_basePrompt.text2img_samplingMethod, 
+        text2img_basePrompt_text2img_samplingSteps:                     text2img_basePrompt.text2img_samplingSteps, 
+        text2img_basePrompt_text2img_scheduler:                         text2img_basePrompt.text2img_scheduler, 
+        text2img_basePrompt_text2img_model:                             text2img_basePrompt.text2img_model, 
+        text2img_basePrompt_text2img_hr_upscaler:                       text2img_basePrompt.text2img_hr_upscaler, 
+        text2img_basePrompt_text2img_basePrompt_hr_scale:               text2img_basePrompt.text2img_basePrompt_hr_scale, 
+        text2img_basePrompt_text2img_basePrompt_hr_step:                text2img_basePrompt.text2img_basePrompt_hr_step, 
+        text2img_basePrompt_text2img_basePrompt_hr_denoising_strength:  text2img_basePrompt.text2img_basePrompt_hr_denoising_strength
+    };
+    localStorage.setItem('localSettingsData', JSON.stringify(localSettingsData));
+    createToast("Settings Save Completed! (Local storage)", "");
+  });
+
+  settingsLoad.addEventListener("click", function () {
+    createToast("Settings Load Start! (Local storage)", "");
+
+    const localSettingsData = localStorage.getItem('localSettingsData');
+    if (localSettingsData) {
+        const localSettings = JSON.parse(localSettingsData);
+
+        document.getElementById('Stable_Diffusion_WebUI_apiPort').value             = localSettings.Stable_Diffusion_WebUI_apiPort;
+        document.getElementById('Stable_Diffusion_WebUI_apiHost').value             = localSettings.Stable_Diffusion_WebUI_apiHost;
+        text2img_basePrompt.text2img_prompt                           = localSettings.text2img_basePrompt_text2img_prompt;
+        text2img_basePrompt.text2img_negativePrompt                   = localSettings.text2img_basePrompt_text2img_negativePrompt;
+        text2img_basePrompt.text2img_seed                             = localSettings.text2img_basePrompt_text2img_seed;
+        text2img_basePrompt.text2img_cfg_scale                        = localSettings.text2img_basePrompt_text2img_cfg_scale;
+        text2img_basePrompt.text2img_width                            = localSettings.text2img_basePrompt_text2img_width;
+        text2img_basePrompt.text2img_height                           = localSettings.text2img_basePrompt_text2img_height;
+        text2img_basePrompt.text2img_samplingMethod                   = localSettings.text2img_basePrompt_text2img_samplingMethod;
+        text2img_basePrompt.text2img_samplingSteps                    = localSettings.text2img_basePrompt_text2img_samplingSteps;
+        text2img_basePrompt.text2img_scheduler                        = localSettings.text2img_basePrompt_text2img_scheduler;
+        text2img_basePrompt.text2img_model                            = localSettings.text2img_basePrompt_text2img_model;
+        text2img_basePrompt.text2img_hr_upscaler                      = localSettings.text2img_basePrompt_text2img_hr_upscaler;
+        text2img_basePrompt.text2img_basePrompt_hr_scale              = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale;
+        text2img_basePrompt.text2img_basePrompt_hr_step               = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step;
+        text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength;
+
+        createToast("Settings Load Completed! (Local storage)", "");
+    } else {
+      createToast("Settings Load Failed! (Local storage)", "Settings not found.");
+    }
+  });
 
   saveButton.addEventListener("click", function () {
     if (stateStack.length === 0) {
       createErrorToast("Save Error", "Not Found.");
       return;
     }
-    createToast("Save Start!", "");
+    createToast("Save Project Start!", "");
     const startTime = performance.now();
     var zip = new JSZip();
 
@@ -61,7 +120,8 @@ document.addEventListener("DOMContentLoaded", function () {
     fileInput.onchange = function () {
       var file = this.files[0];
       if (file) {
-        createToast("Load Start!", "");
+        createToast("Load Project Start!", "");
+
         const startTime = performance.now();
         JSZip.loadAsync(file).then(function (zip) {
           stateStack = [];

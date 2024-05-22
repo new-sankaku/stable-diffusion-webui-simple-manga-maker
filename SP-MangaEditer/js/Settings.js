@@ -16,8 +16,8 @@ var clipAreaCoords = {
   width: canvas.width,
   height: canvas.height,
 };
-var svgPagging = 20;
 
+var svgPagging = 20;
 var stableDiffusionWebUIPort = 7860;
 var stableDiffusionWebUIHost = "127.0.0.1";
 

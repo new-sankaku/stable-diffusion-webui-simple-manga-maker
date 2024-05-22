@@ -1,6 +1,6 @@
 function updateSliderValue(sliderId, displayId) {
   document.querySelector(sliderId).addEventListener("input", function() {
-      document.querySelector(displayId).textContent = parseFloat(this.value).toFixed(2);
+      document.querySelector(displayId).textContent = parseFloat(this.value).toFixed(3);
   });
 }
 
