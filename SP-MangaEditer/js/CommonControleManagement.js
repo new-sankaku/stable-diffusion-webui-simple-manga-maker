@@ -1,6 +1,6 @@
 
 function attachControlEvents() {
-	['angle-control', 'scale-control', 'top-control', 'left-control', 'skewX-control', 'skewY-control'].forEach(function(id) {
+	['angle-control', 'scale-control', 'top-control', 'left-control', 'skewX-control', 'skewY-control', 'opacity-control'].forEach(function(id) {
 		document.getElementById(id).oninput = function() {
 			var activeObject = canvas.getActiveObject();
 			if (!activeObject) return;
@@ -23,11 +23,14 @@ function attachControlEvents() {
 				case 'skewY-control':
 					activeObject.set('skewY', parseInt(this.value, 10));
 					break;
+				case 'opacity-control':
+					var opacity = this.value/100
+					activeObject.set('opacity', opacity);
+					break;
 			}
 			activeObject.setCoords();
 			canvas.requestRenderAll();
-			
 		};
 	});
 }
-attachControlEvents();  
+attachControlEvents();

@@ -26,7 +26,7 @@ function updateLayerPanel() {
       nameDiv.contentEditable = true; // テキストを編集可能にする
 
       // テキストが変更されたときの処理
-      nameDiv.onblur = function () {
+      nameDiv.ondblclick = function () {
         layer.name = nameDiv.textContent;
         saveState();
       };
@@ -265,6 +265,7 @@ function updateControls(activeObject) {
     document.getElementById("left-control").value = 0;
     document.getElementById("skewX-control").value = 0;
     document.getElementById("skewY-control").value = 0;
+    document.getElementById("opacity-control").value = 1;
     
     document.getElementById("angleValue").innerText = 0.0.toFixed(1);
     document.getElementById("scaleValue").innerText = 1.0.toFixed(2);
@@ -272,6 +273,7 @@ function updateControls(activeObject) {
     document.getElementById("leftValue").innerText = 0.0.toFixed(1);
     document.getElementById("skewXValue").innerText = 0.0.toFixed(1);
     document.getElementById("skewYValue").innerText = 0.0.toFixed(1);
+    document.getElementById("opacityValue").innerText = 1.0.toFixed(1)*100;
     
     // 新たに追加されたコントロールのデフォルト値を設定
     document.getElementById("sepiaEffect").checked = false;
@@ -304,6 +306,7 @@ function updateControls(activeObject) {
   document.getElementById("left-control").value = activeObject.left || 0;
   document.getElementById("skewX-control").value = activeObject.skewX || 0;
   document.getElementById("skewY-control").value = activeObject.skewY || 0;
+  document.getElementById("opacity-control").value = activeObject.opacity*100 || 100;
   
   document.getElementById("angleValue").innerText = (activeObject.angle || 0).toFixed(1);
   document.getElementById("scaleValue").innerText = (activeObject.scaleX || 1.0).toFixed(2);
@@ -311,6 +314,7 @@ function updateControls(activeObject) {
   document.getElementById("leftValue").innerText = (activeObject.left || 0).toFixed(1);
   document.getElementById("skewXValue").innerText = (activeObject.skewX || 0).toFixed(1);
   document.getElementById("skewYValue").innerText = (activeObject.skewY || 0).toFixed(1);
+  document.getElementById("opacityValue").innerText = (activeObject.opacity*100 || 100).toFixed(1);
   
   // 新たに追加されたコントロールの値を設定
   var filters = activeObject.filters || [];

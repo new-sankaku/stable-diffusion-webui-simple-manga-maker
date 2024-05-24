@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
   updateSliderValue("#left-control", "#leftValue");
   updateSliderValue("#skewX-control", "#skewXValue");
   updateSliderValue("#skewY-control", "#skewYValue");
+  updateSliderValue("#opacity-control", "#opacityValue");
 });
 
 function applyFilters() {

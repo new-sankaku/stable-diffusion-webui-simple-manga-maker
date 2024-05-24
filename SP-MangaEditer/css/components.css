@@ -64,8 +64,9 @@
 #text-preview-area input[type="color"], 
 #panel-manager-items input[type="color"], 
 #speech-bubble-svg-preview-area1 input[type="color"] {
-    width: 15%;
-    margin: 4px;
+    width: 25px;
+    height: 15px;
+    margin: 2px;
     text-align: left; 
 }
 

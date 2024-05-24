@@ -224,11 +224,19 @@
             <div id="speech-bubble-area1" style="display: none;">
                 <div class="area-header">Bubble(Click only)</div>
                 <div id="speech-bubble-svg-preview-area1">
-                    <input type="checkbox" id="applyColorChange"> Enable Color
-                    <label>Background: <input type="color" id="bubbleFillColor" value="#FAFAFA"></label>
-                    <label>Line: <input type="color" id="bubbleStrokeColor" value="#404040"></label>
-                    <button onclick="updatebubbleObjectColors()"><i class="material-icons">format_color_fill</i>Color
-                        Change</button>
+                    <input type="checkbox" id="applySpeechbubbleChange"> Enable Settings
+                    <hr>
+                    <label>Background: 
+                        <input type="color" id="bubbleFillColor" value="#FFFFFF" oninput="changeSpeechBubbleBackgroundColor(this.value)">
+                    </label>
+                    <label>Line: 
+                        <input type="color" id="bubbleStrokeColor" value="#000000" oninput="changeSpeechBubbleLineColor(this.value)">
+                    </label>
+
+                    <label>Opacity:
+                        <input type="range" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100" step="0.1" value="100" oninput="changeSpeechBubbleOpacity(this.value)">
+                    </label>
+
                     <label style="display: none;">Line Size</label>
                     <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10"
                         value="3">
@@ -397,6 +405,11 @@
                             <label>SkewY</label>
                             <input type="range" id="skewY-control" min="-60" max="60" value="0">
                             <span id="skewYValue">0</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Opacity</label>
+                            <input type="range" id="opacity-control" name="opacity-control" min="0" max="100" step="0.1" value="100">
+                            <span id="opacityValue">0</span>
                         </div>
                     </div>
                 </div>
