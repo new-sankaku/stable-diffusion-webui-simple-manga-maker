@@ -42,10 +42,10 @@ function makeDraggable(element) {
     }
 }
 
-function closeFloatingWindowPromptClass() {
-    const floatingWindow = document.querySelector('.floating-windowPromptClass');
-    document.body.removeChild(floatingWindow);
-}
+// function closeFloatingWindowPromptClass() {
+//     const floatingWindow = document.querySelector('.floating-windowPromptClass');
+//     document.body.removeChild(floatingWindow);
+// }
 
 
 function isNotVisibleFloatingWindow() {

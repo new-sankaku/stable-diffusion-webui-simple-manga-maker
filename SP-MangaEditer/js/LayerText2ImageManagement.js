@@ -1,11 +1,7 @@
-var floatingWindowItem = null; 
-function openfloatingWindowItem(layer) {
-  if (floatingWindowItem) {
-    updatefloatingWindowItem(layer);
-    return;
-  }
+var floatingWindows = []; // 複数のフローティングウインドウを管理する配列
 
-  floatingWindowItem = document.createElement("div");
+function openfloatingWindowItem(layer) {
+  var floatingWindowItem = document.createElement("div");
   floatingWindowItem.className = "floating-windowPromptClass";
   floatingWindowItem.style.cursor = "move"; 
   floatingWindowItem.innerHTML = `
@@ -51,24 +47,26 @@ function openfloatingWindowItem(layer) {
     }
   });
 
-  makeDraggable(floatingWindowItem); 
-  updatefloatingWindowItem(layer);
+  makeDraggable(floatingWindowItem);
+  updatefloatingWindowItem(layer, floatingWindowItem);
 
   // Add event listener for the Save button
-  var text2imgItem_saveButton = document.getElementById("text2imgItem_saveButton");
+  var text2imgItem_saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
   text2imgItem_saveButton.onclick = function () {
     adjustToMultipleOfEight('text2img_height');
     adjustToMultipleOfEight('text2img_width');
 
     saveLayerText2ImageAttributes(layer);
-    closefloatingWindowItem();
+    closefloatingWindowItem(floatingWindowItem);
   };
 
   // Add event listener for the Close button
-  var text2imgItem_closeButton = document.getElementById("text2imgItem_closeButton");
+  var text2imgItem_closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
   text2imgItem_closeButton.onclick = function () {
-    closefloatingWindowItem();
+    closefloatingWindowItem(floatingWindowItem);
   };
+
+  floatingWindows.push(floatingWindowItem); // 新しいウインドウを配列に追加
 }
 
 function adjustToMultipleOfEight(elementId) {
@@ -79,7 +77,7 @@ function adjustToMultipleOfEight(elementId) {
   }
 }
 
-function updatefloatingWindowItem(layer) {
+function updatefloatingWindowItem(layer, floatingWindowItem) {
   var canvasRect = canvas.getElement().getBoundingClientRect();
   floatingWindowItem.style.left = 50 + "px";
   floatingWindowItem.style.top = 50 + "px";
@@ -100,20 +98,16 @@ function saveLayerText2ImageAttributes(layer) {
   saveState();
 }
 
-function closefloatingWindowItem() {
+function closefloatingWindowItem(floatingWindowItem) {
   if (floatingWindowItem) {
     document.body.removeChild(floatingWindowItem);
-    floatingWindowItem = null;
+    // 配列から削除
+    const index = floatingWindows.indexOf(floatingWindowItem);
+    if (index > -1) {
+      floatingWindows.splice(index, 1);
+    }
   }
 }
-
-function openBaseText2ImagefloatingWindow() {
-  openfloatingWindowItem(basePrompt);
-}
-
-
-
-
 
 function openText2ImageBaseFloatingWindow() {
   // フローティングウィンドウの作成
@@ -183,8 +177,8 @@ function openText2ImageBaseFloatingWindow() {
         <input type="number" id="text2img_basePrompt_hr_step" step="1" min="1" max="150" value="${text2img_basePrompt.text2img_basePrompt_hr_step}">
       </div>
 
-      <button onclick="updateText2ImgBasePrompt()">Save</button>
-      <button onclick="closeFloatingWindowPromptClass()">Close</button>
+      <button id="baseSaveButton">Save</button>
+      <button id="baseCloseButton">Close</button>
   `;
 
   document.body.appendChild(floatingWindow);
@@ -202,14 +196,23 @@ function openText2ImageBaseFloatingWindow() {
     }
   });
 
-
   makeDraggable(floatingWindow); 
   fetchModels();
   fetchSampler();
   fetchUpscaler();
+
+  var baseSaveButton = floatingWindow.querySelector("#baseSaveButton");
+  baseSaveButton.onclick = function () {
+    updateText2ImgBasePrompt(floatingWindow);
+  };
+
+  var baseCloseButton = floatingWindow.querySelector("#baseCloseButton");
+  baseCloseButton.onclick = function () {
+    closefloatingWindowItem(floatingWindow);
+  };
 }
 
-function updateText2ImgBasePrompt() {
+function updateText2ImgBasePrompt(floatingWindow) {
   adjustToMultipleOfEight('text2img_basePrompt_width');
   adjustToMultipleOfEight('text2img_basePrompt_height');                                                           
   text2img_basePrompt.text2img_prompt                           = document.getElementById('text2img_basePrompt_prompt').value;
@@ -231,7 +234,7 @@ function updateText2ImgBasePrompt() {
   text2img_basePrompt.text2img_samplingMethod = selectedSampler;
 
   console.log('Updated selectedModel:', selectedModel);
-  closeFloatingWindowPromptClass();
+  closefloatingWindowItem(floatingWindow);
 
   sendModelToServer();
 }
