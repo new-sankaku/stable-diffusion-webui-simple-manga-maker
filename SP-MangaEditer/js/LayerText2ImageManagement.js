@@ -1,4 +1,3 @@
-
 var floatingWindowItem = null; 
 function openfloatingWindowItem(layer) {
   if (floatingWindowItem) {

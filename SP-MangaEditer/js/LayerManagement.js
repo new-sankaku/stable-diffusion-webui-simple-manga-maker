@@ -39,7 +39,6 @@ function updateLayerPanel() {
       nameTextArea.style.outline = 'none';
 
       nameTextArea.oninput = function () {
-        console.log("nameTextArea oninput", nameTextArea.value);
         layer.name = nameTextArea.value;
       };
 
@@ -72,6 +71,35 @@ function updateLayerPanel() {
           spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
           areaHeader.appendChild(spinner);
 
+          StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
+          index++;
+        };
+
+        buttonsDiv.appendChild(runButton);
+      }
+
+      //一旦蓋閉じ
+      if (false && layer.type == 'image') {
+        var i2iButton = document.createElement("button");
+        i2iButton.innerHTML = '<i class="material-icons">settings</i> I2I';
+        i2iButton.onclick = function (e) {
+          e.stopPropagation();
+          openfloatingWindowItem(layer);
+        };
+        buttonsDiv.appendChild(i2iButton);
+
+        var runButton = document.createElement("button");
+        runButton.id = 'runButton-' + index;
+        runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
+        runButton.onclick = function (e) {
+          e.stopPropagation();
+          var areaHeader = document.querySelector('#layer-panel .area-header');
+          var spinner = document.createElement('span');
+          spinner.id = 'spinner-' + index;
+          spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
+          areaHeader.appendChild(spinner);
+
+          //I2Iにする
           StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
           index++;
         };
