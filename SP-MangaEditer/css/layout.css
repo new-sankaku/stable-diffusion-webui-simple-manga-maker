@@ -9,7 +9,7 @@
 }
 
 #layer-buttons {
-  margin-top: 13px;
+  margin-top: 5px;
   margin-right: 10px;
 }
 
@@ -111,6 +111,7 @@
 }
 
 #download-buttons {
+  font-size: 14px;
   margin-top: 5px;
   margin-right: 20px;
 }
@@ -126,7 +127,8 @@
 }
 
 #canvas-buttons {
-  margin-top: 15px;
+  font-size: 14px;
+  margin-top: 5px;
   margin-right: 20px;
 }
 
@@ -136,7 +138,7 @@
 
 #canvas-buttons button .material-icons, 
 #layer-buttons  button .material-icons{
-  font-size: 16px;
+  font-size: 14px;
   vertical-align: middle;
 }
 

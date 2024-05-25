@@ -1,0 +1,41 @@
+
+
+@keyframes glow {
+  50% {
+      box-shadow: 0 0 20px hsl(12, 100%, 60%);
+  }
+}
+
+[anim="glow"]:not(.toggled) {
+  animation: glow 2000ms infinite alternate;
+}
+
+:root {
+  --black: hsl(0, 0%, 13%);
+  --white: hsl(0, 0%, 96%);
+  --red: hsl(12, 90%, 63%);
+  --red-shadow: hsl(12, 100%, 60%);
+}
+
+article {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  padding-block: 16px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-basis: 180px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--white);
+  font-family: "aglet-mono-variable", sans-serif;
+}
