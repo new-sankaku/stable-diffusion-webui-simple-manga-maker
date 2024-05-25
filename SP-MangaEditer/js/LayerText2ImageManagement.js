@@ -10,7 +10,7 @@ function openfloatingWindowItem(layer) {
   floatingWindowItem.className = "floating-windowPromptClass";
   floatingWindowItem.style.cursor = "move"; 
   floatingWindowItem.innerHTML = `
-    <h4>Text2Image Settings</h4>
+    <h4>${layer.name} Settings</h4>
     <div class="form-group">
       <label for="text2img_prompt">Prompt:</label>
       <textarea id="text2img_prompt" rows="3">${layer.text2img_prompt || ''}</textarea>

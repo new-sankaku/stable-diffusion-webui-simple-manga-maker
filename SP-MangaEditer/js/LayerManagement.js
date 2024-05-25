@@ -8,32 +8,39 @@ function updateLayerPanel() {
       var layerDiv = document.createElement("div");
       var previewDiv = document.createElement("div");
       var detailsDiv = document.createElement("div");
-      var nameDiv = document.createElement("div");
+      var nameTextArea = document.createElement("textarea");
       var buttonsDiv = document.createElement("div");
       var deleteButton = document.createElement("button");
 
       layerDiv.className = "layer-item";
       previewDiv.className = "layer-preview";
       detailsDiv.className = "layer-details";
-      nameDiv.className = "layer-name";
+      nameTextArea.className = "layer-name";
       buttonsDiv.className = "layer-buttons";
 
       if (["image", "rect", "circle", "path", "group", "polygon"].includes(layer.type)) {
         putPreviewImage(layer, previewDiv);
       } else if (layer.type === "text" || layer.type === "textbox") {
         var fullText = layer.text;
-        nameDiv.textContent = fullText.substring(0, 20);
+        nameTextArea.value = fullText.substring(0, 20);
       } else if (layer.type === "verticalText") {
         var fullText = layer.getObjects().map(obj => obj.text).join('');
-        nameDiv.textContent = fullText.substring(0, 15);
+        nameTextArea.value = fullText.substring(0, 15);
       }
 
-      nameDiv.textContent = layer.name || nameDiv.textContent || layer.type + ` ${index + 1}`;
-      nameDiv.contentEditable = true;
+      nameTextArea.value = layer.name || nameTextArea.value || layer.type + ` ${index + 1}`;
+      layer.name = nameTextArea.value;
+      nameTextArea.rows = 1; 
+      nameTextArea.style.resize = 'none'; 
+      nameTextArea.style.width = '100%';  
+      nameTextArea.style.boxSizing = 'border-box';  
+      nameTextArea.style.border = 'none'; 
+      nameTextArea.style.borderBottom = '1px solid #cccccc';
+      nameTextArea.style.outline = 'none';
 
-      nameDiv.ondblclick = function () {
-        layer.name = nameDiv.textContent;
-        saveState();
+      nameTextArea.oninput = function () {
+        console.log("nameTextArea oninput", nameTextArea.value);
+        layer.name = nameTextArea.value;
       };
 
       deleteButton.textContent = "✕";
@@ -43,7 +50,7 @@ function updateLayerPanel() {
         removeLayer(layer);
       };
 
-      detailsDiv.appendChild(nameDiv);
+      detailsDiv.appendChild(nameTextArea);
 
       if (layer.isPanel) {
         var t2iButton = document.createElement("button");
@@ -90,6 +97,7 @@ function updateLayerPanel() {
     }
   });
 }
+
 
 function calculateCenter(layer) {
   //console.log("calculateCenter:", layer.left, layer.width, layer.top, layer.height );
