@@ -18,6 +18,11 @@ var clipAreaCoords = {
 };
 
 var svgPagging = 20;
+document.getElementById('marginFromPanel').addEventListener('input', function() {
+  svgPagging = parseInt(this.value, 20);
+});
+
+
 var stableDiffusionWebUIPort = 7860;
 var stableDiffusionWebUIHost = "127.0.0.1";
 
