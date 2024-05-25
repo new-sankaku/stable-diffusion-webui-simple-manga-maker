@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+document.getElementById('SD_WebUI_pingCheck').addEventListener('change', function() {
+    sdwebui_checkAPIStatus();
+});
+
 var StableDiffusionWebUI_API_ping      = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/internal/ping'
 var StableDiffusionWebUI_API_sampler   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/samplers'
 var StableDiffusionWebUI_API_scheduler = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/schedulers'
