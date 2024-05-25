@@ -1,4 +1,5 @@
-function createToast(title, message) {
+
+function createToast(title, messages) {
     const container = document.getElementById('toastContainer');
     const toastId = `toast-${Date.now()}`;
 
@@ -6,13 +7,14 @@ function createToast(title, message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.id = toastId;
+    toast.style.height = '80px'; // 初期高さを設定
     toast.innerHTML = `
         <div class="toast-header">
             <strong class="me-auto">${title}</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            ${message}
+            <div id="toastMessageContainer"></div>
             <div class="progress" style="height: 5px;">
                 <div class="progress-bar" role="progressbar" style="width: 100%;"></div>
             </div>
@@ -24,12 +26,41 @@ function createToast(title, message) {
 
     // トーストを初期化して表示
     const bsToast = new bootstrap.Toast(toast, {
-        autohide: true,
-        delay: 3500
+        autohide: false
     });
     bsToast.show();
 
-    // プログレスバーのアニメーション
+    // メッセージを1行ずつ描画
+    const messageContainer = toast.querySelector('#toastMessageContainer');
+    let messageIndex = 0;
+    const messageInterval = 300; // ミリ秒
+    const lineHeight = 24; // 各行の高さを設定
+
+    const showNextMessage = () => {
+        if (messageIndex < messages.length) {
+            const messageLine = document.createElement('div');
+            messageLine.className = 'line';
+            messageLine.style.animationDelay = '0s'; // アニメーションディレイを0に設定
+            messageLine.textContent = messages[messageIndex];
+            messageContainer.appendChild(messageLine);
+            messageIndex++;
+            // トーストの高さを増加させ、同時にメッセージを描画
+            toast.style.height = `${80 + (messageIndex * lineHeight)}px`;
+            setTimeout(showNextMessage, messageInterval);
+        } else {
+            // 全てのメッセージが表示された後にプログレスバーを開始
+            startProgressBar(toast);
+        }
+    };
+
+    showNextMessage();
+
+    toast.addEventListener('hidden.bs.toast', function () {
+        toast.style.animation = 'fade-out 1s forwards';
+    });
+}
+
+function startProgressBar(toast) {
     const progressBar = toast.querySelector('.progress-bar');
     const interval = 50; // ミリ秒
     const totalDuration = 3500; // ミリ秒
@@ -37,53 +68,11 @@ function createToast(title, message) {
     const timer = setInterval(() => {
         width -= (interval / totalDuration * 100);
         progressBar.style.width = `${width}%`;
-        if (width <= 0) clearInterval(timer);
+        if (width <= 0) {
+            clearInterval(timer);
+            // トーストを自動的に閉じる
+            const bsToast = bootstrap.Toast.getInstance(toast);
+            bsToast.hide();
+        }
     }, interval);
-
-    toast.addEventListener('hidden.bs.toast', function () {
-        clearInterval(timer);
-    });
-}
-
-
-function createErrorToast(title, message) {
-    const container = document.getElementById('toastContainer');
-    const toastId = `toast-${Date.now()}`;
-
-    const toast = document.createElement('div');
-    toast.className = 'toast bg-danger text-white';
-    toast.id = toastId;
-    toast.innerHTML = `
-        <div class="toast-header bg-danger text-white">
-            <strong class="me-auto">${title}</strong>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            ${message}
-            <div class="progress" style="height: 5px;">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 100%;"></div>
-            </div>
-        </div>
-    `;
-
-    container.appendChild(toast);
-    const bsToast = new bootstrap.Toast(toast, {
-        autohide: true,
-        delay: 3500
-    });
-    bsToast.show();
-
-    const progressBar = toast.querySelector('.progress-bar');
-    const interval = 50;
-    const totalDuration = 3500;
-    let width = 100;
-    const timer = setInterval(() => {
-        width -= (interval / totalDuration * 100);
-        progressBar.style.width = `${width}%`;
-        if (width <= 0) clearInterval(timer);
-    }, interval);
-
-    toast.addEventListener('hidden.bs.toast', function () {
-        clearInterval(timer);
-    });
 }

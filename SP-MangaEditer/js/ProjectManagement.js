@@ -5,11 +5,20 @@ document.addEventListener("DOMContentLoaded", function () {
   var settingsSave = document.getElementById("settingsSave");
   var settingsLoad = document.getElementById("settingsLoad");
 
-
-
   settingsSave.addEventListener("click", function () {
-    createToast("Settings Save Start! (Local storage)", "");
+    createToast('Settings Save', [
+      'Api port...',
+      'Api host...',
+      'Base Settings...',
+      'Dpi...',
+      'Grid Line Size...',
+      'Margin From Panel...',
+      'Save Completed!!'
+    ]);
     const localSettingsData = {
+        canvasDpi:                                                      document.getElementById('outputDpi').value,
+        canvasGridLineSize:                                             document.getElementById('gridSizeInput').value,
+        canvasMarginFromPanel:                                          document.getElementById('marginFromPanel').value,
         Stable_Diffusion_WebUI_apiPort:                                 document.getElementById('Stable_Diffusion_WebUI_apiPort').value,
         Stable_Diffusion_WebUI_apiHost:                                 document.getElementById('Stable_Diffusion_WebUI_apiHost').value,
         text2img_basePrompt_text2img_prompt:                            text2img_basePrompt.text2img_prompt, 
@@ -28,34 +37,44 @@ document.addEventListener("DOMContentLoaded", function () {
         text2img_basePrompt_text2img_basePrompt_hr_denoising_strength:  text2img_basePrompt.text2img_basePrompt_hr_denoising_strength
     };
     localStorage.setItem('localSettingsData', JSON.stringify(localSettingsData));
-    createToast("Settings Save Completed! (Local storage)", "");
   });
 
+
+
   settingsLoad.addEventListener("click", function () {
-    createToast("Settings Load Start! (Local storage)", "");
+    createToast('Settings Load', [
+      'Api port...',
+      'Api host...',
+      'Base Settings...',
+      'Dpi...',
+      'Grid Line Size...',
+      'Margin From Panel...',
+      'Load Completed!!'
+    ]);
 
     const localSettingsData = localStorage.getItem('localSettingsData');
     if (localSettingsData) {
         const localSettings = JSON.parse(localSettingsData);
+        document.getElementById('outputDpi').value                      = localSettings.canvasDpi || "300";
+        document.getElementById('gridSizeInput').value                  = localSettings.canvasGridLineSize || "10";
+        document.getElementById('marginFromPanel').value                = localSettings.canvasMarginFromPanel || "20";
+        document.getElementById('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
+        document.getElementById('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
+        text2img_basePrompt.text2img_prompt                             = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
+        text2img_basePrompt.text2img_negativePrompt                     = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt ;
+        text2img_basePrompt.text2img_seed                               = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
+        text2img_basePrompt.text2img_cfg_scale                          = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
+        text2img_basePrompt.text2img_width                              = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
+        text2img_basePrompt.text2img_height                             = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
+        text2img_basePrompt.text2img_samplingMethod                     = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
+        text2img_basePrompt.text2img_samplingSteps                      = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
+        text2img_basePrompt.text2img_scheduler                          = localSettings.text2img_basePrompt_text2img_scheduler || text2img_basePrompt.text2img_scheduler;
+        text2img_basePrompt.text2img_model                              = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
+        text2img_basePrompt.text2img_hr_upscaler                        = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
+        text2img_basePrompt.text2img_basePrompt_hr_scale                = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
+        text2img_basePrompt.text2img_basePrompt_hr_step                 = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
+        text2img_basePrompt.text2img_basePrompt_hr_denoising_strength   = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
 
-        document.getElementById('Stable_Diffusion_WebUI_apiPort').value             = localSettings.Stable_Diffusion_WebUI_apiPort;
-        document.getElementById('Stable_Diffusion_WebUI_apiHost').value             = localSettings.Stable_Diffusion_WebUI_apiHost;
-        text2img_basePrompt.text2img_prompt                           = localSettings.text2img_basePrompt_text2img_prompt;
-        text2img_basePrompt.text2img_negativePrompt                   = localSettings.text2img_basePrompt_text2img_negativePrompt;
-        text2img_basePrompt.text2img_seed                             = localSettings.text2img_basePrompt_text2img_seed;
-        text2img_basePrompt.text2img_cfg_scale                        = localSettings.text2img_basePrompt_text2img_cfg_scale;
-        text2img_basePrompt.text2img_width                            = localSettings.text2img_basePrompt_text2img_width;
-        text2img_basePrompt.text2img_height                           = localSettings.text2img_basePrompt_text2img_height;
-        text2img_basePrompt.text2img_samplingMethod                   = localSettings.text2img_basePrompt_text2img_samplingMethod;
-        text2img_basePrompt.text2img_samplingSteps                    = localSettings.text2img_basePrompt_text2img_samplingSteps;
-        text2img_basePrompt.text2img_scheduler                        = localSettings.text2img_basePrompt_text2img_scheduler;
-        text2img_basePrompt.text2img_model                            = localSettings.text2img_basePrompt_text2img_model;
-        text2img_basePrompt.text2img_hr_upscaler                      = localSettings.text2img_basePrompt_text2img_hr_upscaler;
-        text2img_basePrompt.text2img_basePrompt_hr_scale              = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale;
-        text2img_basePrompt.text2img_basePrompt_hr_step               = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step;
-        text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength;
-
-        createToast("Settings Load Completed! (Local storage)", "");
     } else {
       createToast("Settings Load Failed! (Local storage)", "Settings not found.");
     }
@@ -63,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   saveButton.addEventListener("click", function () {
     if (stateStack.length === 0) {
-      createErrorToast("Save Error", "Not Found.");
+      createToast("Save Error", "Not Found.");
       return;
     }
     createToast("Save Project Start!", "");
