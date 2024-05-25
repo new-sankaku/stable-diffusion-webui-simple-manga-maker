@@ -360,6 +360,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function addSquare() {
+
+  var strokeWidthScale = canvas.width / 700;
+  var strokeWidth = 2 * strokeWidthScale;
+
   var square = new fabric.Polygon(
     [
       { x: 0, y: 0 },
@@ -371,7 +375,7 @@ function addSquare() {
       left: 50,
       top: 50,
       fill: "#FFFFFF",
-      strokeWidth: 2,
+      strokeWidth: strokeWidth,
       strokeUniform: true,
       stroke: "black",
       objectCaching: false,
@@ -388,16 +392,18 @@ function addSquare() {
     }
   );
   canvas.add(square);
+  updateLayerPanel();
 }
 
 function addPentagon() {
-  var side = 150; // 五角形の一辺の長さ
-  var angle = 54; // 中心から頂点までの角度（度数法）
+  var side = 150;
+  var angle = 54;
 
-  // 五角形の各頂点の計算
+  var strokeWidthScale = canvas.width / 700;
+  var strokeWidth = 2 * strokeWidthScale;
+
   var points = [];
   for (var i = 0; i < 5; i++) {
-    // 角度をラジアンに変換し、頂点の座標を計算
     var x = side * Math.cos((Math.PI / 180) * (angle + i * 72));
     var y = side * Math.sin((Math.PI / 180) * (angle + i * 72));
     points.push({ x: x, y: y });
@@ -407,7 +413,7 @@ function addPentagon() {
     left: 150,
     top: 150,
     fill: "#FFFFFF",
-    strokeWidth: 2,
+    strokeWidth: strokeWidth,
     strokeUniform: true,
     stroke: "black",
     objectCaching: false,
@@ -424,6 +430,8 @@ function addPentagon() {
   });
 
   canvas.add(pentagon);
+  updateLayerPanel();
+
 }
 
 function Edit() {
@@ -453,6 +461,7 @@ function Edit() {
   }
   poly.hasBorders = !poly.edit;
   canvas.requestRenderAll();
+  updateLayerPanel();
 }
 
 function changeStrokeWidth(value) {
