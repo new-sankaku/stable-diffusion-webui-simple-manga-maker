@@ -8,10 +8,6 @@
   margin-right: 10px;
 }
 
-#layer-buttons {
-  margin-top: 5px;
-  margin-right: 10px;
-}
 
 #canvas-container {
   width: 100%;
@@ -39,50 +35,6 @@
   background-color: #ffe9cb;
   text-align: center;
 }
-
-#layer-content {
-  overflow-y: auto;
-  border: 2px solid #4D4D4D;
-  height: 750px;
-}
-
-.layer-item {
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  border-bottom: 1px solid #EEE;
-  transition: background-color 0.3s;
-}
-
-.layer-item:hover, .layer-item.active {
-  background-color: #ffdfa7;
-}
-
-.layer-preview {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
-  background-size: cover;
-  border: 1px solid #ffc560;
-}
-
-.layer-name {
-  font-size: 13px;
-  flex-grow: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-
-#layer-panel {
-  min-width: 10%;
-  max-width: 18%;
-  flex: 0 0 20%;
-  max-width: 25%;
-  min-width: 15%;
-}
-
 
 #sidebar {
   margin-right: 10px;
@@ -136,8 +88,7 @@
   color: #FFFFFF;
 }
 
-#canvas-buttons button .material-icons, 
-#layer-buttons  button .material-icons{
+#canvas-buttons button .material-icons{
   font-size: 14px;
   vertical-align: middle;
 }

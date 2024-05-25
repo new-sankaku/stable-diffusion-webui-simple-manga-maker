@@ -1,0 +1,63 @@
+
+
+#layer-content {
+  overflow-y: auto;
+  border: 2px solid #4D4D4D;
+  height: 750px;
+}
+
+.layer-item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #EEE;
+  transition: background-color 0.3s;
+}
+
+.layer-item:hover, .layer-item.active {
+  background-color: #ffdfa7;
+}
+
+.layer-preview {
+  width: 45px;
+  height: 45px;
+  margin-right: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; 
+  border: 1px solid #ffc560;
+}
+
+.layer-details {
+  flex: 2;
+}
+
+.layer-name {
+  font-size: 14px;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layer-buttons {
+  display: flex;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+#layer-buttons button .material-icons{
+  font-size: 12px;
+}
+.layer-buttons button {
+  padding: 1px 1px;
+  
+}
+
+
+#layer-panel {
+  min-width: 10%;
+  max-width: 18%;
+  flex: 0 0 20%;
+  max-width: 25%;
+  min-width: 15%;
+}

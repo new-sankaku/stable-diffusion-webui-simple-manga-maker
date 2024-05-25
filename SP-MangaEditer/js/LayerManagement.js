@@ -1,5 +1,3 @@
-
-
 function updateLayerPanel() {
   var layers = canvas.getObjects();
   var layerContent = document.getElementById("layer-content");
@@ -8,11 +6,20 @@ function updateLayerPanel() {
   layers.slice().reverse().forEach(function (layer, index) {
     if (!layer.excludeFromLayerPanel) {
       var layerDiv = document.createElement("div");
+      var previewDiv = document.createElement("div");
+      var detailsDiv = document.createElement("div");
       var nameDiv = document.createElement("div");
+      var buttonsDiv = document.createElement("div");
       var deleteButton = document.createElement("button");
 
+      layerDiv.className = "layer-item";
+      previewDiv.className = "layer-preview";
+      detailsDiv.className = "layer-details";
+      nameDiv.className = "layer-name";
+      buttonsDiv.className = "layer-buttons";
+
       if (["image", "rect", "circle", "path", "group", "polygon"].includes(layer.type)) {
-        putPreviewImage(layer, layerDiv);
+        putPreviewImage(layer, previewDiv);
       } else if (layer.type === "text" || layer.type === "textbox") {
         var fullText = layer.text;
         nameDiv.textContent = fullText.substring(0, 20);
@@ -21,11 +28,9 @@ function updateLayerPanel() {
         nameDiv.textContent = fullText.substring(0, 15);
       }
 
-      nameDiv.className = "layer-name";
       nameDiv.textContent = layer.name || nameDiv.textContent || layer.type + ` ${index + 1}`;
-      nameDiv.contentEditable = true; // テキストを編集可能にする
+      nameDiv.contentEditable = true;
 
-      // テキストが変更されたときの処理
       nameDiv.ondblclick = function () {
         layer.name = nameDiv.textContent;
         saveState();
@@ -38,9 +43,7 @@ function updateLayerPanel() {
         removeLayer(layer);
       };
 
-      layerDiv.setAttribute("data-id", layer.id);
-      layerDiv.className = "layer-item";
-      layerDiv.appendChild(nameDiv);
+      detailsDiv.appendChild(nameDiv);
 
       if (layer.isPanel) {
         var t2iButton = document.createElement("button");
@@ -49,28 +52,32 @@ function updateLayerPanel() {
           e.stopPropagation();
           openfloatingWindowItem(layer);
         };
-        layerDiv.appendChild(t2iButton);
+        buttonsDiv.appendChild(t2iButton);
 
         var runButton = document.createElement("button");
         runButton.id = 'runButton-' + index;
         runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
         runButton.onclick = function (e) {
-            e.stopPropagation();
-            var areaHeader = document.querySelector('#layer-panel .area-header');
-            var spinner = document.createElement('span');
-            spinner.id = 'spinner-' + index;
-            spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
-            areaHeader.appendChild(spinner);
-    
-            StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
-            index++;
+          e.stopPropagation();
+          var areaHeader = document.querySelector('#layer-panel .area-header');
+          var spinner = document.createElement('span');
+          spinner.id = 'spinner-' + index;
+          spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
+          areaHeader.appendChild(spinner);
+
+          StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
+          index++;
         };
-    
-        
-        layerDiv.appendChild(runButton);
+
+        buttonsDiv.appendChild(runButton);
       }
 
-      layerDiv.appendChild(deleteButton);
+      buttonsDiv.appendChild(deleteButton);
+
+      layerDiv.setAttribute("data-id", layer.id);
+      layerDiv.appendChild(previewDiv);
+      layerDiv.appendChild(detailsDiv);
+      detailsDiv.appendChild(buttonsDiv);
 
       layerDiv.onclick = function () {
         canvas.setActiveObject(layer);
