@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabric.js Snapping Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="c" width="800" height="600"></canvas>
+    <script>
+        // SnappyRectクラスの定義
+        const SnappyRect = fabric.util.createClass(fabric.Rect, {
+            initialize: function(options) {
+                options || (options = {});
+                this.callSuper("initialize", options);
+                this.guides = {};
+            },
+
+            _render: function(ctx) {
+                this.callSuper("_render", ctx);
+                this._drawObjectGuides();
+            },
+
+            _drawObjectGuides: function() {
+                const w = this.getScaledWidth();
+                const h = this.getScaledHeight();
+                this._drawGuide("top", this.top);
+                this._drawGuide("left", this.left);
+                this._drawGuide("centerX", this.left + w / 2);
+                this._drawGuide("centerY", this.top + h / 2);
+                this._drawGuide("right", this.left + w);
+                this._drawGuide("bottom", this.top + h);
+                this.setCoords();
+            },
+
+            _drawGuide: function(side, pos) {
+                let ln;
+                const color = "rgb(178, 207, 255)";
+                const lineProps = {
+                    left: 0,
+                    top: 0,
+                    evented: true,
+                    stroke: color,
+                    selectable: false,
+                    opacity: 1
+                };
+
+                if (side === "top" || side === "bottom") {
+                    ln = new fabric.Line([0, pos, this.canvas.width, pos], lineProps);
+                } else {
+                    ln = new fabric.Line([pos, 0, pos, this.canvas.height], lineProps);
+                }
+
+                if (this.guides[side] instanceof fabric.Line) {
+                    this.canvas.remove(this.guides[side]);
+                    delete this.guides[side];
+                }
+
+                this.guides[side] = ln;
+                this.canvas.add(ln);
+            }
+        });
+
+        // SnappyPolygonクラスの定義
+        const SnappyPolygon = fabric.util.createClass(fabric.Polygon, {
+            initialize: function(points, options) {
+                options || (options = {});
+                this.callSuper("initialize", points, options);
+                this.guides = {};
+            },
+
+            _render: function(ctx) {
+                this.callSuper("_render", ctx);
+                this._drawObjectGuides();
+            },
+
+            _drawObjectGuides: function() {
+                const bounds = this.getBoundingRect();
+                this._drawGuide("top", bounds.top);
+                this._drawGuide("left", bounds.left);
+                this._drawGuide("centerX", bounds.left + bounds.width / 2);
+                this._drawGuide("centerY", bounds.top + bounds.height / 2);
+                this._drawGuide("right", bounds.left + bounds.width);
+                this._drawGuide("bottom", bounds.top + bounds.height);
+                this.setCoords();
+            },
+
+            _drawGuide: function(side, pos) {
+                let ln;
+                const color = "rgb(178, 207, 255)";
+                const lineProps = {
+                    left: 0,
+                    top: 0,
+                    evented: true,
+                    stroke: color,
+                    selectable: false,
+                    opacity: 1
+                };
+
+                if (side === "top" || side === "bottom") {
+                    ln = new fabric.Line([0, pos, this.canvas.width, pos], lineProps);
+                } else {
+                    ln = new fabric.Line([pos, 0, pos, this.canvas.height], lineProps);
+                }
+
+                if (this.guides[side] instanceof fabric.Line) {
+                    this.canvas.remove(this.guides[side]);
+                    delete this.guides[side];
+                }
+
+                this.guides[side] = ln;
+                this.canvas.add(ln);
+            }
+        });
+
+        // キャンバスとSnappyRect、SnappyPolygonのインスタンスを作成
+        const canvas = new fabric.Canvas('c');
+        const rect1 = new SnappyRect({
+            width: 100,
+            height: 100,
+            fill: 'red',
+            left: 100,
+            top: 100
+        });
+
+        const rect2 = new SnappyRect({
+            width: 100,
+            height: 100,
+            fill: 'blue',
+            left: 300,
+            top: 100
+        });
+
+        const polygon = new SnappyPolygon([
+            { x: 50, y: 0 },
+            { x: 100, y: 50 },
+            { x: 50, y: 100 },
+            { x: 0, y: 50 }
+        ], {
+            fill: 'green',
+            left: 200,
+            top: 200
+        });
+
+        canvas.add(rect1, rect2, polygon);
+
+        // スナッピング機能を追加
+        canvas.on('object:moving', function(e) {
+            const obj = e.target;
+            const objects = canvas.getObjects().filter(o => o !== obj);
+
+            objects.forEach(target => {
+                if (Math.abs(obj.left - target.left) < 10) {
+                    obj.left = target.left;
+                }
+                if (Math.abs(obj.top - target.top) < 10) {
+                    obj.top = target.top;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
