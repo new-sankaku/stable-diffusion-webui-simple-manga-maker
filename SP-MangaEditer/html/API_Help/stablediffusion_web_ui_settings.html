@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="title">Stable Diffusion WebUI API Setup Guide</title>
+    <title data-i18n="title">Stable Diffusion WebUI(or Forge) API Setup Guide</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,7 +71,7 @@
         <h2 data-i18n="config_steps">API Setup Steps</h2>
         <p data-i18n="config_file_edit">Edit the <code>webui-user.bat</code> file within the Stable Diffusion WebUI folder to set environment variables in COMMANDLINE_ARGS.</p>
         <p data-i18n="example_config">The configuration file is as follows</p>
-        <img src="API_settings.jpg" width="70%" alt="webui-user.bat settings example" border="2">
+        <img src="API_settings.jpg" width="60%" alt="webui-user.bat settings example" border="2">
         
         <h2 data-i18n="env_variables">Environment Variables to Set</h2>
 
@@ -88,21 +88,21 @@
         <h3 data-i18n="detailed_setup_spmanga">Detailed Setup: Using SP-MangaEditer standalone</h3>
         <p data-i18n="usage_detail_spmanga">If you are using SP-MangaEditer standalone (SP-MangaEditer/index.html), please set the following environment variables.</p>
         <code data-i18n="detailed_code_cors">COMMANDLINE_ARGS=--cors-allow-origins "*" --api</code>
-        <p data-i18n="cors_note"><strong>Note:</strong> It is not possible to set <code>--cors-allow-origins</code> when launching from Stability Matrix, hence access is not available. You must execute webui-user.bat.</p>
         <br>
-
-        <p data-i18n="api_deprecation_notice"><strong>Note:</strong> The API feature has been removed in the Stable diffusion WebUI Forge edition, hence running the API is not possible. Using the WebUI is required.</p>
+        <h3>Stability Matrix</h3>
+        <p data-i18n="cors_note"><strong>Note:</strong> It is not possible to set <code>--cors-allow-origins</code> when launching from Stability Matrix, hence access is not available. You must execute webui-user.bat.</p>
+        <img src="StablityMatrix.jpg" width="60%" alt="webui-user.bat settings example" border="2">
     </div>
 
     <script>
         const resources = {
             en: {
                 translation: {
-                    "title": "Stable Diffusion WebUI API Setup Guide",
-                    "header": "How to Setup the Stable Diffusion WebUI API",
-                    "intro": "This guide explains how to configure the Stable Diffusion WebUI API using SP-MangaEditer.",
+                    "title": "Stable Diffusion WebUI(or Forge) API Setup Guide",
+                    "header": "How to Setup the Stable Diffusion WebUI(or Forge) API",
+                    "intro": "This guide explains how to configure the Stable Diffusion WebUI(or Forge) API using SP-MangaEditer.",
                     "config_steps": "API Setup Steps",
-                    "config_file_edit": "Edit the 'webui-user.bat' file within the Stable Diffusion WebUI folder to set environment variables in COMMANDLINE_ARGS.",
+                    "config_file_edit": "Edit the 'webui-user.bat' file within the Stable Diffusion WebUI(or Forge) folder to set environment variables in COMMANDLINE_ARGS.",
                     "example_config": "The configuration file is as follows",
                     "env_variables": "Environment Variables to Set",
                     "simple_setup": "Simple Setup: For those who find detailed access settings cumbersome",
@@ -114,17 +114,16 @@
                     "detailed_setup_spmanga": "Detailed Setup: Using SP-MangaEditer standalone",
                     "usage_detail_spmanga": "If you are using SP-MangaEditer standalone (SP-MangaEditer/index.html), please set the following environment variables.",
                     "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
-                    "cors_note": "Note: It is not possible to set '--cors-allow-origins' when launching from Stability Matrix, hence access is not available. You must execute webui-user.bat.",
-                    "api_deprecation_notice": "Note: The API feature has been removed in the Stable diffusion WebUI Forge edition, hence running the API is not possible. Using the WebUI is required."
+                    "cors_note": "Note: When launching from Stability Matrix, please set it in Extra Launch Arguments."
                 }
             },
             ja: {
                 translation: {
-                    "title": "Stable Diffusion WebUI API設定ガイド",
-                    "header": "Stable Diffusion WebUI APIの設定方法",
-                    "intro": "このガイドでは、SP-MangaEditerを使用してStable Diffusion WebUIのAPIを使用するための設定を説明します。",
+                    "title": "Stable Diffusion WebUI(or Forge) API設定ガイド",
+                    "header": "Stable Diffusion WebUI(or Forge) APIの設定方法",
+                    "intro": "このガイドでは、SP-MangaEditerを使用してStable Diffusion WebUI(or Forge)のAPIを使用するための設定を説明します。",
                     "config_steps": "API設定手順",
-                    "config_file_edit": "Stable Diffusion WebUIフォルダ内の'webui-user.bat'ファイルを編集してCOMMANDLINE_ARGSに環境変数を設定します。",
+                    "config_file_edit": "Stable Diffusion WebUI(or Forge)フォルダ内の'webui-user.bat'ファイルを編集してCOMMANDLINE_ARGSに環境変数を設定します。",
                     "example_config": "設定ファイルは以下のとおりです",
                     "env_variables": "設定する環境変数",
                     "simple_setup": "簡単な設定：細かいアクセス設定が面倒な方向け",
@@ -136,17 +135,16 @@
                     "detailed_setup_spmanga": "詳細な設定：SP-MangaEditer単体での利用",
                     "usage_detail_spmanga": "SP-MangaEditerを単体で利用する場合（SP-MangaEditer/index.html）、以下の環境変数を設定してください。",
                     "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
-                    "cors_note": "注意：Stablity Matrixからの起動では'--cors-allow-origins'が設定できないため、アクセスできません。webui-user.batを実行する必要があります。",
-                    "api_deprecation_notice": "注意：Stable diffusion WebUI Forge版ではAPI機能が削除されているため、APIを実行することはできません。WebUIを使う必要があります。"
+                    "cors_note": "注意：Stablity Matrixからの起動ではExtra Launch Argumentsに設定してください。"
                 }
             },
             ko: {
                 translation: {
-                    "title": "Stable Diffusion WebUI API 설정 가이드",
-                    "header": "Stable Diffusion WebUI API 설정 방법",
-                    "intro": "이 가이드에서는 SP-MangaEditer를 사용하여 Stable Diffusion WebUI의 API를 설정하는 방법을 설명합니다.",
+                    "title": "Stable Diffusion WebUI(or Forge) API 설정 가이드",
+                    "header": "Stable Diffusion WebUI(or Forge) API 설정 방법",
+                    "intro": "이 가이드에서는 SP-MangaEditer를 사용하여 Stable Diffusion WebUI(or Forge)의 API를 설정하는 방법을 설명합니다.",
                     "config_steps": "API 설정 절차",
-                    "config_file_edit": "Stable Diffusion WebUI 폴더 내의 'webui-user.bat' 파일을 편집하여 COMMANDLINE_ARGS에 환경 변수를 설정하십시오.",
+                    "config_file_edit": "Stable Diffusion WebUI(or Forge) 폴더 내의 'webui-user.bat' 파일을 편집하여 COMMANDLINE_ARGS에 환경 변수를 설정하십시오.",
                     "example_config": "구성 파일은 다음과 같습니다",
                     "env_variables": "설정할 환경 변수",
                     "simple_setup": "간단한 설정: 세부 접근 설정이 번거로운 사용자를 위한",
@@ -158,17 +156,16 @@
                     "detailed_setup_spmanga": "자세한 설정: SP-MangaEditer 단독 사용 시",
                     "usage_detail_spmanga": "SP-MangaEditer를 단독으로 사용하는 경우(SP-MangaEditer/index.html), 다음 환경 변수를 설정하십시오.",
                     "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
-                    "cors_note": "주의: Stability Matrix에서 시작할 때는 '--cors-allow-origins'을 설정할 수 없으므로 접근할 수 없습니다. webui-user.bat을 실행해야 합니다.",
-                    "api_deprecation_notice": "주의: Stable diffusion WebUI Forge 버전에서는 API 기능이 제거되었으므로 API를 실행할 수 없습니다. WebUI를 사용해야 합니다."
+                    "cors_note": "주의: Stability Matrix에서 실행할 때 Extra Launch Arguments에 설정하세요."
                 }
             },
             zh: {
                 translation: {
-                    "title": "Stable Diffusion WebUI API设置指南",
-                    "header": "如何设置Stable Diffusion WebUI API",
-                    "intro": "本指南说明了如何使用SP-MangaEditer配置Stable Diffusion WebUI的API。",
+                    "title": "Stable Diffusion WebUI(or Forge) API设置指南",
+                    "header": "如何设置Stable Diffusion WebUI(or Forge) API",
+                    "intro": "本指南说明了如何使用SP-MangaEditer配置Stable Diffusion WebUI(or Forge)的API。",
                     "config_steps": "API设置步骤",
-                    "config_file_edit": "编辑Stable Diffusion WebUI文件夹中的'webui-user.bat'文件，以在COMMANDLINE_ARGS中设置环境变量。",
+                    "config_file_edit": "编辑Stable Diffusion WebUI(or Forge)文件夹中的'webui-user.bat'文件，以在COMMANDLINE_ARGS中设置环境变量。",
                     "example_config": "配置文件如下",
                     "env_variables": "要设置的环境变量",
                     "simple_setup": "简易设置：适合不喜欢繁琐访问设置的用户",
@@ -180,17 +177,16 @@
                     "detailed_setup_spmanga": "详细设置：单独使用SP-MangaEditer",
                     "usage_detail_spmanga": "如果您正在单独使用SP-MangaEditer（SP-MangaEditer/index.html），请设置以下环境变量。",
                     "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
-                    "cors_note": "注意：从Stability Matrix启动时不能设置'--cors-allow-origins'，因此无法访问。您必须执行webui-user.bat。",
-                    "api_deprecation_notice": "注意：Stable diffusion WebUI Forge版中已删除API功能，因此无法运行API。必须使用WebUI。"
+                    "cors_note": "注意：从Stability Matrix启动时，请在额外启动参数中设置。"
                 }
             },
             fr: {
                 translation: {
-                    "title": "Guide de configuration de l'API Stable Diffusion WebUI",
-                    "header": "Comment configurer l'API Stable Diffusion WebUI",
-                    "intro": "Ce guide explique comment configurer l'API Stable Diffusion WebUI en utilisant SP-MangaEditer.",
+                    "title": "Guide de configuration de l'API Stable Diffusion WebUI(or Forge)",
+                    "header": "Comment configurer l'API Stable Diffusion WebUI(or Forge)",
+                    "intro": "Ce guide explique comment configurer l'API Stable Diffusion WebUI(or Forge) en utilisant SP-MangaEditer.",
                     "config_steps": "Étapes de configuration de l'API",
-                    "config_file_edit": "Éditez le fichier 'webui-user.bat' dans le dossier Stable Diffusion WebUI pour définir les variables d'environnement dans COMMANDLINE_ARGS.",
+                    "config_file_edit": "Éditez le fichier 'webui-user.bat' dans le dossier Stable Diffusion WebUI(or Forge) pour définir les variables d'environnement dans COMMANDLINE_ARGS.",
                     "example_config": "Le fichier de configuration est comme suit",
                     "env_variables": "Variables d'environnement à définir",
                     "simple_setup": "Configuration simple : Pour ceux qui trouvent les réglages d'accès détaillés fastidieux",
@@ -202,8 +198,7 @@
                     "detailed_setup_spmanga": "Configuration détaillée : Utilisation indépendante de SP-MangaEditer",
                     "usage_detail_spmanga": "Si vous utilisez SP-MangaEditer de manière indépendante (SP-MangaEditer/index.html), veuillez configurer les variables d'environnement suivantes.",
                     "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
-                    "cors_note": "Remarque : Il n'est pas possible de définir '--cors-allow-origins' lors du lancement à partir de Stability Matrix, donc l'accès n'est pas disponible. Vous devez exécuter webui-user.bat.",
-                    "api_deprecation_notice": "Remarque : La fonctionnalité API a été retirée dans l'édition Forge de Stable diffusion WebUI, par conséquent, il n'est pas possible d'exécuter l'API. L'utilisation du WebUI est nécessaire."
+                    "cors_note": "Remarque : Lors du lancement à partir de Stability Matrix, veuillez le définir dans les arguments de lancement supplémentaires."
                 }
             }
         };
