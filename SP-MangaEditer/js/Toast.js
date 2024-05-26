@@ -67,7 +67,12 @@ function createToast(title, messages) {
 
         showNextMessage();
     } else {
-        console.error('Invalid message type');
+        const messageLine = document.createElement('div');
+        messageLine.className = 'line';
+        messageLine.textContent = messages;
+        messageContainer.appendChild(messageLine);
+        toast.style.height = `${80 + lineHeight}px`;
+        startProgressBar(toast);
     }
 
     toast.addEventListener('hidden.bs.toast', function () {

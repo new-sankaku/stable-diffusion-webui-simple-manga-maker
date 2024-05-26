@@ -213,6 +213,8 @@ async function sdwebui_fetchText2Image(layer) {
 
   if( layer.text2img_seed == -2 ){
     seed = text2img_basePrompt.text2img_seed;
+  }else if( layer.text2img_seed > -1 ){
+    seed = layer.text2img_seed;
   }
   
   if( layer.text2img_width <= 0 ){
@@ -262,7 +264,7 @@ async function sdwebui_fetchText2Image(layer) {
       });
       const data = await response.json();
       // console.log("response", data);
-      return data.images[0];
+      return data;
   } catch (error) {
       createToast("Text2Image Error.", "check SD WebUI!")
       // console.error('Error fetching image:', error);
@@ -270,20 +272,20 @@ async function sdwebui_fetchText2Image(layer) {
 }
 
 async function sdwebui_generateText2Image(layer) {
-  const base64ImageData = await sdwebui_fetchText2Image(layer);
-  if (!base64ImageData) return null;
+  const responseData = await sdwebui_fetchText2Image(layer);
+  if (!responseData) return null;
+  const base64ImageData = responseData.images[0];
   const imageSrc = 'data:image/png;base64,' + base64ImageData;
   return new Promise((resolve, reject) => {
     fabric.Image.fromURL(imageSrc, (img) => {
       if (img) {
-        resolve(img);
+        resolve({ img, responseData });
       } else {
         reject(new Error('Failed to create a fabric.Image object'));
       }
     });
   });
 }
-
 
 let isStableDiffusionWebUI_Text2ImageProcessing = false;
 
@@ -301,12 +303,18 @@ async function StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinnerId) {
   isStableDiffusionWebUI_Text2ImageProcessing = true;
   try {
     // console.log("StableDiffusionWebUI_text2ImgaeProcessQueue await sdwebui_generateText2Image(layer);");
-    const img = await sdwebui_generateText2Image(layer);
+    const { img, responseData } = await sdwebui_generateText2Image(layer);
     if (img) {
       const center = calculateCenter(layer);
+
+
       putImageInFrame(img, center.centerX, center.centerY);
+      const infoObject = JSON.parse(responseData.info);
+      const seedValue = infoObject.seed;
+      layer.tempSeed = seedValue;
+
     } else {
-      console.log("generate error, text2image");
+      createToast("generate error, text2image", "");
     }
   } catch (error) {
     createToast("Text2Image Error.", "check SD WebUI!")

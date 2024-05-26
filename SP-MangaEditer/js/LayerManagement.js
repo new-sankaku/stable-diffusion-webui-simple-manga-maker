@@ -76,6 +76,20 @@ function updateLayerPanel() {
         };
 
         buttonsDiv.appendChild(runButton);
+
+        var runButton = document.createElement("button");
+        runButton.innerHTML = '<i class="material-icons">recycling</i> Seed';
+        runButton.onclick = function (e) {
+          e.stopPropagation();
+          
+          if( layer.tempSeed ){
+            layer.text2img_seed = layer.tempSeed;
+            createToast("Recycling Seed", layer.text2img_seed);
+          }else{
+            createToast("Nothing Seed", "");
+          }
+        };
+        buttonsDiv.appendChild(runButton);
       }
 
       //一旦蓋閉じ
