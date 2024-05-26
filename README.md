@@ -7,19 +7,23 @@ This is an extension of Stable diffusion WebUI (Forge).
 The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 
 ## Features
-- **Page Layouts**: A variety of preset manga page layouts.
-- **Panels**: Add and edit manga panels that automatically crop and scale images within them.
-- **Speech Bubbles**: A variety of standard speech bubbles.
-- **Pre-Generated Image Support**: Images drag-and-dropped into a panel will be displayed if you prefer to generate elsewhere first.
-- **Out Of Panel Images**: Images can be independantly placed outside of panels, by dragging them into the space outside a panel.
-- **Layering**: All panels and images use a layer functionality that will be familiar to any graphic designer or artist.
-- **Image Editing**: Adjust angle, position, scale, changes along X and Y axis, horizontal flip, vertical flip.
+- **Comic Panels**: Standard-equipped comic panel pages. 29 types (vertical), 16 types (horizontal). Background color changeable.
+- **Panels**: Add panels, edit panels, change panel color, change line width of panels.
+- **Speech Bubble Insertion**: Standard-equipped speech bubbles, 40 types. Changeable background color, line color, and transparency settings.
+- **Auto-fit Inside Panels**: Automatically applies images dropped into panels.
+- **Overlay Display**: Displays items as overlays when dropped outside of frames.
+- **Layer Display**: Manage images/text/panels as layers.
+- **Image Editing Features**: Adjust angle, position, scale, changes along the X and Y axes, horizontal flip, vertical flip.
 - **Image Effects**: Sepia, grayscale, gamma, blur, vibrance, pixelation.
-- **Text**: Vertical and horizontal writing, bold, shadow, fonts suitable for comics.
-- **Undo/Redo Function**: Ability to quickly undo or redo changes.
-- **Image Saving**: Export the project as a printable page.
-- **Project Save/Load**: Save and load project, complete with layers and settings for later editing.
-- **Text2Image**: Generate images for each panel via Stable Diffusion WebUI directly inside the extension.
+- **Text**: Vertical writing, horizontal writing, bold, shadow, outline, neon, fonts suitable for comics.
+- **Undo/Redo Function**: Allows to undo or redo edits.
+- **Image Saving**: Save to download folder or copy to clipboard.
+- **Project Save/Load**: Save and load editing projects.
+- **Settings Save/Load**: Save and load settings to and from the browser's standard local directory.
+- **Text2Image**: Generate images per panel via Stable diffusion WebUI (Forge).
+- **Prompt Replacement**: Bulk replace prompts to easily generate different character versions on the same page.
+- **Pen Mode**: Basic pen tool, change line width, color, line style, shadow.
+- **Eraser Mode (β)**: Basic eraser functionality for image erasing.
 
 
 ## Media
