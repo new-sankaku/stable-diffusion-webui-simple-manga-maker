@@ -1,4 +1,5 @@
 
+
 function createToast(title, messages) {
     const container = document.getElementById('toastContainer');
     const toastId = `toast-${Date.now()}`;
@@ -32,33 +33,48 @@ function createToast(title, messages) {
 
     // メッセージを1行ずつ描画
     const messageContainer = toast.querySelector('#toastMessageContainer');
-    let messageIndex = 0;
-    const messageInterval = 300; // ミリ秒
     const lineHeight = 24; // 各行の高さを設定
 
-    const showNextMessage = () => {
-        if (messageIndex < messages.length) {
-            const messageLine = document.createElement('div');
-            messageLine.className = 'line';
-            messageLine.style.animationDelay = '0s'; // アニメーションディレイを0に設定
-            messageLine.textContent = messages[messageIndex];
-            messageContainer.appendChild(messageLine);
-            messageIndex++;
-            // トーストの高さを増加させ、同時にメッセージを描画
-            toast.style.height = `${80 + (messageIndex * lineHeight)}px`;
-            setTimeout(showNextMessage, messageInterval);
-        } else {
-            // 全てのメッセージが表示された後にプログレスバーを開始
-            startProgressBar(toast);
-        }
-    };
+    if (typeof messages === 'string') {
+        // messages が文字列の場合
+        const messageLine = document.createElement('div');
+        messageLine.className = 'line';
+        messageLine.textContent = messages;
+        messageContainer.appendChild(messageLine);
+        toast.style.height = `${80 + lineHeight}px`;
+        startProgressBar(toast);
+    } else if (Array.isArray(messages)) {
+        // messages が配列の場合
+        let messageIndex = 0;
+        const messageInterval = 300; // ミリ秒
 
-    showNextMessage();
+        const showNextMessage = () => {
+            if (messageIndex < messages.length) {
+                const messageLine = document.createElement('div');
+                messageLine.className = 'line';
+                messageLine.style.animationDelay = '0s'; // アニメーションディレイを0に設定
+                messageLine.textContent = messages[messageIndex];
+                messageContainer.appendChild(messageLine);
+                messageIndex++;
+                // トーストの高さを増加させ、同時にメッセージを描画
+                toast.style.height = `${80 + (messageIndex * lineHeight)}px`;
+                setTimeout(showNextMessage, messageInterval);
+            } else {
+                // 全てのメッセージが表示された後にプログレスバーを開始
+                startProgressBar(toast);
+            }
+        };
+
+        showNextMessage();
+    } else {
+        console.error('Invalid message type');
+    }
 
     toast.addEventListener('hidden.bs.toast', function () {
         toast.style.animation = 'fade-out 1s forwards';
     });
 }
+
 
 function startProgressBar(toast) {
     const progressBar = toast.querySelector('.progress-bar');
