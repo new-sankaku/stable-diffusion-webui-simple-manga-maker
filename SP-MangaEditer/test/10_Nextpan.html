@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabric.js Drawing Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+        .toolbox {
+            margin-bottom: 10px;
+        }
+        .toolbox button, .toolbox select, .toolbox input {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbox">
+        <button id="draw">ペンツール</button>
+        <button id="eraser">消しゴム</button>
+        <button id="clear">クリア</button>
+        <label for="brush-width">ペンの太さ: </label>
+        <input type="range" id="brush-width" min="1" max="50" value="5">
+        <label for="brush-color">ペンの色: </label>
+        <input type="color" id="brush-color" value="#000000">
+        <label for="brush-type">ペンの種類: </label>
+        <select id="brush-type">
+            <option value="Pencil">鉛筆</option>
+            <option value="Circle">円形</option>
+            <option value="Spray">スプレー</option>
+        </select>
+        <label for="brush-opacity">透明度: </label>
+        <input type="range" id="brush-opacity" min="0" max="1" step="0.1" value="1">
+        <label for="line-style">線のスタイル: </label>
+        <select id="line-style">
+            <option value="solid">実線</option>
+            <option value="dashed">破線</option>
+            <option value="dotted">点線</option>
+        </select>
+        <label for="bg-color">背景色: </label>
+        <input type="color" id="bg-color" value="#ffffff">
+    </div>
+    <canvas id="c" width="800" height="600"></canvas>
+
+    <script>
+        const canvas = new fabric.Canvas('c');
+        let isDrawingMode = false;
+
+        // ペンツールボタンのクリックイベント
+        document.getElementById('draw').onclick = function() {
+            isDrawingMode = true;
+            canvas.isDrawingMode = true;
+            applyBrushSettings();
+        };
+
+        // 消しゴムツールのクリックイベント
+        document.getElementById('eraser').onclick = function() {
+            isDrawingMode = true;
+            canvas.isDrawingMode = true;
+            const eraserBrush = new fabric.PencilBrush(canvas);
+            eraserBrush.color = 'rgba(255, 255, 255, 1)';
+            eraserBrush.strokeLineCap = 'round';
+            eraserBrush.globalCompositeOperation = 'destination-out';
+            canvas.freeDrawingBrush = eraserBrush;
+            applyBrushSettings();
+        };
+
+        // クリアボタンのクリックイベント
+        document.getElementById('clear').onclick = function() {
+            canvas.clear();
+        };
+
+        // デフォルトのペン設定
+        canvas.freeDrawingBrush.width = 5;
+        canvas.freeDrawingBrush.color = '#000000';
+        canvas.freeDrawingBrush.opacity = 1;
+
+        // ペンの太さを変更
+        document.getElementById('brush-width').onchange = function() {
+            applyBrushSettings();
+        };
+
+        // ペンの色を変更
+        document.getElementById('brush-color').onchange = function() {
+            applyBrushSettings();
+        };
+
+        // ペンの透明度を変更
+        document.getElementById('brush-opacity').onchange = function() {
+            applyBrushSettings();
+        };
+
+        // ペンの種類を変更
+        document.getElementById('brush-type').onchange = function() {
+            const brushType = this.value;
+            if (brushType === 'Pencil') {
+                canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+            } else if (brushType === 'Circle') {
+                canvas.freeDrawingBrush = new fabric.CircleBrush(canvas);
+            } else if (brushType === 'Spray') {
+                canvas.freeDrawingBrush = new fabric.SprayBrush(canvas);
+            }
+            applyBrushSettings();
+        };
+
+        // ペンの線スタイルを変更
+        document.getElementById('line-style').onchange = function() {
+            applyBrushSettings();
+        };
+
+        // 背景色の変更
+        document.getElementById('bg-color').onchange = function() {
+            canvas.backgroundColor = this.value;
+            canvas.renderAll();
+        };
+
+        // ペン設定の適用
+        function applyBrushSettings() {
+            if (!canvas.freeDrawingBrush) return;
+
+            const brushWidth = parseInt(document.getElementById('brush-width').value, 10) || 1;
+            canvas.freeDrawingBrush.width = brushWidth;
+            canvas.freeDrawingBrush.color = document.getElementById('brush-color').value;
+            canvas.freeDrawingBrush.opacity = parseFloat(document.getElementById('brush-opacity').value);
+
+            const lineStyle = document.getElementById('line-style').value;
+            if (lineStyle === 'solid') {
+                canvas.freeDrawingBrush.strokeDashArray = null;
+            } else if (lineStyle === 'dashed') {
+                canvas.freeDrawingBrush.strokeDashArray = [brushWidth * 4, brushWidth * 4];
+            } else if (lineStyle === 'dotted') {
+                canvas.freeDrawingBrush.strokeDashArray = [brushWidth, brushWidth * 4];
+            }
+        }
+
+        // 初期設定適用
+        applyBrushSettings();
+    </script>
+</body>
+</html>

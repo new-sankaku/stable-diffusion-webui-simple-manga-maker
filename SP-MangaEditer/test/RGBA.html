@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Fabric.js with Opacity Slider</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.2.4/fabric.min.js"></script>
+    <style>
+        #controls {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="800" height="600" style="border:1px solid #000;"></canvas>
+<div id="controls">
+    <label for="opacity-slider">透明度: </label>
+    <input type="range" id="opacity-slider" min="0" max="100" value="50">
+    <span id="opacity-value">50</span>%
+</div>
+<script>
+    // Canvasの初期化
+    const canvas = new fabric.Canvas('canvas');
+
+    // ポリゴンを描画する関数
+    function addPolygon(points, fill, opacity) {
+        const polygon = new fabric.Polygon(points, {
+            fill: fill,
+            opacity: opacity,
+            selectable: true
+        });
+        canvas.add(polygon);
+    }
+
+    // 青のポリゴン
+    const bluePoints = [
+        {x: 100, y: 100},
+        {x: 200, y: 100},
+        {x: 150, y: 200}
+    ];
+    addPolygon(bluePoints, 'blue', 0.5);
+
+    // 赤のポリゴン
+    const redPoints = [
+        {x: 300, y: 100},
+        {x: 400, y: 100},
+        {x: 350, y: 200}
+    ];
+    addPolygon(redPoints, 'red', 0.5);
+
+    // スライダーのイベントリスナー
+    const opacitySlider = document.getElementById('opacity-slider');
+    const opacityValue = document.getElementById('opacity-value');
+
+    opacitySlider.addEventListener('input', function() {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            const opacity = opacitySlider.value / 100;
+            activeObject.set('opacity', opacity);
+            canvas.renderAll();
+        }
+        opacityValue.textContent = opacitySlider.value;
+    });
+
+    // アクティブオブジェクトが変更されたときにスライダーを更新
+    canvas.on('object:selected', function() {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            opacitySlider.value = activeObject.opacity * 100;
+            opacityValue.textContent = opacitySlider.value;
+        }
+    });
+
+    canvas.on('selection:cleared', function() {
+        opacitySlider.value = 50;
+        opacityValue.textContent = opacitySlider.value;
+    });
+</script>
+</body>
+</html>

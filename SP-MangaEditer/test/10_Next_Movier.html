@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Fabric.js Animation Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas" width="800" height="600"></canvas>
+<div>
+  <button id="rotateButton">回転</button>
+  <button id="moveButton">移動</button>
+  <button id="bounceButton">バウンド</button>
+  <button id="scaleButton">拡大縮小</button>
+  <button id="heartbeatButton">心臓の鼓動</button>
+  <button id="fadeButton">フェード</button>
+  <button id="flipButton">フリップ</button>
+  <button id="shakeButton">震え</button>
+  <button id="startRecordingButton">録画開始</button>
+  <button id="stopRecordingButton">録画停止</button>
+</div>
+
+<script>
+  const canvas = new fabric.Canvas('canvas');
+  let img;
+  let mediaRecorder;
+  let recordedChunks = [];
+
+  // Canvasに画像をドロップして描画する
+  canvas.on('drop', function(e) {
+    e.e.preventDefault();
+    const file = e.e.dataTransfer.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(f) {
+      const data = f.target.result;
+      fabric.Image.fromURL(data, function(image) {
+        // Canvasに収まるようにスケールを調整
+        const scaleFactor = Math.min(
+          canvas.width / image.width,
+          canvas.height / image.height
+        );
+        image.scale(scaleFactor);
+        
+        // 中心に配置
+        image.set({
+          left: canvas.width / 2 - (image.width * scaleFactor) / 2,
+          top: canvas.height / 2 - (image.height * scaleFactor) / 2,
+        });
+
+        canvas.add(image);
+        img = image;
+      });
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ドラッグオーバーのイベントリスナー
+  canvas.on('dragover', function(e) {
+    e.e.preventDefault();
+  });
+
+  function animateRotation(image) {
+    function rotate() {
+      image.animate('angle', image.angle + 360, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 2000,
+        easing: fabric.util.ease.easeOutBounce,
+        onComplete: rotate
+      });
+    }
+    rotate();
+  }
+
+  function animateMovement(image) {
+    function move() {
+      image.animate('left', image.left + 100, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 1000,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('left', image.left - 100, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuad,
+          onComplete: move
+        }),
+      });
+    }
+    move();
+  }
+
+  function animateBounce(image) {
+    function bounce() {
+      image.animate('top', image.top + 50, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 1000,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('top', image.top - 50, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuad,
+          onComplete: bounce
+        }),
+      });
+    }
+    bounce();
+  }
+
+  function animateScale(image) {
+    function scale() {
+      image.animate('scaleX', image.scaleX * 1.5, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 1000,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('scaleX', image.scaleX / 1.5, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuad,
+          onComplete: scale
+        }),
+      });
+      image.animate('scaleY', image.scaleY * 1.5, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 1000,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('scaleY', image.scaleY / 1.5, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuad,
+        }),
+      });
+    }
+    scale();
+  }
+
+  function animateHeartbeat(image) {
+    function pulse() {
+      image.animate('scaleX', image.scaleX * 1.2, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 500,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('scaleX', image.scaleX / 1.2, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 500,
+          easing: fabric.util.ease.easeInOutQuad,
+          onComplete: pulse
+        }),
+      });
+      image.animate('scaleY', image.scaleY * 1.2, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 500,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('scaleY', image.scaleY / 1.2, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 500,
+          easing: fabric.util.ease.easeInOutQuad,
+        }),
+      });
+    }
+    pulse();
+  }
+
+  function animateFade(image) {
+    function fade() {
+      image.animate('opacity', 0, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 1000,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('opacity', 1, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuad,
+          onComplete: fade
+        }),
+      });
+    }
+    fade();
+  }
+
+  function animateFlip(image) {
+    function flip() {
+      image.animate('flipX', !image.flipX, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 1000,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('flipX', !image.flipX, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuad,
+          onComplete: flip
+        }),
+      });
+      image.animate('flipY', !image.flipY, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 1000,
+        easing: fabric.util.ease.easeInOutQuad,
+        onComplete: () => image.animate('flipY', !image.flipY, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuad,
+        }),
+      });
+    }
+    flip();
+  }
+
+  function animateShake(image) {
+    function shake() {
+      const amplitude = 5;
+      const duration = 100;
+      const positions = [amplitude, -amplitude, amplitude, -amplitude, 0];
+
+      (function loop(i) {
+        image.animate('left', image.left + positions[i], {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: duration,
+          easing: fabric.util.ease.easeInOutQuad,
+          onComplete: () => {
+            if (i < positions.length - 1) {
+              loop(i + 1);
+            } else {
+              shake(); // Loop the shake animation
+            }
+          },
+        });
+      })(0);
+    }
+    shake();
+  }
+
+  function startRecording() {
+    const stream = canvas.getElement().captureStream(30); // 30 FPSでキャプチャ
+    mediaRecorder = new MediaRecorder(stream, {
+      mimeType: 'video/webm; codecs=vp9'
+    });
+
+    mediaRecorder.ondataavailable = function(event) {
+      if (event.data.size > 0) {
+        recordedChunks.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = function() {
+      const blob = new Blob(recordedChunks, {
+        type: 'video/webm'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = 'animation.webm';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    };
+
+    mediaRecorder.start();
+  }
+
+  function stopRecording() {
+    mediaRecorder.stop();
+  }
+
+  document.getElementById('rotateButton').addEventListener('click', function() {
+    if (img) {
+      animateRotation(img);
+    }
+  });
+
+  document.getElementById('moveButton').addEventListener('click', function() {
+    if (img) {
+      animateMovement(img);
+    }
+  });
+
+  document.getElementById('bounceButton').addEventListener('click', function() {
+    if (img) {
+      animateBounce(img);
+    }
+  });
+
+  document.getElementById('scaleButton').addEventListener('click', function() {
+    if (img) {
+      animateScale(img);
+    }
+  });
+
+  document.getElementById('heartbeatButton').addEventListener('click', function() {
+    if (img) {
+      animateHeartbeat(img);
+    }
+  });
+
+  document.getElementById('fadeButton').addEventListener('click', function() {
+    if (img) {
+      animateFade(img);
+    }
+  });
+
+  document.getElementById('flipButton').addEventListener('click', function() {
+    if (img) {
+      animateFlip(img);
+    }
+  });
+
+  document.getElementById('shakeButton').addEventListener('click', function() {
+    if (img) {
+      animateShake(img);
+    }
+  });
+
+  document.getElementById('startRecordingButton').addEventListener('click', startRecording);
+  document.getElementById('stopRecordingButton').addEventListener('click', stopRecording);
+</script>
+
+</body>
+</html>
