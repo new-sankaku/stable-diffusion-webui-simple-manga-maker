@@ -1,9 +1,8 @@
 [English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
 # 生成AI機能を搭載した漫画エディタです！
-ExtensionとしてStable diffusion WebUI、Stable diffusion forgeをサポートしています。  
-Text2Image機能はStable diffusion WebUIのAPIをサポートしています。  
-forgeはAPIが消えていたのでサポートされていません（API経由じゃなくて直接叩くようにするか確認中です）。  
+これはStable diffusion WebUI(Forge)のExtensionです。
+Text2Image機能はStable diffusion WebUI(Forge)のAPIをサポートしています。  
 
 # デモサイト  
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)
