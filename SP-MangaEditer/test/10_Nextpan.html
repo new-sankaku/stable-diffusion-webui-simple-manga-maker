@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fabric.js Drawing Tool</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="fabric.min_PlusEraser.js"></script>
     <style>
         canvas {
             border: 1px solid #ccc;
@@ -15,6 +15,9 @@
         .toolbox button, .toolbox select, .toolbox input {
             margin-right: 5px;
         }
+        .toolbox label {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -22,8 +25,11 @@
         <button id="draw">ペンツール</button>
         <button id="eraser">消しゴム</button>
         <button id="clear">クリア</button>
+        <button id="add-image">画像追加</button>
+        <input type="file" id="image-input" accept="image/*" style="display: none;">
         <label for="brush-width">ペンの太さ: </label>
         <input type="range" id="brush-width" min="1" max="50" value="5">
+        <span id="brush-width-value">5</span>
         <label for="brush-color">ペンの色: </label>
         <input type="color" id="brush-color" value="#000000">
         <label for="brush-type">ペンの種類: </label>
@@ -34,6 +40,7 @@
         </select>
         <label for="brush-opacity">透明度: </label>
         <input type="range" id="brush-opacity" min="0" max="1" step="0.1" value="1">
+        <span id="brush-opacity-value">1.0</span>
         <label for="line-style">線のスタイル: </label>
         <select id="line-style">
             <option value="solid">実線</option>
@@ -49,51 +56,66 @@
         const canvas = new fabric.Canvas('c');
         let isDrawingMode = false;
 
-        // ペンツールボタンのクリックイベント
         document.getElementById('draw').onclick = function() {
             isDrawingMode = true;
             canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
             applyBrushSettings();
+            console.log('Drawing mode enabled:', isDrawingMode);
         };
 
-        // 消しゴムツールのクリックイベント
         document.getElementById('eraser').onclick = function() {
             isDrawingMode = true;
             canvas.isDrawingMode = true;
-            const eraserBrush = new fabric.PencilBrush(canvas);
-            eraserBrush.color = 'rgba(255, 255, 255, 1)';
-            eraserBrush.strokeLineCap = 'round';
-            eraserBrush.globalCompositeOperation = 'destination-out';
+            const eraserBrush = new fabric.EraserBrush(canvas);
+            eraserBrush.width = parseInt(document.getElementById('brush-width').value, 10) || 10;
             canvas.freeDrawingBrush = eraserBrush;
             applyBrushSettings();
+            console.log('Eraser mode enabled:', isDrawingMode);
         };
 
-        // クリアボタンのクリックイベント
         document.getElementById('clear').onclick = function() {
             canvas.clear();
+            console.log('Canvas cleared');
         };
 
-        // デフォルトのペン設定
-        canvas.freeDrawingBrush.width = 5;
-        canvas.freeDrawingBrush.color = '#000000';
-        canvas.freeDrawingBrush.opacity = 1;
+        document.getElementById('add-image').onclick = function() {
+            document.getElementById('image-input').click();
+        };
 
-        // ペンの太さを変更
-        document.getElementById('brush-width').onchange = function() {
+        document.getElementById('image-input').onchange = function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const imgObj = new Image();
+                imgObj.src = event.target.result;
+                imgObj.onload = function() {
+                    const img = new fabric.Image(imgObj);
+                    const scaleFactor = Math.min(canvas.width / img.width, canvas.height / img.height);
+                    img.scale(scaleFactor);
+                    canvas.add(img);
+                    console.log('Image added');
+                }
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        document.getElementById('brush-width').oninput = function() {
+            document.getElementById('brush-width-value').innerText = this.value;
             applyBrushSettings();
+            console.log('Brush width changed:', this.value);
         };
 
-        // ペンの色を変更
         document.getElementById('brush-color').onchange = function() {
             applyBrushSettings();
+            console.log('Brush color changed:', this.value);
         };
 
-        // ペンの透明度を変更
-        document.getElementById('brush-opacity').onchange = function() {
+        document.getElementById('brush-opacity').oninput = function() {
+            document.getElementById('brush-opacity-value').innerText = this.value;
             applyBrushSettings();
+            console.log('Brush opacity changed:', this.value);
         };
 
-        // ペンの種類を変更
         document.getElementById('brush-type').onchange = function() {
             const brushType = this.value;
             if (brushType === 'Pencil') {
@@ -104,27 +126,31 @@
                 canvas.freeDrawingBrush = new fabric.SprayBrush(canvas);
             }
             applyBrushSettings();
+            console.log('Brush type changed:', brushType);
         };
 
-        // ペンの線スタイルを変更
         document.getElementById('line-style').onchange = function() {
             applyBrushSettings();
+            console.log('Line style changed:', this.value);
         };
 
-        // 背景色の変更
         document.getElementById('bg-color').onchange = function() {
             canvas.backgroundColor = this.value;
             canvas.renderAll();
+            console.log('Background color changed:', this.value);
         };
 
-        // ペン設定の適用
         function applyBrushSettings() {
             if (!canvas.freeDrawingBrush) return;
 
             const brushWidth = parseInt(document.getElementById('brush-width').value, 10) || 1;
             canvas.freeDrawingBrush.width = brushWidth;
-            canvas.freeDrawingBrush.color = document.getElementById('brush-color').value;
-            canvas.freeDrawingBrush.opacity = parseFloat(document.getElementById('brush-opacity').value);
+            if (canvas.freeDrawingBrush.color !== undefined) {
+                canvas.freeDrawingBrush.color = document.getElementById('brush-color').value;
+            }
+            if (canvas.freeDrawingBrush.opacity !== undefined) {
+                canvas.freeDrawingBrush.opacity = parseFloat(document.getElementById('brush-opacity').value);
+            }
 
             const lineStyle = document.getElementById('line-style').value;
             if (lineStyle === 'solid') {
@@ -134,9 +160,9 @@
             } else if (lineStyle === 'dotted') {
                 canvas.freeDrawingBrush.strokeDashArray = [brushWidth, brushWidth * 4];
             }
+            console.log('Brush settings applied: width =', brushWidth, 'color =', canvas.freeDrawingBrush.color, 'opacity =', canvas.freeDrawingBrush.opacity, 'line style =', lineStyle);
         }
 
-        // 初期設定適用
         applyBrushSettings();
     </script>
 </body>

@@ -2,6 +2,7 @@
 #svg-container-landscape,
 #speech-bubble-area1,
 #text-area,
+#tool-area,
 #panel-manager-area,
 #dummy-area4 {
     font-size: 14px;
@@ -24,6 +25,7 @@
 #svg-preview-area-landscape,
 #speech-bubble-svg-preview-area1,
 #text-preview-area,
+#tool-preview-area,
 #panel-manager-items,
 #dummy-svg-preview-area4 {
     max-width: 150px;
@@ -36,32 +38,48 @@
     overflow-x: hidden;
 }
 
+#tool-preview-area button,
+#tool-preview-area label,
+#tool-preview-area input[type="range"],
+#tool-preview-area select,
 #text-preview-area button,
-#text-preview-area hr,
 #text-preview-area label,
 #text-preview-area input[type="range"],
 #text-preview-area select,
 #panel-manager-items button,
-#panel-manager-items hr,
 #panel-manager-items label,
 #panel-manager-items input[type="range"],
 #speech-bubble-svg-preview-area1 button,
-#speech-bubble-svg-preview-area1 hr,
 #speech-bubble-svg-preview-area1 label,
 #speech-bubble-svg-preview-area1 input[type="range"] {
+    padding: 0px 3px;
+    font-size: 14px;
     display: block;
     width: 92%;
     margin: 4px;
     text-align: left;
 }
 
+#tool-preview-area hr,
+#text-preview-area hr,
+#panel-manager-items hr,
+#speech-bubble-svg-preview-area1 hr {
+    font-size: 14px;
+    display: block;
+    width: 92%;
+    margin: 6px;
+    text-align: left;
+}
+
 #text-preview-area label,
+#tool-preview-area label,
 #panel-manager-items label,
 #speech-bubble-svg-preview-area1 label {
     white-space: nowrap;
 }
 
 #text-preview-area input[type="color"],
+#tool-preview-area input[type="color"],
 #panel-manager-items input[type="color"],
 #speech-bubble-svg-preview-area1 input[type="color"] {
     width: 25px;
@@ -70,12 +88,14 @@
     text-align: left;
 }
 
-#text-preview-area select {
+#text-preview-area select,
+#tool-preview-area select {
     font-size: 16px;
 }
 
 #layer-content button .material-icons,
 #text-preview-area button .material-icons,
+#tool-preview-area button .material-icons,
 #speech-bubble-svg-preview-area1 button .material-icons,
 #panel-manager-items button .material-icons {
     font-size: 13px;

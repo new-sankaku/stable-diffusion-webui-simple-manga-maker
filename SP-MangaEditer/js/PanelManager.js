@@ -208,7 +208,9 @@ function loadSVGPlusReset(svgString) {
     clipAreaCoords.top = offsetY;
     clipAreaCoords.width = options.width * scaleToFit + 4;
     clipAreaCoords.height = options.height * scaleToFit + 4;
-    canvas.backgroundColor = "white";
+
+    var bgColorInput = document.getElementById('bg-color');
+    canvas.backgroundColor = bgColorInput.value;
 
     objects.forEach(function (obj) {
       if (obj.type === "path") {

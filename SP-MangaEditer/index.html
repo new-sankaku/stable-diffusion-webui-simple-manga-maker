@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/toast.css?v=1.6">
     
     <link href="third/Bootstrup/bootstrap.min.css?v=1.6" rel="stylesheet">   
-    <script src="third/Fabric.js/fabric.min.js?v=1.6"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=1.6"></script>
 
 </head>
 
@@ -106,7 +106,7 @@
                             SD WebUI
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li>   
+                            <li id="SD_WebUI_pingCheck_li">   
                                 <label>
                                     <input type="checkbox" id="SD_WebUI_pingCheck"> Ping
                                 </label>
@@ -114,15 +114,11 @@
                                     <i class="material-icons">manage_search</i> Checking...
                                 </label>
                             </li>
-                            <li class="dropdown-item">
-                                <div>
-                                    <label for="Stable_Diffusion_WebUI_apiHost">API Host:</label>
-                                    <input type="text" id="Stable_Diffusion_WebUI_apiHost">
-                                </div>
-                                <div>
-                                    <label for="Stable_Diffusion_WebUI_apiPort">API Port:</label>
-                                    <input type="text" id="Stable_Diffusion_WebUI_apiPort">
-                                </div>
+                            <li>
+                                    <label for="Stable_Diffusion_WebUI_apiHost">API Host:<input type="text" id="Stable_Diffusion_WebUI_apiHost"></label>
+                            </li>
+                            <li>
+                                    <label for="Stable_Diffusion_WebUI_apiPort">API Port:<input type="text" id="Stable_Diffusion_WebUI_apiPort"></label>
                             </li>
                             <li>
                                 <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank">
@@ -139,6 +135,11 @@
                             Canvas
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item">
+                                <i class="material-icons">format_color_fill</i> Canvas BG
+                                <input type="color" id="bg-color" value="#ffffff">
+                            </a>
+
                             <a class="dropdown-item">
                                 <i class="material-icons">photo_size_select_large</i> Download Dpi
                                 <input type="number" id="outputDpi" class="dropdown-item-mini-text" value="300" min="96" step="1">
@@ -200,6 +201,7 @@
                 <i class="material-icons" onclick="toggleVisibility('panel-manager-area');">dashboard</i>
                 <i class="material-icons" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
                 <i class="material-icons" onclick="toggleVisibility('text-area');">text_fields</i>
+                <i class="material-icons" onclick="toggleVisibility('tool-area');">brush</i>
                 <i class="material-icons" onclick="toggleVisibility('dummy-area4');">info</i>
             </div>
 
@@ -222,10 +224,10 @@
                     <input type="range" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2"
                         onchange="changeStrokeWidth(this.value)">
                     <hr>
-                    <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i>New Square</button>
-                    <button id="addPentagon" onclick="addPentagon()"><i class="material-icons">pentagon</i>New
+                    <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i> New Square</button>
+                    <button id="addPentagon" onclick="addPentagon()"><i class="material-icons">pentagon</i> New
                         Pentagon</button>
-                    <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i>Editing Mode</button>
+                    <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> Editing Mode</button>
                 </div>
             </div>
 
@@ -251,8 +253,9 @@
                     <hr>
                 </div>
             </div>
+
             <div id="text-area" style="display: none;">
-                <div class="area-header">Text and Effect</div>
+                <div class="area-header">Text</div>
                 <div id="text-preview-area">
                     <label>Text : <input type="color" id="textColorPicker" value="#000000"
                             oninput="changeTextColor(this.value)"></label>
@@ -271,12 +274,12 @@
                         <option style="font-family: 'Stick';">Stick</option>
                     </select>
 
+                    <hr>
                     <button onclick="createTextbox()"><i class="material-icons">text_fields</i><i
                             class="material-icons">east</i> New Text</button>
                     <button id="openWindow"><i class="material-icons">text_fields</i><i class="material-icons">south</i>
                         New Text</button>
 
-                    <hr>
                     <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
                     <hr>
                     <label>Effects</label>
@@ -302,6 +305,56 @@
                             class="material-icons">vibration</i> Neon Jitter</button>
                     <button style="display: none;" onclick="applyZebraReflectionEffect()"><i
                             class="material-icons">view_compact</i> Reflection</button>
+                </div>
+            </div>
+
+            <div id="tool-area" style="display: none;">
+                <div class="area-header">Tools (β)</div>
+                <div id="tool-preview-area">
+                    <button id="drawing-mode"><i class="material-icons">mode_edit</i> Draw Mode</button>
+                    <button id="eraser"><i class="material-icons">app_registration</i> Eraser Mode</button>
+
+                    <label>Size 
+                        <input type="number" id="drawing-line-width" min="1" max="150" value="5">
+                    </label>
+
+                    <label for="brush-color">Color 
+                        <input type="color" id="drawing-color" value="#000000">
+                    </label>
+
+                    <hr>
+                    <label for="brush-type">Type
+                        <select id="drawing-mode-selector">
+                            <option value="Pencil">Pencil</option>
+                            <option value="Circle">Circle</option>
+                            <!-- <option value="Spray">Spray</option> -->
+                            <!-- <option value="hline">Horizontal Line</option> -->
+                            <!-- <option value="vline">Vertical Line</option> -->
+                            <option value="square">Square</option>
+                            <option value="diamond">Diamond</option>
+                            <option value="texture">Texture</option>
+                          </select>
+                    </label>
+                    <label for="line-style">Line Style 
+                        <select id="line-style">
+                            <option value="solid">Solid</option>
+                            <option value="dashed">Dashed</option>
+                            <option value="dotted">Dotted</option>
+                        </select>
+                    </label>
+
+                    <hr>
+                    <label>Shadow</label>
+                    <label>Size 
+                        <input type="number" id="drawing-shadow-width" min="0" max="150" value="0">
+                    </label>
+                    <label>Offset 
+                        <input type="number" id="drawing-shadow-offset" min="1" max="150" value="5">
+                    </label>
+                    <label for="brush-Shadow-color">Color 
+                        <input type="color" id="drawing-shadow-color" value="#000000">
+                    </label>
+                    <hr>
                 </div>
             </div>
 
@@ -518,6 +571,7 @@
     <script src="js/ProjectManagement.js?v=1.6" defer></script>
     <script src="js/ImageDownload.js?v=1.6" defer></script>
     <script src="js/Anime.js?v=1.6" defer></script>
+    <script src="js/Tools.js?v=1.6" defer></script>
 </body>
 
 </html>

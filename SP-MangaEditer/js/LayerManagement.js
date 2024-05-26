@@ -110,7 +110,11 @@ function updateLayerPanel() {
       buttonsDiv.appendChild(deleteButton);
 
       layerDiv.setAttribute("data-id", layer.id);
-      layerDiv.appendChild(previewDiv);
+
+      if (["image", "rect", "circle", "path", "group", "polygon"].includes(layer.type)) {
+        layerDiv.appendChild(previewDiv);
+      }
+
       layerDiv.appendChild(detailsDiv);
       detailsDiv.appendChild(buttonsDiv);
 

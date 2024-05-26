@@ -21,6 +21,7 @@ function toggleVisibility(id) {
       document.getElementById('panel-manager-area').style.display = 'none';
       document.getElementById('speech-bubble-area1').style.display = 'none';
       document.getElementById('text-area').style.display = 'none';
+      document.getElementById('tool-area').style.display = 'none';
       document.getElementById('dummy-area4').style.display = 'none';
       // クリックされたエリアを表示する
       element.style.display = 'block';

@@ -175,3 +175,9 @@ function resizeCanvasToObject(objectWidth, objectHeight) {
   canvas.renderAll();
   
 }
+
+document.getElementById('bg-color').addEventListener('input', function(event) {
+  console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
+  var color = event.target.value;
+  canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
+});

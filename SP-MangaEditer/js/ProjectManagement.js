@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   settingsSave.addEventListener("click", function () {
     createToast('Settings Save', [
+      'Canvas Background Color...',
       'Api port...',
       'Api host...',
       'Base Settings...',
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
       'Save Completed!!'
     ]);
     const localSettingsData = {
+        canvasBgColor:                                                  document.getElementById('bg-color').value,
         canvasDpi:                                                      document.getElementById('outputDpi').value,
         canvasGridLineSize:                                             document.getElementById('gridSizeInput').value,
         canvasMarginFromPanel:                                          document.getElementById('marginFromPanel').value,
@@ -43,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   settingsLoad.addEventListener("click", function () {
     createToast('Settings Load', [
+      'Canvas Background Color...',
       'Api port...',
       'Api host...',
       'Base Settings...',
@@ -55,6 +58,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const localSettingsData = localStorage.getItem('localSettingsData');
     if (localSettingsData) {
         const localSettings = JSON.parse(localSettingsData);
+        
+        var bgColorInputElement = document.getElementById('bg-color');
+        bgColorInputElement.value                                       = localSettings.canvasBgColor || "#ffffff";
+        var event = new Event('input', { 'bubbles': true,'cancelable': true });
+        bgColorInputElement.dispatchEvent(event);
+
         document.getElementById('outputDpi').value                      = localSettings.canvasDpi || "300";
         document.getElementById('gridSizeInput').value                  = localSettings.canvasGridLineSize || "10";
         document.getElementById('marginFromPanel').value                = localSettings.canvasMarginFromPanel || "20";

@@ -160,6 +160,22 @@
   margin-right: 10px;
 }
 
+.dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-menu .dropdown-item input[type="color"] {
+  margin-left: 10px;
+  max-width: 50px;
+}
+
+.dropdown-menu .dropdown-item input {
+  margin-left: 10px;
+  min-width: 50px;
+  max-width: 150px;
+  width: 50px;
+}
 .dropdown-menu .dropdown-item input {
   flex: 2;
 }
