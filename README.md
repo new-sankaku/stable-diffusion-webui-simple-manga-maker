@@ -3,9 +3,8 @@
 
 
 # Manga/Comic Creator for Automatic1111/SD-WebUI-Forge!
-Compatible with both Automatic1111 WebUI and Stable Diffusion WebUI Forge* as an extension.  
-The Text2Image feature is provided by the WebUI server's API, and is not included in this extension.  
-*Forge support requires the `--api` launch parameter.
+This is an extension of Stable diffusion WebUI (Forge).
+The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 
 ## Features
 - **Page Layouts**: A variety of preset manga page layouts.
