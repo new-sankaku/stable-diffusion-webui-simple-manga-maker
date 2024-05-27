@@ -69,6 +69,81 @@ function openfloatingWindowItem(layer) {
   floatingWindows.push(floatingWindowItem); // 新しいウインドウを配列に追加
 }
 
+
+function openImage2ImagefloatingWindowItem(layer) {
+  var floatingWindowItem = document.createElement("div");
+  floatingWindowItem.className = "floating-windowPromptClass";
+  floatingWindowItem.style.cursor = "move"; 
+  floatingWindowItem.innerHTML = `
+    <h4>${layer.name} Settings</h4>
+    <div class="form-group">
+      <label for="text2img_prompt">Prompt:</label>
+      <textarea id="text2img_prompt" rows="3">${layer.text2img_prompt || ''}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="text2img_negativePrompt">Negative Prompt:</label>
+      <textarea id="text2img_negativePrompt" rows="3">${layer.text2img_negativePrompt || ''}</textarea>
+    </div>
+    <div class="form-group form-row">
+      <label for="text2img_seed">Seed(-1=Rundom, -2=Use Base):</label>
+      <input type="number" id="text2img_seed" value="${layer.text2img_seed || -2}">
+    </div>
+    <div class="form-group form-row">
+      <label for="text2img_width">Width(-1=Use Base):</label>
+      <input type="number" id="text2img_width" step="8"  min="0" value="${layer.text2img_width || 1024}">
+    </div>
+    <div class="form-group form-row">
+      <label for="text2img_height">Height(-1=Use Base):</label>
+      <input type="number" id="text2img_height" step="8"  min="0" value="${layer.text2img_height || 1024}">
+    </div>
+    <div class="form-group form-row">
+      <label for="img2img_denoising_strength">Denoising Strength:</label>
+      <input type="number" id="img2img_denoising_strength" step="0.01"  max="1" min="0" value="${layer.img2img_denoising_strength || 0.75}">
+    </div>
+    <div class="button-group">
+      <button id="text2imgItem_saveButton">Save</button>
+      <button id="text2imgItem_closeButton">Close</button>
+    </div>
+  `;
+  document.body.appendChild(floatingWindowItem);
+
+  document.getElementById('text2img_height').addEventListener('blur', function() {
+    var value = parseInt(this.value);
+    if (value !== -1) {
+      this.value = Math.round(value / 8) * 8;
+    }
+  });
+  document.getElementById('text2img_width').addEventListener('blur', function() {
+    var value = parseInt(this.value);
+    if (value !== -1) {
+      this.value = Math.round(value / 8) * 8;
+    }
+  });
+
+  makeDraggable(floatingWindowItem);
+  updatefloatingWindowItem(layer, floatingWindowItem);
+
+  // Add event listener for the Save button
+  var text2imgItem_saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
+  text2imgItem_saveButton.onclick = function () {
+    adjustToMultipleOfEight('text2img_height');
+    adjustToMultipleOfEight('text2img_width');
+
+    saveLayerText2ImageAttributes(layer);
+    closefloatingWindowItem(floatingWindowItem);
+  };
+
+  // Add event listener for the Close button
+  var text2imgItem_closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
+  text2imgItem_closeButton.onclick = function () {
+    closefloatingWindowItem(floatingWindowItem);
+  };
+
+  floatingWindows.push(floatingWindowItem);
+}
+
+
+
 function adjustToMultipleOfEight(elementId) {
   var inputElement = document.getElementById(elementId);
   var value = parseInt(inputElement.value);
@@ -92,9 +167,11 @@ function saveLayerText2ImageAttributes(layer) {
   layer.text2img_seed = parseInt(document.getElementById("text2img_seed").value);
   layer.text2img_width = parseInt(document.getElementById("text2img_width").value);
   layer.text2img_height = parseInt(document.getElementById("text2img_height").value);
+  layer.img2img_denoising_strength = parseFloat(document.getElementById("img2img_denoising_strength").value);
 
-  console.log("Saved layer attributes:", layer);
-  console.log("applyChanges", "saveState");
+  console.log( "parseInt(document.getElementById", parseFloat(document.getElementById("img2img_denoising_strength").value));
+  console.log( "layer.img2img_denoising_strength", layer.img2img_denoising_strength);
+
   saveState();
 }
 

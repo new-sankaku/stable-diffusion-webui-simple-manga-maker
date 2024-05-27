@@ -18,9 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-document.getElementById('SD_WebUI_pingCheck').addEventListener('change', function() {
-    sdwebui_checkAPIStatus();
-});
+
 
 var StableDiffusionWebUI_API_ping      = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/internal/ping'
 var StableDiffusionWebUI_API_sampler   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/samplers'
@@ -28,6 +26,7 @@ var StableDiffusionWebUI_API_scheduler = 'http://' + stableDiffusionWebUIHost + 
 var StableDiffusionWebUI_API_upscaler  = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/upscalers'
 var StableDiffusionWebUI_API_sdModel   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/sd-models'
 var StableDiffusionWebUI_API_T2I       = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/txt2img'
+var StableDiffusionWebUI_API_I2I       = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/img2img'
 var StableDiffusionWebUI_API_options   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/options'
 var StableDiffusionWebUI_API_samplers  = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/samplers'
 
@@ -39,6 +38,7 @@ function StableDiffusionWebUI_reBuild_URL(){
   StableDiffusionWebUI_API_upscaler  = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/upscalers'
   StableDiffusionWebUI_API_sdModel   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/sd-models'
   StableDiffusionWebUI_API_T2I       = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/txt2img'
+  StableDiffusionWebUI_API_I2I       = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/img2img'
   StableDiffusionWebUI_API_options   = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/options'
   StableDiffusionWebUI_API_samplers  = 'http://' + stableDiffusionWebUIHost + ':' + stableDiffusionWebUIPort + '/sdapi/v1/samplers'
 }
@@ -89,7 +89,6 @@ async function fetchOptions() {
       console.error('Failed to fetch data:', error);
   }
 }
-
 
 async function fetchSampler() {
   const response = await fetch(StableDiffusionWebUI_API_samplers, { method: 'GET' });
@@ -195,18 +194,20 @@ function sdwebui_checkAPIStatus() {
   });
 }
 
-
-
 document.addEventListener('DOMContentLoaded', function() {
   setInterval(sdwebui_checkAPIStatus, 1000 * 15 );
 });
 
+document.getElementById('SD_WebUI_pingCheck').addEventListener('change', function() {
+    sdwebui_checkAPIStatus();
+});
+
+
 sdwebui_checkAPIStatus();
 
 
-async function sdwebui_fetchText2Image(layer) {
-  const url = StableDiffusionWebUI_API_T2I;
 
+function baseRequestData(layer){
   var seed = -1;
   var width = -1;
   var height = -1;
@@ -217,12 +218,14 @@ async function sdwebui_fetchText2Image(layer) {
     seed = layer.text2img_seed;
   }
   
+  console.log("layer.text2img_width",layer.text2img_width );
   if( layer.text2img_width <= 0 ){
     width = text2img_basePrompt.text2img_width;
   }else{
     width = layer.text2img_width;
   }
 
+  console.log("layer.text2img_height",layer.text2img_height );
   if( layer.text2img_height <= 0 ){
     height = text2img_basePrompt.text2img_height;
   }else{
@@ -244,17 +247,24 @@ async function sdwebui_fetchText2Image(layer) {
 
   if( text2img_basePrompt.text2img_hr_upscaler && text2img_basePrompt.text2img_hr_upscaler != 'None' ){
     Object.assign(requestData, {
-      enable_hr: true,
-      hr_upscaler: text2img_basePrompt.text2img_hr_upscaler,
-      hr_scale:text2img_basePrompt.text2img_basePrompt_hr_scale,
-      hr_second_pass_steps:text2img_basePrompt.text2img_basePrompt_hr_step,
-      denoising_strength:text2img_basePrompt.text2img_basePrompt_hr_denoising_strength,
+                  enable_hr: true,
+                  hr_upscaler: text2img_basePrompt.text2img_hr_upscaler,
+                  hr_scale:text2img_basePrompt.text2img_basePrompt_hr_scale,
+                  hr_second_pass_steps:text2img_basePrompt.text2img_basePrompt_hr_step,
+                  denoising_strength:text2img_basePrompt.text2img_basePrompt_hr_denoising_strength,
     });
   }
-  // console.log("requestData", requestData);
-  
+
+  return requestData;
+}
+
+
+
+async function sdwebui_fetchText2Image(layer) {
+  var requestData = baseRequestData (layer);
+
   try {
-      const response = await fetch(url, {
+      const response = await fetch(StableDiffusionWebUI_API_T2I, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -263,16 +273,81 @@ async function sdwebui_fetchText2Image(layer) {
           body: JSON.stringify(requestData)
       });
       const data = await response.json();
-      // console.log("response", data);
       return data;
   } catch (error) {
       createToast("Text2Image Error.", "check SD WebUI!")
-      // console.error('Error fetching image:', error);
   }
 }
 
-async function sdwebui_generateText2Image(layer) {
-  const responseData = await sdwebui_fetchText2Image(layer);
+async function sdwebui_fetchImage2Image(layer) {
+  const scaleFactor = 2; // 2倍のスケール
+
+  // オフスクリーンCanvasを作成
+  const objWidth = layer.width * layer.scaleX;
+  const objHeight = layer.height * layer.scaleY;
+  const offscreenCanvas = document.createElement('canvas');
+  offscreenCanvas.width = objWidth * scaleFactor;
+  offscreenCanvas.height = objHeight * scaleFactor;
+  const offscreenCtx = offscreenCanvas.getContext('2d');
+
+  // ClipPathを一時的に解除
+  const originalClipPath = layer.clipPath;
+  layer.clipPath = null;
+
+  // 背景を白にする（透明部分を白くするため）
+  offscreenCtx.fillStyle = 'white';
+  offscreenCtx.fillRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+  // 元のスケールと位置を考慮してレイヤーをオフスクリーンCanvasに描画
+  offscreenCtx.scale(scaleFactor, scaleFactor);
+  offscreenCtx.translate(-layer.left, -layer.top);
+  layer.render(offscreenCtx);
+
+  // ClipPathを元に戻す
+  layer.clipPath = originalClipPath;
+
+  // 完全なPNGとして出力
+  const imageBase64 = offscreenCanvas.toDataURL('image/png');
+
+  var requestData = baseRequestData(layer);
+  requestData.init_images = [imageBase64];
+  requestData.denoising_strength = layer.img2img_denoising_strength;
+
+  // console.log("requestData", requestData);
+
+  try {
+      const response = await fetch(StableDiffusionWebUI_API_I2I, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'accept': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+      });
+      const data = await response.json();
+      
+      // // 画像をダウンロードする処理
+      // downloadImage(imageBase64);
+
+      return data;
+  } catch (error) {
+      createToast("Text2Image Error.", "check SD WebUI!");
+  }
+}
+
+// // Base64画像をダウンロードする関数
+// function downloadImage(base64Data) {
+//   const link = document.createElement('a');
+//   link.href = base64Data;
+//   link.download = 'image.png';
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// }
+
+// 汎用的な関数を定義
+async function sdwebui_generateImage(layer, fetchFunction) {
+  const responseData = await fetchFunction(layer);
   if (!responseData) return null;
   const base64ImageData = responseData.images[0];
   const imageSrc = 'data:image/png;base64,' + base64ImageData;
@@ -287,45 +362,61 @@ async function sdwebui_generateText2Image(layer) {
   });
 }
 
-let isStableDiffusionWebUI_Text2ImageProcessing = false;
+// Image2Image用の関数
+async function sdwebui_generateImage2Image(layer) {
+  return sdwebui_generateImage(layer, sdwebui_fetchImage2Image);
+}
+// Text2Image用の関数
+async function sdwebui_generateText2Image(layer) {
+  return sdwebui_generateImage(layer, sdwebui_fetchText2Image);
+}
 
-async function StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinnerId) {
+let isStableDiffusionWebUI_Processing = false;
 
-  while ( isStableDiffusionWebUI_Text2ImageProcessing ) {
-    if (isStableDiffusionWebUI_Text2ImageProcessing ) {
-      // console.log("StableDiffusionWebUI_text2ImgaeProcessQueue await sleep(1000);");
-      await sleep(1000);
-      continue;
-    }else{
-      break;
-    }
+async function StableDiffusionWebUI_ProcessQueue(layer, spinnerId, generateFunction) {
+  while (isStableDiffusionWebUI_Processing) {
+    await sleep(1000);
   }
-  isStableDiffusionWebUI_Text2ImageProcessing = true;
+  isStableDiffusionWebUI_Processing = true;
   try {
-    // console.log("StableDiffusionWebUI_text2ImgaeProcessQueue await sdwebui_generateText2Image(layer);");
-    const { img, responseData } = await sdwebui_generateText2Image(layer);
+    const { img, responseData } = await generateFunction(layer);
     if (img) {
+
+      setImage2ImageInitPrompt(img);
+
       const center = calculateCenter(layer);
-
-
       putImageInFrame(img, center.centerX, center.centerY);
       const infoObject = JSON.parse(responseData.info);
-      const seedValue = infoObject.seed;
-      layer.tempSeed = seedValue;
+      layer.tempSeed = infoObject.seed;
+
+      img.tempPrompt = infoObject.prompt;
+      img.tempNegativePrompt = infoObject.negative_prompt;
+
+      console.log("tempSeed",           layer.tempSeed);
+      console.log("tempPrompt",         img.tempPrompt);
+      console.log("tempNegativePrompt", img.tempNegativePrompt);
 
     } else {
-      createToast("generate error, text2image", "");
+      createToast("generate error", "");
     }
   } catch (error) {
-    createToast("Text2Image Error.", "check SD WebUI!")
+    createToast("Generation Error.", "check SD WebUI!");
     console.log("error:", error);
   } finally {
     var removeSpinner = document.getElementById(spinnerId);
     if (removeSpinner) {
-        removeSpinner.remove();
+      removeSpinner.remove();
     }
-    isStableDiffusionWebUI_Text2ImageProcessing = false;
+    isStableDiffusionWebUI_Processing = false;
   }
+}
+
+async function StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinnerId) {
+  return StableDiffusionWebUI_ProcessQueue(layer, spinnerId, sdwebui_generateText2Image);
+}
+
+async function StableDiffusionWebUI_Image2ImgaeProcessQueue(layer, spinnerId) {
+  return StableDiffusionWebUI_ProcessQueue(layer, spinnerId, sdwebui_generateImage2Image);
 }
 
 function sleep(ms) {

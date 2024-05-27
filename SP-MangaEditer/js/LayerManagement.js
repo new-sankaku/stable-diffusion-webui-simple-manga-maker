@@ -77,9 +77,9 @@ function updateLayerPanel() {
 
         buttonsDiv.appendChild(runButton);
 
-        var runButton = document.createElement("button");
-        runButton.innerHTML = '<i class="material-icons">recycling</i> Seed';
-        runButton.onclick = function (e) {
+        var seedButton = document.createElement("button");
+        seedButton.innerHTML = '<i class="material-icons">recycling</i> Seed';
+        seedButton.onclick = function (e) {
           e.stopPropagation();
           
           if( layer.tempSeed ){
@@ -89,16 +89,15 @@ function updateLayerPanel() {
             createToast("Nothing Seed", "");
           }
         };
-        buttonsDiv.appendChild(runButton);
+        buttonsDiv.appendChild(seedButton);
       }
 
-      //一旦蓋閉じ
-      if (false && layer.type == 'image') {
+      if (layer.type == 'image') {
         var i2iButton = document.createElement("button");
         i2iButton.innerHTML = '<i class="material-icons">settings</i> I2I';
         i2iButton.onclick = function (e) {
           e.stopPropagation();
-          openfloatingWindowItem(layer);
+          openImage2ImagefloatingWindowItem(layer);
         };
         buttonsDiv.appendChild(i2iButton);
 
@@ -114,11 +113,32 @@ function updateLayerPanel() {
           areaHeader.appendChild(spinner);
 
           //I2Iにする
-          StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
+          StableDiffusionWebUI_Image2ImgaeProcessQueue(layer, spinner.id);
           index++;
         };
 
+        var promptButton = document.createElement("button");
+        promptButton.innerHTML = '<i class="material-icons">text_snippet</i> Prompt';
+        promptButton.onclick = function (e) {
+          e.stopPropagation();
+
+          if( layer.tempPrompt ){
+            layer.text2img_prompt = layer.tempPrompt;
+            createToast("Apply Prompt", layer.text2img_prompt);
+          }else{
+            createToast("Nothing Prompt", "");
+          }
+
+          if( layer.tempNegativePrompt ){
+            layer.text2img_negativePrompt = layer.tempNegativePrompt;
+            createToast("Apply Negative Prompt", layer.text2img_negativePrompt);
+          }else{
+            createToast("Nothing Negative Prompt", "");
+          }
+        };
+
         buttonsDiv.appendChild(runButton);
+        buttonsDiv.appendChild(promptButton);
       }
 
       buttonsDiv.appendChild(deleteButton);

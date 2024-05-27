@@ -35,6 +35,7 @@ document.getElementById("canvas-container").addEventListener(
         var canvasHeight = canvasElement.height;
 
         putImageInFrame(img, x, y);
+        setImage2ImageInitPrompt(img);
       });
     };
 
@@ -51,7 +52,6 @@ function putImageInFrame(img, x, y) {
     top: y,
   });
   canvas.add(img);
-  
 
   var targetFrameIndex = findTargetFrame(x, y);
   if (targetFrameIndex !== -1) {
@@ -127,6 +127,8 @@ function putImageInFrame(img, x, y) {
 
   isUndoRedoOperation = false;
   saveStateByManual();
+
+  return img;
 }
 
 function findTargetFrame(x, y) {
@@ -238,7 +240,6 @@ function loadSVGPlusReset(svgString) {
             var prevPoint = self[index - 1];
             var xDiff = Math.abs(point.x - prevPoint.x);
             var yDiff = Math.abs(point.y - prevPoint.y);
-            // console.log("DIFF:", "xDiff", xDiff, "yDiff", yDiff, "threshold",threshold, "RESULT",!((xDiff < threshold) && (yDiff < threshold)), "point.x",point.x, "point.y",point.y, "prevPoint",prevPoint);
 
             if (xDiff < threshold && yDiff < threshold) {
               return false;
@@ -275,18 +276,10 @@ function loadSVGPlusReset(svgString) {
           hasBorders: true,
           cornerStyle: "rect",
 
-          isPanel: true,
-          text2img_prompt: "",
-          text2img_negativePrompt: "",
-          text2img_seed: -2,
-          text2img_width: -1,
-          text2img_height: -1,
-          text2img_samplingMethod: "DPM++ 2M",
-          text2img_samplingSteps: 0,
-
           controls: fabric.Object.prototype.controls,
         });
-        // polygon.points = vertices;
+        setText2ImageInitPrompt( polygon );
+
         canvas.add(polygon);
       } else {
         obj.scaleX = scaleToFit;
@@ -384,15 +377,9 @@ function addSquare() {
       transparentCorners: false,
       cornerColor: "Blue",
 
-      isPanel: text2img_initPrompt.isPanel,
-      text2img_prompt: text2img_initPrompt.text2img_prompt,
-      text2img_negativePrompt: text2img_initPrompt.text2img_negativePrompt,
-      text2img_seed: text2img_initPrompt.text2img_seed,
-      text2img_width: text2img_initPrompt.text2img_width,
-      text2img_height: text2img_initPrompt.text2img_height,
-      text2img_samplingSteps: text2img_initPrompt.text2img_samplingSteps,
     }
   );
+  setText2ImageInitPrompt( square );
   canvas.add(square);
   updateLayerPanel();
 }
@@ -421,19 +408,30 @@ function addPentagon() {
     objectCaching: false,
     transparentCorners: false,
     cornerColor: "blue",
-
-    isPanel: text2img_initPrompt.isPanel,
-    text2img_prompt: text2img_initPrompt.text2img_prompt,
-    text2img_negativePrompt: text2img_initPrompt.text2img_negativePrompt,
-    text2img_seed: text2img_initPrompt.text2img_seed,
-    text2img_width: text2img_initPrompt.text2img_width,
-    text2img_height: text2img_initPrompt.text2img_height,
-    text2img_samplingSteps: text2img_initPrompt.text2img_samplingSteps,
   });
-
+  setText2ImageInitPrompt( pentagon );
   canvas.add(pentagon);
   updateLayerPanel();
 
+}
+
+function setText2ImageInitPrompt(object){
+  object.isPanel                 = text2img_initPrompt.isPanel;
+  object.text2img_prompt         = text2img_initPrompt.text2img_prompt;
+  object.text2img_negativePrompt = text2img_initPrompt.text2img_negativePrompt;
+  object.text2img_seed           = text2img_initPrompt.text2img_seed;
+  object.text2img_width          = text2img_initPrompt.text2img_width;
+  object.text2img_height         = text2img_initPrompt.text2img_height;
+  object.text2img_samplingSteps  = text2img_initPrompt.text2img_samplingSteps;
+}
+function setImage2ImageInitPrompt(object){
+  object.text2img_prompt            = img2img_initPrompt.img2img_prompt;
+  object.text2img_negativePrompt    = img2img_initPrompt.img2img_negativePrompt;
+  object.text2img_seed              = img2img_initPrompt.img2img_seed;
+  object.text2img_width             = img2img_initPrompt.img2img_width;
+  object.text2img_height            = img2img_initPrompt.img2img_height;
+  object.text2img_samplingSteps     = img2img_initPrompt.img2img_samplingSteps;
+  object.img2img_denoising_strength = img2img_initPrompt.img2img_denoising_strength;
 }
 
 function Edit() {
