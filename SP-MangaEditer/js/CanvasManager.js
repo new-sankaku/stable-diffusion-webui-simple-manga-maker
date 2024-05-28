@@ -67,6 +67,7 @@ function resizeCanvas(newWidth, newHeight) {
       });
       clipPath.setCoords();
     }
+    console.log("function resizeCanvas(newWidth, newHeight) { saveInitialState" );
     saveInitialState(obj);
     obj.setCoords();
   });
@@ -81,6 +82,7 @@ function adjustCanvasSize() {
   adjustCanvasSize( false );
 }
 
+//forced = 強制
 function adjustCanvasSize( forced ) {
   var container = document.getElementById("canvas-container");
   var windowWidth = container.clientWidth;
@@ -110,45 +112,6 @@ function adjustCanvasSize( forced ) {
 window.addEventListener("load", initResizeCanvas);
 window.addEventListener("resize", adjustCanvasSize);
 
-function saveInitialState(obj) {
-  obj.initial = {
-    left: obj.left,
-    top: obj.top,
-    scaleX: obj.scaleX,
-    scaleY: obj.scaleY,
-    strokeWidth: obj.strokeWidth,
-    canvasWidth: canvas.getWidth(),
-    canvasHeight: canvas.getHeight(),
-  };
-
-  if (obj.clipPath) {
-    obj.clipPath.initial = {
-      left: obj.clipPath.left,
-      top: obj.clipPath.top,
-      scaleX: obj.clipPath.scaleX,
-      scaleY: obj.clipPath.scaleY,
-      canvasWidth: canvas.getWidth(),
-      canvasHeight: canvas.getHeight(),
-    };
-  }
-}
-
-canvas.on("object:added", (e) => {
-  // console.log( "object:added" );
-  const obj = e.target;
-  if (!obj.initial) {
-    saveInitialState(obj);
-  }
-  forcedAdjustCanvasSize();
-});
-
-canvas.on("object:modified", (e) => {
-  // console.log( "object:modified" );
-  const obj = e.target;
-  saveInitialState(obj);
-});
-
-
 
 function resizeCanvasToObject(objectWidth, objectHeight) {
   var container = document.getElementById("canvas-container");
@@ -177,7 +140,7 @@ function resizeCanvasToObject(objectWidth, objectHeight) {
 }
 
 document.getElementById('bg-color').addEventListener('input', function(event) {
-  console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
+  // console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
   var color = event.target.value;
   canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
 });

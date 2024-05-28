@@ -112,7 +112,7 @@ function updateLayerPanel() {
           spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
           areaHeader.appendChild(spinner);
 
-          //I2Iにする
+
           StableDiffusionWebUI_Image2ImgaeProcessQueue(layer, spinner.id);
           index++;
         };
@@ -317,22 +317,6 @@ function getActiveObjectIndex(canvas) {
   return index;
 }
 
-// Canvas のオブジェクト選択イベントに反応する
-canvas.on('selection:created', highlightActiveLayerByCanvas);
-canvas.on('selection:updated', highlightActiveLayerByCanvas);
-
-
-canvas.on('object:added', highlightActiveLayerByCanvas);
-canvas.on('object:removed', highlightActiveLayerByCanvas);
-canvas.on('object:modified', highlightActiveLayerByCanvas);
-canvas.on('object:scaling', highlightActiveLayerByCanvas);
-canvas.on('object:moving', highlightActiveLayerByCanvas);
-canvas.on('object:rotating', highlightActiveLayerByCanvas);
-
-canvas.on('selection:cleared', function() {
-  var layers = document.querySelectorAll(".layer-item");
-  layers.forEach(layer => layer.classList.remove("active"));
-});
 
 
 

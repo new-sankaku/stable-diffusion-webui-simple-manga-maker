@@ -1,5 +1,3 @@
-canvas.on("selection:created", handleSelection);
-canvas.on("selection:updated", handleSelection);
 
 document.getElementById("canvas-container").addEventListener(
   "dragover",
@@ -120,6 +118,8 @@ function putImageInFrame(img, x, y) {
   }
   
   canvas.setActiveObject(img);
+
+  console.log("function putImageInFrame { saveInitialState" );
   saveInitialState(img)
   
   canvas.renderAll();
@@ -136,12 +136,8 @@ function findTargetFrame(x, y) {
 
   let objects = canvas.getObjects().reverse();
   for (let i = 0; i < objects.length; i++) {
-    if (
-      objects[i].type === "path" ||
-      objects[i].type === "rect" ||
-      objects[i].type === "polygon"
-    ) {
-      // console.log("findTargetFrame(x, y)", findTargetFrame);
+    if ( isShapes(objects[i]) ) {
+
       let frameBounds = objects[i].getBoundingRect(true);
       if (
         x >= frameBounds.left &&
@@ -153,7 +149,6 @@ function findTargetFrame(x, y) {
       }
     }
   }
-  //console.log("findTargetFrame(x, y) NO HIT.");
   return -1;
 }
 
@@ -258,6 +253,7 @@ function loadSVGPlusReset(svgString) {
         // console.log("threshold, vertices", threshold, ":", vertices);
 
         var polygon = new fabric.Polygon(vertices, {
+          isPanel: true,
           scaleX: scaleToFit,
           scaleY: scaleToFit,
           top: obj.top * scaleToFit + offsetY,
@@ -282,6 +278,7 @@ function loadSVGPlusReset(svgString) {
 
         canvas.add(polygon);
       } else {
+        isPanel: true,
         obj.scaleX = scaleToFit;
         obj.scaleY = scaleToFit;
         obj.top = obj.top * scaleToFit + offsetY;
@@ -376,7 +373,7 @@ function addSquare() {
       objectCaching: false,
       transparentCorners: false,
       cornerColor: "Blue",
-
+      isPanel: true,
     }
   );
   setText2ImageInitPrompt( square );
@@ -408,30 +405,12 @@ function addPentagon() {
     objectCaching: false,
     transparentCorners: false,
     cornerColor: "blue",
+    isPanel: true,
   });
   setText2ImageInitPrompt( pentagon );
   canvas.add(pentagon);
   updateLayerPanel();
 
-}
-
-function setText2ImageInitPrompt(object){
-  object.isPanel                 = text2img_initPrompt.isPanel;
-  object.text2img_prompt         = text2img_initPrompt.text2img_prompt;
-  object.text2img_negativePrompt = text2img_initPrompt.text2img_negativePrompt;
-  object.text2img_seed           = text2img_initPrompt.text2img_seed;
-  object.text2img_width          = text2img_initPrompt.text2img_width;
-  object.text2img_height         = text2img_initPrompt.text2img_height;
-  object.text2img_samplingSteps  = text2img_initPrompt.text2img_samplingSteps;
-}
-function setImage2ImageInitPrompt(object){
-  object.text2img_prompt            = img2img_initPrompt.img2img_prompt;
-  object.text2img_negativePrompt    = img2img_initPrompt.img2img_negativePrompt;
-  object.text2img_seed              = img2img_initPrompt.img2img_seed;
-  object.text2img_width             = img2img_initPrompt.img2img_width;
-  object.text2img_height            = img2img_initPrompt.img2img_height;
-  object.text2img_samplingSteps     = img2img_initPrompt.img2img_samplingSteps;
-  object.img2img_denoising_strength = img2img_initPrompt.img2img_denoising_strength;
 }
 
 function Edit() {
@@ -641,9 +620,3 @@ function debounceSnapToGrid(target) {
   }, 50);
 }
 
-// オブジェクト移動イベントリスナーを追加
-canvas.on("object:moving", function (e) {
-  if (isGridVisible) {
-    debounceSnapToGrid(e.target);
-  }
-});

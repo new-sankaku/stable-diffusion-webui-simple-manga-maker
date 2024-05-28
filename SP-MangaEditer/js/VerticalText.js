@@ -7,9 +7,9 @@ let offsetX, offsetY;
 
 // console.log("openButton", openButton);
 openButton.addEventListener("click", function () {
-  const selectedObject = canvas.getActiveObject();
-  if (selectedObject && selectedObject.type === "verticalText") {
-    textInput.value = selectedObject._objects.map((obj) => obj.text).join("");
+  const activeObject = canvas.getActiveObject();
+  if (isVerticalText(activeObject)) {
+    textInput.value = activeObject._objects.map((obj) => obj.text).join("");
   } else {
     textInput.value = "";
   }
@@ -183,23 +183,3 @@ function openModalForEditing() {
     myWindow.style.display = "block";
   }
 }
-
-canvas.on("selection:created", function () {
-  const selectedObject = canvas.getActiveObject();
-  if (isVerticalText(selectedObject)) {
-    openModalForEditing();
-  } else {
-    myWindow.style.display = "none";
-  }
-});
-
-canvas.on("selection:updated", function () {
-  const selectedObject = canvas.getActiveObject();
-  if (isVerticalText(selectedObject)) {
-    openModalForEditing();
-  } else {
-    myWindow.style.display = "none";
-  }
-});
-
-canvas.on("selection:cleared", closeWindow);

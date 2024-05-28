@@ -30,19 +30,7 @@ function generateHash(imageData) {
 }
 
 function customToJSON() {
-    const json = canvas.toJSON(['excludeFromLayerPanel', 
-                                'isPanel', 
-                                'text2img_prompt', 
-                                'text2img_negativePrompt', 
-                                'text2img_seed', 
-                                'text2img_width', 
-                                'text2img_height', 
-                                'text2img_samplingMethod', 
-                                'text2img_samplingSteps',
-                                'initial', 
-                                'clipPath.initial',
-                                'name'
-                            ]);
+    const json = canvas.toJSON(commonProperties);
     
     json.objects = json.objects.map(obj => {
         if (obj.type === 'image' && obj.src.startsWith('data:')) {
@@ -56,6 +44,25 @@ function customToJSON() {
     });
 
     return json;
+}
+
+// JSON からの画像データの復元処理
+function restoreImage(json) {
+    const parsedJson = JSON.parse(json);
+    parsedJson.objects = parsedJson.objects.map(obj => {
+        if (obj.type === 'image' && imageMap.has(obj.src)) {
+            obj.src = imageMap.get(obj.src); // ハッシュキーに基づき画像データを復元
+        }
+        commonProperties.forEach(prop => {
+            if (obj[prop] !== undefined) {
+                obj[prop] = obj[prop]; 
+            }
+        });
+        
+        return obj;
+    });
+
+    return parsedJson;
 }
 
 
@@ -72,30 +79,6 @@ function saveState() {
     currentStateIndex++;
     updateLayerPanel();
     // console.log("saveState END currentStateIndex:StackLenght ", currentStateIndex, ":", stateStack.length,"count:", json.length);
-}
-
-// JSON からの画像データの復元処理
-function restoreImage(json) {
-
-    // console.log("restoreImage json", json);
-    const parsedJson = JSON.parse(json);
-    parsedJson.objects = parsedJson.objects.map(obj => {
-        if (obj.type === 'image' && imageMap.has(obj.src)) {
-            obj.src = imageMap.get(obj.src); // ハッシュキーに基づき画像データを復元
-        }
-        const props = ['excludeFromLayerPanel', 'isPanel', 'text2img_prompt', 'text2img_negativePrompt',
-        'text2img_seed', 'text2img_width', 'text2img_height', 'text2img_samplingMethod',
-        'text2img_samplingSteps', 'initial', 'clipPath.initial', 'name'];
-        props.forEach(prop => {
-            if (obj[prop] !== undefined) {
-                obj[prop] = obj[prop]; 
-            }
-        });
-        
-        return obj;
-    });
-
-    return parsedJson;
 }
 
 function undo() {
@@ -136,13 +119,6 @@ function lastRedo() {
     });
 }
 
-
-// Event listeners setup
-canvas.on('object:modified', function(e) { saveStateByListener(e, 'object:modified'); });
-canvas.on('object:added', function(e) { saveStateByListener(e, 'object:added'); });
-canvas.on('object:removed', function(e) { saveStateByListener(e, 'object:removed'); });
-canvas.on('path:created', function(e) { saveStateByListener(e, 'path:created'); });
-canvas.on('canvas:cleared', function(e) { saveStateByListener(e, 'canvas:cleared'); });
 
 saveState();
 

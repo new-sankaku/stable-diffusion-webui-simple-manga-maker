@@ -56,7 +56,7 @@ function openfloatingWindowItem(layer) {
     adjustToMultipleOfEight('text2img_height');
     adjustToMultipleOfEight('text2img_width');
 
-    saveLayerText2ImageAttributes(layer);
+    saveLayerDiffusionAttributes(layer);
     closefloatingWindowItem(floatingWindowItem);
   };
 
@@ -129,7 +129,7 @@ function openImage2ImagefloatingWindowItem(layer) {
     adjustToMultipleOfEight('text2img_height');
     adjustToMultipleOfEight('text2img_width');
 
-    saveLayerText2ImageAttributes(layer);
+    saveLayerDiffusionAttributes(layer);
     closefloatingWindowItem(floatingWindowItem);
   };
 
@@ -161,16 +161,17 @@ function updatefloatingWindowItem(layer, floatingWindowItem) {
   console.log("updatefloatingWindowItem left top", floatingWindowItem.style.left, floatingWindowItem.style.top);
 }
 
-function saveLayerText2ImageAttributes(layer) {
-  layer.text2img_prompt = document.getElementById("text2img_prompt").value;
-  layer.text2img_negativePrompt = document.getElementById("text2img_negativePrompt").value;
-  layer.text2img_seed = parseInt(document.getElementById("text2img_seed").value);
-  layer.text2img_width = parseInt(document.getElementById("text2img_width").value);
-  layer.text2img_height = parseInt(document.getElementById("text2img_height").value);
-  layer.img2img_denoising_strength = parseFloat(document.getElementById("img2img_denoising_strength").value);
+function saveLayerDiffusionAttributes(layer) {
 
-  console.log( "parseInt(document.getElementById", parseFloat(document.getElementById("img2img_denoising_strength").value));
-  console.log( "layer.img2img_denoising_strength", layer.img2img_denoising_strength);
+  layer.text2img_prompt             = document.getElementById("text2img_prompt").value;
+  layer.text2img_negativePrompt     = document.getElementById("text2img_negativePrompt").value;
+  layer.text2img_seed               = parseInt(document.getElementById("text2img_seed").value);
+  layer.text2img_width              = parseInt(document.getElementById("text2img_width").value);
+  layer.text2img_height             = parseInt(document.getElementById("text2img_height").value);
+
+  if(isImage(layer)){
+    layer.img2img_denoising_strength  = parseFloat(document.getElementById("img2img_denoising_strength").value);
+  }
 
   saveState();
 }

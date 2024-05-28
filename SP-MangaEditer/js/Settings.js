@@ -61,3 +61,20 @@ const img2img_initPrompt = {
   img2img_samplingSteps : 20,
   img2img_denoising_strength : 0.75,
 };
+
+
+// 共通プロパティリスト
+const commonProperties = [
+                          'excludeFromLayerPanel', 
+                          'isPanel', 
+                          'text2img_prompt', 
+                          'text2img_negativePrompt', 
+                          'text2img_seed', 
+                          'text2img_width', 
+                          'text2img_height', 
+                          'text2img_samplingMethod', 
+                          'text2img_samplingSteps',
+                          'initial', 
+                          'clipPath.initial',
+                          'name'
+];

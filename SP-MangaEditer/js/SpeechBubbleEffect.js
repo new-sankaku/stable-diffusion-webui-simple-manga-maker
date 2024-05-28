@@ -1,9 +1,8 @@
 
-
 function changeSpeechBubbleLineColor(value) {
     var activeObject = canvas.getActiveObject();
     if (activeObject) {
-        if (activeObject.type === 'group') {
+        if (isGroup(activeObject)) {
             activeObject.forEachObject((obj) => {
                 if (obj.type !== 'line') {
                     obj.set({ stroke: value });
@@ -11,10 +10,12 @@ function changeSpeechBubbleLineColor(value) {
                     obj.set({ stroke: value });
                 }
             });
-        } else if (['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) {
+        } else if (isShapes(activeObject)) {
             activeObject.set({ stroke: value });
-        } else if (activeObject.type === 'line') {
+
+        } else if (isLine(activeObject)) {
             activeObject.set({ stroke: value });
+        
         }
         canvas.requestRenderAll();
     }
@@ -23,13 +24,13 @@ function changeSpeechBubbleLineColor(value) {
 function changeSpeechBubbleBackgroundColor(value) {
     var activeObject = canvas.getActiveObject();
     if (activeObject) {
-        if (activeObject.type === 'group') {
+        if (isGroup(activeObject)) {
             activeObject.forEachObject((obj) => {
                 if (obj.type !== 'line') {
                     obj.set({ fill: value });
                 }
             });
-        } else if (['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) {
+        } else if (isShapes(activeObject)) {
             activeObject.set({ fill: value });
         }
         canvas.requestRenderAll();

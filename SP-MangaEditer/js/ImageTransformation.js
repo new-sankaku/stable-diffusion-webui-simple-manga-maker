@@ -1,7 +1,7 @@
 
 function flipHorizontally() {
 	var activeObject = canvas.getActiveObject();
-	if (activeObject && activeObject.type === 'image') {
+	if (isImage(activeObject)) {
 		activeObject.set('flipX', !activeObject.flipX);
 		canvas.renderAll();
 	}
@@ -9,7 +9,7 @@ function flipHorizontally() {
 
 function flipVertically() {
 	var activeObject = canvas.getActiveObject();
-	if (activeObject && activeObject.type === 'image') {
+	if (isImage(activeObject)) {
 		activeObject.set('flipY', !activeObject.flipY);
 		canvas.renderAll();
 	}
@@ -81,21 +81,6 @@ document.getElementById('cropMode').addEventListener('click', function() {
         createToast("Select Image!", "");
 				document.getElementById('crop').style.display = 'none';
     }
-});
-
-canvas.on('selection:cleared', function() {
-    if (cropFrame) {
-        canvas.remove(cropFrame);
-        cropFrame = null;
-				document.getElementById('crop').style.display = 'none';
-    }
-});
-canvas.on('selection:updated', function() {
-	if (cropFrame && canvas.getActiveObject() !== cropFrame) {
-		canvas.remove(cropFrame);
-		cropFrame = null;
-		document.getElementById('crop').style.display = 'none';
-	}
 });
 
 function cropImage(png, left, top, height, width) {

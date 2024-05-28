@@ -4,17 +4,6 @@ var neonIntensity = parseFloat(
 );
 var isNeonEnabled = false;
 
-canvas.on('selection:created', function(event) {
-  if (event.selected && event.selected[0]) {
-    updateTextControls(event.selected[0]);
-  }
-});
-
-canvas.on('selection:updated', function(event) {
-  if (event.selected && event.selected[0]) {
-    updateTextControls(event.selected[0]);
-  }
-});
 
 function rgbToHex(rgb) {
   if( rgb ){
@@ -84,7 +73,7 @@ function applyVividGradientEffect() {
       ]
     });
 
-    if (activeObject && activeObject.type === 'verticalText') {
+    if (isVerticalText(activeObject)) {
       activeObject.setGradientFill(gradient);
       canvas.renderAll();
     }else{
@@ -117,7 +106,7 @@ function applyInnerShadow() {
 function applyNeonJitterEffect() {
   const activeObject = canvas.getActiveObject();
 
-  if (activeObject && activeObject.type === 'text') {
+  if (isVerticalText(activeObject)) {
     const jitterAmount = 5; // ジッターの量
     const glowColors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3']; // 虹色の配列
 
@@ -468,28 +457,6 @@ function updateNeonEffect(activeObject) {
   }
 }
 
-function isVerticalText(activeObject) {
-  if (activeObject && (activeObject.type === "verticalText") ) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function isText(activeObject) {
-  // console.log("isText(activeObject) start");
-
-  if (activeObject && (activeObject.type === "text" || activeObject.type === "textbox"|| activeObject.type === "verticalText") ) {
-    // console.log("isText(activeObject) true");
-    return true;
-  } else {
-    // console.log("isText(activeObject) false", activeObject);
-    if (activeObject){
-      // console.log("isText(activeObject) ", activeObject.type);
-    }
-    return false;
-  }
-}
 
 
 function changeFont(font) {
