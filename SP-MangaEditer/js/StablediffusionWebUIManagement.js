@@ -423,14 +423,3 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelector('#SD_WebUI_pingCheck').addEventListener('click', function (event) {
-    event.stopPropagation();
-  });
-  document.querySelector('#SD_WebUI_pingCheck_li').addEventListener('click', function (event) {
-    event.stopPropagation();
-  });
-
-
-});
