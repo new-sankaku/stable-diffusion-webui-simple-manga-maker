@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Polygon Splitting with Line Drawing</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="https://unpkg.com/jsts/dist/jsts.min.js"></script>
 </head>
 
 <body>
@@ -15,39 +15,85 @@
             backgroundColor: '#f0f0f0' // ここで背景色を設定
         });
 
+        var coordText = new fabric.Text('', {
+            left: 10,
+            top: 10,
+            fontSize: 16,
+            fill: 'black',
+            selectable: false
+        });
+        canvas.add(coordText);
+
+        canvas.on('mouse:move', function (options) {
+            var pointer = canvas.getPointer(options.e);
+            var endX = pointer.x;
+            var endY = pointer.y;
+            coordText.set({ text: 'X: ' + endX.toFixed(2) + ', Y: ' + endY.toFixed(2) });
+            canvas.renderAll();
+        });
+
+        var strokeWidth = 2;
 
         var rect = new fabric.Polygon([
-            { x: 20, y: 20 },
-            { x: 500, y: 20 },
+            { x: 0, y: 0 },
+            { x: 500, y: 0 },
             { x: 500, y: 700 },
-            { x: 20, y: 700 }
+            { x: 0, y: 700 }
         ], {
+            left: 100,
+            top: 100,
             fill: 'white',
             stroke: 'black',
-            strokeWidth: 2,
+            strokeWidth: strokeWidth,
             selectable: false
         });
 
         canvas.add(rect);
 
         var panelSpacing = 5;
-        var knifeAssist = 3;
-        
-        var currentRect = rect;
-        var currentLine = null;
-        var isDrawing = false;
-        var isKnifeMode = false; // ナイフモードのフラグを追加
-        var startX, startY;
+        var knifeAssistAngle = 3;
+        var currentKnifeObject = rect;
+        var currentKnifeLine = null;
+        var isKnifeDrawing = false;
+        var isKnifeMode = true;
+        var startKnifeX, startKnifeY;
+
+        function getCurrentLeft() {
+            if (currentKnifeObject && currentKnifeObject.left !== undefined) {
+                return currentKnifeObject.left;
+            }
+            return 0;
+        }
+
+        function getCurrentTop() {
+            if (currentKnifeObject && currentKnifeObject.top !== undefined) {
+                return currentKnifeObject.top;
+            }
+            return 0;
+        }
 
         function isInsidePolygon(point, polygon) {
-            var x = point.x, y = point.y;
-            var inside = false;
-            var points = polygon.points;
-            for (var i = 0, j = points.length - 1; i < points.length; j = i++) {
-                var xi = points[i].x, yi = points[i].y;
-                var xj = points[j].x, yj = points[j].y;
+            var offsetX = polygon.left;
+            var offsetY = polygon.top;
+            var pointX = point.x,
+                pointY = point.y;
 
-                var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            var inside = false;
+            var vertices = polygon.points;
+
+            var minX = Math.min(...vertices.map(v => v.x));
+            var minY = Math.min(...vertices.map(v => v.y));
+
+            for (var i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+                var currentVertexX = vertices[i].x + offsetX - minX,
+                    currentVertexY = vertices[i].y + offsetY - minY;
+
+                var previousVertexX = vertices[j].x + offsetX - minX,
+                    previousVertexY = vertices[j].y + offsetY - minY;
+
+                var intersect = ((currentVertexY > pointY) != (previousVertexY > pointY)) &&
+                    (pointX < (previousVertexX - currentVertexX) * (pointY - currentVertexY) / (previousVertexY - currentVertexY) + currentVertexX);
+
                 if (intersect) inside = !inside;
             }
             return inside;
@@ -56,6 +102,7 @@
         function getPolygonAtPoint(point) {
             var foundPolygon = null;
             canvas.forEachObject(function (obj) {
+
                 if (obj.type === 'polygon' && isInsidePolygon(point, obj)) {
                     foundPolygon = obj;
                 }
@@ -64,74 +111,96 @@
         }
 
         canvas.on('mouse:down', function (options) {
-            if (!isKnifeMode) return; // ナイフモードでなければ何もしない
+            if (!isKnifeMode) return;
 
             var pointer = canvas.getPointer(options.e);
             var selectedPolygon = getPolygonAtPoint(pointer);
 
             if (selectedPolygon) {
-                isDrawing = true;
-                currentRect = selectedPolygon;
-                startX = pointer.x;
-                startY = pointer.y;
-                drawLine(startX, startY, startX, startY);
+                isKnifeDrawing = true;
+                currentKnifeObject = selectedPolygon;
+                startKnifeX = pointer.x;
+                startKnifeY = pointer.y;
+                drawLine(startKnifeX, startKnifeY, startKnifeX, startKnifeY);
             } else {
-                isDrawing = false;
+                isKnifeDrawing = false;
                 canvas.discardActiveObject().renderAll();
             }
         });
 
+
+        canvas.on('mouse:up', function (options) {
+            if (!isKnifeMode || !isKnifeDrawing) return;
+
+            isKnifeDrawing = false;
+
+            if (currentKnifeLine) {
+                currentKnifeLine.bringToFront();
+                splitPolygon(currentKnifeObject);
+            }
+            currentKnifeObject = null;
+            currentKnifeLine = null;
+        });
+
+
         canvas.on('mouse:move', function (options) {
-            if (!isKnifeMode || !isDrawing) return; // ナイフモードでなければ何もしない
+            if (!isKnifeMode || !isKnifeDrawing) return;
 
             var pointer = canvas.getPointer(options.e);
             var endX = pointer.x;
             var endY = pointer.y;
 
-            var dx = endX - startX;
-            var dy = endY - startY;
+            var dx = endX - startKnifeX;
+            var dy = endY - startKnifeY;
             var angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
-            if ((angle >= (0-knifeAssist) && angle <= knifeAssist) || angle <= (-180+knifeAssist) || angle >= (180-knifeAssist)) {
-                endY = startY;
-            } else if ((angle >= (90-knifeAssist) && angle <= (90+knifeAssist)) || (angle >= (-90-knifeAssist) && angle <= (-90+knifeAssist))) {
-                endX = startX;
+            if ((angle >= (0 - knifeAssistAngle) && angle <= knifeAssistAngle) || angle <= (-180 + knifeAssistAngle) || angle >= (180 - knifeAssistAngle)) {
+                endY = startKnifeY;
+            } else if ((angle >= (90 - knifeAssistAngle) && angle <= (90 + knifeAssistAngle)) || (angle >= (-90 - knifeAssistAngle) && angle <= (-90 + knifeAssistAngle))) {
+                endX = startKnifeX;
             }
 
-            drawLine(startX, startY, endX, endY);
+            drawLine(startKnifeX, startKnifeY, endX, endY);
         });
 
-        canvas.on('mouse:up', function (options) {
-            if (!isKnifeMode || !isDrawing) return; // ナイフモードでなければ何もしない
-
-            isDrawing = false;
-
-            if (currentLine) {
-                currentLine.bringToFront();
-                splitPolygon(currentRect);
-            }
-        });
-
-        function drawLine(startX, startY, endX, endY) {
-            if (!currentRect) {
+        //ドラッグ開始点、ドラッグ終了点
+        function drawLine(startKnifeX, startKnifeY, endX, endY) {
+            if (!currentKnifeObject) {
                 return;
             }
 
-            var points = currentRect.points;
+            var points = currentKnifeObject.points;
+            var offsetX = getCurrentLeft();
+            var offsetY = getCurrentTop();
+
             var intersections = [];
+
+            var minX = Math.min(...points.map(v => v.x));
+            var minY = Math.min(...points.map(v => v.y));
 
             for (var i = 0; i < points.length; i++) {
                 var p1 = points[i];
                 var p2 = points[(i + 1) % points.length];
-                var intersection = calculateIntersection(p1.x, p1.y, p2.x, p2.y, startX, startY, endX, endY);
+
+                var intersection = calculateIntersection(
+                    p1.x + offsetX - minX,
+                    p1.y + offsetY - minY,
+                    p2.x + offsetX - minX,
+                    p2.y + offsetY - minY,
+                    startKnifeX,
+                    startKnifeY,
+                    endX,
+                    endY
+                );
+
                 if (intersection) {
                     intersections.push(intersection);
                 }
             }
 
             if (intersections.length === 2) {
-                var intersection1 = getClosestIntersection(intersections, startX, startY);
-                var intersection2 = getFurthestIntersection(intersections, startX, startY);
+                var intersection1 = getClosestIntersection(intersections, startKnifeX, startKnifeY);
+                var intersection2 = getFurthestIntersection(intersections, startKnifeX, startKnifeY);
 
                 if (intersection1 && intersection2) {
                     var nextLine = new fabric.Line([intersection1.x, intersection1.y, intersection2.x, intersection2.y], {
@@ -141,22 +210,22 @@
                     });
                     canvas.add(nextLine);
 
-                    if (currentLine) {
-                        canvas.remove(currentLine);
+                    if (currentKnifeLine) {
+                        canvas.remove(currentKnifeLine);
                     }
-                    currentLine = nextLine;
+                    currentKnifeLine = nextLine;
                 }
             }
         }
 
-        function calculateIntersection(x1, y1, x2, y2, startX, startY, endX, endY) {
+        function calculateIntersection(x1, y1, x2, y2, startKnifeX, startKnifeY, endX, endY) {
             var a1 = y2 - y1;
             var b1 = x1 - x2;
             var c1 = a1 * x1 + b1 * y1;
 
-            var a2 = endY - startY;
-            var b2 = startX - endX;
-            var c2 = a2 * startX + b2 * startY;
+            var a2 = endY - startKnifeY;
+            var b2 = startKnifeX - endX;
+            var c2 = a2 * startKnifeX + b2 * startKnifeY;
 
             var det = a1 * b2 - a2 * b1;
 
@@ -168,19 +237,20 @@
 
                 if (x >= Math.min(x1, x2) && x <= Math.max(x1, x2) && y >= Math.min(y1, y2) && y <= Math.max(y1, y2)) {
                     return { x: x, y: y };
+                } else {
+                    return null;
                 }
-                return null;
             }
         }
 
-        function getClosestIntersection(intersections, startX, startY) {
+        function getClosestIntersection(intersections, startKnifeX, startKnifeY) {
             var minDistance = Infinity;
             var closestIntersection = null;
 
             for (var i = 0; i < intersections.length; i++) {
                 var intersection = intersections[i];
                 if (intersection) {
-                    var distance = Math.sqrt(Math.pow(intersection.x - startX, 2) + Math.pow(intersection.y - startY, 2));
+                    var distance = Math.sqrt(Math.pow(intersection.x - startKnifeX, 2) + Math.pow(intersection.y - startKnifeY, 2));
 
                     if (distance < minDistance) {
                         minDistance = distance;
@@ -188,17 +258,18 @@
                     }
                 }
             }
+
             return closestIntersection;
         }
 
-        function getFurthestIntersection(intersections, startX, startY) {
+        function getFurthestIntersection(intersections, startKnifeX, startKnifeY) {
             var maxDistance = -Infinity;
             var furthestIntersection = null;
 
             for (var i = 0; i < intersections.length; i++) {
                 var intersection = intersections[i];
                 if (intersection) {
-                    var distance = Math.sqrt(Math.pow(intersection.x - startX, 2) + Math.pow(intersection.y - startY, 2));
+                    var distance = Math.sqrt(Math.pow(intersection.x - startKnifeX, 2) + Math.pow(intersection.y - startKnifeY, 2));
 
                     if (distance > maxDistance) {
                         maxDistance = distance;
@@ -206,203 +277,278 @@
                     }
                 }
             }
-
             return furthestIntersection;
         }
 
-        function splitPolygon(polygon) {
-            if (!polygon || !polygon.points) {
-                return;
-            }
-
-            var points = polygon.points.map(function (point) {
-                return { x: point.x, y: point.y };
+        // 重複を削除する関数
+        function removeDuplicates(polygon) {
+            let uniqueCoords = new Set(); // 座標を保存するためのセット
+            let filteredPolygon = polygon.filter(coord => {
+                let coordStr = `${coord.x},${coord.y}`;
+                if (!uniqueCoords.has(coordStr)) {
+                    uniqueCoords.add(coordStr);
+                    return true;
+                }
+                return false;
             });
-            if (currentLine) {
-                var intersections = [
-                    { x: currentLine.x1, y: currentLine.y1 },
-                    { x: currentLine.x2, y: currentLine.y2 }
-                ];
 
-                var splitPoint1 = intersections[0];
-                var splitPoint2 = intersections[1];
+            return filteredPolygon;
+        }
 
-                var splitPoint1_A = { ...intersections[0] };
-                var splitPoint2_A = { ...intersections[1] };
+        function isSplitPoint(splitLine, tolerance, point){
+            splitY = splitLine.y;
+            splitX = splitLine.x;
 
-                var splitPoint1_B = { ...intersections[0] };
-                var splitPoint2_B = { ...intersections[1] };
+            splitYPlus  = splitY + tolerance;
+            splitYMinus = splitY - tolerance;
+            splitXPlus  = splitX + tolerance;
+            splitXMinus = splitX - tolerance;
 
-                var newPolygon1Points = [];
-                var newPolygon2Points = [];
+            if (point.y >= splitYMinus && point.y <= splitYPlus) {
+            if (point.x >= splitXMinus && point.x <= splitXPlus) {
+                return true;
+            }
+            }
+            return false;
+        }
+
+        function adjustShapesBySplitLineDirection(result, splitLine) {
+            const tolerance = 5;
+            const adjustment = 5;
+
+            if (result.length === 2) {
+                let poly1 = result[0];
+                let poly2 = result[1];
+
+                let dx = splitLine[1].x - splitLine[0].x;
+                let dy = splitLine[1].y - splitLine[0].y;
+                let angle = Math.atan2(dy, dx);
+                let isHorizontal = Math.abs(dy) <= Math.abs(dx);
+                console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
+
+                if (isHorizontal) {
+                    // 水平の場合、Y軸のみ調整（X座標も範囲内かチェック）
+                    result[0] = poly1.map(point => {
+
+                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                            point.y -= adjustment;
+                            return { x: point.x, y: point.y };
+                        }
+
+                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                            point.y -= adjustment;
+                            return { x: point.x, y: point.y };
+                        }
+                        return { x: point.x, y: point.y };
+                    });
 
 
-                if (Math.abs(currentLine.x1 - currentLine.x2) > Math.abs(currentLine.y1 - currentLine.y2)) {
-                    //上部
-                    splitPoint1_A.y = splitPoint1_A.y - panelSpacing;
-                    splitPoint2_A.y = splitPoint2_A.y - panelSpacing;
+                    result[1] = poly2.map(point => {
+                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                            point.y += adjustment;
+                            return { x: point.x, y: point.y };
+                        }
 
-                    newPolygon1Points.push(splitPoint2_A);
-                    newPolygon1Points.push(splitPoint1_A);
-                    var pointsAbove = getPointsAboveSplitLine(splitPoint1_A, splitPoint2_A, points);
-                    Array.prototype.push.apply(newPolygon1Points, pointsAbove);
+                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                            point.y += adjustment;
+                            return { x: point.x, y: point.y };
+                        }
 
-                    //下部
-                    splitPoint1_B.y = splitPoint1_B.y + panelSpacing;
-                    splitPoint2_B.y = splitPoint2_B.y + panelSpacing;
-                    newPolygon2Points.push(splitPoint1_B);
-                    newPolygon2Points.push(splitPoint2_B);
-                    var pointsBelow = getPointsBelowSplitLine(splitPoint1_B, splitPoint2_B, points);
-                    Array.prototype.push.apply(newPolygon2Points, pointsBelow);
-
+                        return { x: point.x, y: point.y };
+                    });
                 } else {
-                    //左側
-                    splitPoint1_A.x = splitPoint1_A.x - panelSpacing;
-                    splitPoint2_A.x = splitPoint2_A.x - panelSpacing;
-                    newPolygon1Points.push(splitPoint2_A);
-                    newPolygon1Points.push(splitPoint1_A);
-                    var pointsleft = getPointsLeftOfSplitLine(splitPoint1_A, splitPoint2_A, points);
-                    Array.prototype.push.apply(newPolygon1Points, pointsleft);
+                    // 垂直の場合、X軸のみ調整（Y座標も範囲内かチェック）
+                    result[0] = poly1.map(point => {
 
-                    //右側
-                    splitPoint1_B.x = splitPoint1_B.x + panelSpacing;
-                    splitPoint2_B.x = splitPoint2_B.x + panelSpacing;
-                    newPolygon2Points.push(splitPoint2_B);
-                    newPolygon2Points.push(splitPoint1_B);
-                    var pointsRight = getPointsRightOfSplitLine(splitPoint1_B, splitPoint2_B, points);
-                    Array.prototype.push.apply(newPolygon2Points, pointsRight);
+                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                            point.x -= adjustment;
+                            return { x: point.x, y: point.y };
+                        }
+
+                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                            point.x -= adjustment;
+                            return { x: point.x, y: point.y };
+                        }
+
+                        return { x: point.x, y: point.y };
+                    });
+                    result[1] = poly2.map(point => {
+
+                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                            point.x += adjustment;
+                            return { x: point.x, y: point.y };
+                        }
+
+                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                            point.x += adjustment;
+                            return { x: point.x, y: point.y };
+                        }
+
+                        return { x: point.x, y: point.y };
+                    });
                 }
 
-                newPolygon1Points = orderPolygonPoints(newPolygon1Points);
-                newPolygon2Points = orderPolygonPoints(newPolygon2Points);
-
-                var polygon1 = new fabric.Polygon(newPolygon1Points, {
-                    fill: 'white',
-                    stroke: 'black',
-                    strokeWidth: 2,
-                    selectable: false
-                });
-
-                var polygon2 = new fabric.Polygon(newPolygon2Points, {
-                    fill: 'white',
-                    stroke: 'black',
-                    strokeWidth: 2,
-                    selectable: false
-                });
-
-                canvas.remove(polygon);
-                canvas.remove(currentLine);
-
-                canvas.add(polygon1);
-                canvas.add(polygon2);
-
-                currentRect = null;
-                currentLine = null;
+                console.log("調整後の図形1の座標:", result[0]);
+                console.log("調整後の図形2の座標:", result[1]);
+            } else {
+                console.log("図形が適切に分割されていません。図形数:", result.length);
             }
         }
 
-        function findNearestVertex(points, point) {
-            var minDistance = Infinity;
-            var nearestIndex = -1;
 
-            points.forEach((p, index) => {
-                var distance = Math.sqrt(Math.pow(p.x - point.x, 2) + Math.pow(p.y - point.y, 2));
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    nearestIndex = index;
-                }
-            });
 
-            return nearestIndex;
+        function splitPolygon(polygon) {
+    if (!polygon || !polygon.points) {
+        return;
+    }
+
+    var points = polygon.points.map(function (point, index) {
+        return { x: point.x, y: point.y };
+    });
+
+    var newPolygon1Points = [];
+    var newPolygon2Points = [];
+
+    if (currentKnifeLine) {
+        var offsetX = getCurrentLeft();
+        var offsetY = getCurrentTop();
+
+        var pointsStr = polygon.points.map(function (point) {
+            return (point.x + offsetX) + " " + (point.y + offsetY);
+        });
+        pointsStr.push(pointsStr[0]);
+
+        var splitPoint1 = [currentKnifeLine.x1, currentKnifeLine.y1];
+        var splitPoint2 = [currentKnifeLine.x2, currentKnifeLine.y2];
+
+        // JSTSライブラリを使用して多角形と分割線を読み込む
+        var reader = new jsts.io.WKTReader();
+        var poly = reader.read('POLYGON((' + pointsStr.join(', ') + '))');
+        var line = reader.read('LINESTRING(' + splitPoint1.join(' ') + ', ' + splitPoint2.join(' ') + ')');
+
+        // 分割を試みる
+        var union = poly.getExteriorRing().union(line);
+        var polygonizer = new jsts.operation.polygonize.Polygonizer();
+        polygonizer.add(union);
+
+        var polygons = polygonizer.getPolygons();
+        var result = [];
+        for (var i = polygons.iterator(); i.hasNext();) {
+            var polygonTemp = i.next();
+            var coords = polygonTemp.getCoordinates().map(coord => ({ x: coord.x, y: coord.y }));
+            result.push(coords);
         }
 
-        function getPointsAboveSplitLine(splitPoint1, splitPoint2, points) {
-            var slope = (splitPoint2.y - splitPoint1.y) / (splitPoint2.x - splitPoint1.x);
-            var pointsAbove = [];
+        // 分割線が交点を持たない場合、分割線を延長して再試行
+        if (result.length !== 2) {
+            console.log("分割線が無いので再試行", result.length );
 
-            points.forEach(function (point) {
-                var yOnLine = splitPoint1.y + slope * (point.x - splitPoint1.x);
-                if (point.y < yOnLine) {
-                    pointsAbove.push(point);
-                }
-            });
+            var extendLength = 10; // 延長するピクセル数
+            var dx = currentKnifeLine.x2 - currentKnifeLine.x1;
+            var dy = currentKnifeLine.y2 - currentKnifeLine.y1;
+            var length = Math.sqrt(dx * dx + dy * dy);
+            var extendX = (dx / length) * extendLength;
+            var extendY = (dy / length) * extendLength;
 
-            return pointsAbove;
+            var extendedLine = reader.read('LINESTRING(' + (splitPoint1[0] - extendX) + ' ' + (splitPoint1[1] - extendY) + ', ' + (splitPoint2[0] + extendX) + ' ' + (splitPoint2[1] + extendY) + ')');
+            union = poly.getExteriorRing().union(extendedLine);
+            polygonizer = new jsts.operation.polygonize.Polygonizer();
+            polygonizer.add(union);
+
+            polygons = polygonizer.getPolygons();
+            result = [];
+            for (var i = polygons.iterator(); i.hasNext();) {
+                var polygonTemp = i.next();
+                var coords = polygonTemp.getCoordinates().map(coord => ({ x: coord.x, y: coord.y }));
+                result.push(coords);
+            }
         }
 
-        function getPointsBelowSplitLine(splitPoint1, splitPoint2, points) {
-            var slope = (splitPoint2.y - splitPoint1.y) / (splitPoint2.x - splitPoint1.x);
-            var pointsBelow = [];
+        if (result.length === 2) {
+            result[0] = removeDuplicates(result[0]);
+            result[1] = removeDuplicates(result[1]);
 
-            points.forEach(function (point) {
-                var yOnLine = splitPoint1.y + slope * (point.x - splitPoint1.x);
-                if (point.y >= yOnLine) {
-                    pointsBelow.push(point);
-                }
-            });
+            // 分割線の座標を配列に格納します。
+            var splitLine = [
+                { x: currentKnifeLine.x1, y: currentKnifeLine.y1 },
+                { x: currentKnifeLine.x2, y: currentKnifeLine.y2 }
+            ];
 
-            return pointsBelow;
+            adjustShapesBySplitLineDirection(result, splitLine);
+        } else {
+            console.log("分割線がありません", result.length );
+            return;
         }
 
-        function getPointsLeftOfSplitLine(splitPoint1, splitPoint2, points) {
-            var slope = (splitPoint2.y - splitPoint1.y) / (splitPoint2.x - splitPoint1.x);
-            var intercept = splitPoint1.y - slope * splitPoint1.x;
-            var pointsLeft = [];
+        newPolygon1Points = result[0];
+        newPolygon2Points = result[1];
 
-            points.forEach(function (point) {
-                var yOnLine = slope * point.x + intercept;
-                if (point.x < splitPoint1.x) {
-                    pointsLeft.push(point);
-                }
-            });
+        var minX = 0;
+        var minY = 0;
 
-            return pointsLeft;
-        }
-
-        function getPointsRightOfSplitLine(splitPoint1, splitPoint2, points) {
-            var slope = (splitPoint2.y - splitPoint1.y) / (splitPoint2.x - splitPoint1.x);
-            var intercept = splitPoint1.y - slope * splitPoint1.x;
-            var pointsRight = [];
-
-            points.forEach(function (point) {
-                var yOnLine = slope * point.x + intercept;
-                if (point.x >= splitPoint1.x) {
-                    pointsRight.push(point);
-                }
-            });
-
-            return pointsRight;
-        }
-
-        function orderPolygonPoints(polygonPoints) {
-            if (polygonPoints.length < 3) return polygonPoints;
-
-            var centroid = { x: 0, y: 0 };
-            polygonPoints.forEach(function (point) {
-                centroid.x += point.x;
-                centroid.y += point.y;
-            });
-            centroid.x /= polygonPoints.length;
-            centroid.y /= polygonPoints.length;
-
-            var sortedPoints = polygonPoints.map(function (point) {
-                var angle = Math.atan2(point.y - centroid.y, point.x - centroid.x);
-                return { point: point, angle: angle };
-            }).sort(function (a, b) {
-                return a.angle - b.angle;
-            }).map(function (item) {
-                return item.point;
-            });
-
-            return sortedPoints;
-        }
-
-        // ナイフモードのボタンのクリックイベント
-        document.getElementById('knifeModeButton').addEventListener('click', function() {
-            isKnifeMode = !isKnifeMode; // ナイフモードの有効/無効を切り替える
-            this.textContent = isKnifeMode ? 'ナイフモード: ON' : 'ナイフモード: OFF';
+        var adjustedPolygon1Points = newPolygon1Points.map(function (point) {
+            return {
+                x: point.x - offsetX - minX,
+                y: point.y - offsetY - minY
+            };
         });
 
+        var adjustedPolygon2Points = newPolygon2Points.map(function (point) {
+            return {
+                x: point.x - offsetX - minX,
+                y: point.y - offsetY - minY
+            };
+        });
+
+        var minX = Math.min(...adjustedPolygon2Points.map(v => v.x));
+        var minY = Math.min(...adjustedPolygon2Points.map(v => v.y));
+
+        var adjustedPolygon2Points2 = adjustedPolygon2Points.map(function (point) {
+            return {
+                x: point.x - minX,
+                y: point.y - minY
+            };
+        });
+
+        var polygon1MinX = Math.min(...newPolygon1Points.map(point => point.x));
+        var polygon1MinY = Math.min(...newPolygon1Points.map(point => point.y));
+
+        var polygon2MinX = Math.min(...newPolygon2Points.map(point => point.x));
+        var polygon2MinY = Math.min(...newPolygon2Points.map(point => point.y));
+
+        var polygon1 = new fabric.Polygon(adjustedPolygon1Points, {
+            left: polygon1MinX,
+            top: polygon1MinY,
+            fill: 'white',
+            stroke: 'black',
+            strokeWidth: 2,
+            selectable: false
+        });
+
+        var polygon2 = new fabric.Polygon(adjustedPolygon2Points2, {
+            left: polygon2MinX,
+            top: polygon2MinY,
+            fill: 'blue',
+            stroke: 'black',
+            strokeWidth: 2,
+            selectable: false
+        });
+
+        canvas.remove(polygon);
+        canvas.remove(currentKnifeLine);
+
+        canvas.add(polygon1);
+        canvas.add(polygon2);
+        currentKnifeObject = null;
+        currentKnifeLine = null;
+    }
+}
+
+
+        document.getElementById('knifeModeButton').addEventListener('click', function () {
+            isKnifeMode = !isKnifeMode;
+            this.textContent = isKnifeMode ? 'ナイフモード: ON' : 'ナイフモード: OFF';
+        });
     </script>
 </body>
 
