@@ -13,9 +13,9 @@
   width: 100%;
   min-width: 600px;
   max-width: 65vw;
-  height: 85%;
+  height: 95%;
   min-height: 400px;
-  max-height: 80vh;
+  max-height: 95%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -133,12 +133,9 @@
   vertical-align: middle;
 }
 
-.navbar-nav .nav-link i {
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-.navbar-nav .dropdown-item i {
+.navbar-nav .nav-link i,
+.navbar-nav .dropdown-item i,
+.navbar-nav .dropdown-item span {
   margin-right: 8px;
   vertical-align: middle;
 }

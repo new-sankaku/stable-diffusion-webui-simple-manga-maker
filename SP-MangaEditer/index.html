@@ -13,17 +13,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/common.css?v=1.7">
-    <link rel="stylesheet" href="css/components.css?v=1.7">
-    <link rel="stylesheet" href="css/layout.css?v=1.7">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=1.7">
-    <link rel="stylesheet" href="css/anime.css?v=1.7">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=1.7">
-    <link rel="stylesheet" href="css/toast.css?v=1.7">
+    <link rel="stylesheet" href="css/common.css?v=1.8">
+    <link rel="stylesheet" href="css/components.css?v=1.8">
+    <link rel="stylesheet" href="css/layout.css?v=1.8">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=1.8">
+    <link rel="stylesheet" href="css/anime.css?v=1.8">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=1.8">
+    <link rel="stylesheet" href="css/toast.css?v=1.8">
     
-    <link href="third/Bootstrup/bootstrap.min.css?v=1.7" rel="stylesheet">   
-    <script src="third/Fabric.js/fabric.min.js?v=1.7"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=1.7"></script>
+    <link href="third/Bootstrup/bootstrap.min.css?v=1.8" rel="stylesheet">   
+    <script src="third/Fabric.js/fabric.min.js?v=1.8"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=1.8"></script>
 
 </head>
 
@@ -80,6 +80,21 @@
                             <li>
                                 <a class="dropdown-item" href="#" id="settingsLoad">
                                     <i class="material-icons">settings</i> Settings Load
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" id="settingsSave" onclick="cropAndDownload()">
+                                    <span class="material-symbols-outlined">imagesmode</span> Image Download
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" id="settingsLoad" onclick="clipCopy()">
+                                    <i class="material-icons">content_copy</i> Image Copy
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="allRemove()">
+                                    <i class="material-icons">delete</i> All Remove
                                 </a>
                             </li>
                         </ul>
@@ -397,20 +412,6 @@
                 <div id="canvas-container">
                     <canvas id="mangaImageCanvas"></canvas>
                 </div>
-                <div id="canvas-buttons">
-                    <button onclick="allRemove()"><i class="material-icons">delete</i> All Remove</button>
-                    <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> Flip</button>
-                    <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> Flip</button>
-                    <button onclick="undo()"><i class="material-icons">undo</i> Undo</button>
-                    <button onclick="redo()"><i class="material-icons">redo</i> Redo</button>
-                    <button id="cropMode"><i class="material-icons">crop_free</i> Crop Mode</button>
-                    <button id="crop" anim="glow"><i class="material-icons">crop</i> CROP!</button>
-                </div>
-                <div id="download-buttons">
-                    <button onclick="cropAndDownload()"><span class="material-symbols-outlined">imagesmode</span> Image
-                        Download</button>
-                    <button onclick="clipCopy()"><i class="material-icons">content_copy</i> Image Copy</button>
-                </div>
             </div>
 
             <div id="layer-panel">
@@ -424,6 +425,15 @@
                     <button style="display: none;" onclick="openBaseText2ImagefloatingWindow()"><i
                             class="material-icons">collections</i> All Run T2I</button>
                 </div>
+                <div id="canvas-buttons">
+                    <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> Flip</button>
+                    <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> Flip</button>
+                    <button onclick="undo()"><i class="material-icons">undo</i> Undo</button>
+                    <button onclick="redo()"><i class="material-icons">redo</i> Redo</button>
+                    <button id="cropMode"><i class="material-icons">crop_free</i> Crop Mode</button>
+                    <button id="crop" anim="glow"><i class="material-icons">crop</i> CROP!</button>
+                </div>
+
             </div>
             
             <div id="controls">
@@ -548,42 +558,42 @@
         </div>
     </div> -->
     <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
-    <script src="third/jszip/jszip.min.js?v=1.7" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=1.7"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=1.7"></script>
+    <script src="third/jszip/jszip.min.js?v=1.8" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=1.8"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=1.8"></script>
 
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.7" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.7" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=1.7" defer></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.8" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.8" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=1.8" defer></script>
 
-    <script src="js/Settings.js?v=1.7" defer></script>
-    <script src="js/CanvasManager.js?v=1.7" defer></script>
-    <script src="js/util/FabricUtil.js?v=1.7" defer></script>
-    <script src="js/Shortcut.js?v=1.7" defer></script>    
-    <script src="js/PanelManager.js?v=1.7" defer></script>
+    <script src="js/Settings.js?v=1.8" defer></script>
+    <script src="js/CanvasManager.js?v=1.8" defer></script>
+    <script src="js/util/FabricUtil.js?v=1.8" defer></script>
+    <script src="js/Shortcut.js?v=1.8" defer></script>    
+    <script src="js/PanelManager.js?v=1.8" defer></script>
 
-    <script src="js/Toast.js?v=1.7" defer></script>
+    <script src="js/Toast.js?v=1.8" defer></script>
     
-    <script src="js/FloatingWindowManagement.js?v=1.7" defer></script>
+    <script src="js/FloatingWindowManagement.js?v=1.8" defer></script>
 
-    <script src="js/PromptManager.js?v=1.7" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=1.7" defer></script>
-    <script src="js/LayerManagement.js?v=1.7" defer></script>
-    <script src="js/CommonControleManagement.js?v=1.7" defer></script>
-    <script src="js/ImageTransformation.js?v=1.7" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=1.7" defer></script>
-    <script src="js/Sidebar.js?v=1.7" defer></script>
-    <script src="js/TextEffect.js?v=1.7" defer></script>
-    <script src="js/VerticalText.js?v=1.7" defer></script>
-    <script src="js/ImageControleManager.js?v=1.7" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=1.7" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=1.7" defer></script>
-    <script src="js/ProjectManagement.js?v=1.7" defer></script>
-    <script src="js/ImageDownload.js?v=1.7" defer></script>
-    <script src="js/Anime.js?v=1.7" defer></script>
-    <script src="js/Tools.js?v=1.7" defer></script>
-    <script src="js/event/FabricManagement.js?v=1.7" defer></script>
-    <script src="js/InfomationControle.js?v=1.7" defer></script>
+    <script src="js/PromptManager.js?v=1.8" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=1.8" defer></script>
+    <script src="js/LayerManagement.js?v=1.8" defer></script>
+    <script src="js/CommonControleManagement.js?v=1.8" defer></script>
+    <script src="js/ImageTransformation.js?v=1.8" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=1.8" defer></script>
+    <script src="js/Sidebar.js?v=1.8" defer></script>
+    <script src="js/TextEffect.js?v=1.8" defer></script>
+    <script src="js/VerticalText.js?v=1.8" defer></script>
+    <script src="js/ImageControleManager.js?v=1.8" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=1.8" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=1.8" defer></script>
+    <script src="js/ProjectManagement.js?v=1.8" defer></script>
+    <script src="js/ImageDownload.js?v=1.8" defer></script>
+    <script src="js/Anime.js?v=1.8" defer></script>
+    <script src="js/Tools.js?v=1.8" defer></script>
+    <script src="js/event/FabricManagement.js?v=1.8" defer></script>
+    <script src="js/InfomationControle.js?v=1.8" defer></script>
 
     
 </body>
