@@ -178,18 +178,18 @@ function sdwebui_checkAPIStatus() {
     headers: {'Accept': 'application/json'}
   })
   .then(response => {
-    const statusElement = document.getElementById('Stable_Diffusion_WebUI_Status');
+    const statusElement = document.getElementById('SD_WebUI_pingCheck_Label');
     if (response.ok) {
-      statusElement.innerHTML = 'Stable diffusion WebUI Online';
+      statusElement.innerHTML = '<input type="checkbox" id="SD_WebUI_pingCheck" checked> SD WebUI ON';
       statusElement.style.color = 'green';
     } else {
-      statusElement.innerHTML = 'Stable diffusion WebUI Offline';
+      statusElement.innerHTML = '<input type="checkbox" id="SD_WebUI_pingCheck" checked> SD WebUI OFF';
       statusElement.style.color = 'red';
     }
   })
   .catch(error => {
-    const statusElement = document.getElementById('Stable_Diffusion_WebUI_Status');
-    statusElement.innerHTML = 'Stable diffusion WebUI Offline(Error)';
+    const statusElement = document.getElementById('SD_WebUI_pingCheck_Label');
+    statusElement.innerHTML = '<input type="checkbox" id="SD_WebUI_pingCheck" checked> SD WebUI OFF(Error)';
     statusElement.style.color = 'red';
   });
 }
