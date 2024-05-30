@@ -124,7 +124,10 @@ saveState();
 
 
 function allRemove() {
+    isUndoRedoOperation = true;
 	canvas.clear();
+    isUndoRedoOperation = false;
+    saveStateByManual();
 	updateLayerPanel();
 	currentImage = null;
 }
