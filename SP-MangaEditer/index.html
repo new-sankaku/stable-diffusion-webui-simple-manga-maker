@@ -527,7 +527,19 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="panel" id="infomationPanel">
+                    <div class="area-header" onclick="imageControleTogglePanel('infomationPanel', this)">
+                        ▼ Infomation Controls
+                    </div>
+                    <div class="control-content">
+                        <div class="control-item">
+                            <label><input type="checkbox" id="InfomationFPS"> FPS : 0</label>
+                        </div>
+                        <div class="control-item">
+                            <label><input type="checkbox" id="InfomationCoordinate"> X:0.0  Y:0.0 </label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
@@ -550,6 +562,7 @@
 
     <script src="js/Settings.js?v=1.7" defer></script>
     <script src="js/CanvasManager.js?v=1.7" defer></script>
+    <script src="js/util/FabricUtil.js?v=1.7" defer></script>
     <script src="js/Shortcut.js?v=1.7" defer></script>    
     <script src="js/PanelManager.js?v=1.7" defer></script>
 
@@ -574,7 +587,9 @@
     <script src="js/Anime.js?v=1.7" defer></script>
     <script src="js/Tools.js?v=1.7" defer></script>
     <script src="js/event/FabricManagement.js?v=1.7" defer></script>
-    <script src="js/util/FabricUtil.js?v=1.7" defer></script>
+    <script src="js/InfomationControle.js?v=1.7" defer></script>
+
+    
 </body>
 
 </html>

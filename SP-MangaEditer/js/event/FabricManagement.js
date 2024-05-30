@@ -161,3 +161,4 @@ canvas.on("selection:updated", function () {
   }
 });
 canvas.on("selection:cleared", closeWindow);
+
