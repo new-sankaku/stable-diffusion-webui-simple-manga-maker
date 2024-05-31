@@ -210,3 +210,59 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
+
+function executeWithConfirmation(message, callback) {
+  var modalHtml = `
+      <div class="modal fade" id="dynamicConfirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+                      <button type="button" class="btn-close" id="executeWithConfirmationCloseButton" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      ${message}
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" id="executeWithConfirmationCancelButton">Cancel</button>
+                      <button type="button" class="btn btn-primary" id="executeWithConfirmationConfirmButton">Yes</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  var confirmModal = new bootstrap.Modal(document.getElementById('dynamicConfirmModal'));
+  confirmModal.show();
+
+  var executeWithConfirmationConfirmButton = document.getElementById('executeWithConfirmationConfirmButton');
+  var executeWithConfirmationCancelButton = document.getElementById('executeWithConfirmationCancelButton');
+  var executeWithConfirmationCloseButton = document.getElementById('executeWithConfirmationCloseButton');
+
+  function handleConfirm() {
+      callback();
+      confirmModal.hide();
+      cleanup();
+  }
+
+  function handleCancel() {
+      console.log("handleCancel");
+      confirmModal.hide();
+      cleanup();
+  }
+
+  function cleanup() {
+    executeWithConfirmationConfirmButton.removeEventListener('click', handleConfirm);
+    executeWithConfirmationCancelButton.removeEventListener('click', handleCancel);
+    executeWithConfirmationCloseButton.removeEventListener('click', handleCancel);
+    document.getElementById('dynamicConfirmModal').remove();
+  }
+
+  executeWithConfirmationConfirmButton.addEventListener('click', handleConfirm);
+  executeWithConfirmationCancelButton.addEventListener('click', handleCancel);
+  executeWithConfirmationCloseButton.addEventListener('click', handleCancel);
+}
+
+

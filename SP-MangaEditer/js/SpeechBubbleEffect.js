@@ -120,7 +120,13 @@ window.onload = function () {
         img.classList.add("svg-preview");
         img.alt = item.name;
         img.addEventListener("click", function () {
-            loadSVGPlusReset(item.svg);
+            if( stateStack.length > 1 ){
+                executeWithConfirmation('New Project?', function() {
+                    loadSVGPlusReset(item.svg);
+                });
+            }else{
+                loadSVGPlusReset(item.svg);
+            }
         });
         previewAreaVertical.appendChild(img);
     });
@@ -133,7 +139,13 @@ window.onload = function () {
         img.classList.add("svg-preview");
         img.alt = item.name;
         img.addEventListener("click", function () {
-            loadSVGPlusReset(item.svg);
+            if( stateStack.length > 1 ){
+                executeWithConfirmation('New Project?', function() {
+                    loadSVGPlusReset(item.svg);
+                });
+            }else{
+                loadSVGPlusReset(item.svg);
+            }
         });
         previewAreaLandscape.appendChild(img);
     });
