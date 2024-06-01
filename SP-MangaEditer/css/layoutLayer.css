@@ -4,6 +4,7 @@
   overflow-y: auto;
   border: 2px solid #4D4D4D;
   height: 750px;
+  margin-bottom: 5px;
 }
 
 .layer-item {
@@ -41,16 +42,13 @@
 }
 
 .layer-buttons {
-  display: flex;
-  margin-left: auto;
-  justify-content: flex-end;
+  margin: 5px;
 }
 #layer-buttons button .material-icons{
   font-size: 12px;
 }
 .layer-buttons button {
   padding: 0px 3px;
-  
 }
 
 

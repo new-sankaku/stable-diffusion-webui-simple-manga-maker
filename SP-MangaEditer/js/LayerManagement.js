@@ -8,7 +8,7 @@ function updateLayerPanel() {
       var layerDiv = document.createElement("div");
       var previewDiv = document.createElement("div");
       var detailsDiv = document.createElement("div");
-      var nameTextArea = document.createElement("textarea");
+      var nameTextArea = document.createElement("input");
       var buttonsDiv = document.createElement("div");
       var deleteButton = document.createElement("button");
 
@@ -17,15 +17,18 @@ function updateLayerPanel() {
       detailsDiv.className = "layer-details";
       nameTextArea.className = "layer-name";
       buttonsDiv.className = "layer-buttons";
-
-      if (["image", "rect", "circle", "path", "group", "polygon"].includes(layer.type)) {
+      
+      if (isPutImage(layer)) {
         putPreviewImage(layer, previewDiv);
-      } else if (layer.type === "text" || layer.type === "textbox") {
+      
+      } else if (isHorizontalText(layer)) {
         var fullText = layer.text;
         nameTextArea.value = fullText.substring(0, 20);
-      } else if (layer.type === "verticalText") {
+      
+      } else if (isVerticalText(layer)) {
         var fullText = layer.getObjects().map(obj => obj.text).join('');
         nameTextArea.value = fullText.substring(0, 15);
+
       }
 
       nameTextArea.value = layer.name || nameTextArea.value || layer.type + ` ${index + 1}`;
@@ -38,6 +41,13 @@ function updateLayerPanel() {
       nameTextArea.style.borderBottom = '1px solid #cccccc';
       nameTextArea.style.outline = 'none';
 
+      if (isText(layer)) {
+        nameTextArea.style.flex = '1'; 
+        nameTextArea.style.marginRight = '5px';
+        detailsDiv.style.display = 'flex';
+        detailsDiv.style.alignItems = 'center';
+      }
+
       nameTextArea.oninput = function () {
         layer.name = nameTextArea.value;
       };
@@ -48,6 +58,7 @@ function updateLayerPanel() {
         e.stopPropagation();
         removeLayer(layer);
       };
+
 
       detailsDiv.appendChild(nameTextArea);
 

@@ -28,4 +28,6 @@ function toggleVisibility(id) {
   } else {
       element.style.display = 'none';
   }
+  adjustCanvasSize();
+
 }

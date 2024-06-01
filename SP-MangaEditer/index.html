@@ -238,6 +238,12 @@
                             <span data-i18n="links">Links</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item"
+                                href="https://new-sankaku.github.io/SP-MangaEditer/"
+                                target="_blank">
+                                <i class="material-icons">emoji_people</i>
+                                <span>SP-MANGA EDITER(Standalone)</span>
+                            </a>
                             <a class="dropdown-item" href="https://discord.gg/zuU96TqNUb" target="_blank">
                                 <i class="fab fa-discord"></i>
                                 <span data-i18n="discord">Discord</span>
@@ -248,6 +254,7 @@
                                 <i class="fab fa-github"></i>
                                 <span data-i18n="github">GitHub</span>
                             </a>
+
                         </ul>
                     </li>
                 </ul>
@@ -558,7 +565,21 @@
             </div>
 
             <div id="canvas-area">
-                <div class="area-header" data-i18n="canvas">Canvas : Panel click or Drop image </div>
+                <div class="area-header">
+                    <span data-i18n="canvas">[Canvas] : </span>
+
+                    <span data-i18n="view">View Settings : </span>
+                    <label data-i18n="view_layers">
+                        Layers: 
+                    </label>
+                    <input type="checkbox" id="view_layers_checkbox" checked>
+    
+                    <label data-i18n="view_controles">
+                        Controles: 
+                    </label>
+                    <input type="checkbox" id="view_controles_checkbox" checked>
+                </div>
+
                 <div id="canvas-container">
                     <canvas id="mangaImageCanvas"></canvas>
                 </div>
@@ -577,10 +598,7 @@
                             T2I</span></button>
                 </div>
                 <div id="canvas-buttons">
-                    <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> <span
-                            data-i18n="flip">Flip</span></button>
-                    <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> <span
-                            data-i18n="flip">Flip</span></button>
+
                     <button onclick="undo()"><i class="material-icons">undo</i> <span
                             data-i18n="undo">Undo</span></button>
                     <button onclick="redo()"><i class="material-icons">redo</i> <span
@@ -643,6 +661,12 @@
                         ▼ Fast Image Effect
                     </div>
                     <div class="control-content">
+                        <div class="control-row">
+                            <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> <span
+                                data-i18n="flip">Flip</span></button>
+                            <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> <span
+                                    data-i18n="flip">Flip</span></button>
+                        </div>
                         <div class="control-item">
                             <input type="checkbox" id="sepiaEffect">
                             <label data-i18n="sepia">

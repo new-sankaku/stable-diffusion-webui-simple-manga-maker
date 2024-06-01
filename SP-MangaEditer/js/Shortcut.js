@@ -15,6 +15,16 @@ document.addEventListener("keydown", function (e) {
     return;
   } else if (e.key === "c" && e.ctrlKey) {
     // コピー (Ctrl+C)
+  }else if (e.ctrlKey && e.key === 'l') {
+    changeView('layer-panel', document.getElementById('view_layers_checkbox').checked);
+    document.getElementById('view_layers_checkbox').click();
+    e.preventDefault();
+    return;
+  } else if (e.ctrlKey && e.key === 'k') {
+    changeView('controls', document.getElementById('view_controles_checkbox').checked);
+    document.getElementById('view_controles_checkbox').click();
+    e.preventDefault();
+    return;
   }
 
   if (activeObject) {

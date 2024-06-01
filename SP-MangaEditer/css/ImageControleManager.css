@@ -26,7 +26,7 @@
 .control-row {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .control-row label {
@@ -43,6 +43,9 @@
   flex: 0 0 30px;
   text-align: right;
   margin-left: 5px;
+}
+.control-row button {
+  margin-right: 5px;
 }
 
 .panel-header {

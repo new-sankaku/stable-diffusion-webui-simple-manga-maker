@@ -4,7 +4,7 @@
 
 #canvas-area {
   min-width: 600px;
-  width: 50%;
+  width: 100%;
   margin-right: 10px;
 }
 
@@ -12,7 +12,7 @@
 #canvas-container {
   width: 100%;
   min-width: 600px;
-  max-width: 65vw;
+  max-width: 100%;
   height: 95%;
   min-height: 400px;
   max-height: 95%;
@@ -40,8 +40,8 @@
   margin-right: 10px;
   width: 50px;
   min-width: 50px;
-  height: auto;
-  max-height: auto;
+  height: 95vh;
+  max-height: 95vh;
   background: linear-gradient(145deg, #ffe0ad, #ffe0ad);
   box-shadow: 2px 0 5px rgba(82, 40, 0, 0.1);
   display: flex;

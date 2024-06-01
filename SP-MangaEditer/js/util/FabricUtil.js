@@ -14,6 +14,10 @@ function isVerticalText(activeObject) {
   return (activeObject && (activeObject.type === "verticalText") );
 }
 
+function isHorizontalText(activeObject) {
+  return (activeObject && (activeObject.type === "text" || activeObject.type === "textbox") );
+}
+
 function isLine(activeObject){
   return (activeObject && activeObject.type === 'line') ;
 }
@@ -24,6 +28,10 @@ function isGroup(activeObject){
 
 function isShapes(activeObject){
   return (activeObject && ['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) ;
+}
+
+function isPutImage(activeObject) {
+  return (activeObject && ["image", "rect", "circle", "path", "group", "polygon"].includes(activeObject.type) );
 }
 
 function saveInitialState(obj) {

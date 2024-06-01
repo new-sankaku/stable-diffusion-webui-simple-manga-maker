@@ -44,6 +44,10 @@ button{
     margin: 4px;
     text-align: left;
 }
+button .material-icons{
+    font-size: 14px;
+    vertical-align: middle;
+}
 
 
 .input-group {

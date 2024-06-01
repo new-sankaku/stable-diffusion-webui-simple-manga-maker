@@ -116,12 +116,12 @@ function putImageInFrame(img, x, y) {
       scaleY: scaleToCanvas,
     });
   }
-  
+
   canvas.setActiveObject(img);
 
   // console.log("function putImageInFrame { saveInitialState" );
   saveInitialState(img)
-  
+
   canvas.renderAll();
   updateLayerPanel();
 
@@ -136,7 +136,7 @@ function findTargetFrame(x, y) {
 
   let objects = canvas.getObjects().reverse();
   for (let i = 0; i < objects.length; i++) {
-    if ( isShapes(objects[i]) ) {
+    if (isShapes(objects[i])) {
 
       let frameBounds = objects[i].getBoundingRect(true);
       if (
@@ -160,16 +160,16 @@ function isWithin(image, frame) {
     imageBounds.left >= frameBounds.left &&
     imageBounds.top >= frameBounds.top &&
     imageBounds.left + imageBounds.width * image.scaleX <=
-      frameBounds.left + frameBounds.width &&
+    frameBounds.left + frameBounds.width &&
     imageBounds.top + imageBounds.height * image.scaleY <=
-      frameBounds.top + frameBounds.height;
+    frameBounds.top + frameBounds.height;
   return within;
 }
 
 function adjustImageToFitFrame(image, frame) {
   let frameBounds = frame.getBoundingRect();
   let scale = Math.min(
-    frameBounds.width / image.getScaledWidth(), 
+    frameBounds.width / image.getScaledWidth(),
     frameBounds.height / image.getScaledHeight()
   );
   image.set({
@@ -184,10 +184,10 @@ function adjustImageToFitFrame(image, frame) {
 function loadSVGPlusReset(svgString) {
   initImageHistory();
   saveState();
-  
+
   isUndoRedoOperation = true;
   fabric.loadSVGFromString(svgString, function (objects, options) {
-    resizeCanvasToObject(options.width , options.height);
+    resizeCanvasToObject(options.width, options.height);
 
     var canvasUsableHeight = canvas.height - svgPagging;
     var overallScaleX = canvas.width / options.width;
@@ -274,12 +274,12 @@ function loadSVGPlusReset(svgString) {
 
           controls: fabric.Object.prototype.controls,
         });
-        setText2ImageInitPrompt( polygon );
+        setText2ImageInitPrompt(polygon);
 
         canvas.add(polygon);
       } else {
         isPanel: true,
-        obj.scaleX = scaleToFit;
+          obj.scaleX = scaleToFit;
         obj.scaleY = scaleToFit;
         obj.top = obj.top * scaleToFit + offsetY;
         obj.left = obj.left * scaleToFit + offsetX;
@@ -376,7 +376,7 @@ function addSquare() {
       isPanel: true,
     }
   );
-  setText2ImageInitPrompt( square );
+  setText2ImageInitPrompt(square);
   canvas.add(square);
   updateLayerPanel();
 }
@@ -407,7 +407,7 @@ function addPentagon() {
     cornerColor: "blue",
     isPanel: true,
   });
-  setText2ImageInitPrompt( pentagon );
+  setText2ImageInitPrompt(pentagon);
   canvas.add(pentagon);
   updateLayerPanel();
 
@@ -620,3 +620,20 @@ function debounceSnapToGrid(target) {
   }, 50);
 }
 
+
+
+document.getElementById('view_layers_checkbox').addEventListener('change', function () {
+  changeView('layer-panel', this.checked);
+});
+document.getElementById('view_controles_checkbox').addEventListener('change', function () {
+  changeView('controls', this.checked);
+});
+function changeView(elementId, isVisible) {
+  var element = document.getElementById(elementId);
+  if (isVisible) {
+    element.style.display = 'block';
+  } else {
+    element.style.display = 'none';
+  }
+  adjustCanvasSize();
+}
