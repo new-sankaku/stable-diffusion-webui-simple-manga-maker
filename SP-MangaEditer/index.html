@@ -13,19 +13,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/common.css?v=1.8">
-    <link rel="stylesheet" href="css/components.css?v=1.8">
-    <link rel="stylesheet" href="css/layout.css?v=1.8">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=1.8">
-    <link rel="stylesheet" href="css/anime.css?v=1.8">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=1.8">
-    <link rel="stylesheet" href="css/toast.css?v=1.8">
-    
-    <link href="third/Bootstrup/bootstrap.min.css?v=1.8" rel="stylesheet">   
+    <link rel="stylesheet" href="css/common.css?v=1.9">
+    <link rel="stylesheet" href="css/components.css?v=1.9">
+    <link rel="stylesheet" href="css/layout.css?v=1.9">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=1.9">
+    <link rel="stylesheet" href="css/anime.css?v=1.9">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=1.9">
+    <link rel="stylesheet" href="css/toast.css?v=1.9">
 
-    <script src="third/Fabric.js/fabric.min.js?v=1.8"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=1.8"></script>
+    <link href="third/Bootstrup/bootstrap.min.css?v=1.9" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 
+    <script src="third/glfx/glfx.js?=1.9"></script>
+    <script src="third/Fabric.js/fabric.min.js?v=1.9"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=1.9"></script>
+    <script src="third/i18next/i18next.min.js?v=1.9"></script>
 </head>
 
 <body>
@@ -40,8 +43,8 @@
                 <span class="close-btn" onclick="closeWindow()"></span>
                 <textarea id="vertical_textInput"></textarea>
                 <div class="button-container">
-                    <button id="updateButton">Submit</button>
-                    <button id="cancelButton">Cancel</button>
+                    <button id="updateButton"><span data-i18n="submit">Submit</span></button>
+                    <button id="cancelButton"><span data-i18n="cancel">Cancel</span></button>
                 </div>
             </div>
         </div>
@@ -60,42 +63,48 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            File
+                            <span data-i18n="file">File</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
                                 <a class="dropdown-item" href="#" id="projectSave">
-                                    <i class="material-icons">folder_zip</i> Project Save
+                                    <i class="material-icons">folder_zip</i> <span data-i18n="projectSave">Project
+                                        Save</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" id="projectLoad">
-                                    <i class="material-icons">folder_zip</i> Project Load
+                                    <i class="material-icons">folder_zip</i> <span data-i18n="projectLoad">Project
+                                        Load</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" id="settingsSave">
-                                    <i class="material-icons">settings</i> Settings Save
+                                    <i class="material-icons">settings</i> <span data-i18n="settingsSave">Settings
+                                        Save</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" id="settingsLoad">
-                                    <i class="material-icons">settings</i> Settings Load
+                                    <i class="material-icons">settings</i> <span data-i18n="settingsLoad">Settings
+                                        Load</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" id="settingsSave" onclick="cropAndDownload()">
-                                    <span class="material-symbols-outlined">imagesmode</span> Image Download
+                                    <span class="material-symbols-outlined">imagesmode</span> <span
+                                        data-i18n="imageDownload">Image Download</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" id="settingsLoad" onclick="clipCopy()">
-                                    <i class="material-icons">content_copy</i> Image Copy
+                                    <i class="material-icons">content_copy</i> <span data-i18n="imageCopy">Image
+                                        Copy</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" onclick="allRemove()">
-                                    <i class="material-icons">delete</i> All Remove
+                                    <i class="material-icons">delete</i> <span data-i18n="allRemove">All Remove</span>
                                 </a>
                             </li>
                         </ul>
@@ -105,12 +114,13 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Prompt
+                            <span data-i18n="prompt">Prompt</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
                                 <a class="dropdown-item" onclick="openPromptChangeFloatingWindow()">
-                                    <i class="material-icons">manage_search</i> Search & Replace
+                                    <i class="material-icons">manage_search</i> <span data-i18n="searchReplace">Search &
+                                        Replace</span>
                                 </a>
                             </li>
                         </ul>
@@ -120,18 +130,21 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            SD WebUI
+                            <span data-i18n="sdWebUI">SD WebUI</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
-                                    <label for="Stable_Diffusion_WebUI_apiHost">API Host:<input type="text" id="Stable_Diffusion_WebUI_apiHost"></label>
+                                <label for="Stable_Diffusion_WebUI_apiHost"><span data-i18n="apiHost">API
+                                        Host:</span><input type="text" id="Stable_Diffusion_WebUI_apiHost"></label>
                             </li>
                             <li>
-                                    <label for="Stable_Diffusion_WebUI_apiPort">API Port:<input type="text" id="Stable_Diffusion_WebUI_apiPort"></label>
+                                <label for="Stable_Diffusion_WebUI_apiPort"><span data-i18n="apiPort">API
+                                        Port:</span><input type="text" id="Stable_Diffusion_WebUI_apiPort"></label>
                             </li>
                             <li>
                                 <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank">
-                                    <i class="material-icons">help_outline</i> Help:API Connect Settings
+                                    <i class="material-icons">help_outline</i> <span
+                                        data-i18n="help_api_connect_settings">Help:API Connect Settings</span>
                                 </a>
                             </li>
                         </ul>
@@ -141,31 +154,38 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Canvas
+                            <span data-i18n="canvas">Canvas</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item">
-                                <i class="material-icons">format_color_fill</i> Canvas BG
+                                <i class="material-icons">format_color_fill</i> <span data-i18n="canvasBG">Canvas
+                                    BG</span>
                                 <input type="color" id="bg-color" value="#ffffff">
                             </a>
 
                             <a class="dropdown-item">
-                                <i class="material-icons">photo_size_select_large</i> Download Dpi
-                                <input type="number" id="outputDpi" class="dropdown-item-mini-text" value="300" min="96" step="1">
+                                <i class="material-icons">photo_size_select_large</i> <span
+                                    data-i18n="downloadDpi">Download Dpi</span>
+                                <input type="number" id="outputDpi" class="dropdown-item-mini-text" value="300" min="96"
+                                    step="1">
                             </a>
                             <hr>
                             <a class="dropdown-item" href="#" id="toggleGridButton">
-                                <i class="material-icons">grid_4x4</i> Grid Line (Ctrl+G)
+                                <i class="material-icons">grid_4x4</i> <span data-i18n="gridLine">Grid Line
+                                    (Ctrl+G)</span>
                             </a>
                             <a class="dropdown-item">
-                                <i class="material-icons">format_line_spacing</i> Grid Line Size
+                                <i class="material-icons">format_line_spacing</i> <span data-i18n="gridLineSize">Grid
+                                    Line Size</span>
                                 <input type="number" id="gridSizeInput" class="dropdown-item-mini-text" value="10"
                                     min="1">
                             </a>
                             <hr>
                             <a class="dropdown-item">
-                                <i class="material-icons">fit_screen</i> Margin From Panel
-                                <input type="number" id="marginFromPanel" class="dropdown-item-mini-text" value="20" step="1" min="0" max="100">
+                                <i class="material-icons">fit_screen</i> <span data-i18n="marginFromPanel">Margin From
+                                    Panel</span>
+                                <input type="number" id="marginFromPanel" class="dropdown-item-mini-text" value="20"
+                                    step="1" min="0" max="100">
                             </a>
                         </ul>
                     </li>
@@ -174,32 +194,63 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Help
+                            <span data-i18n="help">Help</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="html/Shortcut/shortcut.html" target="_blank">
-                                <i class="material-icons">switch_access_shortcut</i> Shortcut Page
-                            </a>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Links
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="https://discord.gg/zuU96TqNUb" target="_blank">
-                                <i class="material-icons">chat_bubble_outline</i> Discord
-                            </a>
-                            <a class="dropdown-item" href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker" target="_blank">
-                                <i class="material-icons">code</i> GitHub
+                                <i class="material-icons">switch_access_shortcut</i>
+                                <span data-i18n="shortcutPage">Shortcut Page</span>
                             </a>
                         </ul>
                     </li>
                 </ul>
 
+
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" data-i18n="language">
+                            <span data-i18n="language">Language</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('en', event)">
+                                <span class="flag-icon flag-icon-us"></span> <span data-i18n="english">English</span>
+                            </a>
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('ja', event)">
+                                <span class="flag-icon flag-icon-jp"></span> <span data-i18n="japanese">日本語</span>
+                            </a>
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('ko', event)">
+                                <span class="flag-icon flag-icon-kr"></span> <span data-i18n="korean">한국어</span>
+                            </a>
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('zh', event)">
+                                <span class="flag-icon flag-icon-cn"></span> <span data-i18n="chinese">中文</span>
+                            </a>
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('fr', event)">
+                                <span class="flag-icon flag-icon-fr"></span> <span data-i18n="french">Français</span>
+                            </a>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" data-i18n="links">
+                            <span data-i18n="links">Links</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="https://discord.gg/zuU96TqNUb" target="_blank">
+                                <i class="fab fa-discord"></i>
+                                <span data-i18n="discord">Discord</span>
+                            </a>
+                            <a class="dropdown-item"
+                                href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker"
+                                target="_blank">
+                                <i class="fab fa-github"></i>
+                                <span data-i18n="github">GitHub</span>
+                            </a>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </nav>
 
@@ -215,47 +266,60 @@
             </div>
 
             <div id="svg-container-vertical" style="display: none;">
-                <div class="area-header">Panels(Click only)</div>
+                <div class="area-header" data-i18n="panelsVertical">Panels</div>
                 <div id="svg-preview-area-vertical"></div>
             </div>
             <div id="svg-container-landscape" style="display: none;">
-                <div class="area-header">Panels(Click only)</div>
+                <div class="area-header" data-i18n="panelsLandscape">Panels</div>
                 <div id="svg-preview-area-landscape"></div>
             </div>
 
             <div id="panel-manager-area" style="display: none;">
-                <div class="area-header">Panel Manager</div>
+                <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="panel-manager-items">
-                    <label for="strokeColor">Line:
+                    <div class="input-group">
+                        <label for="strokeColor" data-i18n="line">Line:</label>
                         <input type="color" id="strokeColor" name="strokeColor" value="#000000"
-                            oninput="changeStrokeColor(this.value)"></label>
-                    <label for="strokeWidth">Line Width:</label>
-                    <input type="range" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2"
-                    oninput="changeStrokeWidth(this.value)">
+                            oninput="changeStrokeColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label for="strokeWidth" data-i18n="lineWidth">Line Width:</label>
+                        <input type="number" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2"
+                            oninput="changeStrokeWidth(this.value)">
+                    </div>
                     <hr>
-                    <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i> New Square</button>
-                    <button id="addPentagon" onclick="addPentagon()"><i class="material-icons">pentagon</i> New
-                        Pentagon</button>
-                    <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> Editing Mode</button>
+                    <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i> <span
+                            data-i18n="newSquare">New Square</span></button>
+                    <button id="addPentagon" onclick="addPentagon()"><i class="material-icons">pentagon</i> <span
+                            data-i18n="newPentagon">New Pentagon</span></button>
+                    <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> <span
+                            data-i18n="editingMode">Editing Mode</span></button>
                 </div>
             </div>
 
             <div id="speech-bubble-area1" style="display: none;">
-                <div class="area-header">Bubble(Click only)</div>
+                <div class="area-header" data-i18n="bubble">Bubble</div>
                 <div id="speech-bubble-svg-preview-area1">
-                    <input type="checkbox" id="applySpeechbubbleChange"> Enable Settings
+                    <div class="input-group">
+                        <input type="checkbox" id="applySpeechbubbleChange" data-i18n="enableSettings">
+                        <span data-i18n="enableSettings">Enable Settings</span>
+                    </div>
                     <hr>
-                    <label>Background: 
-                        <input type="color" id="bubbleFillColor" value="#FFFFFF" oninput="changeSpeechBubbleBackgroundColor(this.value)">
-                    </label>
-                    <label>Line: 
-                        <input type="color" id="bubbleStrokeColor" value="#000000" oninput="changeSpeechBubbleLineColor(this.value)">
-                    </label>
-
-                    <label>Opacity:
-                        <input type="range" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100" step="0.1" value="100" oninput="changeSpeechBubbleOpacity(this.value)">
-                    </label>
-
+                    <div class="input-group">
+                        <label data-i18n="background">Background</label>
+                        <input type="color" id="bubbleFillColor" value="#FFFFFF"
+                            oninput="changeSpeechBubbleBackgroundColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="line">Line</label>
+                        <input type="color" id="bubbleStrokeColor" value="#000000"
+                            oninput="changeSpeechBubbleLineColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="opacity">Opacity</label>
+                        <input type="number" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100"
+                            step="0.1" value="100" oninput="changeSpeechBubbleOpacity(this.value)">
+                    </div>
                     <label style="display: none;">Line Size</label>
                     <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10"
                         value="3">
@@ -264,289 +328,644 @@
             </div>
 
             <div id="text-area" style="display: none;">
-                <div class="area-header">Text</div>
+                <div class="area-header" data-i18n="text">Text</div>
                 <div id="text-preview-area">
-                    <label>Text : <input type="color" id="textColorPicker" value="#000000"
-                            oninput="changeTextColor(this.value)"></label>
-                    <label>Outline : <input type="color" id="textOutlineColorPicker" value="#000000"
-                            oninput="changeOutlineTextColor(this.value)"></label>
-                    <label>Size(Vertical unsupport) <input type="range" id="fontSizeSlider" min="7" max="150" value="30"
-                            oninput="changeFontSize(this.value)"></label>
-                    <label>Outline Size <input type="range" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1"
-                            oninput="changeStrokeWidthSize(this.value)"></label>
-                    <label>Font:</label>
-                    <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
-                        <option style="font-family: 'KleeOne';">KleeOne</option>
-                        <option style="font-family: 'Arial';">Arial</option>
-                        <option style="font-family: 'Comic Sans MS';">Comic Sans MS</option>
-                        <option style="font-family: 'DotGothic16';">DotGothic16</option>
-                        <option style="font-family: 'Stick';">Stick</option>
-                    </select>
-
+                    <div class="input-group">
+                        <label data-i18n="font">Font:</label>
+                        <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
+                            <option style="font-family: 'KleeOne';">KleeOne</option>
+                            <option style="font-family: 'Arial';">Arial</option>
+                            <option style="font-family: 'Comic Sans MS';">Comic Sans MS</option>
+                            <option style="font-family: 'DotGothic16';">DotGothic16</option>
+                            <option style="font-family: 'Stick';">Stick</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="textColor">Text</label>
+                        <input type="color" id="textColorPicker" value="#000000" oninput="changeTextColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="outlineColor">Outline</label>
+                        <input type="color" id="textOutlineColorPicker" value="#000000"
+                            oninput="changeOutlineTextColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="fontSize">Size</label>
+                        <input type="number" id="fontSizeSlider" min="7" max="150" value="30"
+                            oninput="changeFontSize(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="outlineSize">Outline Size</label>
+                        <input type="number" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1"
+                            oninput="changeStrokeWidthSize(this.value)">
+                    </div>
                     <hr>
-                    <button onclick="createTextbox()"><i class="material-icons">text_fields</i><i
-                            class="material-icons">east</i> New Text</button>
-                    <button id="openWindow"><i class="material-icons">text_fields</i><i class="material-icons">south</i>
-                        New Text</button>
-
-                    <button onclick="toggleBold()"><i class="material-icons">format_bold</i> Bold</button>
+                    <button onclick="createTextbox()">
+                        <i class="material-icons">text_fields</i>
+                        <i class="material-icons">east</i>
+                        <span data-i18n="newText">New Text</span>
+                    </button>
+                    <button id="openWindow">
+                        <i class="material-icons">text_fields</i>
+                        <i class="material-icons">south</i>
+                        <span data-i18n="newText">New Text</span>
+                    </button>
+                    <button onclick="toggleBold()">
+                        <i class="material-icons">format_bold</i>
+                        <span data-i18n="bold">Bold</span>
+                    </button>
                     <hr>
-                    <label>Effects</label>
-                    <label>First Color <input type="color" id="firstTextEffectColorPicker" value="#F58220"
-                            oninput="changeNeonColor(this.value)"></label>
-                    <label>Second Color <input type="color" id="secondTextEffectColorPicker" value="#ff8080"
-                            oninput="changeNeonColor(this.value)"></label>
+                    <label data-i18n="effects">Effects</label>
+                    <div class="input-group">
+                        <label data-i18n="firstColor">First Color:</label>
+                        <input type="color" id="firstTextEffectColorPicker" value="#F58220"
+                            oninput="changeNeonColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="secondColor">Second Color:</label>
+                        <input type="color" id="secondTextEffectColorPicker" value="#ff8080"
+                            oninput="changeNeonColor(this.value)">
+                    </div>
                     <hr>
-                    <label style="display: none;">Neon Intensity:</label>
+                    <label style="display: none;" data-i18n="neonIntensity">Neon Intensity:</label>
                     <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2"
                         value="2" oninput="changeNeonIntensity(this.value)">
-                    <button onclick="applyCSSTextEffect()"><i class="material-icons">deblur</i> Shadow</button>
-                    <button onclick="applyVividGradientEffect()"><i class="material-icons">filter</i> Vivid
-                        Gradient</button>
-                    <button onclick="applyNeonEffect()"><i class="material-icons">flare</i> Neon</button>
+                    <button onclick="applyCSSTextEffect()"><i class="material-icons">deblur</i> <span
+                            data-i18n="shadow">Shadow</span></button>
+                    <button onclick="applyVividGradientEffect()"><i class="material-icons">filter</i> <span
+                            data-i18n="vividGradient">Vivid Gradient</span></button>
+                    <button onclick="applyNeonEffect()"><i class="material-icons">flare</i> <span
+                            data-i18n="neon">Neon</span></button>
                     <button style="display: none;" onclick="applySpaceAgeEffect()"><i
-                            class="material-icons">space_bar</i> Space Age</button>
+                            class="material-icons">space_bar</i> <span data-i18n="spaceAge">Space Age</span></button>
                     <button style="display: none;" onclick="applySpaceAgeEffect2()"><i
-                            class="material-icons">space_bar</i> Space Age2</button>
+                            class="material-icons">space_bar</i> <span data-i18n="spaceAge2">Space Age2</span></button>
                     <button style="display: none;" onclick="applyGeneratorBasedEffect()"><i
-                            class="material-icons">transform</i> Generator Based</button>
+                            class="material-icons">transform</i> <span data-i18n="generatorBased">Generator
+                            Based</span></button>
                     <button style="display: none;" onclick="applyNeonJitterEffect()"><i
-                            class="material-icons">vibration</i> Neon Jitter</button>
+                            class="material-icons">vibration</i> <span data-i18n="neonJitter">Neon
+                            Jitter</span></button>
                     <button style="display: none;" onclick="applyZebraReflectionEffect()"><i
-                            class="material-icons">view_compact</i> Reflection</button>
+                            class="material-icons">view_compact</i> <span
+                            data-i18n="reflection">Reflection</span></button>
                 </div>
             </div>
 
+
+
+
             <div id="tool-area" style="display: none;">
-                <div class="area-header">Tools (β)</div>
+                <div class="area-header" data-i18n="tools">Tools (β)</div>
                 <div id="tool-preview-area">
-                    <button id="drawing-mode"><i class="material-icons">mode_edit</i> Draw Mode</button>
-                    <button id="eraser"><i class="material-icons">app_registration</i> Eraser Mode</button>
+                    <button id="drawing-mode">
+                        <i class="material-icons">mode_edit</i>
+                        <span data-i18n="drawMode">Draw Mode</span>
+                    </button>
+                    <button id="eraser">
+                        <i class="material-icons">app_registration</i>
+                        <span data-i18n="eraserMode">Eraser Mode</span>
+                    </button>
 
-                    <label>Size 
+                    <div class="input-group">
+                        <label data-i18n="size">Size</label>
                         <input type="number" id="drawing-line-width" min="1" max="150" value="5">
-                    </label>
+                    </div>
 
-                    <label for="brush-color">Color 
+                    <div class="input-group">
+                        <label for="brush-color" data-i18n="color">Color</label>
                         <input type="color" id="drawing-color" value="#000000">
-                    </label>
+                    </div>
 
                     <hr>
-                    <label for="brush-type">Type
+                    <div class="input-group">
+                        <label for="brush-type" data-i18n="type">Type</label>
                         <select id="drawing-mode-selector">
                             <option value="Pencil">Pencil</option>
                             <option value="Circle">Circle</option>
-                            <!-- <option value="Spray">Spray</option> -->
-                            <!-- <option value="hline">Horizontal Line</option> -->
-                            <!-- <option value="vline">Vertical Line</option> -->
                             <option value="square">Square</option>
                             <option value="diamond">Diamond</option>
                             <option value="texture">Texture</option>
-                          </select>
-                    </label>
-                    <label for="line-style">Line Style 
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="line-style" data-i18n="lineStyle">Line Style</label>
                         <select id="line-style">
                             <option value="solid">Solid</option>
                             <option value="dashed">Dashed</option>
                             <option value="dotted">Dotted</option>
                         </select>
-                    </label>
+                    </div>
 
                     <hr>
-                    <label>Shadow</label>
-                    <label>Size 
+                    <div>
+                        <label data-i18n="shadow">Shadow</label>
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="shadowSize">Size</label>
                         <input type="number" id="drawing-shadow-width" min="0" max="150" value="0">
-                    </label>
-                    <label>Offset 
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="shadowOffset">Offset</label>
                         <input type="number" id="drawing-shadow-offset" min="1" max="150" value="5">
-                    </label>
-                    <label for="brush-Shadow-color">Color 
+                    </div>
+                    <div class="input-group">
+                        <label for="brush-Shadow-color" data-i18n="shadowColor">Color</label>
                         <input type="color" id="drawing-shadow-color" value="#000000">
-                    </label>
+                    </div>
                     <hr>
                 </div>
             </div>
 
+
+
+
+
+
             <div id="dummy-area4" style="display: none;">
-                <div class="area-header">Information</div>
+                <div class="area-header" data-i18n="information">Information</div>
                 <div id="dummy-svg-preview-area4">
                     <div id="license-info">
                         <div class="info-section">
-                            <p>Developer links:</p>
-                            <div class="info-item"><i class="material-icons">chat_bubble_outline</i> <a
-                                href="https://discord.gg/zuU96TqNUb" target="_blank">Discord</a></div>
-                            <div class="info-item"><i class="material-icons">alternate_email</i> <a
-                                    href="https://twitter.com/hypersankaku2" target="_blank">Twitter</a></div>
-                            <div class="info-item"><i class="material-icons">code</i> <a
-                                    href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker" target="_blank">GitHub</a>
+                            <p data-i18n="developerLinks">Developer links:</p>
+                            <div class="info-item">
+                                <i class="fab fa-discord"></i>
+                                <a href="https://discord.gg/zuU96TqNUb" target="_blank">
+                                    <span data-i18n="discord">Discord</span>
+                                </a>
                             </div>
-                            <div class="info-item"><i class="material-icons">send</i> <a
-                                    href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues"
-                                    target="_blank">Bug report / Feature add request</a></div>
+                            <div class="info-item">
+                                <i class="fab fa-twitter"></i>
+                                <a href="https://twitter.com/hypersankaku2" target="_blank">
+                                    <span data-i18n="twitter">Twitter</span>
+                                </a>
+                            </div>
+                            <div class="info-item">
+                                <i class="fab fa-github"></i>
+                                <a href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker"
+                                    target="_blank">
+                                    <span data-i18n="github">GitHub</span>
+                                </a>
+                            </div>
+                            <div class="info-item">
+                                <i class="fab fa-github"></i>
+                                <a href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues"
+                                    target="_blank">
+                                    <span data-i18n="bugReport">Bug report / Feature request</span>
+                                </a>
+                            </div>
                         </div>
                         <div class="info-section">
-                            <p>Libraries:</p>
-                            <div class="info-item"><i class="material-icons">brush</i> <a href="http://fabricjs.com/"
-                                    target="_blank">Fabric.js</a></div>
-                            <div class="info-item"><i class="material-icons">add_reaction</i> <a
-                                    href="https://fonts.google.com/icons" target="_blank">Google Icons</a></div>
-                            <div class="info-item"><i class="material-icons">font_download</i> <a
-                                    href="https://fonts.google.com" target="_blank">Google Font</a></div>
-                            <div class="info-item"><i class="material-icons">view_comfy</i> <a
-                                    href="https://getbootstrap.jp" target="_blank">Bootstrup</a></div>
-                            <div class="info-item"><i class="material-icons">folder_zip</i> <a
-                                    href="https://github.com/Stuk/jszip" target="_blank">jsZip</a></div>
-                            <div class="info-item"><i class="material-icons">enhanced_encryption</i> <a
-                                    href="https://github.com/brix/crypto-js" target="_blank">crypto-js</a></div>
+                            <p data-i18n="libraries">Libraries:</p>
+                            <div class="info-item"><i class="fab fa-js"></i>
+                                <a href="http://fabricjs.com/" target="_blank">Fabric.js</a>
+                            </div>
+                            <div class="info-item"><i class="fab fa-js"></i>
+                                <a href="https://github.com/brix/crypto-js" target="_blank">crypto-js</a>
+                            </div>
+                            <div class="info-item"><i class="fab fa-js"></i>
+                                <a href="https://github.com/Stuk/jszip" target="_blank">jsZip</a>
+                            </div>
+                            
+                            <div class="info-item"><i class="fab fa-js"></i>
+                                <a href="https://www.i18next.com/" target="_blank">i18next</a>
+                            </div>
+                            <div class="info-item"><i class="fab fa-js"></i>
+                                <a href="https://evanw.github.io/glfx.js/" target="_blank">glfx.js</a>
+                            </div>
+
+                            <div class="info-item"><i class="fab fa-google"></i>
+                                <a href="https://fonts.google.com/icons" target="_blank">Google Icons</a>
+                            </div>
+                            <div class="info-item"><i class="fab fa-google"></i>
+                                <a href="https://fonts.google.com" target="_blank">Google Font</a>
+                            </div>
+                            <div class="info-item"><i class="fab fa-bootstrap"></i>
+                                <a href="https://getbootstrap.jp" target="_blank">Bootstrup</a>
+                            </div>
                         </div>
                         <div class="info-section">
-                            <p>Materials:</p>
-                            <div class="info-item"><i class="material-icons">image</i> <a href="https://fukidesign.com"
-                                    target="_blank">Speech Bubble</a></div>
+                            <p data-i18n="materials">Materials:</p>
+                            <div class="info-item">
+                                <i class="material-icons">image</i>
+                                <a href="https://fukidesign.com" target="_blank" data-i18n="speechBubble">Speech
+                                    Bubble</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="canvas-area">
-                <div class="area-header">Canvas : Panel click or Drop image </div>
+                <div class="area-header" data-i18n="canvas">Canvas : Panel click or Drop image </div>
                 <div id="canvas-container">
                     <canvas id="mangaImageCanvas"></canvas>
                 </div>
             </div>
 
             <div id="layer-panel">
-                <div class="area-header">Layers </div>
+                <div class="area-header" data-i18n="layers">Layers</div>
                 <div id="layer-content"></div>
                 <div id="layer-buttons">
                     <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
                     <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
-                    <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> Base
-                        T2I</button>
+                    <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span
+                            data-i18n="baseT2I">Base T2I</span></button>
                     <button style="display: none;" onclick="openBaseText2ImagefloatingWindow()"><i
-                            class="material-icons">collections</i> All Run T2I</button>
+                            class="material-icons">collections</i> <span data-i18n="allRunT2I">All Run
+                            T2I</span></button>
                 </div>
                 <div id="canvas-buttons">
-                    <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> Flip</button>
-                    <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> Flip</button>
-                    <button onclick="undo()"><i class="material-icons">undo</i> Undo</button>
-                    <button onclick="redo()"><i class="material-icons">redo</i> Redo</button>
-                    <button id="cropMode"><i class="material-icons">crop_free</i> Crop Mode</button>
-                    <button id="crop" anim="glow"><i class="material-icons">crop</i> CROP!</button>
+                    <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> <span
+                            data-i18n="flip">Flip</span></button>
+                    <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> <span
+                            data-i18n="flip">Flip</span></button>
+                    <button onclick="undo()"><i class="material-icons">undo</i> <span
+                            data-i18n="undo">Undo</span></button>
+                    <button onclick="redo()"><i class="material-icons">redo</i> <span
+                            data-i18n="redo">Redo</span></button>
+                    <button id="cropMode"><i class="material-icons">crop_free</i> <span data-i18n="cropMode">Crop
+                            Mode</span></button>
+                    <button id="crop" anim="glow"><i class="material-icons">crop</i> <span
+                            data-i18n="crop">CROP!</span></button>
                 </div>
-
             </div>
-            
+
             <div id="controls">
                 <div class="panel" id="commonControlsPanel">
-                    <div class="area-header" onclick="imageControleTogglePanel('commonControlsPanel', this)">
+                    <div class="area-header" onclick="imageControleTogglePanel('commonControlsPanel', this)"
+                        data-i18n="commonControls">
                         ▼ Common Controls
                     </div>
                     <div class="control-content">
                         <div class="control-row">
-                            <label>Angle</label>
+                            <label data-i18n="angle">Angle</label>
                             <input type="range" id="angle-control" min="0" max="360" value="0">
                             <span id="angleValue">0</span>
                         </div>
                         <div class="control-row">
-                            <label>Scale</label>
+                            <label data-i18n="scale">Scale</label>
                             <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01" value="1">
                             <span id="scaleValue">1.0</span>
                         </div>
                         <div class="control-row">
-                            <label>Top</label>
+                            <label data-i18n="top">Top</label>
                             <input type="range" id="top-control" min="-300" max="600" value="100">
                             <span id="topValue">100</span>
                         </div>
                         <div class="control-row">
-                            <label>Left</label>
+                            <label data-i18n="left">Left</label>
                             <input type="range" id="left-control" min="-300" max="600" value="100">
                             <span id="leftValue">100</span>
                         </div>
                         <div class="control-row">
-                            <label>SkewX</label>
+                            <label data-i18n="skewX">SkewX</label>
                             <input type="range" id="skewX-control" min="-60" max="60" value="0">
                             <span id="skewXValue">0</span>
                         </div>
                         <div class="control-row">
-                            <label>SkewY</label>
+                            <label data-i18n="skewY">SkewY</label>
                             <input type="range" id="skewY-control" min="-60" max="60" value="0">
                             <span id="skewYValue">0</span>
                         </div>
                         <div class="control-row">
-                            <label>Opacity</label>
-                            <input type="range" id="opacity-control" name="opacity-control" min="0" max="100" step="0.1" value="100">
+                            <label data-i18n="opacity">Opacity</label>
+                            <input type="range" id="opacity-control" name="opacity-control" min="0" max="100" step="0.1"
+                                value="100">
                             <span id="opacityValue">0</span>
                         </div>
                     </div>
                 </div>
                 <div class="panel" id="imageControlPanel">
-                    <div class="area-header" onclick="imageControleTogglePanel('imageControlPanel', this)">
-                        ▼ Image Controls
+                    <div class="area-header" onclick="imageControleTogglePanel('imageControlPanel', this)"
+                        data-i18n="imageControls">
+                        ▼ Fast Image Effect
                     </div>
                     <div class="control-content">
                         <div class="control-item">
-                            <label><input type="checkbox" id="sepiaEffect"> Sepia</label>
+                            <input type="checkbox" id="sepiaEffect">
+                            <label data-i18n="sepia">
+                                Sepia
+                            </label>
                         </div>
                         <hr class="separator">
                         <div class="control-item">
-                            <label><input type="checkbox" id="grayscaleEffect"> Grayscale</label>
+                            <input type="checkbox" id="grayscaleEffect">
+                            <label data-i18n="grayscale">
+                                Grayscale
+                            </label>
                         </div>
                         <div class="control-item radio-options" id="grayscaleOptions">
-                            <label><input type="radio" name="grayscaleMode" value="average" checked> Average</label>
-                            <label><input type="radio" name="grayscaleMode" value="luminosity"> Luminosity</label>
+                            <input type="radio" name="grayscaleMode" value="average" checked>
+                            <label data-i18n="average">
+                                Average
+                            </label>
+
+                            <input type="radio" name="grayscaleMode" value="luminosity">
+                            <label data-i18n="luminosity">
+                                Luminosity
+                            </label>
                         </div>
                         <hr class="separator">
                         <div class="control-row">
-                            <label>Red</label>
+                            <label data-i18n="red">Red</label>
                             <input type="range" id="gammaRed" min="0" max="2.2" step="0.003921" value="1">
                             <span id="gammaRedValue">1.0</span>
                         </div>
                         <div class="control-row">
-                            <label>Green</label>
+                            <label data-i18n="green">Green</label>
                             <input type="range" id="gammaGreen" min="0" max="2.2" step="0.003921" value="1">
                             <span id="gammaGreenValue">1.0</span>
                         </div>
                         <div class="control-row">
-                            <label>Blue</label>
+                            <label data-i18n="blue">Blue</label>
                             <input type="range" id="gammaBlue" min="0" max="2.2" step="0.003921" value="1">
                             <span id="gammaBlueValue">1.0</span>
                         </div>
                         <hr class="separator">
                         <div class="control-row">
-                            <label>Vibrance</label>
+                            <label data-i18n="vibrance">Vibrance</label>
                             <input type="range" id="vibranceValue" min="-1" max="1" step="0.003921" value="0">
                             <span id="vibranceValueDisplay">0.0</span>
                         </div>
                         <div class="control-row">
-                            <label>Blur</label>
+                            <label data-i18n="blur">Blur</label>
                             <input type="range" id="blurValue" min="0" max="0.3" step="0.003921" value="0">
                             <span id="blurValueDisplay">0.0</span>
                         </div>
                         <div class="control-row">
-                            <label>Pixelate</label>
+                            <label data-i18n="pixelate">Pixelate</label>
                             <input type="range" id="pixelateValue" min="1" max="20" step="1" value="1">
                             <span id="pixelateValueDisplay">1</span>
                         </div>
                     </div>
                 </div>
+
+                <div class="panel" id="glfxImageControlPanel">
+                    <div class="area-header" onclick="imageControleTogglePanel('glfxImageControlPanel', this)"
+                        data-i18n="glfxImageControls">
+                        ▼ <span data-i18n="glfxImageControls">Glfx Image Controls</span>
+                    </div>
+                    <div class="control-content glfxControls">
+                        <select id="glfxFilter">
+                            <option value="" data-i18n="select">Select</option>
+                            <option value="glfxBrightnessContrast" data-i18n="brightnessContrast">Brightness / Contrast
+                            </option>
+                            <option value="glfxHueSaturation" data-i18n="hueSaturation">Hue / Saturation</option>
+                            <option value="glfxSepia" data-i18n="sepia">Sepia</option>
+                            <option value="glfxUnsharpMask" data-i18n="unsharpMask">Unsharp Mask</option>
+                            <option value="glfxVibrance" data-i18n="vibrance">Vibrance</option>
+                            <option value="glfxVignette" data-i18n="vignette">Vignette</option>
+                            <option value="glfxLensBlur" data-i18n="lensBlur">Lens Blur</option>
+                            <!-- <option value="glfxTiltShift" data-i18n="tiltShift">Tilt Shift</option> -->
+                            <option value="glfxTriangleBlur" data-i18n="triangleBlur">Triangle Blur</option>
+                            <option value="glfxZoomBlur" data-i18n="zoomBlur">Zoom Blur</option>
+                            <option value="glfxColorHalftone" data-i18n="colorHalftone">Color Halftone</option>
+                            <option value="glfxDotScreen" data-i18n="dotScreen">Dot Screen</option>
+                            <option value="glfxEdgeWork" data-i18n="edgeWork">Edge Work</option>
+                            <option value="glfxHexagonalPixelate" data-i18n="hexagonalPixelate">Hexagonal Pixelate
+                            </option>
+                            <option value="glfxInk" data-i18n="ink">Ink</option>
+                            <!-- <option value="glfxBulgePinch" data-i18n="bulgePinch">Bulge / Pinch</option> -->
+                            <option value="glfxSwirl" data-i18n="swirl">Swirl</option>
+                        </select>
+
+
+                        <div id="glfxBrightnessContrast" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxBrightness" data-i18n="brightness">Brightness:</label>
+                                <input type="range" id="glfxBrightness" min="-1" max="1" step="0.01" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxContrast" data-i18n="contrast">Contrast:</label>
+                                <input type="range" id="glfxContrast" min="-1" max="1" step="0.01" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxHueSaturation" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxHue" data-i18n="hue">Hue:</label>
+                                <input type="range" id="glfxHue" min="-1" max="1" step="0.01" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxSaturation" data-i18n="saturation">Saturation:</label>
+                                <input type="range" id="glfxSaturation" min="-1" max="1" step="0.01" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxSepia" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxSepiaAmount" data-i18n="sepia">Sepia:</label>
+                                <input type="range" id="glfxSepiaAmount" min="0" max="1" step="0.01" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxUnsharpMask" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxUnsharpRadius" data-i18n="radius">Radius:</label>
+                                <input type="range" id="glfxUnsharpRadius" min="0" max="200" step="0.1" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxUnsharpStrength" data-i18n="strength">Strength:</label>
+                                <input type="range" id="glfxUnsharpStrength" min="0" max="5" step="0.1" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxVibrance" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxVibranceAmount" data-i18n="vibrance">Vibrance:</label>
+                                <input type="range" id="glfxVibranceAmount" min="-1" max="1" step="0.01" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxVignette" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxVignetteSize" data-i18n="size">Size:</label>
+                                <input type="range" id="glfxVignetteSize" min="0" max="1" step="0.01" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxVignetteAmount" data-i18n="amount">Amount:</label>
+                                <input type="range" id="glfxVignetteAmount" min="0" max="1" step="0.01" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxLensBlur" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxBlurRadius" data-i18n="radius">Radius:</label>
+                                <input type="range" id="glfxBlurRadius" min="0" max="50" step="1" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxBlurBrightness" data-i18n="brightness">Brightness:</label>
+                                <input type="range" id="glfxBlurBrightness" min="-1" max="1" step="0.01" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxBlurAngle" data-i18n="angle">Angle:</label>
+                                <input type="range" id="glfxBlurAngle" min="-3.14" max="3.14" step="0.01" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxTiltShift" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxStartX" data-i18n="startX">Start X:</label>
+                                <input type="range" id="glfxStartX" min="0" max="1" step="0.01" value="0.5">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxStartY" data-i18n="startY">Start Y:</label>
+                                <input type="range" id="glfxStartY" min="0" max="1" step="0.01" value="0.5">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxEndX" data-i18n="endX">End X:</label>
+                                <input type="range" id="glfxEndX" min="0" max="1" step="0.01" value="0.5">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxEndY" data-i18n="endY">End Y:</label>
+                                <input type="range" id="glfxEndY" min="0" max="1" step="0.01" value="0.5">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxTiltBlurRadius" data-i18n="blurRadius">Blur Radius:</label>
+                                <input type="range" id="glfxTiltBlurRadius" min="0" max="50" step="0.01" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxGradientRadius" data-i18n="gradientRadius">Gradient Radius:</label>
+                                <input type="range" id="glfxGradientRadius" min="0" max="1" step="0.01" value="0.5">
+                            </div>
+                        </div>
+
+                        <div id="glfxTriangleBlur" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxTriangleRadius" data-i18n="radius">Radius:</label>
+                                <input type="range" id="glfxTriangleRadius" min="0" max="200" step="1" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxZoomBlur" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxZoomCenterX" data-i18n="centerX">Center X:</label>
+                                <input type="range" id="glfxZoomCenterX" min="0" max="1024" step="0.01" value="0.5">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxZoomCenterY" data-i18n="centerY">Center Y:</label>
+                                <input type="range" id="glfxZoomCenterY" min="0" max="1024" step="0.01" value="0.5">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxZoomStrength" data-i18n="strength">Strength:</label>
+                                <input type="range" id="glfxZoomStrength" min="0" max="1" step="0.01" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxColorHalftone" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxHalftoneAngle" data-i18n="angle">Angle:</label>
+                                <input type="range" id="glfxHalftoneAngle" min="0" max="6.28" step="0.1" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxHalftoneSize" data-i18n="size">Size:</label>
+                                <input type="range" id="glfxHalftoneSize" min="1" max="100" step="1" value="10">
+                            </div>
+                        </div>
+
+                        <div id="glfxDotScreen" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxDotAngle" data-i18n="angle">Angle:</label>
+                                <input type="range" id="glfxDotAngle" min="0" max="6.28" step="0.1" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxDotSize" data-i18n="size">Size:</label>
+                                <input type="range" id="glfxDotSize" min="1" max="100" step="1" value="10">
+                            </div>
+                        </div>
+
+                        <div id="glfxEdgeWork" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxEdgeRadius" data-i18n="radius">Radius:</label>
+                                <input type="range" id="glfxEdgeRadius" min="0" max="10" step="0.1" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxHexagonalPixelate" class="glfxCcontrol-group">
+
+                            <div class="control-row">
+                                <label for="glfxHexScale" data-i18n="scale">Scale:</label>
+                                <input type="range" id="glfxHexScale" min="1" max="100" step="1" value="10">
+                            </div>
+                        </div>
+
+                        <div id="glfxInk" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxInkStrength" data-i18n="strength">Strength:</label>
+                                <input type="range" id="glfxInkStrength" min="0" max="1" step="0.1" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxBulgePinch" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxBulgeCenterX" data-i18n="centerX">Center X:</label>
+                                <input type="range" id="glfxBulgeCenterX" min="0" max="1024" step="1" value="500">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxBulgeCenterY" data-i18n="centerY">Center Y:</label>
+                                <input type="range" id="glfxBulgeCenterY" min="0" max="1024" step="1" value="500">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxBulgeRadius" data-i18n="radius">Radius:</label>
+                                <input type="range" id="glfxBulgeRadius" min="-1" max="1" step="0.01" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxBulgeStrength" data-i18n="strength">Strength:</label>
+                                <input type="range" id="glfxBulgeStrength" min="0" max="600" step="1" value="0">
+                            </div>
+                        </div>
+
+                        <div id="glfxSwirl" class="glfxCcontrol-group">
+                            <div class="control-row">
+                                <label for="glfxSwirlCenterX" data-i18n="centerX">Center X:</label>
+                                <input type="range" id="glfxSwirlCenterX" min="0" max="1024" step="1" value="256">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxSwirlCenterY" data-i18n="centerY">Center Y:</label>
+                                <input type="range" id="glfxSwirlCenterY" min="0" max="1024" step="1" value="256">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxSwirlRadius" data-i18n="radius">Radius:</label>
+                                <input type="range" id="glfxSwirlRadius" min="0" max="600" step="1" value="0">
+                            </div>
+                            <div class="control-row">
+                                <label for="glfxSwirlAngle" data-i18n="angle">Angle:</label>
+                                <input type="range" id="glfxSwirlAngle" min="-25" max="25" step="10" value="0">
+                            </div>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <button id="glfxApplyButton" data-i18n="apply">Apply</button>
+                            <button id="glfxResetButton" data-i18n="reset">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="panel" id="infomationPanel">
-                    <div class="area-header" onclick="imageControleTogglePanel('infomationPanel', this)">
+                    <div class="area-header" onclick="imageControleTogglePanel('infomationPanel', this)"
+                        data-i18n="informationControls">
                         ▼ Infomation Controls
                     </div>
                     <div class="control-content">
                         <div class="control-item">
-                            <label><input type="checkbox" id="InfomationFPS"> FPS : 0</label>
+                            <label><input type="checkbox" id="InfomationFPS">
+                                FPS :0
+                            </label>
                         </div>
                         <div class="control-item">
-                            <label><input type="checkbox" id="InfomationCoordinate"> X:0.0  Y:0.0 </label>
+                            <label><input type="checkbox" id="InfomationCoordinate">
+                                X:0.0 Y:0.0
+                            </label>
                         </div>
                         <div class="control-item">
-                            <label id="SD_WebUI_pingCheck_Label"><input type="checkbox" id="SD_WebUI_pingCheck"> SD WebUI PING</label>
+                            <label id="SD_WebUI_pingCheck_Label"><input type="checkbox" id="SD_WebUI_pingCheck">
+                                SD WebUI PING
+                            </label>
                         </div>
-
                     </div>
                 </div>
+
             </div>
 
 
@@ -559,44 +978,48 @@
         </div>
     </div> -->
     <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
-    <script src="third/jszip/jszip.min.js?v=1.8" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=1.8"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=1.8"></script>
+    <script src="third/jszip/jszip.min.js?v=1.9" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=1.9"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=1.9"></script>
 
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.8" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.8" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=1.8" defer></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=1.9" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=1.9" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=1.9" defer></script>
 
-    <script src="js/Settings.js?v=1.8" defer></script>
-    <script src="js/CanvasManager.js?v=1.8" defer></script>
-    <script src="js/util/FabricUtil.js?v=1.8" defer></script>
-    <script src="js/Shortcut.js?v=1.8" defer></script>    
-    <script src="js/PanelManager.js?v=1.8" defer></script>
+    <script src="js/Settings.js?v=1.9" defer></script>
+    <script src="js/CanvasManager.js?v=1.9" defer></script>
+    <script src="js/util/FabricUtil.js?v=1.9" defer></script>
+    <script src="js/Shortcut.js?v=1.9" defer></script>
+    <script src="js/PanelManager.js?v=1.9" defer></script>
 
-    <script src="js/Toast.js?v=1.8" defer></script>
-    
-    <script src="js/FloatingWindowManagement.js?v=1.8" defer></script>
+    <script src="js/Toast.js?v=1.9" defer></script>
 
-    <script src="js/PromptManager.js?v=1.8" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=1.8" defer></script>
-    <script src="js/LayerManagement.js?v=1.8" defer></script>
-    <script src="js/CommonControleManagement.js?v=1.8" defer></script>
-    <script src="js/ImageTransformation.js?v=1.8" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=1.8" defer></script>
-    <script src="js/Sidebar.js?v=1.8" defer></script>
-    <script src="js/TextEffect.js?v=1.8" defer></script>
-    <script src="js/VerticalText.js?v=1.8" defer></script>
-    <script src="js/ImageControleManager.js?v=1.8" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=1.8" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=1.8" defer></script>
-    <script src="js/ProjectManagement.js?v=1.8" defer></script>
-    <script src="js/ImageDownload.js?v=1.8" defer></script>
-    <script src="js/Anime.js?v=1.8" defer></script>
-    <script src="js/Tools.js?v=1.8" defer></script>
-    <script src="js/event/FabricManagement.js?v=1.8" defer></script>
-    <script src="js/InfomationControle.js?v=1.8" defer></script>
+    <script src="js/FloatingWindowManagement.js?v=1.9" defer></script>
 
-    
+    <script src="js/PromptManager.js?v=1.9" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=1.9" defer></script>
+    <script src="js/LayerManagement.js?v=1.9" defer></script>
+    <script src="js/CommonControleManagement.js?v=1.9" defer></script>
+    <script src="js/ImageTransformation.js?v=1.9" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=1.9" defer></script>
+    <script src="js/Sidebar.js?v=1.9" defer></script>
+    <script src="js/TextEffect.js?v=1.9" defer></script>
+    <script src="js/VerticalText.js?v=1.9" defer></script>
+    <script src="js/ImageControleManager.js?v=1.9" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=1.9" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=1.9" defer></script>
+    <script src="js/ProjectManagement.js?v=1.9" defer></script>
+    <script src="js/ImageDownload.js?v=1.9" defer></script>
+    <script src="js/Anime.js?v=1.9" defer></script>
+    <script src="js/Tools.js?v=1.9" defer></script>
+    <script src="js/InfomationControle.js?v=1.9" defer></script>
+    <script src="js/effect/glfxControle.js?v=1.9" defer></script>
+    <script src="js/i18next.js?v=1.9" defer></script>
+
+
+
+    <script src="js/event/FabricManagement.js?v=1.9" defer></script>
+
 </body>
 
 </html>

@@ -110,6 +110,11 @@
 
 .info-item .material-icons {
   margin-right: 5px;
+  width: 15%;
+}
+.info-item .fab {
+  margin-right: 5px;
+  width: 15%;
 }
 
 .info-item a {

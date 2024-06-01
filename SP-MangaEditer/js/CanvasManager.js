@@ -67,7 +67,7 @@ function resizeCanvas(newWidth, newHeight) {
       });
       clipPath.setCoords();
     }
-    console.log("function resizeCanvas(newWidth, newHeight) { saveInitialState" );
+    // console.log("function resizeCanvas(newWidth, newHeight) { saveInitialState" );
     saveInitialState(obj);
     obj.setCoords();
   });

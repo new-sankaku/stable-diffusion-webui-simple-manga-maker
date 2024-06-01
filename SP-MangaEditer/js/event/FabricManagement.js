@@ -1,75 +1,29 @@
 
-
-
-
-
-
-
-function saveInitialState(obj) {
-  console.log( "saveInitialState" , obj.type );
-  console.log( "saveInitialState obj.initial" , obj.initial );
-
-
-  if( isImage(obj) && (!obj.initial) ){
-    setImage2ImageInitPrompt(obj);
-  }
-
-  if( isPanel(obj)  && (!obj.initial)  ){
-    setText2ImageInitPrompt(obj);
-  }
-
-
-  obj.initial = {
-    left:         obj.left,
-    top:          obj.top,
-    scaleX:       obj.scaleX,
-    scaleY:       obj.scaleY,
-    strokeWidth:  obj.strokeWidth,
-    canvasWidth:  canvas.getWidth(),
-    canvasHeight: canvas.getHeight(),
-  };
-
-  if (obj.clipPath) {
-    obj.clipPath.initial = {
-      left:         obj.clipPath.left,
-      top:          obj.clipPath.top,
-      scaleX:       obj.clipPath.scaleX,
-      scaleY:       obj.clipPath.scaleY,
-      canvasWidth:  canvas.getWidth(),
-      canvasHeight: canvas.getHeight(),
-    };
-  }
-
-}
-
-
-function setText2ImageInitPrompt(object){
-  object.isPanel                 = text2img_initPrompt.isPanel;
-  object.text2img_prompt         = text2img_initPrompt.text2img_prompt;
-  object.text2img_negativePrompt = text2img_initPrompt.text2img_negativePrompt;
-  object.text2img_seed           = text2img_initPrompt.text2img_seed;
-  object.text2img_width          = text2img_initPrompt.text2img_width;
-  object.text2img_height         = text2img_initPrompt.text2img_height;
-  object.text2img_samplingSteps  = text2img_initPrompt.text2img_samplingSteps;
-}
-function setImage2ImageInitPrompt(object){
-  object.text2img_prompt            = img2img_initPrompt.img2img_prompt;
-  object.text2img_negativePrompt    = img2img_initPrompt.img2img_negativePrompt;
-  object.text2img_seed              = img2img_initPrompt.img2img_seed;
-  object.text2img_width             = img2img_initPrompt.img2img_width;
-  object.text2img_height            = img2img_initPrompt.img2img_height;
-  object.text2img_samplingSteps     = img2img_initPrompt.img2img_samplingSteps;
-  object.img2img_denoising_strength = img2img_initPrompt.img2img_denoising_strength;
-}
-
-
+var lastActiveObjectState = null;
+canvas.on('selection:created', function(event) {
+  lastActiveObjectState = canvas.getActiveObject();
+  // console.log("created lastActiveObjectState", lastActiveObjectState);
+});
+canvas.on('selection:updated', function(event) {
+  glfxReset();
+  lastActiveObjectState = canvas.getActiveObject();
+  // console.log("updated lastActiveObjectState", lastActiveObjectState);
+});
+canvas.on('selection:cleared', function() {
+  // console.log("aaaa");
+  // console.log("cleared lastActiveObjectState1", lastActiveObjectState);
+  glfxReset();
+  // console.log("bbbb");
+  // console.log("cccc");
+  // console.log("cleared lastActiveObjectState2", lastActiveObjectState);
+});
 
 canvas.on("object:added", (e) => {
   const obj = e.target;
-  console.log( "canvas.on(object:added" , obj.type );
+  // console.log( "canvas.on(object:added" , obj.type );
 
   if (!obj.initial) {
-    console.log( "canvas.on(object:added initial " , obj.initial );
+    // console.log( "canvas.on(object:added initial " , obj.initial );
     saveInitialState(obj);
   }
   forcedAdjustCanvasSize();
@@ -97,11 +51,11 @@ canvas.on('selection:cleared', function() {
   }
 });
 canvas.on('selection:updated', function() {
-if (cropFrame && canvas.getActiveObject() !== cropFrame) {
-  canvas.remove(cropFrame);
-  cropFrame = null;
-  document.getElementById('crop').style.display = 'none';
-}
+  if (cropFrame && canvas.getActiveObject() !== cropFrame) {
+    canvas.remove(cropFrame);
+    cropFrame = null;
+    document.getElementById('crop').style.display = 'none';
+  }
 });
 
 //Object選択時にLeyerパネルをハイライトする。

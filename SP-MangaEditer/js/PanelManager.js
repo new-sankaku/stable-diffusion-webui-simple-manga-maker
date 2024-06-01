@@ -119,7 +119,7 @@ function putImageInFrame(img, x, y) {
   
   canvas.setActiveObject(img);
 
-  console.log("function putImageInFrame { saveInitialState" );
+  // console.log("function putImageInFrame { saveInitialState" );
   saveInitialState(img)
   
   canvas.renderAll();

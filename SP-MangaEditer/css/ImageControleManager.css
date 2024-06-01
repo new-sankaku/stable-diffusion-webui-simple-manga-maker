@@ -1,3 +1,11 @@
+.glfxControls {
+  margin-top: 20px;
+}
+.glfxCcontrol-group {
+  display: none;
+  margin-top: 10px;
+}
+
 #controls {
   font-size: 12px;
   min-width: 180px;
