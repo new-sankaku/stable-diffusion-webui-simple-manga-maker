@@ -334,20 +334,19 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 });
 
-/** Disallow drag-on-drop. */
 document.addEventListener("DOMContentLoaded", function () {
   var svgPreviewArea = document.getElementById("speech-bubble-area1");
 
   svgPreviewArea.addEventListener(
-    "mousedown",
-    function (event) {
-      // スライダーの要素上でのマウスダウンイベントは許可する
-      if (!event.target.closest("input[type='range']")) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    },
-    false
+      "mousedown",
+      function (event) {
+          // スライダーと数値入力の要素上でのマウスダウンイベントは許可する
+          if (!event.target.closest("input[type='range']") && !event.target.closest("input[type='number']")) {
+              event.preventDefault();
+              event.stopPropagation();
+          }
+      },
+      false
   );
 });
 
