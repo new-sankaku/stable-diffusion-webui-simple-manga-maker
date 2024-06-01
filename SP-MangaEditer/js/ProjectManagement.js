@@ -102,12 +102,15 @@ document.addEventListener("DOMContentLoaded", function () {
     zip.file("text2img_basePrompt.json", JSON.stringify(text2img_basePrompt));
 
     stateStack.forEach((json, index) => {
-      zip.file(`state_${index}.json`, JSON.stringify(json));
+      const paddedIndex = String(index).padStart(6, '0');
+      zip.file(`state_${paddedIndex}.json`, JSON.stringify(json));
+      // zip.file(`state_${index}.json`, JSON.stringify(json));
     });
 
     imageMap.forEach((value, key) => {
       zip.file(`${key}.img`, value);
     });
+    createToast("Save IMAGE", "");
 
     // Canvasの縦横情報を追加
     var canvasInfo = {
@@ -124,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
       isGridVisible = true;
     }
 
+    createToast("Save Zip Create Start!", "");
     zip.generateAsync({ type: "blob" }).then(function (content) {
       var url = window.URL.createObjectURL(content);
       var a = document.createElement("a");
@@ -136,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const endTime = performance.now();
       console.log(`Save operation took ${endTime - startTime} milliseconds`);
     });
+
   });
 
   loadButton.addEventListener("click", function () {
@@ -172,28 +177,69 @@ document.addEventListener("DOMContentLoaded", function () {
               })
             : Promise.resolve({ width: 750, height: 850 });
 
-          var sortedFiles = Object.keys(zip.files).sort();
-          var promises = sortedFiles.map(function (fileName) {
+          // var sortedFiles = Object.keys(zip.files).sort();
+          var sortedFiles = Object.keys(zip.files).sort((a, b) => {
+            const numA = a.match(/(\d+)/) ? parseInt(a.match(/(\d+)/)[0]) : -1;
+            const numB = b.match(/(\d+)/) ? parseInt(b.match(/(\d+)/)[0]) : -1;
+            if (numA === numB) {
+              return a.localeCompare(b);
+            }
+            return numA - numB;
+          });
+
+          
+          //Image sort
+          sortedFiles.map(function (fileName) {
             return zip.file(fileName).async("string").then(function (content) {
               if (fileName.endsWith(".img")) {
                 let hash = fileName.split('.')[0];
                 imageMap.set(hash, content);
-              } else if (fileName.endsWith(".json") && fileName !== "text2img_basePrompt.json" && fileName !== "canvas_info.json") {
-                return JSON.parse(content);
               }
+            }).catch(function (error) {
+              console.error("Failed to load file:", fileName, error);
+            });
+          });
+
+          var promises = sortedFiles.map(function (fileName) {
+            return zip.file(fileName).async("string").then(function (content) {
+              if (fileName.endsWith(".json") && fileName !== "text2img_basePrompt.json" && fileName !== "canvas_info.json") {
+                try {
+                  //console.log( "fileName JSON.parse(content)", fileName, " ", JSON.parse(content).length );
+                  return JSON.parse(content);
+                } catch (e) {
+                  console.error("JSON parse error in file:", fileName, e);
+                }
+              }
+            }).catch(function (error) {
+              console.error("Failed to load file:", fileName, error);
             });
           });
 
           Promise.all([canvasInfoPromise, ...promises]).then(function (allData) {
-            var canvasInfo = allData[0];
-            stateStack = allData.slice(1).filter(data => data !== undefined);
 
-            console.log("Loaded states:", stateStack);
-            console.log("Loaded canvasInfo:", canvasInfo);
+            //console.log("Promise.all([canvasInfoPromise, ...promises]) allData:", allData);
+            var canvasInfo = allData[0];
+            stateStack = allData.slice(1).filter((data, index) => {
+              const isDataDefined = data !== undefined;
+              
+              // if (isDataDefined) {
+                // const dataString = JSON.stringify(data);
+                //console.log(`Valid data added to stateStack from index ${index + 1}:`, dataString.length);
+              // } else {
+                //console.log(`Undefined data found and excluded from stateStack at index ${index + 1}`);
+              // }
+              return isDataDefined;
+            });
+            // console.log("Loaded states:", stateStack);
+            //console.log("Loaded states length:", stateStack.length);
+            // console.log("Loaded canvasInfo:", canvasInfo);
 
             document.body.removeChild(fileInput);
             currentStateIndex = stateStack.length - 1;
 
+            //console.log("Promise.all([canvasInfoPromise, ...promises]).then(function (allData) { stateStack[stateStack.length - 1], ", stateStack[stateStack.length - 1]);
+
+            
             resizeCanvasByNum(canvasInfo.width, canvasInfo.height)
 
             lastRedo();
@@ -248,7 +294,7 @@ function executeWithConfirmation(message, callback) {
   }
 
   function handleCancel() {
-      console.log("handleCancel");
+      //console.log("handleCancel");
       confirmModal.hide();
       cleanup();
   }
