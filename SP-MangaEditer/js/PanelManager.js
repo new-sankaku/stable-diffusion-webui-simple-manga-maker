@@ -9,9 +9,6 @@ document.getElementById("canvas-container").addEventListener(
 
 function handleSelection(e) {
   var selectedObject = e.target;
-  var layers = canvas.getObjects();
-  var activeIndex = layers.indexOf(selectedObject);
-  highlightActiveLayer(activeIndex);
   updateControls(selectedObject);
 }
 

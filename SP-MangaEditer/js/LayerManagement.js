@@ -292,7 +292,6 @@ function removeLayer(layer) {
 }
 
 function highlightActiveLayer(activeIndex) {
-  //console.log("Activating layer at index:", activeIndex);
   var layerItems = document.querySelectorAll(".layer-item");
   layerItems.forEach((layer, index) => {
     if (index === activeIndex) {
@@ -312,6 +311,7 @@ function highlightActiveLayerByCanvas() {
   var layers = document.querySelectorAll(".layer-item");
 
   var reverseIndex = layers.length - 1 - activeIndex;
+
   layers.forEach(function(layerDiv, index) {
     if (index === reverseIndex) {
       layerDiv.classList.add("active");
