@@ -27,6 +27,19 @@ canvas.on("object:added", (e) => {
     saveInitialState(obj);
   }
   forcedAdjustCanvasSize();
+
+  if (isKnifeMode) {
+    //console.log("is ナイフ");
+    obj.set({
+      selectable: false
+    });
+  } else {
+    //console.log("not ナイフ");
+    obj.set({
+      selectable: true
+    });
+  }
+
 });
 
 canvas.on("object:modified", (e) => {

@@ -355,13 +355,15 @@ function addSquare() {
   var square = new fabric.Polygon(
     [
       { x: 0, y: 0 },
-      { x: 250, y: 0 },
-      { x: 250, y: 250 },
-      { x: 0, y: 250 },
+      { x: 200, y: 0 },
+      { x: 200, y: 300 },
+      { x: 0, y: 300 },
     ],
     {
       left: 50,
       top: 50,
+      scaleX: 2,
+      scaleY: 2,
       fill: "#FFFFFF",
       strokeWidth: strokeWidth,
       strokeUniform: true,

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Polygon Splitting with Line Drawing</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
@@ -24,15 +25,8 @@
         });
         canvas.add(coordText);
 
-        canvas.on('mouse:move', function (options) {
-            var pointer = canvas.getPointer(options.e);
-            var endX = pointer.x;
-            var endY = pointer.y;
-            coordText.set({ text: 'X: ' + endX.toFixed(2) + ', Y: ' + endY.toFixed(2) });
-            canvas.renderAll();
-        });
 
-        var strokeWidth = 2;
+
 
         var rect = new fabric.Polygon([
             { x: 0, y: 0 },
@@ -42,6 +36,8 @@
         ], {
             left: 100,
             top: 100,
+            scaleX: 1.1,
+            scaleY: 1.1,
             fill: 'white',
             stroke: 'black',
             strokeWidth: strokeWidth,
@@ -50,6 +46,9 @@
 
         canvas.add(rect);
 
+
+
+
         var panelSpacing = 5;
         var knifeAssistAngle = 3;
         var currentKnifeObject = rect;
@@ -57,6 +56,33 @@
         var isKnifeDrawing = false;
         var isKnifeMode = true;
         var startKnifeX, startKnifeY;
+        var isHorizontalInt = 1;
+        var isVerticalInt = 2;
+        var isErrorInt = -1;
+
+
+        var strokeWidth = 2;
+        canvas.on('mouse:move', function (options) {
+            var pointer = canvas.getPointer(options.e);
+            var endX = pointer.x;
+            var endY = pointer.y;
+            coordText.set({ text: 'X: ' + endX.toFixed(2) + ', Y: ' + endY.toFixed(2) });
+            canvas.renderAll();
+        });
+
+        function getScaleX() {
+            if (currentKnifeObject && currentKnifeObject.scaleX !== undefined) {
+                return currentKnifeObject.scaleX;
+            }
+            return 1;
+        }
+
+        function getScaleY() {
+            if (currentKnifeObject && currentKnifeObject.scaleY !== undefined) {
+                return currentKnifeObject.scaleY;
+            }
+            return 0;
+        }
 
         function getCurrentLeft() {
             if (currentKnifeObject && currentKnifeObject.left !== undefined) {
@@ -172,6 +198,9 @@
             var points = currentKnifeObject.points;
             var offsetX = getCurrentLeft();
             var offsetY = getCurrentTop();
+
+            var scaleX = getScaleX();
+            var scaleY = getScaleY();
 
             var intersections = [];
 
@@ -295,24 +324,26 @@
             return filteredPolygon;
         }
 
-        function isSplitPoint(splitLine, tolerance, point){
+        function isSplitPoint(splitLine, tolerance, point) {
             splitY = splitLine.y;
             splitX = splitLine.x;
 
-            splitYPlus  = splitY + tolerance;
+            splitYPlus = splitY + tolerance;
             splitYMinus = splitY - tolerance;
-            splitXPlus  = splitX + tolerance;
+            splitXPlus = splitX + tolerance;
             splitXMinus = splitX - tolerance;
 
             if (point.y >= splitYMinus && point.y <= splitYPlus) {
-            if (point.x >= splitXMinus && point.x <= splitXPlus) {
-                return true;
-            }
+                if (point.x >= splitXMinus && point.x <= splitXPlus) {
+                    return true;
+                }
             }
             return false;
         }
 
-        function adjustShapesBySplitLineDirection(result, splitLine) {
+
+
+        function isHorizontal(result, splitLine) {
             const tolerance = 5;
             const adjustment = 5;
 
@@ -324,18 +355,49 @@
                 let dy = splitLine[1].y - splitLine[0].y;
                 let angle = Math.atan2(dy, dx);
                 let isHorizontal = Math.abs(dy) <= Math.abs(dx);
-                console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
+
+                if (isHorizontal) {
+                    return isHorizontalInt;
+                } else {
+                   return isVerticalInt;
+                }
+            } else {
+                return isErrorInt;
+            }
+        }
+
+
+
+        function adjustShapesBySplitLineDirection(result, splitLine) {
+            const tolerance = 5;
+            const adjustment = 5;
+            
+            var scaleX = getScaleX();
+            var scaleY = getScaleY();
+
+            var offsetX = getCurrentLeft();
+            var offsetY = getCurrentTop();
+
+            if (result.length === 2) {
+                let poly1 = result[0];
+                let poly2 = result[1];
+
+                let dx = splitLine[1].x - splitLine[0].x;
+                let dy = splitLine[1].y - splitLine[0].y;
+                let angle = Math.atan2(dy, dx);
+                let isHorizontal = Math.abs(dy) <= Math.abs(dx);
+                //console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
 
                 if (isHorizontal) {
                     // 水平の場合、Y軸のみ調整（X座標も範囲内かチェック）
                     result[0] = poly1.map(point => {
 
-                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                        if (isSplitPoint(splitLine[0], tolerance, point)) {
                             point.y -= adjustment;
                             return { x: point.x, y: point.y };
                         }
 
-                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                        if (isSplitPoint(splitLine[1], tolerance, point)) {
                             point.y -= adjustment;
                             return { x: point.x, y: point.y };
                         }
@@ -344,28 +406,28 @@
 
 
                     result[1] = poly2.map(point => {
-                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                        if (isSplitPoint(splitLine[0], tolerance, point)) {
                             point.y += adjustment;
                             return { x: point.x, y: point.y };
                         }
 
-                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                        if (isSplitPoint(splitLine[1], tolerance, point)) {
                             point.y += adjustment;
                             return { x: point.x, y: point.y };
                         }
 
-                        return { x: point.x, y: point.y };
+                        return { x: point.x, y: ((point.y-offsetY)*scaleY)+offsetY };
                     });
                 } else {
                     // 垂直の場合、X軸のみ調整（Y座標も範囲内かチェック）
                     result[0] = poly1.map(point => {
 
-                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                        if (isSplitPoint(splitLine[0], tolerance, point)) {
                             point.x -= adjustment;
                             return { x: point.x, y: point.y };
                         }
 
-                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                        if (isSplitPoint(splitLine[1], tolerance, point)) {
                             point.x -= adjustment;
                             return { x: point.x, y: point.y };
                         }
@@ -374,175 +436,220 @@
                     });
                     result[1] = poly2.map(point => {
 
-                        if (isSplitPoint( splitLine[0], tolerance, point )) {
+                        if (isSplitPoint(splitLine[0], tolerance, point)) {
                             point.x += adjustment;
                             return { x: point.x, y: point.y };
                         }
 
-                        if (isSplitPoint( splitLine[1], tolerance, point )) {
+                        if (isSplitPoint(splitLine[1], tolerance, point)) {
                             point.x += adjustment;
                             return { x: point.x, y: point.y };
                         }
 
-                        return { x: point.x, y: point.y };
+                        return { x: ((point.x-offsetX)*scaleX)+offsetX, y: point.y };
                     });
                 }
 
-                console.log("調整後の図形1の座標:", result[0]);
-                console.log("調整後の図形2の座標:", result[1]);
+                //console.log("調整後の図形1の座標:", result[0]);
+                //console.log("調整後の図形2の座標:", result[1]);
             } else {
-                console.log("図形が適切に分割されていません。図形数:", result.length);
+                //console.log("図形が適切に分割されていません。図形数:", result.length);
             }
         }
 
 
 
         function splitPolygon(polygon) {
-    if (!polygon || !polygon.points) {
-        return;
-    }
+            if (!polygon || !polygon.points) {
+                return;
+            }
 
-    var points = polygon.points.map(function (point, index) {
-        return { x: point.x, y: point.y };
-    });
+            var points = polygon.points.map(function (point, index) {
+                return { x: point.x, y: point.y };
+            });
 
-    var newPolygon1Points = [];
-    var newPolygon2Points = [];
+            var newPolygon1Points = [];
+            var newPolygon2Points = [];
 
-    if (currentKnifeLine) {
-        var offsetX = getCurrentLeft();
-        var offsetY = getCurrentTop();
+            if (currentKnifeLine) {
+                var offsetX = getCurrentLeft();
+                var offsetY = getCurrentTop();
 
-        var pointsStr = polygon.points.map(function (point) {
-            return (point.x + offsetX) + " " + (point.y + offsetY);
-        });
-        pointsStr.push(pointsStr[0]);
 
-        var splitPoint1 = [currentKnifeLine.x1, currentKnifeLine.y1];
-        var splitPoint2 = [currentKnifeLine.x2, currentKnifeLine.y2];
 
-        // JSTSライブラリを使用して多角形と分割線を読み込む
-        var reader = new jsts.io.WKTReader();
-        var poly = reader.read('POLYGON((' + pointsStr.join(', ') + '))');
-        var line = reader.read('LINESTRING(' + splitPoint1.join(' ') + ', ' + splitPoint2.join(' ') + ')');
+                var pointsStr = polygon.points.map(function (point) {
+                    return (point.x + offsetX) + " " + (point.y + offsetY);
+                });
+                pointsStr.push(pointsStr[0]);
 
-        // 分割を試みる
-        var union = poly.getExteriorRing().union(line);
-        var polygonizer = new jsts.operation.polygonize.Polygonizer();
-        polygonizer.add(union);
+                var splitPoint1 = [currentKnifeLine.x1, currentKnifeLine.y1];
+                var splitPoint2 = [currentKnifeLine.x2, currentKnifeLine.y2];
 
-        var polygons = polygonizer.getPolygons();
-        var result = [];
-        for (var i = polygons.iterator(); i.hasNext();) {
-            var polygonTemp = i.next();
-            var coords = polygonTemp.getCoordinates().map(coord => ({ x: coord.x, y: coord.y }));
-            result.push(coords);
-        }
+                // JSTSライブラリを使用して多角形と分割線を読み込む
+                var reader = new jsts.io.WKTReader();
+                var poly = reader.read('POLYGON((' + pointsStr.join(', ') + '))');
+                var line = reader.read('LINESTRING(' + splitPoint1.join(' ') + ', ' + splitPoint2.join(' ') + ')');
 
-        // 分割線が交点を持たない場合、分割線を延長して再試行
-        if (result.length !== 2) {
-            console.log("分割線が無いので再試行", result.length );
+                // 分割を試みる
+                var union = poly.getExteriorRing().union(line);
+                var polygonizer = new jsts.operation.polygonize.Polygonizer();
+                polygonizer.add(union);
 
-            var extendLength = 10; // 延長するピクセル数
-            var dx = currentKnifeLine.x2 - currentKnifeLine.x1;
-            var dy = currentKnifeLine.y2 - currentKnifeLine.y1;
-            var length = Math.sqrt(dx * dx + dy * dy);
-            var extendX = (dx / length) * extendLength;
-            var extendY = (dy / length) * extendLength;
+                var polygons = polygonizer.getPolygons();
+                var result = [];
+                for (var i = polygons.iterator(); i.hasNext();) {
+                    var polygonTemp = i.next();
+                    var coords = polygonTemp.getCoordinates().map(coord => ({ x: coord.x, y: coord.y }));
+                    result.push(coords);
+                }
 
-            var extendedLine = reader.read('LINESTRING(' + (splitPoint1[0] - extendX) + ' ' + (splitPoint1[1] - extendY) + ', ' + (splitPoint2[0] + extendX) + ' ' + (splitPoint2[1] + extendY) + ')');
-            union = poly.getExteriorRing().union(extendedLine);
-            polygonizer = new jsts.operation.polygonize.Polygonizer();
-            polygonizer.add(union);
+                // 分割線が交点を持たない場合、分割線を延長して再試行
+                if (result.length !== 2) {
+                    //console.log("分割線が無いので再試行", result.length);
 
-            polygons = polygonizer.getPolygons();
-            result = [];
-            for (var i = polygons.iterator(); i.hasNext();) {
-                var polygonTemp = i.next();
-                var coords = polygonTemp.getCoordinates().map(coord => ({ x: coord.x, y: coord.y }));
-                result.push(coords);
+                    var extendLength = 10; // 延長するピクセル数
+                    var dx = currentKnifeLine.x2 - currentKnifeLine.x1;
+                    var dy = currentKnifeLine.y2 - currentKnifeLine.y1;
+                    var length = Math.sqrt(dx * dx + dy * dy);
+                    var extendX = (dx / length) * extendLength;
+                    var extendY = (dy / length) * extendLength;
+
+                    var extendedLine = reader.read('LINESTRING(' + (splitPoint1[0] - extendX) + ' ' + (splitPoint1[1] - extendY) + ', ' + (splitPoint2[0] + extendX) + ' ' + (splitPoint2[1] + extendY) + ')');
+                    union = poly.getExteriorRing().union(extendedLine);
+                    polygonizer = new jsts.operation.polygonize.Polygonizer();
+                    polygonizer.add(union);
+
+                    polygons = polygonizer.getPolygons();
+                    result = [];
+                    for (var i = polygons.iterator(); i.hasNext();) {
+                        var polygonTemp = i.next();
+                        var coords = polygonTemp.getCoordinates().map(coord => ({ x: coord.x, y: coord.y }));
+                        result.push(coords);
+                    }
+                }
+
+                var isSplit = -1;
+
+                if (result.length === 2) {
+                    result[0] = removeDuplicates(result[0]);
+                    result[1] = removeDuplicates(result[1]);
+
+                    // 分割線の座標を配列に格納します。
+                    var splitLine = [
+                        { x: currentKnifeLine.x1, y: currentKnifeLine.y1 },
+                        { x: currentKnifeLine.x2, y: currentKnifeLine.y2 }
+                    ];
+                    isSplit = isHorizontal(result, splitLine);
+                    adjustShapesBySplitLineDirection(result, splitLine);
+                } else {
+                    console.log("not found splitLine", result.length);
+                    canvas.remove(currentKnifeLine);
+                    return;
+                }
+
+                newPolygon1Points = result[0];
+                newPolygon2Points = result[1];
+
+                var minX = 0;
+                var minY = 0;
+
+                var adjustedPolygon1Points = newPolygon1Points.map(function (point) {
+                    return {
+                        x: point.x - offsetX - minX,
+                        y: point.y - offsetY - minY
+                    };
+                });
+
+                var adjustedPolygon2Points = newPolygon2Points.map(function (point) {
+                    //console.log( "newPolygon2Points Y", point.y - offsetY - minY);
+                    return {
+                        x: point.x - offsetX - minX,
+                        y: point.y - offsetY - minY
+                    };
+                });
+
+                var minX = Math.min(...adjustedPolygon2Points.map(v => v.x));
+                var minY = Math.min(...adjustedPolygon2Points.map(v => v.y));
+
+                var adjustedPolygon2Points2 = adjustedPolygon2Points.map(function (point) {
+                    //console.log( "adjustedPolygon2Points2 Y", point.y - minY);
+                    return {
+                        x: point.x - minX,
+                        y: point.y - minY
+                    };
+                });
+
+                var polygon1MinX = Math.min(...newPolygon1Points.map(point => point.x));
+                var polygon1MinY = Math.min(...newPolygon1Points.map(point => point.y));
+
+                var polygon2MinX = Math.min(...newPolygon2Points.map(point => point.x));
+                var polygon2MinY = Math.min(...newPolygon2Points.map(point => point.y));
+
+                var left = 0;
+                var top = 0;
+
+                var scaleX = getScaleX();
+                var scaleY = getScaleY();
+                var scaleX2 = getScaleX();
+                var scaleY2 = getScaleY();
+
+                if( isSplit == isHorizontalInt ){
+                    // console.log("isHorizontalInt");
+                    top = polygon2MinY;
+                    left = polygon2MinX;
+                    scaleY = 1;
+                    scaleY2 = 1;
+                }else if( isSplit == isVerticalInt ){
+                    // console.log("isVerticalInt");
+                    top = polygon2MinY;
+                    left = polygon2MinX;
+                    scaleX = 1;
+                    scaleX2 = 1;
+                }else{
+                    // console.log("is else");
+                    //console.log("分割線がありません?", result.length);
+                    console.log("not found splitLine", result.length);
+                    canvas.remove(currentKnifeLine);
+                    return;
+                }
+
+                // console.log( "adjustedPolygon1Points  top, left, scaleX, scaleY",  adjustedPolygon1Points, top, left, scaleX, scaleY);
+                // console.log( "adjustedPolygon2Points2 top, left, scaleX, scaleY", adjustedPolygon2Points2, top, left, scaleX, scaleY);
+
+                var polygon1 = new fabric.Polygon(adjustedPolygon1Points, {
+                    left: polygon1MinX,
+                    top: polygon1MinY,
+                    fill: 'white',
+                    stroke: 'black',
+                    strokeWidth: 2,
+                    scaleX: scaleX,
+                    scaleY: scaleY,
+                    selectable: false
+                });
+
+                //console.log("scaleX", scaleX);
+                //console.log("scaleY2", scaleY2);
+
+                var polygon2 = new fabric.Polygon(adjustedPolygon2Points2, {
+                    left: left,
+                    top: top,
+                    fill: 'blue',
+                    stroke: 'black',
+                    strokeWidth: 2,
+                    scaleX: scaleX2,
+                    scaleY: scaleY2,
+                    selectable: false
+                });
+
+                canvas.remove(polygon);
+                canvas.remove(currentKnifeLine);
+
+                canvas.add(polygon1);
+                canvas.add(polygon2);
+                currentKnifeObject = null;
+                currentKnifeLine = null;
             }
         }
-
-        if (result.length === 2) {
-            result[0] = removeDuplicates(result[0]);
-            result[1] = removeDuplicates(result[1]);
-
-            // 分割線の座標を配列に格納します。
-            var splitLine = [
-                { x: currentKnifeLine.x1, y: currentKnifeLine.y1 },
-                { x: currentKnifeLine.x2, y: currentKnifeLine.y2 }
-            ];
-
-            adjustShapesBySplitLineDirection(result, splitLine);
-        } else {
-            console.log("分割線がありません", result.length );
-            return;
-        }
-
-        newPolygon1Points = result[0];
-        newPolygon2Points = result[1];
-
-        var minX = 0;
-        var minY = 0;
-
-        var adjustedPolygon1Points = newPolygon1Points.map(function (point) {
-            return {
-                x: point.x - offsetX - minX,
-                y: point.y - offsetY - minY
-            };
-        });
-
-        var adjustedPolygon2Points = newPolygon2Points.map(function (point) {
-            return {
-                x: point.x - offsetX - minX,
-                y: point.y - offsetY - minY
-            };
-        });
-
-        var minX = Math.min(...adjustedPolygon2Points.map(v => v.x));
-        var minY = Math.min(...adjustedPolygon2Points.map(v => v.y));
-
-        var adjustedPolygon2Points2 = adjustedPolygon2Points.map(function (point) {
-            return {
-                x: point.x - minX,
-                y: point.y - minY
-            };
-        });
-
-        var polygon1MinX = Math.min(...newPolygon1Points.map(point => point.x));
-        var polygon1MinY = Math.min(...newPolygon1Points.map(point => point.y));
-
-        var polygon2MinX = Math.min(...newPolygon2Points.map(point => point.x));
-        var polygon2MinY = Math.min(...newPolygon2Points.map(point => point.y));
-
-        var polygon1 = new fabric.Polygon(adjustedPolygon1Points, {
-            left: polygon1MinX,
-            top: polygon1MinY,
-            fill: 'white',
-            stroke: 'black',
-            strokeWidth: 2,
-            selectable: false
-        });
-
-        var polygon2 = new fabric.Polygon(adjustedPolygon2Points2, {
-            left: polygon2MinX,
-            top: polygon2MinY,
-            fill: 'blue',
-            stroke: 'black',
-            strokeWidth: 2,
-            selectable: false
-        });
-
-        canvas.remove(polygon);
-        canvas.remove(currentKnifeLine);
-
-        canvas.add(polygon1);
-        canvas.add(polygon2);
-        currentKnifeObject = null;
-        currentKnifeLine = null;
-    }
-}
 
 
         document.getElementById('knifeModeButton').addEventListener('click', function () {

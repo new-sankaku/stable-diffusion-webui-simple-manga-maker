@@ -29,6 +29,7 @@
     <script src="third/Fabric.js/fabric.min.js?v=2.0"></script>
     <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.0"></script>
     <script src="third/i18next/i18next.min.js?v=2.0"></script>
+    <script src="third/jsts/jsts.min.js?v=2.0"></script>
 </head>
 
 <body>
@@ -100,6 +101,12 @@
                                 <a class="dropdown-item" href="#" id="settingsLoad" onclick="clipCopy()">
                                     <i class="material-icons">content_copy</i> <span data-i18n="imageCopy">Image
                                         Copy</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" id="svgDownload">
+                                    <span class="material-symbols-outlined">polyline</span>
+                                    <span data-i18n="SvgDownload">Svg Download</span>
                                 </a>
                             </li>
                             <li>
@@ -301,6 +308,12 @@
                             data-i18n="newPentagon">New Pentagon</span></button>
                     <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> <span
                             data-i18n="editingMode">Editing Mode</span></button>
+                    <hr>
+                    <button  style="display: none;" id="knifeModeButton">
+                        <i class="material-icons">edit_square</i>
+                        <span data-i18n="editingMode">Knife Mode(β): OFF</span>
+                    </button>
+                    <hr>
                 </div>
             </div>
 
@@ -1040,6 +1053,7 @@
     <script src="js/effect/glfxControle.js?v=2.0" defer></script>
     <script src="js/i18next.js?v=2.0" defer></script>
 
+    <script src="js/Knife.js?v=2.0" defer></script>
 
 
     <script src="js/event/FabricManagement.js?v=2.0" defer></script>
