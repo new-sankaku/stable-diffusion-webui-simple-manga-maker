@@ -292,7 +292,7 @@ function loadSVGPlusReset(svgString) {
     var bgColorInput = document.getElementById("bg-color");
     canvas.backgroundColor = bgColorInput.value;
 
-    objects.forEach(function (obj) {
+    objects.reverse().forEach(function (obj) {
       if (obj.type === "path") {
         var points = obj.path.map(function (item) {
           return {
