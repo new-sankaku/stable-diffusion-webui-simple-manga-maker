@@ -309,10 +309,34 @@
                     <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> <span
                             data-i18n="editingMode">Editing Mode</span></button>
                     <hr>
-                    <button  style="display: none;" id="knifeModeButton">
-                        <i class="material-icons">edit_square</i>
-                        <span data-i18n="editingMode">Knife Mode(β): OFF</span>
+
+
+                    <button id="A4-H">
+                        <i class="material-icons">crop_portrait</i>
+                        <span" data-i18n="A4-H-Scale">A4 Scale Panel</span>
                     </button>
+                    <button id="A4-V">
+                        <i class="material-icons">crop_landscape</i>
+                        <span" data-i18n="A4-V-Scale">A4 Scale Panel</span>
+                    </button>
+
+                    <button id="B4-H">
+                        <i class="material-icons">crop_portrait</i>
+                        <span" data-i18n="B4-H-Scale">B4 Scale Panel</span>
+                    </button>
+                    <button id="B4-V">
+                        <i class="material-icons">crop_landscape</i>
+                        <span" data-i18n="B4-V-Scale">B4 Scale Panel</span>
+                    </button>
+                    <button id="knifeModeButton">
+                        <i class="material-icons">edit_square</i>
+                        <span data-i18n="knifeMode">Knife Mode(β): OFF</span>
+                    </button>
+                    <div class="input-group">
+                        <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
+                        <input type="number" id="panelSpaceSize" name="panelSpaceSize" min="0" max="75" step="1" value="10">
+                    </div>
+                    <label data-i18n="KnifeHelp">The knife tool cuts well on a square, but sometimes doesn't work well on an angle.</label>
                     <hr>
                 </div>
             </div>
@@ -579,24 +603,30 @@
 
             <div id="canvas-area">
                 <div class="area-header">
-                    <span data-i18n="canvas">[Canvas] : </span>
-
-                    <span data-i18n="view">View Settings : </span>
+                    <span data-i18n="canvas">[Canvas]:</span>
+                    <button onclick="zoomIn()"><span class="material-symbols-outlined">zoom_in</span></button>
+                    <button onclick="zoomOut()"><span class="material-symbols-outlined">zoom_out</span></button>
+                    <button onclick="zoomFit()"><span class="material-symbols-outlined">1x_mobiledata_badge</span></button>
                     <label data-i18n="view_layers">
-                        Layers: 
+                        L
                     </label>
                     <input type="checkbox" id="view_layers_checkbox" checked>
     
                     <label data-i18n="view_controles">
-                        Controles: 
+                        C 
                     </label>
                     <input type="checkbox" id="view_controles_checkbox" checked>
                 </div>
 
-                <div id="canvas-container">
-                    <canvas id="mangaImageCanvas"></canvas>
+                <div class="content">
+                    <div class="resizable-container" id="resizable-container">
+                        <div class="canvas-container" id="canvas-container">
+                            <canvas id="mangaImageCanvas"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
+
 
             <div id="layer-panel">
                 <div class="area-header" data-i18n="layers">Layers</div>
@@ -620,6 +650,7 @@
                             Mode</span></button>
                     <button id="crop" anim="glow"><i class="material-icons">crop</i> <span
                             data-i18n="crop">CROP!</span></button>
+
                 </div>
             </div>
 

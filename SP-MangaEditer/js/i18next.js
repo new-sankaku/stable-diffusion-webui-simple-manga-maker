@@ -1,6 +1,14 @@
 const resources = {
   en: {
     translation: {
+
+      "spaceSizeLabel": "Space Size",
+      "A4-H-Scale": "A4 Scale Panel",
+      "A4-V-Scale": "A4 Scale Panel",
+      "B4-H-Scale": "B4 Scale Panel",
+      "B4-V-Scale": "B4 Scale Panel",
+      "KnifeHelp": "The knife tool cuts well on a square, but sometimes doesn't work well on an angle.",
+
       "red":"Red",
       "green":"Green",
       "blue":"Blue",
@@ -203,6 +211,14 @@ const resources = {
   },
   ja: {
     translation: {
+      "knifeMode": "ナイフツール",
+      "spaceSizeLabel": "コマ間の間隔",
+      "A4-H-Scale": "A4 横 縮尺パネル",
+      "A4-V-Scale": "A4 縦 縮尺パネル",
+      "B4-H-Scale": "B4 横 縮尺パネル",
+      "B4-V-Scale": "B4 縦 縮尺パネル",
+      "KnifeHelp": "ナイフツールは正方形でうまく切れますが、角度がつくと上手く切れないことがあります。",
+
        "allRemove": "全て削除",
        "allRunT2I": "全て実行T2I",
        "angle": "角度",
@@ -344,6 +360,17 @@ const resources = {
   },
   ko: {
     translation: {
+      "knifeMode": "칼 도구",
+      "spaceSizeLabel": "프레임 간 간격",
+
+      "A4-H-Scale": "A4 가로 축척 패널",
+      "A4-V-Scale": "A4 세로 축척 패널",
+      "B4-H-Scale": "B4 가로 축척 패널",
+      "B4-V-Scale": "B4 세로 축척 패널",
+      
+      "KnifeHelp": "칼 도구는 사각형에서 잘 자르지만 때로는 각도에서 잘 작동하지 않습니다.",
+      
+
       "red": "빨강",
       "green": "초록",
       "blue": "파랑",
@@ -494,6 +521,17 @@ const resources = {
   },
   fr: {
     translation: {
+      "knifeMode": "Mode couteau",
+
+      "spaceSizeLabel": "Écart entre cadres",
+
+      "A4-H-Scale": "Échelle A4 horizontale",
+      "A4-V-Scale": "Échelle A4 verticale",
+      "B4-H-Scale": "Échelle B4 horizontale",
+      "B4-V-Scale": "Échelle B4 verticale",
+      
+      "KnifeHelp": "L'outil couteau coupe bien sur un carré, mais parfois ne fonctionne pas bien sur un angle.",
+      
       "red": "Rouge",
       "green": "Vert",
       "blue": "Bleu",
@@ -677,6 +715,15 @@ const resources = {
   },
   zh: {
     translation: {
+      "knifeMode": "刀具模式",
+
+      "spaceSizeLabel": "帧间距",
+      "A4-H-Scale": "A4 横向缩放面板",
+      "A4-V-Scale": "A4 纵向缩放面板",
+      "B4-H-Scale": "B4 横向缩放面板",
+      "B4-V-Scale": "B4 纵向缩放面板",      
+      "KnifeHelp": "刀具在正方形上切割效果好，但有时在角度上不太有效。",
+      
         "red": "红色",
         "green": "绿色",
         "blue": "蓝色",

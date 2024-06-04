@@ -1,5 +1,32 @@
-#canvas-container, #mangaImageCanvas {
-  margin-right: 10px;
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-width: 600px;
+  max-width: 100%;
+
+  height: 95%;
+  min-height: 400px;
+  max-height: 95%;
+
+}
+
+.resizable-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  align-items: left;
+  justify-content: center;
+}
+
+.canvas-container {
+
+  transform-origin: 0 0;
+  transform-origin: top center;
 }
 
 #canvas-area {
@@ -10,21 +37,24 @@
 
 
 #canvas-container {
+
   width: 100%;
   min-width: 600px;
   max-width: 100%;
+
   height: 95%;
   min-height: 400px;
   max-height: 95%;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; 
-  box-sizing: border-box;  
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 #mangaImageCanvas {
-  transform-origin: 0 0; 
+  transform-origin: 0 0;
   border: 3px dashed #4D4D4D;
 }
 
@@ -57,7 +87,8 @@
   transition: color 0.3s, transform 0.3s;
 }
 
-#sidebar i:hover, #sidebar i.active {
+#sidebar i:hover,
+#sidebar i.active {
   color: #000;
   transform: scale(1.1);
 }
@@ -73,7 +104,7 @@
 }
 
 #download-buttons button .material-icons,
-#download-buttons button .material-symbols-outlined{
+#download-buttons button .material-symbols-outlined {
   font-size: 16px;
   vertical-align: middle;
 }
@@ -88,7 +119,7 @@
   color: #FFFFFF;
 }
 
-#canvas-buttons button .material-icons{
+#canvas-buttons button .material-icons {
   font-size: 14px;
   vertical-align: middle;
 }
@@ -112,6 +143,7 @@
   margin-right: 5px;
   width: 15%;
 }
+
 .info-item .fab {
   margin-right: 5px;
   width: 15%;
@@ -178,15 +210,16 @@
   max-width: 150px;
   width: 50px;
 }
+
 .dropdown-menu .dropdown-item input {
   flex: 2;
 }
 
-.tight-text{
+.tight-text {
   flex: 1;
 }
 
-.tight-text label{
+.tight-text label {
   margin-left: 2px;
   margin-right: 2px;
 }
@@ -227,11 +260,14 @@
   bottom: 0;
   height: 10%;
   width: 100%;
-  background-color: #f8f9fa; /* 背景色を設定 */
-  border-top: 1px solid #dee2e6; /* 上部に境界線を追加 */
+  background-color: #f8f9fa;
+  /* 背景色を設定 */
+  border-top: 1px solid #dee2e6;
+  /* 上部に境界線を追加 */
 }
 
 .bottom-bar-content {
   padding: 10px;
-  text-align: center; /* 中央揃え */
+  text-align: center;
+  /* 中央揃え */
 }

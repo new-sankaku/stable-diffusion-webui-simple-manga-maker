@@ -1,4 +1,3 @@
-
 document.getElementById("canvas-container").addEventListener(
   "dragover",
   function (e) {
@@ -26,10 +25,13 @@ document.getElementById("canvas-container").addEventListener(
     reader.onload = function (f) {
       var data = f.target.result;
       fabric.Image.fromURL(data, function (img) {
-        var canvasWidth = canvasElement.width;
-        var canvasHeight = canvasElement.height;
+        // var canvasWidth = canvasElement.width;
+        // var canvasHeight = canvasElement.height;
 
-        putImageInFrame(img, x, y);
+        var canvasX = x / canvasContinerScale;
+        var canvasY = y / canvasContinerScale;
+
+        putImageInFrame(img, canvasX, canvasY);
         setImage2ImageInitPrompt(img);
       });
     };
@@ -49,6 +51,14 @@ function putImageInFrame(img, x, y) {
   canvas.add(img);
 
   var targetFrameIndex = findTargetFrame(x, y);
+
+  console.log(
+    "scale, x, y, targetFrameIndex",
+    canvasContinerScale,
+    x,
+    y,
+    targetFrameIndex
+  );
   if (targetFrameIndex !== -1) {
     var targetFrame = canvas.item(targetFrameIndex);
     var frameCenterX =
@@ -117,7 +127,7 @@ function putImageInFrame(img, x, y) {
   canvas.setActiveObject(img);
 
   // console.log("function putImageInFrame { saveInitialState" );
-  saveInitialState(img)
+  saveInitialState(img);
 
   canvas.renderAll();
   updateLayerPanel();
@@ -134,7 +144,6 @@ function findTargetFrame(x, y) {
   let objects = canvas.getObjects().reverse();
   for (let i = 0; i < objects.length; i++) {
     if (isShapes(objects[i])) {
-
       let frameBounds = objects[i].getBoundingRect(true);
       if (
         x >= frameBounds.left &&
@@ -157,9 +166,9 @@ function isWithin(image, frame) {
     imageBounds.left >= frameBounds.left &&
     imageBounds.top >= frameBounds.top &&
     imageBounds.left + imageBounds.width * image.scaleX <=
-    frameBounds.left + frameBounds.width &&
+      frameBounds.left + frameBounds.width &&
     imageBounds.top + imageBounds.height * image.scaleY <=
-    frameBounds.top + frameBounds.height;
+      frameBounds.top + frameBounds.height;
   return within;
 }
 
@@ -177,6 +186,82 @@ function adjustImageToFitFrame(image, frame) {
   });
 }
 
+document.getElementById("A4-H").addEventListener("click", function () {
+  loadBookSize(210, 297);
+});
+document.getElementById("A4-V").addEventListener("click", function () {
+  loadBookSize(297, 210);
+});
+document.getElementById("B4-H").addEventListener("click", function () {
+  loadBookSize(257, 364);
+});
+document.getElementById("B4-V").addEventListener("click", function () {
+  loadBookSize(364, 257);
+});
+
+function loadBookSize(width, height) {
+  if (stateStack.length > 2) {
+    executeWithConfirmation("New Project?", function () {
+      isUndoRedoOperation = true;
+      resizeCanvasToObject(width, height);
+      addSquareBySize(width, height);
+      isUndoRedoOperation = false;
+    });
+  } else {
+    isUndoRedoOperation = true;
+    resizeCanvasToObject(width, height);
+    addSquareBySize(width, height);
+    isUndoRedoOperation = false;
+  }
+}
+
+function addSquareBySize(width, height) {
+  initImageHistory();
+  saveState();
+
+  var strokeWidthScale = canvas.width / 700;
+  var strokeWidth = 2 * strokeWidthScale;
+  console.log("strokeWidth", strokeWidth);
+
+  var widthScale = canvas.width / width;
+  var heightScale = canvas.height / height;
+
+  var svgPaggingWidth = svgPagging * widthScale;
+  var svgPaggingHeight = svgPagging * heightScale;
+
+  var svgPaggingHalfWidth = svgPaggingWidth / 2;
+  var svgPaggingHalfHeight = svgPaggingHeight / 2;
+
+  var newWidth = width * widthScale - svgPaggingWidth;
+  var newHeight = height * heightScale - svgPaggingHeight;
+
+  var square = new fabric.Polygon(
+    [
+      { x: 0, y: 0 },
+      { x: newWidth, y: 0 },
+      { x: newWidth, y: newHeight },
+      { x: 0, y: newHeight },
+    ],
+    {
+      left: svgPaggingHalfWidth,
+      top: svgPaggingHalfHeight,
+      scaleX: 1,
+      scaleY: 1,
+      fill: "#FFFFFF",
+      strokeWidth: strokeWidth,
+      strokeUniform: true,
+      stroke: "black",
+      objectCaching: false,
+      transparentCorners: false,
+      cornerColor: "Blue",
+      isPanel: true,
+    }
+  );
+  setText2ImageInitPrompt(square);
+  canvas.add(square);
+  updateLayerPanel();
+}
+
 /** Load SVG(Verfical, Landscope) */
 function loadSVGPlusReset(svgString) {
   initImageHistory();
@@ -191,7 +276,8 @@ function loadSVGPlusReset(svgString) {
     var overallScaleY = canvasUsableHeight / options.height;
     var scaleToFit = Math.min(overallScaleX, overallScaleY);
     var offsetX = (canvas.width - options.width * scaleToFit) / 2;
-    var offsetY = svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+    var offsetY =
+      svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
 
     var strokeWidthScale = canvas.width / 700;
     var strokeWidth = 2 * strokeWidthScale;
@@ -203,7 +289,7 @@ function loadSVGPlusReset(svgString) {
     clipAreaCoords.width = options.width * scaleToFit + 4;
     clipAreaCoords.height = options.height * scaleToFit + 4;
 
-    var bgColorInput = document.getElementById('bg-color');
+    var bgColorInput = document.getElementById("bg-color");
     canvas.backgroundColor = bgColorInput.value;
 
     objects.forEach(function (obj) {
@@ -275,8 +361,7 @@ function loadSVGPlusReset(svgString) {
 
         canvas.add(polygon);
       } else {
-        isPanel: true,
-          obj.scaleX = scaleToFit;
+        isPanel: true, (obj.scaleX = scaleToFit);
         obj.scaleY = scaleToFit;
         obj.top = obj.top * scaleToFit + offsetY;
         obj.left = obj.left * scaleToFit + offsetX;
@@ -303,7 +388,6 @@ function loadSVGPlusReset(svgString) {
   isUndoRedoOperation = true;
   updateLayerPanel();
 }
-
 
 /** Disallow drag-on-drop. */
 document.addEventListener("DOMContentLoaded", function () {
@@ -335,20 +419,22 @@ document.addEventListener("DOMContentLoaded", function () {
   var svgPreviewArea = document.getElementById("speech-bubble-area1");
 
   svgPreviewArea.addEventListener(
-      "mousedown",
-      function (event) {
-          // スライダーと数値入力の要素上でのマウスダウンイベントは許可する
-          if (!event.target.closest("input[type='range']") && !event.target.closest("input[type='number']")) {
-              event.preventDefault();
-              event.stopPropagation();
-          }
-      },
-      false
+    "mousedown",
+    function (event) {
+      // スライダーと数値入力の要素上でのマウスダウンイベントは許可する
+      if (
+        !event.target.closest("input[type='range']") &&
+        !event.target.closest("input[type='number']")
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    false
   );
 });
 
 function addSquare() {
-
   var strokeWidthScale = canvas.width / 700;
   var strokeWidth = 2 * strokeWidthScale;
 
@@ -408,7 +494,6 @@ function addPentagon() {
   setText2ImageInitPrompt(pentagon);
   canvas.add(pentagon);
   updateLayerPanel();
-
 }
 
 function Edit() {
@@ -618,20 +703,22 @@ function debounceSnapToGrid(target) {
   }, 50);
 }
 
-
-
-document.getElementById('view_layers_checkbox').addEventListener('change', function () {
-  changeView('layer-panel', this.checked);
-});
-document.getElementById('view_controles_checkbox').addEventListener('change', function () {
-  changeView('controls', this.checked);
-});
+document
+  .getElementById("view_layers_checkbox")
+  .addEventListener("change", function () {
+    changeView("layer-panel", this.checked);
+  });
+document
+  .getElementById("view_controles_checkbox")
+  .addEventListener("change", function () {
+    changeView("controls", this.checked);
+  });
 function changeView(elementId, isVisible) {
   var element = document.getElementById(elementId);
   if (isVisible) {
-    element.style.display = 'block';
+    element.style.display = "block";
   } else {
-    element.style.display = 'none';
+    element.style.display = "none";
   }
   adjustCanvasSize();
 }

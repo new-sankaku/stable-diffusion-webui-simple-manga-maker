@@ -38,7 +38,7 @@ function resizeCanvas(newWidth, newHeight) {
 
   canvas.setDimensions({ width: newWidth, height: newHeight });
   canvas.getObjects().forEach((obj) => {
-    
+
     var scaleX = newWidth / obj.initial.canvasWidth;
     var scaleY = newHeight / obj.initial.canvasHeight;
 
@@ -75,15 +75,15 @@ function resizeCanvas(newWidth, newHeight) {
 }
 
 function forcedAdjustCanvasSize() {
-  adjustCanvasSize( true );
+  adjustCanvasSize(true);
 }
 
 function adjustCanvasSize() {
-  adjustCanvasSize( false );
+  adjustCanvasSize(false);
 }
 
 //forced = 強制
-function adjustCanvasSize( forced ) {
+function adjustCanvasSize(forced) {
   var container = document.getElementById("canvas-container");
   var windowWidth = container.clientWidth;
   var windowHeight = container.clientHeight;
@@ -98,10 +98,10 @@ function adjustCanvasSize( forced ) {
     newHeight = windowWidth / aspectRatio;
   }
 
-  if( forced ){
+  if (forced) {
     //next
     // console.log( "adjustCanvasSize forced true" );
-  }else if (newWidth == canvas.getWidth() && newHeight == canvas.getHeight()) {
+  } else if (newWidth == canvas.getWidth() && newHeight == canvas.getHeight()) {
     // console.log( "adjustCanvasSize forced false" );
     return;
   }
@@ -136,11 +136,83 @@ function resizeCanvasToObject(objectWidth, objectHeight) {
   }
 
   canvas.renderAll();
-  
+
 }
 
-document.getElementById('bg-color').addEventListener('input', function(event) {
+document.getElementById('bg-color').addEventListener('input', function (event) {
   // console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
   var color = event.target.value;
   canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
 });
+
+let canvasContinerScale = 1;
+const resizableContainer = document.getElementById('canvas-container');
+function zoomIn() {
+  const containerRect = resizableContainer.getBoundingClientRect();
+
+  canvasContinerScale += 0.1;
+  document.getElementById('canvas-container').style.transform = `scale(${canvasContinerScale})`;
+
+  const newContentRect = document.getElementById('canvas-container').getBoundingClientRect();
+  const centerX = containerRect.left + containerRect.width / 2;
+  const centerY = containerRect.top + containerRect.height / 2;
+  const newScrollLeft = (centerX - newContentRect.width / 2 - containerRect.left) + resizableContainer.scrollLeft;
+  const newScrollTop = (centerY - newContentRect.height / 2 - containerRect.top) + resizableContainer.scrollTop;
+
+  resizableContainer.scrollLeft = newScrollLeft;
+  resizableContainer.scrollTop = newScrollTop;
+
+  // const offsetX = (newScrollLeft - (containerRect.left + containerRect.width / 2 - newContentRect.width / 2)) / containerRect.width * 100;
+  // const offsetY = (newScrollTop - (containerRect.top + containerRect.height / 2 - newContentRect.height / 2)) / containerRect.height * 100;
+
+  // console.log(`ズームイン後の中心位置の偏差: X = ${offsetX.toFixed(2)}%, Y = ${offsetY.toFixed(2)}%`);
+  forcedAdjustCanvasSize();
+
+}
+
+function zoomFit() {
+  const containerRect = resizableContainer.getBoundingClientRect();
+
+  canvasContinerScale = 1.0;
+  document.getElementById('canvas-container').style.transform = `scale(${canvasContinerScale})`;
+
+  const newContentRect = document.getElementById('canvas-container').getBoundingClientRect();
+  const centerX = containerRect.left + containerRect.width / 2;
+  const centerY = containerRect.top + containerRect.height / 2;
+  const newScrollLeft = (centerX - newContentRect.width / 2 - containerRect.left) + resizableContainer.scrollLeft;
+  const newScrollTop = (centerY - newContentRect.height / 2 - containerRect.top) + resizableContainer.scrollTop;
+
+  resizableContainer.scrollLeft = newScrollLeft;
+  resizableContainer.scrollTop = newScrollTop;
+
+  // const offsetX = (newScrollLeft - (containerRect.left + containerRect.width / 2 - newContentRect.width / 2)) / containerRect.width * 100;
+  // const offsetY = (newScrollTop - (containerRect.top + containerRect.height / 2 - newContentRect.height / 2)) / containerRect.height * 100;
+
+  // console.log(`ズームイン後の中心位置の偏差: X = ${offsetX.toFixed(2)}%, Y = ${offsetY.toFixed(2)}%`);
+  forcedAdjustCanvasSize();
+
+}
+
+function zoomOut() {
+  if (canvasContinerScale > 0.1) {
+    const containerRect = resizableContainer.getBoundingClientRect();
+
+    canvasContinerScale -= 0.1;
+    document.getElementById('canvas-container').style.transform = `scale(${canvasContinerScale})`;
+
+    const newContentRect = document.getElementById('canvas-container').getBoundingClientRect();
+    const centerX = containerRect.left + containerRect.width / 2;
+    const centerY = containerRect.top + containerRect.height / 2;
+    const newScrollLeft = (centerX - newContentRect.width / 2 - containerRect.left) + resizableContainer.scrollLeft;
+    const newScrollTop = (centerY - newContentRect.height / 2 - containerRect.top) + resizableContainer.scrollTop;
+
+    resizableContainer.scrollLeft = newScrollLeft;
+    resizableContainer.scrollTop = newScrollTop;
+
+    // const offsetX = (newScrollLeft - (containerRect.left + containerRect.width / 2 - newContentRect.width / 2)) / containerRect.width * 100;
+    // const offsetY = (newScrollTop - (containerRect.top + containerRect.height / 2 - newContentRect.height / 2)) / containerRect.height * 100;
+
+    // console.log(`ズームアウト後の中心位置の偏差: X = ${offsetX.toFixed(2)}%, Y = ${offsetY.toFixed(2)}%`);
+    forcedAdjustCanvasSize();
+  }
+}

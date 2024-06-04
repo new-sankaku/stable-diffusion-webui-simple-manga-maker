@@ -120,7 +120,7 @@ window.onload = function () {
         img.classList.add("svg-preview");
         img.alt = item.name;
         img.addEventListener("click", function () {
-            if( stateStack.length > 1 ){
+            if( stateStack.length > 2 ){
                 executeWithConfirmation('New Project?', function() {
                     loadSVGPlusReset(item.svg);
                 });
@@ -139,7 +139,7 @@ window.onload = function () {
         img.classList.add("svg-preview");
         img.alt = item.name;
         img.addEventListener("click", function () {
-            if( stateStack.length > 1 ){
+            if( stateStack.length > 2 ){
                 executeWithConfirmation('New Project?', function() {
                     loadSVGPlusReset(item.svg);
                 });
