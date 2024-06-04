@@ -309,8 +309,8 @@ function createTextbox() {
   var fontsize = document.getElementById("fontSizeSlider").value
   var fontStrokeWidth = document.getElementById("fontStrokeWidthSlider").value
 
-  console.log( "selectedFont", selectedFont )
-  var textbox = new fabric.Textbox("New Text.", {
+  console.log( "selectedFont", "New Text" )
+  var textbox = new fabric.Textbox(selectedFont, {
     width: 150,
     top: 50,
     left: 50,
@@ -461,9 +461,9 @@ function updateNeonEffect(activeObject) {
 
 function changeFont(font) {
   document.getElementById("text-preview-area").style.fontFamily = font;
-  var select = document.getElementById("fontSelector");
-  var options = select.options;
-  for (var i = 0; i < options.length; i++) {
-      options[i].style.fontFamily = font; // ドロップボックス内のフォントを変更
-  }
+  // var select = document.getElementById("fontSelector");
+  // var options = select.options;
+  // for (var i = 0; i < options.length; i++) {
+  //     options[i].style.fontFamily = font; // ドロップボックス内のフォントを変更
+  // }
 }

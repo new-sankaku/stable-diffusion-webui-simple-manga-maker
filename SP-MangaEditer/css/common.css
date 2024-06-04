@@ -175,9 +175,57 @@ button:active, .custom-file-upload:active {
   font-style: normal;
 }
 
+
+
+
+
+
+@font-face {
+  font-family: '851CHIKARA-DZUYOKU_kanaA';
+  src: url('../font/851CHIKARA-DZUYOKU_kanaA_004/851CHIKARA-DZUYOKU_kanaA_004.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '851MkPOP_101';
+  src: url('../font/851MkPOP_101/851MkPOP_101.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'TrainOne-Regular';
+  src: url('../font/Train_One/TrainOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 @font-face {
   font-family: 'KleeOne';
   src: url('../font/Klee_One/KleeOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'RampartOne-Regular';
+  src: url('../font/Rampart_One/RampartOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OhisamaFont11';
+  src: url('../font/OhisamaFont11/OhisamaFont11.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'DokiDokiFont2';
+  src: url('../font/DokiDokiFont2/DokiDokiFantasia.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KleeOne';
+  src: url('../font/ChalkJP_3/Chalk-JP.otf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
