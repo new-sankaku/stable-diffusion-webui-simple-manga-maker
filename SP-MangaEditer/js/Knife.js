@@ -80,9 +80,6 @@ canvas.on('mouse:move', function (options) {
 });
 
 
-
-
-var panelSpacing = 5;
 var knifeAssistAngle = 3;
 var currentKnifeObject = null;
 var currentKnifeLine = null;
@@ -212,14 +209,13 @@ function drawLine(startKnifeX, startKnifeY, endX, endY) {
         selectable: false
       });
 
-      isUndoRedoOperation = true;
+      
+      setNotSave(nextLine);
       canvas.add(nextLine);
-      isUndoRedoOperation = false;
  
       if (currentKnifeLine) {
-        isUndoRedoOperation = true;
+        setNotSave(currentKnifeLine);
         canvas.remove(currentKnifeLine);
-        isUndoRedoOperation = false;
       }
       currentKnifeLine = nextLine;
     }
@@ -433,10 +429,6 @@ function splitPolygon(polygon) {
     return;
   }
 
-  var points = polygon.points.map(function (point, index) {
-    return { x: point.x, y: point.y };
-  });
-
   var newPolygon1Points = [];
   var newPolygon2Points = [];
 
@@ -512,9 +504,8 @@ function splitPolygon(polygon) {
       isSplit = isHorizontal(resultLine, splitLine);
       adjustShapesBySplitLineDirection(resultLine, splitLine);
     } else {
-      isUndoRedoOperation = true;
+      setNotSave(currentKnifeLine);
       canvas.remove(currentKnifeLine);
-      isUndoRedoOperation = false;
       return;
     }
 
@@ -573,10 +564,8 @@ function splitPolygon(polygon) {
       scaleX = 1;
       scaleX2 = 1;
     } else {
-      console.log("not found splitLine", resultLine.length);
-      isUndoRedoOperation = true;
+      setNotSave(currentKnifeLine);
       canvas.remove(currentKnifeLine);
-      isUndoRedoOperation = false;
       return;
     }
 
@@ -608,12 +597,10 @@ function splitPolygon(polygon) {
     setText2ImageInitPrompt(polygon1);
     setText2ImageInitPrompt(polygon2);
 
-    isUndoRedoOperation = true;
-    canvas.remove(currentKnifeLine);
-    canvas.remove(polygon);
-    canvas.add(polygon1);
-    canvas.add(polygon2);
-    isUndoRedoOperation = false;
+    canvas.remove(setNotSave(currentKnifeLine));
+    canvas.remove(setNotSave(polygon));
+    canvas.add(setNotSave(polygon1));
+    canvas.add(setNotSave(polygon2));
     saveStateByManual();
 
     currentKnifeObject = null;

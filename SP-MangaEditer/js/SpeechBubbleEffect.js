@@ -151,7 +151,6 @@ window.onload = function () {
     });
 
     /** Load speech bubble manga panel image. */
-    // speechBubbleArea.innerHTML = "";
     SpeechBubble.forEach((item) => {
         const img = document.createElement("img");
         img.src = "data:image/svg+xml;utf8," + encodeURIComponent(item.svg);

@@ -335,16 +335,6 @@ async function sdwebui_fetchImage2Image(layer) {
   }
 }
 
-// // Base64画像をダウンロードする関数
-// function downloadImage(base64Data) {
-//   const link = document.createElement('a');
-//   link.href = base64Data;
-//   link.download = 'image.png';
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-// }
-
 // 汎用的な関数を定義
 async function sdwebui_generateImage(layer, fetchFunction) {
   const responseData = await fetchFunction(layer);

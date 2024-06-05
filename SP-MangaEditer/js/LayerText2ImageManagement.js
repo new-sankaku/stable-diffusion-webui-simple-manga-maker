@@ -1,4 +1,4 @@
-var floatingWindows = []; // 複数のフローティングウインドウを管理する配列
+var floatingWindows = [];
 
 function openfloatingWindowItem(layer) {
   var floatingWindowItem = document.createElement("div");
@@ -66,7 +66,7 @@ function openfloatingWindowItem(layer) {
     closefloatingWindowItem(floatingWindowItem);
   };
 
-  floatingWindows.push(floatingWindowItem); // 新しいウインドウを配列に追加
+  floatingWindows.push(floatingWindowItem);
 }
 
 
@@ -153,7 +153,6 @@ function adjustToMultipleOfEight(elementId) {
 }
 
 function updatefloatingWindowItem(layer, floatingWindowItem) {
-  var canvasRect = canvas.getElement().getBoundingClientRect();
   floatingWindowItem.style.left = 50 + "px";
   floatingWindowItem.style.top = 50 + "px";
   floatingWindowItem.style.width = "30%";

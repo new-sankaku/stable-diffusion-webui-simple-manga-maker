@@ -25,8 +25,20 @@ document.addEventListener("keydown", function (e) {
     document.getElementById('view_controles_checkbox').click();
     e.preventDefault();
     return;
+  } else if (e.ctrlKey && e.key === '8') { // Ctrl + 8
+    zoomIn();
+    e.preventDefault();
+    return;
+  } else if (e.ctrlKey && e.key === '9') { // Ctrl + 9
+    zoomOut();
+    e.preventDefault();
+    return;
+  }else if (e.ctrlKey && e.key === '0') { // Ctrl + 0
+    zoomFit();
+    e.preventDefault();
+    return;
   }
-
+  
   if (activeObject) {
     if (e.key === "Delete") {
       removeLayer(activeObject);

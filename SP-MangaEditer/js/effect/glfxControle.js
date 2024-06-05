@@ -323,19 +323,17 @@ document.querySelectorAll(".glfxControls input").forEach(function (input) {
         return;
       }
 
-      isUndoRedoOperation = true;
+      changeDoNotSaveHistory();
       if (glfxOriginalImage) {
         glfxCopiedImage = glfxOriginalImage.cloneNode();
         glfxApplyFilter();
       }
-      isUndoRedoOperation = false;
+      changeDoSaveHistory();
     }, 100)
   );
 });
 
-document
-  .getElementById("glfxApplyButton")
-  .addEventListener("click", function () {
+document.getElementById("glfxApplyButton").addEventListener("click", function () {
     if (glfxCopiedImage) {
       glfxOriginalImage = glfxCopiedImage.cloneNode();
       glfxCopiedImage = null;
@@ -345,9 +343,7 @@ document
     }
   });
 
-document
-  .getElementById("glfxResetButton")
-  .addEventListener("click", function () {
+document.getElementById("glfxResetButton").addEventListener("click", function () {
     glfxReset();
   });
 

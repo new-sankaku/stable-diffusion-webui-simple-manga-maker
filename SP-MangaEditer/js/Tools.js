@@ -1,31 +1,31 @@
-document.addEventListener("DOMContentLoaded", function() {
-
+document.addEventListener("DOMContentLoaded", function () {
   fabric.Object.prototype.transparentCorners = false;
-  var drawingModeEl        = document.getElementById('drawing-mode'),
-      eraserModeEl         = document.getElementById('eraser'),
-      drawingColorEl       = document.getElementById('drawing-color'),
-      drawingShadowColorEl = document.getElementById('drawing-shadow-color'),
-      drawingLineWidthEl   = document.getElementById('drawing-line-width'),
-      drawingShadowWidth   = document.getElementById('drawing-shadow-width'),
-      drawingShadowOffset  = document.getElementById('drawing-shadow-offset');
+  var drawingModeEl = document.getElementById("drawing-mode"),
+    eraserModeEl = document.getElementById("eraser"),
+    drawingColorEl = document.getElementById("drawing-color"),
+    drawingShadowColorEl = document.getElementById("drawing-shadow-color"),
+    drawingLineWidthEl = document.getElementById("drawing-line-width"),
+    drawingShadowWidth = document.getElementById("drawing-shadow-width"),
+    drawingShadowOffset = document.getElementById("drawing-shadow-offset");
 
-let isEraser = false;
-let isDrawind = false;
+  let isEraser = false;
+  let isDrawind = false;
 
-  drawingModeEl.onclick = function() {
+  drawingModeEl.onclick = function () {
     isEraser = false;
-    eraserModeEl.innerHTML = '<i class="material-icons">app_registration</i> Eraser Mode';
+    eraserModeEl.innerHTML =
+      '<i class="material-icons">app_registration</i> Eraser Mode';
 
-    if( isDrawind ){
+    if (isDrawind) {
       drawingModeEl.innerHTML = '<i class="material-icons">brush</i> Draw Mode';
       canvas.isDrawingMode = false;
       isDrawind = false;
-    }else{
-      drawingModeEl.innerHTML = '<i class="material-icons">brush</i> Cancel Draw';
+    } else {
+      drawingModeEl.innerHTML =
+        '<i class="material-icons">brush</i> Cancel Draw';
       canvas.isDrawingMode = true;
       isDrawind = true;
     }
-    
 
     const brush = new fabric.PencilBrush(canvas);
     brush.color = drawingColorEl.value;
@@ -41,7 +41,7 @@ let isDrawind = false;
     applyBrushSettings();
   };
 
-  eraserModeEl.onclick = function() {
+  eraserModeEl.onclick = function () {
     isDrawind = false;
     drawingModeEl.innerHTML = '<i class="material-icons">brush</i> Draw Mode';
 
@@ -52,8 +52,8 @@ let isDrawind = false;
       }
       canvas.isDrawingMode = false;
       isEraser = false;
-      eraserModeEl.innerHTML = '<i class="material-icons">app_registration</i> Eraser Mode';
-
+      eraserModeEl.innerHTML =
+        '<i class="material-icons">app_registration</i> Eraser Mode';
     } else {
       previousBrush = canvas.freeDrawingBrush;
       const eraserBrush = new fabric.EraserBrush(canvas);
@@ -62,17 +62,17 @@ let isDrawind = false;
 
       canvas.isDrawingMode = true;
       isEraser = true;
-      eraserModeEl.innerHTML = '<i class="material-icons">app_registration</i> Cancel Eraser';
-
+      eraserModeEl.innerHTML =
+        '<i class="material-icons">app_registration</i> Cancel Eraser';
     }
   };
 
   if (fabric.PatternBrush) {
     var vLinePatternBrush = new fabric.PatternBrush(canvas);
-    vLinePatternBrush.getPatternSrc = function() {
-      var patternCanvas = fabric.document.createElement('canvas');
+    vLinePatternBrush.getPatternSrc = function () {
+      var patternCanvas = fabric.document.createElement("canvas");
       patternCanvas.width = patternCanvas.height = 10;
-      var ctx = patternCanvas.getContext('2d');
+      var ctx = patternCanvas.getContext("2d");
       ctx.strokeStyle = this.color;
       ctx.lineWidth = 5;
       ctx.beginPath();
@@ -84,10 +84,10 @@ let isDrawind = false;
     };
 
     var hLinePatternBrush = new fabric.PatternBrush(canvas);
-    hLinePatternBrush.getPatternSrc = function() {
-      var patternCanvas = fabric.document.createElement('canvas');
+    hLinePatternBrush.getPatternSrc = function () {
+      var patternCanvas = fabric.document.createElement("canvas");
       patternCanvas.width = patternCanvas.height = 10;
-      var ctx = patternCanvas.getContext('2d');
+      var ctx = patternCanvas.getContext("2d");
       ctx.strokeStyle = this.color;
       ctx.lineWidth = 5;
       ctx.beginPath();
@@ -99,30 +99,32 @@ let isDrawind = false;
     };
 
     var squarePatternBrush = new fabric.PatternBrush(canvas);
-    squarePatternBrush.getPatternSrc = function() {
-      var squareWidth = 10, squareDistance = 2;
-      var patternCanvas = fabric.document.createElement('canvas');
+    squarePatternBrush.getPatternSrc = function () {
+      var squareWidth = 10,
+        squareDistance = 2;
+      var patternCanvas = fabric.document.createElement("canvas");
       patternCanvas.width = patternCanvas.height = squareWidth + squareDistance;
-      var ctx = patternCanvas.getContext('2d');
+      var ctx = patternCanvas.getContext("2d");
       ctx.fillStyle = this.color;
       ctx.fillRect(0, 0, squareWidth, squareWidth);
       return patternCanvas;
     };
 
     var diamondPatternBrush = new fabric.PatternBrush(canvas);
-    diamondPatternBrush.getPatternSrc = function() {
-      var squareWidth = 10, squareDistance = 5;
-      var patternCanvas = fabric.document.createElement('canvas');
+    diamondPatternBrush.getPatternSrc = function () {
+      var squareWidth = 10,
+        squareDistance = 5;
+      var patternCanvas = fabric.document.createElement("canvas");
       var rect = new fabric.Rect({
         width: squareWidth,
         height: squareWidth,
         angle: 45,
-        fill: this.color
+        fill: this.color,
       });
       var canvasWidth = rect.getBoundingRect().width;
       patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance;
       rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 });
-      var ctx = patternCanvas.getContext('2d');
+      var ctx = patternCanvas.getContext("2d");
       rect.render(ctx);
       return patternCanvas;
     };
@@ -130,24 +132,19 @@ let isDrawind = false;
     var texturePatternBrush = new fabric.PatternBrush(canvas);
   }
 
-  document.getElementById('drawing-mode-selector').onchange = function() {
-    if (this.value === 'hline') {
+  document.getElementById("drawing-mode-selector").onchange = function () {
+    if (this.value === "hline") {
       canvas.freeDrawingBrush = vLinePatternBrush;
-    }
-    else if (this.value === 'vline') {
+    } else if (this.value === "vline") {
       canvas.freeDrawingBrush = hLinePatternBrush;
-    }
-    else if (this.value === 'square') {
+    } else if (this.value === "square") {
       canvas.freeDrawingBrush = squarePatternBrush;
-    }
-    else if (this.value === 'diamond') {
+    } else if (this.value === "diamond") {
       canvas.freeDrawingBrush = diamondPatternBrush;
-    }
-    else if (this.value === 'texture') {
+    } else if (this.value === "texture") {
       canvas.freeDrawingBrush = texturePatternBrush;
-    }
-    else {
-      canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
+    } else {
+      canvas.freeDrawingBrush = new fabric[this.value + "Brush"](canvas);
     }
     applyBrushSettings();
 
@@ -168,25 +165,25 @@ let isDrawind = false;
     }
   };
 
-  drawingColorEl.onchange = function() {
+  drawingColorEl.onchange = function () {
     var brush = canvas.freeDrawingBrush;
     brush.color = this.value;
     if (brush.getPatternSrc) {
       brush.source = brush.getPatternSrc.call(brush);
     }
   };
-  drawingShadowColorEl.onchange = function() {
+  drawingShadowColorEl.onchange = function () {
     canvas.freeDrawingBrush.shadow.color = this.value;
   };
-  drawingLineWidthEl.oninput = function() {
+  drawingLineWidthEl.oninput = function () {
     var value = parseInt(this.value, 10) || 1;
     canvas.freeDrawingBrush.width = value;
   };
-  drawingShadowWidth.oninput = function() {
+  drawingShadowWidth.oninput = function () {
     var value = parseInt(this.value, 10) || 0;
     canvas.freeDrawingBrush.shadow.blur = value;
   };
-  drawingShadowOffset.oninput = function() {
+  drawingShadowOffset.oninput = function () {
     var value = parseInt(this.value, 10) || 0;
     canvas.freeDrawingBrush.shadow.offsetX = value;
     canvas.freeDrawingBrush.shadow.offsetY = value;
@@ -195,7 +192,8 @@ let isDrawind = false;
   if (canvas.freeDrawingBrush) {
     canvas.freeDrawingBrush.color = drawingColorEl.value;
     if (canvas.freeDrawingBrush.getPatternSrc) {
-      canvas.freeDrawingBrush.source = canvas.freeDrawingBrush.getPatternSrc.call(canvas.freeDrawingBrush);
+      canvas.freeDrawingBrush.source =
+        canvas.freeDrawingBrush.getPatternSrc.call(canvas.freeDrawingBrush);
     }
     canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
     canvas.freeDrawingBrush.shadow = new fabric.Shadow({
@@ -207,27 +205,29 @@ let isDrawind = false;
     });
   }
 
-  document.getElementById('line-style').onchange = function() {
+  document.getElementById("line-style").onchange = function () {
     applyBrushSettings();
   };
 
   function applyBrushSettings() {
     console.log("applyBrushSettings");
     if (!canvas.freeDrawingBrush) return;
-    const lineStyle = document.getElementById('line-style').value;
+    const lineStyle = document.getElementById("line-style").value;
 
-    var brushWidth = parseInt(document.getElementById('drawing-line-width').value, 10) || 1;
-    if (lineStyle === 'solid') {
+    var brushWidth =
+      parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
+    if (lineStyle === "solid") {
       canvas.freeDrawingBrush.strokeDashArray = null;
-    } else if (lineStyle === 'dashed') {
-      canvas.freeDrawingBrush.strokeDashArray = [brushWidth * 4, brushWidth * 4];
-    } else if (lineStyle === 'dotted') {
+    } else if (lineStyle === "dashed") {
+      canvas.freeDrawingBrush.strokeDashArray = [
+        brushWidth * 4,
+        brushWidth * 4,
+      ];
+    } else if (lineStyle === "dotted") {
       canvas.freeDrawingBrush.strokeDashArray = [brushWidth, brushWidth * 4];
     }
 
     console.log("lineStyle", lineStyle);
   }
   applyBrushSettings();
-
-
 });

@@ -10,7 +10,6 @@ function rgbToHex(rgb) {
     return;
   }
 
-
   let match = rgb.match(/^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$/);
   if (!match) {
     return rgb;
@@ -216,14 +215,14 @@ function applySpaceAgeEffect() {
   const activeObject = canvas.getActiveObject();
 
   if (isText(activeObject)) {
-    const offset = 10; // 影のオフセット量
-    const alphaDecrement = 0.1; // 透明度の減少量
+    const offset = 10; 
+    const alphaDecrement = 0.1; 
     let currentAlpha = 1.0;
 
-    // 最初のテキストの複製を作成
+
     for (let i = 0; i < offset; i++) {
       currentAlpha -= alphaDecrement;
-      // テキストオブジェクトの複製を作成
+
       const shadow = new fabric.Text(activeObject.text, {
         left: activeObject.left - i,
         top: activeObject.top - i,
@@ -232,11 +231,10 @@ function applySpaceAgeEffect() {
         fill: 'rgba(0, 0, 0, ' + currentAlpha + ')'
       });
 
-      // 影をキャンバスに追加
       canvas.add(shadow);
-      shadow.moveTo(activeObject.get('top') - 1); // 影をオブジェクトの下層に移動
+      shadow.moveTo(activeObject.get('top') - 1);
     }
-    canvas.renderAll(); // Canvasを再描画
+    canvas.renderAll();
   }
 }
 
@@ -461,9 +459,4 @@ function updateNeonEffect(activeObject) {
 
 function changeFont(font) {
   document.getElementById("text-preview-area").style.fontFamily = font;
-  // var select = document.getElementById("fontSelector");
-  // var options = select.options;
-  // for (var i = 0; i < options.length; i++) {
-  //     options[i].style.fontFamily = font; // ドロップボックス内のフォントを変更
-  // }
 }

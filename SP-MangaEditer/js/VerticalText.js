@@ -85,7 +85,7 @@ function createVerticalText(textString, options) {
   let offsetY = options.top || 0;
   const lineHeight = options.fontSize * 1.2;
 
-  isUndoRedoOperation = true;
+  changeDoNotSaveHistory();
   chars.forEach((char, index) => {
     const isIgnored = ignoreRegex.test(char);
     const isReverce = reverceRegex.test(char);
@@ -117,7 +117,7 @@ function createVerticalText(textString, options) {
       offsetY += actualHeight;
     }
   });
-  isUndoRedoOperation = false;
+  changeDoSaveHistory();
 
   const group = new fabric.VerticalText(groupItems, {
     selectable: true,

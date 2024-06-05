@@ -2,39 +2,27 @@
 var lastActiveObjectState = null;
 canvas.on('selection:created', function(event) {
   lastActiveObjectState = canvas.getActiveObject();
-  // console.log("created lastActiveObjectState", lastActiveObjectState);
 });
 canvas.on('selection:updated', function(event) {
   glfxReset();
   lastActiveObjectState = canvas.getActiveObject();
-  // console.log("updated lastActiveObjectState", lastActiveObjectState);
 });
 canvas.on('selection:cleared', function() {
-  // console.log("aaaa");
-  // console.log("cleared lastActiveObjectState1", lastActiveObjectState);
   glfxReset();
-  // console.log("bbbb");
-  // console.log("cccc");
-  // console.log("cleared lastActiveObjectState2", lastActiveObjectState);
 });
 
 canvas.on("object:added", (e) => {
   const obj = e.target;
-  // console.log( "canvas.on(object:added" , obj.type );
-
   if (!obj.initial) {
-    // console.log( "canvas.on(object:added initial " , obj.initial );
     saveInitialState(obj);
   }
   forcedAdjustCanvasSize();
 
   if (isKnifeMode) {
-    //console.log("is ナイフ");
     obj.set({
       selectable: false
     });
   } else {
-    //console.log("not ナイフ");
     obj.set({
       selectable: true
     });

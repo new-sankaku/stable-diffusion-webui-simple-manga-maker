@@ -1,6 +1,9 @@
 function isPanel(activeObject) {
   return (activeObject && activeObject.isPanel );
 }
+function isPanelType(activeObject) {
+  return (activeObject && ["rect", "circle", "polygon"].includes(activeObject.type) );
+}
 
 function isImage(activeObject) {
   return (activeObject && (activeObject.type === "image") );
@@ -34,6 +37,11 @@ function isPutImage(activeObject) {
   return (activeObject && ["image", "rect", "circle", "path", "group", "polygon"].includes(activeObject.type) );
 }
 
+function isLayerPreview(activeObject) {
+  return (activeObject && ["image", "rect", "circle", "group", "polygon"].includes(activeObject.type) );
+}
+
+
 function saveInitialState(obj) {
 
   if( isImage(obj) && (!obj.initial) ){
@@ -65,11 +73,6 @@ function saveInitialState(obj) {
     };
   }
 }
-
-
-
-
-
 
 function setText2ImageInitPrompt(object){
   object.isPanel                 = text2img_initPrompt.isPanel;

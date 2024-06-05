@@ -1,3 +1,9 @@
+const imageMap = new Map();
+var stateStack = [];
+var currentStateIndex = -1;
+var isUndoRedoOperation = false;
+
+
 fabric.Object.prototype.toObject = (function (toObject) {
   return function (propertiesToInclude) {
     propertiesToInclude = (propertiesToInclude || []).concat(["clipTo"]);
@@ -5,33 +11,62 @@ fabric.Object.prototype.toObject = (function (toObject) {
   };
 })(fabric.Object.prototype.toObject);
 
-var stateStack = [];
-var currentStateIndex = -1;
-var isUndoRedoOperation = false;
+
+function isSaveHistory(){
+    if( isUndoRedoOperation ){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+function setNotSave(activeObject){
+    activeObject.saveHistory = false;
+    return activeObject;
+}
+function setSave(activeObject){
+    activeObject.saveHistory = true;
+    return activeObject;
+}
+
+
+function isSaveObject(activeObject){
+    return (activeObject && (activeObject.saveHistory == true )) ;
+}
+
+function isNotSaveObject(activeObject){
+    return !(isSaveObject(activeObject)) ;
+}
+
+function changeDoNotSaveHistory(){
+    isUndoRedoOperation = true;
+}
+
+function changeDoSaveHistory(){
+    isUndoRedoOperation = false;
+}
 
 function saveStateByListener(event, eventType) {
-    if (!event || isUndoRedoOperation) {
+    if (!event || isSaveHistory()) {
+        return;
+    }
+    if( isNotSaveObject(event) ){
         return;
     }
     saveState();
 }
+
 function saveStateByManual() {
     saveState();
 }
-
-
-
-
-// ハッシュ化関数と画像データマップ
-const imageMap = new Map();
 
 function generateHash(imageData) {
     return CryptoJS.SHA256(imageData).toString(CryptoJS.enc.Hex);
 }
 
+
 function customToJSON() {
     const json = canvas.toJSON(commonProperties);
-    
     json.objects = json.objects.map(obj => {
         if (obj.type === 'image' && obj.src.startsWith('data:')) {
             const hash = generateHash(obj.src);
@@ -46,28 +81,24 @@ function customToJSON() {
     return json;
 }
 
-// JSON からの画像データの復元処理
 function restoreImage(json) {
     const parsedJson = JSON.parse(json);
     parsedJson.objects = parsedJson.objects.map(obj => {
         if (obj.type === 'image' && imageMap.has(obj.src)) {
-            obj.src = imageMap.get(obj.src); // ハッシュキーに基づき画像データを復元
+            obj.src = imageMap.get(obj.src);
         }
         commonProperties.forEach(prop => {
             if (obj[prop] !== undefined) {
                 obj[prop] = obj[prop]; 
             }
-        });
-        
+        });        
         return obj;
     });
-
     return parsedJson;
 }
 
 
 function saveState() {
-    // console.log("saveState START currentStateIndex:StackLenght ", currentStateIndex, ":", stateStack.length);
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }
@@ -78,55 +109,47 @@ function saveState() {
     stateStack.push(json);
     currentStateIndex++;
     updateLayerPanel();
-    // console.log("saveState END currentStateIndex:StackLenght ", currentStateIndex, ":", stateStack.length,"count:", json.length);
 }
 
 function undo() {
     if (currentStateIndex >= 1) {
-        isUndoRedoOperation = true;
+        
+        changeDoNotSaveHistory();
         currentStateIndex--;
-        // console.log("undo currentStateIndex", currentStateIndex);
         canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
-            isUndoRedoOperation = false;
+            changeDoSaveHistory();
         });
-        // forcedAdjustCanvasSize();
     }
 }
 
 function redo() {
     if (currentStateIndex < stateStack.length - 1) {
-        isUndoRedoOperation = true;
+        changeDoNotSaveHistory();
         currentStateIndex++;
-        // console.log("redo currentStateIndex", currentStateIndex);
         canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
-            isUndoRedoOperation = false;
+            changeDoSaveHistory();
         });
-        // forcedAdjustCanvasSize();
     }
 }
 
 function lastRedo() {
-    isUndoRedoOperation = true;
+    changeDoNotSaveHistory();
     currentStateIndex = stateStack.length - 1;
     canvas.loadFromJSON(restoreImage(stateStack[stateStack.length - 1]), function () {
         canvas.renderAll();
         updateLayerPanel();
-        isUndoRedoOperation = false;
+        changeDoSaveHistory();
     });
 }
 
-
-saveState();
-
-
 function allRemove() {
-    isUndoRedoOperation = true;
+    changeDoNotSaveHistory();
 	canvas.clear();
-    isUndoRedoOperation = false;
+    changeDoSaveHistory();
     saveStateByManual();
 	updateLayerPanel();
 	currentImage = null;
@@ -138,4 +161,4 @@ function initImageHistory(){
     currentStateIndex = -1;
 }
 
-
+saveState();

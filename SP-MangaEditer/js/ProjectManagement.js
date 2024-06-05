@@ -41,8 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem('localSettingsData', JSON.stringify(localSettingsData));
   });
 
-
-
   settingsLoad.addEventListener("click", function () {
     createToast('Settings Load', [
       'Canvas Background Color...',
@@ -216,36 +214,16 @@ document.addEventListener("DOMContentLoaded", function () {
           });
 
           Promise.all([canvasInfoPromise, ...promises]).then(function (allData) {
-
-            //console.log("Promise.all([canvasInfoPromise, ...promises]) allData:", allData);
             var canvasInfo = allData[0];
             stateStack = allData.slice(1).filter((data, index) => {
               const isDataDefined = data !== undefined;
-              
-              // if (isDataDefined) {
-                // const dataString = JSON.stringify(data);
-                //console.log(`Valid data added to stateStack from index ${index + 1}:`, dataString.length);
-              // } else {
-                //console.log(`Undefined data found and excluded from stateStack at index ${index + 1}`);
-              // }
               return isDataDefined;
             });
-            // console.log("Loaded states:", stateStack);
-            //console.log("Loaded states length:", stateStack.length);
-            // console.log("Loaded canvasInfo:", canvasInfo);
 
             document.body.removeChild(fileInput);
             currentStateIndex = stateStack.length - 1;
-
-            //console.log("Promise.all([canvasInfoPromise, ...promises]).then(function (allData) { stateStack[stateStack.length - 1], ", stateStack[stateStack.length - 1]);
-
-            
             resizeCanvasByNum(canvasInfo.width, canvasInfo.height)
-
             lastRedo();
-
-            // Canvasのリサイズ
-            // adjustCanvasSize();
 
             const endTime = performance.now();
             console.log(`Load operation took ${endTime - startTime} milliseconds`);

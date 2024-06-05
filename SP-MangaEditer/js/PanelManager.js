@@ -42,12 +42,11 @@ document.getElementById("canvas-container").addEventListener(
 );
 
 function putImageInFrame(img, x, y) {
-  isUndoRedoOperation = true;
-
   img.set({
     left: x,
     top: y,
   });
+  setNotSave(img);
   canvas.add(img);
 
   var targetFrameIndex = findTargetFrame(x, y);
@@ -125,16 +124,11 @@ function putImageInFrame(img, x, y) {
   }
 
   canvas.setActiveObject(img);
-
-  // console.log("function putImageInFrame { saveInitialState" );
   saveInitialState(img);
 
   canvas.renderAll();
   updateLayerPanel();
-
-  isUndoRedoOperation = false;
   saveStateByManual();
-
   return img;
 }
 
@@ -202,16 +196,16 @@ document.getElementById("B4-V").addEventListener("click", function () {
 function loadBookSize(width, height) {
   if (stateStack.length > 2) {
     executeWithConfirmation("New Project?", function () {
-      isUndoRedoOperation = true;
+      changeDoNotSaveHistory();
       resizeCanvasToObject(width, height);
       addSquareBySize(width, height);
-      isUndoRedoOperation = false;
+      changeDoSaveHistory();
     });
   } else {
-    isUndoRedoOperation = true;
+    changeDoNotSaveHistory();
     resizeCanvasToObject(width, height);
     addSquareBySize(width, height);
-    isUndoRedoOperation = false;
+    changeDoSaveHistory();
   }
 }
 
@@ -267,7 +261,8 @@ function loadSVGPlusReset(svgString) {
   initImageHistory();
   saveState();
 
-  isUndoRedoOperation = true;
+  changeDoNotSaveHistory();
+
   fabric.loadSVGFromString(svgString, function (objects, options) {
     resizeCanvasToObject(options.width, options.height);
 
@@ -385,7 +380,7 @@ function loadSVGPlusReset(svgString) {
   resizeCanvas(canvas.width, canvas.height);
 
   saveState();
-  isUndoRedoOperation = true;
+  changeDoSaveHistory();
   updateLayerPanel();
 }
 
