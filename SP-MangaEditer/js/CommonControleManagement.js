@@ -73,6 +73,9 @@ function updateControls(activeObject) {
     document.getElementById("pixelateValue").value = 1;
     document.getElementById("pixelateValueDisplay").innerText = 1;
 
+    document.getElementById("glowOutLineSlider").value = 20;
+    document.getElementById("glowOutLineColorPicker").value = "#FFFFFF";
+
     return;
   }
 
@@ -124,4 +127,18 @@ function updateControls(activeObject) {
       document.getElementById("pixelateValueDisplay").innerText = filter.blocksize;
     }
   });
+
+  if (activeObject && activeObject.shadow) {
+    const shadowColor = activeObject.shadow.color.toString(); 
+    console.log( "activeObject.shadow.color", shadowColor );
+    document.getElementById('addGlowEffectCheckBox').checked = true;
+    document.getElementById('glowOutLineColorPicker').value = shadowColor;
+    document.getElementById('glowOutLineSlider').value = activeObject.shadow.blur;
+    document.getElementById('glowOutLineValue').innerText = activeObject.shadow.blur;
+  } else {
+      document.getElementById('addGlowEffectCheckBox').checked = false;
+      document.getElementById('glowOutLineColorPicker').value = "#FFFFFF";
+      document.getElementById('glowOutLineSlider').value = 20;
+      document.getElementById('glowOutLineValue').innerText = 20;
+  }
 }

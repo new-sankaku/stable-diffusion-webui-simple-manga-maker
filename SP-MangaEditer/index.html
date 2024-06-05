@@ -245,8 +245,7 @@
                             <span data-i18n="links">Links</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item"
-                                href="https://new-sankaku.github.io/SP-MangaEditer/"
+                            <a class="dropdown-item" href="https://new-sankaku.github.io/SP-MangaEditer/"
                                 target="_blank">
                                 <i class="material-icons">emoji_people</i>
                                 <span>SP-MANGA EDITER(Standalone)</span>
@@ -334,9 +333,11 @@
                     </button>
                     <div class="input-group">
                         <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
-                        <input type="number" id="panelSpaceSize" name="panelSpaceSize" min="0" max="75" step="1" value="10">
+                        <input type="number" id="panelSpaceSize" name="panelSpaceSize" min="0" max="75" step="1"
+                            value="10">
                     </div>
-                    <label data-i18n="KnifeHelp">The knife tool cuts well on a square, but sometimes doesn't work well on an angle.</label>
+                    <label data-i18n="KnifeHelp">The knife tool cuts well on a square, but sometimes doesn't work well
+                        on an angle.</label>
                     <hr>
                 </div>
             </div>
@@ -580,7 +581,7 @@
                             <div class="info-item"><i class="fab fa-js"></i>
                                 <a href="https://github.com/Stuk/jszip" target="_blank">jsZip</a>
                             </div>
-                            
+
                             <div class="info-item"><i class="fab fa-js"></i>
                                 <a href="https://www.i18next.com/" target="_blank">i18next</a>
                             </div>
@@ -607,19 +608,23 @@
                             </div>
                             <div class="info-item">
                                 <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/specimen/M+PLUS+Rounded+1c" target="_blank">M+PLUS+Rounded+1c</a>
+                                <a href="https://fonts.google.com/specimen/M+PLUS+Rounded+1c"
+                                    target="_blank">M+PLUS+Rounded+1c</a>
                             </div>
                             <div class="info-item">
                                 <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/specimen/Stick?subset=japanese" target="_blank">Stick</a>
+                                <a href="https://fonts.google.com/specimen/Stick?subset=japanese"
+                                    target="_blank">Stick</a>
                             </div>
                             <div class="info-item">
                                 <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/specimen/DotGothic16?subset=japanese" target="_blank">DotGothic16</a>
+                                <a href="https://fonts.google.com/specimen/DotGothic16?subset=japanese"
+                                    target="_blank">DotGothic16</a>
                             </div>
                             <div class="info-item">
                                 <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/noto/specimen/Noto+Serif+JP?subset=japanese&noto.script=Hira" target="_blank">Noto+Serif</a>
+                                <a href="https://fonts.google.com/noto/specimen/Noto+Serif+JP?subset=japanese&noto.script=Hira"
+                                    target="_blank">Noto+Serif</a>
                             </div>
                             <div class="info-item">
                                 <i class="material-icons">text_fields</i>
@@ -659,14 +664,15 @@
                     <span data-i18n="canvas">[Canvas]:</span>
                     <button onclick="zoomIn()"><span class="material-symbols-outlined">zoom_in</span></button>
                     <button onclick="zoomOut()"><span class="material-symbols-outlined">zoom_out</span></button>
-                    <button onclick="zoomFit()"><span class="material-symbols-outlined">1x_mobiledata_badge</span></button>
+                    <button onclick="zoomFit()"><span
+                            class="material-symbols-outlined">1x_mobiledata_badge</span></button>
                     <label data-i18n="view_layers">
                         L
                     </label>
                     <input type="checkbox" id="view_layers_checkbox" checked>
-    
+
                     <label data-i18n="view_controles">
-                        C 
+                        C
                     </label>
                     <input type="checkbox" id="view_controles_checkbox" checked>
                 </div>
@@ -760,10 +766,32 @@
                     <div class="control-content">
                         <div class="control-row">
                             <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> <span
-                                data-i18n="flip">Flip</span></button>
+                                    data-i18n="flip">Flip</span></button>
                             <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> <span
                                     data-i18n="flip">Flip</span></button>
                         </div>
+                        <hr class="separator">
+
+
+                        <!-- addGlowButton -> addGlowEffect -->
+                        <div class="control-item">
+                            <input type="checkbox" id="addGlowEffectCheckBox">
+                            <label data-i18n="grayscale">
+                                Outlone Glow
+                            </label>
+                        </div>
+                        <div class="control-row">
+                            <label data-i18n="glowOutLineSize">Size</label>
+                            <input type="range" id="glowOutLineSlider" min="0" max="250" value="20">
+                            <span id="glowOutLineValue">20</span>
+                        </div>
+                        <div class="control-row">
+                            <label for="glowOutLineColorPicker" data-i18n="glowOutLineColor">Color </label>
+                            <input type="color" id="glowOutLineColorPicker" value="#FFFFFF">
+                        </div>
+
+
+                        <hr class="separator">
                         <div class="control-item">
                             <input type="checkbox" id="sepiaEffect">
                             <label data-i18n="sepia">
