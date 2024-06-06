@@ -33,7 +33,7 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 
 **Editor**
 
-<img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/Editer.png" width="450">
+<img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/docs/Editer.png" width="450">
  
 <br/>
 <br/>
@@ -41,7 +41,7 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 
 **Sample Image**
 
-<img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/99_sample_image/cropped-image.png" width="450">
+<img src="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/SP-MangaEditer/docs/cropped-image.png" width="450">
 </details>
 <details>
 <summary>Videos</summary>
