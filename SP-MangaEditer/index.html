@@ -13,23 +13,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/common.css?v=2.1">
-    <link rel="stylesheet" href="css/components.css?v=2.1">
-    <link rel="stylesheet" href="css/layout.css?v=2.1">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.1">
-    <link rel="stylesheet" href="css/anime.css?v=2.1">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=2.1">
-    <link rel="stylesheet" href="css/toast.css?v=2.1">
+    <link rel="stylesheet" href="css/common.css?v=2.2">
+    <link rel="stylesheet" href="css/components.css?v=2.2">
+    <link rel="stylesheet" href="css/layout.css?v=2.2">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.2">
+    <link rel="stylesheet" href="css/anime.css?v=2.2">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=2.2">
+    <link rel="stylesheet" href="css/toast.css?v=2.2">
 
-    <link href="third/Bootstrup/bootstrap.min.css?v=2.1" rel="stylesheet">
+    <link href="third/Bootstrup/bootstrap.min.css?v=2.2" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 
-    <script src="third/glfx/glfx.js?=1.9"></script>
-    <script src="third/Fabric.js/fabric.min.js?v=2.1"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.1"></script>
-    <script src="third/i18next/i18next.min.js?v=2.1"></script>
-    <script src="third/jsts/jsts.min.js?v=2.1"></script>
+    <script src="third/glfx/glfx.js?v=2.2"></script>
+    <script src="third/Fabric.js/fabric.min.js?v=2.2"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.2"></script>
+    <script src="third/i18next/i18next.min.js?v=2.2"></script>
+    <script src="third/jsts/jsts.min.js?v=2.2"></script>
 </head>
 
 <body>
@@ -291,15 +291,30 @@
                 <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="panel-manager-items">
                     <div class="input-group">
-                        <label for="strokeColor" data-i18n="line">Line:</label>
-                        <input type="color" id="strokeColor" name="strokeColor" value="#000000"
-                            oninput="changeStrokeColor(this.value)">
+                        <label for="panelStrokeColor" data-i18n="line">Line:</label>
+                        <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000" 
+                               oninput="changePanelStrokeColor(this.value)">
                     </div>
                     <div class="input-group">
-                        <label for="strokeWidth" data-i18n="lineWidth">Line Width:</label>
-                        <input type="number" id="strokeWidth" name="strokeWidth" min="0.1" max="10" step="0.1" value="2"
-                            oninput="changeStrokeWidth(this.value)">
+                        <label for="panelFillColor" data-i18n="fill">Fill:</label>
+                        <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF" 
+                               oninput="changePanelFillColor(this.value)">
                     </div>
+                    <div class="input-group">
+                        <label data-i18n="panelOpacity">Opacity:</label>
+                        <input type="number" id="panelOpacity" name="panelOpacity" 
+                               min="0" max="100" step="1" value="100" 
+                               oninput="changePanelOpacity(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label for="panelStrokeWidth" data-i18n="lineWidth">Line Width:</label>
+                        <input type="number" id="panelStrokeWidth" name="panelStrokeWidth" 
+                               min="0.1" max="10" step="0.1" value="2"
+                               oninput="changePanelStrokeWidth(this.value)">
+                    </div>
+                    <button id="add" onclick="panelAllChange()"><i class="material-icons">border_all</i> <span
+                        data-i18n="all_change">All Change</span></button>
+
                     <hr>
                     <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i> <span
                             data-i18n="newSquare">New Square</span></button>
@@ -658,7 +673,7 @@
 
             <div id="canvas-area">
                 <div class="area-header">
-                    <span data-i18n="canvas">[Canvas]:</span>
+                    <span>[Canvas]:</span>
                     <button onclick="zoomIn()"><span class="material-symbols-outlined">zoom_in</span></button>
                     <button onclick="zoomOut()"><span class="material-symbols-outlined">zoom_out</span></button>
                     <button onclick="zoomFit()"><span
@@ -1124,48 +1139,48 @@
         </div>
     </div> -->
     <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
-    <script src="third/jszip/jszip.min.js?v=2.1" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=2.1"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.1"></script>
+    <script src="third/jszip/jszip.min.js?v=2.2" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=2.2"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.2"></script>
 
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.1" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.1" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=2.1" defer></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.2" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.2" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=2.2" defer></script>
 
-    <script src="js/Settings.js?v=2.1" defer></script>
-    <script src="js/CanvasManager.js?v=2.1" defer></script>
-    <script src="js/util/FabricUtil.js?v=2.1" defer></script>
-    <script src="js/Shortcut.js?v=2.1" defer></script>
-    <script src="js/PanelManager.js?v=2.1" defer></script>
+    <script src="js/Settings.js?v=2.2" defer></script>
+    <script src="js/CanvasManager.js?v=2.2" defer></script>
+    <script src="js/util/FabricUtil.js?v=2.2" defer></script>
+    <script src="js/Shortcut.js?v=2.2" defer></script>
+    <script src="js/PanelManager.js?v=2.2" defer></script>
 
-    <script src="js/Toast.js?v=2.1" defer></script>
+    <script src="js/Toast.js?v=2.2" defer></script>
 
-    <script src="js/FloatingWindowManagement.js?v=2.1" defer></script>
+    <script src="js/FloatingWindowManagement.js?v=2.2" defer></script>
 
-    <script src="js/PromptManager.js?v=2.1" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=2.1" defer></script>
-    <script src="js/LayerManagement.js?v=2.1" defer></script>
-    <script src="js/CommonControleManagement.js?v=2.1" defer></script>
-    <script src="js/ImageTransformation.js?v=2.1" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=2.1" defer></script>
-    <script src="js/Sidebar.js?v=2.1" defer></script>
-    <script src="js/TextEffect.js?v=2.1" defer></script>
-    <script src="js/VerticalText.js?v=2.1" defer></script>
-    <script src="js/ImageControleManager.js?v=2.1" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=2.1" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=2.1" defer></script>
-    <script src="js/ProjectManagement.js?v=2.1" defer></script>
-    <script src="js/ImageDownload.js?v=2.1" defer></script>
-    <script src="js/Anime.js?v=2.1" defer></script>
-    <script src="js/Tools.js?v=2.1" defer></script>
-    <script src="js/InfomationControle.js?v=2.1" defer></script>
-    <script src="js/effect/glfxControle.js?v=2.1" defer></script>
-    <script src="js/i18next.js?v=2.1" defer></script>
+    <script src="js/PromptManager.js?v=2.2" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=2.2" defer></script>
+    <script src="js/LayerManagement.js?v=2.2" defer></script>
+    <script src="js/CommonControleManagement.js?v=2.2" defer></script>
+    <script src="js/ImageTransformation.js?v=2.2" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=2.2" defer></script>
+    <script src="js/Sidebar.js?v=2.2" defer></script>
+    <script src="js/TextEffect.js?v=2.2" defer></script>
+    <script src="js/VerticalText.js?v=2.2" defer></script>
+    <script src="js/ImageControleManager.js?v=2.2" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=2.2" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=2.2" defer></script>
+    <script src="js/ProjectManagement.js?v=2.2" defer></script>
+    <script src="js/ImageDownload.js?v=2.2" defer></script>
+    <script src="js/Anime.js?v=2.2" defer></script>
+    <script src="js/Tools.js?v=2.2" defer></script>
+    <script src="js/InfomationControle.js?v=2.2" defer></script>
+    <script src="js/effect/glfxControle.js?v=2.2" defer></script>
+    <script src="js/i18next.js?v=2.2" defer></script>
 
-    <script src="js/Knife.js?v=2.1" defer></script>
+    <script src="js/Knife.js?v=2.2" defer></script>
 
 
-    <script src="js/event/FabricManagement.js?v=2.1" defer></script>
+    <script src="js/event/FabricManagement.js?v=2.2" defer></script>
 
 </body>
 

@@ -572,12 +572,15 @@ function splitPolygon(polygon) {
     var strokeWidthScale = canvas.width / 700;
     var strokeWidth = 2 * strokeWidthScale;
 
+
     var polygon1 = new fabric.Polygon(adjustedPolygon1Points, {
       left: polygon1MinX,
       top: polygon1MinY,
-      fill: 'white',
-      stroke: 'black',
-      strokeWidth: strokeWidth,
+      fill: polygon.fill,
+      opacity: polygon.opacity,
+      stroke: polygon.stroke,
+      strokeWidth: polygon.strokeWidth,
+      isPanel: true,
       scaleX: 1,
       scaleY: 1,
       selectable: false
@@ -586,9 +589,11 @@ function splitPolygon(polygon) {
     var polygon2 = new fabric.Polygon(adjustedPolygon2Points2, {
       left: left,
       top: top,
-      fill: 'white',
-      stroke: 'black',
-      strokeWidth: strokeWidth,
+      fill: polygon.fill,
+      opacity: polygon.opacity,
+      stroke: polygon.stroke,
+      strokeWidth: polygon.strokeWidth,
+      isPanel: true,
       scaleX: 1,
       scaleY: 1,
       selectable: false

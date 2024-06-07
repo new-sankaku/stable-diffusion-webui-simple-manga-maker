@@ -1,6 +1,16 @@
 const resources = {
   en: {
     translation: {
+      "glowOutLineSize": "Size",
+      "glowOutLineColor": "Color",
+
+      "view_layers": "L",
+      "view_controles": "C",
+
+      "all_change": "All Change",
+      "fill": "Fill:",
+      "lineWidth": "Line Width:",
+      "panelOpacity": "Opacity:",
 
       "spaceSizeLabel": "Space Size",
       "A4-H-Scale": "A4 Scale Panel",
@@ -211,6 +221,15 @@ const resources = {
   },
   ja: {
     translation: {
+  "glowOutLineSize": "サイズ",
+  "glowOutLineColor": "色",
+      "view_layers": "L",
+      "view_controles": "C",
+        "all_change": "すべて変更",
+        "fill": "塗り:",
+        "lineWidth": "線幅:",
+        "panelOpacity": "不透明度:",
+      
       "knifeMode": "ナイフツール",
       "spaceSizeLabel": "コマ間の間隔",
       "A4-H-Scale": "A4 横 縮尺パネル",
@@ -360,8 +379,17 @@ const resources = {
   },
   ko: {
     translation: {
+      "view_layers": "L",
+      "view_controles": "C",
+  "glowOutLineSize": "크기",
+  "glowOutLineColor": "색상",
       "knifeMode": "칼 도구",
       "spaceSizeLabel": "프레임 간 간격",
+      
+      "all_change": "모두 변경",
+      "fill": "채우기:",
+      "lineWidth": "선 두께:",
+      "panelOpacity": "불투명도:",
 
       "A4-H-Scale": "A4 가로 축척 패널",
       "A4-V-Scale": "A4 세로 축척 패널",
@@ -521,8 +549,17 @@ const resources = {
   },
   fr: {
     translation: {
-      "knifeMode": "Mode couteau",
+  "glowOutLineSize": "Taille",
+  "glowOutLineColor": "Couleur",
 
+      "view_layers": "L",
+      "view_controles": "C",
+
+      "all_change": "Tout changer",
+      "fill": "Remplir:",
+      "lineWidth": "Largeur de ligne:",
+      "panelOpacity": "Opacité:",
+      "knifeMode": "Mode couteau",
       "spaceSizeLabel": "Écart entre cadres",
 
       "A4-H-Scale": "Échelle A4 horizontale",
@@ -715,8 +752,16 @@ const resources = {
   },
   zh: {
     translation: {
+      "view_layers": "L",
+      "view_controles": "C",
+  "glowOutLineSize": "大小",
+  "glowOutLineColor": "颜色",
+      "all_change": "全部更改",
+      "fill": "填充:",
+      "lineWidth": "线宽:",
+      "panelOpacity": "不透明度:",
       "knifeMode": "刀具模式",
-
+      
       "spaceSizeLabel": "帧间距",
       "A4-H-Scale": "A4 横向缩放面板",
       "A4-V-Scale": "A4 纵向缩放面板",

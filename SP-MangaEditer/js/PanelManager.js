@@ -251,7 +251,10 @@ function addSquareBySize(width, height) {
       isPanel: true,
     }
   );
+
+  
   setText2ImageInitPrompt(square);
+  setPanelValue(square);
   canvas.add(square);
   updateLayerPanel();
 }
@@ -373,7 +376,7 @@ function loadSVGPlusReset(svgString) {
         canvas.add(obj);
       }
     });
-    changeStrokeWidth(document.getElementById("strokeWidth").value);
+    panelAllChange();
     canvas.renderAll();
   });
 
@@ -456,6 +459,7 @@ function addSquare() {
     }
   );
   setText2ImageInitPrompt(square);
+  setPanelValue(square);
   canvas.add(square);
   updateLayerPanel();
 }
@@ -487,6 +491,7 @@ function addPentagon() {
     isPanel: true,
   });
   setText2ImageInitPrompt(pentagon);
+  setPanelValue(pentagon);
   canvas.add(pentagon);
   updateLayerPanel();
 }
@@ -521,22 +526,92 @@ function Edit() {
   updateLayerPanel();
 }
 
-function changeStrokeWidth(value) {
-  canvas.getObjects().forEach(function (obj) {
-    obj.set({
+
+
+
+function changePanelStrokeWidth(value) {
+  var activeObject = canvas.getActiveObject();
+  if (isPanel(activeObject)) {
+    activeObject.set({
       strokeWidth: parseFloat(value),
       strokeUniform: true,
     });
+    canvas.requestRenderAll();
+  }
+}
+function changePanelStrokeColor(value) {
+  var activeObject = canvas.getActiveObject();
+  if (isPanel(activeObject)) {
+    activeObject.set("stroke", value);
+    canvas.requestRenderAll();
+  }
+}
+function changePanelOpacity(value) {
+  var activeObject = canvas.getActiveObject();
+  if (isPanel(activeObject)) {
+    const opacity = value / 100;
+    activeObject.set('opacity', opacity);
+    canvas.requestRenderAll();
+  }
+}
+function changePanelFillColor(value) {
+  var activeObject = canvas.getActiveObject();
+  if (isPanel(activeObject)) {
+    activeObject.set("fill", value);
+    canvas.requestRenderAll();
+  }
+}
+
+function panelAllChange() {
+  var strokeWidthValue  = document.getElementById("panelStrokeWidth").value;
+  var strokeColorValue  = document.getElementById("panelStrokeColor").value;
+  var opacityValue      = document.getElementById("panelOpacity").value;
+  const opacity         = opacityValue / 100;
+  var fillValue         = document.getElementById("panelFillColor").value;
+
+  canvas.getObjects().forEach(function (obj) {
+    if (isPanel(obj)) {
+      obj.set({
+        strokeWidth: parseFloat(strokeWidthValue),
+        strokeUniform: true,
+      });
+      obj.set("stroke", strokeColorValue);
+      obj.set("fill", fillValue);
+      obj.set('opacity', opacity);
+    }
   });
   canvas.requestRenderAll();
 }
 
-function changeStrokeColor(value) {
-  canvas.getObjects().forEach(function (obj) {
-    obj.set("stroke", value);
-  });
-  canvas.requestRenderAll();
+
+function setPanelValue(obj) {
+  console.log( "setPanelValue" );
+  var strokeWidthValue  = document.getElementById("panelStrokeWidth").value;
+  var strokeColorValue  = document.getElementById("panelStrokeColor").value;
+  var opacityValue      = document.getElementById("panelOpacity").value;
+  const opacity         = opacityValue / 100;
+  var fillValue         = document.getElementById("panelFillColor").value;
+
+  if (isPanel(obj)) {
+    console.log( "setPanelValue isPanel" );
+
+    obj.set({
+      strokeWidth: parseFloat(strokeWidthValue),
+      strokeUniform: true,
+    });
+    obj.set("stroke", strokeColorValue);
+    obj.set("fill", fillValue);
+    obj.set('opacity', opacity);
+    canvas.requestRenderAll();
+  }
 }
+
+
+
+
+
+
+
 
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
   var x = fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x,

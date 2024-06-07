@@ -2,23 +2,23 @@ var fpsCheckbox = document.getElementById("InfomationFPS");
 var coordCheckbox = document.getElementById("InfomationCoordinate");
 
 var frameCount = 0;
-var lastTime = Date.now();
+var lastTime = performance.now(); // Use performance.now() for more accurate timing
 var fps = 0;
 var animFrameId;
 
 function updateFPS() {
   if (fpsCheckbox.checked) {
     frameCount++;
-    var now = Date.now();
+    var now = performance.now(); // Use performance.now() for more accurate timing
     var elapsedTime = now - lastTime;
 
     if (elapsedTime >= 1000) {
-      fps = frameCount / (elapsedTime / 1000);
+      fps = (frameCount / elapsedTime) * 1000;
       fpsCheckbox.nextSibling.nodeValue = " FPS : " + fps.toFixed(2);
       frameCount = 0;
       lastTime = now;
     }
-    animFrameId = fabric.util.requestAnimFrame(updateFPS);
+    animFrameId = requestAnimationFrame(updateFPS); // Use requestAnimationFrame directly
   } else {
     cancelAnimationFrame(animFrameId);
     fpsCheckbox.nextSibling.nodeValue = " FPS : 0";
@@ -35,8 +35,22 @@ function updateCoordinates(options) {
   }
 }
 
-fpsCheckbox.addEventListener("change", updateFPS);
-coordCheckbox.addEventListener("change", updateCoordinates);
+fpsCheckbox.addEventListener("change", function () {
+  if (fpsCheckbox.checked) {
+    lastTime = performance.now();
+    frameCount = 0;
+    updateFPS();
+  } else {
+    cancelAnimationFrame(animFrameId);
+    fpsCheckbox.nextSibling.nodeValue = " FPS : 0";
+  }
+});
+
+coordCheckbox.addEventListener("change", function () {
+  if (!coordCheckbox.checked) {
+    coordCheckbox.nextSibling.nodeValue = " X:0.0 Y:0.0";
+  }
+});
 
 canvas.on("mouse:move", function (options) {
   updateCoordinates(options);
