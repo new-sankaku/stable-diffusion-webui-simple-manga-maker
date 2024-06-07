@@ -1,7 +1,7 @@
 const imageMap = new Map();
 var stateStack = [];
 var currentStateIndex = -1;
-var isUndoRedoOperation = false;
+var isSaveHistory = true;
 
 
 fabric.Object.prototype.toObject = (function (toObject) {
@@ -12,12 +12,12 @@ fabric.Object.prototype.toObject = (function (toObject) {
 })(fabric.Object.prototype.toObject);
 
 
-function isSaveHistory(){
-    if( isUndoRedoOperation ){
-        return false;
-    }else{
-        return true;
-    }
+function isSave(){
+    console.log( "isSaveHistory ", isSaveHistory );
+    return isSaveHistory;
+}
+function notSave(){
+    return !(isSave());
 }
 
 function setNotSave(activeObject){
@@ -31,7 +31,8 @@ function setSave(activeObject){
 
 
 function isSaveObject(activeObject){
-    return (activeObject && (activeObject.saveHistory == true )) ;
+    console.log( "activeObject.saveHistory", activeObject, activeObject.saveHistory );
+    return (activeObject && (activeObject.saveHistory == true || activeObject.saveHistory === undefined)) ;
 }
 
 function isNotSaveObject(activeObject){
@@ -39,24 +40,38 @@ function isNotSaveObject(activeObject){
 }
 
 function changeDoNotSaveHistory(){
-    isUndoRedoOperation = true;
+    console.log( "changeDoNotSaveHistory isSaveHistory = false" );
+    isSaveHistory = false;
 }
 
 function changeDoSaveHistory(){
-    isUndoRedoOperation = false;
+    console.log( "changeDoSaveHistory isSaveHistory = true" );
+    isSaveHistory = true;
 }
 
 function saveStateByListener(event, eventType) {
-    if (!event || isSaveHistory()) {
+
+    if(!event){
+        console.log( "saveStateByListener not save0 if(!event){" );
         return;
     }
+
+    if (notSave()) {
+        console.log( "saveStateByListener not save1" );
+        return;
+    }
+
     if( isNotSaveObject(event) ){
+        console.log( "saveStateByListener not save2" );
         return;
     }
+
+    console.log( "saveStateByListener save" );
     saveState();
 }
 
 function saveStateByManual() {
+    console.log( "saveStateByManual" );
     saveState();
 }
 
@@ -99,6 +114,10 @@ function restoreImage(json) {
 
 
 function saveState() {
+
+    console.log("saveState()");
+
+
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }

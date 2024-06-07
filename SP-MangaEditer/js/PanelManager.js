@@ -378,9 +378,9 @@ function loadSVGPlusReset(svgString) {
   });
 
   resizeCanvas(canvas.width, canvas.height);
-
-  saveState();
   changeDoSaveHistory();
+  saveState();
+
   updateLayerPanel();
 }
 
