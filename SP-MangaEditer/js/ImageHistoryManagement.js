@@ -191,6 +191,8 @@ function lastRedo() {
 function allRemove() {
     changeDoNotSaveHistory();
 	canvas.clear();
+    var bgColorInput = document.getElementById("bg-color");
+    canvas.backgroundColor = bgColorInput.value;
     changeDoSaveHistory();
     saveStateByManual();
 	updateLayerPanel();
