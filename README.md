@@ -63,8 +63,7 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 
 # Demo Site  
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)  
-Connecting the SP-MangaEditor to a Stable Diffusion WebUI server is required to use the Text2Image feature(s).  
-All other features work on the demo site for testing purposes.
+To use the Text2Image/Image2Image features you need to connect to the Stable Diffusion WebUI.
 
 # Install
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
