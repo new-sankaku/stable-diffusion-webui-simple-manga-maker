@@ -10,6 +10,17 @@
     <meta name="keywords"
         content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, Stable diffusion Forge, stable-diffusion-webui-simple-manga-maker">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YWPRKY7WKV"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YWPRKY7WKV');
+    </script>
+
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -235,7 +246,7 @@
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('fr', event)">
                                 <span class="flag-icon flag-icon-fr"></span> <span data-i18n="french">Français</span>
                             </a>
-                            
+
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('ru', event)">
                                 <span class="flag-icon flag-icon-ru"></span> <span data-i18n="russian">Русский</span>
                             </a>
@@ -286,6 +297,7 @@
                 <i class="material-icons" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
                 <i class="material-icons" onclick="toggleVisibility('text-area');">text_fields</i>
                 <i class="material-icons" onclick="toggleVisibility('tool-area');">brush</i>
+                <i class="material-icons" onclick="toggleVisibility('shape-area');" style="display: none;">interests</i>
                 <i class="material-icons" onclick="toggleVisibility('dummy-area4');">info</i>
             </div>
 
@@ -554,6 +566,44 @@
                     <hr>
                 </div>
             </div>
+
+
+
+
+
+
+
+            <div id="shape-area" style="display: none;">
+                <div class="area-header" data-i18n="tools">Shape</div>
+                <div id="shape-preview-area">
+                    <div class="input-group">
+                        <label for="panelStrokeColor" data-i18n="line">Line:</label>
+                        <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000" 
+                               oninput="changePanelStrokeColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label for="panelFillColor" data-i18n="fill">Fill:</label>
+                        <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF" 
+                               oninput="changePanelFillColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="panelOpacity">Opacity:</label>
+                        <input type="number" id="panelOpacity" name="panelOpacity" 
+                               min="0" max="100" step="1" value="100" 
+                               oninput="changePanelOpacity(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label for="panelStrokeWidth" data-i18n="lineWidth">Line Width:</label>
+                        <input type="number" id="panelStrokeWidth" name="panelStrokeWidth" 
+                               min="0.1" max="10" step="0.1" value="2"
+                               oninput="changePanelStrokeWidth(this.value)">
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+
+
 
 
 
