@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Material Icon Search</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="../js/svg/GoogleIconNames.js"></script>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+        .icon-result {
+            display: inline-block;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .settings {
+            margin: 10px 0;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Material Icon Search</h1>
+    <div class="settings">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="アイコン名を入力" onkeydown="if (event.key === 'Enter') searchIcon();">
+            <button onclick="searchIcon()">検索</button>
+        </div>
+        <label for="iconStyle">アイコンスタイル:</label>
+        <select id="iconStyle">
+            <option value="filled">Filled</option>
+            <option value="outlined">Outlined</option>
+            <option value="rounded">Rounded</option>
+            <option value="twotone">Two-tone</option>
+        </select>
+        <label for="lineColor">ライン線色:</label>
+        <input type="color" id="lineColor" value="#000000">
+        <label for="fillColor">塗りつぶし色:</label>
+        <input type="color" id="fillColor" value="#000000">
+        <label for="fillOpacity">塗りつぶし透明度:</label>
+        <input type="number" id="fillOpacity" min="0" max="1" step="0.1" value="1">
+        <label for="lineWidth">線の幅:</label>
+        <input type="number" id="lineWidth" min="1" max="10" step="1" value="1">
+    </div>
+    <div id="results"></div>
+    <canvas id="canvas" width="800" height="600"></canvas>
+
+    <script>
+        const initialIcons = [
+            "favorite", "thumb_up", "hotel_class", "star_rate", "flutter_dash",
+            "accessible_forward", "warning", "error", "new_releases", "bolt",
+            "wifi_password", "auto_awesome", "wb_sunny", "directions_run", "directions_bike"
+        ];
+
+        const canvas = new fabric.Canvas('canvas');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            searchInitialIcons();
+        });
+
+        function getIconURL(iconName, style) {
+            switch (style) {
+                case 'outlined':
+                    return `https://fonts.gstatic.com/s/i/materialiconsoutlined/${iconName}/v6/24px.svg`;
+                case 'rounded':
+                    return `https://fonts.gstatic.com/s/i/materialiconsround/${iconName}/v6/24px.svg`;
+                case 'twotone':
+                    return `https://fonts.gstatic.com/s/i/materialiconstwotone/${iconName}/v6/24px.svg`;
+                default:
+                    return `https://fonts.gstatic.com/s/i/materialicons/${iconName}/v6/24px.svg`;
+            }
+        }
+
+        function searchInitialIcons() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            const style = document.getElementById('iconStyle').value;
+            console.log('初期アイコンを検索します');
+
+            initialIcons.forEach(iconName => {
+                const iconURL = getIconURL(iconName, style);
+                fetch(iconURL)
+                    .then(response => {
+                        console.log(`アイコンURL: ${iconURL}, ステータス: ${response.status}`);
+                        if (response.ok) {
+                            return response.text();
+                        }
+                        return null;
+                    })
+                    .then(svgContent => {
+                        if (svgContent) {
+                            displaySVG(svgContent, iconURL);
+                        }
+                    })
+                    .catch(error => console.error(`初期アイコンの取得中にエラーが発生しました: ${error}`));
+            });
+        }
+
+        function searchIcon() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            const style = document.getElementById('iconStyle').value;
+            console.log(`検索クエリ: ${query}`);
+
+            if (!query) {
+                searchInitialIcons();
+                return;
+            }
+
+            const matchedIcons = iconList.filter(iconName => iconName.includes(query));
+            console.log(`一致するアイコン: ${matchedIcons}`);
+
+            if (matchedIcons.length > 0) {
+                matchedIcons.forEach(iconName => {
+                    const iconURL = getIconURL(iconName, style);
+                    fetch(iconURL)
+                        .then(response => {
+                            console.log(`アイコンURL: ${iconURL}, ステータス: ${response.status}`);
+                            if (response.ok) {
+                                return response.text();
+                            }
+                            return null;
+                        })
+                        .then(svgContent => {
+                            if (svgContent) {
+                                displaySVG(svgContent, iconURL);
+                            }
+                        })
+                        .catch(error => console.error(`アイコンの取得中にエラーが発生しました: ${error}`));
+                });
+            } else {
+                const noResultsDiv = document.createElement('div');
+                noResultsDiv.textContent = '一致するアイコンが見つかりませんでした。';
+                resultsDiv.appendChild(noResultsDiv);
+            }
+        }
+
+        function displaySVG(svgContent, iconURL) {
+            console.log('SVGコンテンツを表示します:', svgContent);
+            const resultsDiv = document.getElementById('results');
+            const svgElement = document.createElement('div');
+            svgElement.innerHTML = svgContent;
+            svgElement.className = 'icon-result';
+            svgElement.addEventListener('click', () => addToCanvas(iconURL));
+            resultsDiv.appendChild(svgElement);
+        }
+
+        function addToCanvas(iconURL) {
+            console.log(`Canvasに追加するアイコンURL: ${iconURL}`);
+            const lineColor = document.getElementById('lineColor').value;
+            const fillColor = document.getElementById('fillColor').value;
+            const fillOpacity = parseFloat(document.getElementById('fillOpacity').value);
+            const lineWidth = parseInt(document.getElementById('lineWidth').value, 10);
+            console.log(`ライン線色: ${lineColor}, 塗りつぶし色: ${fillColor}, 塗りつぶし透明度: ${fillOpacity}, 線の幅: ${lineWidth}`);
+
+            fabric.loadSVGFromURL(iconURL, function(objects, options) {
+                const obj = fabric.util.groupSVGElements(objects, options);
+                obj.set({
+                    left: 100,
+                    top: 100,
+                    stroke: lineColor,
+                    fill: fillColor,
+                    opacity: fillOpacity,
+                    strokeWidth: lineWidth
+                });
+                console.log('Canvasに追加するオブジェクト:', obj);
+                obj.scaleToWidth(100);
+                canvas.add(obj).renderAll();
+            }, function(error) {
+                console.error(`Canvasへの追加中にエラーが発生しました: ${error}`);
+            });
+        }
+    </script>
+</body>
+</html>
