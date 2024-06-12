@@ -31,23 +31,23 @@ function setSave(activeObject){
 
 
 function isSaveObject(activeObject){
-    console.log( "activeObject.saveHistory", activeObject, activeObject.saveHistory );
+    // console.log( "activeObject.saveHistory", activeObject, activeObject.saveHistory );
     if( activeObject ){
         if( activeObject.saveHistory == true ){
-            console.log("isSaveObject true 1");
+            // console.log("isSaveObject true 1");
             return true;
         }
         if( activeObject.saveHistory == false ){
-            console.log("isSaveObject false 2");
+            // console.log("isSaveObject false 2");
             return false;
         }
         if( activeObject.target === undefined ){
-            console.log("isSaveObject true 3");
+            // console.log("isSaveObject true 3");
             return true;
         }
 
         if( activeObject.target.saveHistory === undefined ){
-            console.log("isSaveObject true 4");
+            // console.log("isSaveObject true 4");
             return true;
         }
         console.log("isSaveObject false 5");

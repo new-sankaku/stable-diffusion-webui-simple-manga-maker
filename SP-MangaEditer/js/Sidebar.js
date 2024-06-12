@@ -23,7 +23,7 @@ function toggleVisibility(id) {
       document.getElementById('text-area').style.display = 'none';
       document.getElementById('tool-area').style.display = 'none';
       document.getElementById('dummy-area4').style.display = 'none';
-      // クリックされたエリアを表示する
+      document.getElementById('shape-area').style.display = 'none';
       element.style.display = 'block';
   } else {
       element.style.display = 'none';

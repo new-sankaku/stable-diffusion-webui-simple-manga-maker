@@ -34,10 +34,18 @@ function isShapes(activeObject){
 }
 
 function isPutImage(activeObject) {
+
+  if( activeObject.isIcon){
+    return true;
+  }
+
   return (activeObject && ["image", "rect", "circle", "path", "group", "polygon"].includes(activeObject.type) );
 }
 
 function isLayerPreview(activeObject) {
+  if( activeObject.isIcon){
+    return true;
+  }
   return (activeObject && ["image", "rect", "circle", "group", "polygon"].includes(activeObject.type) );
 }
 

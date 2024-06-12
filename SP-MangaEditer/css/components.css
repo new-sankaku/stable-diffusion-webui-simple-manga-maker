@@ -2,6 +2,7 @@
 #svg-container-landscape,
 #speech-bubble-area1,
 #text-area,
+#shape-area,
 #tool-area,
 #panel-manager-area,
 #dummy-area4 {
@@ -20,6 +21,18 @@
 #dummy-area4 {
     font-size: 12px;
 }
+
+#svg_icon_results {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.icon-result {
+    flex: 1 1 24%; 
+    box-sizing: border-box;
+    padding: 2px; 
+}
+
 
 #svg-preview-area-vertical,
 #svg-preview-area-landscape,
@@ -124,6 +137,23 @@ button .material-symbols-outlined{
     text-align: left;
 }
 
+#text-preview-area  input[type="text"],
+#tool-preview-area  input[type="text"],
+#shape-preview-area  input[type="text"],
+#panel-manager-items  input[type="text"],
+#speech-bubble-svg-preview-area1  input[type="text"]
+{
+    padding: 0px 3px;
+    font-size: 14px;
+    display: block;
+    width: 92%;
+    margin: 4px;
+    text-align: left;
+}
+
+
+
+
 #text-preview-area hr,
 #tool-preview-area hr,
 #shape-preview-area hr,
@@ -135,6 +165,9 @@ button .material-symbols-outlined{
     margin: 6px;
     text-align: left;
 }
+
+
+
 
 #layer-content button {
     font-size: 14px;

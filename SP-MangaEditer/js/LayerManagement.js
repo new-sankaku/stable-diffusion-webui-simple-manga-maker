@@ -18,7 +18,7 @@ function updateLayerPanel() {
       nameTextArea.className = "layer-name";
       buttonsDiv.className = "layer-buttons";
       
-      if (isPutImage(layer)) {
+      if (isLayerPreview(layer)) {
         putPreviewImage(layer, previewDiv);
       
       } else if (isHorizontalText(layer)) {
@@ -186,21 +186,72 @@ function calculateCenter(layer) {
 }
 
 
-
-
-
-
 function putPreviewImage(layer, layerDiv) {
+  // console.log("putPreviewImage function called with layer:", layer);
   var previewDiv = document.createElement("div");
   var canvasSize = 120;
-  var imageSize = 100;
 
   var tempCanvas = document.createElement("canvas");
   tempCanvas.width = canvasSize;
   tempCanvas.height = canvasSize;
   var tempCtx = tempCanvas.getContext("2d");
 
-  if ( isImage(layer) && typeof layer.getElement === "function" ) {
+  if (isGroup(layer)) {
+    // console.log("Layer is a group");
+
+    // Groupのバウンディングボックスを取得
+    var boundingBox = layer.getBoundingRect();
+    var groupWidth = boundingBox.width;
+    var groupHeight = boundingBox.height;
+
+    // スケーリング倍率を計算
+    var scale = Math.min(canvasSize / groupWidth, canvasSize / groupHeight);
+
+    // 中心位置を計算
+    var offsetX = (canvasSize - groupWidth * scale) / 2;
+    var offsetY = (canvasSize - groupHeight * scale) / 2;
+
+    // スケーリングと中央配置
+    tempCtx.save();
+    tempCtx.translate(offsetX, offsetY);
+    tempCtx.scale(scale, scale);
+    tempCtx.translate(-boundingBox.left, -boundingBox.top);
+
+    // Group全体を描画
+    layer.getObjects().forEach(function (obj) {
+      obj.render(tempCtx);
+    });
+
+    tempCtx.restore();
+
+  } else if (layer.type === "path") {
+    // console.log("Layer is a path");
+
+    // Pathのバウンディングボックスを取得
+    var pathBounds = layer.getBoundingRect();
+    var pathWidth = pathBounds.width;
+    var pathHeight = pathBounds.height;
+
+    // スケーリング倍率を計算
+    var scale = Math.min(canvasSize / pathWidth, canvasSize / pathHeight);
+
+    // 中心位置を計算
+    var offsetX = (canvasSize - pathWidth * scale) / 2;
+    var offsetY = (canvasSize - pathHeight * scale) / 2;
+
+    // スケーリングと中央配置
+    tempCtx.save();
+    tempCtx.translate(offsetX, offsetY);
+    tempCtx.scale(scale, scale);
+    tempCtx.translate(-pathBounds.left, -pathBounds.top);
+
+    // Pathを描画
+    layer.render(tempCtx);
+
+    tempCtx.restore();
+
+  } else if (isImage(layer) && typeof layer.getElement === "function") {
+    // console.log("Layer is an image with getElement function");
     var imgElement = layer.getElement();
     var imgWidth = imgElement.width;
     var imgHeight = imgElement.height;
@@ -214,39 +265,13 @@ function putPreviewImage(layer, layerDiv) {
 
     tempCtx.drawImage(imgElement, offsetX, offsetY, drawWidth, drawHeight);
 
-  } else if (isGroup(layer)) {
-    tempCtx.save();
-    tempCtx.translate(60, 60);
-    tempCtx.scale(0.12,0.12);
-    tempCtx.translate(-layer.width / 2, -layer.height / 2);
-  
-    layer.getObjects().forEach(function (obj) {
-      tempCtx.save();
-      tempCtx.translate(obj.left, obj.top);
-  
-      if (["rect", "circle", "polygon"].includes(obj.type)) {
-        var tempCanvas = obj.toCanvasElement();
-        tempCtx.drawImage(tempCanvas, -obj.width / 2, -obj.height / 2, obj.width, obj.height);
-      } else if (obj.type === "path") {
-        var path = new fabric.Path(obj.path);
-        path.left = -obj.width / 2;
-        path.top = -obj.height / 2;
-        path.render(tempCtx);
-      } else {
-        tempCtx.translate(-obj.width / 2, -obj.height / 2);
-        obj.render(tempCtx);
-      }
-  
-      tempCtx.restore();
-    });
-  
-    tempCtx.restore();
-  }  else if ( isPanelType(layer) ) {
+  } else if (isPanelType(layer)) {
+    // console.log("Layer is a panel type");
     var layerCanvas = layer.toCanvasElement();
-    var layerWidth  = layer.width;
+    var layerWidth = layer.width;
     var layerHeight = layer.height;
 
-    var layerScale = Math.min(imageSize / layerWidth, imageSize / layerHeight);
+    var layerScale = Math.min(canvasSize / layerWidth, canvasSize / layerHeight);
     var layerDrawWidth = layerWidth * layerScale;
     var layerDrawHeight = layerHeight * layerScale;
 
@@ -255,11 +280,8 @@ function putPreviewImage(layer, layerDiv) {
 
     tempCtx.drawImage(layerCanvas, layerOffsetX, layerOffsetY, layerDrawWidth, layerDrawHeight);
 
-  } else if (layer.type === "path") {
-    var path = new fabric.Path(layer.path);
-    path.render(tempCtx);
-
   } else {
+    // console.log("Layer is of another type:", layer.type);
     layer.render(tempCtx);
   }
 
@@ -271,6 +293,9 @@ function putPreviewImage(layer, layerDiv) {
   previewDiv.className = "layer-preview";
   layerDiv.appendChild(previewDiv);
 }
+
+
+
 
 function removeLayer(layer) {
   canvas.remove(layer);

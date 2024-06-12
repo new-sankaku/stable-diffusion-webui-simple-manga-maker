@@ -130,7 +130,7 @@ function updateControls(activeObject) {
 
   if (activeObject && activeObject.shadow) {
     const shadowColor = activeObject.shadow.color.toString(); 
-    console.log( "activeObject.shadow.color", shadowColor );
+    // console.log( "activeObject.shadow.color", shadowColor );
     document.getElementById('addGlowEffectCheckBox').checked = true;
     document.getElementById('glowOutLineColorPicker').value = shadowColor;
     document.getElementById('glowOutLineSlider').value = activeObject.shadow.blur;

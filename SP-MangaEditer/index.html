@@ -12,34 +12,34 @@
 
     <script async src="third/GoogleAnalytics/googleAnalytics.js"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-YWPRKY7WKV');
+        gtag('config', 'G-YWPRKY7WKV');
     </script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/common.css?v=2.2">
-    <link rel="stylesheet" href="css/components.css?v=2.2">
-    <link rel="stylesheet" href="css/layout.css?v=2.2">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.2">
-    <link rel="stylesheet" href="css/anime.css?v=2.2">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=2.2">
-    <link rel="stylesheet" href="css/toast.css?v=2.2">
+    <link rel="stylesheet" href="css/common.css?v=2.3">
+    <link rel="stylesheet" href="css/components.css?v=2.3">
+    <link rel="stylesheet" href="css/layout.css?v=2.3">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.3">
+    <link rel="stylesheet" href="css/anime.css?v=2.3">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=2.3">
+    <link rel="stylesheet" href="css/toast.css?v=2.3">
 
-    <link href="third/Bootstrup/bootstrap.min.css?v=2.2" rel="stylesheet">
+    <link href="third/Bootstrup/bootstrap.min.css?v=2.3" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 
-    <script src="third/glfx/glfx.js?v=2.2"></script>
-    <script src="third/Fabric.js/fabric.min.js?v=2.2"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.2"></script>
-    <script src="third/i18next/i18next.min.js?v=2.2"></script>
-    <script src="third/jsts/jsts.min.js?v=2.2"></script>
+    <script src="third/glfx/glfx.js?v=2.3"></script>
+    <script src="third/Fabric.js/fabric.min.js?v=2.3"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.3"></script>
+    <script src="third/i18next/i18next.min.js?v=2.3"></script>
+    <script src="third/jsts/jsts.min.js?v=2.3"></script>
 </head>
 
 <body>
@@ -253,9 +253,10 @@
                                 <span class="flag-icon flag-icon-es"></span> <span data-i18n="spanish">Español</span>
                             </a>
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('pt', event)">
-                                <span class="flag-icon flag-icon-pt"></span> <span data-i18n="portuguese">Português</span>
+                                <span class="flag-icon flag-icon-pt"></span> <span
+                                    data-i18n="portuguese">Português</span>
                             </a>
-                            
+
                         </ul>
                     </li>
                 </ul>
@@ -296,7 +297,7 @@
                 <i class="material-icons" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
                 <i class="material-icons" onclick="toggleVisibility('text-area');">text_fields</i>
                 <i class="material-icons" onclick="toggleVisibility('tool-area');">brush</i>
-                <i class="material-icons" onclick="toggleVisibility('shape-area');" style="display: none;">interests</i>
+                <i class="material-icons" onclick="toggleVisibility('shape-area');">interests</i>
                 <i class="material-icons" onclick="toggleVisibility('dummy-area4');">info</i>
             </div>
 
@@ -314,28 +315,26 @@
                 <div id="panel-manager-items">
                     <div class="input-group">
                         <label for="panelStrokeColor" data-i18n="line">Line:</label>
-                        <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000" 
-                               oninput="changePanelStrokeColor(this.value)">
+                        <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000"
+                            oninput="changePanelStrokeColor(this.value)">
                     </div>
                     <div class="input-group">
                         <label for="panelFillColor" data-i18n="fill">Fill:</label>
-                        <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF" 
-                               oninput="changePanelFillColor(this.value)">
+                        <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF"
+                            oninput="changePanelFillColor(this.value)">
                     </div>
                     <div class="input-group">
                         <label data-i18n="panelOpacity">Opacity:</label>
-                        <input type="number" id="panelOpacity" name="panelOpacity" 
-                               min="0" max="100" step="1" value="100" 
-                               oninput="changePanelOpacity(this.value)">
+                        <input type="number" id="panelOpacity" name="panelOpacity" min="0" max="100" step="1"
+                            value="100" oninput="changePanelOpacity(this.value)">
                     </div>
                     <div class="input-group">
                         <label for="panelStrokeWidth" data-i18n="lineWidth">Line Width:</label>
-                        <input type="number" id="panelStrokeWidth" name="panelStrokeWidth" 
-                               min="0.1" max="10" step="0.1" value="2"
-                               oninput="changePanelStrokeWidth(this.value)">
+                        <input type="number" id="panelStrokeWidth" name="panelStrokeWidth" min="0.1" max="10" step="0.1"
+                            value="2" oninput="changePanelStrokeWidth(this.value)">
                     </div>
                     <button id="add" onclick="panelAllChange()"><i class="material-icons">border_all</i> <span
-                        data-i18n="all_change">All Change</span></button>
+                            data-i18n="all_change">All Change</span></button>
 
                     <hr>
                     <button id="add" onclick="addSquare()"><i class="material-icons">add_box</i> <span
@@ -376,7 +375,7 @@
                     <label data-i18n="KnifeHelp">The knife tool cuts well on a square, but sometimes doesn't work well
                         on an angle.</label>
                     <hr>
-                </div>
+                </div>f
             </div>
 
             <div id="speech-bubble-area1" style="display: none;">
@@ -573,32 +572,72 @@
 
 
             <div id="shape-area" style="display: none;">
-                <div class="area-header" data-i18n="tools">Shape</div>
+                <div class="area-header" data-i18n="shape">Shape</div>
                 <div id="shape-preview-area">
                     <div class="input-group">
-                        <label for="panelStrokeColor" data-i18n="line">Line:</label>
-                        <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000" 
-                               oninput="changePanelStrokeColor(this.value)">
-                    </div>
-                    <div class="input-group">
-                        <label for="panelFillColor" data-i18n="fill">Fill:</label>
-                        <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF" 
-                               oninput="changePanelFillColor(this.value)">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="panelOpacity">Opacity:</label>
-                        <input type="number" id="panelOpacity" name="panelOpacity" 
-                               min="0" max="100" step="1" value="100" 
-                               oninput="changePanelOpacity(this.value)">
-                    </div>
-                    <div class="input-group">
-                        <label for="panelStrokeWidth" data-i18n="lineWidth">Line Width:</label>
-                        <input type="number" id="panelStrokeWidth" name="panelStrokeWidth" 
-                               min="0.1" max="10" step="0.1" value="2"
-                               oninput="changePanelStrokeWidth(this.value)">
+                        <input type="text" id="svg_icon_searchInput"
+                            placeholder="Enter icon name"
+                            data-i18n="svg_icon_search_placeholder"
+                            onkeydown="if (event.key === 'Enter') searchIcon();">
+                        <button onclick="searchIcon()" data-i18n="svg_icon_search_button">Search</button>
                     </div>
                     <hr>
+                    <div class="input-group">
+                        <label for="svg_icon_iconStyle" data-i18n="svg_icon_icon_style">Style</label>
+                        <select id="svg_icon_iconStyle" onchange="searchInitialIcons()">
+                            <option value="filled" data-i18n="svg_icon_filled">Filled</option>
+                            <option value="outlined" data-i18n="svg_icon_outlined">Outlined</option>
+                            <option value="rounded" data-i18n="svg_icon_rounded">Rounded</option>
+                            <option value="twotone" data-i18n="svg_icon_twotone">Two-tone</option>
+                        </select>
+                    </div>
 
+                    
+                    <div class="input-group">
+                        <label for="svg_icon_lineWidth" data-i18n="svg_icon_line_width">Line Width</label>
+                        <input type="number" id="svg_icon_lineWidth" min="0" max="5" step="1" value="1"
+                            oninput="updateSVGStyles()">
+                    </div>
+                    <div class="input-group">
+                        <label for="svg_icon_lineColor" data-i18n="svg_icon_line_color">Line</label>
+                        <input type="color" id="svg_icon_lineColor" value="#000000" onchange="updateSVGStyles()">
+                    </div>
+                    <div class="input-group">
+                        <label for="svg_icon_fillColor" data-i18n="svg_icon_fill_color">Fill</label>
+                        <input type="color" id="svg_icon_fillColor" value="#EEEEEE" onchange="updateSVGStyles()">
+                    </div>
+                    <div class="input-group">
+                        <label for="svg_icon_fillOpacity" data-i18n="svg_icon_fill_opacity">Opacity</label>
+                        <input type="number" id="svg_icon_fillOpacity" min="0" max="1" step="0.1" value="1"
+                            oninput="updateSVGStyles()">
+                    </div>
+                    <hr>
+                    <label>Shadow</label>
+                    <div class="input-group">
+                        <label for="svg_icon_shadowColor" data-i18n="svg_icon_shadow_color">Color</label>
+                        <input type="color" id="svg_icon_shadowColor" value="#FFFFFF" onchange="updateSVGStyles()">
+                    </div>
+                    <div class="input-group">
+                        <label for="svg_icon_shadowBlur" data-i18n="svg_icon_shadow_blur">Blur</label>
+                        <input type="number" id="svg_icon_shadowBlur" min="0" max="100" step="1" value="0"
+                            oninput="updateSVGStyles()">
+                    </div>
+                    <div class="input-group">
+                        <label for="svg_icon_shadowOffsetX" data-i18n="svg_icon_shadow_offset_x">Offset X</label>
+                        <input type="number" id="svg_icon_shadowOffsetX" min="-20" max="20" step="1" value="0"
+                            oninput="updateSVGStyles()">
+                    </div>
+                    <div class="input-group">
+                        <label for="svg_icon_shadowOffsetY" data-i18n="svg_icon_shadow_offset_y">Offset Y</label>
+                        <input type="number" id="svg_icon_shadowOffsetY" min="-20" max="20" step="1" value="0"
+                            oninput="updateSVGStyles()">
+                    </div>
+                    <hr>
+                    <div id="svg_icon_results"></div>
+                    <hr>
+                    <label data-i18n="youCanUseGoogleIcon">You can use Google Icon.</labellabel>
+                    <br>
+                    <a href="https://fonts.google.com/icons?icon.size=24&icon.color=%235f6368&icon.query=Loading&icon.set=Material+Icons&icon.style=Filled">Google Icon</a>
                 </div>
             </div>
 
@@ -1199,48 +1238,51 @@
         </div>
     </div> -->
     <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
-    <script src="third/jszip/jszip.min.js?v=2.2" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=2.2"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.2"></script>
 
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.2" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.2" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=2.2" defer></script>
+    <script src="third/jszip/jszip.min.js?v=2.3" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=2.3"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.3"></script>
 
-    <script src="js/Settings.js?v=2.2" defer></script>
-    <script src="js/CanvasManager.js?v=2.2" defer></script>
-    <script src="js/util/FabricUtil.js?v=2.2" defer></script>
-    <script src="js/Shortcut.js?v=2.2" defer></script>
-    <script src="js/PanelManager.js?v=2.2" defer></script>
+    <script src="js/svg/GoogleIconNames.js?v=2.3"></script>
+    <script src="js/svg/GoogleIconHelper.js?v=2.3"></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.3" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.3" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=2.3" defer></script>
 
-    <script src="js/Toast.js?v=2.2" defer></script>
+    <script src="js/Settings.js?v=2.3" defer></script>
+    <script src="js/CanvasManager.js?v=2.3" defer></script>
+    <script src="js/util/FabricUtil.js?v=2.3" defer></script>
+    <script src="js/Shortcut.js?v=2.3" defer></script>
+    <script src="js/PanelManager.js?v=2.3" defer></script>
 
-    <script src="js/FloatingWindowManagement.js?v=2.2" defer></script>
+    <script src="js/Toast.js?v=2.3" defer></script>
 
-    <script src="js/PromptManager.js?v=2.2" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=2.2" defer></script>
-    <script src="js/LayerManagement.js?v=2.2" defer></script>
-    <script src="js/CommonControleManagement.js?v=2.2" defer></script>
-    <script src="js/ImageTransformation.js?v=2.2" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=2.2" defer></script>
-    <script src="js/Sidebar.js?v=2.2" defer></script>
-    <script src="js/TextEffect.js?v=2.2" defer></script>
-    <script src="js/VerticalText.js?v=2.2" defer></script>
-    <script src="js/ImageControleManager.js?v=2.2" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=2.2" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=2.2" defer></script>
-    <script src="js/ProjectManagement.js?v=2.2" defer></script>
-    <script src="js/ImageDownload.js?v=2.2" defer></script>
-    <script src="js/Anime.js?v=2.2" defer></script>
-    <script src="js/Tools.js?v=2.2" defer></script>
-    <script src="js/InfomationControle.js?v=2.2" defer></script>
-    <script src="js/effect/glfxControle.js?v=2.2" defer></script>
-    <script src="js/i18next.js?v=2.2" defer></script>
+    <script src="js/FloatingWindowManagement.js?v=2.3" defer></script>
 
-    <script src="js/Knife.js?v=2.2" defer></script>
+    <script src="js/PromptManager.js?v=2.3" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=2.3" defer></script>
+    <script src="js/LayerManagement.js?v=2.3" defer></script>
+    <script src="js/CommonControleManagement.js?v=2.3" defer></script>
+    <script src="js/ImageTransformation.js?v=2.3" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=2.3" defer></script>
+    <script src="js/Sidebar.js?v=2.3" defer></script>
+    <script src="js/TextEffect.js?v=2.3" defer></script>
+    <script src="js/VerticalText.js?v=2.3" defer></script>
+    <script src="js/ImageControleManager.js?v=2.3" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=2.3" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=2.3" defer></script>
+    <script src="js/ProjectManagement.js?v=2.3" defer></script>
+    <script src="js/ImageDownload.js?v=2.3" defer></script>
+    <script src="js/Anime.js?v=2.3" defer></script>
+    <script src="js/Tools.js?v=2.3" defer></script>
+    <script src="js/InfomationControle.js?v=2.3" defer></script>
+    <script src="js/effect/glfxControle.js?v=2.3" defer></script>
+    <script src="js/i18next.js?v=2.3" defer></script>
+
+    <script src="js/Knife.js?v=2.3" defer></script>
 
 
-    <script src="js/event/FabricManagement.js?v=2.2" defer></script>
+    <script src="js/event/FabricManagement.js?v=2.3" defer></script>
 
 </body>
 

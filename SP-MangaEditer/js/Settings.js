@@ -67,6 +67,7 @@ const img2img_initPrompt = {
 const commonProperties = [
                           'excludeFromLayerPanel', 
                           'isPanel', 
+                          'isIcon',
                           'text2img_prompt', 
                           'text2img_negativePrompt', 
                           'text2img_seed', 
