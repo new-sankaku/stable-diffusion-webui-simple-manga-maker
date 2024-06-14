@@ -56,6 +56,4 @@ canvas.on("mouse:move", function (options) {
   updateCoordinates(options);
 });
 
-// Start with checkboxes unchecked
-fpsCheckbox.checked = false;
-coordCheckbox.checked = false;
+updateFPS();

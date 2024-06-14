@@ -192,7 +192,7 @@ function openText2ImageBaseFloatingWindow() {
   floatingWindow.className = "floating-windowPromptClass";
   floatingWindow.style.cursor = "move"; 
   floatingWindow.innerHTML = `
-      <h5>Text2Image Base Settings</h5>
+      <h4>Text2Image Base Settings</h4>
       <div class="form-group">
           <label>Prompt:</label>
           <textarea id="text2img_basePrompt_prompt" rows="3">${text2img_basePrompt.text2img_prompt}</textarea>

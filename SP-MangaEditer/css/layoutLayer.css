@@ -1,40 +1,39 @@
-
+@import url('root.css');
 
 #layer-content {
   overflow-y: auto;
-  border: 2px solid #4D4D4D;
-  height: 85vh;
-  margin-bottom: 5px;
+  border: var(--border-2px-solid);
+  height: var(--height-85vh);
+  margin-bottom: var(--margin-bottom-5px);
 }
 
 .layer-item {
   display: flex;
   align-items: center;
-  padding: 5px;
-  border-bottom: 1px solid #EEE;
-  transition: background-color 0.3s;
+  padding: var(--padding-5px);
+  border-bottom: var(--boader-color-1px-solid-A);
+  transition: var(--transition-bg-color);
 }
 
 .layer-item:hover, .layer-item.active {
-  background-color: #ffdfa7;
+  background-color: var(--background-color-D);
 }
 
 .layer-preview {
-  width: 45px;
-  height: 45px;
-  margin-right: 5px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center; 
-  border: 1px solid #ffc560;
+  width: var(--layer-preview-width);
+  height: var(--layer-preview-height);
+  margin-right: var(--margin-right-5px);
+  background-size: var(--bg-size-contain);
+  background-repeat: var(--bg-repeat-no);
+  background-position: var(--bg-position-center); 
 }
 
 .layer-details {
-  flex: 2;
+  flex: var(--flex-2);
 }
 
 .layer-name {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -42,20 +41,21 @@
 }
 
 .layer-buttons {
-  margin: 5px;
-}
-#layer-buttons button .material-icons{
-  font-size: 12px;
-}
-.layer-buttons button {
-  padding: 0px 3px;
+  margin: var(--margin-5px);
 }
 
+#layer-buttons button .material-icons {
+  font-size: var(--font-size-12px);
+}
+
+.layer-buttons button {
+  padding: var(--padding-button);
+}
 
 #layer-panel {
-  min-width: 10%;
-  max-width: 18%;
-  flex: 0 0 20%;
-  max-width: 25%;
-  min-width: 15%;
+  min-width: var(--min-width-layer-panel);
+  max-width: var(--max-width-layer-panel);
+  flex: var(--flex-layer-panel);
+  max-width: var(--max-width-layer-panel-large);
+  min-width: var(--min-width-layer-panel-small);
 }

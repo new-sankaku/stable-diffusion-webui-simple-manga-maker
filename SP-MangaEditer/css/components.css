@@ -1,194 +1,163 @@
-#svg-container-vertical,
-#svg-container-landscape,
-#speech-bubble-area1,
-#text-area,
-#shape-area,
-#tool-area,
-#panel-manager-area,
-#dummy-area4 {
-    font-size: 14px;
-    margin-right: 10px;
-    max-width: 150px;
-    min-width: 150px;
-    height: auto;
-    max-height: auto;
-    background: #F9F9F9;
-    border: 1px solid #ffc560;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-#dummy-area4 {
-    font-size: 12px;
-}
-
-#svg_icon_results {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.icon-result {
-    flex: 1 1 24%; 
-    box-sizing: border-box;
-    padding: 2px; 
-}
+@import url('root.css');
 
 
-#svg-preview-area-vertical,
-#svg-preview-area-landscape,
-#speech-bubble-svg-preview-area1,
-#text-preview-area,
-#tool-preview-area,
-#shape-preview-area,
-#panel-manager-items,
-#dummy-svg-preview-area4 {
-    max-width: 150px;
-    min-width: 150px;
-    height: calc(100vh - 12vh);
-    max-height: calc(100vh - 12vh);
-    background: #F9F9F9;
-    border: 1px solid #ffc560;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+  #svg-container-vertical,
+  #svg-container-landscape,
+  #speech-bubble-area1,
+  #text-area,
+  #shape-area,
+  #tool-area,
+  #panel-manager-area,
+  #dummy-area4 {
+      font-size: var(--font-size-base);
+      margin-right: var(--margin-right-base);
+      max-width: var(--max-width-base);
+      min-width: var(--min-width-base);
+      height: auto;
+      max-height: auto;
+      box-sizing: border-box;
+      overflow: hidden;
+  }
+  
+  #dummy-area4 {
+      font-size: var(--font-size-small);
+  }
+  
+  #svg_icon_results {
+      display: flex;
+      flex-wrap: wrap;
+  }
+  
+  .icon-result {
+      flex: 1 1 24%; 
+      box-sizing: border-box;
+      padding: 2px; 
+  }
+  
+  #svg-preview-area-vertical,
+  #svg-preview-area-landscape,
+  #speech-bubble-svg-preview-area1,
+  #text-preview-area,
+  #tool-preview-area,
+  #shape-preview-area,
+  #panel-manager-items,
+  #dummy-svg-preview-area4 {
+      max-width: var(--max-width-base);
+      min-width: var(--min-width-base);
+      height: calc(100vh - 12vh);
+      max-height: calc(100vh - 12vh);
+      overflow-y: auto;
+      overflow-x: hidden;
+      border: var(--boader-color-1px-solid-A);
+  }
+  
 
-button{
-    padding: 0px 3px;
-    font-size: 15px;
-    margin: 4px;
-    text-align: left;
-}
-button .material-icons{
-    font-size: 16px;
-    vertical-align: middle;
-}
-button .material-symbols-outlined{
-    font-size: 18px;
-    vertical-align: middle;
-    padding: 0px;
-}
+  
+  .input-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+  }
+  .input-group label {
+      font-size: var(--font-size-base);
+      flex: 1;
+      text-align: left;
+      margin-right: var(--input-margin);
+      margin-left: var(--input-margin);
+  }
+  .input-group input[type="checkbox"] {
+      margin-right: var(--input-margin);
+      margin-left: var(--input-margin);
+  }
+  .input-group input[type="color"],
+  .input-group input[type="number"] {
+      font-size: 13px;
+      width: var(--input-width);
+      height: var(--input-height);
+      align-items: right;
+      margin-right: var(--input-margin);
+      margin-left: var(--input-margin);
+      margin-top: var(--input-margin-top);
+  }
+  .input-group input[type="range"] {
+      margin-right: var(--input-margin);
+      margin-left: var(--input-margin);
+      flex: 1;
+      text-align: left;
+  }
+  .input-group select {
+      margin-right: var(--input-margin);
+      margin-left: var(--input-margin);
+      margin-top: var(--input-margin-top);
+  }
+  #fontSelector {
+      margin-right: var(--input-margin);
+      margin-left: var(--input-margin);
+      margin-bottom: 5px;    
+  }
+  
+  #text-preview-area button .material-icons,
+  #layer-content button .material-icons,
+  #tool-preview-area button .material-icons,
+  #shape-preview-area button .material-icons,
+  #speech-bubble-svg-preview-area1 button .material-icons,
+  #panel-manager-items button .material-icons {
+      font-size: 13px;
+      vertical-align: middle;
+  }
 
-
-.input-group {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-}
-.input-group label{
-    font-size: 14px;
-    flex: 1;
-    text-align: left;
-    margin-right: 5px;
-    margin-left: 5px;
-}
-.input-group input[type="checkbox"]
-{
-    margin-right: 5px;
-    margin-left: 5px;
-}
-.input-group input[type="color"] ,
-.input-group input[type="number"]
-{
-    font-size: 13px;
-    width: 32%;
-    height: 20px;
-    align-items: right;
-    margin-right: 5px;
-    margin-left: 5px;
-    margin-top: 3px;
-}
-.input-group input[type="range"] {
-    margin-right: 5px;
-    margin-left: 5px;
-    flex: 1;
-    text-align: left;
-}
-.input-group select{
-    margin-right: 5px;
-    margin-left: 5px;
-    margin-top: 3px;
-}
-#fontSelector{
-    margin-right: 5px;
-    margin-left: 5px;
-    margin-bottom: 5px;    
-}
-
-#text-preview-area button .material-icons,
-#layer-content button .material-icons,
-#tool-preview-area button .material-icons,
-#shape-preview-area button .material-icons,
-#speech-bubble-svg-preview-area1 button .material-icons,
-#panel-manager-items button .material-icons {
-    font-size: 13px;
-    vertical-align: middle;
-}
-#text-preview-area button,
-#tool-preview-area button,
-#shape-preview-area button,
-#panel-manager-items button,
-#speech-bubble-svg-preview-area1 button
-{
-    padding: 0px 3px;
-    font-size: 14px;
-    display: block;
-    width: 92%;
-    margin: 4px;
-    text-align: left;
-}
-
-#text-preview-area  input[type="text"],
-#tool-preview-area  input[type="text"],
-#shape-preview-area  input[type="text"],
-#panel-manager-items  input[type="text"],
-#speech-bubble-svg-preview-area1  input[type="text"]
-{
-    padding: 0px 3px;
-    font-size: 14px;
-    display: block;
-    width: 92%;
-    margin: 4px;
-    text-align: left;
-}
-
-
-
-
-#text-preview-area hr,
-#tool-preview-area hr,
-#shape-preview-area hr,
-#panel-manager-items hr,
-#speech-bubble-svg-preview-area1 hr {
-    font-size: 14px;
-    display: block;
-    width: 92%;
-    margin: 6px;
-    text-align: left;
-}
-
-
-
-
-#layer-content button {
-    font-size: 14px;
-    margin-right: 5px;
-}
-
-.svg-preview {
-    width: 45%;
-    margin-left: 5px;
-    margin-top: 5px;
-    background: #fff6ee;
-}
-
-#vertical_textInput {
-    width: 100%;
-    height: 90%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    resize: vertical;
-    font-size: 14px;
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-}
+  #text-preview-area input[type="text"],
+  #tool-preview-area input[type="text"],
+  #shape-preview-area input[type="text"],
+  #panel-manager-items input[type="text"],
+  #speech-bubble-svg-preview-area1 input[type="text"],
+  #text-preview-area button,
+  #tool-preview-area button,
+  #shape-preview-area button,
+  #panel-manager-items button,
+  #speech-bubble-svg-preview-area1 button {
+      padding: var(--padding-button);
+      font-size: var(--font-size-base);
+      display: block;
+      width: 92%;
+      margin: var(--margin-button);
+      text-align: left;
+  }
+  
+  
+  #text-preview-area hr,
+  #tool-preview-area hr,
+  #shape-preview-area hr,
+  #panel-manager-items hr,
+  #speech-bubble-svg-preview-area1 hr {
+      display: block;
+      width: 92%;
+      margin: 6px;
+      text-align: left;
+      border: var(--boader-color-1px-solid-A);
+  }
+  
+  #layer-content button {
+      font-size: var(--font-size-base);
+      margin-right: var(--input-margin);
+  }
+  
+  .svg-preview {
+      width: var(--svg-preview-width);
+      margin-left: var(--svg-preview-margin);
+      margin-top: var(--svg-preview-margin);
+      background: var(--svg-preview-background);
+  }
+  
+  #vertical_textInput {
+      width: 100%;
+      height: var(--textarea-height);
+      border: var(--boader-color-1px-solid-A);
+      border-radius: var(--textarea-border-radius);
+      box-sizing: border-box;
+      resize: vertical;
+      font-size: var(--font-size-base);
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+  }
+  

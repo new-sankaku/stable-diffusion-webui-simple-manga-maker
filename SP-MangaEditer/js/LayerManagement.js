@@ -60,6 +60,15 @@ function updateLayerPanel() {
       };
 
 
+      var rootStyles = getComputedStyle(document.documentElement);
+      var backgroundColorRoot = rootStyles.getPropertyValue('--background-color-B');
+      var borderColorRoot     = rootStyles.getPropertyValue('--boader-color-1px-solid-B');
+      var colorRoot           = rootStyles.getPropertyValue('--text-color-B');
+  
+      nameTextArea.style.color       = colorRoot.trim();
+      nameTextArea.style.borderColor = borderColorRoot.trim();
+      nameTextArea.style.background  = backgroundColorRoot.trim();
+
       detailsDiv.appendChild(nameTextArea);
 
       if (layer.isPanel) {
@@ -192,14 +201,13 @@ function putPreviewImage(layer, layerDiv) {
   var canvasSize = 120;
 
   var tempCanvas = document.createElement("canvas");
+  
   tempCanvas.width = canvasSize;
   tempCanvas.height = canvasSize;
   var tempCtx = tempCanvas.getContext("2d");
+  tempCtx.fillStyle = "#ffcccc"; 
 
   if (isGroup(layer)) {
-    // console.log("Layer is a group");
-
-    // Groupのバウンディングボックスを取得
     var boundingBox = layer.getBoundingRect();
     var groupWidth = boundingBox.width;
     var groupHeight = boundingBox.height;

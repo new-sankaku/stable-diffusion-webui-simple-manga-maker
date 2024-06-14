@@ -305,3 +305,19 @@ function svgDownload(filename, content) {
   element.click();
   document.body.removeChild(element);
 }
+
+
+
+
+function initializeMode() {
+  const mode = localStorage.getItem('mode') || 'light-mode';
+  document.body.classList.add(mode);
+  const logo = document.getElementById('navbar-logo');
+  if (mode === 'dark-mode') {
+    document.getElementById('mode-toggle').checked = true;
+    logo.src = '02_images_svg/Logo/black_mode_logo.webp';
+  } else {
+    logo.src = '02_images_svg/Logo/light_mode_logo.webp';
+  }
+}
+initializeMode();

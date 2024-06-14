@@ -197,6 +197,10 @@ function allRemove() {
     saveStateByManual();
 	updateLayerPanel();
 	currentImage = null;
+
+    imageMap.clear();
+    stateStack = [];
+    currentStateIndex = -1;
 }
 function initImageHistory(){
 	allRemove();

@@ -1,38 +1,9 @@
-body, div, input, button, label {
-  font-family: 'Open Sans', Arial, sans-serif;
-  color: #333; /* Dark grey for readability on white background */
-}
+@import url('root.css');
 
 body {
   display: flex;
   flex-direction: column;
-  background-color: #FFFFFF;
   box-sizing: border-box;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-button, .custom-file-upload {
-  padding: 5px;
-  font-size: 15px;
-  color: #000000;
-  background: #ffe1b7;
-  border: 1px solid #ffc560;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-button:hover, .custom-file-upload:hover {
-  background: #555;
-}
-
-button:active, .custom-file-upload:active {
-  background: #111;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .logo-container img {
@@ -44,15 +15,15 @@ button:active, .custom-file-upload:active {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
+  background-color: var(--color-scrollbar-track);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #ffedd3;
+  background-color: var(--color-scrollbar-thumb);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #ffedd3;
+  background-color: var(--color-scrollbar-thumb);
 }
 
 .floating-windowPromptClass {
@@ -60,19 +31,18 @@ button:active, .custom-file-upload:active {
   position: fixed;
   right: 0;
   top: 10%;
-  background-color: #f8f9fa;
-  border: 2px solid #007bff;
-  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+  background-color: var(--background-color-A);
+  border: var(--color-window-border);
+  box-shadow: var(--box-shadow-window);
   padding: 5px;
   z-index: 1000;
-  font-family: Arial, sans-serif;
-  transition: transform 0.3s ease-in-out;
+  font-family: var(--font-family-window);
 }
 
 .floating-windowPromptClass h4 {
   margin-top: 0;
-  background-color: #007bff; /* ヘッダーの背景色をブルーに */
-  color: white; /* ヘッダーの文字色を白に */
+  background-color: var(--color-window-header-bg);
+  color: var(--background-color-A);
   padding: 5px;
 }
 
@@ -91,7 +61,7 @@ button:active, .custom-file-upload:active {
 .floating-windowPromptClass textarea {
   width: 100%;
   padding: 5px;
-  border: 1px solid #007bff; /* 入力フィールドのボーダー色を変更 */
+  border: 1px solid var(--color-input-focus-border);
   border-radius: 4px;
 }
 
@@ -105,13 +75,13 @@ button:active, .custom-file-upload:active {
   padding: 5px 5px;
   border: none;
   border-radius: 4px;
-  background-color: #28a745;
+  background-color: var(--color-button-bg);
   color: white;
   cursor: pointer;
 }
 
 .floating-windowPromptClass button:hover {
-  background-color: #218838;
+  background-color: var(--color-button-hover-bg);
 }
 
 .prompt-replace-form-group {
@@ -133,9 +103,9 @@ button:active, .custom-file-upload:active {
   height: 450px;
   bottom: 100px;
   left: 100px;
-  background-color: rgb(250, 250, 250);
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-color-A);
+  border: var(--color-window-border);
+  box-shadow: var(--box-shadow-window);
   z-index: 1000;
   display: none;
   padding: 10px;
@@ -146,8 +116,7 @@ button:active, .custom-file-upload:active {
   padding: 5px;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--boader-color-A);
 }
 
 .close-btn {
@@ -174,11 +143,6 @@ button:active, .custom-file-upload:active {
   font-weight: normal;
   font-style: normal;
 }
-
-
-
-
-
 
 @font-face {
   font-family: '851CHIKARA-DZUYOKU_kanaA';

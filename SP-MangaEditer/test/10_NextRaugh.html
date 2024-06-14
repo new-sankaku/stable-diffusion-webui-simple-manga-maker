@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>Fabric.js and Rough.js on Same Canvas</title>
@@ -12,25 +13,32 @@
             flex-direction: column;
             margin-bottom: 10px;
         }
+
         .control-panel label {
             margin-bottom: 5px;
         }
+
         .control-panel span {
             margin-left: 10px;
         }
+
         .control-panel .parameter-group {
             display: none;
         }
     </style>
 </head>
+
 <body>
     <div class="control-panel">
-        <label>Roughness: <input type="range" id="roughness" min="0" max="1.0" step="0.01" value="0.5"><span id="roughnessValue">1</span></label>
-        <label>Bowing: <input type="range" id="bowing" min="0" max="10" step="0.1" value="1"><span id="bowingValue">1</span></label>
+        <label>Roughness: <input type="range" id="roughness" min="0" max="1.0" step="0.01" value="0.5"><span
+                id="roughnessValue">1</span></label>
+        <label>Bowing: <input type="range" id="bowing" min="0" max="10" step="0.1" value="1"><span
+                id="bowingValue">1</span></label>
         <label>Stroke Color: <input type="color" id="stroke" value="#000000"></label>
-        <label>Stroke Width: <input type="range" id="strokeWidth" min="0" max="2" step="0.1" value="0.1"><span id="strokeWidthValue">1</span></label>
+        <label>Stroke Width: <input type="range" id="strokeWidth" min="0" max="2" step="0.1" value="0.1"><span
+                id="strokeWidthValue">1</span></label>
         <label>Fill Color: <input type="color" id="fill" value="#ffffff"></label>
-        <label>Fill Style: 
+        <label>Fill Style:
             <select id="fillStyle">
                 <option value="hachure">Hachure</option>
                 <option value="solid">Solid</option>
@@ -41,14 +49,22 @@
                 <option value="zigzag-line">Zigzag-line</option>
             </select>
         </label>
-            <label>Fill Weight:         <input type="range" id="fillWeight" min="0" max="10" step="0.1" value="1"><span id="fillWeightValue">1</span></label>
-            <label>Hachure Angle:       <input type="range" id="hachureAngle" min="-180" max="180" step="1" value="-41"><span id="hachureAngleValue">-41</span></label>
-            <label>Hachure Gap:         <input type="range" id="hachureGap" min="0" max="20" step="0.01" value="2"><span id="hachureGapValue">4</span></label>
-            <label>Curve Step Count:    <input type="range" id="curveStepCount" min="1" max="20" step="1" value="9"><span id="curveStepCountValue">9</span></label>
-            <label>Simplification:      <input type="range" id="simplification" min="0" max="1" step="0.01" value="0"><span id="simplificationValue">0</span></label>
-            <label>Dash Offset:         <input type="range" id="dashOffset" min="0.1" max="10" step="0.1" value="0.1"><span id="dashOffsetValue">0</span></label>
-            <label>Dash Gap:            <input type="range" id="dashGap" min="0.1" max="10" step="0.1" value="0.1"><span id="dashGapValue">0</span></label>
-            <label>Zigzag Offset:       <input type="range" id="zigzagOffset" min="0.1" max="10" step="0.1" value="0.1"><span id="zigzagOffsetValue">0</span></label>
+        <label>Fill Weight: <input type="range" id="fillWeight" min="0" max="10" step="0.1" value="1"><span
+                id="fillWeightValue">1</span></label>
+        <label>Hachure Angle: <input type="range" id="hachureAngle" min="-180" max="180" step="1" value="-41"><span
+                id="hachureAngleValue">-41</span></label>
+        <label>Hachure Gap: <input type="range" id="hachureGap" min="0" max="20" step="0.01" value="2"><span
+                id="hachureGapValue">4</span></label>
+        <label>Curve Step Count: <input type="range" id="curveStepCount" min="1" max="20" step="1" value="9"><span
+                id="curveStepCountValue">9</span></label>
+        <label>Simplification: <input type="range" id="simplification" min="0" max="1" step="0.01" value="0"><span
+                id="simplificationValue">0</span></label>
+        <label>Dash Offset: <input type="range" id="dashOffset" min="0.1" max="10" step="0.1" value="0.1"><span
+                id="dashOffsetValue">0</span></label>
+        <label>Dash Gap: <input type="range" id="dashGap" min="0.1" max="10" step="0.1" value="0.1"><span
+                id="dashGapValue">0</span></label>
+        <label>Zigzag Offset: <input type="range" id="zigzagOffset" min="0.1" max="10" step="0.1" value="0.1"><span
+                id="zigzagOffsetValue">0</span></label>
     </div>
     <canvas id="myCanvas" width="800" height="600"></canvas>
     <script>
@@ -70,7 +86,7 @@
             }
 
             const roughOptions = getRoughValue();
-            setRoughValueText( roughOptions );
+            setRoughValueText(roughOptions);
 
             fabric.loadSVGFromString(svgData, (objects, options) => {
                 const paths = objects.filter(obj => {
@@ -89,7 +105,7 @@
                     scaleX: 10,
                     scaleY: 10,
                     isPanel: true,
-                    
+
                     stroke: roughOptions.stroke,
                     strokeWidth: roughOptions.strokeWidth,
                     fill: roughOptions.fill
@@ -107,4 +123,5 @@
         drawRoughIconSvg();
     </script>
 </body>
+
 </html>

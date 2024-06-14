@@ -8,7 +8,13 @@ var canvas = new fabric.Canvas("mangaImageCanvas", {
   skipOffscreen: false,
   renderer: fabric.isWebglSupported ? "webgl" : "canvas",
 });
-canvas.backgroundColor = "white";
+
+const mode = localStorage.getItem('mode') || 'light-mode';
+if (mode === 'dark-mode') {
+  canvas.backgroundColor = "gray";
+}else{
+  canvas.backgroundColor = "white";
+}
 
 var clipAreaCoords = {
   left: 0,

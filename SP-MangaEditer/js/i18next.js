@@ -3,6 +3,34 @@
 const resources = {
   en: {
     translation: {
+      "outloneGlow" : "Outlone Glow",
+      "raughControls": "▼ Raugh Controls",
+      "rough_roughness": "Raugh",
+      "rough_bowing": "Bowing",
+      "rough_stroke": "Stroke",
+      "rough_strokeColor": "Color",
+      "rough_strokeWidth": "Width",
+      "rough_fill": "Fill",
+      "rough_fillColor": "Color",
+      "rough_fillStyle": "Style",
+      "rough_hachure": "Hachure",
+      "rough_hachure": "Hachure",
+      "rough_solid": "Solid",
+      "rough_zigzag": "Zigzag",
+      "rough_crossHatch": "Cross-hatch",
+      "rough_dots": "Dots",
+      "rough_dashed": "Dashed",
+      "rough_zigzagLine": "Zigzag-line",
+      "rough_fillWeight": "Weight",
+      "rough_hachureAngle": "Angle",
+      "rough_hachureGap": "Gap",
+      "rough_curveStepCount": "Curve Step",
+      "rough_simplification": "Simple",
+      "rough_dash": "Dash",
+      "rough_dashOffset": "Offset",
+      "rough_dashGap": "Gap",
+      "rough_zigzag": "Zigzag",
+      "rough_zigzagOffset": "Offset",
 "shape": "Shape",
 "svg_icon_search_placeholder": "Enter icon name",
 "svg_icon_search_button": "Search",
@@ -107,7 +135,7 @@ const resources = {
 "shadowOffset": "Offset",
 "shadowColor": "Color",
 "information": "Information",
-"commonControls": "Common Controls",
+"commonControls": "▼ Common Controls",
 "angle": "Angle",
 "scale": "Scale",
 "top": "Top",
@@ -239,6 +267,7 @@ const resources = {
   },
   ja: {
     translation: {
+"outloneGlow" : "輪郭の光",      
 "shape": "形状",
 "svg_icon_search_placeholder": "アイコン名を入力",
 "svg_icon_search_button": "検索",
@@ -416,6 +445,7 @@ const resources = {
   },
   ko: {
     translation: {
+"outloneGlow" : "외곽선 광선",
 "shape": "형상",
 "svg_icon_search_placeholder": "아이콘 이름 입력",
 "svg_icon_search_button": "검색",
@@ -605,6 +635,7 @@ const resources = {
   },
   fr: {
     translation: {
+"outloneGlow" : "Lueur du contour",
 "shape": "Forme",
 "svg_icon_search_placeholder": "Entrez le nom de l'icône",
 "svg_icon_search_button": "Recherche",
@@ -827,6 +858,7 @@ const resources = {
   },
   zh: {
     translation: {
+"outloneGlow" : "轮廓发光",
 "shape": "形状",
 "svg_icon_search_placeholder": "输入图标名称",
 "svg_icon_search_button": "搜索",
@@ -1046,6 +1078,7 @@ const resources = {
   },
   ru: {
     translation: {
+"outloneGlow" : "Свечение контура",
 "shape": "Форма",
 "svg_icon_search_placeholder": "Введите название значка",
 "svg_icon_search_button": "Поиск",
@@ -1217,6 +1250,7 @@ const resources = {
   },
   es: {
     translation: {
+"outloneGlow" : "Resplandor de contorno",
 "shape": "Forma",
 "svg_icon_search_placeholder": "Ingrese el nombre del icono",
 "svg_icon_search_button": "Buscar",
@@ -1388,6 +1422,7 @@ const resources = {
   },
   pt: {
     translation: {
+"outloneGlow" : "Brilho do contorno",
 "shape": "Forma",
 "svg_icon_search_placeholder": "Digite o nome do ícone",
 "svg_icon_search_button": "Pesquisar",
@@ -1561,8 +1596,10 @@ const resources = {
 
 
 
+const savedLanguage = localStorage.getItem('language') || 'en';
+
 i18next.init({
-  lng: 'en',
+  lng: savedLanguage,
   resources: resources
 }, function (err, t) {
   updateContent();
@@ -1589,6 +1626,12 @@ function changeLanguage(lng, event) {
     event.preventDefault();
   }
   i18next.changeLanguage(lng, function (err, t) {
-    updateContent();
+    if (!err) {
+      createToast("Save Language", "successfully!");
+      localStorage.setItem('language', lng);
+      updateContent();
+    } else {
+      console.error('Failed to change language:', err);
+    }
   });
 }

@@ -28,10 +28,17 @@ document.getElementById("canvas-container").addEventListener(
         // var canvasWidth = canvasElement.width;
         // var canvasHeight = canvasElement.height;
 
-        var canvasX = x / canvasContinerScale;
-        var canvasY = y / canvasContinerScale;
+        console.log("drop stateStack.length", stateStack.length);
+        if (stateStack.length >= 2) {
+          var canvasX = x / canvasContinerScale;
+          var canvasY = y / canvasContinerScale;
+          putImageInFrame(img, canvasX, canvasY);
+        } else {
+          console.log("drop img.width, img.height", img.width, img.height);
+          resizeCanvasByNum(img.width, img.height);
+          initialPutImage(img, 0, 0);
+        }
 
-        putImageInFrame(img, canvasX, canvasY);
         setImage2ImageInitPrompt(img);
       });
     };
@@ -40,6 +47,24 @@ document.getElementById("canvas-container").addEventListener(
   },
   false
 );
+
+
+function initialPutImage(img) {
+  img.set({
+    left: 0,
+    top: 0,
+  });
+  setNotSave(img);
+  canvas.add(img);
+
+  canvas.setActiveObject(img);
+  saveInitialState(img);
+  canvas.renderAll();
+
+  updateLayerPanel();
+  saveStateByManual();
+  return img;
+}
 
 function putImageInFrame(img, x, y) {
   img.set({
