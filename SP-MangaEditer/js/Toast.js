@@ -91,7 +91,6 @@ function startProgressBar(toast) {
         progressBar.style.width = `${width}%`;
         if (width <= 0) {
             clearInterval(timer);
-            // トーストを自動的に閉じる
             const bsToast = bootstrap.Toast.getInstance(toast);
             bsToast.hide();
         }

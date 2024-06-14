@@ -2,14 +2,14 @@ var fpsCheckbox = document.getElementById("InfomationFPS");
 var coordCheckbox = document.getElementById("InfomationCoordinate");
 
 var frameCount = 0;
-var lastTime = performance.now(); // Use performance.now() for more accurate timing
+var lastTime = performance.now();
 var fps = 0;
 var animFrameId;
 
 function updateFPS() {
   if (fpsCheckbox.checked) {
     frameCount++;
-    var now = performance.now(); // Use performance.now() for more accurate timing
+    var now = performance.now();
     var elapsedTime = now - lastTime;
 
     if (elapsedTime >= 1000) {
@@ -18,7 +18,7 @@ function updateFPS() {
       frameCount = 0;
       lastTime = now;
     }
-    animFrameId = requestAnimationFrame(updateFPS); // Use requestAnimationFrame directly
+    animFrameId = requestAnimationFrame(updateFPS);
   } else {
     cancelAnimationFrame(animFrameId);
     fpsCheckbox.nextSibling.nodeValue = " FPS : 0";

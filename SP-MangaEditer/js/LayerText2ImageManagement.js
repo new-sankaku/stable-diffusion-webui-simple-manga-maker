@@ -50,7 +50,6 @@ function openfloatingWindowItem(layer) {
   makeDraggable(floatingWindowItem);
   updatefloatingWindowItem(layer, floatingWindowItem);
 
-  // Add event listener for the Save button
   var text2imgItem_saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
   text2imgItem_saveButton.onclick = function () {
     adjustToMultipleOfEight('text2img_height');
@@ -60,7 +59,6 @@ function openfloatingWindowItem(layer) {
     closefloatingWindowItem(floatingWindowItem);
   };
 
-  // Add event listener for the Close button
   var text2imgItem_closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
   text2imgItem_closeButton.onclick = function () {
     closefloatingWindowItem(floatingWindowItem);
@@ -123,7 +121,6 @@ function openImage2ImagefloatingWindowItem(layer) {
   makeDraggable(floatingWindowItem);
   updatefloatingWindowItem(layer, floatingWindowItem);
 
-  // Add event listener for the Save button
   var text2imgItem_saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
   text2imgItem_saveButton.onclick = function () {
     adjustToMultipleOfEight('text2img_height');
@@ -133,7 +130,6 @@ function openImage2ImagefloatingWindowItem(layer) {
     closefloatingWindowItem(floatingWindowItem);
   };
 
-  // Add event listener for the Close button
   var text2imgItem_closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
   text2imgItem_closeButton.onclick = function () {
     closefloatingWindowItem(floatingWindowItem);
@@ -178,7 +174,6 @@ function saveLayerDiffusionAttributes(layer) {
 function closefloatingWindowItem(floatingWindowItem) {
   if (floatingWindowItem) {
     document.body.removeChild(floatingWindowItem);
-    // 配列から削除
     const index = floatingWindows.indexOf(floatingWindowItem);
     if (index > -1) {
       floatingWindows.splice(index, 1);
@@ -187,7 +182,6 @@ function closefloatingWindowItem(floatingWindowItem) {
 }
 
 function openText2ImageBaseFloatingWindow() {
-  // フローティングウィンドウの作成
   const floatingWindow = document.createElement("div");
   floatingWindow.className = "floating-windowPromptClass";
   floatingWindow.style.cursor = "move"; 

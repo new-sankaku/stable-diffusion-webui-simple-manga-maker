@@ -28,7 +28,6 @@ function updateLayerPanel() {
       } else if (isVerticalText(layer)) {
         var fullText = layer.getObjects().map(obj => obj.text).join('');
         nameTextArea.value = fullText.substring(0, 15);
-
       }
 
       nameTextArea.value = layer.name || nameTextArea.value || layer.type + ` ${index + 1}`;
@@ -212,20 +211,16 @@ function putPreviewImage(layer, layerDiv) {
     var groupWidth = boundingBox.width;
     var groupHeight = boundingBox.height;
 
-    // スケーリング倍率を計算
     var scale = Math.min(canvasSize / groupWidth, canvasSize / groupHeight);
 
-    // 中心位置を計算
     var offsetX = (canvasSize - groupWidth * scale) / 2;
     var offsetY = (canvasSize - groupHeight * scale) / 2;
 
-    // スケーリングと中央配置
     tempCtx.save();
     tempCtx.translate(offsetX, offsetY);
     tempCtx.scale(scale, scale);
     tempCtx.translate(-boundingBox.left, -boundingBox.top);
 
-    // Group全体を描画
     layer.getObjects().forEach(function (obj) {
       obj.render(tempCtx);
     });
@@ -234,32 +229,23 @@ function putPreviewImage(layer, layerDiv) {
 
   } else if (layer.type === "path") {
     // console.log("Layer is a path");
-
-    // Pathのバウンディングボックスを取得
     var pathBounds = layer.getBoundingRect();
     var pathWidth = pathBounds.width;
     var pathHeight = pathBounds.height;
 
-    // スケーリング倍率を計算
     var scale = Math.min(canvasSize / pathWidth, canvasSize / pathHeight);
-
-    // 中心位置を計算
     var offsetX = (canvasSize - pathWidth * scale) / 2;
     var offsetY = (canvasSize - pathHeight * scale) / 2;
 
-    // スケーリングと中央配置
     tempCtx.save();
     tempCtx.translate(offsetX, offsetY);
     tempCtx.scale(scale, scale);
     tempCtx.translate(-pathBounds.left, -pathBounds.top);
-
-    // Pathを描画
     layer.render(tempCtx);
 
     tempCtx.restore();
 
   } else if (isImage(layer) && typeof layer.getElement === "function") {
-    // console.log("Layer is an image with getElement function");
     var imgElement = layer.getElement();
     var imgWidth = imgElement.width;
     var imgHeight = imgElement.height;
@@ -274,7 +260,6 @@ function putPreviewImage(layer, layerDiv) {
     tempCtx.drawImage(imgElement, offsetX, offsetY, drawWidth, drawHeight);
 
   } else if (isPanelType(layer)) {
-    // console.log("Layer is a panel type");
     var layerCanvas = layer.toCanvasElement();
     var layerWidth = layer.width;
     var layerHeight = layer.height;
@@ -289,7 +274,6 @@ function putPreviewImage(layer, layerDiv) {
     tempCtx.drawImage(layerCanvas, layerOffsetX, layerOffsetY, layerDrawWidth, layerDrawHeight);
 
   } else {
-    // console.log("Layer is of another type:", layer.type);
     layer.render(tempCtx);
   }
 
@@ -301,9 +285,6 @@ function putPreviewImage(layer, layerDiv) {
   previewDiv.className = "layer-preview";
   layerDiv.appendChild(previewDiv);
 }
-
-
-
 
 function removeLayer(layer) {
   canvas.remove(layer);

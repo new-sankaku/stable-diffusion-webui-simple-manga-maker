@@ -1,16 +1,26 @@
+function getCropAndDownloadLinkByMultiplier(multiplier, format) {
+	var cropped = canvas.toDataURL({
+			format: format,
+			multiplier: multiplier
+	});
 
-function getCropAndDownloadLinkByMultiplier( multiplier, format ) {
-
-	var cropped = canvas.toDataURL({ 
-		format: format, 
-		multiplier: multiplier });
+	function getFormattedDateTime() {
+			var date = new Date();
+			var yyyy = date.getFullYear();
+			var MM = ('0' + (date.getMonth() + 1)).slice(-2);
+			var dd = ('0' + date.getDate()).slice(-2);
+			var hh = ('0' + date.getHours()).slice(-2);
+			var mm = ('0' + date.getMinutes()).slice(-2);
+			var ss = ('0' + date.getSeconds()).slice(-2);
+			var SSS = ('00' + date.getMilliseconds()).slice(-3);
+			return `${yyyy}${MM}${dd}_${hh}${mm}${ss}_${SSS}`;
+	}
 
 	var link = document.createElement('a');
-	link.download = 'cropped-image.png';
+	link.download = getFormattedDateTime() + '_SP-MangaEditor.png';
 	link.href = cropped;
 	return link;
 }
-
 function getCropAndDownloadLink() {
 	var a5WidthInches = 148 / 25.4;
 	var a5HeightInches = 210 / 25.4;

@@ -5,7 +5,6 @@ const textInput = document.getElementById("vertical_textInput");
 let isDragging = false;
 let offsetX, offsetY;
 
-// console.log("openButton", openButton);
 openButton.addEventListener("click", function () {
   const activeObject = canvas.getActiveObject();
   if (isVerticalText(activeObject)) {
@@ -13,7 +12,6 @@ openButton.addEventListener("click", function () {
   } else {
     textInput.value = "";
   }
-
   myWindow.style.display = "block";
 });
 
@@ -76,7 +74,6 @@ let textGroup;
 function createVerticalText(textString, options) {
   var selectedFont = document.getElementById('fontSelector').value;
   const ignoreRegex = /[･･･…ー（）｛｝「」(){}『』【】[\]]/;
-  // move a little to the right
   const reverceRegex = /[、。，A-Za-z0-9!"#$%&'()=~{`+*}_?><]/;
 
   const chars = textString.split("");
@@ -124,8 +121,6 @@ function createVerticalText(textString, options) {
     type: 'verticalText'
   });
 
-
-  // グループレベルでコントロールの可視性を設定
   group.setControlsVisibility({
     mt: false,
     mb: false,
@@ -146,9 +141,6 @@ function updateVerticalText() {
     let firstText = selectedObject.getObjects('text')[0];
     let inheritedFontSize = firstText ? firstText.fontSize : parseInt(document.getElementById('fontSizeSlider').value);
     let inheritedColor = firstText ? firstText.fill : document.getElementById("textColorPicker").value;
-
-    console.log("selectedObject.left", selectedObject.left);
-    console.log("selectedObject.top", selectedObject.top);
 
     const newTextGroup = createVerticalText(textString, {
       left: selectedObject.left,

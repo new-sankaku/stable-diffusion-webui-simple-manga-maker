@@ -15,34 +15,46 @@
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', 'G-YWPRKY7WKV');
+        function trackCustomEvent(eventCategory, eventAction, eventLabel) {
+            gtag('event', eventAction, {
+                'event_category': eventCategory,
+                'event_label': eventLabel
+            });
+        }
+        document.addEventListener('click', function (event) {
+            var element = event.target;
+            var elementId = element.id ? element.id : 'no-id';
+            var elementClasses = element.className ? element.className.split(' ').join(', ') : 'no-class';
+            var tagName = element.tagName.toLowerCase();
+            var textContent = element.textContent.trim().substring(0, 10);
+            trackCustomEvent('click_' + tagName, elementId + ' | ' + elementClasses, textContent);
+        });
     </script>
-
 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/form.css?v=2.3">
+    <link rel="stylesheet" href="css/form.css?v=2.4">
 
-    <link rel="stylesheet" href="css/common.css?v=2.3">
-    <link rel="stylesheet" href="css/components.css?v=2.3">
-    <link rel="stylesheet" href="css/layout.css?v=2.3">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.3">
-    <link rel="stylesheet" href="css/anime.css?v=2.3">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=2.3">
-    <link rel="stylesheet" href="css/toast.css?v=2.3">
-    <link rel="stylesheet" href="css/ui/modeChange.css?v=2.3">
+    <link rel="stylesheet" href="css/common.css?v=2.4">
+    <link rel="stylesheet" href="css/components.css?v=2.4">
+    <link rel="stylesheet" href="css/layout.css?v=2.4">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.4">
+    <link rel="stylesheet" href="css/anime.css?v=2.4">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=2.4">
+    <link rel="stylesheet" href="css/toast.css?v=2.4">
+    <link rel="stylesheet" href="css/ui/modeChange.css?v=2.4">
 
-    <link href="third/Bootstrup/bootstrap.min.css?v=2.3" rel="stylesheet">
+    <link href="third/Bootstrup/bootstrap.min.css?v=2.4" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 
-    <script src="third/glfx/glfx.js?v=2.3"></script>
-    <script src="third/Fabric.js/fabric.min.js?v=2.3"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.3"></script>
-    <script src="third/i18next/i18next.min.js?v=2.3"></script>
-    <script src="third/jsts/jsts.min.js?v=2.3"></script>
+    <script src="third/glfx/glfx.js?v=2.4"></script>
+    <script src="third/Fabric.js/fabric.min.js?v=2.4"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.4"></script>
+    <script src="third/i18next/i18next.min.js?v=2.4"></script>
+    <script src="third/jsts/jsts.min.js?v=2.4"></script>
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script> -->
 </head>
@@ -67,7 +79,8 @@
 
         <nav class="navbar navbar-expand custom-navbar">
             <a class="navbar-brand" href="#">
-                <img src="02_images_svg/Logo/black_mode_logo.webp" alt="SP-MangaEditer Official Logo" class="navbar-logo" id="navbar-logo">
+                <img src="02_images_svg/Logo/black_mode_logo.webp" alt="SP-MangaEditer Official Logo"
+                    class="navbar-logo" id="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +96,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
                                 <a class="dropdown-item" href="#" id="projectSave">
-                                    <i class="material-icons">folder_zip</i> 
+                                    <i class="material-icons">folder_zip</i>
                                     <span data-i18n="projectSave">Project Save</span>
                                 </a>
                             </li>
@@ -165,7 +178,7 @@
                             <hr>
                             <li>
                                 <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank">
-                                    <i class="material-icons">help_outline</i> 
+                                    <i class="material-icons">help_outline</i>
                                     <span data-i18n="help_api_connect_settings">
                                         Help:API Connect Settings
                                     </span>
@@ -193,9 +206,9 @@
                                 <input type="number" id="outputDpi" class="dropdown-item-mini-text" value="300" min="96"
                                     step="1">
                             </a>
-                            <hr> 
+                            <hr>
                             <a class="dropdown-item" href="#" id="toggleGridButton">
-                                <i class="material-icons">grid_4x4</i> 
+                                <i class="material-icons">grid_4x4</i>
                                 <span data-i18n="gridLine">Grid Line (Ctrl+G)</span>
                             </a>
                             <a class="dropdown-item">
@@ -325,7 +338,7 @@
             <div id="svg-container-vertical" style="display: none;">
                 <div class="area-header" data-i18n="panelsVertical">Panels</div>
                 <div id="svg-preview-area-vertical"></div>
-            </div>      
+            </div>
 
             <div id="svg-container-landscape" style="display: none;">
                 <div class="area-header" data-i18n="panelsLandscape">Panels</div>
@@ -497,28 +510,18 @@
                             oninput="changeNeonColor(this.value)">
                     </div>
                     <hr>
-                    <label style="display: none;" data-i18n="neonIntensity">Neon Intensity:</label>
-                    <input style="display: none;" type="range" id="neonIntensitySlider" min="0" max="6" step="0.2"
-                        value="2" oninput="changeNeonIntensity(this.value)">
-                    <button onclick="applyCSSTextEffect()"><i class="material-icons">deblur</i> <span
-                            data-i18n="shadow">Shadow</span></button>
-                    <button onclick="applyVividGradientEffect()"><i class="material-icons">filter</i> <span
-                            data-i18n="vividGradient">Vivid Gradient</span></button>
-                    <button onclick="applyNeonEffect()"><i class="material-icons">flare</i> <span
-                            data-i18n="neon">Neon</span></button>
-                    <button style="display: none;" onclick="applySpaceAgeEffect()"><i
-                            class="material-icons">space_bar</i> <span data-i18n="spaceAge">Space Age</span></button>
-                    <button style="display: none;" onclick="applySpaceAgeEffect2()"><i
-                            class="material-icons">space_bar</i> <span data-i18n="spaceAge2">Space Age2</span></button>
-                    <button style="display: none;" onclick="applyGeneratorBasedEffect()"><i
-                            class="material-icons">transform</i> <span data-i18n="generatorBased">Generator
-                            Based</span></button>
-                    <button style="display: none;" onclick="applyNeonJitterEffect()"><i
-                            class="material-icons">vibration</i> <span data-i18n="neonJitter">Neon
-                            Jitter</span></button>
-                    <button style="display: none;" onclick="applyZebraReflectionEffect()"><i
-                            class="material-icons">view_compact</i> <span
-                            data-i18n="reflection">Reflection</span></button>
+                    <button onclick="applyCSSTextEffect()">
+                        <i class="material-icons">deblur</i>
+                        <span data-i18n="shadow">Shadow</span>
+                    </button>
+                    <button onclick="applyVividGradientEffect()">
+                        <i class="material-icons">filter</i>
+                        <span data-i18n="vividGradient">Vivid Gradient</span>
+                    </button>
+                    <button onclick="applyNeonEffect()">
+                        <i class="material-icons">flare</i>
+                        <span data-i18n="neon">Neon</span>
+                    </button>
                 </div>
             </div>
 
@@ -658,7 +661,8 @@
                     <div id="svg_icon_results"></div>
                     <hr>
                     <label data-i18n="youCanUseGoogleIcon">You can use Google Icon.</label>
-                    <a href="https://fonts.google.com/icons?icon.size=24&icon.color=%235f6368&icon.query=Loading&icon.set=Material+Icons&icon.style=Filled">Google
+                    <a
+                        href="https://fonts.google.com/icons?icon.size=24&icon.color=%235f6368&icon.query=Loading&icon.set=Material+Icons&icon.style=Filled">Google
                         Icon</a>
                 </div>
             </div>
@@ -808,12 +812,14 @@
                     <label data-i18n="view_layers" style="margin-top: 0px; margin-bottom: 0px;">
                         L
                     </label>
-                    <input type="checkbox" id="view_layers_checkbox" checked  style="margin-top: 0px; margin-bottom: 0px;">
+                    <input type="checkbox" id="view_layers_checkbox" checked
+                        style="margin-top: 0px; margin-bottom: 0px;">
 
                     <label data-i18n="view_controles" style="margin-top: 0px; margin-bottom: 0px;">
                         C
                     </label>
-                    <input type="checkbox" id="view_controles_checkbox" checked  style="margin-top: 0px; margin-bottom: 0px;">
+                    <input type="checkbox" id="view_controles_checkbox" checked
+                        style="margin-top: 0px; margin-bottom: 0px;">
                 </div>
 
                 <div class="content">
@@ -832,14 +838,11 @@
                 <div id="layer-buttons">
                     <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
                     <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
+
                     <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span
                             data-i18n="baseT2I">Base T2I</span></button>
-                    <button style="display: none;" onclick="openBaseText2ImagefloatingWindow()"><i
-                            class="material-icons">collections</i> <span data-i18n="allRunT2I">All Run
-                            T2I</span></button>
                 </div>
                 <div id="canvas-buttons">
-
                     <button onclick="undo()"><i class="material-icons">undo</i> <span
                             data-i18n="undo">Undo</span></button>
                     <button onclick="redo()"><i class="material-icons">redo</i> <span
@@ -1359,7 +1362,7 @@
                         <hr class="separator">
                     </div>
                 </div> -->
-                
+
 
 
 
@@ -1377,50 +1380,50 @@
     </div> -->
     <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
 
-    <script src="third/jszip/jszip.min.js?v=2.3" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=2.3"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.3"></script>
+    <script src="third/jszip/jszip.min.js?v=2.4" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=2.4"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.4"></script>
 
-    <script src="js/svg/GoogleIconNames.js?v=2.3"></script>
-    <script src="js/svg/GoogleIconHelper.js?v=2.3"></script>
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.3" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.3" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=2.3" defer></script>
+    <script src="js/svg/GoogleIconNames.js?v=2.4"></script>
+    <script src="js/svg/GoogleIconHelper.js?v=2.4"></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.4" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.4" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=2.4" defer></script>
 
-    <script src="js/Settings.js?v=2.3" defer></script>
-    <script src="js/CanvasManager.js?v=2.3" defer></script>
-    <script src="js/util/FabricUtil.js?v=2.3" defer></script>
-    <script src="js/Shortcut.js?v=2.3" defer></script>
-    <script src="js/PanelManager.js?v=2.3" defer></script>
+    <script src="js/Settings.js?v=2.4" defer></script>
+    <script src="js/CanvasManager.js?v=2.4" defer></script>
+    <script src="js/util/FabricUtil.js?v=2.4" defer></script>
+    <script src="js/Shortcut.js?v=2.4" defer></script>
+    <script src="js/PanelManager.js?v=2.4" defer></script>
 
-    <script src="js/Toast.js?v=2.3" defer></script>
+    <script src="js/Toast.js?v=2.4" defer></script>
 
-    <script src="js/FloatingWindowManagement.js?v=2.3" defer></script>
+    <script src="js/FloatingWindowManagement.js?v=2.4" defer></script>
 
-    <script src="js/PromptManager.js?v=2.3" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=2.3" defer></script>
-    <script src="js/LayerManagement.js?v=2.3" defer></script>
-    <script src="js/CommonControleManagement.js?v=2.3" defer></script>
-    <script src="js/ImageTransformation.js?v=2.3" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=2.3" defer></script>
-    <script src="js/Sidebar.js?v=2.3" defer></script>
-    <script src="js/TextEffect.js?v=2.3" defer></script>
-    <script src="js/VerticalText.js?v=2.3" defer></script>
-    <script src="js/ImageControleManager.js?v=2.3" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=2.3" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=2.3" defer></script>
-    <script src="js/ProjectManagement.js?v=2.3" defer></script>
-    <script src="js/ImageDownload.js?v=2.3" defer></script>
-    <script src="js/Anime.js?v=2.3" defer></script>
-    <script src="js/Tools.js?v=2.3" defer></script>
-    <script src="js/InfomationControle.js?v=2.3" defer></script>
-    <script src="js/effect/glfxControle.js?v=2.3" defer></script>
-    <script src="js/i18next.js?v=2.3" defer></script>
+    <script src="js/PromptManager.js?v=2.4" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=2.4" defer></script>
+    <script src="js/LayerManagement.js?v=2.4" defer></script>
+    <script src="js/CommonControleManagement.js?v=2.4" defer></script>
+    <script src="js/ImageTransformation.js?v=2.4" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=2.4" defer></script>
+    <script src="js/Sidebar.js?v=2.4" defer></script>
+    <script src="js/TextEffect.js?v=2.4" defer></script>
+    <script src="js/VerticalText.js?v=2.4" defer></script>
+    <script src="js/ImageControleManager.js?v=2.4" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=2.4" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=2.4" defer></script>
+    <script src="js/ProjectManagement.js?v=2.4" defer></script>
+    <script src="js/ImageDownload.js?v=2.4" defer></script>
+    <script src="js/Anime.js?v=2.4" defer></script>
+    <script src="js/Tools.js?v=2.4" defer></script>
+    <script src="js/InfomationControle.js?v=2.4" defer></script>
+    <script src="js/effect/glfxControle.js?v=2.4" defer></script>
+    <script src="js/i18next.js?v=2.4" defer></script>
 
-    <script src="js/Knife.js?v=2.3" defer></script>
-    <!-- <script src="js/effect/roughHelper.js?v=2.3" defer></script> -->
-    <script src="js/event/FabricManagement.js?v=2.3" defer></script>
-    <script src="js/ui/modeChange.js?v=2.3" defer></script>
+    <script src="js/Knife.js?v=2.4" defer></script>
+    <!-- <script src="js/effect/roughHelper.js?v=2.4" defer></script> -->
+    <script src="js/event/FabricManagement.js?v=2.4" defer></script>
+    <script src="js/ui/modeChange.js?v=2.4" defer></script>
 
 </body>
 

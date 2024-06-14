@@ -272,7 +272,6 @@ function executeWithConfirmation(message, callback) {
   }
 
   function handleCancel() {
-      //console.log("handleCancel");
       confirmModal.hide();
       cleanup();
   }
@@ -305,6 +304,3 @@ function svgDownload(filename, content) {
   element.click();
   document.body.removeChild(element);
 }
-
-
-

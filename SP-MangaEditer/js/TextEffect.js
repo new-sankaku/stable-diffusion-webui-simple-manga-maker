@@ -1,7 +1,5 @@
 
-var neonIntensity = parseFloat(
-  document.getElementById("neonIntensitySlider").value
-);
+var neonIntensity = 2;
 var isNeonEnabled = false;
 
 
@@ -102,45 +100,6 @@ function applyInnerShadow() {
 }
 
 
-function applyNeonJitterEffect() {
-  const activeObject = canvas.getActiveObject();
-
-  if (isVerticalText(activeObject)) {
-    const jitterAmount = 5; // ジッターの量
-    const glowColors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3']; // 虹色の配列
-
-    glowColors.forEach((color, index) => {
-      // ジッターエフェクトのためのランダムオフセット
-      const jitterX = (Math.random() - 0.5) * jitterAmount;
-      const jitterY = (Math.random() - 0.5) * jitterAmount;
-
-      const shadow = new fabric.Text(activeObject.text, {
-        left: activeObject.left + jitterX,
-        top: activeObject.top + jitterY,
-        fontSize: activeObject.fontSize,
-        fontFamily: activeObject.fontFamily,
-        fill: color,
-        // グローエフェクトのための設定
-        shadow: new fabric.Shadow({
-          color: color,
-          blur: 10, // グローの強さ
-          offsetX: 0,
-          offsetY: 0
-        })
-      });
-
-      // ブレンドモードを設定
-      shadow.globalCompositeOperation = 'lighter';
-
-      // テキストの影をキャンバスに追加
-      canvas.add(shadow);
-      shadow.moveTo(activeObject.get('top') - 1 - index); // 影をオブジェクトの下層に移動
-    });
-
-    canvas.renderAll(); // Canvasを再描画
-  }
-}
-
 function drawNeonJitterEffect(textObject) {
   const activeObject = canvas.getActiveObject();
   if (isText(activeObject)) {
@@ -180,21 +139,6 @@ function drawNeonJitterEffect(textObject) {
 }
 
 
-function applyZebraReflectionEffect() {
-  const activeObject = canvas.getActiveObject();
-  if (isText(activeObject)) {
-    activeObject.clone(function (clonedText) {
-      clonedText.set({
-        top: activeObject.top + activeObject.height + 10,
-        scaleX: 1,
-        scaleY: -1,
-        fill: "rgba(255, 255, 255, 0.5)",
-      });
-      canvas.add(clonedText);
-    });
-  }
-}
-
 
 function applyInnerShadow() {
   const activeObject = canvas.getActiveObject();
@@ -208,76 +152,6 @@ function applyInnerShadow() {
       },
     });
     canvas.renderAll();
-  }
-}
-
-function applySpaceAgeEffect() {
-  const activeObject = canvas.getActiveObject();
-
-  if (isText(activeObject)) {
-    const offset = 10; 
-    const alphaDecrement = 0.1; 
-    let currentAlpha = 1.0;
-
-
-    for (let i = 0; i < offset; i++) {
-      currentAlpha -= alphaDecrement;
-
-      const shadow = new fabric.Text(activeObject.text, {
-        left: activeObject.left - i,
-        top: activeObject.top - i,
-        fontSize: activeObject.fontSize,
-        fontFamily: activeObject.fontFamily,
-        fill: 'rgba(0, 0, 0, ' + currentAlpha + ')'
-      });
-
-      canvas.add(shadow);
-      shadow.moveTo(activeObject.get('top') - 1);
-    }
-    canvas.renderAll();
-  }
-}
-
-
-function applySpaceAgeEffect2() {
-  const activeObject = canvas.getActiveObject();
-  if (isText(activeObject)) {
-    const text = activeObject.text;
-    let x = activeObject.left;
-    let y = activeObject.top;
-    canvas.remove(activeObject);
-    for (let i = 0; i < 360; i += 15) {
-      const fabricText = new fabric.Text(text, {
-        left: x,
-        top: y,
-        fontSize: 48,
-        fontFamily: "Arial",
-        fill: `hsl(${i}, 100%, 50%)`,
-      });
-      canvas.add(fabricText);
-      x += 1;
-      y += 2;
-    }
-  }
-}
-
-function applyGeneratorBasedEffect() {
-  const activeObject = canvas.getActiveObject();
-  if (isText(activeObject)) {
-    const text = activeObject.text;
-    let x = activeObject.left;
-    let y = activeObject.top;
-    canvas.remove(activeObject);
-    for (let i = 0; i < 10; i++) {
-      const fabricText = new fabric.Text(text, {
-        left: x + Math.random() * 10 - 5,
-        top: y + Math.random() * 10 - 5,
-        fontSize: 48,
-        fontFamily: "Arial",
-        fill: `rgba(255, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`,
-      });
-      canvas.add(fabricText);
-    }
   }
 }
 

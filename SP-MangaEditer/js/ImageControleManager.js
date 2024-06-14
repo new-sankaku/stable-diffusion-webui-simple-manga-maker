@@ -96,28 +96,6 @@ function imageControleTogglePanel(panelId) {
   }
 }
 
-
-
-
-// <!-- addGlowButton -> addGlowEffectCheckBox -->
-// <div class="control-item">
-//     <input type="checkbox" id="addGlowEffectCheckBox">
-//     <label data-i18n="grayscale">
-//         Outlone Glow
-//     </label>
-// </div>
-// <div class="control-row">
-//     <label data-i18n="glowOutLineSize">Size</label>
-//     <input type="range" id="glowOutLineSlider" min="0" max="100" value="20">
-//     <span id=glowOutLineValue">20</span>
-// </div>
-// <div class="control-row">
-//     <label for="glowOutLineColorPicker" data-i18n="glowOutLineColor">Color </label>
-//     <input type="color" id="glowOutLineColorPicker" value="#FFFFFF">
-// </div>
-
-
-
 document.getElementById('addGlowEffectCheckBox').addEventListener('change', function () {
 
   const selectedObject = canvas.getActiveObject();

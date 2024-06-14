@@ -11,9 +11,7 @@ fabric.Object.prototype.toObject = (function (toObject) {
   };
 })(fabric.Object.prototype.toObject);
 
-
 function isSave(){
-    //console.log( "isSaveHistory ", isSaveHistory );
     return isSaveHistory;
 }
 function notSave(){
@@ -31,23 +29,18 @@ function setSave(activeObject){
 
 
 function isSaveObject(activeObject){
-    // console.log( "activeObject.saveHistory", activeObject, activeObject.saveHistory );
     if( activeObject ){
         if( activeObject.saveHistory == true ){
-            // console.log("isSaveObject true 1");
             return true;
         }
         if( activeObject.saveHistory == false ){
-            // console.log("isSaveObject false 2");
             return false;
         }
         if( activeObject.target === undefined ){
-            // console.log("isSaveObject true 3");
             return true;
         }
 
         if( activeObject.target.saveHistory === undefined ){
-            // console.log("isSaveObject true 4");
             return true;
         }
         console.log("isSaveObject false 5");
@@ -63,33 +56,26 @@ function isNotSaveObject(activeObject){
 }
 
 function changeDoNotSaveHistory(){
-    //console.log( "changeDoNotSaveHistory isSaveHistory = false" );
     isSaveHistory = false;
 }
 
 function changeDoSaveHistory(){
-    //console.log( "changeDoSaveHistory isSaveHistory = true" );
     isSaveHistory = true;
 }
 
 function saveStateByListener(event, eventType) {
 
     if(!event){
-        //console.log( "saveStateByListener not save0 if(!event){" );
         return;
     }
 
     if (notSave()) {
-        //console.log( "saveStateByListener not save1" );
         return;
     }
 
     if( isNotSaveObject(event) ){
-        //console.log( "saveStateByListener not save2" );
         return;
     }
-
-    //console.log( "saveStateByListener save" );
     saveState();
 }
 
@@ -137,10 +123,6 @@ function restoreImage(json) {
 
 
 function saveState() {
-
-    //console.log("saveState()");
-
-
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }

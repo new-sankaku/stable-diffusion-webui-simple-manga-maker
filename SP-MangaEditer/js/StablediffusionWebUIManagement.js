@@ -280,9 +280,7 @@ async function sdwebui_fetchText2Image(layer) {
 }
 
 async function sdwebui_fetchImage2Image(layer) {
-  const scaleFactor = 2; // 2倍のスケール
-
-  // オフスクリーンCanvasを作成
+  const scaleFactor = 2;
   const objWidth = layer.width * layer.scaleX;
   const objHeight = layer.height * layer.scaleY;
   const offscreenCanvas = document.createElement('canvas');
@@ -290,30 +288,22 @@ async function sdwebui_fetchImage2Image(layer) {
   offscreenCanvas.height = objHeight * scaleFactor;
   const offscreenCtx = offscreenCanvas.getContext('2d');
 
-  // ClipPathを一時的に解除
   const originalClipPath = layer.clipPath;
   layer.clipPath = null;
 
-  // 背景を白にする（透明部分を白くするため）
   offscreenCtx.fillStyle = 'white';
   offscreenCtx.fillRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-
-  // 元のスケールと位置を考慮してレイヤーをオフスクリーンCanvasに描画
   offscreenCtx.scale(scaleFactor, scaleFactor);
   offscreenCtx.translate(-layer.left, -layer.top);
   layer.render(offscreenCtx);
 
-  // ClipPathを元に戻す
   layer.clipPath = originalClipPath;
 
-  // 完全なPNGとして出力
   const imageBase64 = offscreenCanvas.toDataURL('image/png');
 
   var requestData = baseRequestData(layer);
   requestData.init_images = [imageBase64];
   requestData.denoising_strength = layer.img2img_denoising_strength;
-
-  // console.log("requestData", requestData);
 
   try {
       const response = await fetch(StableDiffusionWebUI_API_I2I, {
@@ -326,9 +316,6 @@ async function sdwebui_fetchImage2Image(layer) {
       });
       const data = await response.json();
       
-      // // 画像をダウンロードする処理
-      // downloadImage(imageBase64);
-
       return data;
   } catch (error) {
       createToast("Text2Image Error.", "check SD WebUI!");
@@ -382,9 +369,9 @@ async function StableDiffusionWebUI_ProcessQueue(layer, spinnerId, generateFunct
       img.tempPrompt = infoObject.prompt;
       img.tempNegativePrompt = infoObject.negative_prompt;
 
-      console.log("tempSeed",           layer.tempSeed);
-      console.log("tempPrompt",         img.tempPrompt);
-      console.log("tempNegativePrompt", img.tempNegativePrompt);
+      // console.log("tempSeed",           layer.tempSeed);
+      // console.log("tempPrompt",         img.tempPrompt);
+      // console.log("tempNegativePrompt", img.tempNegativePrompt);
 
     } else {
       createToast("generate error", "");
