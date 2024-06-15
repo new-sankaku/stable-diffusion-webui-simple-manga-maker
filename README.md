@@ -40,7 +40,7 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 </div>
 
 ## Features
-- **Multiple languages**: English, Japanese, Chinese, French, Korean
+- **Multiple languages**: English, Japanese, Korean, French, Chinese, Russian, Spanish, Portuguese
 - **Page Presets**: Preset comic panel layouts. 29 vertical, 16 horizontal.
 - **Panels**: Create and customize panels. Shape, color, line width, etc.
 - **Speech Bubbles**: More than 40 different speech bubble styles, each with customizable background color, line color, and transparency settings.
