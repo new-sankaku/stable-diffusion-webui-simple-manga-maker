@@ -120,7 +120,7 @@ function updateLayerPanel() {
       var isMatchingLayer = layers.some(layerWithGUIDs => layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid));
       if (isMatchingLayer) {
         layerDiv.style.border = 'none';
-        layerDiv.style.borderLeft    = getCssValue('--boader-color-3px-solid-C');
+        layerDiv.style.borderLeft    = getCssValue('--boader-color-2px-solid-C');
         layerDiv.style.borderBottom  = getCssValue('--boader-color-1px-solid-D');
         layerDiv.style.marginLeft = "10px";
         layerDiv.style.paddingLeft = "5px";
