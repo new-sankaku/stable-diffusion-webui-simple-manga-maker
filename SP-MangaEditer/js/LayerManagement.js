@@ -86,9 +86,8 @@ function updateLayerPanel() {
         runButton.onclick = function (e) {
           e.stopPropagation();
           var areaHeader = document.querySelector('#layer-panel .area-header');
-          var spinner = document.createElement('span');
-          spinner.id = 'spinner-' + index;
-          spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
+
+          var spinner = createSpinner(index);
           areaHeader.appendChild(spinner);
 
           sdWebUI_t2IProcessQueue(layer, spinner.id);
@@ -127,9 +126,8 @@ function updateLayerPanel() {
         runButton.onclick = function (e) {
           e.stopPropagation();
           var areaHeader = document.querySelector('#layer-panel .area-header');
-          var spinner = document.createElement('span');
-          spinner.id = 'spinner-' + index;
-          spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
+
+          var spinner = createSpinner(index);
           areaHeader.appendChild(spinner);
 
 
@@ -157,8 +155,32 @@ function updateLayerPanel() {
           }
         };
 
+        var clipButton = document.createElement("button");
+        var deepDooruButton = document.createElement("button");
+        clipButton.innerHTML = '📎';
+        deepDooruButton.innerHTML = '📦';
+
+        clipButton.onclick = function (e) {
+          e.stopPropagation();
+          var areaHeader = document.querySelector('#layer-panel .area-header');
+          var spinner = createSpinnerSuccess(index);
+          areaHeader.appendChild(spinner);
+          sdWebUI_Interrogate(layer, "clip", spinner.id);
+          index++;
+        };
+        deepDooruButton.onclick = function (e) {
+          e.stopPropagation();
+          var areaHeader = document.querySelector('#layer-panel .area-header');
+          var spinner = createSpinnerSuccess(index);
+          areaHeader.appendChild(spinner);
+          sdWebUI_Interrogate(layer, "deepdanbooru", spinner.id);
+          index++;
+        };
+
         buttonsDiv.appendChild(runButton);
         buttonsDiv.appendChild(promptButton);
+        buttonsDiv.appendChild(clipButton);
+        buttonsDiv.appendChild(deepDooruButton);
       }
 
       buttonsDiv.appendChild(deleteButton);

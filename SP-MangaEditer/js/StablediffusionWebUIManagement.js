@@ -29,6 +29,7 @@ var sdWebUI_API_T2I = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/t
 var sdWebUI_API_I2I = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/img2img'
 var sdWebUI_API_options = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/options'
 var sdWebUI_API_samplers = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
+var sdWebUI_API_interrogate = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/interrogate'
 
 
 function sdWebUI_reBuild_URL() {
@@ -41,6 +42,7 @@ function sdWebUI_reBuild_URL() {
   sdWebUI_API_I2I = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/img2img'
   sdWebUI_API_options = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/options'
   sdWebUI_API_samplers = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
+  sdWebUI_API_interrogate = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/interrogate'
 }
 
 async function sendModelToServer() {
@@ -246,13 +248,9 @@ function baseRequestData(layer) {
 
   return requestData;
 }
-
-
-
-async function sdwebui_fetchText2Image(layer) {
-  var requestData = baseRequestData(layer);
+async function fetchImageData(url, requestData) {
   try {
-    const response = await fetch(sdWebUI_API_T2I, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -260,57 +258,42 @@ async function sdwebui_fetchText2Image(layer) {
       },
       body: JSON.stringify(requestData)
     });
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    createToast("Text2Image Error.", "check SD WebUI!")
+    createToast("Fetch Error.", "check SD WebUI!");
+    return null;
   }
+}
+
+async function sdwebui_fetchText2Image(layer) {
+  return fetchImageData(sdWebUI_API_T2I, baseRequestData(layer));
 }
 
 async function sdwebui_fetchImage2Image(layer) {
   const scaleFactor = 2;
-  const objWidth = layer.width * layer.scaleX;
-  const objHeight = layer.height * layer.scaleY;
+  const { width, height, scaleX, scaleY, clipPath, left, top } = layer;
   const offscreenCanvas = document.createElement('canvas');
-  offscreenCanvas.width = objWidth * scaleFactor;
-  offscreenCanvas.height = objHeight * scaleFactor;
+  offscreenCanvas.width = width * scaleX * scaleFactor;
+  offscreenCanvas.height = height * scaleY * scaleFactor;
   const offscreenCtx = offscreenCanvas.getContext('2d');
 
-  const originalClipPath = layer.clipPath;
   layer.clipPath = null;
-
   offscreenCtx.fillStyle = 'white';
   offscreenCtx.fillRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
   offscreenCtx.scale(scaleFactor, scaleFactor);
-  offscreenCtx.translate(-layer.left, -layer.top);
+  offscreenCtx.translate(-left, -top);
   layer.render(offscreenCtx);
+  layer.clipPath = clipPath;
 
-  layer.clipPath = originalClipPath;
+  const requestData = {
+    ...baseRequestData(layer),
+    init_images: [offscreenCanvas.toDataURL('image/png')],
+    denoising_strength: layer.img2img_denoising_strength
+  };
 
-  const imageBase64 = offscreenCanvas.toDataURL('image/png');
-
-  var requestData = baseRequestData(layer);
-  requestData.init_images = [imageBase64];
-  requestData.denoising_strength = layer.img2img_denoising_strength;
-
-  try {
-    const response = await fetch(sdWebUI_API_I2I, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
-      body: JSON.stringify(requestData)
-    });
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    createToast("Text2Image Error.", "check SD WebUI!");
-  }
+  return fetchImageData(sdWebUI_API_I2I, requestData);
 }
 
-// 汎用的な関数を定義
 async function sdwebui_generateImage(layer, fetchFunction) {
   const responseData = await fetchFunction(layer);
   if (!responseData) return null;
@@ -327,34 +310,15 @@ async function sdwebui_generateImage(layer, fetchFunction) {
   });
 }
 
-// Image2Image用の関数
-async function sdwebui_generateI2I(layer) {
-  return sdwebui_generateImage(layer, sdwebui_fetchImage2Image);
-}
-// Text2Image用の関数
-async function sdwebui_generateT2I(layer) {
-  return sdwebui_generateImage(layer, sdwebui_fetchText2Image);
-}
-
-async function sdWebUI_ProcessQueue(layer, spinnerId, generateFunction) {
-  return generateFunction(layer);
-}
-
-
-async function sdWebUI_t2IProcessQueue(layer, spinnerId) {
-  sdQueue.add(async () => {
-      const result = await sdWebUI_ProcessQueue(layer, spinnerId, sdwebui_generateT2I);
-      return result;
-    })
-    .then(async (result) => {
-      const { img, responseData } = result;
+async function handleProcessQueue(layer, spinnerId, fetchFunction, imageName) {
+  sdQueue.add(async () => sdwebui_generateImage(layer, fetchFunction))
+    .then(async ({ img, responseData }) => {
       if (img) {
         const webpImg = await img2webp(img);
-
-        webpImg.name = "t2i";
+        webpImg.name = imageName;
         setImage2ImageInitPrompt(webpImg); 
-        const center = calculateCenter(layer);
-        putImageInFrame(webpImg, center.centerX, center.centerY);
+        const { centerX, centerY } = calculateCenter(layer);
+        putImageInFrame(webpImg, centerX, centerY);
 
         const infoObject = JSON.parse(responseData.info);
         layer.tempSeed = infoObject.seed;
@@ -368,37 +332,58 @@ async function sdWebUI_t2IProcessQueue(layer, spinnerId) {
       createToast("Generation Error.", "check SD WebUI!");
       console.log("error:", error);
     })
-    .finally(() => {
-      removeSpinner(spinnerId);
-    });
+    .finally(() => removeSpinner(spinnerId));
 }
 
 
+async function sdWebUI_t2IProcessQueue(layer, spinnerId) {
+  handleProcessQueue(layer, spinnerId, sdwebui_fetchText2Image, "t2i");
+}
+
 async function sdWebUI_I2IProcessQueue(layer, spinnerId) {
+  handleProcessQueue(layer, spinnerId, sdwebui_fetchImage2Image, "i2i");
+}
+
+
+async function sdWebUI_Interrogate(layer, model, spinnerId) {
   sdQueue.add(async () => {
-    const result = await sdWebUI_ProcessQueue(layer, spinnerId, sdwebui_generateI2I);
+    let base64Image = imageObject2Base64Image(layer);
+    const requestBody = {
+      image: base64Image,
+      model: model
+    };
+
+    console.log("sdWebUI_Interrogate", "fetch start");
+    const response = await fetch(sdWebUI_API_interrogate, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    });
+    console.log("sdWebUI_Interrogate", "fetch end");
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      createToast("Interrogate error", errorText);
+      return null;
+    }
+
+    const result = await response.json();
     return result;
   })
   .then(async (result) => {
-    const { img, responseData } = result;
-    if (img) {
-      const webpImg = await img2webp(img);
-
-      webpImg.name = "i2i";
-      setImage2ImageInitPrompt(webpImg);
-      const center = calculateCenter(layer);
-      putImageInFrame(webpImg, center.centerX, center.centerY);
-
-      const infoObject = JSON.parse(responseData.info);
-      layer.tempSeed = infoObject.seed;
-      webpImg.tempPrompt = infoObject.prompt;
-      webpImg.tempNegativePrompt = infoObject.negative_prompt;
-    } else {
-      createToast("generate error", "");
-    }
+    if (result) {
+      createToast("Interrogate Success. " + model, result.caption);
+      if( layer.text2img_prompt ){
+        layer.text2img_prompt = layer.text2img_prompt + ", " +  result.caption;
+      }else{
+        layer.text2img_prompt = result.caption;
+      }
+    } 
   })
   .catch(error => {
-    createToast("Generation Error.", "check SD WebUI!");
+    createToast("Interrogate Error.", "check SD WebUI!");
     console.log("error:", error);
   })
   .finally(() => {
@@ -406,9 +391,24 @@ async function sdWebUI_I2IProcessQueue(layer, spinnerId) {
   });
 }
 
+
+
+
 function removeSpinner(spinnerId) {
   var removeSpinner = document.getElementById(spinnerId);
   if (removeSpinner) {
     removeSpinner.remove();
   }
+}
+function createSpinner(index) {
+  var spinner = document.createElement('span');
+  spinner.id = 'spinner-' + index;
+  spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
+  return spinner;
+}
+function createSpinnerSuccess(index) {
+  var spinner = document.createElement('span');
+  spinner.id = 'spinner-' + index;
+  spinner.className = 'spinner-border text-success ms-1 spinner-border-sm';
+  return spinner;
 }

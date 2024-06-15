@@ -1,66 +1,60 @@
-
-
 function createToast(title, messages) {
-    const container = document.getElementById('toastContainer');
-    const toastId = `toast-${Date.now()}`;
+    const container = document.getElementById('sp-manga-toastContainer');
+    if (!container) {
+        console.error('Toast container not found');
+        return;
+    }
 
-    // トーストのHTML要素を生成
+    const toastId = `sp-manga-toast-${Date.now()}`;
     const toast = document.createElement('div');
-    toast.className = 'toast';
+    toast.className = 'sp-manga-toast';
     toast.id = toastId;
-    toast.style.height = '80px'; // 初期高さを設定
+    toast.style.height = 'auto';
     toast.innerHTML = `
-        <div class="toast-header">
+        <div class="sp-manga-toast-header">
             <strong class="me-auto">${title}</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body">
-            <div id="toastMessageContainer"></div>
+        <div class="sp-manga-toast-body">
+            <div id="sp-manga-toastMessageContainer"></div>
             <div class="progress" style="height: 5px;">
-                <div class="progress-bar" role="progressbar" style="width: 100%;"></div>
+                <div class="sp-manga-progress-bar" role="progressbar" style="width: 100%;"></div>
             </div>
         </div>
     `;
 
-    // トースト要素をコンテナに追加
     container.appendChild(toast);
 
-    // トーストを初期化して表示
     const bsToast = new bootstrap.Toast(toast, {
         autohide: false
     });
     bsToast.show();
 
-    // メッセージを1行ずつ描画
-    const messageContainer = toast.querySelector('#toastMessageContainer');
-    const lineHeight = 24; // 各行の高さを設定
+    const messageContainer = toast.querySelector('#sp-manga-toastMessageContainer');
+    const lineHeight = 24;
 
     if (typeof messages === 'string') {
-        // messages が文字列の場合
         const messageLine = document.createElement('div');
-        messageLine.className = 'line';
+        messageLine.className = 'sp-manga-line';
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
         startProgressBar(toast);
     } else if (Array.isArray(messages)) {
-        // messages が配列の場合
         let messageIndex = 0;
-        const messageInterval = 300; // ミリ秒
+        const messageInterval = 300;
 
         const showNextMessage = () => {
             if (messageIndex < messages.length) {
                 const messageLine = document.createElement('div');
-                messageLine.className = 'line';
-                messageLine.style.animationDelay = '0s'; // アニメーションディレイを0に設定
+                messageLine.className = 'sp-manga-line';
+                messageLine.style.animationDelay = '0s';
                 messageLine.textContent = messages[messageIndex];
                 messageContainer.appendChild(messageLine);
                 messageIndex++;
-                // トーストの高さを増加させ、同時にメッセージを描画
-                toast.style.height = `${80 + (messageIndex * lineHeight)}px`;
+                toast.style.height = `auto`;
                 setTimeout(showNextMessage, messageInterval);
             } else {
-                // 全てのメッセージが表示された後にプログレスバーを開始
                 startProgressBar(toast);
             }
         };
@@ -68,7 +62,7 @@ function createToast(title, messages) {
         showNextMessage();
     } else {
         const messageLine = document.createElement('div');
-        messageLine.className = 'line';
+        messageLine.className = 'sp-manga-line';
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
@@ -76,15 +70,14 @@ function createToast(title, messages) {
     }
 
     toast.addEventListener('hidden.bs.toast', function () {
-        toast.style.animation = 'fade-out 1s forwards';
+        toast.style.animation = 'sp-manga-fade-out 1s forwards';
     });
 }
 
-
 function startProgressBar(toast) {
-    const progressBar = toast.querySelector('.progress-bar');
-    const interval = 50; // ミリ秒
-    const totalDuration = 3500; // ミリ秒
+    const progressBar = toast.querySelector('.sp-manga-progress-bar');
+    const interval = 50;
+    const totalDuration = 3500;
     let width = 100;
     const timer = setInterval(() => {
         width -= (interval / totalDuration * 100);

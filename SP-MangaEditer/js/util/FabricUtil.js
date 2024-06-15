@@ -153,3 +153,31 @@ function copy(srcObject, object) {
   }
   object.initial          = srcObject.initial          ? srcObject.initial          : undefined;
 }
+
+
+function imageObject2Base64Image(object) {
+  imageObject2Base64Image(object, 1.0);
+}
+
+function imageObject2Base64Image(object, scale) {
+  try {
+    const src = object.getSrc();
+    if (!src) {
+      throw new Error("Image source is not defined.");
+    }
+
+    const imageFormat = src.split('.').pop().toLowerCase();
+    const supportedFormats = ['png', 'jpeg', 'jpg', 'webp'];
+    const format = supportedFormats.includes(imageFormat) ? imageFormat : 'png';
+
+    const base64Image = object.toDataURL({
+      format: format,
+      quality: scale
+    });
+
+    return base64Image;
+  } catch (error) {
+    console.error("Error converting image object to Base64:", error);
+    return null;
+  }
+}
