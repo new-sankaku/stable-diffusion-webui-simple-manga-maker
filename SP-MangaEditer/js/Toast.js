@@ -71,6 +71,7 @@ function createToast(title, messages) {
 
     toast.addEventListener('hidden.bs.toast', function () {
         toast.style.animation = 'sp-manga-fade-out 1s forwards';
+        toast.remove();
     });
 }
 

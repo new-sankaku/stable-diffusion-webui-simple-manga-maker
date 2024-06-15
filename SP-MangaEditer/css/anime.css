@@ -50,6 +50,8 @@ section {
   background-color: #333;
   color: #fff;
   border-bottom: 1px solid #6200ea;
+  pointer-events: auto;
+
 }
 
 .sp-manga-progress-bar {
