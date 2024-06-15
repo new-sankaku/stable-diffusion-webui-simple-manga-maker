@@ -15,6 +15,7 @@
   transition: var(--transition-bg-color);
 }
 
+
 .layer-item:hover, .layer-item.active {
   background-color: var(--background-color-D);
 }

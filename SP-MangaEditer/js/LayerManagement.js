@@ -1,193 +1,109 @@
+
+
 function updateLayerPanel() {
-  var layers = canvas.getObjects();
+  var layers = canvas.getObjects().slice().reverse();
   var layerContent = document.getElementById("layer-content");
   layerContent.innerHTML = "";
+  var guidMap = createGUIDMap(layers);
+  var processedLayersFirst  = new Set();
+  var processedLayersSecond = new Set();
 
-  layers.slice().reverse().forEach(function (layer, index) {
+  // 最終的なレイヤー順序を保持する配列
+  var finalLayerOrder = [];
+
+  layers.forEach(layer => {
+    if (layer.guids && layer.guids.length > 0) {
+    }else{
+      layer.guids = [];
+    }
+  });
+
+  // guidsを持つレイヤーを処理
+  layers.forEach(layer => {
+    if (layer.isPanel) {
+      processedLayersFirst.add(layer);
+      layer.guids.forEach(guid => {
+        var matchingLayer = guidMap.get(guid);
+        if (matchingLayer) {
+          processedLayersFirst.add(matchingLayer);
+        }
+      });
+    }
+  });
+
+  // guidsを持つレイヤーを処理
+  layers.forEach(layer => {
+    if (layer.isPanel) {
+      finalLayerOrder.push(layer);
+      processedLayersSecond.add(layer);
+
+      var guidsNow = layer.guids;
+      var guidsTemp = [];
+      layers.forEach(layer => {
+        var nowGuid = layer.guid;
+        if( guidsNow.includes(nowGuid) ){
+          guidsTemp.push(nowGuid);
+        }
+      });
+
+      guidsTemp.forEach(guid => {
+        var matchingLayer = guidMap.get(guid);
+        if (matchingLayer) {
+          finalLayerOrder.push(matchingLayer);
+          processedLayersSecond.add(matchingLayer);
+        }
+      });
+    }else{
+      if (!processedLayersFirst.has(layer)) {
+        finalLayerOrder.push(layer);
+      }
+    }
+  });
+
+  // レイヤーパネルの更新
+  finalLayerOrder.forEach((layer, index) => {
     if (!layer.excludeFromLayerPanel) {
-      var layerDiv = document.createElement("div");
-      var previewDiv = document.createElement("div");
-      var detailsDiv = document.createElement("div");
-      var nameTextArea = document.createElement("input");
-      var buttonsDiv = document.createElement("div");
-      var deleteButton = document.createElement("button");
+      var layerDiv     = Object.assign(document.createElement("div"),   { className: "layer-item" });
+      var previewDiv   = Object.assign(document.createElement("div"),   { className: "layer-preview" });
+      var detailsDiv   = Object.assign(document.createElement("div"),   { className: "layer-details" });
+      var nameTextArea = Object.assign(document.createElement("input"), { className: "layer-name" });
+      var buttonsDiv   = Object.assign(document.createElement("div"),   { className: "layer-buttons" });
 
-      layerDiv.className = "layer-item";
-      previewDiv.className = "layer-preview";
-      detailsDiv.className = "layer-details";
-      nameTextArea.className = "layer-name";
-      buttonsDiv.className = "layer-buttons";
-      
       if (isLayerPreview(layer)) {
-        putPreviewImage(layer, previewDiv);
-      
+        createPreviewImage(layer, previewDiv);
       } else if (isHorizontalText(layer)) {
         var fullText = layer.text;
         nameTextArea.value = fullText.substring(0, 20);
-      
       } else if (isVerticalText(layer)) {
         var fullText = layer.getObjects().map(obj => obj.text).join('');
         nameTextArea.value = fullText.substring(0, 15);
       }
 
-      nameTextArea.value = layer.name || nameTextArea.value || layer.type + `${index + 1}`;
-      layer.name = nameTextArea.value;
-      nameTextArea.rows = 1; 
-      nameTextArea.style.resize = 'none'; 
-      nameTextArea.style.width = '100%';  
-      nameTextArea.style.boxSizing = 'border-box';  
-      nameTextArea.style.border = 'none'; 
-      nameTextArea.style.borderBottom = '1px solid #cccccc';
-      nameTextArea.style.outline = 'none';
+      setNameTextAreaProperties(layer, nameTextArea, index);
 
       if (isText(layer)) {
-        nameTextArea.style.flex = '1'; 
-        nameTextArea.style.marginRight = '5px';
         detailsDiv.style.display = 'flex';
         detailsDiv.style.alignItems = 'center';
       }
 
-      nameTextArea.oninput = function () {
-        layer.name = nameTextArea.value;
-      };
-
-      deleteButton.textContent = "✕";
-      deleteButton.className = "delete-layer-button";
-      deleteButton.onclick = function (e) {
-        e.stopPropagation();
-        removeLayer(layer);
-      };
-
-      var currentModeElement = document.body;
-      var rootStyles = getComputedStyle(currentModeElement);
-
-      var backgroundColorRoot = rootStyles.getPropertyValue('--background-color-B');
-      var borderColorRoot     = rootStyles.getPropertyValue('--boader-color-1px-solid-B');
-      var colorRoot           = rootStyles.getPropertyValue('--text-color-B');
-
-      nameTextArea.style.color       = colorRoot.trim();
-      nameTextArea.style.borderColor = borderColorRoot.trim();
-      nameTextArea.style.background  = backgroundColorRoot.trim();
-
       detailsDiv.appendChild(nameTextArea);
 
       if (layer.isPanel) {
-        var t2iButton = document.createElement("button");
-        t2iButton.innerHTML = '<i class="material-icons">settings</i> T2I';
-        t2iButton.onclick = function (e) {
-          e.stopPropagation();
-          openfloatingWindowItem(layer);
-        };
-        buttonsDiv.appendChild(t2iButton);
-
-        var runButton = document.createElement("button");
-        runButton.id = 'runButton-' + index;
-        runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
-        runButton.onclick = function (e) {
-          e.stopPropagation();
-          var areaHeader = document.querySelector('#layer-panel .area-header');
-
-          var spinner = createSpinner(index);
-          areaHeader.appendChild(spinner);
-
-          sdWebUI_t2IProcessQueue(layer, spinner.id);
-          index++;
-        };
-
-        buttonsDiv.appendChild(runButton);
-
-        var seedButton = document.createElement("button");
-        seedButton.innerHTML = '<i class="material-icons">recycling</i> Seed';
-        seedButton.onclick = function (e) {
-          e.stopPropagation();
-          
-          if( layer.tempSeed ){
-            layer.text2img_seed = layer.tempSeed;
-            createToast("Recycling Seed", layer.text2img_seed);
-          }else{
-            createToast("Nothing Seed", "");
-          }
-        };
-        buttonsDiv.appendChild(seedButton);
+        putT2iButton(buttonsDiv, layer);
+        putRunT2iButton(buttonsDiv, layer, index);
+        putSeedButton(buttonsDiv, layer);
       }
-
       if (layer.type == 'image') {
-        var i2iButton = document.createElement("button");
-        i2iButton.innerHTML = '<i class="material-icons">settings</i> I2I';
-        i2iButton.onclick = function (e) {
-          e.stopPropagation();
-          openImage2ImagefloatingWindowItem(layer);
-        };
-        buttonsDiv.appendChild(i2iButton);
-
-        var runButton = document.createElement("button");
-        runButton.id = 'runButton-' + index;
-        runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
-        runButton.onclick = function (e) {
-          e.stopPropagation();
-          var areaHeader = document.querySelector('#layer-panel .area-header');
-
-          var spinner = createSpinner(index);
-          areaHeader.appendChild(spinner);
-
-
-          sdWebUI_I2IProcessQueue(layer, spinner.id);
-          index++;
-        };
-
-        var promptButton = document.createElement("button");
-        promptButton.innerHTML = '<i class="material-icons">text_snippet</i> Prompt';
-        promptButton.onclick = function (e) {
-          e.stopPropagation();
-
-          if( layer.tempPrompt ){
-            layer.text2img_prompt = layer.tempPrompt;
-            createToast("Apply Prompt", layer.text2img_prompt);
-          }else{
-            createToast("Nothing Prompt", "");
-          }
-
-          if( layer.tempNegativePrompt ){
-            layer.text2img_negativePrompt = layer.tempNegativePrompt;
-            createToast("Apply Negative Prompt", layer.text2img_negativePrompt);
-          }else{
-            createToast("Nothing Negative Prompt", "");
-          }
-        };
-
-        var clipButton = document.createElement("button");
-        var deepDooruButton = document.createElement("button");
-        clipButton.innerHTML = '📎';
-        deepDooruButton.innerHTML = '📦';
-
-        clipButton.onclick = function (e) {
-          e.stopPropagation();
-          var areaHeader = document.querySelector('#layer-panel .area-header');
-          var spinner = createSpinnerSuccess(index);
-          areaHeader.appendChild(spinner);
-          sdWebUI_Interrogate(layer, "clip", spinner.id);
-          index++;
-        };
-        deepDooruButton.onclick = function (e) {
-          e.stopPropagation();
-          var areaHeader = document.querySelector('#layer-panel .area-header');
-          var spinner = createSpinnerSuccess(index);
-          areaHeader.appendChild(spinner);
-          sdWebUI_Interrogate(layer, "deepdanbooru", spinner.id);
-          index++;
-        };
-
-        buttonsDiv.appendChild(runButton);
-        buttonsDiv.appendChild(promptButton);
-        buttonsDiv.appendChild(clipButton);
-        buttonsDiv.appendChild(deepDooruButton);
+        putI2iButton(buttonsDiv, layer);
+        putRunI2iButton(buttonsDiv, layer, index);
+        putPromptButton(buttonsDiv, layer);
+        putInterrogateButtons(buttonsDiv, layer, index);
       }
-
-      buttonsDiv.appendChild(deleteButton);
+      putDeleteButton(buttonsDiv, layer);
 
       layerDiv.setAttribute("data-id", layer.id);
 
-      if ( isLayerPreview(layer) ) {
+      if (isLayerPreview(layer)) {
         layerDiv.appendChild(previewDiv);
       }
 
@@ -201,33 +117,190 @@ function updateLayerPanel() {
         updateControls(layer);
       };
 
+      var isMatchingLayer = layers.some(layerWithGUIDs => layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid));
+      if (isMatchingLayer) {
+        layerDiv.style.border = 'none';
+        layerDiv.style.borderLeft    = getCssValue('--boader-color-3px-solid-C');
+        layerDiv.style.borderBottom  = getCssValue('--boader-color-1px-solid-D');
+        layerDiv.style.marginLeft = "10px";
+        layerDiv.style.paddingLeft = "5px";
+      } else {
+        layerDiv.style.border = 'none';
+          layerDiv.style.borderTop    = getCssValue('--layer-panel-boader-color-1px-solid-B');
+          layerDiv.style.borderBottom = getCssValue('--layer-panel-boader-color-1px-solid-B');
+      }
       layerContent.appendChild(layerDiv);
     }
   });
 }
 
+function setNameTextAreaProperties(layer, nameTextArea, index){
+  nameTextArea.value = layer.name || nameTextArea.value || layer.type + `${index + 1}`;
+  layer.name = nameTextArea.value;
+  nameTextArea.rows = 1;
+  nameTextArea.style.resize = 'none';
+  nameTextArea.style.width = '100%';
+  nameTextArea.style.boxSizing = 'border-box';
+  nameTextArea.style.border = 'none';
+  // nameTextArea.style.borderBottom = '1px solid #cccccc';
+  nameTextArea.style.outline = 'none';
+  nameTextArea.style.color = getCssValue('--text-color-B');
+  nameTextArea.style.borderColor = getCssValue('--boader-color-1px-solid-B');
+  nameTextArea.style.background = getCssValue('--background-color-B');
+  nameTextArea.oninput = function () {
+    layer.name = nameTextArea.value;
+  };
 
-function calculateCenter(layer) {
-  //console.log("calculateCenter:", layer.left, layer.width, layer.top, layer.height );
+  if (isText(layer)) {
+    nameTextArea.style.flex = '1';
+    nameTextArea.style.marginRight = '5px';
+  }
+}
 
-  const centerX = layer.left + (layer.width / 2) * layer.scaleX;
-  const centerY = layer.top + (layer.height / 2) * layer.scaleY;
-  
- return { centerX, centerY };
+function putInterrogateButtons(buttonsDiv, layer, index) {
+  var clipButton = document.createElement("button");
+  var deepDooruButton = document.createElement("button");
+  clipButton.innerHTML = '📎';
+  deepDooruButton.innerHTML = '📦';
+
+  clipButton.onclick = function (e) {
+    e.stopPropagation();
+    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var spinner = createSpinnerSuccess(index);
+    areaHeader.appendChild(spinner);
+    sdWebUI_Interrogate(layer, "clip", spinner.id);
+    index++;
+  };
+  deepDooruButton.onclick = function (e) {
+    e.stopPropagation();
+    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var spinner = createSpinnerSuccess(index);
+    areaHeader.appendChild(spinner);
+    sdWebUI_Interrogate(layer, "deepdanbooru", spinner.id);
+    index++;
+  };
+
+  buttonsDiv.appendChild(clipButton);
+  buttonsDiv.appendChild(deepDooruButton);
+}
+
+function putPromptButton(buttonsDiv, layer) {
+  var promptButton = document.createElement("button");
+  promptButton.innerHTML = '<i class="material-icons">text_snippet</i> Prompt';
+  promptButton.onclick = function (e) {
+    e.stopPropagation();
+    if (layer.tempPrompt) {
+      layer.text2img_prompt = layer.tempPrompt;
+      createToast("Apply Prompt", layer.text2img_prompt);
+    } else {
+      createToast("Nothing Prompt", "");
+    }
+    if (layer.tempNegativePrompt) {
+      layer.text2img_negativePrompt = layer.tempNegativePrompt;
+      createToast("Apply Negative Prompt", layer.text2img_negativePrompt);
+    } else {
+      createToast("Nothing Negative Prompt", "");
+    }
+  };
+  buttonsDiv.appendChild(promptButton);
 }
 
 
-function putPreviewImage(layer, layerDiv) {
-  // console.log("putPreviewImage function called with layer:", layer);
+function putRunI2iButton(buttonsDiv, layer, index) {
+  var runButton = document.createElement("button");
+  runButton.id = 'runButton-' + index;
+  runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
+  runButton.onclick = function (e) {
+    e.stopPropagation();
+    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var spinner = createSpinner(index);
+    areaHeader.appendChild(spinner);
+    sdWebUI_I2IProcessQueue(layer, spinner.id);
+    index++;
+  };
+  buttonsDiv.appendChild(runButton);
+}
+
+
+function putI2iButton(buttonsDiv, layer) {
+  var i2iButton = document.createElement("button");
+  i2iButton.innerHTML = '<i class="material-icons">settings</i> I2I';
+  i2iButton.onclick = function (e) {
+    e.stopPropagation();
+    openImage2ImagefloatingWindowItem(layer);
+  };
+  buttonsDiv.appendChild(i2iButton);
+}
+
+function putDeleteButton(buttonsDiv, layer) {
+  var deleteButton = document.createElement("button");
+  deleteButton.textContent = "✕";
+  deleteButton.className = "delete-layer-button";
+  deleteButton.onclick = function (e) {
+    e.stopPropagation();
+    removeLayer(layer);
+  };
+  buttonsDiv.appendChild(deleteButton);
+}
+
+function putSeedButton(buttonsDiv, layer) {
+  var seedButton = document.createElement("button");
+  seedButton.innerHTML = '<i class="material-icons">recycling</i> Seed';
+  seedButton.onclick = function (e) {
+    e.stopPropagation();
+    if (layer.tempSeed) {
+      layer.text2img_seed = layer.tempSeed;
+      createToast("Recycling Seed", layer.text2img_seed);
+    } else {
+      createToast("Nothing Seed", "");
+    }
+  };
+  buttonsDiv.appendChild(seedButton);
+}
+
+function putRunT2iButton(buttonsDiv, layer, index) {
+  var runButton = document.createElement("button");
+  runButton.id = 'runButton-' + index;
+  runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
+  runButton.onclick = function (e) {
+    e.stopPropagation();
+    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var spinner = createSpinner(index);
+    areaHeader.appendChild(spinner);
+    sdWebUI_t2IProcessQueue(layer, spinner.id);
+    index++;
+  };
+  buttonsDiv.appendChild(runButton);
+}
+
+function putT2iButton(buttonsDiv, layer) {
+  var t2iButton = document.createElement("button");
+  t2iButton.innerHTML = '<i class="material-icons">settings</i> T2I';
+  t2iButton.onclick = function (e) {
+    e.stopPropagation();
+    openfloatingWindowItem(layer);
+  };
+  buttonsDiv.appendChild(t2iButton);
+}
+
+
+function calculateCenter(layer) {
+  const centerX = layer.left + (layer.width / 2) * layer.scaleX;
+  const centerY = layer.top + (layer.height / 2) * layer.scaleY;
+  return { centerX, centerY };
+}
+
+
+function createPreviewImage(layer, layerDiv) {
   var previewDiv = document.createElement("div");
   var canvasSize = 120;
 
   var tempCanvas = document.createElement("canvas");
-  
+
   tempCanvas.width = canvasSize;
   tempCanvas.height = canvasSize;
   var tempCtx = tempCanvas.getContext("2d");
-  tempCtx.fillStyle = "#ffcccc"; 
+  tempCtx.fillStyle = "#ffcccc";
 
   if (isGroup(layer)) {
     var boundingBox = layer.getBoundingRect();
@@ -316,7 +389,7 @@ function removeLayer(layer) {
   if (canvas.getActiveObject() === layer) {
     canvas.discardActiveObject();
     canvas.requestRenderAll();
-  }else{
+  } else {
     canvas.requestRenderAll();
   }
 }
@@ -342,7 +415,7 @@ function highlightActiveLayerByCanvas() {
 
   var reverseIndex = layers.length - 1 - activeIndex;
 
-  layers.forEach(function(layerDiv, index) {
+  layers.forEach(function (layerDiv, index) {
     if (index === reverseIndex) {
       layerDiv.classList.add("active");
     } else {

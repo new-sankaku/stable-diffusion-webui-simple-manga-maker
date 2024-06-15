@@ -1,103 +1,103 @@
 function isPanel(activeObject) {
-  return (activeObject && activeObject.isPanel );
+  return (activeObject && activeObject.isPanel);
 }
 function isPanelType(activeObject) {
-  return (activeObject && ["rect", "circle", "polygon"].includes(activeObject.type) );
+  return (activeObject && ["rect", "circle", "polygon"].includes(activeObject.type));
 }
 
 function isImage(activeObject) {
-  return (activeObject && (activeObject.type === "image") );
+  return (activeObject && (activeObject.type === "image"));
 }
 
-function isText(activeObject){
-  return (activeObject && (activeObject.type === "text" || activeObject.type === "textbox"|| activeObject.type === "verticalText") ) ;
+function isText(activeObject) {
+  return (activeObject && (activeObject.type === "text" || activeObject.type === "textbox" || activeObject.type === "verticalText"));
 }
 
 function isVerticalText(activeObject) {
-  return (activeObject && (activeObject.type === "verticalText") );
+  return (activeObject && (activeObject.type === "verticalText"));
 }
 
 function isHorizontalText(activeObject) {
-  return (activeObject && (activeObject.type === "text" || activeObject.type === "textbox") );
+  return (activeObject && (activeObject.type === "text" || activeObject.type === "textbox"));
 }
 
-function isLine(activeObject){
-  return (activeObject && activeObject.type === 'line') ;
+function isLine(activeObject) {
+  return (activeObject && activeObject.type === 'line');
 }
 
-function isGroup(activeObject){
-  return (activeObject && activeObject.type === 'group') ;
+function isGroup(activeObject) {
+  return (activeObject && activeObject.type === 'group');
 }
 
-function isShapes(activeObject){
-  return (activeObject && ['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) ;
+function isShapes(activeObject) {
+  return (activeObject && ['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type));
 }
 
 function isPutImage(activeObject) {
 
-  if( activeObject.isIcon){
+  if (activeObject.isIcon) {
     return true;
   }
 
-  return (activeObject && ["image", "rect", "circle", "path", "group", "polygon"].includes(activeObject.type) );
+  return (activeObject && ["image", "rect", "circle", "path", "group", "polygon"].includes(activeObject.type));
 }
 
 function isLayerPreview(activeObject) {
-  if( activeObject.isIcon){
+  if (activeObject.isIcon) {
     return true;
   }
-  return (activeObject && ["image", "rect", "circle", "group", "polygon"].includes(activeObject.type) );
+  return (activeObject && ["image", "rect", "circle", "group", "polygon"].includes(activeObject.type));
 }
 
 
 function saveInitialState(obj) {
 
-  if( isImage(obj) && (!obj.initial) ){
+  if (isImage(obj) && (!obj.initial)) {
     setImage2ImageInitPrompt(obj);
   }
 
-  if( isPanel(obj)  && (!obj.initial)  ){
+  if (isPanel(obj) && (!obj.initial)) {
     setText2ImageInitPrompt(obj);
   }
 
   obj.initial = {
-    left:         obj.left,
-    top:          obj.top,
-    scaleX:       obj.scaleX,
-    scaleY:       obj.scaleY,
-    strokeWidth:  obj.strokeWidth,
-    canvasWidth:  canvas.getWidth(),
+    left: obj.left,
+    top: obj.top,
+    scaleX: obj.scaleX,
+    scaleY: obj.scaleY,
+    strokeWidth: obj.strokeWidth,
+    canvasWidth: canvas.getWidth(),
     canvasHeight: canvas.getHeight(),
   };
 
   if (obj.clipPath) {
     obj.clipPath.initial = {
-      left:         obj.clipPath.left,
-      top:          obj.clipPath.top,
-      scaleX:       obj.clipPath.scaleX,
-      scaleY:       obj.clipPath.scaleY,
-      canvasWidth:  canvas.getWidth(),
+      left: obj.clipPath.left,
+      top: obj.clipPath.top,
+      scaleX: obj.clipPath.scaleX,
+      scaleY: obj.clipPath.scaleY,
+      canvasWidth: canvas.getWidth(),
       canvasHeight: canvas.getHeight(),
     };
   }
 }
 
-function setText2ImageInitPrompt(object){
-  object.isPanel                 = text2img_initPrompt.isPanel;
-  object.text2img_prompt         = text2img_initPrompt.text2img_prompt;
+function setText2ImageInitPrompt(object) {
+  object.isPanel = text2img_initPrompt.isPanel;
+  object.text2img_prompt = text2img_initPrompt.text2img_prompt;
   object.text2img_negativePrompt = text2img_initPrompt.text2img_negativePrompt;
-  object.text2img_seed           = text2img_initPrompt.text2img_seed;
-  object.text2img_width          = text2img_initPrompt.text2img_width;
-  object.text2img_height         = text2img_initPrompt.text2img_height;
-  object.text2img_samplingSteps  = text2img_initPrompt.text2img_samplingSteps;
+  object.text2img_seed = text2img_initPrompt.text2img_seed;
+  object.text2img_width = text2img_initPrompt.text2img_width;
+  object.text2img_height = text2img_initPrompt.text2img_height;
+  object.text2img_samplingSteps = text2img_initPrompt.text2img_samplingSteps;
 }
-function setImage2ImageInitPrompt(object){
-  object.text2img_prompt            = img2img_initPrompt.img2img_prompt;
-  object.text2img_negativePrompt    = img2img_initPrompt.img2img_negativePrompt;
-  object.text2img_seed              = img2img_initPrompt.img2img_seed;
-  object.text2img_width             = img2img_initPrompt.img2img_width;
-  object.text2img_height            = img2img_initPrompt.img2img_height;
-  object.text2img_samplingSteps     = img2img_initPrompt.img2img_samplingSteps;
+function setImage2ImageInitPrompt(object) {
+  object.text2img_prompt = img2img_initPrompt.img2img_prompt;
+  object.text2img_negativePrompt = img2img_initPrompt.img2img_negativePrompt;
+  object.text2img_seed = img2img_initPrompt.img2img_seed;
+  object.text2img_width = img2img_initPrompt.img2img_width;
+  object.text2img_height = img2img_initPrompt.img2img_height;
+  object.text2img_samplingSteps = img2img_initPrompt.img2img_samplingSteps;
   object.img2img_denoising_strength = img2img_initPrompt.img2img_denoising_strength;
 }
 
@@ -124,34 +124,34 @@ function deepCopy(obj) {
 }
 
 function copy(srcObject, object) {
-    object.name                       = srcObject.name;
-    object.isPanel                    = srcObject.isPanel;
-    object.text2img_prompt            = srcObject.text2img_prompt;
-    object.text2img_negativePrompt    = srcObject.text2img_negativePrompt;
-    object.text2img_seed              = srcObject.text2img_seed;
-    object.text2img_width             = srcObject.text2img_width;
-    object.text2img_height            = srcObject.text2img_height;
-    object.text2img_samplingSteps     = srcObject.text2img_samplingSteps;
-    object.img2img_prompt             = srcObject.img2img_prompt;
-    object.img2img_negativePrompt     = srcObject.img2img_negativePrompt;
-    object.img2img_seed               = srcObject.img2img_seed;
-    object.img2img_width              = srcObject.img2img_width;
-    object.img2img_height             = srcObject.img2img_height;
-    object.img2img_samplingSteps      = srcObject.img2img_samplingSteps;
-    object.img2img_denoising_strength  = srcObject.img2img_denoising_strength;
-    object.top                         = srcObject.top;
-    object.left                        = srcObject.left;
-    object.scaleX                      = srcObject.scaleX;
-    object.scaleY                      = srcObject.scaleY;
-    object.width                       = srcObject.width;
-    object.height                      = srcObject.height
+  object.name = srcObject.name;
+  object.isPanel = srcObject.isPanel;
+  object.text2img_prompt = srcObject.text2img_prompt;
+  object.text2img_negativePrompt = srcObject.text2img_negativePrompt;
+  object.text2img_seed = srcObject.text2img_seed;
+  object.text2img_width = srcObject.text2img_width;
+  object.text2img_height = srcObject.text2img_height;
+  object.text2img_samplingSteps = srcObject.text2img_samplingSteps;
+  object.img2img_prompt = srcObject.img2img_prompt;
+  object.img2img_negativePrompt = srcObject.img2img_negativePrompt;
+  object.img2img_seed = srcObject.img2img_seed;
+  object.img2img_width = srcObject.img2img_width;
+  object.img2img_height = srcObject.img2img_height;
+  object.img2img_samplingSteps = srcObject.img2img_samplingSteps;
+  object.img2img_denoising_strength = srcObject.img2img_denoising_strength;
+  object.top = srcObject.top;
+  object.left = srcObject.left;
+  object.scaleX = srcObject.scaleX;
+  object.scaleY = srcObject.scaleY;
+  object.width = srcObject.width;
+  object.height = srcObject.height
 
-    object.clipPath         = srcObject.clipPath         ? srcObject.clipPath         : undefined;
+  object.clipPath = srcObject.clipPath ? srcObject.clipPath : undefined;
 
   if (srcObject.clipPath && srcObject.clipPath.initial) {
     object.clipPath.initial = srcObject.clipPath.initial ? srcObject.clipPath.initial : undefined;
   }
-  object.initial          = srcObject.initial          ? srcObject.initial          : undefined;
+  object.initial = srcObject.initial ? srcObject.initial : undefined;
 }
 
 
@@ -180,4 +180,101 @@ function imageObject2Base64Image(object, scale) {
     console.error("Error converting image object to Base64:", error);
     return null;
   }
+}
+
+// set targetFram.guids
+function setGUID(targetFrame, imageObject) {
+  if (!targetFrame.guids) {
+    targetFrame.guids = [];
+  }
+  guid = getGUID(imageObject);
+  console.log(targetFrame.name + " : setGUID", guid);
+  targetFrame.guids.push(guid);
+}
+
+
+function getGUID(activeObject) {
+  if (!activeObject) {
+    console.log("ERROR, getGUID activeObject is null.")
+    return null;
+  }
+
+  if (activeObject.guid) {
+    return activeObject.guid;
+  }
+  let guid = generateGUID();
+  activeObject.guid = guid;
+  return guid;
+}
+
+function generateGUID() {
+  const array = new Uint8Array(16);
+  window.crypto.getRandomValues(array);
+  array[6] = (array[6] & 0x0f) | 0x40;
+  array[8] = (array[8] & 0x3f) | 0x80;
+  const guid = Array.from(array).map(b => ('00' + b.toString(16)).slice(-2)).join('');
+  return `${guid.slice(0, 8)}-${guid.slice(8, 12)}-${guid.slice(12, 16)}-${guid.slice(16, 20)}-${guid.slice(20)}`;
+}
+
+function createGUIDMap(layers) {
+  var layerMap = new Map();
+  layers.forEach(function (layer) {
+    layer.guid = getGUID(layer);
+    layerMap.set(layer.guid, layer);
+  });
+  return layerMap;
+}
+
+
+
+function replaceGuids(searchGuid, nextObject) {
+  if (!searchGuid) {
+    return;
+  }
+  if (!nextObject) {
+    console.log("replaceGuids is invalid value. ", searchGuid);
+    return;
+  }
+
+  var parentObject = haveGuidsObjectByGuid(searchGuid);
+  console.log( "1 parentObject", parentObject );
+  console.log( "1 parentObject.guids", parentObject.guids );
+
+  if (parentObject && Array.isArray(parentObject.guids)) {
+    parentObject.guids = parentObject.guids.filter(guid => guid !== searchGuid);
+    var nextGuid = getGUID(nextObject);
+    parentObject.guids.push(nextGuid);
+
+    console.log( "2 nextGuid", nextGuid );
+    console.log( "2 parentObject.guids", parentObject.guids );
+  } else {
+    console.log("parentObject or parentObject.guids is invalid. ", searchGuid);
+  }
+}
+
+function haveGuidsObjectByGuid(searchGuid) {
+  if( !searchGuid){
+    console.log("haveGuidsObjectByGuid is invalid value.");
+    return null;
+  }
+
+  var layers = canvas.getObjects();
+  console.log("haveGuidsObjectByGuid.", searchGuid);
+  var matchingObject = layers.find(layer => layer.guids && layer.guids.includes(searchGuid));
+
+  console.log("haveGuidsObjectByGuid.", matchingObject.guids);
+  console.log("haveGuidsObjectByGuid.", matchingObject);
+
+  return matchingObject;
+}
+
+function getObjectByGUID(searchGuid) {
+  if( !searchGuid){
+    console.log("getObjectByGUID is invalid value.");
+    return;
+  }
+  
+  var layers = canvas.getObjects();
+  var matchingObject = layers.find(layer => layer.guid === guid);
+  return matchingObject;
 }

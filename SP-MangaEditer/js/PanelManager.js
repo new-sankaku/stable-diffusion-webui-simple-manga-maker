@@ -145,6 +145,8 @@ function putImageInFrame(img, x, y) {
     }
     
     img.clipPath = clipPath;
+    setGUID(targetFrame, img);
+
   } else {
     var scaleToCanvasWidth = 300 / img.width;
     var scaleToCanvasHeight = 300 / img.height;

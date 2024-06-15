@@ -53,3 +53,4 @@ async function img2webp(i) {
     reader.readAsDataURL(webpBlob);
   });
 }
+

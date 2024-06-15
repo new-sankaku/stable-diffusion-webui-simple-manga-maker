@@ -30,3 +30,12 @@ function initializeMode() {
   }
 }
 initializeMode();
+
+
+
+function getCssValue( key ){
+  var currentModeElement = document.body;
+  var rootStyles = getComputedStyle(currentModeElement);
+  return rootStyles.getPropertyValue(key).trim();
+}
+

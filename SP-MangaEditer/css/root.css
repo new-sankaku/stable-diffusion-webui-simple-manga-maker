@@ -24,9 +24,16 @@
 
   --boader-color-1px-solid-A:1px solid #ffffff;
   --boader-color-1px-solid-B:1px solid #555;
+
+  --boader-color-3px-solid-C:3px dashed #555;
+  --boader-color-1px-solid-D:1px dashed #555;
+
   --border-color-3px-dashed-A:3px dashed  #aeaeae;
+  --border-color-2px-dashed-B:2px dashed  #aeaeae;
   --border-2px-solid: 2px solid var(--border-color-C);
 
+  --layer-panel-boader-color-1px-solid-B:1px dashed  #9b9b9b;
+  
   --border-color-C: #929292;
 
   --color-input-focus-border: #ffffff;
@@ -65,9 +72,17 @@
   --button-hover-color: #000000;
 
   --boader-color-1px-solid-A:1px solid #000000;
-  --boader-color-1px-solid-B:1px solid #bdbdbd;
+  --boader-color-1px-solid-B:1px solid #000000;
+
+  --boader-color-3px-solid-C:3px dashed #bdbdbd;
+  --boader-color-1px-solid-D:1px dashed #bdbdbd;
+
   --border-color-3px-dashed-A:3px dashed  #656565;
+  --border-color-2px-dashed-B:2px dashed  #656565;
   --border-2px-solid: 2px solid var(--border-color-C);
+
+  --layer-panel-boader-color-1px-solid-B:1px dashed  #404040;
+
 
   --border-color-C: #727272;
 
