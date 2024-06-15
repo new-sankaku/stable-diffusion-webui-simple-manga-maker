@@ -1,36 +1,37 @@
 
 // en ja ko fr zh ru es pt
+//ドイツ語（de）、タイ語（th）、オランダ語（nl）、スペイン語（es）
 const resources = {
   en: {
     translation: {
-      "outloneGlow" : "Outlone Glow",
-      "raughControls": "▼ Raugh Controls",
-      "rough_roughness": "Raugh",
-      "rough_bowing": "Bowing",
-      "rough_stroke": "Stroke",
-      "rough_strokeColor": "Color",
-      "rough_strokeWidth": "Width",
-      "rough_fill": "Fill",
-      "rough_fillColor": "Color",
-      "rough_fillStyle": "Style",
-      "rough_hachure": "Hachure",
-      "rough_hachure": "Hachure",
-      "rough_solid": "Solid",
-      "rough_zigzag": "Zigzag",
-      "rough_crossHatch": "Cross-hatch",
-      "rough_dots": "Dots",
-      "rough_dashed": "Dashed",
-      "rough_zigzagLine": "Zigzag-line",
-      "rough_fillWeight": "Weight",
-      "rough_hachureAngle": "Angle",
-      "rough_hachureGap": "Gap",
-      "rough_curveStepCount": "Curve Step",
-      "rough_simplification": "Simple",
-      "rough_dash": "Dash",
-      "rough_dashOffset": "Offset",
-      "rough_dashGap": "Gap",
-      "rough_zigzag": "Zigzag",
-      "rough_zigzagOffset": "Offset",
+"outloneGlow" : "Outlone Glow",
+"raughControls": "▼ Raugh Controls",
+"rough_roughness": "Raugh",
+"rough_bowing": "Bowing",
+"rough_stroke": "Stroke",
+"rough_strokeColor": "Color",
+"rough_strokeWidth": "Width",
+"rough_fill": "Fill",
+"rough_fillColor": "Color",
+"rough_fillStyle": "Style",
+"rough_hachure": "Hachure",
+"rough_hachure": "Hachure",
+"rough_solid": "Solid",
+"rough_zigzag": "Zigzag",
+"rough_crossHatch": "Cross-hatch",
+"rough_dots": "Dots",
+"rough_dashed": "Dashed",
+"rough_zigzagLine": "Zigzag-line",
+"rough_fillWeight": "Weight",
+"rough_hachureAngle": "Angle",
+"rough_hachureGap": "Gap",
+"rough_curveStepCount": "Curve Step",
+"rough_simplification": "Simple",
+"rough_dash": "Dash",
+"rough_dashOffset": "Offset",
+"rough_dashGap": "Gap",
+"rough_zigzag": "Zigzag",
+"rough_zigzagOffset": "Offset",
 "shape": "Shape",
 "svg_icon_search_placeholder": "Enter icon name",
 "svg_icon_search_button": "Search",
@@ -57,14 +58,12 @@ const resources = {
 "fill": "Fill:",
 "lineWidth": "Line Width:",
 "panelOpacity": "Opacity:",
-
 "spaceSizeLabel": "Space Size",
 "A4-H-Scale": "A4 Scale Panel",
 "A4-V-Scale": "A4 Scale Panel",
 "B4-H-Scale": "B4 Scale Panel",
 "B4-V-Scale": "B4 Scale Panel",
 "KnifeHelp": "The knife tool cuts well on a square, but sometimes doesn't work well on an angle.",
-
 "red": "Red",
 "green": "Green",
 "blue": "Blue",
@@ -79,7 +78,6 @@ const resources = {
 "informationControls": "▼ Infomation Controls",
 "imageControls": "▼ Fast Image Effect",
 "help": "Help",
-
 "japanese": "日本語",
 "korean": "한국어",
 "chinese": "中文",
@@ -286,7 +284,6 @@ const resources = {
 "svg_icon_shadow_offset_x": "オフセット X",
 "svg_icon_shadow_offset_y": "オフセット Y",
 "youCanUseGoogleIcon": "Googleアイコンを使っています。",
-
 "glowOutLineSize": "サイズ",
 "glowOutLineColor": "色",
 "view_layers": "L",
@@ -295,7 +292,6 @@ const resources = {
 "fill": "塗り:",
 "lineWidth": "線幅:",
 "panelOpacity": "不透明度:",
-
 "knifeMode": "ナイフツール",
 "spaceSizeLabel": "コマ間の間隔",
 "A4-H-Scale": "A4 横 縮尺パネル",
@@ -303,7 +299,6 @@ const resources = {
 "B4-H-Scale": "B4 横 縮尺パネル",
 "B4-V-Scale": "B4 縦 縮尺パネル",
 "KnifeHelp": "ナイフツールは正方形でうまく切れますが、角度がつくと上手く切れないことがあります。",
-
 "allRemove": "全て削除",
 "allRunT2I": "全て実行T2I",
 "angle": "角度",
@@ -1634,4 +1629,9 @@ function changeLanguage(lng, event) {
       console.error('Failed to change language:', err);
     }
   });
+}
+
+function getTranslation(key, defaultText) {
+  const translatedText = i18next.t(key);
+  return translatedText !== key ? translatedText : defaultText;
 }

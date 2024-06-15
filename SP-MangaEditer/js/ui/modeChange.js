@@ -13,6 +13,7 @@ function toggleMode() {
     localStorage.setItem('mode', 'light-mode');
     logo.src = '02_images_svg/Logo/light_mode_logo.webp';
   }
+  updateLayerPanel();
 }
 
 document.getElementById('mode-toggle').addEventListener('change', toggleMode);

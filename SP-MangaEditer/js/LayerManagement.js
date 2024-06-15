@@ -30,7 +30,7 @@ function updateLayerPanel() {
         nameTextArea.value = fullText.substring(0, 15);
       }
 
-      nameTextArea.value = layer.name || nameTextArea.value || layer.type + ` ${index + 1}`;
+      nameTextArea.value = layer.name || nameTextArea.value || layer.type + `${index + 1}`;
       layer.name = nameTextArea.value;
       nameTextArea.rows = 1; 
       nameTextArea.style.resize = 'none'; 
@@ -58,12 +58,13 @@ function updateLayerPanel() {
         removeLayer(layer);
       };
 
+      var currentModeElement = document.body;
+      var rootStyles = getComputedStyle(currentModeElement);
 
-      var rootStyles = getComputedStyle(document.documentElement);
       var backgroundColorRoot = rootStyles.getPropertyValue('--background-color-B');
       var borderColorRoot     = rootStyles.getPropertyValue('--boader-color-1px-solid-B');
       var colorRoot           = rootStyles.getPropertyValue('--text-color-B');
-  
+
       nameTextArea.style.color       = colorRoot.trim();
       nameTextArea.style.borderColor = borderColorRoot.trim();
       nameTextArea.style.background  = backgroundColorRoot.trim();
@@ -90,7 +91,7 @@ function updateLayerPanel() {
           spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
           areaHeader.appendChild(spinner);
 
-          StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
+          sdWebUI_t2IProcessQueue(layer, spinner.id);
           index++;
         };
 
@@ -132,7 +133,7 @@ function updateLayerPanel() {
           areaHeader.appendChild(spinner);
 
 
-          StableDiffusionWebUI_Image2ImgaeProcessQueue(layer, spinner.id);
+          sdWebUI_I2IProcessQueue(layer, spinner.id);
           index++;
         };
 

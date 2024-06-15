@@ -43,10 +43,10 @@ function isSaveObject(activeObject){
         if( activeObject.target.saveHistory === undefined ){
             return true;
         }
-        console.log("isSaveObject false 5");
+        //console.log("isSaveObject false 5");
         return false;
     }else{
-        console.log("isSaveObject false 6");
+        //console.log("isSaveObject false 6");
         return false;
     }
 }
@@ -92,7 +92,9 @@ function generateHash(imageData) {
 function customToJSON() {
     const json = canvas.toJSON(commonProperties);
     json.objects = json.objects.map(obj => {
-        if (obj.type === 'image' && obj.src.startsWith('data:')) {
+
+        //console.log( "customToJSON obj.type:", obj.type, "/obj.src:", obj.src, " : ", obj )
+        if (obj.type === 'image' && (obj.src.startsWith('data:') || obj.src.startsWith('blob:') )) {
             const hash = generateHash(obj.src);
             if (!imageMap.has(hash)) {
                 imageMap.set(hash, obj.src);

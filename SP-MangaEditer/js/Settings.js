@@ -28,9 +28,8 @@ document.getElementById('marginFromPanel').addEventListener('input', function() 
   svgPagging = parseInt(this.value, 20);
 });
 
-
-var stableDiffusionWebUIPort = 7860;
-var stableDiffusionWebUIHost = "127.0.0.1";
+var sdWebUIPort = 7860;
+var sdWebUIHost = "127.0.0.1";
 
 const text2img_basePrompt = {
   text2img_prompt               : "masterpiece, best quality, 1girl, simple background, ",
