@@ -57,6 +57,10 @@
     <script src="third/jsts/jsts.min.js?v=2.6"></script>
     <script src="third/browser-image-compression/browser-image-compression.js?v=2.6"></script>
 
+    <script src="third/intro/intro.min.js?v=2.6"></script>
+    <link rel="stylesheet" href="third/intro/introjs.min.css?v=2.6">
+    <link rel="stylesheet" href="css/ui/intro.css?v=2.6">
+
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script> -->
 </head>
 
@@ -165,7 +169,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span data-i18n="sdWebUI">SD WebUI</span>
+                            <span id="intro_sdWebUI" data-i18n="sdWebUI">SD WebUI</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
@@ -248,9 +252,14 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span data-i18n="language">Language</span>
+                            <span id="language" data-i18n="language" data-step="1" data-intro="">Language</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a id="Intro_Tutorial" class="dropdown-item" href="#" target="_blank">
+                                <i class="material-icons">volunteer_activism</i>
+                                <span data-i18n="Tutorial">Tutorial</span>
+                            </a>
+
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('en', event)">
                                 <span class="flag-icon flag-icon-us"></span> <span data-i18n="english">English</span>
                             </a>
@@ -286,7 +295,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span data-i18n="links">Links</span>
+                            <span id="intro_links" data-i18n="links">Links</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="https://new-sankaku.github.io/SP-MangaEditer/"
@@ -326,14 +335,14 @@
 
         <div id="head-id" style="display: flex; flex-grow: 1;">
             <div id="sidebar">
-                <i class="material-icons" onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
-                <i class="material-icons" onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
-                <i class="material-icons" onclick="toggleVisibility('panel-manager-area');">dashboard</i>
-                <i class="material-icons" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
-                <i class="material-icons" onclick="toggleVisibility('text-area');">text_fields</i>
-                <i class="material-icons" onclick="toggleVisibility('tool-area');">brush</i>
-                <i class="material-icons" onclick="toggleVisibility('shape-area');">interests</i>
-                <i class="material-icons" onclick="toggleVisibility('dummy-area4');">info</i>
+                <i class="material-icons" id="intro_svg-container-vertical"     onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
+                <i class="material-icons" id="intro_svg-container-landscape"    onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
+                <i class="material-icons" id="intro_panel-manager-area"         onclick="toggleVisibility('panel-manager-area');">dashboard</i>
+                <i class="material-icons" id="intro_speech-bubble-area1"        onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
+                <i class="material-icons" id="intro_text-area"                  onclick="toggleVisibility('text-area');">text_fields</i>
+                <i class="material-icons" id="intro_tool-area"                  onclick="toggleVisibility('tool-area');">brush</i>
+                <i class="material-icons" id="intro_shape-area"                 onclick="toggleVisibility('shape-area');">interests</i>
+                <i class="material-icons" id="intro_dummy-area4"                onclick="toggleVisibility('dummy-area4');">info</i>
             </div>
 
             <div id="svg-container-vertical" style="display: none;">
@@ -407,7 +416,7 @@
                     <div class="input-group">
                         <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
                         <input type="number" id="panelSpaceSize" name="panelSpaceSize" min="0" max="75" step="1"
-                            value="10">
+                            value="20">
                     </div>
                     <hr>
                     <label data-i18n="KnifeHelp"></label>
@@ -827,7 +836,7 @@
                         style="margin-top: 0px; margin-bottom: 0px;">
                 </div>
 
-                <div class="content">
+                <div id="intro_content" class="content">
                     <div class="resizable-container" id="resizable-container">
                         <div class="canvas-container" id="canvas-container">
                             <canvas id="mangaImageCanvas"></canvas>
@@ -880,7 +889,7 @@
                                 X:0.0 Y:0.0
                             </label>
                         </div>
-                        <div class="control-item">
+                        <div id="intro_SD_WebUI_pingCheck_Label" class="control-item">
                             <label id="SD_WebUI_pingCheck_Label">
                                 <input type="checkbox" id="SD_WebUI_pingCheck" checked>
                                 SD WebUI PING
@@ -1431,6 +1440,7 @@
     <script src="js/event/FabricManagement.js?v=2.6" defer></script>
     <script src="js/ui/modeChange.js?v=2.6" defer></script>
 
+    <script src="js/ui/intro.js?v=2.6" defer></script>
 </body>
 
 </html>

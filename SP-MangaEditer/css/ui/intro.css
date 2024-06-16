@@ -1,0 +1,76 @@
+.introjs-tooltip {
+  background-color: rgba(44, 44, 44, 0.9);
+  color: #d4af37;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  max-width: 400px;
+  border: 1px solid #d4af37;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0s ease-in-out; /* 即時に切り替え */
+}
+
+.introjs-tooltiptext {
+  color: #d4af37;
+  text-shadow: 0 0 1px #d4af37, 0 0 2px #d4af37, 0 0 4px #ff6347, 0 0 6px #ff6347; /* ネオンの幅を狭くする */
+}
+
+.introjs-button, .introjs-tooltip .introjs-button {
+  background-color: #4b2e2e;
+  border: 1px solid #d4af37;
+  border-radius: 4px;
+  color: #fff;
+  padding: 10px 15px;
+  text-transform: uppercase;
+  transition: background-color 0s ease-in-out, transform 0s ease-in-out; /* 即時に切り替え */
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.introjs-button:hover, .introjs-tooltip .introjs-button:hover {
+  background-color: #3a2323;
+  transform: scale(1.05);
+}
+
+.introjs-overlay {
+  background: rgba(0, 0, 0, 0.7);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: fadeInOverlay 0s ease-in-out; /* 即時に切り替え */
+}
+
+.introjs-title {
+  font-size: 18px;
+  font-weight: bold;
+  background: linear-gradient(15deg, #d4af37, #ff6347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 1px rgba(212, 175, 55, 0.75), 0 0 2px rgba(255, 99, 71, 0.75);
+  display: flex;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInOverlay {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

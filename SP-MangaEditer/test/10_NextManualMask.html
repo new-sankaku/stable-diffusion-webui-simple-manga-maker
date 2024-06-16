@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabric.js Mask Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+        }
+        .buttons {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <div class="buttons">
+        <input type="file" id="file-input" accept="image/*">
+        <button id="clear-mask">マスクを削除</button>
+        <button id="download-mask">マスクをダウンロード</button>
+    </div>
+    <script>
+        const canvas = new fabric.Canvas('canvas');
+        let isDrawing = false;
+        let currentPath;
+            // ログ関数
+    function log(message) {
+        console.log(`[LOG] ${new Date().toISOString()} - ${message}`);
+    }
+
+    document.getElementById('file-input').addEventListener('change', function(e) {
+        log("画像ファイルが選択されました");
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const imgObj = new Image();
+            imgObj.src = event.target.result;
+            imgObj.onload = function () {
+                const img = new fabric.Image(imgObj);
+                img.set({
+                    left: 0,
+                    top: 0,
+                    scaleX: canvas.width / img.width,
+                    scaleY: canvas.height / img.height
+                });
+                canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                log("背景画像が設定されました");
+            };
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    });
+
+    canvas.on('mouse:down', function(o){
+        isDrawing = true;
+        const pointer = canvas.getPointer(o.e);
+        currentPath = new fabric.Path(`M ${pointer.x} ${pointer.y}`, {
+            fill: '',
+            stroke: 'yellow',
+            strokeDashArray: [10, 5],
+            strokeWidth: 3,
+            selectable: false
+        });
+        canvas.add(currentPath);
+        log(`マウスダウン - パス作成 - 座標: (${pointer.x}, ${pointer.y})`);
+        log(`パスが追加されました: ${JSON.stringify(currentPath.toObject())}`);
+    });
+
+    canvas.on('mouse:move', function(o){
+        if (!isDrawing) return;
+        const pointer = canvas.getPointer(o.e);
+        currentPath.path.push(['L', pointer.x, pointer.y]);
+        currentPath.set({ path: currentPath.path });
+        canvas.renderAll();
+        log(`マウス移動 - パス更新 - 座標: (${pointer.x}, ${pointer.y})`);
+        log(`現在のパスデータ: ${JSON.stringify(currentPath.path)}`);
+    });
+
+    canvas.on('mouse:up', function(o){
+        if (!isDrawing) return;
+        isDrawing = false;
+        log("マウスアップ - パスが確定しました");
+        log(`最終パスデータ: ${JSON.stringify(currentPath.path)}`);
+        maskPath(currentPath);
+    });
+
+    document.getElementById('clear-mask').addEventListener('click', function() {
+        log("マスクを削除ボタンがクリックされました");
+        canvas.getObjects().forEach(obj => {
+            if (obj.type === 'path' && obj.fill !== '') {
+                canvas.remove(obj);
+            }
+        });
+        canvas.renderAll();
+        log("全てのマスクが削除されました");
+    });
+
+    document.getElementById('download-mask').addEventListener('click', function() {
+        log("マスクをダウンロードボタンがクリックされました");
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL({ format: 'png', multiplier: 1 });
+        link.download = 'mask.png';
+        link.click();
+        log("マスクがダウンロードされました");
+    });
+
+    function maskPath(path) {
+        log("重複するマスクの確認を開始します");
+        const objects = canvas.getObjects();
+        objects.forEach(obj => {
+            if (obj === path) return;
+            if (obj.type === 'path' && obj.fill !== '') {
+                if (isPathOverlapping(path, obj)) {
+                    canvas.remove(obj);
+                    log("重複するマスクが削除されました");
+                }
+            }
+        });
+
+        path.set({ fill: 'rgba(255, 0, 0, 0.6)', stroke: '', strokeDashArray: null });
+        canvas.renderAll();
+        log("新しいマスクが適用されました");
+    }
+
+    function isPathOverlapping(path1, path2) {
+        const path1Bounds = path1.getBoundingRect();
+        const path2Bounds = path2.getBoundingRect();
+        const isOverlapping = !(
+            path1Bounds.left > path2Bounds.left + path2Bounds.width ||
+            path1Bounds.left + path1Bounds.width < path2Bounds.left ||
+            path1Bounds.top > path2Bounds.top + path2Bounds.height ||
+            path1Bounds.top + path1Bounds.height < path2Bounds.top
+        );
+        log(`パスの重複確認: ${isOverlapping}`);
+        return isOverlapping;
+    }
+</script>
+</body>
+</html>

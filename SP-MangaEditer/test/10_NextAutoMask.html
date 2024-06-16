@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>自動選択ツール</title>
+    <style>
+        #canvasContainer {
+            position: relative;
+        }
+        #imageCanvas, #overlayCanvas {
+            border: 1px solid black;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageLoader" name="imageLoader"/>
+    <br>
+    トレランス: <input type="range" id="toleranceSlider" min="0" max="100" value="50">
+    <span id="toleranceValue">50</span>
+    <br><br>
+    <button id="saveMask">マスク画像を保存</button>
+    <button id="clearMask">マスク画像を削除</button>
+    <button id="toggleSmoothing">平滑化: オフ</button>
+    <button id="toggleBlurring">境界ぼかし: オフ</button>
+    <div id="canvasContainer">
+        <canvas id="imageCanvas" width="500" height="500"></canvas>
+        <canvas id="overlayCanvas" width="500" height="500"></canvas>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const imageCanvas = document.getElementById('imageCanvas');
+        const overlayCanvas = document.getElementById('overlayCanvas');
+        const imageCtx = imageCanvas.getContext('2d');
+        const overlayCtx = overlayCanvas.getContext('2d');
+        const imageLoader = document.getElementById('imageLoader');
+        const toleranceSlider = document.getElementById('toleranceSlider');
+        const toleranceValue = document.getElementById('toleranceValue');
+        const saveMaskButton = document.getElementById('saveMask');
+        const clearMaskButton = document.getElementById('clearMask');
+        const toggleSmoothingButton = document.getElementById('toggleSmoothing');
+        const toggleBlurringButton = document.getElementById('toggleBlurring');
+
+        let imageData;
+        const selectedPixels = new Set();  // 選択されたピクセルを追跡するセット
+        let smoothingEnabled = false;
+        let blurringEnabled = false;
+
+        imageLoader.addEventListener('change', handleImage, false);
+        toleranceSlider.addEventListener('input', function() {
+            toleranceValue.textContent = toleranceSlider.value;
+        });
+
+        toggleSmoothingButton.addEventListener('click', function() {
+            smoothingEnabled = !smoothingEnabled;
+            toggleSmoothingButton.textContent = `平滑化: ${smoothingEnabled ? 'オン' : 'オフ'}`;
+        });
+
+        toggleBlurringButton.addEventListener('click', function() {
+            blurringEnabled = !blurringEnabled;
+            toggleBlurringButton.textContent = `境界ぼかし: ${blurringEnabled ? 'オン' : 'オフ'}`;
+        });
+
+        function handleImage(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    imageCanvas.width = img.width;
+                    imageCanvas.height = img.height;
+                    overlayCanvas.width = img.width;
+                    overlayCanvas.height = img.height;
+                    imageCtx.drawImage(img, 0, 0);
+                    imageData = imageCtx.getImageData(0, 0, imageCanvas.width, imageCanvas.height);
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        overlayCanvas.addEventListener('click', function(event) {
+            const x = event.offsetX;
+            const y = event.offsetY;
+            if (!imageData) return;
+            const targetColor = getColorAtPixel(imageData, x, y);
+            const tolerance = parseInt(toleranceSlider.value, 10);
+
+            const newSelectedPixels = floodFill(imageData, x, y, targetColor, tolerance);
+            newSelectedPixels.forEach(pixel => selectedPixels.add(pixel));
+            highlightSelectedPixels(overlayCtx, newSelectedPixels);
+
+            if (smoothingEnabled) {
+                smoothSelection(overlayCtx, overlayCanvas);
+            }
+
+            if (blurringEnabled) {
+                blurSelection(overlayCtx, overlayCanvas);
+            }
+        });
+
+        function getColorAtPixel(imageData, x, y) {
+            const index = (y * imageData.width + x) * 4;
+            return {
+                r: imageData.data[index],
+                g: imageData.data[index + 1],
+                b: imageData.data[index + 2],
+                a: imageData.data[index + 3]
+            };
+        }
+
+        function rgbToHsv(r, g, b) {
+            r /= 255, g /= 255, b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, v = max;
+            const d = max - min;
+            s = max === 0 ? 0 : d / max;
+            if (max === min) {
+                h = 0;
+            } else {
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return [h, s, v];
+        }
+
+        function colorMatch(color1, color2, tolerance) {
+            const [h1, s1, v1] = rgbToHsv(color1.r, color1.g, color1.b);
+            const [h2, s2, v2] = rgbToHsv(color2.r, color2.g, color2.b);
+            return Math.abs(h1 - h2) <= tolerance / 360 &&
+                   Math.abs(s1 - s2) <= tolerance / 100 &&
+                   Math.abs(v1 - v2) <= tolerance / 100;
+        }
+
+        function floodFill(imageData, x, y, targetColor, tolerance) {
+            const stack = [[x, y]];
+            const newSelectedPixels = [];
+            const visited = new Set();
+
+            while (stack.length > 0) {
+                const [currentX, currentY] = stack.pop();
+                const key = `${currentX},${currentY}`;
+                if (visited.has(key) || selectedPixels.has(key)) continue;
+                visited.add(key);
+
+                const currentColor = getColorAtPixel(imageData, currentX, currentY);
+                if (colorMatch(currentColor, targetColor, tolerance)) {
+                    newSelectedPixels.push(key);
+                    stack.push([currentX + 1, currentY]);
+                    stack.push([currentX - 1, currentY]);
+                    stack.push([currentX, currentY + 1]);
+                    stack.push([currentX, currentY - 1]);
+                }
+            }
+
+            return newSelectedPixels;
+        }
+
+        function highlightSelectedPixels(ctx, newSelectedPixels) {
+            newSelectedPixels.forEach(key => {
+                const [x, y] = key.split(',').map(Number);
+                ctx.clearRect(x, y, 1, 1);  // 既存のピクセルを消す
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                ctx.fillRect(x, y, 1, 1);
+            });
+        }
+
+        function smoothSelection(ctx, canvas) {
+            // 簡単な平滑化処理 (ここでは単純なぼかしを使用)
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(canvas, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.filter = 'blur(2px)';
+            ctx.drawImage(tempCanvas, 0, 0);
+            ctx.filter = 'none';
+        }
+
+        function blurSelection(ctx, canvas) {
+            // 境界ぼかし処理 (ここでは単純なエッジぼかしを使用)
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(canvas, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.filter = 'blur(4px)';
+            ctx.drawImage(tempCanvas, 0, 0);
+            ctx.filter = 'none';
+        }
+
+        saveMaskButton.addEventListener('click', () => {
+            const maskImage = overlayCanvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = maskImage;
+            link.download = 'mask.png';
+            link.click();
+        });
+
+        clearMaskButton.addEventListener('click', () => {
+            overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            selectedPixels.clear();  // 選択されたピクセルのセットもクリア
+        });
+    });
+</script>
+</body>
+</html>
