@@ -67,8 +67,8 @@ function generateSteps() {
 
 
 function startupIntro() {
-  // if (!localStorage.getItem('startupIntroShown')) {
-  if (true) {
+  if (!localStorage.getItem('startupIntroShown')) {
+  // if (true) {
       introJs().setOptions({
       steps: [
         {
