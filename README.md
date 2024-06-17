@@ -74,6 +74,21 @@ pause
 
 To use your own custom workflow you need to first export it in api format. This is achieved by opening up the comfyui settings menu and then enabling [Enable Dev Mode Options]. Once thats done you should see a [Save (API Format)] button in your sidebar.
 
+If you wanna be able to change prompts, width, height, model, etc. without changing your workflow everytime you have to add placeholders to your workflow file. The available placeholders are the following:
+- "%prompt%"
+- "%negative_prompt%"
+- "%cfg%"
+- "%steps%"
+- "%sampler%"
+- "%scheduler%"
+- "%model%"
+- "%seed%"
+- "%vae%"
+- "%width%"
+- "%height%"
+
+If you want to see an example of how this is done then take a look at the sample_workflow.json file.
+
 # Install
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/install.png" width="800">
