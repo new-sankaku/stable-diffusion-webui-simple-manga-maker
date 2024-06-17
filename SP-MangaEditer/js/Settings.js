@@ -26,6 +26,9 @@ document.getElementById('marginFromPanel').addEventListener('input', function() 
 var stableDiffusionWebUIPort = 7860;
 var stableDiffusionWebUIHost = "127.0.0.1";
 
+var comfyuiPort = 8188;
+var comfyuiHost = "127.0.0.1";
+
 const text2img_basePrompt = {
   text2img_prompt               : "masterpiece, best quality, 1girl, simple background, ",
   text2img_negativePrompt       : "low quality, worst quality, jpeg, normal quality, ",

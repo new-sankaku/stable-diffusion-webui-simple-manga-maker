@@ -82,7 +82,12 @@ function updateLayerPanel() {
           spinner.className = 'spinner-border text-danger ms-1 spinner-border-sm';
           areaHeader.appendChild(spinner);
 
-          StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
+          // Call appropiate api to generate image
+          if (API_mode == apis.A1111)
+            StableDiffusionWebUI_text2ImgaeProcessQueue(layer, spinner.id);
+          else if (API_mode == apis.COMFYUI)
+            Comfyui_generate_image(layer, spinner.id);
+
           index++;
         };
 
