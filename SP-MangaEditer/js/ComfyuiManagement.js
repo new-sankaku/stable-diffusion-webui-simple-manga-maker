@@ -1,10 +1,10 @@
 let reader = new FileReader();
+const comfyuiQueue = new TaskQueue(1);
 
 var socket = null;
 const uuid = crypto.randomUUID();
 var selected_workflow = null;
 var processing_prompt = false;
-
 
 const hostInput = document.getElementById('Comfyui_apiHost');
 const portInput = document.getElementById('Comfyui_apiPort');
@@ -159,7 +159,7 @@ async function Comfyui_track_prompt_progress(prompt_id) {
 /*
 * Starts generating the proper prompt from the workflow and sends it to the queue
 */
-async function Comfyui_generate_image(layer, spinnerId) {
+async function Comfyui_handle_process_queue(layer, spinnerId) {
     if (!socket) connectToComfyui();
 
     var requestData = baseRequestData(layer);
@@ -168,49 +168,41 @@ async function Comfyui_generate_image(layer, spinnerId) {
     var workflow = Comfyui_replace_placeholders(selected_workflow, requestData);
 
     // Once constructed the prompt we add it to the queue
-    Comfyui_ProcessQueue(workflow, layer, spinnerId);    
+    comfyuiQueue.add(async () => Comfyui_generate_image(workflow))
+        .then(async (img) => {
+            var center = calculateCenter(layer);
+            putImageInFrame(img, center.centerX, center.centerY);
+        })
+        .catch(error => {
+            createToast("Generation Error.", "check SD WebUI!");
+            console.log("error:", error);
+        })
+        .finally(() => removeSpinner(spinnerId));
 }
 
-let isComfyui_Processing = false;
 
 /*
 * Waits for already queued prompts before queueing a new one, waits for it to finish before retrieving the image and placing it in layer
 */
-async function Comfyui_ProcessQueue(workflow, layer, spinnerId) {
-    while(isComfyui_Processing) {
-        await sleep(1000);
-    }
-    isComfyui_Processing = true;
-    try {
-        // Send prompt to comfyui
-        var response = await Comfyui_queue_prompt(workflow);
-        if (!response) return null;
-        processing_prompt = true;
+async function Comfyui_generate_image(workflow) {
+    var response = await Comfyui_queue_prompt(workflow);
+    if (!response) return null;
+    processing_prompt = true;
 
-        var prompt_id = response.prompt_id;
+    var prompt_id = response.prompt_id;
 
-        await Comfyui_track_prompt_progress(prompt_id);
+    await Comfyui_track_prompt_progress(prompt_id);
 
-        response = await Comfyui_get_history(prompt_id);
-        if (!response) return null;
-        // TODO this looks scuffed
-        var image_data = response[prompt_id]['outputs'][Object.keys(response[prompt_id]['outputs'])[0]].images['0'];
-        
-        // place image
-        var img = await Comfyui_get_image(image_data);
-        var center = calculateCenter(layer);
-        putImageInFrame(img, center.centerX, center.centerY);
-    } catch (error) {
-        createToast("Generation Error.", "check SD WebUI!");
-        console.log("error:", error);
-    } finally {
-        // remove spinner
-        var removeSpinner = document.getElementById(spinnerId);
-        if (removeSpinner) {
-            removeSpinner.remove();
-        }
-        isComfyui_Processing = false;
-    }
+    response = await Comfyui_get_history(prompt_id);
+    if (!response) return null;
+    // TODO this looks scuffed
+    var image_data = response[prompt_id]['outputs'][Object.keys(response[prompt_id]['outputs'])[0]].images['0'];
+    
+    var img = await Comfyui_get_image(image_data);
+
+    return new Promise((resolve) => {
+        resolve(img);
+    });
 }
 
 
