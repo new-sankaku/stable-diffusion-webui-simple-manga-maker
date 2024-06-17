@@ -326,7 +326,6 @@ function executeWithConfirmation(message, callback) {
   }
 
   function handleCancel() {
-      //console.log("handleCancel");
       confirmModal.hide();
       cleanup();
   }

@@ -8,7 +8,13 @@ var canvas = new fabric.Canvas("mangaImageCanvas", {
   skipOffscreen: false,
   renderer: fabric.isWebglSupported ? "webgl" : "canvas",
 });
-canvas.backgroundColor = "white";
+
+const mode = localStorage.getItem('mode') || 'light-mode';
+if (mode === 'dark-mode') {
+  canvas.backgroundColor = "gray";
+}else{
+  canvas.backgroundColor = "white";
+}
 
 var clipAreaCoords = {
   left: 0,
@@ -22,9 +28,8 @@ document.getElementById('marginFromPanel').addEventListener('input', function() 
   svgPagging = parseInt(this.value, 20);
 });
 
-
-var stableDiffusionWebUIPort = 7860;
-var stableDiffusionWebUIHost = "127.0.0.1";
+var sdWebUIPort = 7860;
+var sdWebUIHost = "127.0.0.1";
 
 var comfyuiPort = 8188;
 var comfyuiHost = "127.0.0.1";
@@ -70,6 +75,7 @@ const img2img_initPrompt = {
 const commonProperties = [
                           'excludeFromLayerPanel', 
                           'isPanel', 
+                          'isIcon',
                           'text2img_prompt', 
                           'text2img_negativePrompt', 
                           'text2img_seed', 

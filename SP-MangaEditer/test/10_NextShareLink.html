@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNS投稿リンク</title>
+</head>
+<body>
+    <button id="tweetButton">Tweetする</button>
+    <button id="facebookButton">Facebookで共有</button>
+    <button id="linkedinButton">LinkedInで共有</button>
+    <button id="instagramButton">Instagramで共有</button>
+    <button id="pinterestButton">Pinterestで共有</button>
+    <button id="redditButton">Redditで共有</button>
+    <button id="whatsappButton">WhatsAppで共有</button>
+    <button id="telegramButton">Telegramで共有</button>
+
+    <script>
+        function openWindow(url) {
+            var width = 550;
+            var height = 420;
+            var left = (screen.width / 2) - (width / 2);
+            var top = (screen.height / 2) - (height / 2);
+            window.open(url, 'ShareWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
+        }
+
+        document.getElementById('tweetButton').addEventListener('click', function() {
+            var tweetText = "ここにあなたの投稿内容を入力してください";
+            var tweetUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweetText);
+            openWindow(tweetUrl);
+        });
+
+        document.getElementById('facebookButton').addEventListener('click', function() {
+            var shareUrl = "https://www.example.com"; // 共有するURLを入力
+            var facebookUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(shareUrl);
+            openWindow(facebookUrl);
+        });
+
+        document.getElementById('linkedinButton').addEventListener('click', function() {
+            var shareUrl = "https://www.example.com"; // 共有するURLを入力
+            var title = "ここにタイトルを入力";
+            var summary = "ここに概要を入力";
+            var source = "ここにソースを入力";
+            var linkedinUrl = "https://www.linkedin.com/shareArticle?mini=true&url=" + encodeURIComponent(shareUrl) +
+                              "&title=" + encodeURIComponent(title) +
+                              "&summary=" + encodeURIComponent(summary) +
+                              "&source=" + encodeURIComponent(source);
+            openWindow(linkedinUrl);
+        });
+
+        document.getElementById('instagramButton').addEventListener('click', function() {
+            // Instagramは直接URLで投稿をシェアする方法がないため、アプリに誘導するリンクを開きます
+            var instagramUrl = "https://www.instagram.com/";
+            openWindow(instagramUrl);
+        });
+
+        document.getElementById('pinterestButton').addEventListener('click', function() {
+            var shareUrl = "https://www.example.com"; // 共有するURLを入力
+            var mediaUrl = "https://www.example.com/image.jpg"; // 共有する画像のURLを入力
+            var description = "ここに説明を入力";
+            var pinterestUrl = "https://pinterest.com/pin/create/button/?url=" + encodeURIComponent(shareUrl) +
+                               "&media=" + encodeURIComponent(mediaUrl) +
+                               "&description=" + encodeURIComponent(description);
+            openWindow(pinterestUrl);
+        });
+
+        document.getElementById('redditButton').addEventListener('click', function() {
+            var shareUrl = "https://www.example.com"; // 共有するURLを入力
+            var title = "ここにタイトルを入力";
+            var redditUrl = "https://www.reddit.com/submit?url=" + encodeURIComponent(shareUrl) +
+                            "&title=" + encodeURIComponent(title);
+            openWindow(redditUrl);
+        });
+
+        document.getElementById('whatsappButton').addEventListener('click', function() {
+            var shareText = "ここに共有するテキストを入力";
+            var whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(shareText);
+            openWindow(whatsappUrl);
+        });
+
+        document.getElementById('telegramButton').addEventListener('click', function() {
+            var shareText = "ここに共有するテキストを入力";
+            var telegramUrl = "https://telegram.me/share/url?text=" + encodeURIComponent(shareText);
+            openWindow(telegramUrl);
+        });
+    </script>
+</body>
+</html>

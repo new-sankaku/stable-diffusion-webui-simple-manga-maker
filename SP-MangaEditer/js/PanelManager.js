@@ -13,7 +13,7 @@ function handleSelection(e) {
 
 document.getElementById("canvas-container").addEventListener(
   "drop",
-  function (e) {
+  async function (e) {
     e.preventDefault();
     var file = e.dataTransfer.files[0];
     var canvasElement = canvas.getElement();
@@ -21,27 +21,59 @@ document.getElementById("canvas-container").addEventListener(
     var x = e.clientX - rect.left;
     var y = e.clientY - rect.top;
 
+    // WebPに変換
+    var webpFile;
+    try {
+      webpFile = await imgFile2webpFile(file);
+    } catch (error) {
+      console.error('Failed to convert to WebP', error);
+      return;
+    }
+
     var reader = new FileReader();
     reader.onload = function (f) {
       var data = f.target.result;
+
       fabric.Image.fromURL(data, function (img) {
-        // var canvasWidth = canvasElement.width;
-        // var canvasHeight = canvasElement.height;
+        console.log("drop stateStack.length", stateStack.length);
+        if (stateStack.length >= 2) {
+          var canvasX = x / canvasContinerScale;
+          var canvasY = y / canvasContinerScale;
+          putImageInFrame(img, canvasX, canvasY);
+        } else {
+          console.log("drop img.width, img.height", img.width, img.height);
+          resizeCanvasByNum(img.width, img.height);
+          initialPutImage(img, 0, 0);
+        }
 
-        var canvasX = x / canvasContinerScale;
-        var canvasY = y / canvasContinerScale;
-
-        putImageInFrame(img, canvasX, canvasY);
         setImage2ImageInitPrompt(img);
       });
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(webpFile);
   },
   false
 );
 
+function initialPutImage(img) {
+  img.set({
+    left: 0,
+    top: 0,
+  });
+  setNotSave(img);
+  canvas.add(img);
+
+  canvas.setActiveObject(img);
+  saveInitialState(img);
+  canvas.renderAll();
+
+  updateLayerPanel();
+  saveStateByManual();
+  return img;
+}
+
 function putImageInFrame(img, x, y) {
+  
   img.set({
     left: x,
     top: y,
@@ -59,14 +91,12 @@ function putImageInFrame(img, x, y) {
     targetFrameIndex
   );
   if (targetFrameIndex !== -1) {
-    var targetFrame = canvas.item(targetFrameIndex);
-    var frameCenterX =
-      targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
-    var frameCenterY =
-      targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
-    var scaleToFitX = (targetFrame.width * targetFrame.scaleX) / img.width;
-    var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / img.height;
-    var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
+    var targetFrame  = canvas.item(targetFrameIndex);
+    var frameCenterX = targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
+    var frameCenterY = targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
+    var scaleToFitX  = (targetFrame.width * targetFrame.scaleX) / img.width;
+    var scaleToFitY  = (targetFrame.height * targetFrame.scaleY) / img.height;
+    var scaleToFit   = Math.max(scaleToFitX, scaleToFitY);
 
     var clipPath;
     if (targetFrame.type === "polygon") {
@@ -108,8 +138,15 @@ function putImageInFrame(img, x, y) {
       scaleX: scaleToFit * 1.05,
       scaleY: scaleToFit * 1.05,
     });
-
+    if( img.name ){
+      img.name = targetFrame.name + "-" + img.name;
+    }else{
+      img.name = targetFrame.name + " In Image";
+    }
+    
     img.clipPath = clipPath;
+    setGUID(targetFrame, img);
+
   } else {
     var scaleToCanvasWidth = 300 / img.width;
     var scaleToCanvasHeight = 300 / img.height;

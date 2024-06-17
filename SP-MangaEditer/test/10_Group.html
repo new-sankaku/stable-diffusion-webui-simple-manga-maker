@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fabric.js Group Example with Scaling</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <script>
+    var canvas = new fabric.Canvas('canvas');
+
+    var rect = new fabric.Rect({
+      left: 100,
+      top: 100,
+      fill: 'red',
+      width: 50,
+      height: 50,
+      scaleX: 2,
+      scaleY: 1
+    });
+
+    var circle = new fabric.Circle({
+      left: 150,
+      top: 100,
+      fill: 'green',
+      radius: 30,
+      scaleX: 1.5,
+      scaleY: 0.5
+    });
+
+    var text = new fabric.Text('Hello, Fabric.js!', {
+      left: 200,
+      top: 200,
+      fontSize: 20,
+      scaleX: 1.2,
+      scaleY: 1.2
+    });
+
+    console.log('グループ化前:');
+    console.log('Rect:', rect.get('scaleX'), rect.get('scaleY'), rect.get('width') * rect.get('scaleX'), rect.get('height') * rect.get('scaleY'));
+    console.log('Circle:', circle.get('scaleX'), circle.get('scaleY'), circle.get('width') * circle.get('scaleX'), circle.get('height') * circle.get('scaleY'));
+    console.log('Text:', text.get('scaleX'), text.get('scaleY'), text.get('width') * text.get('scaleX'), text.get('height') * text.get('scaleY'));
+
+    var group = new fabric.Group([rect, circle, text], {
+      left: 50,
+      top: 50,
+      angle: 30
+    });
+
+    canvas.add(group);
+
+    console.log('グループ化後:');
+    group.getObjects().forEach(function(obj) {
+      console.log(obj.type + ':', obj.get('scaleX'), obj.get('scaleY'), obj.get('width') * obj.get('scaleX'), obj.get('height') * obj.get('scaleY'));
+    });
+
+    // グループ全体のスケールを変更
+    group.scale(0.5);
+    canvas.renderAll();
+
+    console.log('グループスケール後:');
+    group.getObjects().forEach(function(obj) {
+      console.log(obj.type + ':', obj.get('scaleX'), obj.get('scaleY'), obj.get('width') * obj.get('scaleX') * group.get('scaleX'), obj.get('height') * obj.get('scaleY') * group.get('scaleY'));
+    });
+
+    // オブジェクトの表示サイズを視覚的に確認
+    group.getObjects().forEach(function(obj) {
+      var actualWidth = obj.get('width') * obj.get('scaleX') * group.get('scaleX');
+      var actualHeight = obj.get('height') * obj.get('scaleY') * group.get('scaleY');
+      console.log(obj.type + ' 表示サイズ:', actualWidth, actualHeight);
+    });
+  </script>
+</body>
+</html>

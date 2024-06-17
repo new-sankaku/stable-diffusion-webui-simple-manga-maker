@@ -1,3 +1,6 @@
+<!-- PolygonじゃなくてPathになってしまう。
+Polygonに変換するとラフっぽさが無くなる。 -->
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -31,7 +34,7 @@
         scaleX: 1.5,
         scaleY: 1.5,
         angle: 30,
-        selectable: true
+        selectable: false
       });
       canvas.add(existingPolygon);
       canvas.renderAll();
@@ -90,3 +93,83 @@
 </body>
 
 </html>
+
+
+
+<!-- 
+document
+  .getElementById("allRaghuButton")
+  .addEventListener("click", function () {
+    var activeObject = canvas.getActiveObject();
+    if (isPanel(activeObject)) {
+      roughenPolygon(activeObject);
+    }
+  });
+
+
+
+  function roughenPolygon(polygon) {
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = 500; // 必要に応じて適切なサイズを設定
+    tempCanvas.height = 500;
+  
+    const roughCanvas = rough.canvas(tempCanvas);
+    const points = polygon.points.map((p) => [p.x, p.y]);
+    const roughPolygon = roughCanvas.polygon(points, {
+      roughness: 5,
+      bowing: 3,
+      stroke: "blue",
+      strokeWidth: 5,
+      fillStyle: "none",
+    });
+  
+    const roughPoints = [];
+    roughPolygon.sets.forEach((set) => {
+      set.ops.forEach((op) => {
+        switch (op.op) {
+          case "move":
+            roughPoints.push({ x: op.data[0], y: op.data[1] });
+            break;
+          case "lineTo":
+            roughPoints.push({ x: op.data[0], y: op.data[1] });
+            break;
+          case "bcurveTo":
+            roughPoints.push({ x: op.data[4], y: op.data[5] });
+            break;
+          case "qcurveTo":
+            roughPoints.push({ x: op.data[2], y: op.data[3] });
+            break;
+          case "curveTo":
+            roughPoints.push({ x: op.data[4], y: op.data[5] });
+            break;
+          case "arc":
+            roughPoints.push({ x: op.data[5], y: op.data[6] });
+            break;
+          case "closePath":
+            // closePathは特に処理は不要
+            break;
+          default:
+            console.warn(`Unsupported operation: ${op.op}`);
+        }
+      });
+    });
+  
+    if (roughPoints.length > 0) {
+      const newPolygon = new fabric.Polygon(roughPoints, {
+        left: polygon.left,
+        top: polygon.top,
+        scaleX: polygon.scaleX,
+        scaleY: polygon.scaleY,
+        angle: polygon.angle,
+        stroke: "black",
+        strokeWidth: 4,
+        fill: "white"
+      });
+      canvas.add(newPolygon);
+      canvas.remove(polygon);
+      canvas.renderAll();
+    } else {
+      console.error("Generated rough points are invalid.");
+    }
+  }
+   -->

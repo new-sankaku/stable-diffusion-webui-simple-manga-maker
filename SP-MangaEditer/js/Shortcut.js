@@ -13,9 +13,7 @@ document.addEventListener("keydown", function (e) {
     redo();
     e.preventDefault();
     return;
-  } else if (e.key === "c" && e.ctrlKey) {
-    // コピー (Ctrl+C)
-  }else if (e.ctrlKey && e.key === 'l') {
+  } else if (e.ctrlKey && e.key === 'l') {
     changeView('layer-panel', document.getElementById('view_layers_checkbox').checked);
     document.getElementById('view_layers_checkbox').click();
     e.preventDefault();
@@ -25,15 +23,15 @@ document.addEventListener("keydown", function (e) {
     document.getElementById('view_controles_checkbox').click();
     e.preventDefault();
     return;
-  } else if (e.ctrlKey && e.key === '8') { // Ctrl + 8
+  } else if (e.ctrlKey && e.key === '8') {
     zoomIn();
     e.preventDefault();
     return;
-  } else if (e.ctrlKey && e.key === '9') { // Ctrl + 9
+  } else if (e.ctrlKey && e.key === '9') {
     zoomOut();
     e.preventDefault();
     return;
-  }else if (e.ctrlKey && e.key === '0') { // Ctrl + 0
+  }else if (e.ctrlKey && e.key === '0') {
     zoomFit();
     e.preventDefault();
     return;
@@ -89,7 +87,6 @@ document.addEventListener("paste", function (event) {
           const activeObject = canvas.getActiveObject();
 
           if (activeObject && isActive) {
-            // アクティブオブジェクトの中央座標を使用
             const x =
               activeObject.left +
               (activeObject.width * activeObject.scaleX) / 2;
@@ -123,3 +120,4 @@ document.addEventListener("paste", function (event) {
     }
   }
 });
+

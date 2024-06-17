@@ -116,12 +116,12 @@ function cropImage(png, left, top, height, width) {
   tempCanvas.renderAll();
 
   fabric.Image.fromURL(
-    tempCanvas.toDataURL({ format: "png", multiplier: 4 }),
+    tempCanvas.toDataURL({ format: "webp", multiplier: 2 }),
     function (img) {
-      var scaledLeft = (left - png.left) * 4;
-      var scaledTop = (top - png.top) * 4;
-      var scaledWidth = width * 4;
-      var scaledHeight = height * 4;
+      var scaledLeft = (left - png.left) * 2;
+      var scaledTop = (top - png.top) * 2;
+      var scaledWidth = width * 2;
+      var scaledHeight = height * 2;
 
       img.set("left", -scaledLeft);
       img.set("top", -scaledTop);
@@ -132,13 +132,13 @@ function cropImage(png, left, top, height, width) {
       canvas_crop.renderAll();
 
       fabric.Image.fromURL(
-        canvas_crop.toDataURL({ format: "png", multiplier: 1 }),
+        canvas_crop.toDataURL({ format: "webp", multiplier: 1 }),
         function (croppedImg) {
           croppedImg.set({
             left: left,
             top: top,
-            scaleX: 0.25,
-            scaleY: 0.25,
+            scaleX: 0.5,
+            scaleY: 0.5,
           });
 
           if (png.clipPath) {
@@ -148,11 +148,12 @@ function cropImage(png, left, top, height, width) {
             }
           }
 
+          replaceGuids(png.guid, croppedImg);
           canvas.add(croppedImg).renderAll();
-
           canvas.remove(cropActiveObject);
           canvas.setActiveObject(croppedImg);
           canvas.renderAll();
+          updateLayerPanel();
         }
       );
     }

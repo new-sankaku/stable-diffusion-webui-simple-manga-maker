@@ -12,10 +12,8 @@ function changeSpeechBubbleLineColor(value) {
             });
         } else if (isShapes(activeObject)) {
             activeObject.set({ stroke: value });
-
         } else if (isLine(activeObject)) {
             activeObject.set({ stroke: value });
-        
         }
         canvas.requestRenderAll();
     }
@@ -46,8 +44,6 @@ function changeSpeechBubbleOpacity(value) {
     }
 }
 
-
-
 /** Sppech bubble */
 function loadSVGReadOnly(svgString) {
     var apply = document.getElementById("applySpeechbubbleChange").checked;
@@ -75,7 +71,6 @@ function loadSVGReadOnly(svgString) {
                     opacity: speechBubbleOpacity,
                 });
             }
-
             return obj;
         });
 
@@ -89,7 +84,6 @@ function loadSVGReadOnly(svgString) {
             lockRotation: false,
             lockScalingX: false,
             lockScalingY: false,
-
         });
 
         canvas.add(group);

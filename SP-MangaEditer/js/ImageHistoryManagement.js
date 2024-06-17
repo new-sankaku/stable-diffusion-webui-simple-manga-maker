@@ -11,9 +11,7 @@ fabric.Object.prototype.toObject = (function (toObject) {
   };
 })(fabric.Object.prototype.toObject);
 
-
 function isSave(){
-    //console.log( "isSaveHistory ", isSaveHistory );
     return isSaveHistory;
 }
 function notSave(){
@@ -31,29 +29,24 @@ function setSave(activeObject){
 
 
 function isSaveObject(activeObject){
-    console.log( "activeObject.saveHistory", activeObject, activeObject.saveHistory );
     if( activeObject ){
         if( activeObject.saveHistory == true ){
-            console.log("isSaveObject true 1");
             return true;
         }
         if( activeObject.saveHistory == false ){
-            console.log("isSaveObject false 2");
             return false;
         }
         if( activeObject.target === undefined ){
-            console.log("isSaveObject true 3");
             return true;
         }
 
         if( activeObject.target.saveHistory === undefined ){
-            console.log("isSaveObject true 4");
             return true;
         }
-        console.log("isSaveObject false 5");
+        //console.log("isSaveObject false 5");
         return false;
     }else{
-        console.log("isSaveObject false 6");
+        //console.log("isSaveObject false 6");
         return false;
     }
 }
@@ -63,33 +56,26 @@ function isNotSaveObject(activeObject){
 }
 
 function changeDoNotSaveHistory(){
-    //console.log( "changeDoNotSaveHistory isSaveHistory = false" );
     isSaveHistory = false;
 }
 
 function changeDoSaveHistory(){
-    //console.log( "changeDoSaveHistory isSaveHistory = true" );
     isSaveHistory = true;
 }
 
 function saveStateByListener(event, eventType) {
 
     if(!event){
-        //console.log( "saveStateByListener not save0 if(!event){" );
         return;
     }
 
     if (notSave()) {
-        //console.log( "saveStateByListener not save1" );
         return;
     }
 
     if( isNotSaveObject(event) ){
-        //console.log( "saveStateByListener not save2" );
         return;
     }
-
-    //console.log( "saveStateByListener save" );
     saveState();
 }
 
@@ -106,7 +92,9 @@ function generateHash(imageData) {
 function customToJSON() {
     const json = canvas.toJSON(commonProperties);
     json.objects = json.objects.map(obj => {
-        if (obj.type === 'image' && obj.src.startsWith('data:')) {
+
+        //console.log( "customToJSON obj.type:", obj.type, "/obj.src:", obj.src, " : ", obj )
+        if (obj.type === 'image' && (obj.src.startsWith('data:') || obj.src.startsWith('blob:') )) {
             const hash = generateHash(obj.src);
             if (!imageMap.has(hash)) {
                 imageMap.set(hash, obj.src);
@@ -137,10 +125,6 @@ function restoreImage(json) {
 
 
 function saveState() {
-
-    //console.log("saveState()");
-
-
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }
@@ -197,6 +181,10 @@ function allRemove() {
     saveStateByManual();
 	updateLayerPanel();
 	currentImage = null;
+
+    imageMap.clear();
+    stateStack = [];
+    currentStateIndex = -1;
 }
 function initImageHistory(){
 	allRemove();
