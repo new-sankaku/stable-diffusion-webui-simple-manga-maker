@@ -65,6 +65,15 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)  
 To use the Text2Image/Image2Image features you need to connect to the Stable Diffusion WebUI.
 
+# Comfyui Usage 
+To use comfyui you first need to add the parameter: [--enable-cors-header] to your run file. Locate your comfyui folder and find the files "run_cpu.bat" and "run_nvidia_gpu.bat", then edit the one you typically use. Example of how the script could look like:
+```
+.\python_embeded\python.exe -s ComfyUI\main.py --windows-standalone-build --enable-cors-header --force-fp16 --disable-smart-memory --lowvram
+pause
+```
+
+To use your own custom workflow you need to first export it in api format. This is achieved by opening up the comfyui settings menu and then enabling [Enable Dev Mode Options]. Once thats done you should see a [Save (API Format)] button in your sidebar.
+
 # Install
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/install.png" width="800">

@@ -230,7 +230,7 @@ function Comfyui_replace_placeholders(workflow, requestData) {
         workflow = replacePlaceholder(workflow, "%vae%", requestData['vae']);
     if ("width" in requestData && requestData['width'] != "")
         workflow = replacePlaceholder(workflow, "%width%", requestData['width']);
-    if ("height" in requestData && requestData['prompt'] != "")
+    if ("height" in requestData && requestData['height'] != "")
         workflow = replacePlaceholder(workflow, "%height%", requestData['height']);
     return workflow;
 }
