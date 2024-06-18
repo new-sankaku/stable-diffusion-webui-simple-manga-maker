@@ -60,7 +60,7 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 - **Prompt Queue**: Bulk queue prompts to easily generate different character versions in the same page or panel.
 - **Pen/Eraser tools**: Basic pen and eraser tool, change line width, color, line style, shadow. Erase lines, or portions of images.
 - **Canvas Zoom In/Zoom Out**: Basic pen and eraser tool, change line width, color, line style, shadow. Erase lines, or portions of images.
-- **Dark mode/Light mode**: Dark mode/Light mode: When you switch, the selected mode will be applied from next time.
+- **Dark mode/Light mode**: When you switch, the selected mode will be applied from next time.
 - **Tutorial**: There is a simple tutorial. After setting the language, select Tutorial at the top of the language settings.
 
 # Demo Site  
