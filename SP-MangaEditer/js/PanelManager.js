@@ -229,23 +229,22 @@ document.getElementById("CustomPanelButton").addEventListener("click", function 
 });
 
 document.getElementById("A4-H").addEventListener("click", function () {
-  loadBookSize(210, 297);
+  loadBookSize(210, 297, true);
 });
 document.getElementById("A4-V").addEventListener("click", function () {
-  loadBookSize(297, 210);
+  loadBookSize(297, 210, true);
 });
 document.getElementById("B4-H").addEventListener("click", function () {
-  loadBookSize(257, 364);
+  loadBookSize(257, 364, true);
 });
 document.getElementById("B4-V").addEventListener("click", function () {
-  loadBookSize(364, 257);
+  loadBookSize(364, 257, true);
 });
 
-function loadBookSize(width, height) {
-  loadBookSize(width, height, true);
-}
-
 function loadBookSize(width, height, addPanel) {
+
+  console.log( "loadBookSize addPanel", addPanel );
+
   if (stateStack.length > 2) {
     executeWithConfirmation("New Project?", function () {
       changeDoNotSaveHistory();
