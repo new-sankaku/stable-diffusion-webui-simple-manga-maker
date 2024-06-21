@@ -499,69 +499,241 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 });
 
-function addSquare() {
-  var strokeWidthScale = canvas.width / 700;
-  var strokeWidth = 2 * strokeWidthScale;
 
-  var square = new fabric.Polygon(
-    [
-      { x: 0, y: 0 },
-      { x: 200, y: 0 },
-      { x: 200, y: 300 },
-      { x: 0, y: 300 },
-    ],
-    {
-      left: 50,
-      top: 50,
-      scaleX: 2,
-      scaleY: 2,
-      fill: "#FFFFFF",
-      strokeWidth: strokeWidth,
-      strokeUniform: true,
-      stroke: "black",
-      objectCaching: false,
-      transparentCorners: false,
-      cornerColor: "Blue",
-      isPanel: true,
-    }
-  );
-  setText2ImageInitPrompt(square);
-  setPanelValue(square);
-  canvas.add(square);
+
+
+
+
+
+
+
+function addShape(points, options = {}) {
+  var strokeWidthScale = canvas.width / 700;
+  options.strokeWidth = 2 * strokeWidthScale;
+  options.strokeUniform = true;
+  options.stroke = "black";
+  options.objectCaching = false;
+  options.transparentCorners = false;
+  options.cornerColor = "Blue";
+  options.isPanel = true;
+  options.left = options.left || 50;
+  options.top = options.top || 50;
+
+  var shape = new fabric.Polygon(points, options);
+  setText2ImageInitPrompt(shape);
+  setPanelValue(shape);
+  canvas.add(shape);
   updateLayerPanel();
+}
+
+function addSquare() {
+  var points = [
+    { x: 0, y: 0 },
+    { x: 200, y: 0 },
+    { x: 200, y: 300 },
+    { x: 0, y: 300 }
+  ];
+  addShape(points);
 }
 
 function addPentagon() {
   var side = 150;
   var angle = 54;
-
-  var strokeWidthScale = canvas.width / 700;
-  var strokeWidth = 2 * strokeWidthScale;
-
   var points = [];
   for (var i = 0; i < 5; i++) {
     var x = side * Math.cos((Math.PI / 180) * (angle + i * 72));
     var y = side * Math.sin((Math.PI / 180) * (angle + i * 72));
     points.push({ x: x, y: y });
   }
+  addShape(points);
+}
 
-  var pentagon = new fabric.Polygon(points, {
-    left: 150,
-    top: 150,
-    fill: "#FFFFFF",
-    strokeWidth: strokeWidth,
+function addTallRect() {
+  var points = [
+    { x: 0, y: 0 },
+    { x: 100, y: 0 },
+    { x: 100, y: 400 },
+    { x: 0, y: 400 }
+  ];
+  addShape(points);
+}
+
+function addTallTrap() {
+  var points = [
+    { x: 50, y: 0 },
+    { x: 150, y: 0 },
+    { x: 100, y: 400 },
+    { x: 0, y: 400 }
+  ];
+  addShape(points);
+}
+
+function addWideRect() {
+  var points = [
+    { x: 0, y: 0 },
+    { x: 400, y: 0 },
+    { x: 400, y: 100 },
+    { x: 0, y: 100 }
+  ];
+  addShape(points);
+}
+
+function addWideTrap() {
+  var points = [
+    { x: 0, y: 0 },
+    { x: 400, y: 0 },
+    { x: 350, y: 100 },
+    { x: 50, y: 100 }
+  ];
+  addShape(points);
+}
+
+function addTrapezoid() {
+  var points = [
+    { x: 50, y: 0 },
+    { x: 200, y: 0 },
+    { x: 150, y: 100 },
+    { x: 0, y: 100 }
+  ];
+  addShape(points);
+}
+
+function addTriangle() {
+  var points = [
+    { x: 100, y: 0 },
+    { x: 200, y: 200 },
+    { x: 0, y: 200 }
+  ];
+  addShape(points);
+}
+
+function addCircle() {
+  var circle = new fabric.Circle({
+    radius: 100,
+    left: 50,
+    top: 50,
+    strokeWidth: canvas.width / 700 * 2,
     strokeUniform: true,
     stroke: "black",
     objectCaching: false,
     transparentCorners: false,
-    cornerColor: "blue",
-    isPanel: true,
+    cornerColor: "Blue",
+    isPanel: true
   });
-  setText2ImageInitPrompt(pentagon);
-  setPanelValue(pentagon);
-  canvas.add(pentagon);
+  setText2ImageInitPrompt(circle);
+  setPanelValue(circle);
+  canvas.add(circle);
   updateLayerPanel();
 }
+
+function addHexagon() {
+  var side = 100;
+  var points = [];
+  for (var i = 0; i < 6; i++) {
+    var x = side * Math.cos((Math.PI / 180) * (60 * i));
+    var y = side * Math.sin((Math.PI / 180) * (60 * i));
+    points.push({ x: x, y: y });
+  }
+  addShape(points);
+}
+
+function addEllipse() {
+  var ellipse = new fabric.Ellipse({
+    rx: 100,
+    ry: 50,
+    left: 50,
+    top: 50,
+    strokeWidth: canvas.width / 700 * 2,
+    strokeUniform: true,
+    stroke: "black",
+    objectCaching: false,
+    transparentCorners: false,
+    cornerColor: "Blue",
+    isPanel: true
+  });
+  setText2ImageInitPrompt(ellipse);
+  setPanelValue(ellipse);
+  canvas.add(ellipse);
+  updateLayerPanel();
+}
+
+function addRhombus() {
+  var points = [
+    { x: 0, y: 100 },
+    { x: 100, y: 0 },
+    { x: 200, y: 100 },
+    { x: 100, y: 200 }
+  ];
+  addShape(points);
+}
+
+function addStar() {
+  var points = [];
+  var outerRadius = 100;
+  var innerRadius = 50;
+  for (var i = 0; i < 10; i++) {
+    var radius = i % 2 === 0 ? outerRadius : innerRadius;
+    var angle = (Math.PI / 5) * i;
+    points.push({
+      x: radius * Math.sin(angle),
+      y: -radius * Math.cos(angle)
+    });
+  }
+  addShape(points);
+}
+
+function addPentagon() {
+  var side = 150;
+  var angle = 54;
+  var points = [];
+  for (var i = 0; i < 5; i++) {
+    var x = side * Math.cos((Math.PI / 180) * (angle + i * 72));
+    var y = side * Math.sin((Math.PI / 180) * (angle + i * 72));
+    points.push({ x: x, y: y });
+  }
+  addShape(points);
+}
+
+function addOctagon() {
+  var side = 100;
+  var points = [];
+  for (var i = 0; i < 8; i++) {
+    var x = side * Math.cos((Math.PI / 180) * (45 * i));
+    var y = side * Math.sin((Math.PI / 180) * (45 * i));
+    points.push({ x: x, y: y });
+  }
+  addShape(points);
+}
+
+function addTallRightLeaningTrapezoid() {
+  var points = [
+    { x: 0, y: 0 },
+    { x: 100, y: 50 },
+    { x: 100, y: 300 },
+    { x: 0, y: 300 }
+  ];
+  addShape(points);
+}
+
+function addRightSlantingTrapezoid() {
+  var points = [
+    { x: 0, y: 0 },
+    { x: 300, y: 0 },
+    { x: 350, y: 100 },
+    { x: 0, y: 100 }
+  ];
+  addShape(points);
+}
+
+
+
+
+
+
+
+
+
+
 
 function Edit() {
   var poly = canvas.getActiveObject();
