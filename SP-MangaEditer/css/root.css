@@ -1,7 +1,6 @@
 
 .dark-mode {
   --sidebar-gradient: linear-gradient(145deg, #262626, #363636);
-  --button-box-shadow: 2px 0 5px rgba(82, 40, 0, 0.1);
   
   --text-color-B: #dedede;
   --text-border: #ff9532;
@@ -46,11 +45,11 @@
   --color-dark-grey: #ccc;
   --color-scrollbar-track: #2e2e2e;
   --color-scrollbar-thumb: #555555;
+
 }
 
 .light-mode {
   --sidebar-gradient:rgb(255, 217, 141);
-  --button-box-shadow: 2px 0 5px rgba(191, 92, 0, 0.1);
   
   --text-color-B: #242424;
   --text-border: #ff9532;
@@ -100,6 +99,12 @@
 
 
 :root {
+
+  --toggle-off-background: #4f9eff;
+  --toggle-on-background: #ff5e57;
+  --toggle-button-color: #fff;
+  --toggle-button-shadow: rgba(0, 0, 0, 0.2);
+
   --color-window-border: 2px solid #007bff;
   --color-window-header-bg: #007bff;
   --color-button-hover-bg: #218838;
@@ -182,7 +187,7 @@
   --margin-right-2: 2px;
   --navbar-logo-max-height: 25px;
   --flex-span-width: 30px;
-  --input-width: 32%;
+  --input-width: 38%;
   --gap-article: 32px;
   --input-margin-top: 3px;
   --min-height-400: 400px;

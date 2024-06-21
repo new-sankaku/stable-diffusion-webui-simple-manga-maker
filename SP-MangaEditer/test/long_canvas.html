@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Tiling Example</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .canvas-container {
+            height: 1000px;
+            width: 700px;
+            overflow-y: scroll;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+        }
+        canvas {
+            background-color: #d3d3d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-container" id="canvas-container">
+        <canvas id="mangaImageCanvas" width="690" height="1000"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script>
+        const canvas = new fabric.Canvas('mangaImageCanvas');
+        const canvasContainer = document.getElementById('canvas-container');
+        const totalHeight = 20000;
+        const tileHeight = 1000;
+        const tileCount = Math.ceil(totalHeight / tileHeight);
+
+        // タイルを管理するオブジェクト
+        const tiles = [];
+
+        // 画像オブジェクト
+        let imageObject;
+
+        // タイルを生成する
+        for (let i = 0; i < tileCount; i++) {
+            const offScreenCanvas = document.createElement('canvas');
+            offScreenCanvas.width = 690;
+            offScreenCanvas.height = tileHeight;
+            const offScreenContext = offScreenCanvas.getContext('2d');
+
+            tiles.push({ canvas: offScreenCanvas, context: offScreenContext });
+        }
+
+        // 初期描画
+        function drawTiles() {
+            for (let i = 0; i < tileCount; i++) {
+                const context = tiles[i].context;
+                context.clearRect(0, 0, 690, tileHeight);
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, 690, tileHeight);
+
+                // 画像がタイルの範囲内にある場合のみ描画
+                if (imageObject) {
+                    const imageTop = imageObject.top;
+                    const imageBottom = imageTop + imageObject.height;
+                    const tileTop = i * tileHeight;
+                    const tileBottom = tileTop + tileHeight;
+
+                    if (imageBottom > tileTop && imageTop < tileBottom) {
+                        context.drawImage(
+                            imageObject.getElement(),
+                            50,
+                            imageTop - tileTop
+                        );
+                    }
+                }
+            }
+        }
+
+        // 可視領域の更新
+        function updateVisibleArea() {
+            const scrollTop = canvasContainer.scrollTop;
+            const visibleContext = canvas.getContext('2d');
+            const startTile = Math.floor(scrollTop / tileHeight);
+            const endTile = Math.min(startTile + 1, tileCount - 1);
+
+            visibleContext.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = startTile; i <= endTile; i++) {
+                const tileY = (i - startTile) * tileHeight - (scrollTop % tileHeight);
+                visibleContext.drawImage(tiles[i].canvas, 0, tileY);
+            }
+        }
+
+        // 初期化
+        fabric.Image.fromURL('https://example.com/path/to/your/image.jpg', function(img) {
+            imageObject = img.set({
+                left: 50,
+                top: 50,
+                selectable: true
+            });
+
+            canvas.add(imageObject);
+
+            // ドラッグイベントのハンドラを追加
+            imageObject.on('moving', function() {
+                drawTiles();
+                updateVisibleArea();
+            });
+
+            drawTiles();
+            updateVisibleArea();
+        });
+
+        // スクロールイベント
+        canvasContainer.addEventListener('scroll', updateVisibleArea);
+    </script>
+</body>
+</html>

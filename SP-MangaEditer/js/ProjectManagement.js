@@ -246,48 +246,70 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   });
 
-  // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
-  selectA1111APIButton.addEventListener('click', (event) => {
-    event.stopPropagation();
 
-    API_mode = apis.A1111;
+  // // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
+  // selectA1111APIButton.addEventListener('click', (event) => {
+  //   event.stopPropagation();
 
-    // Hide comfyui elements and show A1111 elements
-    let a1111Elements = document.getElementsByClassName("A1111_api_content");
-    let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+  //   API_mode = apis.A1111;
 
-    selectA1111APIButton.style.backgroundColor = "#ffedd3";
-    for (let i = 0; i < a1111Elements.length; i++) {
-      a1111Elements[i].style.display = "block";
-    }
+  //   // // Hide comfyui elements and show A1111 elements
+  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
+  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
 
-    selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
-    for (let i = 0; i < comfyuiElements.length; i++) {
-      comfyuiElements[i].style.display = "none";
-    }
-  });
+  //   // selectA1111APIButton.style.backgroundColor = "#ffedd3";
+  //   // for (let i = 0; i < a1111Elements.length; i++) {
+  //   //   a1111Elements[i].style.display = "block";
+  //   // }
 
-  selectComfyuiAPIButton.addEventListener('click', (event) => {
-    event.stopPropagation();
+  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
+  //   // for (let i = 0; i < comfyuiElements.length; i++) {
+  //   //   comfyuiElements[i].style.display = "none";
+  //   // }
+  // });
 
-    API_mode = apis.COMFYUI;
+  // selectComfyuiAPIButton.addEventListener('click', (event) => {
+  //   event.stopPropagation();
 
-    // Show comfyui elements and hide A1111 elements
-    let a1111Elements = document.getElementsByClassName("A1111_api_content");
-    let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+  //   API_mode = apis.COMFYUI;
 
-    selectA1111APIButton.style.backgroundColor = "#ffe1b7";
-    for (let i = 0; i < a1111Elements.length; i++) {
-      a1111Elements[i].style.display = "none";
-    }
+  //   // // Show comfyui elements and hide A1111 elements
+  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
+  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
 
-    selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
-    for (let i = 0; i < comfyuiElements.length; i++) {
-      comfyuiElements[i].style.display = "block";
-    }
-  });
+  //   // selectA1111APIButton.style.backgroundColor = "#ffe1b7";
+  //   // for (let i = 0; i < a1111Elements.length; i++) {
+  //   //   a1111Elements[i].style.display = "none";
+  //   // }
+
+  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
+  //   // for (let i = 0; i < comfyuiElements.length; i++) {
+  //   //   comfyuiElements[i].style.display = "block";
+  //   // }
+  // });
 
 });
+
+
+function toggleAPI(event) {
+  event.stopPropagation();
+  event.preventDefault();
+
+  const toggleCheckbox = document.getElementById('toggle-api');
+  if (toggleCheckbox.checked) {
+      API_mode = apis.COMFYUI;
+      console.log('API_mode is now set to:', API_mode);
+      createToast("API CHANGE!", "COMFYUI");
+  } else {
+      API_mode = apis.A1111;
+      console.log('API_mode is now set to:', API_mode);
+      createToast("API CHANGE!", "WebUI(A1111/Forge)");
+  }
+}
+
+
+
+
 
 
 function executeWithConfirmation(message, callback) {

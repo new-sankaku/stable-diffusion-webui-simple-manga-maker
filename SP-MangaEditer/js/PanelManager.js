@@ -217,6 +217,17 @@ function adjustImageToFitFrame(image, frame) {
   });
 }
 
+
+
+
+document.getElementById("CustomPanelButton").addEventListener("click", function () {
+  var x  = document.getElementById("customPanelSizeX").value;
+  var y  = document.getElementById("customPanelSizeY").value;
+  loadBookSize(x, y, false);
+  canvas.renderAll();
+  adjustCanvasSize();
+});
+
 document.getElementById("A4-H").addEventListener("click", function () {
   loadBookSize(210, 297);
 });
@@ -231,17 +242,31 @@ document.getElementById("B4-V").addEventListener("click", function () {
 });
 
 function loadBookSize(width, height) {
+  loadBookSize(width, height, true);
+}
+
+function loadBookSize(width, height, addPanel) {
   if (stateStack.length > 2) {
     executeWithConfirmation("New Project?", function () {
       changeDoNotSaveHistory();
       resizeCanvasToObject(width, height);
-      addSquareBySize(width, height);
+      if(addPanel){
+        addSquareBySize(width, height);
+      }else{
+        initImageHistory();
+        saveState();
+      }
       changeDoSaveHistory();
     });
   } else {
     changeDoNotSaveHistory();
     resizeCanvasToObject(width, height);
-    addSquareBySize(width, height);
+    if(addPanel){
+      addSquareBySize(width, height);
+    }else{
+      initImageHistory();
+      saveState();
+    }
     changeDoSaveHistory();
   }
 }
@@ -263,8 +288,13 @@ function addSquareBySize(width, height) {
   var svgPaggingHalfWidth = svgPaggingWidth / 2;
   var svgPaggingHalfHeight = svgPaggingHeight / 2;
 
-  var newWidth = width * widthScale - svgPaggingWidth;
+  var newWidth  = width  * widthScale - svgPaggingWidth;
   var newHeight = height * heightScale - svgPaggingHeight;
+
+  console.log("addSquareBySize height", height);
+  console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
+  console.log("addSquareBySize heightScale", heightScale);
+  console.log("addSquareBySize newHeight", newHeight);
 
   var square = new fabric.Polygon(
     [

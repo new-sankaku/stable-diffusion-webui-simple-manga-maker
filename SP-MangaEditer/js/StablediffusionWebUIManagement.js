@@ -88,114 +88,52 @@ async function fetchOptions() {
   }
 }
 
-async function fetchSampler() {
+async function fetchSD_Sampler() {
   const response = await fetch(sdWebUI_API_samplers, { method: 'GET' });
   const models = await response.json();
   updateSamplerDropdown(models);
 }
 
-async function fetchUpscaler() {
-  console.log("fetchUpscaler");
+async function fetchSD_Upscaler() {
+  //console.log("fetchUpscaler");
   const response = await fetch(sdWebUI_API_upscaler, { method: 'GET' });
   const models = await response.json();
   updateUpscalerDropdown(models);
 }
 
-async function fetchModels() {
+async function fetchSD_Models() {
   fetchOptions();
   const response = await fetch(sdWebUI_API_sdModel, { method: 'GET' });
   const models = await response.json();
   updateModelDropdown(models);
 }
 
-function updateUpscalerDropdown(models) {
-  const modelDropdown = document.getElementById('text2img_basePrompt_hr_upscaler');
-  modelDropdown.innerHTML = '';
-  models.forEach(model => {
-    const option = document.createElement('option');
-    option.value = model.name;
-    option.textContent = model.name;
 
-    if (text2img_basePrompt.text2img_hr_upscaler === model.name) {
-      option.selected = true;
-    }
-    modelDropdown.appendChild(option);
-  });
-}
+function sdwebui_apiHeartbeat() {
 
-function updateSamplerDropdown(models) {
-  const modelDropdown = document.getElementById('text2img_basePrompt_samplingMethod');
-  modelDropdown.innerHTML = '';
-  text2img_basePrompt.text2img_samplingMethod
+  const SD_WebUI_Heartbeat_Label = document.getElementById('SD_WebUI_Heartbeat_Label');
 
-  models.forEach(model => {
-    const option = document.createElement('option');
-    option.value = model.name;
-    option.textContent = model.name;
-
-    if (text2img_basePrompt.text2img_samplingMethod === model.name) {
-      option.selected = true;
-    }
-    modelDropdown.appendChild(option);
-  });
-}
-
-
-function updateModelDropdown(models) {
-  const modelDropdown = document.getElementById('text2img_basePrompt_model');
-  modelDropdown.innerHTML = '';
-  models.forEach(model => {
-    const option = document.createElement('option');
-    option.value = model.title;
-    option.textContent = model.model_name;
-
-    if (text2img_basePrompt.text2img_model === model.title) {
-      option.selected = true;
-    }
-    modelDropdown.appendChild(option);
-  });
-}
-
-
-function sdwebui_checkAPIStatus() {
-
-  const pingCheck = document.getElementById('SD_WebUI_pingCheck');
-  if (pingCheck.checked) {
-
-  } else {
-    return;
-  }
   fetch(sdWebUI_API_ping, {
     method: 'GET',
     headers: { 'Accept': 'application/json' }
   })
     .then(response => {
-      const statusElement = document.getElementById('SD_WebUI_pingCheck_Label');
-      if (response.ok) {
-        statusElement.innerHTML = '<input type="checkbox" id="SD_WebUI_pingCheck" checked> SD WebUI ON';
-        statusElement.style.color = 'green';
-      } else {
-        statusElement.innerHTML = '<input type="checkbox" id="SD_WebUI_pingCheck" checked> SD WebUI OFF';
-        statusElement.style.color = 'red';
-      }
+        if( response.ok ){
+          //console.log("apiHeartbeat", "sdWebUI_isAlive");
+          SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge ON';
+          SD_WebUI_Heartbeat_Label.style.color = 'green';
+        }else{
+          //console.log("apiHeartbeat", "sdWebUI_notAlive");
+          SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge OFF';
+          SD_WebUI_Heartbeat_Label.style.color = 'red';
+        }
     })
     .catch(error => {
-      const statusElement = document.getElementById('SD_WebUI_pingCheck_Label');
-      statusElement.innerHTML = '<input type="checkbox" id="SD_WebUI_pingCheck" checked> SD WebUI OFF(Error)';
-      statusElement.style.color = 'red';
+      //console.log("apiHeartbeat", "sdWebUI_notAlive");
+      SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge OFF';
+      SD_WebUI_Heartbeat_Label.style.color = 'red';
     });
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-  setInterval(sdwebui_checkAPIStatus, 1000 * 15);
-});
-
-document.getElementById('SD_WebUI_pingCheck').addEventListener('change', function () {
-  sdwebui_checkAPIStatus();
-});
-
-sdwebui_checkAPIStatus();
-
 
 
 function baseRequestData(layer) {
@@ -209,14 +147,14 @@ function baseRequestData(layer) {
     seed = layer.text2img_seed;
   }
 
-  // console.log("layer.text2img_width", layer.text2img_width);
+  // //console.log("layer.text2img_width", layer.text2img_width);
   if (layer.text2img_width <= 0) {
     width = text2img_basePrompt.text2img_width;
   } else {
     width = layer.text2img_width;
   }
 
-  // console.log("layer.text2img_height", layer.text2img_height);
+  // //console.log("layer.text2img_height", layer.text2img_height);
   if (layer.text2img_height <= 0) {
     height = text2img_basePrompt.text2img_height;
   } else {
@@ -260,7 +198,7 @@ async function fetchImageData(url, requestData) {
     });
     return await response.json();
   } catch (error) {
-    createToast("Fetch Error.", "check SD WebUI!");
+    createToastError("Fetch Error.", "check SD WebUI!");
     return null;
   }
 }
@@ -316,7 +254,7 @@ async function handleProcessQueue(layer, spinnerId, fetchFunction, imageName) {
       if (img) {
         const webpImg = await img2webp(img);
         webpImg.name = imageName;
-        setImage2ImageInitPrompt(webpImg); 
+        setImage2ImageInitPrompt(webpImg);
         const { centerX, centerY } = calculateCenter(layer);
         putImageInFrame(webpImg, centerX, centerY);
 
@@ -325,12 +263,12 @@ async function handleProcessQueue(layer, spinnerId, fetchFunction, imageName) {
         webpImg.tempPrompt = infoObject.prompt;
         webpImg.tempNegativePrompt = infoObject.negative_prompt;
       } else {
-        createToast("generate error", "");
+        createToastError("generate error", "");
       }
     })
     .catch(error => {
-      createToast("Generation Error.", "check SD WebUI!");
-      console.log("error:", error);
+      createToastError("Generation Error.", "check SD WebUI!");
+      //console.log("error:", error);
     })
     .finally(() => removeSpinner(spinnerId));
 }
@@ -353,45 +291,43 @@ async function sdWebUI_Interrogate(layer, model, spinnerId) {
       model: model
     };
 
-    console.log("sdWebUI_Interrogate", "fetch start");
+    //console.log("sdWebUI_Interrogate", "fetch start");
     const response = await fetch(sdWebUI_API_interrogate, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
     });
-    console.log("sdWebUI_Interrogate", "fetch end");
+    //console.log("sdWebUI_Interrogate", "fetch end");
 
     if (!response.ok) {
       const errorText = await response.text();
-      createToast("Interrogate error", errorText);
+      createToastError("Interrogate error", errorText);
       return null;
     }
 
     const result = await response.json();
     return result;
   })
-  .then(async (result) => {
-    if (result) {
-      createToast("Interrogate Success. " + model, result.caption);
-      if( layer.text2img_prompt ){
-        layer.text2img_prompt = layer.text2img_prompt + ", " +  result.caption;
-      }else{
-        layer.text2img_prompt = result.caption;
+    .then(async (result) => {
+      if (result) {
+        createToast("Interrogate Success. " + model, result.caption);
+        if (layer.text2img_prompt) {
+          layer.text2img_prompt = layer.text2img_prompt + ", " + result.caption;
+        } else {
+          layer.text2img_prompt = result.caption;
+        }
       }
-    } 
-  })
-  .catch(error => {
-    createToast("Interrogate Error.", "check SD WebUI!");
-    console.log("error:", error);
-  })
-  .finally(() => {
-    removeSpinner(spinnerId);
-  });
+    })
+    .catch(error => {
+      createToastError("Interrogate Error.", "check SD WebUI!");
+      //console.log("error:", error);
+    })
+    .finally(() => {
+      removeSpinner(spinnerId);
+    });
 }
-
-
 
 
 function removeSpinner(spinnerId) {

@@ -135,6 +135,7 @@ function resizeCanvasToObject(objectWidth, objectHeight) {
 
 }
 
+
 document.getElementById('bg-color').addEventListener('input', function (event) {
   // console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
   var color = event.target.value;

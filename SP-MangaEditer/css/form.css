@@ -56,6 +56,92 @@ hr {
 }
 
 
+.file-input-label {
+  display: inline-block;
+  padding: 3px;
+  background-color: #6e7e8f;
+  color: rgb(255, 255, 255);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+}
+
+.file-input-label:hover {
+  background-color: #679ed9;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+
+.toggle-container {
+  display: flex;
+  gap: 0px;
+  padding: 10px;
+  width: 100%;
+}
+
+.toggle-text {
+  font-size: 14px;
+  margin-right: 20px;
+  text-align: center;
+}
+.toggle-text2 {
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+}
+
+.toggle-switch {
+  width: 40px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 40px;
+}
+
+.toggle-checkbox {
+  display: none;
+}
+
+.toggle-label {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  background: var(--toggle-off-background);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: inset 1px 1px 3px var(--toggle-button-shadow), inset -1px -1px 3px #ffffff;
+}
+
+.toggle-label::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: var(--toggle-button-color);
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.1s ease, background 0.1s ease;
+  box-shadow: 1px 1px 3px var(--toggle-button-shadow), -1px -1px 3px #ffffff;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background: var(--toggle-on-background);
+}
+
+.toggle-checkbox:checked + .toggle-label::after {
+  transform: translateX(20px);
+}
+
+
+
 
 select,
 .custom-navbar input[type="text"],

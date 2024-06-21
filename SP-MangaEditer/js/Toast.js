@@ -1,4 +1,10 @@
 function createToast(title, messages) {
+    return createToast(title, messages, false);
+}
+function createToastError(title, messages) {
+    return createToast(title, messages, true);
+}
+function createToast(title, messages, isError) {
     const container = document.getElementById('sp-manga-toastContainer');
     if (!container) {
         console.error('Toast container not found');
@@ -7,21 +13,34 @@ function createToast(title, messages) {
 
     const toastId = `sp-manga-toast-${Date.now()}`;
     const toast = document.createElement('div');
-    toast.className = 'sp-manga-toast';
-    toast.id = toastId;
-    toast.style.height = 'auto';
-    toast.innerHTML = `
-        <div class="sp-manga-toast-header">
+
+    var className = 'sp-manga-toast';
+    var progressBarClass = 'sp-manga-progress-bar';
+    var header = 'sp-manga-toast-header';
+
+    if( isError ){
+        className = 'sp-manga-toast-error';
+        progressBarClass = 'sp-manga-progress-bar-error';
+        header = 'sp-manga-toast-header-error';
+    }
+
+    toast.className = className;
+        toast.innerHTML = `
+        <div class="${header}">
             <strong class="me-auto">${title}</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="sp-manga-toast-body">
             <div id="sp-manga-toastMessageContainer"></div>
             <div class="progress" style="height: 5px;">
-                <div class="sp-manga-progress-bar" role="progressbar" style="width: 100%;"></div>
+                <div class="${progressBarClass}" role="progressbar" style="width: 100%;"></div>
             </div>
         </div>
     `;
+
+    toast.id = toastId;
+    toast.style.height = 'auto';
+
 
     container.appendChild(toast);
 
@@ -39,7 +58,7 @@ function createToast(title, messages) {
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
-        startProgressBar(toast);
+        startProgressBar(toast, progressBarClass);
     } else if (Array.isArray(messages)) {
         let messageIndex = 0;
         const messageInterval = 300;
@@ -55,7 +74,7 @@ function createToast(title, messages) {
                 toast.style.height = `auto`;
                 setTimeout(showNextMessage, messageInterval);
             } else {
-                startProgressBar(toast);
+                startProgressBar(toast,progressBarClass);
             }
         };
 
@@ -66,7 +85,7 @@ function createToast(title, messages) {
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
-        startProgressBar(toast);
+        startProgressBar(toast,progressBarClass);
     }
 
     toast.addEventListener('hidden.bs.toast', function () {
@@ -75,8 +94,8 @@ function createToast(title, messages) {
     });
 }
 
-function startProgressBar(toast) {
-    const progressBar = toast.querySelector('.sp-manga-progress-bar');
+function startProgressBar(toast, progressBarClass) {
+    const progressBar = toast.querySelector("."+progressBarClass);
     const interval = 50;
     const totalDuration = 3500;
     let width = 100;

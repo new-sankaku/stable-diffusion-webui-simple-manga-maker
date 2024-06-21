@@ -8,6 +8,10 @@ var canvas = new fabric.Canvas("mangaImageCanvas", {
   skipOffscreen: false,
   renderer: fabric.isWebglSupported ? "webgl" : "canvas",
 });
+document.addEventListener("DOMContentLoaded", function() {
+  loadBookSize(210, 297);
+
+});
 
 const mode = localStorage.getItem('mode') || 'light-mode';
 if (mode === 'dark-mode') {

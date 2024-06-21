@@ -4,6 +4,9 @@
 const resources = {
   en: {
     translation: {
+"customPanelSizeX": "Width",
+"customPanelSizeY": "Height",
+"customPanel": "Custom Size",      
 "Tutorial": "Tutorial",
 "intro_svg-container-vertical_body": "This is a vertical template panel.",
 "intro_svg-container-vertical_title": "Vertical Panel",
@@ -123,10 +126,10 @@ const resources = {
 "allRemove": "All Remove",
 "prompt": "Prompt",
 "searchReplace": "Search & Replace",
-"sdWebUI": "SD WebUI",
+"sdWebUI": "SD API",
 "apiHost": "API Host",
 "apiPort": "API Port",
-"help_api_connect_settings": "Help:API Connect Settings",
+"help_api_connect_settings": "Help:Settings",
 "canvas": "Canvas",
 "panelsVertical": "Panels",
 "panelsLandscape": "Panels",
@@ -291,6 +294,9 @@ const resources = {
   },
   ja: {
     translation: {
+"customPanelSizeX": "幅",
+"customPanelSizeY": "高さ",
+"customPanel": "カスタムサイズ",
 "Tutorial": "チュートリアル",
 "intro_svg-container-vertical_body": "縦型のテンプレートパネルです。",
 "intro_svg-container-vertical_title": "縦型パネル",
@@ -492,6 +498,9 @@ const resources = {
   },
   ko: {
     translation: {
+"customPanelSizeX": "너비",
+"customPanelSizeY": "높이",
+"customPanel": "사용자 정의 크기",
 "Tutorial": "튜토리얼",
 "intro_svg-container-vertical_body": "이것은 세로형 템플릿 패널입니다.",
 "intro_svg-container-vertical_title": "세로형 패널",
@@ -708,6 +717,9 @@ const resources = {
   },
   fr: {
     translation: {
+"customPanelSizeX": "Largeur",
+"customPanelSizeY": "Hauteur",
+"customPanel": "Taille personnalisée",
 "Tutorial": "Tutoriel",
 "intro_svg-container-vertical_body": "Ceci est un panneau de modèle vertical.",
 "intro_svg-container-vertical_title": "Panneau Vertical",
@@ -958,6 +970,9 @@ const resources = {
   },
   zh: {
     translation: {
+"customPanelSizeX": "宽度",
+"customPanelSizeY": "高度",
+"customPanel": "自定义大小",
 "Tutorial": "教程",
 "intro_svg-container-vertical_body": "这是一个竖向模板面板。",
 "intro_svg-container-vertical_title": "竖向面板",
@@ -1204,6 +1219,9 @@ const resources = {
   },
   ru: {
     translation: {
+"customPanelSizeX": "Ширина",
+"customPanelSizeY": "Высота",
+"customPanel": "Пользовательский размер",
 "Tutorial": "Учебник",
 "intro_svg-container-vertical_body": "Это вертикальная панель шаблона.",
 "intro_svg-container-vertical_title": "Вертикальная панель",
@@ -1402,6 +1420,9 @@ const resources = {
   },
   es: {
     translation: {
+"customPanelSizeX": "Ancho",
+"customPanelSizeY": "Altura",
+"customPanel": "Tamaño personalizado",
 "Tutorial": "Tutorial",
 "intro_svg-container-vertical_body": "Este es un panel de plantilla vertical.",
 "intro_svg-container-vertical_title": "Panel Vertical",
@@ -1599,6 +1620,9 @@ const resources = {
   },
   pt: {
     translation: {
+"customPanelSizeX": "Largura",
+"customPanelSizeY": "Altura",
+"customPanel": "Tamanho personalizado",
 "Tutorial": "Tutorial",
 "intro_svg-container-vertical_body": "Este é um painel de modelo vertical.",
 "intro_svg-container-vertical_title": "Painel Vertical",

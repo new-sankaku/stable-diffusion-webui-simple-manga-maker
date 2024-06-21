@@ -55,7 +55,7 @@ function clipCopy() {
 			navigator.clipboard.write([item]).then(function () {
 				createToast("Success", "Image copied to clipboard successfully!");
 			}, function (error) {
-				createToast("Error", "Unable to write to clipboard. Error");
+				createToastError("Error", "Unable to write to clipboard. Error");
 			});
 		});
 	if (isGridVisible) {

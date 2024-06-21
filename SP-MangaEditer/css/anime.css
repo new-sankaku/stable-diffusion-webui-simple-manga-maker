@@ -32,6 +32,30 @@ section {
   font-family: var(--font-family-section);
 }
 
+
+.sp-manga-toast-error {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  border: 1px solid #333;
+  box-shadow: 0 0 10px #ea0000;
+  animation: sp-manga-slide-in 0.5s ease-out;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+  max-width: 500px;
+  width: auto;
+  word-wrap: break-word;
+}
+.sp-manga-toast-header-error {
+  background-color: #333;
+  color: #fff;
+  border-bottom: 1px solid #ea0000;
+  pointer-events: auto;
+}
+
+.sp-manga-progress-bar-error {
+  background-color: #ea0000;
+}
+
 .sp-manga-toast {
   background-color: rgba(0, 0, 0, 0.9);
   color: #fff;
@@ -51,7 +75,6 @@ section {
   color: #fff;
   border-bottom: 1px solid #6200ea;
   pointer-events: auto;
-
 }
 
 .sp-manga-progress-bar {

@@ -169,50 +169,87 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="intro_sdWebUI" data-i18n="sdWebUI">SD WebUI</span>
+                            <span id="intro_sdWebUI" data-i18n="sdWebUI">SD API</span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <!--Select API-->
-                            <!--TODO: fix temporary styling-->
-                            <li style="display: flex; justify-content: center; align-items: center; list-style: none; padding: 10px">
+                            <!-- <li style="display: flex; justify-content: center; align-items: center; list-style: none; padding: 10px">
                                 <button id="Select_a1111_button"  style="margin: 0 10px; padding: 5px; background-color: #ffedd3;">A1111</button>
                                 <button id="Select_comfyui_button" style="margin: 0 10px; padding: 5px">Comfyui</button>
+                            </li> -->
+                            <li  style="display: none;">
+                                <div class="toggle-container">
+                                    <span class="toggle-text">WebUI</span>
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="toggle-api" class="toggle-checkbox" onchange="toggleAPI(event)">
+                                        <label for="toggle-api" class="toggle-label"></label>
+                                    </div>
+                                    <span class="toggle-text2">ComfyUI</span>
+                                </div>                            
                             </li>
-                            
+
+                            <hr>
                             <!--A1111-->
                             <div class="A1111_api_content">
                                 <li>
-                                    <label for="Stable_Diffusion_WebUI_apiHost"><span data-i18n="apiHost">API
-                                            Host:</span><input type="text" id="Stable_Diffusion_WebUI_apiHost"></label>
+                                    <label>
+                                        <span data-i18n="">WebUI(A1111/Forge)</span>
+                                    </label>
+                                    <label for="Stable_Diffusion_WebUI_apiHost">
+                                        <span data-i18n="apiHost">API Host:</span>
+                                        <input type="text" id="Stable_Diffusion_WebUI_apiHost">
+                                    </label>
                                 </li>
                                 <li>
-                                    <label for="Stable_Diffusion_WebUI_apiPort"><span data-i18n="apiPort">API
-                                            Port:</span><input type="text" id="Stable_Diffusion_WebUI_apiPort"></label>
+                                    <label for="Stable_Diffusion_WebUI_apiPort">
+                                        <span data-i18n="apiPort">API Port:</span>
+                                        <input type="text" id="Stable_Diffusion_WebUI_apiPort">
+                                    </label>
                                 </li>
-                                <hr>
-                            <li>
+                                <li>
                                     <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank">
                                         <i class="material-icons">help_outline</i>
                                         <span data-i18n="help_api_connect_settings">
-                                        Help:API Connect Settings
-                                    </span>
+                                            Help:Connect Settings
+                                        </span>
                                     </a>
                                 </li>
                             </div>
+                            <hr>
 
                             <!--COMFYUI-->
                             <div class="Comfyui_api_content" style="display: none;">
                                 <li>
-                                    <label for="Comfyui_apiHost"><span data-i18n="apiHost">API
-                                            Host:</span><input type="text" id="Comfyui_apiHost"></label>
+                                    <label>
+                                        <span data-i18n="">ComufyUI(β)</span>
+                                    </label>
                                 </li>
                                 <li>
-                                    <label for="Comfyui_apiPort"><span data-i18n="apiPort">API
-                                            Port:</span><input type="text" id="Comfyui_apiPort"></label>
+                                    <label for="Comfyui_apiHost">
+                                        <span data-i18n="apiHost">API Host:</span>
+                                        <input type="text" id="Comfyui_apiHost">
+                                    </label>
                                 </li>
                                 <li>
-                                    <input type="file" id="Workflow_path_load" style="width: 100%;">
+                                    <label for="Comfyui_apiPort">
+                                        <span data-i18n="apiPort">API Port:</span>
+                                        <input type="text" id="Comfyui_apiPort">
+                                    </label>
                                 </li>
+                                <li>
+                                    <label class="file-input-label">
+                                      <input type="file" id="Workflow_path_load" onchange="displayFileName()">
+                                      <span>Workflow File</span>
+                                    </label>
+                                    <label>
+                                        <span id="file-name">No file</span>
+                                    </label>
+                                </li>
+                                <a href="html/API_Help/ComufyUI_settings.html" target="_blank">
+                                    <i class="material-icons">help_outline</i>
+                                    <span data-i18n="help_api_connect_settings">
+                                    Help:Connect Settings
+                                    </span>
+                                </a>
                             </div>
                         </ul>
                     </li>
@@ -345,7 +382,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <i class="fas fa-sun"></i>
-                        <label class="toggle-switch">
+                        <label class="toggle-switchTermaMode">
                             <input type="checkbox" id="mode-toggle">
                             <span class="slider">
                                 <span class="mode-icons">
@@ -434,19 +471,31 @@
                         <span" data-i18n="B4-V-Scale">B4 Scale Panel</span>
                     </button>
                     <hr>
+                    <div class="input-group">
+                        <label for="customPanelSizeX" data-i18n="customPanelSizeX">Width</label>
+                        <input type="number" id="customPanelSizeX" name="customPanelSizeX" min="1" max="4096" step="1" value="690">
+                    </div>
+                    <div class="input-group">
+                        <label for="customPanelSizeY" data-i18n="customPanelSizeY">Height</label>
+                        <input type="number" id="customPanelSizeY" name="customPanelSizeY" min="1" max="4096" step="1" value="2000">
+                    </div>
+                    <button id="CustomPanelButton">
+                        <i class="material-icons">crop_landscape</i>
+                        <span" data-i18n="customPanel">Custom Size</span>
+                    </button>
+                    <hr>
                     <button id="knifeModeButton">
                         <i class="material-icons">edit_square</i>
                         <span data-i18n="knifeMode">Knife Mode(β): OFF</span>
                     </button>
                     <div class="input-group">
                         <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
-                        <input type="number" id="panelSpaceSize" name="panelSpaceSize" min="0" max="75" step="1"
-                            value="20">
+                        <input type="number" id="panelSpaceSize" name="panelSpaceSize" min="0" max="75" step="1" value="20">
                     </div>
                     <hr>
                     <label data-i18n="KnifeHelp"></label>
                     <hr>
-                </div>f
+                </div>
             </div>
 
             <div id="speech-bubble-area1" style="display: none;">
@@ -916,9 +965,13 @@
                         </div>
                         <div id="intro_SD_WebUI_pingCheck_Label" class="control-item A1111_api_content">
                             <label id="SD_WebUI_pingCheck_Label">
-                                <input type="checkbox" id="SD_WebUI_pingCheck" checked>
-                                SD WebUI PING
+                                <input type="checkbox" id="apiHeartbeatCheckbox" checked>
+                                AI Check
                             </label>
+                        </div>
+                        <div class="control-item">
+                            <label id="SD_WebUI_Heartbeat_Label">SD WebUI Check…</label>
+                            <label id="ComufyUI_Heartbeat_Label" style="display: none;">ComufyUI Check…</label>
                         </div>
                     </div>
                 </div>
@@ -1417,6 +1470,9 @@
             ここに下部の横長エリアの内容を追加します。
         </div>
     </div> -->
+    <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
+
+
     <script src="third/jszip/jszip.min.js?v=2.6" defer></script>
     <script src="third/crypto-js/crypto-js.min.js?v=2.6"></script>
     <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.6"></script>
@@ -1465,6 +1521,7 @@
     <script src="js/ui/modeChange.js?v=2.6" defer></script>
 
     <script src="js/ui/intro.js?v=2.6" defer></script>
+    <script src="js/ai/GenerativeAI.js?v=2.6" defer></script>
 </body>
 
 </html>
