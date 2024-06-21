@@ -1,0 +1,31 @@
+.tippy-box[data-theme~='retro'] {
+  background-color: #ffcc00;
+  color: #333;
+  border: 2px solid #333;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 1s ease; /* 1秒のアニメーション */
+}
+.tippy-box[data-theme~='retro'][data-state='hidden'] {
+  opacity: 0;
+}
+.tippy-box[data-theme~='retro'] .tippy-arrow {
+  color: #ffcc00;
+}
+
+.tippy-box[data-theme~='light'] {
+  background-color: #fff;
+  color: #333;
+  border: 2px solid #333;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 1s ease; /* 1秒のアニメーション */
+}
+.tippy-box[data-theme~='light'][data-state='hidden'] {
+  opacity: 0;
+}
+.tippy-box[data-theme~='light'] .tippy-arrow {
+  color: #fff;
+}

@@ -9,7 +9,7 @@ var canvas = new fabric.Canvas("mangaImageCanvas", {
   renderer: fabric.isWebglSupported ? "webgl" : "canvas",
 });
 document.addEventListener("DOMContentLoaded", function() {
-  loadBookSize(210, 297);
+  loadBookSize(210, 297, false);
 
 });
 

@@ -232,45 +232,31 @@ function replaceGuids(searchGuid, nextObject) {
     return;
   }
   if (!nextObject) {
-    console.log("replaceGuids is invalid value. ", searchGuid);
     return;
   }
 
   var parentObject = haveGuidsObjectByGuid(searchGuid);
-  console.log( "1 parentObject", parentObject );
-  console.log( "1 parentObject.guids", parentObject.guids );
 
   if (parentObject && Array.isArray(parentObject.guids)) {
     parentObject.guids = parentObject.guids.filter(guid => guid !== searchGuid);
     var nextGuid = getGUID(nextObject);
     parentObject.guids.push(nextGuid);
-
-    console.log( "2 nextGuid", nextGuid );
-    console.log( "2 parentObject.guids", parentObject.guids );
   } else {
-    console.log("parentObject or parentObject.guids is invalid. ", searchGuid);
   }
 }
 
 function haveGuidsObjectByGuid(searchGuid) {
   if( !searchGuid){
-    console.log("haveGuidsObjectByGuid is invalid value.");
     return null;
   }
 
   var layers = canvas.getObjects();
-  console.log("haveGuidsObjectByGuid.", searchGuid);
   var matchingObject = layers.find(layer => layer.guids && layer.guids.includes(searchGuid));
-
-  console.log("haveGuidsObjectByGuid.", matchingObject.guids);
-  console.log("haveGuidsObjectByGuid.", matchingObject);
-
   return matchingObject;
 }
 
 function getObjectByGUID(searchGuid) {
   if( !searchGuid){
-    console.log("getObjectByGUID is invalid value.");
     return;
   }
   

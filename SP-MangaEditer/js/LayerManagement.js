@@ -89,17 +89,17 @@ function updateLayerPanel() {
       detailsDiv.appendChild(nameTextArea);
 
       if (layer.isPanel) {
-        putT2iButton(buttonsDiv, layer);
+        putT2iButton(buttonsDiv, layer, index);
         putRunT2iButton(buttonsDiv, layer, index);
-        putSeedButton(buttonsDiv, layer);
+        putSeedButton(buttonsDiv, layer, index);
       }
       if (layer.type == 'image') {
-        putI2iButton(buttonsDiv, layer);
+        putI2iButton(buttonsDiv, layer, index);
         putRunI2iButton(buttonsDiv, layer, index);
-        putPromptButton(buttonsDiv, layer);
+        putPromptButton(buttonsDiv, layer, index);
         putInterrogateButtons(buttonsDiv, layer, index);
       }
-      putDeleteButton(buttonsDiv, layer);
+      putDeleteButton(buttonsDiv, layer, index);
 
       layerDiv.setAttribute("data-id", layer.id);
 
@@ -171,6 +171,7 @@ function putInterrogateButtons(buttonsDiv, layer, index) {
     sdWebUI_Interrogate(layer, "clip", spinner.id);
     index++;
   };
+
   deepDooruButton.onclick = function (e) {
     e.stopPropagation();
     var areaHeader = document.querySelector('#layer-panel .area-header');
@@ -179,14 +180,16 @@ function putInterrogateButtons(buttonsDiv, layer, index) {
     sdWebUI_Interrogate(layer, "deepdanbooru", spinner.id);
     index++;
   };
+  addTooltipByElement(deepDooruButton, "deepDooruButton");
+  addTooltipByElement(clipButton, "clipButton");
 
   buttonsDiv.appendChild(clipButton);
   buttonsDiv.appendChild(deepDooruButton);
 }
 
-function putPromptButton(buttonsDiv, layer) {
+function putPromptButton(buttonsDiv, layer, index) {
   var promptButton = document.createElement("button");
-  promptButton.innerHTML = '<i class="material-icons">text_snippet</i> Prompt';
+  promptButton.innerHTML = '<i class="material-icons">text_snippet</i>';
   promptButton.onclick = function (e) {
     e.stopPropagation();
     if (layer.tempPrompt) {
@@ -202,6 +205,8 @@ function putPromptButton(buttonsDiv, layer) {
       createToast("Nothing Negative Prompt", "");
     }
   };
+
+  addTooltipByElement(promptButton, "promptButton");
   buttonsDiv.appendChild(promptButton);
 }
 
@@ -209,7 +214,7 @@ function putPromptButton(buttonsDiv, layer) {
 function putRunI2iButton(buttonsDiv, layer, index) {
   var runButton = document.createElement("button");
   runButton.id = 'runButton-' + index;
-  runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
+  runButton.innerHTML = '<i class="material-icons">directions_run</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
     var areaHeader = document.querySelector('#layer-panel .area-header');
@@ -218,21 +223,26 @@ function putRunI2iButton(buttonsDiv, layer, index) {
     sdWebUI_I2IProcessQueue(layer, spinner.id);
     index++;
   };
+
+  addTooltipByElement(runButton, "runButton");
+
   buttonsDiv.appendChild(runButton);
 }
 
 
-function putI2iButton(buttonsDiv, layer) {
+function putI2iButton(buttonsDiv, layer, index) {
   var i2iButton = document.createElement("button");
-  i2iButton.innerHTML = '<i class="material-icons">settings</i> I2I';
+  i2iButton.innerHTML = '<i class="material-icons">settings</i>';
   i2iButton.onclick = function (e) {
     e.stopPropagation();
     openImage2ImagefloatingWindowItem(layer);
   };
+  
+  addTooltipByElement(i2iButton, "i2iButton");
   buttonsDiv.appendChild(i2iButton);
 }
 
-function putDeleteButton(buttonsDiv, layer) {
+function putDeleteButton(buttonsDiv, layer, index) {
   var deleteButton = document.createElement("button");
   deleteButton.textContent = "✕";
   deleteButton.className = "delete-layer-button";
@@ -240,12 +250,13 @@ function putDeleteButton(buttonsDiv, layer) {
     e.stopPropagation();
     removeLayer(layer);
   };
+  addTooltipByElement(deleteButton, "deleteButton");
   buttonsDiv.appendChild(deleteButton);
 }
 
-function putSeedButton(buttonsDiv, layer) {
+function putSeedButton(buttonsDiv, layer, index) {
   var seedButton = document.createElement("button");
-  seedButton.innerHTML = '<i class="material-icons">recycling</i> Seed';
+  seedButton.innerHTML = '<i class="material-icons">recycling</i>';
   seedButton.onclick = function (e) {
     e.stopPropagation();
     if (layer.tempSeed) {
@@ -255,13 +266,15 @@ function putSeedButton(buttonsDiv, layer) {
       createToast("Nothing Seed", "");
     }
   };
+
+  addTooltipByElement(seedButton, "seedButton");
   buttonsDiv.appendChild(seedButton);
 }
 
 function putRunT2iButton(buttonsDiv, layer, index) {
   var runButton = document.createElement("button");
   runButton.id = 'runButton-' + index;
-  runButton.innerHTML = '<i class="material-icons">add_photo_alternate</i> Run';
+  runButton.innerHTML = '<i class="material-icons">directions_run</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
     var areaHeader = document.querySelector('#layer-panel .area-header');
@@ -274,16 +287,18 @@ function putRunT2iButton(buttonsDiv, layer, index) {
       Comfyui_handle_process_queue(layer, spinner.id);
     index++;
   };
+  addTooltipByElement(runButton, "runButton");
   buttonsDiv.appendChild(runButton);
 }
 
-function putT2iButton(buttonsDiv, layer) {
+function putT2iButton(buttonsDiv, layer, index) {
   var t2iButton = document.createElement("button");
-  t2iButton.innerHTML = '<i class="material-icons">settings</i> T2I';
+  t2iButton.innerHTML = '<i class="material-icons">settings</i>';
   t2iButton.onclick = function (e) {
     e.stopPropagation();
     openfloatingWindowItem(layer);
   };
+  addTooltipByElement(t2iButton, "t2iButton");
   buttonsDiv.appendChild(t2iButton);
 }
 

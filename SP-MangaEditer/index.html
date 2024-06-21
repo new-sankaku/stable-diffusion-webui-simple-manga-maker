@@ -35,33 +35,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/form.css?v=2.7">
+    <link rel="stylesheet" href="css/form.css?v=2.8">
 
-    <link rel="stylesheet" href="css/common.css?v=2.7">
-    <link rel="stylesheet" href="css/components.css?v=2.7">
-    <link rel="stylesheet" href="css/layout.css?v=2.7">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.7">
-    <link rel="stylesheet" href="css/anime.css?v=2.7">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=2.7">
-    <link rel="stylesheet" href="css/toast.css?v=2.7">
-    <link rel="stylesheet" href="css/ui/modeChange.css?v=2.7">
+    <link rel="stylesheet" href="css/common.css?v=2.8">
+    <link rel="stylesheet" href="css/components.css?v=2.8">
+    <link rel="stylesheet" href="css/layout.css?v=2.8">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=2.8">
+    <link rel="stylesheet" href="css/anime.css?v=2.8">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=2.8">
+    <link rel="stylesheet" href="css/toast.css?v=2.8">
+    <link rel="stylesheet" href="css/ui/modeChange.css?v=2.8">
+    <link rel="stylesheet" href="css/tippy.css?v=2.8">
+    <link rel="stylesheet" href="third/tippy/tippy.css?v=2.8">
 
-    <link href="third/Bootstrup/bootstrap.min.css?v=2.7" rel="stylesheet">
+    <link href="third/Bootstrup/bootstrap.min.css?v=2.8" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 
-    <script src="third/glfx/glfx.js?v=2.7"></script>
-    <script src="third/Fabric.js/fabric.min.js?v=2.7"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.7"></script>
-    <script src="third/i18next/i18next.min.js?v=2.7"></script>
-    <script src="third/jsts/jsts.min.js?v=2.7"></script>
-    <script src="third/browser-image-compression/browser-image-compression.js?v=2.7"></script>
-    <script src="third/intro/intro.min.js?v=2.7"></script>
-
+    <script src="third/glfx/glfx.js?v=2.8"></script>
+    <script src="third/Fabric.js/fabric.min.js?v=2.8"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=2.8"></script>
+    <script src="third/i18next/i18next.min.js?v=2.8"></script>
+    <script src="third/jsts/jsts.min.js?v=2.8"></script>
+    <script src="third/browser-image-compression/browser-image-compression.js?v=2.8"></script>
+    <script src="third/intro/intro.min.js?v=2.8"></script>
     <script src="js/fabric/dist/fabric-brush.min.js"></script>
+    <link rel="stylesheet" href="third/intro/introjs.min.css?v=2.8">
+    <link rel="stylesheet" href="css/ui/intro.css?v=2.8">
 
-    <link rel="stylesheet" href="third/intro/introjs.min.css?v=2.7">
-    <link rel="stylesheet" href="css/ui/intro.css?v=2.7">
+    <script src="third/tippy/popper.min.js?v=2.8"></script>
+    <script src="third/tippy/tippy-bundle.umd.min.js?v=2.8"></script>
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script> -->
 </head>
@@ -969,13 +972,17 @@
             <div id="canvas-area">
                 <div class="area-header">
                     <span>[Canvas]:</span>
-                    <button onclick="zoomIn()">
+                    <button id="inputImageFile" onclick="inputImageFile()">
+                        <span class="material-symbols-outlined">image</span>
+                        <input type="file" id="imageInput" multiple style="display: none;" accept="image/*">
+                    </button>
+                    <button id="zoomIn" onclick="zoomIn()">
                         <span class="material-symbols-outlined">zoom_in</span>
                     </button>
-                    <button onclick="zoomOut()">
+                    <button id="zoomOut" onclick="zoomOut()">
                         <span class="material-symbols-outlined">zoom_out</span>
                     </button>
-                    <button onclick="zoomFit()">
+                    <button id="zoomFit" onclick="zoomFit()">
                         <span class="material-symbols-outlined">1x_mobiledata_badge</span>
                     </button>
 
@@ -1009,18 +1016,21 @@
                     <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
                     <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
 
-                    <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span
-                            data-i18n="baseT2I">Base T2I</span></button>
+                    <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span data-i18n="baseT2I">Base T2I</span></button>
                 </div>
                 <div id="canvas-buttons">
-                    <button onclick="undo()"><i class="material-icons">undo</i> <span
-                            data-i18n="undo">Undo</span></button>
-                    <button onclick="redo()"><i class="material-icons">redo</i> <span
-                            data-i18n="redo">Redo</span></button>
-                    <button id="cropMode"><i class="material-icons">crop_free</i> <span data-i18n="cropMode">Crop
-                            Mode</span></button>
-                    <button id="crop" anim="glow"><i class="material-icons">crop</i> <span
-                            data-i18n="crop">CROP!</span></button>
+                    <button id="undo" onclick="undo()">
+                        <i class="material-icons">undo</i>
+                    </button>
+                    <button id="redo" onclick="redo()">
+                        <i class="material-icons">redo</i> 
+                    </button>
+                    <button id="cropMode">
+                        <i class="material-icons">crop_free</i>
+                    </button>
+                    <button id="crop" anim="glow">
+                        <i class="material-icons">crop</i>
+                    </button>
 
                 </div>
             </div>
@@ -1555,56 +1565,59 @@
     <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
 
 
-    <script src="third/jszip/jszip.min.js?v=2.7" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=2.7"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.7"></script>
+    <script src="third/jszip/jszip.min.js?v=2.8" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=2.8"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=2.8"></script>
 
-    <script src="js/svg/GoogleIconNames.js?v=2.7"></script>
-    <script src="js/svg/GoogleIconHelper.js?v=2.7"></script>
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.7" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.7" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=2.7" defer></script>
-    <script src="js/Settings.js?v=2.7" defer></script>
-    <script src="js/queue/TaskQueue.js?v=2.7" defer></script>
-    <script src="js/CanvasManager.js?v=2.7" defer></script>
-    <script src="js/util/FabricUtil.js?v=2.7" defer></script>
-    <script src="js/util/ImageUtil.js?v=2.7" defer></script>
-    <script src="js/Shortcut.js?v=2.7" defer></script>
-    <script src="js/PanelManager.js?v=2.7" defer></script>
+    <script src="js/svg/GoogleIconNames.js?v=2.8"></script>
+    <script src="js/svg/GoogleIconHelper.js?v=2.8"></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=2.8" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=2.8" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=2.8" defer></script>
+    <script src="js/Settings.js?v=2.8" defer></script>
+    <script src="js/queue/TaskQueue.js?v=2.8" defer></script>
+    <script src="js/CanvasManager.js?v=2.8" defer></script>
+    <script src="js/util/FabricUtil.js?v=2.8" defer></script>
+    <script src="js/util/ImageUtil.js?v=2.8" defer></script>
+    <script src="js/Shortcut.js?v=2.8" defer></script>
+    <script src="js/PanelManager.js?v=2.8" defer></script>
 
-    <script src="js/Toast.js?v=2.7" defer></script>
+    <script src="js/Toast.js?v=2.8" defer></script>
 
-    <script src="js/FloatingWindowManagement.js?v=2.7" defer></script>
+    <script src="js/FloatingWindowManagement.js?v=2.8" defer></script>
 
-    <script src="js/PromptManager.js?v=2.7" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=2.7" defer></script>
-    <script src="js/LayerManagement.js?v=2.7" defer></script>
-    <script src="js/CommonControleManagement.js?v=2.7" defer></script>
-    <script src="js/ImageTransformation.js?v=2.7" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=2.7" defer></script>
-    <script src="js/Sidebar.js?v=2.7" defer></script>
-    <script src="js/TextEffect.js?v=2.7" defer></script>
-    <script src="js/VerticalText.js?v=2.7" defer></script>
-    <script src="js/ImageControleManager.js?v=2.7" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=2.7" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=2.7" defer></script>
+    <script src="js/PromptManager.js?v=2.8" defer></script>
+    <script src="js/LayerText2ImageManagement.js?v=2.8" defer></script>
+    <script src="js/LayerManagement.js?v=2.8" defer></script>
+    <script src="js/CommonControleManagement.js?v=2.8" defer></script>
+    <script src="js/ImageTransformation.js?v=2.8" defer></script>
+    <script src="js/ImageHistoryManagement.js?v=2.8" defer></script>
+    <script src="js/Sidebar.js?v=2.8" defer></script>
+    <script src="js/TextEffect.js?v=2.8" defer></script>
+    <script src="js/VerticalText.js?v=2.8" defer></script>
+    <script src="js/ImageControleManager.js?v=2.8" defer></script>
+    <script src="js/SpeechBubbleEffect.js?v=2.8" defer></script>
+    <script src="js/StablediffusionWebUIManagement.js?v=2.8" defer></script>
     <script src="js/ComfyuiManagement.js" defer></script>
-    <script src="js/ProjectManagement.js?v=2.7" defer></script>
-    <script src="js/ImageDownload.js?v=2.7" defer></script>
-    <script src="js/Anime.js?v=2.7" defer></script>
-    <script src="js/Tools.js?v=2.7" defer></script>
-    <script src="js/InfomationControle.js?v=2.7" defer></script>
-    <script src="js/effect/glfxControle.js?v=2.7" defer></script>
-    <script src="js/i18next.js?v=2.7" defer></script>
+    <script src="js/ProjectManagement.js?v=2.8" defer></script>
+    <script src="js/ImageDownload.js?v=2.8" defer></script>
+    <script src="js/Anime.js?v=2.8" defer></script>
+    <script src="js/Tools.js?v=2.8" defer></script>
+    <script src="js/InfomationControle.js?v=2.8" defer></script>
+    <script src="js/effect/glfxControle.js?v=2.8" defer></script>
 
-    <script src="js/Knife.js?v=2.7" defer></script>
-    <!-- <script src="js/effect/roughHelper.js?v=2.7" defer></script> -->
-    <script src="js/event/FabricManagement.js?v=2.7" defer></script>
-    <script src="js/ui/modeChange.js?v=2.7" defer></script>
+    <script src="js/tippy/tippy.js?v=2.8" defer></script>
+    <script src="js/i18next.js?v=2.8" defer></script>
 
-    <script src="js/ui/intro.js?v=2.7" defer></script>
-    <script src="js/ai/GenerativeAI.js?v=2.7" defer></script>
-    <script src="js/util/ShareUtil.js?v=2.7" defer></script>
+    <script src="js/Knife.js?v=2.8" defer></script>
+    <!-- <script src="js/effect/roughHelper.js?v=2.8" defer></script> -->
+    <script src="js/event/FabricManagement.js?v=2.8" defer></script>
+    <script src="js/ui/modeChange.js?v=2.8" defer></script>
+
+    <script src="js/ui/intro.js?v=2.8" defer></script>
+    <script src="js/ai/GenerativeAI.js?v=2.8" defer></script>
+    <script src="js/util/ShareUtil.js?v=2.8" defer></script>
+
 </body>
 
 </html>

@@ -213,3 +213,27 @@ function zoomOut() {
     forcedAdjustCanvasSize();
   }
 }
+
+
+function inputImageFile() {
+  document.getElementById('imageInput').click();
+}
+
+document.getElementById('imageInput').addEventListener('change', function(e) {
+  var files = e.target.files;
+  for (var i = 0; i < files.length; i++) {
+      (function(file) {
+          var reader = new FileReader();
+          reader.onload = function(f) {
+              var data = f.target.result;
+              fabric.Image.fromURL(data, function(img) {
+                  var scaleFactor = Math.min(canvas.width / img.width, canvas.height / img.height);
+                  img.scale(scaleFactor);
+                  canvas.add(img);
+                  canvas.renderAll();
+              });
+          };
+          reader.readAsDataURL(file);
+      })(files[i]);
+  }
+});
