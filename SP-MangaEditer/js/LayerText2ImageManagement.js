@@ -184,9 +184,79 @@ function closefloatingWindowItem(floatingWindowItem) {
 function openText2ImageBaseFloatingWindow() {
   const floatingWindow = document.createElement("div");
   floatingWindow.className = "floating-windowPromptClass";
-  floatingWindow.style.cursor = "move"; 
-  floatingWindow.innerHTML = `
-      <h4>Text2Image Base Settings</h4>
+  floatingWindow.style.cursor = "move";
+
+  // TODO: Quite a bad way of handling multiple api models I think, to be looked at.
+  if (API_mode == apis.A1111) {
+    floatingWindow.innerHTML = `
+        <h4>Text2Image Base Settings</h4>
+        <div class="form-group">
+            <label>Prompt:</label>
+            <textarea id="text2img_basePrompt_prompt" rows="3">${text2img_basePrompt.text2img_prompt}</textarea>
+        </div>
+        <div class="form-group">
+            <label>Negative Prompt:</label>
+            <textarea id="text2img_basePrompt_negativePrompt" rows="3">${text2img_basePrompt.text2img_negativePrompt}</textarea>
+        </div>
+        
+        <hr>
+
+        <div class="form-group form-row">
+            <label>Seed:</label>
+            <input type="number" id="text2img_basePrompt_seed"  min="-2" value="${text2img_basePrompt.text2img_seed}">
+        </div>
+        <div class="form-group form-row">
+            <label>CFG Scale:</label>
+            <input type="number" id="text2img_basePrompt_cfg_scale" min="1" value="${text2img_basePrompt.text2img_cfg_scale}">
+        </div>
+        <div class="form-group form-row">
+            <label>Width:</label>
+            <input type="number" id="text2img_basePrompt_width" step="8" min="0" value="${text2img_basePrompt.text2img_width}">
+        </div>
+        <div class="form-group form-row">
+            <label>Height:</label>
+            <input type="number" id="text2img_basePrompt_height" step="8"  min="0" value="${text2img_basePrompt.text2img_height}">
+        </div>
+        <div class="form-group form-row">
+            <label>Sampling Method:</label>
+            <select id="text2img_basePrompt_samplingMethod"></select>
+        </div>
+        <div class="form-group form-row">
+            <label>Sampling Steps:</label>
+            <input type="number" id="text2img_basePrompt_samplingSteps" value="${text2img_basePrompt.text2img_samplingSteps}">
+        </div>
+        <div class="form-group form-row">
+          <label>Model:</label>
+          <select id="text2img_basePrompt_model"></select>
+        </div>
+
+        <hr>
+
+        <h7>Hires. fix</h7>
+        <div class="form-group form-row">
+            <label>Upscaler:</label>
+            <select id="text2img_basePrompt_hr_upscaler"></select>
+        </div>
+
+        <div class="form-group form-row">
+          <label>Scale:</label>
+          <input type="number" id="text2img_basePrompt_hr_scale" step="0.1"  min="1.0" max="4" value="${text2img_basePrompt.text2img_basePrompt_hr_scale}">
+        </div>
+        <div class="form-group form-row">
+          <label>Denoising Strength:</label>
+          <input type="number" id="text2img_basePrompt_hr_denoising_strength" step="0.01" min="0" max="1.0" value="${text2img_basePrompt.text2img_basePrompt_hr_denoising_strength}">
+        </div>
+        <div class="form-group form-row">
+          <label>Step:</label>
+          <input type="number" id="text2img_basePrompt_hr_step" step="1" min="1" max="150" value="${text2img_basePrompt.text2img_basePrompt_hr_step}">
+        </div>
+
+        <button id="baseSaveButton">Save</button>
+        <button id="baseCloseButton">Close</button>
+    `;
+  } else if (API_mode == apis.COMFYUI) {
+    floatingWindow.innerHTML = `
+      <h5>Text2Image Base Settings</h5>
       <div class="form-group">
           <label>Prompt:</label>
           <textarea id="text2img_basePrompt_prompt" rows="3">${text2img_basePrompt.text2img_prompt}</textarea>
@@ -216,7 +286,7 @@ function openText2ImageBaseFloatingWindow() {
       </div>
       <div class="form-group form-row">
           <label>Sampling Method:</label>
-          <select id="text2img_basePrompt_samplingMethod"></select>
+          <input type="text" id="text2img_basePrompt_samplingMethod" value="">
       </div>
       <div class="form-group form-row">
           <label>Sampling Steps:</label>
@@ -224,7 +294,7 @@ function openText2ImageBaseFloatingWindow() {
       </div>
       <div class="form-group form-row">
         <label>Model:</label>
-        <select id="text2img_basePrompt_model"></select>
+        <input type="text" id="text2img_basePrompt_model" value="">
       </div>
 
       <hr>
@@ -232,7 +302,7 @@ function openText2ImageBaseFloatingWindow() {
       <h7>Hires. fix</h7>
       <div class="form-group form-row">
           <label>Upscaler:</label>
-          <select id="text2img_basePrompt_hr_upscaler"></select>
+          <input type="text" id="text2img_basePrompt_hr_upscaler" value="">
       </div>
 
       <div class="form-group form-row">
@@ -250,7 +320,8 @@ function openText2ImageBaseFloatingWindow() {
 
       <button id="baseSaveButton">Save</button>
       <button id="baseCloseButton">Close</button>
-  `;
+    `;
+  }
 
   document.body.appendChild(floatingWindow);
 
@@ -267,10 +338,13 @@ function openText2ImageBaseFloatingWindow() {
     }
   });
 
-  makeDraggable(floatingWindow); 
-  fetchModels();
-  fetchSampler();
-  fetchUpscaler();
+  makeDraggable(floatingWindow);
+  // Fetch A1111 models 
+  if (API_mode == apis.A1111) {
+    fetchModels();
+    fetchSampler();
+    fetchUpscaler();
+  }
 
   var baseSaveButton = floatingWindow.querySelector("#baseSaveButton");
   baseSaveButton.onclick = function () {
@@ -307,5 +381,7 @@ function updateText2ImgBasePrompt(floatingWindow) {
   console.log('Updated selectedModel:', selectedModel);
   closefloatingWindowItem(floatingWindow);
 
-  sendModelToServer();
+  // Only in A1111 do we need to apply model change as its done during queue prompt automatically in comfyui
+  if (API_mode == apis.A1111) 
+    sendModelToServer();
 }

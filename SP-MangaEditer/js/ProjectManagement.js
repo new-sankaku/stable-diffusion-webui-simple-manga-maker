@@ -1,6 +1,19 @@
+// Available api models
+const apis = {
+  A1111: "A1111",
+  COMFYUI: "comfyui"
+};
+
+// Variable to keep track of selected api model to use
+var API_mode = apis.A1111;
+
 document.addEventListener("DOMContentLoaded", function () {
   var saveButton = document.getElementById("projectSave");
   var loadButton = document.getElementById("projectLoad");
+
+  //TODO: Maybe moved this to another file
+  var selectA1111APIButton = document.getElementById("Select_a1111_button");
+  var selectComfyuiAPIButton = document.getElementById("Select_comfyui_button");
 
   var settingsSave = document.getElementById("settingsSave");
   var settingsLoad = document.getElementById("settingsLoad");
@@ -231,6 +244,47 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
     };
+  });
+
+  // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
+  selectA1111APIButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+
+    API_mode = apis.A1111;
+
+    // Hide comfyui elements and show A1111 elements
+    let a1111Elements = document.getElementsByClassName("A1111_api_content");
+    let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+
+    selectA1111APIButton.style.backgroundColor = "#ffedd3";
+    for (let i = 0; i < a1111Elements.length; i++) {
+      a1111Elements[i].style.display = "block";
+    }
+
+    selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
+    for (let i = 0; i < comfyuiElements.length; i++) {
+      comfyuiElements[i].style.display = "none";
+    }
+  });
+
+  selectComfyuiAPIButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+
+    API_mode = apis.COMFYUI;
+
+    // Show comfyui elements and hide A1111 elements
+    let a1111Elements = document.getElementsByClassName("A1111_api_content");
+    let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+
+    selectA1111APIButton.style.backgroundColor = "#ffe1b7";
+    for (let i = 0; i < a1111Elements.length; i++) {
+      a1111Elements[i].style.display = "none";
+    }
+
+    selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
+    for (let i = 0; i < comfyuiElements.length; i++) {
+      comfyuiElements[i].style.display = "block";
+    }
   });
 
 });
