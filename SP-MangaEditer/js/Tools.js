@@ -27,18 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
       isDrawind = true;
     }
 
-    const brush = new fabric.PencilBrush(canvas);
-    brush.color = drawingColorEl.value;
-    brush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-    brush.shadow = new fabric.Shadow({
-      blur: parseInt(drawingShadowWidth.value, 10) || 0,
-      offsetX: 0,
-      offsetY: 0,
-      affectStroke: true,
-      color: drawingShadowColorEl.value,
-    });
-    canvas.freeDrawingBrush = brush;
+    changeDrowingSelector();
     applyBrushSettings();
+
   };
 
   eraserModeEl.onclick = function () {
@@ -133,21 +124,50 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document.getElementById("drawing-mode-selector").onchange = function () {
-    if (this.value === "hline") {
-      canvas.freeDrawingBrush = vLinePatternBrush;
-    } else if (this.value === "vline") {
-      canvas.freeDrawingBrush = hLinePatternBrush;
-    } else if (this.value === "square") {
-      canvas.freeDrawingBrush = squarePatternBrush;
-    } else if (this.value === "diamond") {
-      canvas.freeDrawingBrush = diamondPatternBrush;
-    } else if (this.value === "texture") {
-      canvas.freeDrawingBrush = texturePatternBrush;
-    } else {
-      canvas.freeDrawingBrush = new fabric[this.value + "Brush"](canvas);
-    }
-    applyBrushSettings();
+    changeDrowingSelector();
+  }
 
+  function changeDrowingSelector(){
+    console.log( "changeDrowingSelector start" );
+    var value = document.getElementById("drawing-mode-selector").value;
+
+    console.log( "changeDrowingSelector value", value );
+
+    switch (value) {
+      case "hline":
+        canvas.freeDrawingBrush = vLinePatternBrush;
+        break;
+      case "vline":
+        canvas.freeDrawingBrush = hLinePatternBrush;
+        break;
+      case "square":
+        canvas.freeDrawingBrush = squarePatternBrush;
+        break;
+      case "diamond":
+        canvas.freeDrawingBrush = diamondPatternBrush;
+        break;
+      case "texture":
+        canvas.freeDrawingBrush = texturePatternBrush;
+        break;
+      case "Crayon":
+        canvas.freeDrawingBrush = new fabric.CrayonBrush(canvas, {
+          width: 70,
+          opacity: 0.6,
+          color: "#ff0000"
+        });
+        break;
+      case "Ink":
+        canvas.freeDrawingBrush = new fabric.InkBrush(canvas);
+        break;
+      case "Marker":
+        canvas.freeDrawingBrush = new fabric.MarkerBrush(canvas);
+        break;
+      default:
+        canvas.freeDrawingBrush = new fabric[value + "Brush"](canvas);
+    }
+  
+    applyBrushSettings();
+  
     if (canvas.freeDrawingBrush) {
       var brush = canvas.freeDrawingBrush;
       brush.color = drawingColorEl.value;
