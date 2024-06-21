@@ -517,6 +517,9 @@ function addShape(points, options = {}) {
   options.isPanel = true;
   options.left = options.left || 50;
   options.top = options.top || 50;
+  options.scaleX = 2;
+  options.scaleY = 2;
+
 
   var shape = new fabric.Polygon(points, options);
   setText2ImageInitPrompt(shape);
@@ -529,8 +532,8 @@ function addSquare() {
   var points = [
     { x: 0, y: 0 },
     { x: 200, y: 0 },
-    { x: 200, y: 300 },
-    { x: 0, y: 300 }
+    { x: 200, y: 200 },
+    { x: 0, y: 200 }
   ];
   addShape(points);
 }
