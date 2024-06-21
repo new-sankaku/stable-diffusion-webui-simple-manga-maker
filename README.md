@@ -40,7 +40,7 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 </div>
 
 ## Features
-- **Multiple languages**: English, Japanese, Korean, French, Chinese, Russian, Spanish, Portuguese
+- **Multiple languages**: English, Japanese, Korean, French, Chinese, Russian, Spanish, Portuguese. Once you select a language, it will be loaded in the selected language from next time.
 - **Page Presets**: Preset comic panel layouts. 29 vertical, 16 horizontal.
 - **Panels**: Create and customize panels. Shape, color, line width, etc.
 - **Speech Bubbles**: More than 40 different speech bubble styles, each with customizable background color, line color, and transparency settings.
@@ -59,37 +59,14 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 - **Image2Image**: Generate images directly within panels via Stable diffusion WebUI (Forge).
 - **Prompt Queue**: Bulk queue prompts to easily generate different character versions in the same page or panel.
 - **Pen/Eraser tools**: Basic pen and eraser tool, change line width, color, line style, shadow. Erase lines, or portions of images.
-- **Canvas Zomm In/Zoom Out**: Basic pen and eraser tool, change line width, color, line style, shadow. Erase lines, or portions of images.
+- **Canvas Zoom In/Zoom Out**: Basic pen and eraser tool, change line width, color, line style, shadow. Erase lines, or portions of images.
+- **Dark mode/Light mode**: When you switch, the selected mode will be applied from next time.
+- **Tutorial**: There is a simple tutorial. After setting the language, select Tutorial at the top of the language settings.
 
 # Demo Site  
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)  
 To use the Text2Image/Image2Image features you need to connect to the Stable Diffusion WebUI.
 
-# Comfyui Usage 
-To use comfyui you first need to add the parameter: [--enable-cors-header] to your run file. Locate your comfyui folder and find the files "run_cpu.bat" and "run_nvidia_gpu.bat", then edit the one you typically use. Example of how the script could look like:
-```
-.\python_embeded\python.exe -s ComfyUI\main.py --windows-standalone-build --enable-cors-header --force-fp16 --disable-smart-memory --lowvram
-pause
-```
-
-To use your own custom workflow you need to first export it in api format. This is achieved by opening up the comfyui settings menu and then enabling [Enable Dev Mode Options]. Once thats done you should see a [Save (API Format)] button in your sidebar.
-
-If you wanna be able to change prompts, width, height, model, etc. without changing your workflow everytime you have to add placeholders to your workflow file. The available placeholders are the following:
-- "%prompt%"
-- "%negative_prompt%"
-- "%cfg%"
-- "%steps%"
-- "%sampler%"
-- "%scheduler%"
-- "%model%"
-- "%seed%"
-- "%vae%"
-- "%width%"
-- "%height%"
-
-If you want to see an example of how this is done then take a look at the sample_workflow.json file.
-
-# Install
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/install.png" width="800">
 *:All functions work on the Demo Site.
