@@ -4,6 +4,7 @@
 const resources = {
   en: {
     translation: {
+"Share":"Share",
 "square": "Square",
 "pentagon": "Pentagon",
 "tallRect": "Tall Rectangle",
@@ -312,6 +313,7 @@ const resources = {
   },
   ja: {
     translation: {
+"Share": "共有",
 "square": "正方形",
 "pentagon": "五角形",
 "tallRect": "縦長の長方形",
@@ -533,6 +535,7 @@ const resources = {
   },
   ko: {
     translation: {
+"Share": "공유",
 "square": "정사각형",
 "pentagon": "오각형",
 "tallRect": "긴 직사각형",
@@ -769,6 +772,7 @@ const resources = {
   },
   fr: {
     translation: {
+"Share": "Partager",
 "square": "Carré",
 "pentagon": "Pentagone",
 "tallRect": "Rectangle haut",
@@ -1039,6 +1043,7 @@ const resources = {
   },
   zh: {
     translation: {
+"Share": "分享",
 "square": "正方形",
 "pentagon": "五边形",
 "tallRect": "高长方形",
@@ -1305,6 +1310,7 @@ const resources = {
   },
   ru: {
     translation: {
+"Share": "Поделиться",
 "square": "Квадрат",
 "pentagon": "Пятиугольник",
 "tallRect": "Высокий прямоугольник",
@@ -1523,6 +1529,7 @@ const resources = {
   },
   es: {
     translation: {
+"Share": "Compartir",
 "square": "Cuadrado",
 "pentagon": "Pentágono",
 "tallRect": "Rectángulo alto",
@@ -1740,6 +1747,7 @@ const resources = {
   },
   pt: {
     translation: {
+"Share": "Compartilhar",
 "square": "Quadrado",
 "pentagon": "Pentágono",
 "tallRect": "Retângulo alto",

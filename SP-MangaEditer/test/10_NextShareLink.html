@@ -12,13 +12,11 @@
     <button id="instagramButton">Instagramで共有</button>
     <button id="pinterestButton">Pinterestで共有</button>
     <button id="redditButton">Redditで共有</button>
-    <button id="whatsappButton">WhatsAppで共有</button>
-    <button id="telegramButton">Telegramで共有</button>
 
     <script>
         function openWindow(url) {
-            var width = 550;
-            var height = 420;
+            var width = 720;
+            var height = 720;
             var left = (screen.width / 2) - (width / 2);
             var top = (screen.height / 2) - (height / 2);
             window.open(url, 'ShareWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
@@ -67,21 +65,9 @@
         document.getElementById('redditButton').addEventListener('click', function() {
             var shareUrl = "https://www.example.com"; // 共有するURLを入力
             var title = "ここにタイトルを入力";
-            var redditUrl = "https://www.reddit.com/submit?url=" + encodeURIComponent(shareUrl) +
+            var redditUrl = "https://www.reddit.com/r/StableDiffusion/submit?url=" + encodeURIComponent(shareUrl) +
                             "&title=" + encodeURIComponent(title);
             openWindow(redditUrl);
-        });
-
-        document.getElementById('whatsappButton').addEventListener('click', function() {
-            var shareText = "ここに共有するテキストを入力";
-            var whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(shareText);
-            openWindow(whatsappUrl);
-        });
-
-        document.getElementById('telegramButton').addEventListener('click', function() {
-            var shareText = "ここに共有するテキストを入力";
-            var telegramUrl = "https://telegram.me/share/url?text=" + encodeURIComponent(shareText);
-            openWindow(telegramUrl);
         });
     </script>
 </body>

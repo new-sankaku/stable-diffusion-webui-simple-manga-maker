@@ -381,6 +381,20 @@
                         </ul>
                     </li>
                 </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="intro_links" data-i18n="Share">Share</span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" target="_blank" onclick="snsTweet()">
+                                <i class="fab fa-twitter"></i>
+                                <span>Twitter</span>
+                            </a>
+                        </ul>
+                    </li>
+                </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <i class="fas fa-sun"></i>
@@ -1590,6 +1604,7 @@
 
     <script src="js/ui/intro.js?v=2.6" defer></script>
     <script src="js/ai/GenerativeAI.js?v=2.6" defer></script>
+    <script src="js/util/ShareUtil.js?v=2.6" defer></script>
 </body>
 
 </html>
