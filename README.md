@@ -2,7 +2,7 @@
 
 
 
-# Manga/Comic Creator for Automatic1111/SD-WebUI-Forge!
+# SP-MangaEditer:Manga/Comic Creator for WebUI(A1111/Forge)
 This is an extension of Stable diffusion WebUI (Forge).
 The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 
