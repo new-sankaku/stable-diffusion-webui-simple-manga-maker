@@ -279,7 +279,7 @@ async function Comfyui_handle_process_queue(layer, spinnerId) {
 * Waits for already queued prompts before queueing a new one, waits for it to finish before retrieving the image and placing it in layer
 */
 async function Comfyui_generate_image(workflow) {
-    //console.log('Comfyui_generate_image関数が呼び出されました。ワークフロー:', workflow);
+    console.log('Comfyui_generate_image関数が呼び出されました。ワークフロー:', workflow);
     var response = await Comfyui_queue_prompt(workflow);
     if (!response) return null;
     processing_prompt = true;

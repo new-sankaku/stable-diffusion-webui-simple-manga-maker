@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テキストスタイルの例</title>
+    <style>
+        /* スタイル 1 */
+        .sample1 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: #FF6F00;
+            text-shadow:
+                0 0.01em 0 #999,
+                0 0.02em 0 #888,
+                0 0.03em 0 #777,
+                0 0.04em 0 #666,
+                0 0.05em 0 #555,
+                0 0.06em 0 #444,
+                0 0.08em 0 #000;
+        }
+
+        /* スタイル 2 */
+        .sample2 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            text-shadow:
+                0 0.03em 0.03em #FFAB91,
+                0 0.03em 0.03em #000,
+                0 0.03em 0.03em #FBE9E7;
+        }
+
+        /* スタイル 3 */
+        .sample3 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: #03A9F4;
+            text-shadow:
+                0.04em 0.02em 0 #B0BEC5,
+                0.08em 0.05em 0 rgba(0, 0, 0, 0.6);
+        }
+
+        /* スタイル 4 */
+        .sample4 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: #FDF5E6;
+            text-shadow:
+                1px -1px 1px #BDBDBD,
+                -1px 2px 1px #737272,
+                -2px 4px 1px #767474,
+                -3px 6px 1px #787777,
+                -4px 8px 1px #424242,
+                -5px 10px 1px #616161,
+                -6px 12px 1px #757575,
+                -7px 14px 1px #9E9E9E,
+                -8px 16px 1px #BDBDBD,
+                -9px 18px 1px #E0E0E0;
+        }
+
+        /* スタイル 5 */
+        .sample5 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background: rgba(0, 0, 0, 1);
+            text-shadow:
+                0 0 0.1em rgba(255, 255, 255, 0.05),
+                0.01em 0.04em 0.03em rgba(255, 255, 255, 0.4);
+            -webkit-background-clip: text;
+        }
+
+        /* スタイル 6 */
+        .sample6 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            -webkit-text-stroke: 0.02em rgba(255, 255, 255, 1);
+        }
+
+        /* スタイル 7 */
+        .sample7 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            -webkit-text-stroke: 0.04em rgba(255, 255, 255, 0.5);
+        }
+
+        /* スタイル 8 */
+        .sample8 {
+            font-size: 7em;
+            text-align: center;
+            line-height: 0.95em;
+            letter-spacing: 0.05em;
+            color: transparent;
+            -webkit-text-stroke: 0.03em rgba(0, 0, 0, 1);
+        }
+
+        /* スタイル 9 */
+        .sample9 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: #FFF;
+            text-shadow:
+                0 0 0.05em #F06292,
+                0 0 0.10em #F06292,
+                0 0 0.15em #F06292,
+                0 0 0.30em #F06292;
+            filter: saturate(80%);
+        }
+
+        /* スタイル 10 */
+        .sample10 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background: linear-gradient(45deg, #DD2C00 0% 40%, #01579B 60% 100%);
+            -webkit-background-clip: text;
+        }
+
+        /* スタイル 11 */
+        .sample11 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background: linear-gradient(90deg, #0091EA 0% 30%, #00B0FF 40% 60%, #80D8FF 70% 100%);
+            -webkit-background-clip: text;
+        }
+
+        /* スタイル 12 */
+        .sample12 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background: linear-gradient(0deg, #F57C00 0% 60%, #FFB74D 60% 100%);
+            -webkit-background-clip: text;
+        }
+
+        /* スタイル 13 */
+        .sample13 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background: repeating-linear-gradient(-45deg, #FF3D00 0% 50%, #0091EA 50% 100%);
+            -webkit-background-clip: text;
+        }
+
+        /* スタイル 14 */
+        .sample14 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background: repeating-linear-gradient(0deg, #C62828 0.1em, #EF5350 0.2em, #FFEBEE 0.3em, #EF5350 0.4em, #C62828 0.5em);
+            -webkit-background-clip: text;
+        }
+
+        /* スタイル 15 */
+        .sample15 {
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: #FFF;
+            text-shadow:
+                0 0 0.05em #F06292,
+                0 0 0.10em #F06292,
+                0 0 0.15em #F06292,
+                0 0 0.30em #F06292;
+            filter: saturate(80%);
+            -webkit-background-clip: text;
+            -webkit-box-reflect: below -0.25em -webkit-gradient(linear, left bottom, left top, from(rgba(255, 255, 255, .6)), to(transparent));
+        }
+
+        /* スタイル 16 */
+        .sample16 {
+            font-size: 8em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background-color: #FFF;
+            background-image:
+                repeating-linear-gradient(0deg,
+                    rgba(13, 71, 161, .6) 0px 6px,
+                    rgba(255, 255, 255, .6) 6px 8px,
+                    rgba(13, 71, 161, .6) 8px 10px,
+                    rgba(255, 214, 0, .6) 10px 12px,
+                    rgba(13, 71, 161, .6) 12px 18px,
+                    rgba(213, 0, 0, .6) 18px 34px),
+                repeating-linear-gradient(90deg,
+                    rgba(13, 71, 161, 1) 0px 6px,
+                    rgba(255, 255, 255, 1) 6px 8px,
+                    rgba(13, 71, 161, 1) 8px 10px,
+                    rgba(255, 214, 0, 1) 10px 12px,
+                    rgba(13, 71, 161, 1) 12px 18px,
+                    rgba(213, 0, 0, 1) 18px 34px);
+            -webkit-background-clip: text;
+        }
+
+        /* スタイル 17 */
+        .sample17 {
+            font-size: 6em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            background-color: #FFF;
+            background-image:
+                repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.4) 0px 4px,
+                    rgba(255, 255, 255, 0.4) 4px 8px,
+                    rgba(0, 0, 0, 0.4) 8px 12px,
+                    rgba(255, 255, 255, 0.4) 12px 16px,
+                    rgba(0, 0, 0, 0.4) 16px 20px,
+                    rgba(209, 172, 118, 0.4) 20px 30px,
+                    rgba(213, 0, 0, 0.4) 30px 32px,
+                    rgba(209, 172, 118, 0.4) 32px 36px,
+                    rgba(213, 0, 0, 0.4) 36px 38px,
+                    rgba(209, 172, 118, 0.4) 38px 48px),
+                repeating-linear-gradient(90deg,
+                    rgba(0, 0, 0, 1) 0px 3px,
+                    rgba(255, 255, 255, 1) 3px 6px,
+                    rgba(0, 0, 0, 1) 6px 9px,
+                    rgba(255, 255, 255, 1) 9px 12px,
+                    rgba(0, 0, 0, 1) 12px 15px,
+                    rgba(209, 172, 118, 1) 15px 30px,
+                    rgba(213, 0, 0, 0.8) 30px 31px,
+                    rgba(209, 172, 118, 1) 31px 33px,
+                    rgba(213, 0, 0, 0.8) 33px 34px,
+                    rgba(209, 172, 118, 1) 34px 49px);
+            -webkit-background-clip: text;
+        }
+
+        /* ハイライター 1 */
+        .highlighter1 {
+            background: linear-gradient(transparent 10%, #FF9100 10% 90%, transparent 90%);
+        }
+
+        /* ハイライター 2 */
+        .highlighter2 {
+            background: linear-gradient(transparent 40%, #00B0FF 40% 90%, transparent 90%);
+        }
+
+        /* ハイライター 3 */
+        .highlighter3 {
+            background: linear-gradient(transparent 10%, #00E676 10% 40%, transparent 40%);
+        }
+
+        /* ハイライター 4 */
+        .highlighter4 {
+            background: linear-gradient(transparent 30%, #FF7043 30% 60%, transparent 60%);
+        }
+
+        /* ハイライター 5 */
+        .highlighter5 {
+            background: linear-gradient(transparent 60%, #FF5252 60% 90%, transparent 90%);
+        }
+
+        /* ハイライター 6 */
+        .highlighter6 {
+            position: relative;
+        }
+
+        .highlighter6::before {
+            content: "";
+            width: 100%;
+            height: 80%;
+            position: absolute;
+            top: 10%;
+            left: 0;
+            background: linear-gradient(45deg, transparent 0%, #FF9100 0% 40%, transparent 100%);
+            z-index: -1;
+        }
+
+        /* ハイライター 7 */
+        .highlighter7 {
+            position: relative;
+        }
+
+        .highlighter7::before {
+            content: "";
+            width: 100%;
+            height: 50%;
+            position: absolute;
+            top: 40%;
+            left: 0;
+            background: linear-gradient(45deg, transparent 0%, #00B0FF 0% 40%, transparent 100%);
+            z-index: -1;
+        }
+
+        /* ハイライター 8 */
+        .highlighter8 {
+            position: relative;
+        }
+
+        .highlighter8::before {
+            content: "";
+            width: 100%;
+            height: 30%;
+            position: absolute;
+            top: 10%;
+            left: 0;
+            background: linear-gradient(45deg, transparent 0%, #00E676 0% 40%, transparent 100%);
+            z-index: -1;
+        }
+
+        /* ハイライター 9 */
+        .highlighter9 {
+            position: relative;
+        }
+
+        .highlighter9::before {
+            content: "";
+            width: 100%;
+            height: 30%;
+            position: absolute;
+            top: 30%;
+            left: 0;
+            background: linear-gradient(45deg, transparent 0%, #FF7043 0% 40%, transparent 100%);
+            z-index: -1;
+        }
+
+        /* ハイライター 10 */
+        .highlighter10 {
+            position: relative;
+        }
+
+        .highlighter10::before {
+            content: "";
+            width: 100%;
+            height: 30%;
+            position: absolute;
+            top: 55%;
+            left: 0;
+            background: linear-gradient(45deg, transparent 0%, #FF5252 0% 40%, transparent 100%);
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sample1">Sample 1</div>
+    <div class="sample2">Sample 2</div>
+    <div class="sample3">Sample 3</div>
+    <div class="sample4">Sample 4</div>
+    <div class="sample5">Sample 5</div>
+    <div class="sample6">Sample 6</div>
+    <div class="sample7">Sample 7</div>
+    <div class="sample8">Sample 8</div>
+    <div class="sample9">Sample 9</div>
+    <div class="sample10">Sample 10</div>
+    <div class="sample11">Sample 11</div>
+    <div class="sample12">Sample 12</div>
+    <div class="sample13">Sample 13</div>
+    <div class="sample14">Sample 14</div>
+    <div class="sample15">Sample 15</div>
+    <div class="sample16">Sample 16</div>
+    <div class="sample17">Sample 17</div>
+
+    <div class="highlighter1">Highlighter 1</div>
+    <div class="highlighter2">Highlighter 2</div>
+    <div class="highlighter3">Highlighter 3</div>
+    <div class="highlighter4">Highlighter 4</div>
+    <div class="highlighter5">Highlighter 5</div>
+    <div class="highlighter6">Highlighter 6</div>
+    <div class="highlighter7">Highlighter 7</div>
+    <div class="highlighter8">Highlighter 8</div>
+    <div class="highlighter9">Highlighter 9</div>
+    <div class="highlighter10">Highlighter 10</div>
+</body>
+
+</html>

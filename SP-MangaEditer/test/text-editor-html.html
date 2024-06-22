@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>改良版テキストエディター</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 15px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            font-size: 24px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        #output {
+            display: inline-block;
+            white-space: pre;
+            padding: 0;
+            margin-bottom: 20px; /* コンポーネント間にマージンを追加 */
+            border: 2px dashed #000; /* 点線の枠 */
+            font-size: 24px;
+            line-height: 1.2;
+            transform-origin: top left;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px; /* ボタンとの配置を変更 */
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        label {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        input[type="color"],
+        input[type="number"],
+        input[type="range"] {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        input[type="number"] {
+            width: 50px;
+        }
+
+        select {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <textarea id="input">New Text. あいうえお。
+Second line. かきくけこ。
+Third line. さしすせそ。</textarea>
+        <div id="output"></div>
+        <div class="controls">
+            <div>
+                <div class="control-group">
+                    <button id="bold">B</button>
+                    <button id="italic">I</button>
+                    <button id="underline">U</button>
+                </div>
+                <div class="control-group">
+                    <label for="fontSize">サイズ:</label>
+                    <input type="number" id="fontSize" value="40" min="1" max="100">
+                </div>
+                <div class="control-group">
+                    <label for="textColor">色:</label>
+                    <input type="color" id="textColor" value="#000000">
+                </div>
+                <div class="control-group">
+                    <label for="outlineWidth">輪郭幅:</label>
+                    <input type="number" id="outlineWidth" value="0" min="0" max="10">
+                </div>
+                <div class="control-group">
+                    <label for="outlineColor">輪郭色:</label>
+                    <input type="color" id="outlineColor" value="#FF0000"> <!-- 赤色に設定 -->
+                </div>
+            </div>
+            <div>
+                <div class="control-group">
+                    <label for="letterSpacing">文字間隔:</label>
+                    <input type="number" id="letterSpacing" value="0" min="-5" max="20">
+                </div>
+                <div class="control-group">
+                    <label for="lineHeight">行高:</label>
+                    <input type="number" id="lineHeight" value="1.2" min="0.5" max="3" step="0.1">
+                </div>
+                <div class="control-group">
+                    <label>位置:</label>
+                    <button id="alignLeft">左</button>
+                    <button id="alignCenter">中</button>
+                    <button id="alignRight">右</button>
+                </div>
+                <div class="control-group">
+                    <label for="shadowColor">シャドウ色:</label>
+                    <input type="color" id="shadowColor" value="#808080"> <!-- グレーに設定 -->
+                </div>
+                <div class="control-group">
+                    <label for="shadowOffsetX">シャドウX:</label>
+                    <input type="number" id="shadowOffsetX" value="0" min="-50" max="50">
+                </div>
+                <div class="control-group">
+                    <label for="shadowOffsetY">シャドウY:</label>
+                    <input type="number" id="shadowOffsetY" value="0" min="-50" max="50">
+                </div>
+                <div class="control-group">
+                    <label for="shadowBlur">シャドウブラー:</label>
+                    <input type="number" id="shadowBlur" value="0" min="0" max="50">
+                </div>
+            </div>
+            <div>
+                <div class="control-group">
+                    <button id="download">画像保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('input');
+        const output = document.getElementById('output');
+        const controls = document.querySelectorAll('button, input, select');
+        const downloadBtn = document.getElementById('download');
+
+        let isBold = false;
+        let isItalic = false;
+        let isUnderline = false;
+
+        function updateOutput() {
+            let text = input.value;
+            text = text.replace(/\n/g, '<br>');
+
+            output.innerHTML = text;
+            applyStyles();
+        }
+
+        function applyStyles() {
+            const styles = {
+                fontWeight: isBold ? 'bold' : 'normal',
+                fontStyle: isItalic ? 'italic' : 'normal',
+                textDecoration: isUnderline ? 'underline' : 'none',
+                fontSize: `${document.getElementById('fontSize').value}px`,
+                color: document.getElementById('textColor').value,
+                letterSpacing: `${document.getElementById('letterSpacing').value}px`,
+                lineHeight: document.getElementById('lineHeight').value,
+                textAlign: output.style.textAlign,
+                padding: '0',
+                margin: '0',
+            };
+
+            const shadowStyle = `${document.getElementById('shadowOffsetX').value}px ${document.getElementById('shadowOffsetY').value}px ${document.getElementById('shadowBlur').value}px ${document.getElementById('shadowColor').value}`;
+            const outlineWidth = parseInt(document.getElementById('outlineWidth').value);
+            const outlineColor = document.getElementById('outlineColor').value;
+
+            if (outlineWidth > 0) {
+                let textShadow = `${shadowStyle}, `;
+                for (let i = 0; i < 360; i += 45) {
+                    const x = Math.round(Math.cos(i * Math.PI / 180) * outlineWidth);
+                    const y = Math.round(Math.sin(i * Math.PI / 180) * outlineWidth);
+                    textShadow += `${x}px ${y}px 0 ${outlineColor}, `;
+                }
+                output.style.textShadow = textShadow.slice(0, -2);
+            } else {
+                output.style.textShadow = shadowStyle;
+            }
+
+            Object.assign(output.style, styles);
+        }
+
+        controls.forEach(control => {
+            if (['bold', 'italic', 'underline'].includes(control.id)) {
+                control.addEventListener('click', (e) => {
+                    switch (e.target.id) {
+                        case 'bold': isBold = !isBold; break;
+                        case 'italic': isItalic = !isItalic; break;
+                        case 'underline': isUnderline = !isUnderline; break;
+                    }
+                    updateOutput();
+                });
+            } else {
+                control.addEventListener('input', updateOutput);
+            }
+        });
+
+        input.addEventListener('input', updateOutput);
+
+        document.getElementById('alignLeft').addEventListener('click', () => {
+            output.style.textAlign = 'left';
+            updateOutput();
+        });
+        document.getElementById('alignCenter').addEventListener('click', () => {
+            output.style.textAlign = 'center';
+            updateOutput();
+        });
+        document.getElementById('alignRight').addEventListener('click', () => {
+            output.style.textAlign = 'right';
+            updateOutput();
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const originalBorder = output.style.border;
+            const originalBackground = output.style.backgroundColor;
+            output.style.border = 'none'; // 画像保存時にボーダーを消す
+            output.style.backgroundColor = 'transparent';
+
+            html2canvas(output, {
+                backgroundColor: null
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'text_image.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                output.style.border = originalBorder; // 元のボーダーに戻す
+                output.style.backgroundColor = originalBackground;
+            });
+        });
+
+        updateOutput();
+    </script>
+</body>
+
+</html>
