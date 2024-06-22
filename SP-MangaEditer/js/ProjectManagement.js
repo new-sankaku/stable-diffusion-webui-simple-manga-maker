@@ -247,46 +247,47 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  // // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
-  // selectA1111APIButton.addEventListener('click', (event) => {
-  //   event.stopPropagation();
+  // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
+  selectA1111APIButton.addEventListener('click', (event) => {
+    event.stopPropagation();
 
-  //   API_mode = apis.A1111;
+    API_mode = apis.A1111;
 
-  //   // // Hide comfyui elements and show A1111 elements
-  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
-  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+    // Hide comfyui elements and show A1111 elements
+    let a1111Elements = document.getElementsByClassName("A1111_api_content");
+    let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
 
-  //   // selectA1111APIButton.style.backgroundColor = "#ffedd3";
-  //   // for (let i = 0; i < a1111Elements.length; i++) {
-  //   //   a1111Elements[i].style.display = "block";
-  //   // }
+    selectA1111APIButton.style.backgroundColor = "#ffedd3";
+    for (let i = 0; i < a1111Elements.length; i++) {
+      a1111Elements[i].style.display = "block";
+    }
 
-  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
-  //   // for (let i = 0; i < comfyuiElements.length; i++) {
-  //   //   comfyuiElements[i].style.display = "none";
-  //   // }
-  // });
+    selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
+    for (let i = 0; i < comfyuiElements.length; i++) {
+      comfyuiElements[i].style.display = "none";
+    }
 
-  // selectComfyuiAPIButton.addEventListener('click', (event) => {
-  //   event.stopPropagation();
+  });
 
-  //   API_mode = apis.COMFYUI;
+  selectComfyuiAPIButton.addEventListener('click', (event) => {
+    event.stopPropagation();
 
-  //   // // Show comfyui elements and hide A1111 elements
-  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
-  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+    API_mode = apis.COMFYUI;
 
-  //   // selectA1111APIButton.style.backgroundColor = "#ffe1b7";
-  //   // for (let i = 0; i < a1111Elements.length; i++) {
-  //   //   a1111Elements[i].style.display = "none";
-  //   // }
+    // Show comfyui elements and hide A1111 elements
+    let a1111Elements = document.getElementsByClassName("A1111_api_content");
+    let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
 
-  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
-  //   // for (let i = 0; i < comfyuiElements.length; i++) {
-  //   //   comfyuiElements[i].style.display = "block";
-  //   // }
-  // });
+    selectA1111APIButton.style.backgroundColor = "#ffe1b7";
+    for (let i = 0; i < a1111Elements.length; i++) {
+      a1111Elements[i].style.display = "none";
+    }
+
+    selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
+    for (let i = 0; i < comfyuiElements.length; i++) {
+      comfyuiElements[i].style.display = "block";
+    }
+  });
 
 });
 

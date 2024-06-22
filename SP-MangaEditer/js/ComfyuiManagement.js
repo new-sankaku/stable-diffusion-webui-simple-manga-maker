@@ -24,22 +24,31 @@ workflowFileLoad.addEventListener('change', (event) => {
         return;
     }
 
-    try {
-        var workflowPath = event.target.files[0].name;
-        //console.log('選択されたファイル:', workflowPath);
-        reader.readAsText(event.target.files[0], 'utf8');
+    var workflowFile = event.target.files[0];
+    loadWorkflow(workflowFile);
 
+});
+
+function loadWorkflow(workflow_file) {
+    try {
+        if (!workflow_file) {
+            selected_workflow = comfyuiPresetT2IWorkflow;
+            return;
+        }
+        console.log(workflow_file)
+        //console.log('選択されたファイル:', workflowPath);
+        reader.readAsText(workflow_file, 'utf8');
         reader.addEventListener('loadend', async () => {
             try {
                 const data = reader.result;
                 //console.log('ファイルの内容が読み込まれました。データ:', data);
                 selected_workflow = JSON.parse(data);
                 //console.log('ワークフローが正常に読み込まれました:', selected_workflow);
-                createToast("Workflow loaded successfully.", workflowPath);
+                createToast("Workflow loaded successfully.", workflow_file.name);
             } catch (e) {
                 if (e.name === 'SyntaxError') {
                     //console.log(`ファイル ${workflowPath} は無効なJSONです。`);
-                    createToastError("Workflow Error.", "The file " + workflowPath + " contains invalid JSON.");
+                    createToastError("Workflow Error.", "The file " + workflow_file.name + " contains invalid JSON.");
                 } else {
                     //console.log(`予期しないエラーが発生しました: ${e.message}`);
                     createToastError("Workflow Error.", "An unexpected error occurred: " + e.message);
@@ -54,7 +63,7 @@ workflowFileLoad.addEventListener('change', (event) => {
             //console.log(`予期しないエラーが発生しました: ${e.message}`);
         }
     }
-});
+}
 
 function displayFileName() {
     //console.log('displayFileName関数が呼び出されました。');
@@ -277,6 +286,7 @@ async function Comfyui_handle_process_queue(layer, spinnerId) {
 */
 async function Comfyui_generate_image(workflow) {
     //console.log('Comfyui_generate_image関数が呼び出されました。ワークフロー:', workflow);
+    if (!selected_workflow) loadWorkflow(); // if no workflow loaded then load preset
     var response = await Comfyui_queue_prompt(workflow);
     if (!response) return null;
     processing_prompt = true;

@@ -186,7 +186,6 @@ function openText2ImageBaseFloatingWindow() {
   floatingWindow.className = "floating-windowPromptClass";
   floatingWindow.style.cursor = "move";
 
-  // TODO: Quite a bad way of handling multiple api models I think, to be looked at.
     floatingWindow.innerHTML = `
         <h4>Text2Image Base Settings</h4>
         <div class="form-group">
