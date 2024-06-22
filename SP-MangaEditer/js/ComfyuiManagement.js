@@ -92,6 +92,8 @@ function connectToComfyui() {
 */
 async function comufy_apiHeartbeat() {
 
+    server_address = hostInput.value + ':' + portInput.value;
+    console.log( "comufy_apiHeartbeat", "start" );
     const ComufyUI_Heartbeat_Label = document.getElementById('ComufyUI_Heartbeat_Label');
     try {
         const url = "http://" + server_address +  "/settings";
@@ -104,16 +106,17 @@ async function comufy_apiHeartbeat() {
         });
 
         if( response.ok ){
-          //console.log("apiHeartbeat", "comufy_isAlive");
+          console.log("apiHeartbeat", "comufy_isAlive");
           ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI ON';
           ComufyUI_Heartbeat_Label.style.color = 'green';
         }else{
-          //console.log("apiHeartbeat", "comufy_notAlive");
+          console.log("apiHeartbeat", "comufy_notAlive");
           ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI OFF';
           ComufyUI_Heartbeat_Label.style.color = 'red';
         }
     } catch (error) {
-        //console.log("apiHeartbeat", "comufy_notAlive");
+        console.log("apiHeartbeat", error);
+        console.log("apiHeartbeat", "error comufy_notAlive");
         ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI OFF';
         ComufyUI_Heartbeat_Label.style.color = 'red';
   }

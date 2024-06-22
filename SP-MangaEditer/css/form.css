@@ -95,12 +95,12 @@ input[type="file"] {
 }
 
 .toggle-switch {
-  width: 40px;
+  width: 80px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 40px;
+  margin-right: 30px;
 }
 
 .toggle-checkbox {
@@ -137,7 +137,7 @@ input[type="file"] {
 }
 
 .toggle-checkbox:checked + .toggle-label::after {
-  transform: translateX(20px);
+  transform: translateX(40px);
 }
 
 
