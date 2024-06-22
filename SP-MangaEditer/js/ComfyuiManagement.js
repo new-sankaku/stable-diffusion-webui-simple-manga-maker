@@ -4,7 +4,6 @@ const comfyuiQueue = new TaskQueue(1);
 var socket = null;
 const uuid = crypto.randomUUID();
 var selected_workflow = null;
-var processing_prompt = false;
 
 const hostInput = document.getElementById('Comfyui_apiHost');
 const portInput = document.getElementById('Comfyui_apiPort');
@@ -29,10 +28,11 @@ workflowFileLoad.addEventListener('change', (event) => {
 
 });
 
-function loadWorkflow(workflow_file) {
+async function loadWorkflow(workflow_file) {
     try {
         if (!workflow_file) {
             selected_workflow = comfyuiPresetT2IWorkflow;
+            createToast("Workflow loaded successfully.", "Sample_t2i.json");
             return;
         }
         console.log(workflow_file)
@@ -258,7 +258,8 @@ async function Comfyui_track_prompt_progress(prompt_id) {
 async function Comfyui_handle_process_queue(layer, spinnerId) {
     //console.log('Comfyui_handle_process_queue関数が呼び出されました。');
     if (!socket) connectToComfyui();
-
+    if (!selected_workflow) await loadWorkflow(); // if no workflow loaded then load preset
+    
     var requestData = baseRequestData(layer);
     //console.log('リクエストデータ:', requestData);
     if (text2img_basePrompt.text2img_model != "")
@@ -289,10 +290,8 @@ async function Comfyui_handle_process_queue(layer, spinnerId) {
 */
 async function Comfyui_generate_image(workflow) {
     //console.log('Comfyui_generate_image関数が呼び出されました。ワークフロー:', workflow);
-    if (!selected_workflow) loadWorkflow(); // if no workflow loaded then load preset
     var response = await Comfyui_queue_prompt(workflow);
     if (!response) return null;
-    processing_prompt = true;
     //console.log('プロンプトがキューに追加されました。プロンプトID:', response.prompt_id);
 
     var prompt_id = response.prompt_id;
