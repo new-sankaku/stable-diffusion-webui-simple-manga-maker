@@ -221,7 +221,7 @@
                             </div>
                             <hr>
 
-                            <!--COMFYUI-->
+                            <!--TODO COMFYUI-->
                             <div class="Comfyui_api_content" style="display: none;">
                                 <li>
                                     <label>
@@ -1063,6 +1063,7 @@
                         </div>
                         <div class="control-item">
                             <label id="SD_WebUI_Heartbeat_Label">SD WebUI Check…</label>
+                            <!--TODO COMFYUI-->
                             <label id="ComufyUI_Heartbeat_Label" style="display: none;">ComufyUI Check…</label>
                         </div>
                     </div>
@@ -1444,112 +1445,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="panel" id="roughControlPanel" style="display: none;">
-                    <div class="area-header" onclick="imageControleTogglePanel('roughControlPanel', this)" data-i18n="roughControls">
-                        ▼ Rough Controls
-                    </div>
-                    <div class="control-content">
-                        <div class="control-row">
-                            <label for="rough_roughness" data-i18n="rough_roughness">Roughness</label>
-                            <input type="range" id="rough_roughness" min="0" max="1.0" step="0.01" value="0.5">
-                            <span id="rough_roughnessValue">1</span>
-                        </div>
-                        <div class="control-row">
-                            <label for="rough_bowing" data-i18n="rough_bowing">Bowing</label>
-                            <input type="range" id="rough_bowing" min="0" max="10" step="0.1" value="1">
-                            <span id="rough_bowingValue">1</span>
-                        </div>
-                
-                        <hr class="separator">
-                        <label data-i18n="rough_stroke">Stroke</label>
-                        <div class="control-row">
-                            <label for="rough_stroke" data-i18n="rough_strokeColor">Color</label>
-                            <input type="color" id="rough_stroke" value="#000000">
-                        </div>
-                        <div class="control-row">
-                            <label for="rough_strokeWidth" data-i18n="rough_strokeWidth">Width</label>
-                            <input type="range" id="rough_strokeWidth" min="0" max="2" step="0.1" value="0.1">
-                            <span id="rough_strokeWidthValue">1</span>
-                        </div>
-                
-                        <hr class="separator">
-                        <label data-i18n="rough_fill">Fill</label>
-                        <div class="control-row">
-                            <label for="rough_fill" data-i18n="rough_fillColor">Color</label>
-                            <input type="color" id="rough_fill" value="#ffffff">
-                        </div>
-                        <div class="control-row">
-                            <label for="rough_fillStyle" data-i18n="rough_fillStyle">Style</label>
-                            <select id="rough_fillStyle">
-                                <option value="hachure" data-i18n="rough_hachure">Hachure</option>
-                                <option value="solid" data-i18n="rough_solid">Solid</option>
-                                <option value="zigzag" data-i18n="rough_zigzag">Zigzag</option>
-                                <option value="cross-hatch" data-i18n="rough_crossHatch">Cross-hatch</option>
-                                <option value="dots" data-i18n="rough_dots">Dots</option>
-                                <option value="dashed" data-i18n="rough_dashed">Dashed</option>
-                                <option value="zigzag-line" data-i18n="rough_zigzagLine">Zigzag-line</option>
-                            </select>
-                        </div>
-                        <div class="control-row">
-                            <label for="rough_fillWeight" data-i18n="rough_fillWeight">Weight</label>
-                            <input type="range" id="rough_fillWeight" min="0" max="10" step="0.1" value="1">
-                            <span id="rough_fillWeightValue">1</span>
-                        </div>
-                
-                        <hr class="separator">
-                        <label data-i18n="rough_hachure">Hachure</label>
-                        <div class="control-row">
-                            <label for="rough_hachureAngle" data-i18n="rough_hachureAngle">Angle</label>
-                            <input type="range" id="rough_hachureAngle" min="-180" max="180" step="1" value="-41">
-                            <span id="rough_hachureAngleValue">-41</span>
-                        </div>
-                        <div class="control-row">
-                            <label for="rough_hachureGap" data-i18n="rough_hachureGap">Gap</label>
-                            <input type="range" id="rough_hachureGap" min="0" max="20" step="0.01" value="2">
-                            <span id="rough_hachureGapValue">4</span>
-                        </div>
-                
-                        <hr class="separator">
-                        <div class="control-row">
-                            <label for="rough_curveStepCount" data-i18n="rough_curveStepCount">Curve Step</label>
-                            <input type="range" id="rough_curveStepCount" min="1" max="20" step="1" value="9">
-                            <span id="rough_curveStepCountValue">9</span>
-                        </div>
-                        <div class="control-row">
-                            <label for="rough_simplification" data-i18n="rough_simplification">Simple</label>
-                            <input type="range" id="rough_simplification" min="0" max="1" step="0.01" value="0">
-                            <span id="rough_simplificationValue">0</span>
-                        </div>
-                
-                        <hr class="separator">
-                        <label data-i18n="rough_dash">Dash</label>
-                        <div class="control-row">
-                            <label for="rough_dashOffset" data-i18n="rough_dashOffset">Offset</label>
-                            <input type="range" id="rough_dashOffset" min="0.1" max="10" step="0.1" value="0.1">
-                            <span id="rough_dashOffsetValue">0</span>
-                        </div>
-                        <div class="control-row">
-                            <label for="rough_dashGap" data-i18n="rough_dashGap">Gap</label>
-                            <input type="range" id="rough_dashGap" min="0.1" max="10" step="0.1" value="0.1">
-                            <span id="rough_dashGapValue">0</span>
-                        </div>
-                
-                        <hr class="separator">
-                        <label data-i18n="rough_zigzag">Zigzag</label>
-                        <div class="control-row">
-                            <label for="rough_zigzagOffset" data-i18n="rough_zigzagOffset">Offset</label>
-                            <input type="range" id="rough_zigzagOffset" min="0.1" max="10" step="0.1" value="0.1">
-                            <span id="rough_zigzagOffsetValue">0</span>
-                        </div>
-                
-                        <hr class="separator">
-                    </div>
-                </div> -->
-
-
-
-
 
             </div>
 

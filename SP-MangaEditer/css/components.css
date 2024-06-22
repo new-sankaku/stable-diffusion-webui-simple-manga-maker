@@ -123,7 +123,14 @@
       margin: var(--margin-button);
       text-align: left;
   }
-  
+
+  #text-preview-area label,
+  #tool-preview-area label,
+  #shape-preview-area label,
+  #panel-manager-items label,
+  #speech-bubble-svg-preview-area1 label {
+      margin: 1px;
+  }
   
   #text-preview-area hr,
   #tool-preview-area hr,
