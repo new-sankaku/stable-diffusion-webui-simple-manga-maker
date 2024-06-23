@@ -183,7 +183,7 @@
                                 <button id="Select_comfyui_button" style="margin: 0 10px; padding: 5px">Comfyui</button>
                             </li> --> 
                             <li  style="display: block;">
-                                <div class="toggle-container">
+                                <div class="toggle-container" onclick="event.stopPropagation()">
                                     <span class="toggle-text">WebUI</span>
                                     <div class="toggle-switch">
                                         <input type="checkbox" id="toggle-api" class="toggle-checkbox" onchange="toggleAPI(event)">
@@ -220,8 +220,7 @@
                                     </a>
                                 </li>
                             </div>
-                            <hr>
-
+                            
                             <!--TODO COMFYUI-->
                             <div class="Comfyui_api_content" style="display: none;">
                                 <li>
@@ -243,8 +242,8 @@
                                 </li>
                                 <li>
                                     <label class="file-input-label">
-                                      <input type="file" id="Workflow_path_load" onchange="displayFileName()">
-                                      <span>Workflow File</span>
+                                        <input type="file" id="Workflow_path_load" onchange="displayFileName()">
+                                        <span>Workflow File</span>
                                     </label>
                                     <label>
                                         <span id="file-name">No file</span>
@@ -253,10 +252,11 @@
                                 <a href="html/API_Help/ComfyUI_settings.html" target="_blank">
                                     <i class="material-icons">help_outline</i>
                                     <span data-i18n="help_api_connect_settings">
-                                    Help:Connect Settings
+                                        Help:Connect Settings
                                     </span>
                                 </a>
                             </div>
+                            <hr>
                         </ul>
                     </li>
                 </ul>
