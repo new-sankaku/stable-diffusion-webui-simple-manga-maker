@@ -2119,6 +2119,7 @@ function changeLanguage(lng, event) {
       console.error('Failed to change language:', err);
     }
   });
+  reloadFont();
 }
 
 function getTranslation(key, defaultText) {
