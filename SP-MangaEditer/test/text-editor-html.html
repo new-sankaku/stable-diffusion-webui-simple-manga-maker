@@ -10,6 +10,7 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -20,6 +21,7 @@
         .container {
             max-width: 900px;
             width: 100%;
+            margin-bottom: 20px;
         }
 
         textarea {
@@ -37,8 +39,8 @@
             display: inline-block;
             white-space: pre;
             padding: 0;
-            margin-bottom: 20px; /* コンポーネント間にマージンを追加 */
-            border: 2px dashed #000; /* 点線の枠 */
+            margin-bottom: 20px;
+            border: 2px dashed #000;
             font-size: 24px;
             line-height: 1.2;
             transform-origin: top left;
@@ -48,7 +50,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-top: 20px; /* ボタンとの配置を変更 */
+            margin-top: 20px;
         }
 
         .control-group {
@@ -84,6 +86,17 @@
         select {
             font-size: 12px;
         }
+
+        .info {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            width: 100%;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 
@@ -114,7 +127,7 @@ Third line. さしすせそ。</textarea>
                 </div>
                 <div class="control-group">
                     <label for="outlineColor">輪郭色:</label>
-                    <input type="color" id="outlineColor" value="#FF0000"> <!-- 赤色に設定 -->
+                    <input type="color" id="outlineColor" value="#FF0000">
                 </div>
             </div>
             <div>
@@ -134,7 +147,7 @@ Third line. さしすせそ。</textarea>
                 </div>
                 <div class="control-group">
                     <label for="shadowColor">シャドウ色:</label>
-                    <input type="color" id="shadowColor" value="#808080"> <!-- グレーに設定 -->
+                    <input type="color" id="shadowColor" value="#808080">
                 </div>
                 <div class="control-group">
                     <label for="shadowOffsetX">シャドウX:</label>
@@ -151,17 +164,78 @@ Third line. さしすせそ。</textarea>
             </div>
             <div>
                 <div class="control-group">
+                    <label for="bgColorStart">背景開始色:</label>
+                    <input type="color" id="bgColorStart" value="#FF3D00">
+                </div>
+                <div class="control-group">
+                    <label for="bgColorEnd">背景終了色:</label>
+                    <input type="color" id="bgColorEnd" value="#0091EA">
+                </div>
+                <div class="control-group">
+                    <label for="angle">角度:</label>
+                    <input type="range" id="angle" value="45" min="0" max="360">
+                    <span id="angleValue">45deg</span>
+                </div>
+                <div class="control-group">
+                    <label for="startPos">開始位置:</label>
+                    <input type="range" id="startPos" value="0" min="0" max="100">
+                    <span id="startPosValue">0%</span>
+                </div>
+                <div class="control-group">
+                    <label for="middlePos">中間位置:</label>
+                    <input type="range" id="middlePos" value="50" min="0" max="100">
+                    <span id="middlePosValue">50%</span>
+                </div>
+                <div class="control-group">
+                    <label for="endPos">終了位置:</label>
+                    <input type="range" id="endPos" value="100" min="0" max="100">
+                    <span id="endPosValue">100%</span>
+                </div>
+                <div class="control-group">
+                    <label for="repeatInterval">繰り返し間隔 (px):</label>
+                    <input type="number" id="repeatInterval" value="100" min="1" max="1000">
+                </div>
+                <div class="control-group">
+                    <label for="gradientType">グラデーションタイプ:</label>
+                    <label>
+                        <input type="radio" name="gradientType" value="none" checked> 無し
+                    </label>
+                    <label>
+                        <input type="radio" name="gradientType" value="linear"> Linear
+                    </label>
+                    <label>
+                        <input type="radio" name="gradientType" value="repeating"> Repeating
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label>
+                        <input type="checkbox" id="textClip"> テキストクリップを有効にする
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label>
+                        <input type="checkbox" id="setTransparent"> 透明色を設定
+                    </label>
+                </div>
+                <div class="control-group">
                     <button id="download">画像保存</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="info" class="info"></div>
+
     <script>
         const input = document.getElementById('input');
         const output = document.getElementById('output');
         const controls = document.querySelectorAll('button, input, select');
         const downloadBtn = document.getElementById('download');
+        const gradientTypeInputs = document.querySelectorAll('input[name="gradientType"]');
+        const textClipCheckbox = document.getElementById('textClip');
+        const setTransparentCheckbox = document.getElementById('setTransparent');
+        const repeatIntervalInput = document.getElementById('repeatInterval');
+        const info = document.getElementById('info');
 
         let isBold = false;
         let isItalic = false;
@@ -173,6 +247,7 @@ Third line. さしすせそ。</textarea>
 
             output.innerHTML = text;
             applyStyles();
+            updateInfo();
         }
 
         function applyStyles() {
@@ -181,7 +256,6 @@ Third line. さしすせそ。</textarea>
                 fontStyle: isItalic ? 'italic' : 'normal',
                 textDecoration: isUnderline ? 'underline' : 'none',
                 fontSize: `${document.getElementById('fontSize').value}px`,
-                color: document.getElementById('textColor').value,
                 letterSpacing: `${document.getElementById('letterSpacing').value}px`,
                 lineHeight: document.getElementById('lineHeight').value,
                 textAlign: output.style.textAlign,
@@ -206,6 +280,61 @@ Third line. さしすせそ。</textarea>
             }
 
             Object.assign(output.style, styles);
+
+            const bgColorStart = document.getElementById('bgColorStart').value;
+            const bgColorEnd = document.getElementById('bgColorEnd').value;
+            const angle = document.getElementById('angle').value;
+            const startPos = document.getElementById('startPos').value;
+            const middlePos = document.getElementById('middlePos').value;
+            const endPos = document.getElementById('endPos').value;
+            const repeatInterval = parseInt(repeatIntervalInput.value);
+
+            const gradientType = document.querySelector('input[name="gradientType"]:checked').value;
+            if (gradientType === 'linear') {
+                output.style.background = `linear-gradient(${angle}deg, ${bgColorStart} ${startPos}%, ${bgColorEnd} ${middlePos}%, ${bgColorStart} ${endPos}%)`;
+            } else if (gradientType === 'repeating') {
+                output.style.background = `repeating-linear-gradient(${angle}deg, ${bgColorStart} ${startPos}%, ${bgColorEnd} ${middlePos}%, ${bgColorStart} ${repeatInterval}px)`;
+            } else {
+                output.style.background = '';
+            }
+
+            if (textClipCheckbox.checked) {
+                output.style.color = 'transparent';
+                output.style.webkitBackgroundClip = 'text';
+                output.style.backgroundClip = 'text';
+            } else if (setTransparentCheckbox.checked) {
+                output.style.color = 'transparent';
+                output.style.webkitBackgroundClip = '';
+                output.style.backgroundClip = '';
+            } else {
+                output.style.color = document.getElementById('textColor').value;
+                output.style.webkitBackgroundClip = '';
+                output.style.backgroundClip = '';
+            }
+
+            document.getElementById('angleValue').innerText = `${angle}deg`;
+            document.getElementById('startPosValue').innerText = `${startPos}%`;
+            document.getElementById('middlePosValue').innerText = `${middlePos}%`;
+            document.getElementById('endPosValue').innerText = `${endPos}%`;
+        }
+
+        function updateInfo() {
+            const styles = window.getComputedStyle(output);
+            let infoText = '現在のCSS設定:\n';
+            infoText += `font-weight: ${styles.fontWeight};\n`;
+            infoText += `font-style: ${styles.fontStyle};\n`;
+            infoText += `text-decoration: ${styles.textDecoration};\n`;
+            infoText += `font-size: ${styles.fontSize};\n`;
+            infoText += `letter-spacing: ${styles.letterSpacing};\n`;
+            infoText += `line-height: ${styles.lineHeight};\n`;
+            infoText += `text-align: ${styles.textAlign};\n`;
+            infoText += `color: ${styles.color};\n`;
+            infoText += `text-shadow: ${styles.textShadow};\n`;
+            infoText += `background: ${styles.background};\n`;
+            infoText += `-webkit-background-clip: ${styles.webkitBackgroundClip};\n`;
+            infoText += `background-clip: ${styles.backgroundClip};\n`;
+
+            info.textContent = infoText;
         }
 
         controls.forEach(control => {
@@ -222,6 +351,14 @@ Third line. さしすせそ。</textarea>
                 control.addEventListener('input', updateOutput);
             }
         });
+
+        gradientTypeInputs.forEach(input => {
+            input.addEventListener('change', updateOutput);
+        });
+
+        textClipCheckbox.addEventListener('change', updateOutput);
+        setTransparentCheckbox.addEventListener('change', updateOutput);
+        repeatIntervalInput.addEventListener('input', updateOutput);
 
         input.addEventListener('input', updateOutput);
 
@@ -241,7 +378,7 @@ Third line. さしすせそ。</textarea>
         downloadBtn.addEventListener('click', () => {
             const originalBorder = output.style.border;
             const originalBackground = output.style.backgroundColor;
-            output.style.border = 'none'; // 画像保存時にボーダーを消す
+            output.style.border = 'none';
             output.style.backgroundColor = 'transparent';
 
             html2canvas(output, {
@@ -252,7 +389,7 @@ Third line. さしすせそ。</textarea>
                 link.href = canvas.toDataURL('image/png');
                 link.click();
 
-                output.style.border = originalBorder; // 元のボーダーに戻す
+                output.style.border = originalBorder;
                 output.style.backgroundColor = originalBackground;
             });
         });

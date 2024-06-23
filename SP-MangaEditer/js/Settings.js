@@ -77,17 +77,18 @@ const img2img_initPrompt = {
 
 // 共通プロパティリスト
 const commonProperties = [
-                          'excludeFromLayerPanel', 
-                          'isPanel', 
-                          'isIcon',
-                          'text2img_prompt', 
-                          'text2img_negativePrompt', 
-                          'text2img_seed', 
-                          'text2img_width', 
-                          'text2img_height', 
-                          'text2img_samplingMethod', 
-                          'text2img_samplingSteps',
-                          'initial', 
-                          'clipPath.initial',
-                          'name'
+'excludeFromLayerPanel', 
+'isPanel', 
+'isIcon',
+'text2img_prompt', 
+'text2img_negativePrompt', 
+'text2img_seed', 
+'text2img_width', 
+'text2img_height', 
+'text2img_samplingMethod', 
+'text2img_samplingSteps',
+'initial', 
+'clipPath.initial',
+'name',
+"guids", "guid", "tempPrompt", "tempNegativePrompt", "tempSeed"
 ];

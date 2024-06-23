@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>エッジ検出と三角形内部塗りつぶし</title>
+    <style>
+        .control-panel {
+            margin-top: 10px;
+        }
+        .control-item {
+            margin-bottom: 10px;
+        }
+        .value-display {
+            display: inline-block;
+            width: 40px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <canvas id="canvas"></canvas>
+    <div class="control-panel">
+        <div class="control-item">
+            <label for="widthSlider">三角形の最大幅 (ピクセル): </label>
+            <input type="range" id="widthSlider" min="1" max="50" value="20" step="1">
+            <span id="widthValue" class="value-display">20</span>
+        </div>
+        <div class="control-item">
+            <label for="probabilitySlider">適用確率 (%): </label>
+            <input type="range" id="probabilitySlider" min="0" max="100" value="50" step="1">
+            <span id="probabilityValue" class="value-display">50</span>
+        </div>
+        <div class="control-item">
+            <label for="colorPicker">色選択: </label>
+            <input type="color" id="colorPicker" value="#FFC0CB">
+        </div>
+        <div class="control-item">
+            <label for="transparencyCheck">透明化: </label>
+            <input type="checkbox" id="transparencyCheck">
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const imageInput = document.getElementById('imageInput');
+        const widthSlider = document.getElementById('widthSlider');
+        const widthValue = document.getElementById('widthValue');
+        const probabilitySlider = document.getElementById('probabilitySlider');
+        const probabilityValue = document.getElementById('probabilityValue');
+        const colorPicker = document.getElementById('colorPicker');
+        const transparencyCheck = document.getElementById('transparencyCheck');
+
+        let originalImageData;
+
+        imageInput.addEventListener('change', handleImage);
+        widthSlider.addEventListener('input', handleControlChange);
+        probabilitySlider.addEventListener('input', handleControlChange);
+        colorPicker.addEventListener('input', handleControlChange);
+        transparencyCheck.addEventListener('change', handleControlChange);
+
+        function handleImage(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    processImage();
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function handleControlChange() {
+            widthValue.textContent = widthSlider.value;
+            probabilityValue.textContent = probabilitySlider.value;
+            if (originalImageData) {
+                processImage();
+            }
+        }
+
+        function processImage() {
+            const imageData = new ImageData(
+                new Uint8ClampedArray(originalImageData.data),
+                originalImageData.width,
+                originalImageData.height
+            );
+            const data = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+
+            // エッジ検出（改良版Sobelフィルタ）
+            const edges = new Uint8ClampedArray(width * height);
+            const directions = new Float32Array(width * height);
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const idx = (y * width + x) * 4;
+                    const gx = 
+                        -data[idx - 4 - width * 4] + data[idx + 4 - width * 4] +
+                        -2 * data[idx - 4] + 2 * data[idx + 4] +
+                        -data[idx - 4 + width * 4] + data[idx + 4 + width * 4];
+                    const gy = 
+                        -data[idx - width * 4 - 4] - 2 * data[idx - width * 4] - data[idx - width * 4 + 4] +
+                        data[idx + width * 4 - 4] + 2 * data[idx + width * 4] + data[idx + width * 4 + 4];
+                    const g = Math.sqrt(gx * gx + gy * gy);
+                    edges[y * width + x] = g > 100 ? 255 : 0;
+                    directions[y * width + x] = Math.atan2(gy, gx);
+                }
+            }
+
+            // エッジに沿った三角形の塗りつぶし
+            const maxWidth = parseInt(widthSlider.value);
+            const probability = parseInt(probabilitySlider.value) / 100;
+            const color = hexToRgb(colorPicker.value);
+            const isTransparent = transparencyCheck.checked;
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (edges[y * width + x] === 255 && Math.random() < probability) {
+                        const direction = directions[y * width + x];
+                        const perpendicular = direction + Math.PI / 2;
+                        const triangleWidth = Math.random() * maxWidth + 1;
+                        const triangleLength = Math.random() * maxWidth + maxWidth;
+
+                        // 三角形の頂点を計算
+                        const x1 = x;
+                        const y1 = y;
+                        const x2 = x + Math.cos(perpendicular) * triangleWidth / 2;
+                        const y2 = y + Math.sin(perpendicular) * triangleWidth / 2;
+                        const x3 = x - Math.cos(perpendicular) * triangleWidth / 2;
+                        const y3 = y - Math.sin(perpendicular) * triangleWidth / 2;
+                        const endX = x + Math.cos(direction) * triangleLength;
+                        const endY = y + Math.sin(direction) * triangleLength;
+
+                        fillTriangle(x1, y1, x2, y2, endX, endY, data, width, height, color, isTransparent, edges);
+                        fillTriangle(x1, y1, x3, y3, endX, endY, data, width, height, color, isTransparent, edges);
+                    }
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function fillTriangle(x1, y1, x2, y2, x3, y3, data, width, height, color, isTransparent, edges) {
+            const minX = Math.max(0, Math.floor(Math.min(x1, x2, x3)));
+            const maxX = Math.min(width - 1, Math.ceil(Math.max(x1, x2, x3)));
+            const minY = Math.max(0, Math.floor(Math.min(y1, y2, y3)));
+            const maxY = Math.min(height - 1, Math.ceil(Math.max(y1, y2, y3)));
+
+            for (let y = minY; y <= maxY; y++) {
+                for (let x = minX; x <= maxX; x++) {
+                    if (edges[y * width + x] !== 255 && isPointInTriangle(x, y, x1, y1, x2, y2, x3, y3)) {
+                        const idx = (y * width + x) * 4;
+                        if (isTransparent) {
+                            data[idx + 3] = 0; // 完全に透明
+                        } else {
+                            data[idx] = color.r;
+                            data[idx + 1] = color.g;
+                            data[idx + 2] = color.b;
+                        }
+                    }
+                }
+            }
+        }
+
+        function isPointInTriangle(px, py, x1, y1, x2, y2, x3, y3) {
+            const a = ((y2 - y3) * (px - x3) + (x3 - x2) * (py - y3)) / ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3));
+            const b = ((y3 - y1) * (px - x3) + (x1 - x3) * (py - y3)) / ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3));
+            const c = 1 - a - b;
+            return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+    </script>
+</body>
+</html>

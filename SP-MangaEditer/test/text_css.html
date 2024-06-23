@@ -4,396 +4,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>テキストスタイルの例</title>
+    <title>テキストのグラデーション設定</title>
     <style>
-        /* スタイル 1 */
-        .sample1 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: #FF6F00;
-            text-shadow:
-                0 0.01em 0 #999,
-                0 0.02em 0 #888,
-                0 0.03em 0 #777,
-                0 0.04em 0 #666,
-                0 0.05em 0 #555,
-                0 0.06em 0 #444,
-                0 0.08em 0 #000;
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
 
-        /* スタイル 2 */
-        .sample2 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            text-shadow:
-                0 0.03em 0.03em #FFAB91,
-                0 0.03em 0.03em #000,
-                0 0.03em 0.03em #FBE9E7;
-        }
-
-        /* スタイル 3 */
-        .sample3 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: #03A9F4;
-            text-shadow:
-                0.04em 0.02em 0 #B0BEC5,
-                0.08em 0.05em 0 rgba(0, 0, 0, 0.6);
-        }
-
-        /* スタイル 4 */
-        .sample4 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: #FDF5E6;
-            text-shadow:
-                1px -1px 1px #BDBDBD,
-                -1px 2px 1px #737272,
-                -2px 4px 1px #767474,
-                -3px 6px 1px #787777,
-                -4px 8px 1px #424242,
-                -5px 10px 1px #616161,
-                -6px 12px 1px #757575,
-                -7px 14px 1px #9E9E9E,
-                -8px 16px 1px #BDBDBD,
-                -9px 18px 1px #E0E0E0;
-        }
-
-        /* スタイル 5 */
-        .sample5 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background: rgba(0, 0, 0, 1);
-            text-shadow:
-                0 0 0.1em rgba(255, 255, 255, 0.05),
-                0.01em 0.04em 0.03em rgba(255, 255, 255, 0.4);
-            -webkit-background-clip: text;
-        }
-
-        /* スタイル 6 */
-        .sample6 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            -webkit-text-stroke: 0.02em rgba(255, 255, 255, 1);
-        }
-
-        /* スタイル 7 */
-        .sample7 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            -webkit-text-stroke: 0.04em rgba(255, 255, 255, 0.5);
-        }
-
-        /* スタイル 8 */
-        .sample8 {
-            font-size: 7em;
-            text-align: center;
-            line-height: 0.95em;
-            letter-spacing: 0.05em;
-            color: transparent;
-            -webkit-text-stroke: 0.03em rgba(0, 0, 0, 1);
-        }
-
-        /* スタイル 9 */
-        .sample9 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: #FFF;
-            text-shadow:
-                0 0 0.05em #F06292,
-                0 0 0.10em #F06292,
-                0 0 0.15em #F06292,
-                0 0 0.30em #F06292;
-            filter: saturate(80%);
-        }
-
-        /* スタイル 10 */
-        .sample10 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background: linear-gradient(45deg, #DD2C00 0% 40%, #01579B 60% 100%);
-            -webkit-background-clip: text;
-        }
-
-        /* スタイル 11 */
-        .sample11 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background: linear-gradient(90deg, #0091EA 0% 30%, #00B0FF 40% 60%, #80D8FF 70% 100%);
-            -webkit-background-clip: text;
-        }
-
-        /* スタイル 12 */
-        .sample12 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background: linear-gradient(0deg, #F57C00 0% 60%, #FFB74D 60% 100%);
-            -webkit-background-clip: text;
-        }
-
-        /* スタイル 13 */
-        .sample13 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background: repeating-linear-gradient(-45deg, #FF3D00 0% 50%, #0091EA 50% 100%);
-            -webkit-background-clip: text;
-        }
-
-        /* スタイル 14 */
-        .sample14 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background: repeating-linear-gradient(0deg, #C62828 0.1em, #EF5350 0.2em, #FFEBEE 0.3em, #EF5350 0.4em, #C62828 0.5em);
-            -webkit-background-clip: text;
-        }
-
-        /* スタイル 15 */
-        .sample15 {
-            font-size: 5em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: #FFF;
-            text-shadow:
-                0 0 0.05em #F06292,
-                0 0 0.10em #F06292,
-                0 0 0.15em #F06292,
-                0 0 0.30em #F06292;
-            filter: saturate(80%);
-            -webkit-background-clip: text;
-            -webkit-box-reflect: below -0.25em -webkit-gradient(linear, left bottom, left top, from(rgba(255, 255, 255, .6)), to(transparent));
-        }
-
-        /* スタイル 16 */
-        .sample16 {
-            font-size: 8em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background-color: #FFF;
-            background-image:
-                repeating-linear-gradient(0deg,
-                    rgba(13, 71, 161, .6) 0px 6px,
-                    rgba(255, 255, 255, .6) 6px 8px,
-                    rgba(13, 71, 161, .6) 8px 10px,
-                    rgba(255, 214, 0, .6) 10px 12px,
-                    rgba(13, 71, 161, .6) 12px 18px,
-                    rgba(213, 0, 0, .6) 18px 34px),
-                repeating-linear-gradient(90deg,
-                    rgba(13, 71, 161, 1) 0px 6px,
-                    rgba(255, 255, 255, 1) 6px 8px,
-                    rgba(13, 71, 161, 1) 8px 10px,
-                    rgba(255, 214, 0, 1) 10px 12px,
-                    rgba(13, 71, 161, 1) 12px 18px,
-                    rgba(213, 0, 0, 1) 18px 34px);
-            -webkit-background-clip: text;
-        }
-
-        /* スタイル 17 */
-        .sample17 {
-            font-size: 6em;
-            text-align: center;
-            line-height: 0.95em;
-            font-weight: bold;
-            color: transparent;
-            background-color: #FFF;
-            background-image:
-                repeating-linear-gradient(0deg,
-                    rgba(0, 0, 0, 0.4) 0px 4px,
-                    rgba(255, 255, 255, 0.4) 4px 8px,
-                    rgba(0, 0, 0, 0.4) 8px 12px,
-                    rgba(255, 255, 255, 0.4) 12px 16px,
-                    rgba(0, 0, 0, 0.4) 16px 20px,
-                    rgba(209, 172, 118, 0.4) 20px 30px,
-                    rgba(213, 0, 0, 0.4) 30px 32px,
-                    rgba(209, 172, 118, 0.4) 32px 36px,
-                    rgba(213, 0, 0, 0.4) 36px 38px,
-                    rgba(209, 172, 118, 0.4) 38px 48px),
-                repeating-linear-gradient(90deg,
-                    rgba(0, 0, 0, 1) 0px 3px,
-                    rgba(255, 255, 255, 1) 3px 6px,
-                    rgba(0, 0, 0, 1) 6px 9px,
-                    rgba(255, 255, 255, 1) 9px 12px,
-                    rgba(0, 0, 0, 1) 12px 15px,
-                    rgba(209, 172, 118, 1) 15px 30px,
-                    rgba(213, 0, 0, 0.8) 30px 31px,
-                    rgba(209, 172, 118, 1) 31px 33px,
-                    rgba(213, 0, 0, 0.8) 33px 34px,
-                    rgba(209, 172, 118, 1) 34px 49px);
-            -webkit-background-clip: text;
-        }
-
-        /* ハイライター 1 */
-        .highlighter1 {
-            background: linear-gradient(transparent 10%, #FF9100 10% 90%, transparent 90%);
-        }
-
-        /* ハイライター 2 */
-        .highlighter2 {
-            background: linear-gradient(transparent 40%, #00B0FF 40% 90%, transparent 90%);
-        }
-
-        /* ハイライター 3 */
-        .highlighter3 {
-            background: linear-gradient(transparent 10%, #00E676 10% 40%, transparent 40%);
-        }
-
-        /* ハイライター 4 */
-        .highlighter4 {
-            background: linear-gradient(transparent 30%, #FF7043 30% 60%, transparent 60%);
-        }
-
-        /* ハイライター 5 */
-        .highlighter5 {
-            background: linear-gradient(transparent 60%, #FF5252 60% 90%, transparent 90%);
-        }
-
-        /* ハイライター 6 */
-        .highlighter6 {
-            position: relative;
-        }
-
-        .highlighter6::before {
-            content: "";
+        .container {
+            max-width: 900px;
             width: 100%;
-            height: 80%;
-            position: absolute;
-            top: 10%;
-            left: 0;
-            background: linear-gradient(45deg, transparent 0%, #FF9100 0% 40%, transparent 100%);
-            z-index: -1;
+            margin-bottom: 20px;
         }
 
-        /* ハイライター 7 */
-        .highlighter7 {
-            position: relative;
-        }
-
-        .highlighter7::before {
-            content: "";
+        textarea {
             width: 100%;
-            height: 50%;
-            position: absolute;
-            top: 40%;
-            left: 0;
-            background: linear-gradient(45deg, transparent 0%, #00B0FF 0% 40%, transparent 100%);
-            z-index: -1;
+            height: 150px;
+            margin-bottom: 15px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            font-size: 24px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
-        /* ハイライター 8 */
-        .highlighter8 {
-            position: relative;
+        #output {
+            display: inline-block;
+            white-space: pre;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 5em;
+            text-align: center;
+            line-height: 0.95em;
+            font-weight: bold;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
         }
 
-        .highlighter8::before {
-            content: "";
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        label {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        input[type="color"],
+        input[type="number"],
+        input[type="range"] {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        input[type="number"] {
+            width: 50px;
+        }
+
+        select {
+            font-size: 12px;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
             width: 100%;
-            height: 30%;
-            position: absolute;
-            top: 10%;
-            left: 0;
-            background: linear-gradient(45deg, transparent 0%, #00E676 0% 40%, transparent 100%);
-            z-index: -1;
-        }
-
-        /* ハイライター 9 */
-        .highlighter9 {
-            position: relative;
-        }
-
-        .highlighter9::before {
-            content: "";
-            width: 100%;
-            height: 30%;
-            position: absolute;
-            top: 30%;
-            left: 0;
-            background: linear-gradient(45deg, transparent 0%, #FF7043 0% 40%, transparent 100%);
-            z-index: -1;
-        }
-
-        /* ハイライター 10 */
-        .highlighter10 {
-            position: relative;
-        }
-
-        .highlighter10::before {
-            content: "";
-            width: 100%;
-            height: 30%;
-            position: absolute;
-            top: 55%;
-            left: 0;
-            background: linear-gradient(45deg, transparent 0%, #FF5252 0% 40%, transparent 100%);
-            z-index: -1;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
     </style>
 </head>
 
 <body>
-    <div class="sample1">Sample 1</div>
-    <div class="sample2">Sample 2</div>
-    <div class="sample3">Sample 3</div>
-    <div class="sample4">Sample 4</div>
-    <div class="sample5">Sample 5</div>
-    <div class="sample6">Sample 6</div>
-    <div class="sample7">Sample 7</div>
-    <div class="sample8">Sample 8</div>
-    <div class="sample9">Sample 9</div>
-    <div class="sample10">Sample 10</div>
-    <div class="sample11">Sample 11</div>
-    <div class="sample12">Sample 12</div>
-    <div class="sample13">Sample 13</div>
-    <div class="sample14">Sample 14</div>
-    <div class="sample15">Sample 15</div>
-    <div class="sample16">Sample 16</div>
-    <div class="sample17">Sample 17</div>
+    <div class="container">
+        <textarea id="input">New Text. あいうえお。
+Second line. かきくけこ。
+Third line. さしすせそ。</textarea>
+        <div id="output" class="sample13"></div>
+        <div class="controls">
+            <div>
+                <div class="control-group">
+                    <button id="bold">B</button>
+                    <button id="italic">I</button>
+                    <button id="underline">U</button>
+                </div>
+                <div class="control-group">
+                    <label for="fontSize">サイズ:</label>
+                    <input type="number" id="fontSize" value="40" min="1" max="100">
+                </div>
+                <div class="control-group">
+                    <label for="textColor">色:</label>
+                    <input type="color" id="textColor" value="#000000">
+                </div>
+                <div class="control-group">
+                    <label for="outlineWidth">輪郭幅:</label>
+                    <input type="number" id="outlineWidth" value="0" min="0" max="10">
+                </div>
+                <div class="control-group">
+                    <label for="outlineColor">輪郭色:</label>
+                    <input type="color" id="outlineColor" value="#FF0000">
+                </div>
+            </div>
+            <div>
+                <div class="control-group">
+                    <label for="letterSpacing">文字間隔:</label>
+                    <input type="number" id="letterSpacing" value="0" min="-5" max="20">
+                </div>
+                <div class="control-group">
+                    <label for="lineHeight">行高:</label>
+                    <input type="number" id="lineHeight" value="1.2" min="0.5" max="3" step="0.1">
+                </div>
+                <div class="control-group">
+                    <label>位置:</label>
+                    <button id="alignLeft">左</button>
+                    <button id="alignCenter">中</button>
+                    <button id="alignRight">右</button>
+                </div>
+                <div class="control-group">
+                    <label for="shadowColor">シャドウ色:</label>
+                    <input type="color" id="shadowColor" value="#808080">
+                </div>
+                <div class="control-group">
+                    <label for="shadowOffsetX">シャドウX:</label>
+                    <input type="number" id="shadowOffsetX" value="0" min="-50" max="50">
+                </div>
+                <div class="control-group">
+                    <label for="shadowOffsetY">シャドウY:</label>
+                    <input type="number" id="shadowOffsetY" value="0" min="-50" max="50">
+                </div>
+                <div class="control-group">
+                    <label for="shadowBlur">シャドウブラー:</label>
+                    <input type="number" id="shadowBlur" value="0" min="0" max="50">
+                </div>
+            </div>
+            <div>
+                <div class="control-group">
+                    <label for="bgColorStart">背景開始色:</label>
+                    <input type="color" id="bgColorStart" value="#FF3D00">
+                </div>
+                <div class="control-group">
+                    <label for="bgColorEnd">背景終了色:</label>
+                    <input type="color" id="bgColorEnd" value="#0091EA">
+                </div>
+                <div class="control-group">
+                    <label for="angle">角度:</label>
+                    <input type="range" id="angle" value="45" min="0" max="360">
+                    <span id="angleValue">45deg</span>
+                </div>
+                <div class="control-group">
+                    <label for="repeatInterval">繰り返し間隔 (px):</label>
+                    <input type="number" id="repeatInterval" value="100" min="1" max="1000">
+                </div>
+                <div class="control-group">
+                    <label for="gradientType">グラデーションタイプ:</label>
+                    <label>
+                        <input type="radio" name="gradientType" value="none" checked> 無し
+                    </label>
+                    <label>
+                        <input type="radio" name="gradientType" value="linear"> Linear
+                    </label>
+                    <label>
+                        <input type="radio" name="gradientType" value="repeating"> Repeating
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label>
+                        <input type="checkbox" id="textClip"> テキストクリップを有効にする
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label>
+                        <input type="checkbox" id="setTransparent"> 透明色を設定
+                    </label>
+                </div>
+                <div class="control-group">
+                    <button id="download">画像保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="highlighter1">Highlighter 1</div>
-    <div class="highlighter2">Highlighter 2</div>
-    <div class="highlighter3">Highlighter 3</div>
-    <div class="highlighter4">Highlighter 4</div>
-    <div class="highlighter5">Highlighter 5</div>
-    <div class="highlighter6">Highlighter 6</div>
-    <div class="highlighter7">Highlighter 7</div>
-    <div class="highlighter8">Highlighter 8</div>
-    <div class="highlighter9">Highlighter 9</div>
-    <div class="highlighter10">Highlighter 10</div>
+    <div id="info" class="info"></div>
+
+    <script>
+        const input = document.getElementById('input');
+        const output = document.getElementById('output');
+        const controls = document.querySelectorAll('button, input, select');
+        const downloadBtn = document.getElementById('download');
+        const gradientTypeInputs = document.querySelectorAll('input[name="gradientType"]');
+        const textClipCheckbox = document.getElementById('textClip');
+        const setTransparentCheckbox = document.getElementById('setTransparent');
+        const repeatIntervalInput = document.getElementById('repeatInterval');
+        const info = document.getElementById('info');
+
+        let isBold = false;
+        let isItalic = false;
+        let isUnderline = false;
+
+        function updateOutput() {
+            let text = input.value;
+            text = text.replace(/\n/g, '<br>');
+
+            output.innerHTML = text;
+            applyStyles();
+            updateInfo();
+        }
+
+        function applyStyles() {
+            const styles = {
+                fontWeight: isBold ? 'bold' : 'normal',
+                fontStyle: isItalic ? 'italic' : 'normal',
+                textDecoration: isUnderline ? 'underline' : 'none',
+                fontSize: `${document.getElementById('fontSize').value}px`,
+                letterSpacing: `${document.getElementById('letterSpacing').value}px`,
+                lineHeight: document.getElementById('lineHeight').value,
+                textAlign: output.style.textAlign,
+                padding: '0',
+                margin: '0',
+            };
+
+            const shadowStyle = `${document.getElementById('shadowOffsetX').value}px ${document.getElementById('shadowOffsetY').value}px ${document.getElementById('shadowBlur').value}px ${document.getElementById('shadowColor').value}`;
+            const outlineWidth = parseInt(document.getElementById('outlineWidth').value);
+            const outlineColor = document.getElementById('outlineColor').value;
+
+            if (outlineWidth > 0) {
+                let textShadow = `${shadowStyle}, `;
+                for (let i = 0; i < 360; i += 45) {
+                    const x = Math.round(Math.cos(i * Math.PI / 180) * outlineWidth);
+                    const y = Math.round(Math.sin(i * Math.PI / 180) * outlineWidth);
+                    textShadow += `${x}px ${y}px 0 ${outlineColor}, `;
+                }
+                output.style.textShadow = textShadow.slice(0, -2);
+            } else {
+                output.style.textShadow = shadowStyle;
+            }
+
+            Object.assign(output.style, styles);
+
+            const bgColorStart = document.getElementById('bgColorStart').value;
+            const bgColorEnd = document.getElementById('bgColorEnd').value;
+            const angle = document.getElementById('angle').value;
+            const startPos = document.getElementById('startPos').value;
+            const middlePos = document.getElementById('middlePos').value;
+            const endPos = document.getElementById('endPos').value;
+            const repeatInterval = parseInt(repeatIntervalInput.value);
+
+            const gradientType = document.querySelector('input[name="gradientType"]:checked').value;
+            if (gradientType === 'linear') {
+                output.style.background = `linear-gradient(${angle}deg, ${bgColorStart} ${startPos}%, ${bgColorEnd} ${middlePos}%, ${bgColorStart} ${endPos}%)`;
+            } else if (gradientType === 'repeating') {
+                output.style.background = `repeating-linear-gradient(${angle}deg, ${bgColorStart} ${startPos}%, ${bgColorEnd} ${middlePos}%, ${bgColorStart} ${repeatInterval}px)`;
+            } else {
+                output.style.background = '';
+            }
+
+            if (textClipCheckbox.checked) {
+                output.style.color = 'transparent';
+                output.style.webkitBackgroundClip = 'text';
+                output.style.backgroundClip = 'text';
+            } else if (setTransparentCheckbox.checked) {
+                output.style.color = 'transparent';
+                output.style.webkitBackgroundClip = '';
+                output.style.backgroundClip = '';
+            } else {
+                output.style.color = document.getElementById('textColor').value;
+                output.style.webkitBackgroundClip = '';
+                output.style.backgroundClip = '';
+            }
+
+            document.getElementById('angleValue').innerText = `${angle}deg`;
+        }
+
+        function updateInfo() {
+            const styles = window.getComputedStyle(output);
+            let infoText = '現在のCSS設定:\n';
+            infoText += `font-weight: ${styles.fontWeight};\n`;
+            infoText += `font-style: ${styles.fontStyle};\n`;
+            infoText += `text-decoration: ${styles.textDecoration};\n`;
+            infoText += `font-size: ${styles.fontSize};\n`;
+            infoText += `letter-spacing: ${styles.letterSpacing};\n`;
+            infoText += `line-height: ${styles.lineHeight};\n`;
+            infoText += `text-align: ${styles.textAlign};\n`;
+            infoText += `color: ${styles.color};\n`;
+            infoText += `text-shadow: ${styles.textShadow};\n`;
+            infoText += `background: ${styles.background};\n`;
+            infoText += `-webkit-background-clip: ${styles.webkitBackgroundClip};\n`;
+            infoText += `background-clip: ${styles.backgroundClip};\n`;
+
+            info.textContent = infoText;
+        }
+
+        controls.forEach(control => {
+            if (['bold', 'italic', 'underline'].includes(control.id)) {
+                control.addEventListener('click', (e) => {
+                    switch (e.target.id) {
+                        case 'bold': isBold = !isBold; break;
+                        case 'italic': isItalic = !isItalic; break;
+                        case 'underline': isUnderline = !isUnderline; break;
+                    }
+                    updateOutput();
+                });
+            } else {
+                control.addEventListener('input', updateOutput);
+            }
+        });
+
+        gradientTypeInputs.forEach(input => {
+            input.addEventListener('change', updateOutput);
+        });
+
+        textClipCheckbox.addEventListener('change', updateOutput);
+        setTransparentCheckbox.addEventListener('change', updateOutput);
+        repeatIntervalInput.addEventListener('input', updateOutput);
+
+        input.addEventListener('input', updateOutput);
+
+        document.getElementById('alignLeft').addEventListener('click', () => {
+            output.style.textAlign = 'left';
+            updateOutput();
+        });
+        document.getElementById('alignCenter').addEventListener('click', () => {
+            output.style.textAlign = 'center';
+            updateOutput();
+        });
+        document.getElementById('alignRight').addEventListener('click', () => {
+            output.style.textAlign = 'right';
+            updateOutput();
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const originalBorder = output.style.border;
+            const originalBackground = output.style.backgroundColor;
+            output.style.border = 'none';
+            output.style.backgroundColor = 'transparent';
+
+            html2canvas(output, {
+                backgroundColor: null
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'text_image.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                output.style.border = originalBorder;
+                output.style.backgroundColor = originalBackground;
+            });
+        });
+
+        updateOutput();
+    </script>
 </body>
 
 </html>
