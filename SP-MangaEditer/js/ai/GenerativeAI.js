@@ -8,8 +8,10 @@ function apiHeartbeat(){
     return;
   }
 
-  sdwebui_apiHeartbeat();
-  comufy_apiHeartbeat();
+  if (API_mode == apis.A1111)
+    sdwebui_apiHeartbeat();
+  else if (API_mode == apis.COMFYUI)
+    comufy_apiHeartbeat();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
