@@ -310,6 +310,8 @@ function toggleAPI(event) {
       console.log('API_mode is now set to:', API_mode);
       createToast("API CHANGE!", "WebUI(A1111/Forge)");
   }
+
+  apiHeartbeat();
 }
 
 function showClassContent(class_name) {

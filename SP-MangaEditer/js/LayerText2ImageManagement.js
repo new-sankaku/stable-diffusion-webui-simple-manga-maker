@@ -275,9 +275,9 @@ function openText2ImageBaseFloatingWindow() {
     fetchSD_Sampler();
     fetchSD_Upscaler();
   }else if( API_mode == apis.COMFYUI ){
-    comufyModels();
-    comufySampler();
-    comufyUpscaler();
+    comfyModels();
+    comfySampler();
+    comfyUpscaler();
   }
 
   var baseSaveButton = floatingWindow.querySelector("#baseSaveButton");

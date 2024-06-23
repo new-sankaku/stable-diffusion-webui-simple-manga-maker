@@ -99,11 +99,11 @@ function connectToComfyui() {
 /* 
 * Accesses the specified URL and logs the response
 */
-async function comufy_apiHeartbeat() {
+async function comfy_apiHeartbeat() {
 
     server_address = hostInput.value + ':' + portInput.value;
-    console.log( "comufy_apiHeartbeat", "start" );
-    const ComufyUI_Heartbeat_Label = document.getElementById('ComufyUI_Heartbeat_Label');
+    console.log( "comfy_apiHeartbeat", "start" );
+    const ComfyUI_Heartbeat_Label = document.getElementById('ComfyUI_Heartbeat_Label');
     try {
         const url = "http://" + server_address +  "/settings";
         const response = await fetch(url, {
@@ -115,19 +115,19 @@ async function comufy_apiHeartbeat() {
         });
 
         if( response.ok ){
-          console.log("apiHeartbeat", "comufy_isAlive");
-          ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI ON';
-          ComufyUI_Heartbeat_Label.style.color = 'green';
+          console.log("apiHeartbeat", "comfy_isAlive");
+          ComfyUI_Heartbeat_Label.innerHTML = 'ComfyUI ON';
+          ComfyUI_Heartbeat_Label.style.color = 'green';
         }else{
-          console.log("apiHeartbeat", "comufy_notAlive");
-          ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI OFF';
-          ComufyUI_Heartbeat_Label.style.color = 'red';
+          console.log("apiHeartbeat", "comfy_notAlive");
+          ComfyUI_Heartbeat_Label.innerHTML = 'ComfyUI OFF';
+          ComfyUI_Heartbeat_Label.style.color = 'red';
         }
     } catch (error) {
         console.log("apiHeartbeat", error);
-        console.log("apiHeartbeat", "error comufy_notAlive");
-        ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI OFF';
-        ComufyUI_Heartbeat_Label.style.color = 'red';
+        console.log("apiHeartbeat", "error comfy_notAlive");
+        ComfyUI_Heartbeat_Label.innerHTML = 'ComfyUI OFF';
+        ComfyUI_Heartbeat_Label.style.color = 'red';
   }
 }
 
@@ -379,8 +379,8 @@ function replacePlaceholder(workflow, placeholder, value) {
 
 
 
-async function comufySampler() {
-    //console.log("comufySampler: Function called");
+async function comfySampler() {
+    //console.log("comfySampler: Function called");
     const server_address = hostInput.value + ':' + portInput.value;
     const url = `http://${server_address}/object_info/KSampler`;
     
@@ -390,17 +390,17 @@ async function comufySampler() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        //console.log("comufySampler: Data fetched", data);
+        //console.log("comfySampler: Data fetched", data);
         const models = data.KSampler.input.required.sampler_name[0].map(name => ({ name: name }));
-        //console.log("comufySampler: Models processed", models);
+        //console.log("comfySampler: Models processed", models);
         updateSamplerDropdown(models);
     } catch (error) {
-        console.error("comufySampler: Fetch error", error);
+        console.error("comfySampler: Fetch error", error);
     }
 }
 
-async function comufyUpscaler() {
-    //console.log("comufyUpscaler: Function called");
+async function comfyUpscaler() {
+    //console.log("comfyUpscaler: Function called");
     const server_address = hostInput.value + ':' + portInput.value;
     const url = `http://${server_address}/object_info/UpscaleModelLoader`;
     
@@ -410,17 +410,17 @@ async function comufyUpscaler() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        //console.log("comufyUpscaler: Data fetched", data);
+        //console.log("comfyUpscaler: Data fetched", data);
         const models = data.UpscaleModelLoader.input.required.model_name[0].map(name => ({ name: name }));
-        //console.log("comufyUpscaler: Models processed", models);
+        //console.log("comfyUpscaler: Models processed", models);
         updateUpscalerDropdown(models);
     } catch (error) {
-        console.error("comufyUpscaler: Fetch error", error);
+        console.error("comfyUpscaler: Fetch error", error);
     }
 }
 
-async function comufyModels() {
-    //console.log("comufyModels: Function called");
+async function comfyModels() {
+    //console.log("comfyModels: Function called");
     const server_address = hostInput.value + ':' + portInput.value;
     const url = `http://${server_address}/object_info/CheckpointLoaderSimple`;
     
@@ -430,11 +430,11 @@ async function comufyModels() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        //console.log("comufyModels: Data fetched", data);
+        //console.log("comfyModels: Data fetched", data);
         const models = data.CheckpointLoaderSimple.input.required.ckpt_name[0].map(name => ({ title: name, model_name: name }));
-        //console.log("comufyModels: Models processed", models);
+        //console.log("comfyModels: Models processed", models);
         updateModelDropdown(models);
     } catch (error) {
-        console.error("comufyModels: Fetch error", error);
+        console.error("comfyModels: Fetch error", error);
     }
 }
