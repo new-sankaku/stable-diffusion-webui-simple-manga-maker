@@ -419,6 +419,7 @@
                 <i class="material-icons" id="intro_svg-container-vertical"     onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
                 <i class="material-icons" id="intro_svg-container-landscape"    onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
                 <i class="material-icons" id="intro_panel-manager-area"         onclick="toggleVisibility('panel-manager-area');">dashboard</i>
+                <i class="material-icons" id="intro_custom-panel-manager-area"  onclick="toggleVisibility('custom-panel-manager-area');">dashboard_customize</i>
                 <i class="material-icons" id="intro_speech-bubble-area1"        onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
                 <i class="material-icons" id="intro_text-area"                  onclick="toggleVisibility('text-area');">text_fields</i>
                 <i class="material-icons" id="intro_tool-area"                  onclick="toggleVisibility('tool-area');">brush</i>
@@ -437,8 +438,101 @@
             </div>
 
             <div id="panel-manager-area" style="display: none;">
-                <div class="area-header" data-i18n="panelManager">Panel Manager</div>
+                <div class="area-header" data-i18n="pageManager">Page Manager</div>
                 <div id="panel-manager-items">
+
+                    <hr>
+
+                    <button id="A4-H">
+                        <i class="material-icons">crop_portrait</i>
+                        <span" data-i18n="A4-H-Scale">A4 Scale Panel</span>
+                    </button>
+                    <button id="A4-V">
+                        <i class="material-icons">crop_landscape</i>
+                        <span" data-i18n="A4-V-Scale">A4 Scale Panel</span>
+                    </button>
+                    <button id="B4-H">
+                        <i class="material-icons">crop_portrait</i>
+                        <span" data-i18n="B4-H-Scale">B4 Scale Panel</span>
+                    </button>
+                    <button id="B4-V">
+                        <i class="material-icons">crop_landscape</i>
+                        <span" data-i18n="B4-V-Scale">B4 Scale Panel</span>
+                    </button>
+<hr>
+                    <button id="insta">
+                        <i class="fab fa-instagram"></i>
+                        <span data-i18n="instagram">IG</span>
+                    </button>
+                    <button id="insta-story">
+                        <i class="fab fa-instagram"></i>
+                        <span data-i18n="instagram_story">IG Story</span>
+                    </button>
+                    <button id="insta-portrait">
+                        <i class="fab fa-instagram"></i>
+                        <span data-i18n="instagram_portrait">IG Port</span>
+                    </button>
+                    <hr>
+                    
+                    <button id="fb-page-cover">
+                        <i class="fab fa-facebook"></i>
+                        <span data-i18n="fb_page_cover">FB Page</span>
+                    </button>
+                    <button id="fb-event">
+                        <i class="fab fa-facebook"></i>
+                        <span data-i18n="fb_event">FB Event</span>
+                    </button>
+                    <button id="fb-group-header">
+                        <i class="fab fa-facebook"></i>
+                        <span data-i18n="fb_group_header">FB Group</span>
+                    </button>
+                    <hr>
+
+                    <button id="youtube-thumbnail">
+                        <i class="fab fa-youtube"></i>
+                        <span data-i18n="youtube_thumbnail">YT Thumb</span>
+                    </button>
+                    <button id="youtube-profile">
+                        <i class="fab fa-youtube"></i>
+                        <span data-i18n="youtube_profile">YT Prof</span>
+                    </button>
+                    <button id="youtube-cover">
+                        <i class="fab fa-youtube"></i>
+                        <span data-i18n="youtube_cover">YT Cover</span>
+                    </button>
+                    <hr>
+
+                    <button id="twitter-profile">
+                        <i class="fab fa-twitter"></i>
+                        <span data-i18n="twitter_profile">TW Prof</span>
+                    </button>
+                    <button id="twitter-header">
+                        <i class="fab fa-twitter"></i>
+                        <span data-i18n="twitter_header">TW Head</span>
+                    </button>
+                    
+                    
+
+                    <hr>
+                    <div class="input-group">
+                        <label for="customPanelSizeX" data-i18n="customPanelSizeX">Width</label>
+                        <input type="number" id="customPanelSizeX" name="customPanelSizeX" min="1" max="4096" step="1" value="1380">
+                    </div>
+                    <div class="input-group">
+                        <label for="customPanelSizeY" data-i18n="customPanelSizeY">Height</label>
+                        <input type="number" id="customPanelSizeY" name="customPanelSizeY" min="1" max="4096" step="1" value="4000">
+                    </div>
+                    <button id="CustomPanelButton">
+                        <i class="material-icons">crop_landscape</i>
+                        <span" data-i18n="customPanel">Custom Size</span>
+                    </button>
+                    
+                </div>
+            </div>
+
+            <div id="custom-panel-manager-area" style="display: none;">
+                <div class="area-header" data-i18n="panelManager">Panel Manager</div>
+                <div id="custom-panel-manager-items">
                     <div class="input-group">
                         <label for="panelStrokeColor" data-i18n="line">Line:</label>
                         <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000"
@@ -464,64 +558,40 @@
                     <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> <span
                             data-i18n="editingMode">Editing Mode</span></button>
 
-                    <hr>
+<hr>
+<div class="input-group">
+    <label data-i18n="accept_ratio">Accept Ratio</label>
+</div>
+<div class="input-group">
+    <label data-i18n="width">Width</label>
+    <input type="number" id="ar_width" name="ar_width" min="0.01" max="9999" step="1" value="3">
+</div>
+<div class="input-group">
+    <label data-i18n="height">Height</label>
+    <input type="number" id="ar_height" name="ar_height" min="0.01" max="9999" step="1" value="4">
+</div>
+<button id="addRect" onclick="addArRect()">
+    <i class="material-icons">aspect_ratio</i>
+    <span data-i18n="ar_Rect">AR Rect</span>
+</button>
+<hr>
                     <button id="addSquare" onclick="addSquare()">
                         <i class="material-icons">add_box</i>
                         <span data-i18n="square">Square</span>
-                    </button>
-                    <button id="addPentagon" onclick="addPentagon()">
-                        <i class="material-icons">pentagon</i> 
-                        <span data-i18n="pentagon">Pentagon</span>
                     </button>
                     <button id="addTallRect" onclick="addTallRect()">
                         <i class="material-icons">vertical_split</i>
                         <span data-i18n="tallRect">Tall Rectangle</span>
                     </button>
-                    <button id="addTallTrap" onclick="addTallTrap()">
-                        <i class="material-icons">filter_none</i>
-                        <span data-i18n="tallTrap">Tall Trapezoid</span>
-                    </button>
                     <button id="addWideRect" onclick="addWideRect()">
                         <i class="material-icons">horizontal_split</i>
                         <span data-i18n="wideRect">Wide Rectangle</span>
                     </button>
-                    <button id="addWideTrap" onclick="addWideTrap()">
-                        <i class="material-icons">filter_none</i>
-                        <span data-i18n="wideTrap">Wide Trapezoid</span>
-                    </button>
+
                     <button id="addTrapezoid" onclick="addTrapezoid()">
                         <i class="material-icons">filter_none</i>
                         <span data-i18n="trapezoid">Trapezoid</span>
                     </button>
-                    <button id="addTriangle" onclick="addTriangle()">
-                        <i class="material-icons">change_history</i> 
-                        <span data-i18n="triangle">Triangle</span>
-                    </button>
-                    <button id="addCircle" onclick="addCircle()">
-                        <i class="material-icons">radio_button_unchecked</i> 
-                        <span data-i18n="circle">Circle</span>
-                    </button>
-                    <button id="addHexagon" onclick="addHexagon()">
-                        <i class="material-icons">hexagon</i> 
-                        <span data-i18n="hexagon">Hexagon</span>
-                    </button>
-                    <button id="addEllipse" onclick="addEllipse()">
-                        <i class="material-icons">panorama_fish_eye</i>
-                        <span data-i18n="ellipse">Ellipse</span>
-                    </button>
-                    <button id="addRhombus" onclick="addRhombus()">
-                        <i class="material-icons">diamond</i>
-                        <span data-i18n="rhombus">Rhombus</span>
-                    </button>
-                    <button id="addStar" onclick="addStar()">
-                        <i class="material-icons">star</i>
-                        <span data-i18n="star">Star</span>
-                    </button>
-                    <button id="addOctagon" onclick="addOctagon()">
-                        <i class="material-icons">report</i>
-                        <span data-i18n="octagon">Octagon</span>
-                    </button>
-
                     <button id="addTallRightLeaningTrapezoid" onclick="addTallRightLeaningTrapezoid()">
                         <i class="material-icons">filter_none</i>
                         <span data-i18n="tallTrapezoid">Tall Trapezoid</span>
@@ -529,40 +599,48 @@
                     <button id="addRightSlantingTrapezoid" onclick="addRightSlantingTrapezoid()">
                         <i class="material-icons">filter_none</i>
                         <span data-i18n="wideTrapezoid">Wide Trapezoid</span>
+                    </button>                    
+                    <button id="addTallTrap" onclick="addTallTrap()">
+                        <i class="material-icons">filter_none</i>
+                        <span data-i18n="tallTrap">Tall Trapezoid</span>
+                    </button>
+                    <button id="addWideTrap" onclick="addWideTrap()">
+                        <i class="material-icons">filter_none</i>
+                        <span data-i18n="wideTrap">Wide Trapezoid</span>
                     </button>
 
-                    <hr>
+                    <button id="addTriangle" onclick="addTriangle()">
+                        <i class="material-icons">change_history</i> 
+                        <span data-i18n="triangle">Triangle</span>
+                    </button>
+                    <button id="addRhombus" onclick="addRhombus()">
+                        <i class="material-icons">diamond</i>
+                        <span data-i18n="rhombus">Rhombus</span>
+                    </button>
+                    <button id="addPentagon" onclick="addPentagon()">
+                        <i class="material-icons">pentagon</i> 
+                        <span data-i18n="pentagon">Pentagon</span>
+                    </button>
+                    <button id="addHexagon" onclick="addHexagon()">
+                        <i class="material-icons">hexagon</i> 
+                        <span data-i18n="hexagon">Hexagon</span>
+                    </button>
 
-
-                    <button id="A4-H">
-                        <i class="material-icons">crop_portrait</i>
-                        <span" data-i18n="A4-H-Scale">A4 Scale Panel</span>
+                    <button id="addCircle" onclick="addCircle()">
+                        <i class="material-icons">radio_button_unchecked</i> 
+                        <span data-i18n="circle">Circle</span>
                     </button>
-                    <button id="A4-V">
-                        <i class="material-icons">crop_landscape</i>
-                        <span" data-i18n="A4-V-Scale">A4 Scale Panel</span>
+                    <button id="addEllipse" onclick="addEllipse()">
+                        <i class="material-icons">panorama_fish_eye</i>
+                        <span data-i18n="ellipse">Ellipse</span>
                     </button>
-
-                    <button id="B4-H">
-                        <i class="material-icons">crop_portrait</i>
-                        <span" data-i18n="B4-H-Scale">B4 Scale Panel</span>
+                    <button id="addOctagon" onclick="addOctagon()">
+                        <i class="material-icons">report</i>
+                        <span data-i18n="octagon">Octagon</span>
                     </button>
-                    <button id="B4-V">
-                        <i class="material-icons">crop_landscape</i>
-                        <span" data-i18n="B4-V-Scale">B4 Scale Panel</span>
-                    </button>
-                    <hr>
-                    <div class="input-group">
-                        <label for="customPanelSizeX" data-i18n="customPanelSizeX">Width</label>
-                        <input type="number" id="customPanelSizeX" name="customPanelSizeX" min="1" max="4096" step="1" value="1380">
-                    </div>
-                    <div class="input-group">
-                        <label for="customPanelSizeY" data-i18n="customPanelSizeY">Height</label>
-                        <input type="number" id="customPanelSizeY" name="customPanelSizeY" min="1" max="4096" step="1" value="4000">
-                    </div>
-                    <button id="CustomPanelButton">
-                        <i class="material-icons">crop_landscape</i>
-                        <span" data-i18n="customPanel">Custom Size</span>
+                    <button id="addStar" onclick="addStar()">
+                        <i class="material-icons">star</i>
+                        <span data-i18n="star">Star</span>
                     </button>
                     <hr>
                     <button id="knifeModeButton">

@@ -241,6 +241,51 @@ document.getElementById("B4-V").addEventListener("click", function () {
   loadBookSize(364, 257, true);
 });
 
+document.getElementById("insta").addEventListener("click", function() {
+  loadBookSize(1080, 1080, true);
+});
+
+document.getElementById("insta-story").addEventListener("click", function() {
+  loadBookSize(1080, 1920, true);
+});
+
+document.getElementById("insta-portrait").addEventListener("click", function() {
+  loadBookSize(1080, 1350, true);
+});
+
+document.getElementById("fb-page-cover").addEventListener("click", function() {
+  loadBookSize(1640, 664, true);
+});
+
+document.getElementById("fb-event").addEventListener("click", function() {
+  loadBookSize(1920, 1080, true);
+});
+
+document.getElementById("fb-group-header").addEventListener("click", function() {
+  loadBookSize(1640, 856, true);
+});
+
+document.getElementById("youtube-thumbnail").addEventListener("click", function() {
+  loadBookSize(1280, 720, true);
+});
+
+document.getElementById("youtube-profile").addEventListener("click", function() {
+  loadBookSize(800, 800, true);
+});
+
+document.getElementById("youtube-cover").addEventListener("click", function() {
+  loadBookSize(2560, 1440, true);
+});
+
+document.getElementById("twitter-profile").addEventListener("click", function() {
+  loadBookSize(400, 400, true);
+});
+
+document.getElementById("twitter-header").addEventListener("click", function() {
+  loadBookSize(1500, 500, true);
+});
+
+
 function loadBookSize(width, height, addPanel) {
 
   console.log( "loadBookSize addPanel", addPanel );
@@ -502,24 +547,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+function addArRect() {
+  var width = parseFloat(document.getElementById("ar_width").value);
+  var height = parseFloat(document.getElementById("ar_height").value);
 
+  if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+      return;
+  }
+
+  console.log("addArRect width", width);
+  console.log("addArRect height", height);
+
+  var points = [
+      { x: 0, y: 0 },
+      { x: width, y: 0 },
+      { x: width, y: height },
+      { x: 0, y: height }
+  ];
+
+  addShape(points);
+}
 
 
 
 function addShape(points, options = {}) {
-  var strokeWidthScale = canvas.width / 700;
-  options.strokeWidth = 2 * strokeWidthScale;
+  var canvasWidth = canvas.width;
+  var canvasHeight = canvas.height;
+
+  var minX = Math.min(...points.map(p => p.x));
+  var maxX = Math.max(...points.map(p => p.x));
+  var minY = Math.min(...points.map(p => p.y));
+  var maxY = Math.max(...points.map(p => p.y));
+
+  var shapeWidth = maxX - minX;
+  var shapeHeight = maxY - minY;
+
+  var scaleX = (canvasWidth / 3 ) / shapeWidth;
+  var scaleY = (canvasHeight / 3 ) / shapeHeight;
+  var scale = Math.min(scaleX, scaleY);
+
+  options.strokeWidth = 2 * (canvas.width / 700);
   options.strokeUniform = true;
   options.stroke = "black";
   options.objectCaching = false;
   options.transparentCorners = false;
-  options.cornerColor = "Blue";
   options.isPanel = true;
   options.left = options.left || 50;
   options.top = options.top || 50;
-  options.scaleX = 2;
-  options.scaleY = 2;
-
+  options.scaleX = scale;
+  options.scaleY = scale;
 
   var shape = new fabric.Polygon(points, options);
   setText2ImageInitPrompt(shape);
@@ -527,6 +603,7 @@ function addShape(points, options = {}) {
   canvas.add(shape);
   updateLayerPanel();
 }
+
 
 function addSquare() {
   var points = [

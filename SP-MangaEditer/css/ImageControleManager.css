@@ -49,6 +49,11 @@
   margin-top: var(--margin-top-item);
 }
 
+.control-item label{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 .control-row {
   display: flex;
   align-items: center;
