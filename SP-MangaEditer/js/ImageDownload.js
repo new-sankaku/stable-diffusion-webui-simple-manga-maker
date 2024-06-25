@@ -1,3 +1,12 @@
+
+function canvas2DataURL(multiplier, format) {
+	return canvas.toDataURL({
+			format: format,
+			multiplier: multiplier
+	});
+}
+
+
 function getCropAndDownloadLinkByMultiplier(multiplier, format) {
 	var cropped = canvas.toDataURL({
 			format: format,
@@ -72,4 +81,12 @@ function cropAndDownload() {
 		drawGrid();
 		isGridVisible = true;
 	}
+}
+
+
+function getLink(dataURL) {
+	const link = document.createElement('a');
+	link.href = dataURL;
+	link.download = 'selected-image.png';
+	return link;
 }

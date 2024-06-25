@@ -557,6 +557,19 @@ function addArRect() {
 
   console.log("addArRect width", width);
   console.log("addArRect height", height);
+  var canvasWidth = canvas.getWidth();
+  var canvasHeight = canvas.getHeight();
+
+  var canvasSize = Math.min(canvasWidth, canvasHeight) * 0.25;
+
+  var aspectRatio = width / height;
+  if (width > height) {
+      width = canvasSize;
+      height = canvasSize / aspectRatio;
+  } else {
+      height = canvasSize;
+      width = canvasSize * aspectRatio;
+  }
 
   var points = [
       { x: 0, y: 0 },
@@ -567,7 +580,6 @@ function addArRect() {
 
   addShape(points);
 }
-
 
 
 function addShape(points, options = {}) {

@@ -3,12 +3,14 @@
 //ドイツ語（de）、タイ語（th）、オランダ語（nl）、スペイン語（es）
 const resources = {
   en:{
-    translation:{
-      "accept_ratio": "Accept Ratio",
-      "width": "Width",
-      "height": "Height",
-      "ar_Rect": "AR Rect",
-      "pageManager":"Page Manager",
+translation:{
+"imageDownloadButton":"Download this image. The image includes the hidden parts.",
+"imageCropDownloadButton":"Download the image cropped within the panel frame.",
+"accept_ratio": "Accept Ratio",
+"width": "Width",
+"height": "Height",
+"ar_Rect": "AR Rect",
+"pageManager":"Page Manager",
 "instagram":"Insta",
 "instagram_story":"Insta Story",
 "instagram_portrait":"Insta Port",
@@ -56,7 +58,7 @@ const resources = {
 "wideTrapezoid":"Wide Trapezoid",
 "customPanelSizeX":"Width",
 "customPanelSizeY":"Height",
-"customPanel":"Custom Size",      
+"customPanel":"Custom Size",
 "Tutorial":"Tutorial",
 "intro_svg-container-vertical_body":"This is a vertical template panel.",
 "intro_svg-container-vertical_title":"Vertical Panel",
@@ -338,15 +340,17 @@ const resources = {
 "glfxHexagonalPixelate":"Hexagonal Pixelate",
 "glfxSwirl":"Swirl",
 "select":"Select"
-    }
+}
   },
   ja:{
-    translation:{
-      "accept_ratio": "アスペクト比",
-      "width": "幅",
-      "height": "高さ",
-      "ar_Rect": "比率 長方形",
-      "pageManager":"ページマネージャー",
+translation:{
+"imageDownloadButton": "この画像をダウンロードします。画像には隠れている部分も含まれます。",
+"imageCropDownloadButton": "パネル枠内で切り取られた画像をダウンロードします。",
+"accept_ratio": "アスペクト比",
+"width": "幅",
+"height": "高さ",
+"ar_Rect": "比率 長方形",
+"pageManager":"ページマネージャー",
 "instagram":"インスタ",
 "instagram_story":"インスタストーリー",
 "instagram_portrait":"インスタポート",
@@ -421,7 +425,7 @@ const resources = {
 "intro_SD_WebUI_pingCheck_Label_body":"WebUIの連携はこちらで確認できます。",
 "intro_SD_WebUI_pingCheck_Label_title":"SD WebUI Ping",
 
-"outloneGlow" :"輪郭の光",      
+"outloneGlow" :"輪郭の光",
 "shape":"形状",
 "svg_icon_search_placeholder":"アイコン名を入力",
 "svg_icon_search_button":"検索",
@@ -590,15 +594,17 @@ const resources = {
 "vignette":"ビネット",
 "vividGradient":"ビビッドグラデーション",
 "zoomBlur":"ズームぼかし"
-    }
+}
   },
   ko:{
-    translation:{
-      "accept_ratio": "비율 수락",
-      "width": "너비",
-      "height": "높이",
-      "ar_Rect": "AR 직사각형",
-      "pageManager":"페이지 관리자",
+translation:{
+"imageDownloadButton": "이 이미지를 다운로드하십시오. 이미지에는 숨겨진 부분이 포함되어 있습니다.",
+"imageCropDownloadButton": "패널 프레임 내에서 잘린 이미지를 다운로드하십시오.",
+"accept_ratio": "비율 수락",
+"width": "너비",
+"height": "높이",
+"ar_Rect": "AR 직사각형",
+"pageManager":"페이지 관리자",
 "instagram":"인스타",
 "instagram_story":"인스타 스토리",
 "instagram_portrait":"인스타 포트",
@@ -672,7 +678,7 @@ const resources = {
 "intro_sdWebUI_title":"SD WebUI",
 "intro_SD_WebUI_pingCheck_Label_body":"여기서 WebUI 연결을 확인할 수 있습니다.",
 "intro_SD_WebUI_pingCheck_Label_title":"SD WebUI 핑",
-      
+
 "outloneGlow" :"외곽선 광선",
 "shape":"형상",
 "svg_icon_search_placeholder":"아이콘 이름 입력",
@@ -857,15 +863,17 @@ const resources = {
 "centerY":"중심 Y",
 "amount":"양",
 "strength":"강도",
-    }
+}
   },
   fr:{
-    translation:{
-      "accept_ratio": "Ratio d'acceptation",
-      "width": "Largeur",
-      "height": "Hauteur",
-      "ar_Rect": "Rect AR",
-      "pageManager":"Gestionnaire de page",
+translation:{
+"imageDownloadButton": "Téléchargez cette image. L'image comprend les parties cachées.",
+"imageCropDownloadButton": "Téléchargez l'image recadrée dans le cadre du panneau.",
+"accept_ratio": "Ratio d'acceptation",
+"width": "Largeur",
+"height": "Hauteur",
+"ar_Rect": "Rect AR",
+"pageManager":"Gestionnaire de page",
 "instagram":"Insta",
 "instagram_story":"Insta Story",
 "instagram_portrait":"Insta Port",
@@ -1158,15 +1166,17 @@ const resources = {
 "glfxHexagonalPixelate":"Pixellisation Hexagonale",
 "glfxSwirl":"Tourbillon",
 "select":"sélectionner"
-    }
+}
   },
   zh:{
-    translation:{
-      "accept_ratio": "接受比例",
-      "width": "宽度",
-      "height": "高度",
-      "ar_Rect": "AR 矩形",
-      "pageManager":"页面管理器",
+translation:{
+"imageDownloadButton": "下载此图像。图像包含隐藏的部分。",
+"imageCropDownloadButton": "下载在面板框架内裁剪的图像。",
+"accept_ratio": "接受比例",
+"width": "宽度",
+"height": "高度",
+"ar_Rect": "AR 矩形",
+"pageManager":"页面管理器",
 "instagram":"Insta",
 "instagram_story":"Insta故事",
 "instagram_portrait":"Insta肖像",
@@ -1455,15 +1465,17 @@ const resources = {
 "glfxHexagonalPixelate":"六边形像素化",
 "glfxSwirl":"漩涡",
 "select":"選擇"
-    }
+}
   },
   ru:{
-    translation:{
-      "accept_ratio": "Принимаемое соотношение",
-      "width": "Ширина",
-      "height": "Высота",
-      "ar_Rect": "AR Прямоугольник",
-      "pageManager":"Менеджер страниц",
+translation:{
+"imageDownloadButton": "Скачать это изображение. Изображение включает скрытые части.",
+"imageCropDownloadButton": "Скачать изображение, обрезанное в рамке панели.",
+"accept_ratio": "Принимаемое соотношение",
+"width": "Ширина",
+"height": "Высота",
+"ar_Rect": "AR Прямоугольник",
+"pageManager":"Менеджер страниц",
 "instagram":"Инста",
 "instagram_story":"Инста История",
 "instagram_portrait":"Инста Портрет",
@@ -1704,15 +1716,17 @@ const resources = {
 "speechBubble":"Облако речи",
 "coordinate":"Координаты:X:0.0 Y:0.0",
 "sdWebUIPing":"SD WebUI PING"
-    }
+}
   },
   es:{
-    translation:{
-      "accept_ratio": "Aceptar ratio",
-      "width": "Ancho",
-      "height": "Altura",
-      "ar_Rect": "Rect AR",
-      "instagram":"Insta",
+translation:{
+"imageDownloadButton": "Descargar esta imagen. La imagen incluye las partes ocultas.",
+"imageCropDownloadButton": "Descargar la imagen recortada dentro del marco del panel.",
+"accept_ratio": "Aceptar ratio",
+"width": "Ancho",
+"height": "Altura",
+"ar_Rect": "Rect AR",
+"instagram":"Insta",
 "instagram_story":"Insta Historia",
 "instagram_portrait":"Insta Port",
 "fb_page_cover":"Página FB",
@@ -1951,15 +1965,17 @@ const resources = {
 "speechBubble":"Burbuja de discurso",
 "coordinate":"Coordenadas:X:0.0 Y:0.0",
 "sdWebUIPing":"PING de SD WebUI"
-    }
+}
   },
   pt:{
-    translation:{
-      "accept_ratio": "Aceitar proporção",
-      "width": "Largura",
-      "height": "Altura",
-      "ar_Rect": "Retângulo AR",
-      "pageManager":"Administrador de páginas",
+translation:{
+"imageDownloadButton": "Baixar esta imagem. A imagem inclui as partes ocultas.",
+"imageCropDownloadButton": "Baixar a imagem recortada dentro do quadro do painel.",
+"accept_ratio": "Aceitar proporção",
+"width": "Largura",
+"height": "Altura",
+"ar_Rect": "Retângulo AR",
+"pageManager":"Administrador de páginas",
 "instagram":"Insta",
 "instagram_story":"Insta História",
 "instagram_portrait":"Insta Retrato",
@@ -2199,7 +2215,7 @@ const resources = {
 "speechBubble":"Balão de fala",
 "coordinate":"Coordenadas:X:0.0 Y:0.0",
 "sdWebUIPing":"PING do SD WebUI"
-    }
+}
   }
 };
 
@@ -2217,34 +2233,34 @@ i18next.init({
 
 function updateContent() {
   document.querySelectorAll('[data-i18n]').forEach(function (element) {
-    const key = element.getAttribute('data-i18n');
-    const translation = i18next.t(key);
-    if (translation) {
-      if (element.tagName === 'OPTION') {
-        element.textContent = translation;
-      } else {
-        element.innerHTML = translation;
-      }
-    } else {
-      console.warn(`Translation for key "${key}" not found.`);
-    }
+const key = element.getAttribute('data-i18n');
+const translation = i18next.t(key);
+if (translation) {
+if (element.tagName === 'OPTION') {
+  element.textContent = translation;
+} else {
+  element.innerHTML = translation;
+}
+} else {
+console.warn(`Translation for key "${key}" not found.`);
+}
   });
 }
 
 function changeLanguage(lng, event) {
   if (event) {
-    event.preventDefault();
+event.preventDefault();
   }
   i18next.changeLanguage(lng, function (err, t) {
-    if (!err) {
-      createToast("Save Language", "successfully!");
-      localStorage.setItem('language', lng);
-      updateContent();
-      setLanguage(lng);
-      updateLayerPanel();
-    } else {
-      console.error('Failed to change language:', err);
-    }
+if (!err) {
+createToast("Save Language", "successfully!");
+localStorage.setItem('language', lng);
+updateContent();
+setLanguage(lng);
+updateLayerPanel();
+} else {
+console.error('Failed to change language:', err);
+}
   });
   reloadFont();
 }

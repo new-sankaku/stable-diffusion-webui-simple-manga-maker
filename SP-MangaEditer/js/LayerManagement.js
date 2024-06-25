@@ -92,12 +92,14 @@ function updateLayerPanel() {
         putT2iButton(buttonsDiv, layer, index);
         putRunT2iButton(buttonsDiv, layer, index);
         putSeedButton(buttonsDiv, layer, index);
+        putCropImageDownloadButton(buttonsDiv, layer, index);
       }
       if (layer.type == 'image') {
         putI2iButton(buttonsDiv, layer, index);
         putRunI2iButton(buttonsDiv, layer, index);
         putPromptButton(buttonsDiv, layer, index);
         putInterrogateButtons(buttonsDiv, layer, index);
+        putImageDownloadButton(buttonsDiv, layer, index);
       }
       putDeleteButton(buttonsDiv, layer, index);
 
@@ -156,6 +158,72 @@ function setNameTextAreaProperties(layer, nameTextArea, index){
     nameTextArea.style.marginRight = '5px';
   }
 }
+
+function putCropImageDownloadButton(buttonsDiv, layer, index) {
+  var button = document.createElement("button");
+  button.innerHTML = '<i class="material-icons">download</i>';
+
+  button.onclick = function (e) {
+    e.stopPropagation();
+
+    imageObject2DataURLByCrop(layer).then((croppedDataURL) => {
+      if (croppedDataURL) {
+        link = getLink(croppedDataURL);
+        link.click();
+      } else {
+        console.log("No valid activeObject");
+      }
+    }).catch((err) => {
+      console.error("Error cropping image:", err);
+    });
+    
+
+  };
+
+  addTooltipByElement(button, "imageCropDownloadButton");
+  buttonsDiv.appendChild(button);
+
+}
+
+
+function putImageDownloadButton(buttonsDiv, layer, index) {
+  var button = document.createElement("button");
+  button.innerHTML = '<i class="material-icons">download</i>';
+
+  button.onclick = function (e) {
+    e.stopPropagation();
+    dataURL = imageObject2DataURL(layer);
+    link = getLink(dataURL);
+    link.click();
+  };
+
+  addTooltipByElement(button, "imageDownloadButton");
+  buttonsDiv.appendChild(button);
+}
+
+function putPromptButton(buttonsDiv, layer, index) {
+  var promptButton = document.createElement("button");
+  promptButton.innerHTML = '<i class="material-icons">text_snippet</i>';
+  promptButton.onclick = function (e) {
+    e.stopPropagation();
+    if (layer.tempPrompt) {
+      layer.text2img_prompt = layer.tempPrompt;
+      createToast("Apply Prompt", layer.text2img_prompt);
+    } else {
+      createToast("Nothing Prompt", "");
+    }
+    if (layer.tempNegativePrompt) {
+      layer.text2img_negativePrompt = layer.tempNegativePrompt;
+      createToast("Apply Negative Prompt", layer.text2img_negativePrompt);
+    } else {
+      createToast("Nothing Negative Prompt", "");
+    }
+  };
+
+  addTooltipByElement(promptButton, "promptButton");
+  buttonsDiv.appendChild(promptButton);
+}
+
 
 function putInterrogateButtons(buttonsDiv, layer, index) {
   var clipButton = document.createElement("button");

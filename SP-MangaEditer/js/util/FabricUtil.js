@@ -146,6 +146,12 @@ function copy(srcObject, object) {
   object.width = srcObject.width;
   object.height = srcObject.height
 
+  object.guid = srcObject.guid
+  object.guids = srcObject.guids
+  object.tempPrompt = srcObject.tempPrompt
+  object.tempNegativePrompt = srcObject.tempNegativePrompt
+  object.tempSeed = srcObject.tempSeed
+
   object.clipPath = srcObject.clipPath ? srcObject.clipPath : undefined;
 
   if (srcObject.clipPath && srcObject.clipPath.initial) {
@@ -181,6 +187,80 @@ function imageObject2Base64Image(object, scale) {
     return null;
   }
 }
+
+function imageObject2DataURL(activeObject) {
+  if (activeObject && activeObject.type === 'image') {
+      const originalWidth = activeObject.width;
+      const originalHeight = activeObject.height;
+      const tempCanvas = document.createElement('canvas');
+      const tempContext = tempCanvas.getContext('2d');
+      tempCanvas.width = originalWidth;
+      tempCanvas.height = originalHeight;
+      tempContext.drawImage(activeObject.getElement(), 0, 0, originalWidth, originalHeight);
+      return tempCanvas.toDataURL('image/png');
+  }
+  return null;
+}
+
+
+
+
+function imageObject2DataURLByCrop(activeObject) {
+  console.log("Function start: imageObject2DataURLByCrop");
+  console.log("activeObject:", activeObject);
+
+  if (activeObject && activeObject.isPanel) {
+    var dataURL = canvas2DataURL(3, "png");
+
+    return new Promise((resolve, reject) => {
+      var image = new Image();
+      image.crossOrigin = "Anonymous";
+      image.src = dataURL;
+
+      image.onload = function() {
+        var tempCanvas = document.createElement('canvas');
+        var context = tempCanvas.getContext('2d');
+        tempCanvas.width = image.width;
+        tempCanvas.height = image.height;
+        context.drawImage(image, 0, 0);
+        var objectWidth = activeObject.width * activeObject.scaleX;
+        var objectHeight = activeObject.height * activeObject.scaleY;
+        var objectLeft = activeObject.left;
+        var objectTop = activeObject.top;
+
+        console.log("objectWidth  activeObject.strokeWidth",objectWidth, activeObject.strokeWidth );
+        console.log("objectHeight activeObject.strokeWidth",objectHeight, activeObject.strokeWidth );
+
+
+        var strokeWidth = (activeObject.strokeWidth || 0) * Math.max(activeObject.scaleX, activeObject.scaleY);
+        // var strokeOffset = strokeWidth / 2;
+
+        var scaleX = tempCanvas.width / activeObject.canvas.width;
+        var scaleY = tempCanvas.height / activeObject.canvas.height;
+        var cropX = (objectLeft) * scaleX;
+        var cropY = (objectTop) * scaleY;
+        var cropWidth = (objectWidth  * scaleX)  + (activeObject.strokeWidth * scaleX);
+        var cropHeight = (objectHeight * scaleY) + (activeObject.strokeWidth * scaleX);
+        var cropCanvas = document.createElement('canvas');
+        var cropContext = cropCanvas.getContext('2d');
+        cropCanvas.width = cropWidth;
+        cropCanvas.height = cropHeight;
+        cropContext.drawImage(tempCanvas, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+        var croppedDataURL = cropCanvas.toDataURL("image/png");
+        resolve(croppedDataURL);
+      };
+
+      image.onerror = function(err) {
+        console.error("Image loading error:", err);
+        reject(err);
+      };
+    });
+  }
+  console.log("Function end: imageObject2DataURLByCrop (no valid activeObject)");
+  return Promise.resolve(null);
+}
+
+
 
 // set targetFram.guids
 function setGUID(targetFrame, imageObject) {

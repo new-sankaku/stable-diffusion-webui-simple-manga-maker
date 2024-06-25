@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>改良版：ラメテクスチャ付きテキスト</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        .controls {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .control {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input[type="range"] {
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas" width="800" height="400"></canvas>
+        <div class="controls">
+            <div class="control">
+                <label for="text">テキスト:</label>
+                <input type="text" id="text" value="ラメ効果">
+            </div>
+            <div class="control">
+                <label for="fontSize">フォントサイズ:</label>
+                <input type="range" id="fontSize" min="20" max="200" value="100">
+                <span id="fontSizeValue">100</span>
+            </div>
+            <div class="control">
+                <label for="textColor">テキスト色:</label>
+                <input type="color" id="textColor" value="#FFFFFF">
+            </div>
+            <div class="control">
+                <label for="canvasBgColor">Canvas背景色:</label>
+                <input type="color" id="canvasBgColor" value="#000000">
+            </div>
+            <div class="control">
+                <label for="textShadowColor">テキストシャドウ色:</label>
+                <input type="color" id="textShadowColor" value="#000000">
+            </div>
+            <div class="control">
+                <label for="textShadowBlur">シャドウブラー:</label>
+                <input type="range" id="textShadowBlur" min="0" max="50" value="10" step="1">
+                <span id="textShadowBlurValue">10</span>
+            </div>
+            <div class="control">
+                <label for="textShadowOffsetX">シャドウオフセットX:</label>
+                <input type="range" id="textShadowOffsetX" min="-50" max="50" value="10" step="1">
+                <span id="textShadowOffsetXValue">10</span>
+            </div>
+            <div class="control">
+                <label for="textShadowOffsetY">シャドウオフセットY:</label>
+                <input type="range" id="textShadowOffsetY" min="-50" max="50" value="10" step="1">
+                <span id="textShadowOffsetYValue">10</span>
+            </div>
+            <div class="control">
+                <label for="particleSize">粒子サイズ:</label>
+                <input type="range" id="particleSize" min="1" max="10" value="3" step="0.1">
+                <span id="particleSizeValue">3</span>
+            </div>
+            <div class="control">
+                <label for="particleDensity">粒子密度:</label>
+                <input type="range" id="particleDensity" min="0" max="10000" value="1000">
+                <span id="particleDensityValue">1000</span>
+            </div>
+            <div class="control">
+                <label for="glitterColor">ラメの基本色:</label>
+                <input type="color" id="glitterColor" value="#FFD700">
+            </div>
+            <div class="control">
+                <label for="colorVariation">ラメの色のバリエーション:</label>
+                <input type="range" id="colorVariation" min="0" max="100" value="20">
+                <span id="colorVariationValue">20</span>
+            </div>
+            <div class="control">
+                <label for="glitterBlur">ラメのブラー:</label>
+                <input type="range" id="glitterBlur" min="0" max="10" value="0" step="0.1">
+                <span id="glitterBlurValue">0</span>
+            </div>
+            <div class="control">
+                <label for="glitterShadowBlur">ラメのシャドウぼかし:</label>
+                <input type="range" id="glitterShadowBlur" min="0" max="20" value="0" step="0.1">
+                <span id="glitterShadowBlurValue">0</span>
+            </div>
+            <div class="control">
+                <label for="glitterShadowColor">ラメのシャドウ色:</label>
+                <input type="color" id="glitterShadowColor" value="#FFA500">
+            </div>
+            <div class="control">
+                <label for="textOutlineColor">アウトライン色:</label>
+                <input type="color" id="textOutlineColor" value="#000000">
+            </div>
+            <div class="control">
+                <label for="textOutlineWidth">アウトライン幅:</label>
+                <input type="range" id="textOutlineWidth" min="0" max="10" value="1" step="0.1">
+                <span id="textOutlineWidthValue">1</span>
+            </div>
+            <div class="control">
+                <label for="textBold">太字:</label>
+                <input type="checkbox" id="textBold">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = new fabric.Canvas('canvas');
+        
+        function createGlitterTexture() {
+            const glitterCanvas = document.createElement('canvas');
+            const glitterCtx = glitterCanvas.getContext('2d');
+            const particleSize = parseFloat(document.getElementById('particleSize').value);
+            const particleDensity = parseInt(document.getElementById('particleDensity').value);
+            const baseColor = document.getElementById('glitterColor').value;
+            const colorVariation = parseInt(document.getElementById('colorVariation').value);
+            const glitterBlur = parseFloat(document.getElementById('glitterBlur').value);
+            const glitterShadowBlur = parseFloat(document.getElementById('glitterShadowBlur').value);
+            const glitterShadowColor = document.getElementById('glitterShadowColor').value;
+
+            glitterCanvas.width = canvas.width;
+            glitterCanvas.height = canvas.height;
+            glitterCtx.clearRect(0, 0, glitterCanvas.width, glitterCanvas.height);
+
+            glitterCtx.shadowBlur = glitterShadowBlur;
+            glitterCtx.shadowColor = glitterShadowColor;
+
+            for (let i = 0; i < particleDensity; i++) {
+                const x = Math.random() * glitterCanvas.width;
+                const y = Math.random() * glitterCanvas.height;
+                const color = varyColor(baseColor, colorVariation);
+                glitterCtx.fillStyle = color;
+                glitterCtx.beginPath();
+                glitterCtx.arc(x, y, particleSize, 0, Math.PI * 2);
+                glitterCtx.fill();
+            }
+
+            if (glitterBlur > 0) {
+                glitterCtx.filter = `blur(${glitterBlur}px)`;
+                glitterCtx.drawImage(glitterCanvas, 0, 0);
+                glitterCtx.filter = 'none';
+            }
+
+            return glitterCanvas.toDataURL();
+        }
+
+        function varyColor(baseColor, variation) {
+            const baseRGB = hexToRgb(baseColor);
+            const r = Math.max(0, Math.min(255, baseRGB.r + (Math.random() - 0.5) * variation * 2));
+            const g = Math.max(0, Math.min(255, baseRGB.g + (Math.random() - 0.5) * variation * 2));
+            const b = Math.max(0, Math.min(255, baseRGB.b + (Math.random() - 0.5) * variation * 2));
+            return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function updateText() {
+            const text = document.getElementById('text').value;
+            const fontSize = parseInt(document.getElementById('fontSize').value);
+            const textColor = document.getElementById('textColor').value;
+            const textShadowColor = document.getElementById('textShadowColor').value;
+            const textShadowBlur = parseFloat(document.getElementById('textShadowBlur').value);
+            const textShadowOffsetX = parseFloat(document.getElementById('textShadowOffsetX').value);
+            const textShadowOffsetY = parseFloat(document.getElementById('textShadowOffsetY').value);
+            const textOutlineColor = document.getElementById('textOutlineColor').value;
+            const textOutlineWidth = parseFloat(document.getElementById('textOutlineWidth').value);
+            const textBold = document.getElementById('textBold').checked;
+            const canvasBgColor = document.getElementById('canvasBgColor').value;
+
+            canvas.setBackgroundColor(canvasBgColor, canvas.renderAll.bind(canvas));
+            canvas.clear();
+
+            const glitterImageUrl = createGlitterTexture();
+
+            fabric.Image.fromURL(glitterImageUrl, function(img) {
+                const glitterPattern = new fabric.Pattern({
+                    source: img._element,
+                    repeat: 'repeat'
+                });
+
+                const textObject = new fabric.Text(text, {
+                    left: canvas.width / 2,
+                    top: canvas.height / 2,
+                    fontSize: fontSize,
+                    fontFamily: 'Arial',
+                    originX: 'center',
+                    originY: 'center',
+                    fill: glitterPattern,
+                    stroke: textOutlineColor,
+                    strokeWidth: textOutlineWidth,
+                    fontWeight: textBold ? 'bold' : 'normal',
+                    shadow: new fabric.Shadow({
+                        color: textShadowColor,
+                        blur: textShadowBlur,
+                        offsetX: textShadowOffsetX,
+                        offsetY: textShadowOffsetY
+                    })
+                });
+
+                canvas.add(textObject);
+                canvas.renderAll();
+            });
+        }
+
+        // イベントリスナーの設定
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function(e) {
+                if (this.type === 'range') {
+                    document.getElementById(`${this.id}Value`).textContent = this.value;
+                }
+                updateText();
+            });
+        });
+
+        // 初期描画
+        updateText();
+    </script>
+</body>
+</html>
