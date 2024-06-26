@@ -714,6 +714,17 @@
                         <input type="number" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1"
                             oninput="changeStrokeWidthSize(this.value)">
                     </div>
+                    <div class="input-group-multi">
+                        <button id="align-left" class="selected"  onclick="alignText('left')">
+                            <i class="material-icons">format_align_left</i>
+                        </button>
+                        <button id="align-center" onclick="alignText('center')">
+                            <i class="material-icons">format_align_center</i>
+                        </button>
+                        <button id="align-right" onclick="alignText('right')">
+                            <i class="material-icons">format_align_right</i>
+                        </button>
+                    </div>
                     <hr>
                     <button onclick="createTextbox()">
                         <i class="material-icons">text_fields</i>

@@ -46,9 +46,12 @@
   --color-scrollbar-track: #2e2e2e;
   --color-scrollbar-thumb: #555555;
 
+  --select-button-color: #810000;
 }
 
 .light-mode {
+  --select-button-color: #ff9532;
+
   --sidebar-gradient:rgb(255, 217, 141);
   
   --text-color-B: #242424;

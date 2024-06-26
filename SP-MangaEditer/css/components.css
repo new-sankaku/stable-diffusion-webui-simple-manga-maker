@@ -54,6 +54,29 @@
   }
   
 
+  .input-group-multi {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-group-multi button i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.input-group-multi button {
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+}
+.input-group-multi button.selected {
+  background-color: var(--select-button-color);
+}
+
+
+
   
   .input-group {
       display: grid;
@@ -129,6 +152,7 @@
       margin: var(--margin-button);
       text-align: left;
   }
+
 
   #text-preview-area label,
   #tool-preview-area label,

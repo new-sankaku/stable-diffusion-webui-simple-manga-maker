@@ -174,6 +174,22 @@ function applyNeonEffect() {
   }
 }
 
+var textAlignment = 'left';
+function alignText(alignment) {
+  textAlignment = alignment;
+  var activeObject = canvas.getActiveObject();
+  if (activeObject && isText(activeObject)) {
+    activeObject.set('textAlign', alignment);
+    canvas.renderAll();
+  }
+  updateTextSelectedButton(alignment);
+}
+
+function updateTextSelectedButton(alignment) {
+  const buttons = document.querySelectorAll('.input-group-multi button');
+  buttons.forEach(button => button.classList.remove('selected'));
+  document.getElementById('align-' + alignment).classList.add('selected');
+}
 
 function createTextbox() {
   var selectedFont = document.getElementById('fontSelector').value;
@@ -190,6 +206,7 @@ function createTextbox() {
     fill: document.getElementById("textColorPicker").value,
     stroke: document.getElementById("textOutlineColorPicker").value,
     strokeWidth: parseInt(fontStrokeWidth),
+    textAlign: textAlignment,
   });
 
   textbox.on('text:changed', function () {

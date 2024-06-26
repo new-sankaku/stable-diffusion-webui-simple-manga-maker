@@ -10,7 +10,7 @@ function isImage(activeObject) {
 }
 
 function isText(activeObject) {
-  return (activeObject && (activeObject.type === "text" || activeObject.type === "textbox" || activeObject.type === "verticalText"));
+  return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || activeObject.type === "textbox" || activeObject.type === "verticalText"));
 }
 
 function isVerticalText(activeObject) {
@@ -18,7 +18,7 @@ function isVerticalText(activeObject) {
 }
 
 function isHorizontalText(activeObject) {
-  return (activeObject && (activeObject.type === "text" || activeObject.type === "textbox"));
+  return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || activeObject.type === "textbox"));
 }
 
 function isLine(activeObject) {
