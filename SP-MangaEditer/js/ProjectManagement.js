@@ -247,25 +247,26 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  // // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
+  // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
   // selectA1111APIButton.addEventListener('click', (event) => {
   //   event.stopPropagation();
 
   //   API_mode = apis.A1111;
 
-  //   // // Hide comfyui elements and show A1111 elements
-  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
-  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+  //   // Hide comfyui elements and show A1111 elements
+  //   let a1111Elements = document.getElementsByClassName("A1111_api_content");
+  //   let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
 
-  //   // selectA1111APIButton.style.backgroundColor = "#ffedd3";
-  //   // for (let i = 0; i < a1111Elements.length; i++) {
-  //   //   a1111Elements[i].style.display = "block";
-  //   // }
+  //   selectA1111APIButton.style.backgroundColor = "#ffedd3";
+  //   for (let i = 0; i < a1111Elements.length; i++) {
+  //     a1111Elements[i].style.display = "block";
+  //   }
 
-  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
-  //   // for (let i = 0; i < comfyuiElements.length; i++) {
-  //   //   comfyuiElements[i].style.display = "none";
-  //   // }
+  //   selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
+  //   for (let i = 0; i < comfyuiElements.length; i++) {
+  //     comfyuiElements[i].style.display = "none";
+  //   }
+
   // });
 
   // selectComfyuiAPIButton.addEventListener('click', (event) => {
@@ -273,19 +274,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //   API_mode = apis.COMFYUI;
 
-  //   // // Show comfyui elements and hide A1111 elements
-  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
-  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
+  //   // Show comfyui elements and hide A1111 elements
+  //   let a1111Elements = document.getElementsByClassName("A1111_api_content");
+  //   let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
 
-  //   // selectA1111APIButton.style.backgroundColor = "#ffe1b7";
-  //   // for (let i = 0; i < a1111Elements.length; i++) {
-  //   //   a1111Elements[i].style.display = "none";
-  //   // }
+  //   selectA1111APIButton.style.backgroundColor = "#ffe1b7";
+  //   for (let i = 0; i < a1111Elements.length; i++) {
+  //     a1111Elements[i].style.display = "none";
+  //   }
 
-  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
-  //   // for (let i = 0; i < comfyuiElements.length; i++) {
-  //   //   comfyuiElements[i].style.display = "block";
-  //   // }
+  //   selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
+  //   for (let i = 0; i < comfyuiElements.length; i++) {
+  //     comfyuiElements[i].style.display = "block";
+  //   }
   // });
 
 });
@@ -298,17 +299,30 @@ function toggleAPI(event) {
   const toggleCheckbox = document.getElementById('toggle-api');
   if (toggleCheckbox.checked) {
       API_mode = apis.COMFYUI;
+      hideClassContent("A1111_api_content");
+      showClassContent("Comfyui_api_content");
       console.log('API_mode is now set to:', API_mode);
       createToast("API CHANGE!", "COMFYUI");
   } else {
       API_mode = apis.A1111;
+      showClassContent("A1111_api_content");
+      hideClassContent("Comfyui_api_content");
       console.log('API_mode is now set to:', API_mode);
       createToast("API CHANGE!", "WebUI(A1111/Forge)");
   }
+
+  apiHeartbeat();
 }
 
+function showClassContent(class_name) {
+  let elements = document.getElementsByClassName(class_name);
+  for (let i  = 0; i < elements.length; i++) elements[i].style.display = "block";
+}
 
-
+function hideClassContent(class_name) {
+  let elements = document.getElementsByClassName(class_name);
+  for (let i = 0; i < elements.length; i++) elements[i].style.display = "none";
+}
 
 
 
