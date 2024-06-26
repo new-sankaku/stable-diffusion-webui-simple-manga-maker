@@ -26,7 +26,7 @@ document.getElementById("canvas-container").addEventListener(
     try {
       webpFile = await imgFile2webpFile(file);
     } catch (error) {
-      console.error('Failed to convert to WebP', error);
+      console.error("Failed to convert to WebP", error);
       return;
     }
 
@@ -73,7 +73,6 @@ function initialPutImage(img) {
 }
 
 function putImageInFrame(img, x, y) {
-  
   img.set({
     left: x,
     top: y,
@@ -91,12 +90,14 @@ function putImageInFrame(img, x, y) {
     targetFrameIndex
   );
   if (targetFrameIndex !== -1) {
-    var targetFrame  = canvas.item(targetFrameIndex);
-    var frameCenterX = targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
-    var frameCenterY = targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
-    var scaleToFitX  = (targetFrame.width * targetFrame.scaleX) / img.width;
-    var scaleToFitY  = (targetFrame.height * targetFrame.scaleY) / img.height;
-    var scaleToFit   = Math.max(scaleToFitX, scaleToFitY);
+    var targetFrame = canvas.item(targetFrameIndex);
+    var frameCenterX =
+      targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
+    var frameCenterY =
+      targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
+    var scaleToFitX = (targetFrame.width * targetFrame.scaleX) / img.width;
+    var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / img.height;
+    var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
 
     var clipPath;
     if (targetFrame.type === "polygon") {
@@ -138,15 +139,14 @@ function putImageInFrame(img, x, y) {
       scaleX: scaleToFit * 1.05,
       scaleY: scaleToFit * 1.05,
     });
-    if( img.name ){
+    if (img.name) {
       img.name = targetFrame.name + "-" + img.name;
-    }else{
+    } else {
       img.name = targetFrame.name + " In Image";
     }
-    
+
     img.clipPath = clipPath;
     setGUID(targetFrame, img);
-
   } else {
     var scaleToCanvasWidth = 300 / img.width;
     var scaleToCanvasHeight = 300 / img.height;
@@ -217,16 +217,15 @@ function adjustImageToFitFrame(image, frame) {
   });
 }
 
-
-
-
-document.getElementById("CustomPanelButton").addEventListener("click", function () {
-  var x  = document.getElementById("customPanelSizeX").value;
-  var y  = document.getElementById("customPanelSizeY").value;
-  loadBookSize(x, y, false);
-  canvas.renderAll();
-  adjustCanvasSize();
-});
+document
+  .getElementById("CustomPanelButton")
+  .addEventListener("click", function () {
+    var x = document.getElementById("customPanelSizeX").value;
+    var y = document.getElementById("customPanelSizeY").value;
+    loadBookSize(x, y, false);
+    canvas.renderAll();
+    adjustCanvasSize();
+  });
 
 document.getElementById("A4-H").addEventListener("click", function () {
   loadBookSize(210, 297, true);
@@ -241,62 +240,72 @@ document.getElementById("B4-V").addEventListener("click", function () {
   loadBookSize(364, 257, true);
 });
 
-document.getElementById("insta").addEventListener("click", function() {
+document.getElementById("insta").addEventListener("click", function () {
   loadBookSize(1080, 1080, true);
 });
 
-document.getElementById("insta-story").addEventListener("click", function() {
+document.getElementById("insta-story").addEventListener("click", function () {
   loadBookSize(1080, 1920, true);
 });
 
-document.getElementById("insta-portrait").addEventListener("click", function() {
-  loadBookSize(1080, 1350, true);
-});
+document
+  .getElementById("insta-portrait")
+  .addEventListener("click", function () {
+    loadBookSize(1080, 1350, true);
+  });
 
-document.getElementById("fb-page-cover").addEventListener("click", function() {
+document.getElementById("fb-page-cover").addEventListener("click", function () {
   loadBookSize(1640, 664, true);
 });
 
-document.getElementById("fb-event").addEventListener("click", function() {
+document.getElementById("fb-event").addEventListener("click", function () {
   loadBookSize(1920, 1080, true);
 });
 
-document.getElementById("fb-group-header").addEventListener("click", function() {
-  loadBookSize(1640, 856, true);
-});
+document
+  .getElementById("fb-group-header")
+  .addEventListener("click", function () {
+    loadBookSize(1640, 856, true);
+  });
 
-document.getElementById("youtube-thumbnail").addEventListener("click", function() {
-  loadBookSize(1280, 720, true);
-});
+document
+  .getElementById("youtube-thumbnail")
+  .addEventListener("click", function () {
+    loadBookSize(1280, 720, true);
+  });
 
-document.getElementById("youtube-profile").addEventListener("click", function() {
-  loadBookSize(800, 800, true);
-});
+document
+  .getElementById("youtube-profile")
+  .addEventListener("click", function () {
+    loadBookSize(800, 800, true);
+  });
 
-document.getElementById("youtube-cover").addEventListener("click", function() {
+document.getElementById("youtube-cover").addEventListener("click", function () {
   loadBookSize(2560, 1440, true);
 });
 
-document.getElementById("twitter-profile").addEventListener("click", function() {
-  loadBookSize(400, 400, true);
-});
+document
+  .getElementById("twitter-profile")
+  .addEventListener("click", function () {
+    loadBookSize(400, 400, true);
+  });
 
-document.getElementById("twitter-header").addEventListener("click", function() {
-  loadBookSize(1500, 500, true);
-});
-
+document
+  .getElementById("twitter-header")
+  .addEventListener("click", function () {
+    loadBookSize(1500, 500, true);
+  });
 
 function loadBookSize(width, height, addPanel) {
-
-  console.log( "loadBookSize addPanel", addPanel );
+  console.log("loadBookSize addPanel", addPanel);
 
   if (stateStack.length > 2) {
     executeWithConfirmation("New Project?", function () {
       changeDoNotSaveHistory();
       resizeCanvasToObject(width, height);
-      if(addPanel){
+      if (addPanel) {
         addSquareBySize(width, height);
-      }else{
+      } else {
         initImageHistory();
         saveState();
       }
@@ -305,9 +314,9 @@ function loadBookSize(width, height, addPanel) {
   } else {
     changeDoNotSaveHistory();
     resizeCanvasToObject(width, height);
-    if(addPanel){
+    if (addPanel) {
       addSquareBySize(width, height);
-    }else{
+    } else {
       initImageHistory();
       saveState();
     }
@@ -332,7 +341,7 @@ function addSquareBySize(width, height) {
   var svgPaggingHalfWidth = svgPaggingWidth / 2;
   var svgPaggingHalfHeight = svgPaggingHeight / 2;
 
-  var newWidth  = width  * widthScale - svgPaggingWidth;
+  var newWidth = width * widthScale - svgPaggingWidth;
   var newHeight = height * heightScale - svgPaggingHeight;
 
   console.log("addSquareBySize height", height);
@@ -363,7 +372,6 @@ function addSquareBySize(width, height) {
     }
   );
 
-  
   setText2ImageInitPrompt(square);
   setPanelValue(square);
   canvas.add(square);
@@ -543,16 +551,12 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 });
 
-
-
-
-
 function addArRect() {
   var width = parseFloat(document.getElementById("ar_width").value);
   var height = parseFloat(document.getElementById("ar_height").value);
 
   if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
-      return;
+    return;
   }
 
   console.log("addArRect width", width);
@@ -564,38 +568,37 @@ function addArRect() {
 
   var aspectRatio = width / height;
   if (width > height) {
-      width = canvasSize;
-      height = canvasSize / aspectRatio;
+    width = canvasSize;
+    height = canvasSize / aspectRatio;
   } else {
-      height = canvasSize;
-      width = canvasSize * aspectRatio;
+    height = canvasSize;
+    width = canvasSize * aspectRatio;
   }
 
   var points = [
-      { x: 0, y: 0 },
-      { x: width, y: 0 },
-      { x: width, y: height },
-      { x: 0, y: height }
+    { x: 0, y: 0 },
+    { x: width, y: 0 },
+    { x: width, y: height },
+    { x: 0, y: height },
   ];
 
   addShape(points);
 }
 
-
 function addShape(points, options = {}) {
   var canvasWidth = canvas.width;
   var canvasHeight = canvas.height;
 
-  var minX = Math.min(...points.map(p => p.x));
-  var maxX = Math.max(...points.map(p => p.x));
-  var minY = Math.min(...points.map(p => p.y));
-  var maxY = Math.max(...points.map(p => p.y));
+  var minX = Math.min(...points.map((p) => p.x));
+  var maxX = Math.max(...points.map((p) => p.x));
+  var minY = Math.min(...points.map((p) => p.y));
+  var maxY = Math.max(...points.map((p) => p.y));
 
   var shapeWidth = maxX - minX;
   var shapeHeight = maxY - minY;
 
-  var scaleX = (canvasWidth / 3 ) / shapeWidth;
-  var scaleY = (canvasHeight / 3 ) / shapeHeight;
+  var scaleX = canvasWidth / 3 / shapeWidth;
+  var scaleY = canvasHeight / 3 / shapeHeight;
   var scale = Math.min(scaleX, scaleY);
 
   options.strokeWidth = 2 * (canvas.width / 700);
@@ -616,13 +619,12 @@ function addShape(points, options = {}) {
   updateLayerPanel();
 }
 
-
 function addSquare() {
   var points = [
     { x: 0, y: 0 },
     { x: 200, y: 0 },
     { x: 200, y: 200 },
-    { x: 0, y: 200 }
+    { x: 0, y: 200 },
   ];
   addShape(points);
 }
@@ -644,7 +646,7 @@ function addTallRect() {
     { x: 0, y: 0 },
     { x: 100, y: 0 },
     { x: 100, y: 400 },
-    { x: 0, y: 400 }
+    { x: 0, y: 400 },
   ];
   addShape(points);
 }
@@ -654,7 +656,7 @@ function addTallTrap() {
     { x: 50, y: 0 },
     { x: 150, y: 0 },
     { x: 100, y: 400 },
-    { x: 0, y: 400 }
+    { x: 0, y: 400 },
   ];
   addShape(points);
 }
@@ -664,7 +666,7 @@ function addWideRect() {
     { x: 0, y: 0 },
     { x: 400, y: 0 },
     { x: 400, y: 100 },
-    { x: 0, y: 100 }
+    { x: 0, y: 100 },
   ];
   addShape(points);
 }
@@ -674,7 +676,7 @@ function addWideTrap() {
     { x: 0, y: 0 },
     { x: 400, y: 0 },
     { x: 350, y: 100 },
-    { x: 50, y: 100 }
+    { x: 50, y: 100 },
   ];
   addShape(points);
 }
@@ -684,7 +686,7 @@ function addTrapezoid() {
     { x: 50, y: 0 },
     { x: 200, y: 0 },
     { x: 150, y: 100 },
-    { x: 0, y: 100 }
+    { x: 0, y: 100 },
   ];
   addShape(points);
 }
@@ -693,7 +695,7 @@ function addTriangle() {
   var points = [
     { x: 100, y: 0 },
     { x: 200, y: 200 },
-    { x: 0, y: 200 }
+    { x: 0, y: 200 },
   ];
   addShape(points);
 }
@@ -703,13 +705,13 @@ function addCircle() {
     radius: 100,
     left: 50,
     top: 50,
-    strokeWidth: canvas.width / 700 * 2,
+    strokeWidth: (canvas.width / 700) * 2,
     strokeUniform: true,
     stroke: "black",
     objectCaching: false,
     transparentCorners: false,
     cornerColor: "Blue",
-    isPanel: true
+    isPanel: true,
   });
   setText2ImageInitPrompt(circle);
   setPanelValue(circle);
@@ -734,13 +736,13 @@ function addEllipse() {
     ry: 50,
     left: 50,
     top: 50,
-    strokeWidth: canvas.width / 700 * 2,
+    strokeWidth: (canvas.width / 700) * 2,
     strokeUniform: true,
     stroke: "black",
     objectCaching: false,
     transparentCorners: false,
     cornerColor: "Blue",
-    isPanel: true
+    isPanel: true,
   });
   setText2ImageInitPrompt(ellipse);
   setPanelValue(ellipse);
@@ -753,7 +755,7 @@ function addRhombus() {
     { x: 0, y: 100 },
     { x: 100, y: 0 },
     { x: 200, y: 100 },
-    { x: 100, y: 200 }
+    { x: 100, y: 200 },
   ];
   addShape(points);
 }
@@ -767,7 +769,7 @@ function addStar() {
     var angle = (Math.PI / 5) * i;
     points.push({
       x: radius * Math.sin(angle),
-      y: -radius * Math.cos(angle)
+      y: -radius * Math.cos(angle),
     });
   }
   addShape(points);
@@ -801,7 +803,7 @@ function addTallRightLeaningTrapezoid() {
     { x: 0, y: 0 },
     { x: 100, y: 50 },
     { x: 100, y: 300 },
-    { x: 0, y: 300 }
+    { x: 0, y: 300 },
   ];
   addShape(points);
 }
@@ -811,20 +813,10 @@ function addRightSlantingTrapezoid() {
     { x: 0, y: 0 },
     { x: 300, y: 0 },
     { x: 350, y: 100 },
-    { x: 0, y: 100 }
+    { x: 0, y: 100 },
   ];
   addShape(points);
 }
-
-
-
-
-
-
-
-
-
-
 
 function Edit() {
   var poly = canvas.getActiveObject();
@@ -856,9 +848,6 @@ function Edit() {
   updateLayerPanel();
 }
 
-
-
-
 function changePanelStrokeWidth(value) {
   var activeObject = canvas.getActiveObject();
   if (isPanel(activeObject)) {
@@ -880,7 +869,7 @@ function changePanelOpacity(value) {
   var activeObject = canvas.getActiveObject();
   if (isPanel(activeObject)) {
     const opacity = value / 100;
-    activeObject.set('opacity', opacity);
+    activeObject.set("opacity", opacity);
     canvas.requestRenderAll();
   }
 }
@@ -893,11 +882,11 @@ function changePanelFillColor(value) {
 }
 
 function panelAllChange() {
-  var strokeWidthValue  = document.getElementById("panelStrokeWidth").value;
-  var strokeColorValue  = document.getElementById("panelStrokeColor").value;
-  var opacityValue      = document.getElementById("panelOpacity").value;
-  const opacity         = opacityValue / 100;
-  var fillValue         = document.getElementById("panelFillColor").value;
+  var strokeWidthValue = document.getElementById("panelStrokeWidth").value;
+  var strokeColorValue = document.getElementById("panelStrokeColor").value;
+  var opacityValue = document.getElementById("panelOpacity").value;
+  const opacity = opacityValue / 100;
+  var fillValue = document.getElementById("panelFillColor").value;
 
   canvas.getObjects().forEach(function (obj) {
     if (isPanel(obj)) {
@@ -907,23 +896,22 @@ function panelAllChange() {
       });
       obj.set("stroke", strokeColorValue);
       obj.set("fill", fillValue);
-      obj.set('opacity', opacity);
+      obj.set("opacity", opacity);
     }
   });
   canvas.requestRenderAll();
 }
 
-
 function setPanelValue(obj) {
-  console.log( "setPanelValue" );
-  var strokeWidthValue  = document.getElementById("panelStrokeWidth").value;
-  var strokeColorValue  = document.getElementById("panelStrokeColor").value;
-  var opacityValue      = document.getElementById("panelOpacity").value;
-  const opacity         = opacityValue / 100;
-  var fillValue         = document.getElementById("panelFillColor").value;
+  console.log("setPanelValue");
+  var strokeWidthValue = document.getElementById("panelStrokeWidth").value;
+  var strokeColorValue = document.getElementById("panelStrokeColor").value;
+  var opacityValue = document.getElementById("panelOpacity").value;
+  const opacity = opacityValue / 100;
+  var fillValue = document.getElementById("panelFillColor").value;
 
   if (isPanel(obj)) {
-    console.log( "setPanelValue isPanel" );
+    console.log("setPanelValue isPanel");
 
     obj.set({
       strokeWidth: parseFloat(strokeWidthValue),
@@ -931,17 +919,10 @@ function setPanelValue(obj) {
     });
     obj.set("stroke", strokeColorValue);
     obj.set("fill", fillValue);
-    obj.set('opacity', opacity);
+    obj.set("opacity", opacity);
     canvas.requestRenderAll();
   }
 }
-
-
-
-
-
-
-
 
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
   var x = fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x,
@@ -1121,4 +1102,69 @@ function changeView(elementId, isVisible) {
     element.style.display = "none";
   }
   adjustCanvasSize();
+}
+
+
+
+
+
+
+let areNamesVisible = false;
+const promptTexts = [];
+
+function viewPanelPrompt() {
+  if (areNamesVisible) {
+    promptTexts.forEach((text) => canvas.remove(text));
+    promptTexts.length = 0;
+  } else {
+    canvas.getObjects().forEach((obj) => {
+      if (isPanel(obj)) {
+        let viewText = obj.text2img_prompt || 'nothing';
+        const wrappedText = wrapText(viewText, obj.width * obj.scaleX - 10, 14);
+        const text = new fabric.Text(wrappedText, {
+          left: obj.left + 5,
+          top: obj.top + (obj.height * obj.scaleY / 4),
+          fontSize: 14,
+          fill: "black",
+          selectable: false,
+          evented: false,
+          lineHeight: 1.2,
+          textAlign: 'left',
+        });
+        saveInitialState(text);
+        promptTexts.push(text);
+        canvas.add(text);
+      }
+    });
+  }
+  areNamesVisible = !areNamesVisible;
+  canvas.renderAll();
+}
+
+function wrapText(text, width, fontSize) {
+  const words = text.split(' ');
+  let lines = [];
+  let currentLine = words[0];
+
+  for (let i = 1; i < words.length; i++) {
+    const word = words[i];
+    const testLine = currentLine + ' ' + word;
+    const testWidth = getTextWidth(testLine, fontSize);
+    if (testWidth > width) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = testLine;
+    }
+  }
+  lines.push(currentLine);
+  return lines.join('\n');
+}
+
+function getTextWidth(text, fontSize) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  context.font = fontSize + 'px Arial';
+  const metrics = context.measureText(text);
+  return metrics.width;
 }
