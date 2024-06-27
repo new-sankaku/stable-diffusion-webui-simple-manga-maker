@@ -117,3 +117,59 @@ canvas.on("selection:updated", function () {
 });
 canvas.on("selection:cleared", closeWindow);
 
+
+
+//panelStrokeChange
+function moveSettings(img, poly){
+  updateClipPath(img, poly);
+
+  function updateOnModification() {
+    updateClipPath(img, poly);
+    canvas.renderAll();
+  }
+
+  poly.on('moving', updateOnModification);
+  poly.on('scaling', updateOnModification);
+  poly.on('rotating', updateOnModification);
+  poly.on('skewing', updateOnModification);
+  poly.on('modified', updateOnModification);
+  img.on('moving', updateOnModification);
+  img.on('scaling', updateOnModification);
+  img.on('rotating', updateOnModification);
+  img.on('skewing', updateOnModification);
+  img.on('modified', updateOnModification);
+}
+
+function updateClipPath(imageObj, polygonObj) {
+  const matrix = polygonObj.calcTransformMatrix();
+  const transformedPoints = polygonObj.points.map(point => {
+      return fabric.util.transformPoint({
+          x: point.x - polygonObj.pathOffset.x,
+          y: point.y - polygonObj.pathOffset.y
+      }, matrix);
+  });
+  const clipPath = new fabric.Polygon(transformedPoints, {
+      absolutePositioned: true,
+  });
+  clipPath.set({
+    left:   clipPath.left + polygonObj.strokeWidth-1,
+    top:    clipPath.top  + polygonObj.strokeWidth-1,
+    scaleX: 1 - (polygonObj.strokeWidth) / clipPath.width,
+    scaleY: 1 - (polygonObj.strokeWidth) / clipPath.height,
+    absolutePositioned: true,
+  });
+
+  if (!clipPath.initial) {
+    saveInitialState(clipPath);
+  }
+
+  imageObj.clipPath = clipPath;
+
+}
+
+canvas.on("object:added", (e) => {
+  const obj = e.target;
+  if (isPanel(obj)) {
+      obj.set('fill', 'rgba(255,255,255,0.25)');
+  }
+});

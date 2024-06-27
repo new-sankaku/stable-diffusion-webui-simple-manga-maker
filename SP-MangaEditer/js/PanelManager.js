@@ -73,79 +73,36 @@ function initialPutImage(img) {
 }
 
 function putImageInFrame(img, x, y) {
-  img.set({
-    left: x,
-    top: y,
-  });
+  img.set({  left: x, top: y, });
+
   setNotSave(img);
   canvas.add(img);
 
   var targetFrameIndex = findTargetFrame(x, y);
 
-  console.log(
-    "scale, x, y, targetFrameIndex",
-    canvasContinerScale,
-    x,
-    y,
-    targetFrameIndex
-  );
   if (targetFrameIndex !== -1) {
     var targetFrame = canvas.item(targetFrameIndex);
-    var frameCenterX =
-      targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
-    var frameCenterY =
-      targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
+    var frameCenterX = targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
+    var frameCenterY = targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
     var scaleToFitX = (targetFrame.width * targetFrame.scaleX) / img.width;
     var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / img.height;
     var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
 
-    var clipPath;
-    if (targetFrame.type === "polygon") {
-      clipPath = new fabric.Polygon(targetFrame.points);
-      clipPath.set({
-        left:
-          targetFrame.left +
-          targetFrame.strokeWidth -
-          0.45 * targetFrame.scaleX,
-        top:
-          targetFrame.top + targetFrame.strokeWidth - 0.45 * targetFrame.scaleY,
-        wight:
-          targetFrame.wight -
-          targetFrame.strokeWidth -
-          0.45 * targetFrame.scaleX,
-        height: targetFrame.height,
-        scaleX:
-          targetFrame.scaleX - targetFrame.strokeWidth / targetFrame.width,
-        scaleY:
-          targetFrame.scaleY - targetFrame.strokeWidth / targetFrame.height,
-        absolutePositioned: true,
-      });
-      // console.log("putImageInFrame clipPath", clipPath);
-    } else {
-      clipPath = new fabric.Path(targetFrame.path);
-      clipPath.set({
-        left: targetFrame.left + targetFrame.strokeWidth,
-        top: targetFrame.top + targetFrame.strokeWidth,
-        scaleX:
-          targetFrame.scaleX - targetFrame.strokeWidth / targetFrame.width,
-        scaleY:
-          targetFrame.scaleY - targetFrame.strokeWidth / targetFrame.height,
-        absolutePositioned: true,
-      });
-    }
+    moveSettings( img, targetFrame);
+
     img.set({
       left: frameCenterX - (img.width * scaleToFit) / 2,
-      top: frameCenterY - (img.height * scaleToFit) / 2,
+      top: frameCenterY  - (img.height * scaleToFit) / 2,
       scaleX: scaleToFit * 1.05,
       scaleY: scaleToFit * 1.05,
     });
+
     if (img.name) {
       img.name = targetFrame.name + "-" + img.name;
     } else {
       img.name = targetFrame.name + " In Image";
     }
 
-    img.clipPath = clipPath;
     setGUID(targetFrame, img);
   } else {
     var scaleToCanvasWidth = 300 / img.width;
@@ -197,9 +154,9 @@ function isWithin(image, frame) {
     imageBounds.left >= frameBounds.left &&
     imageBounds.top >= frameBounds.top &&
     imageBounds.left + imageBounds.width * image.scaleX <=
-      frameBounds.left + frameBounds.width &&
+    frameBounds.left + frameBounds.width &&
     imageBounds.top + imageBounds.height * image.scaleY <=
-      frameBounds.top + frameBounds.height;
+    frameBounds.top + frameBounds.height;
   return within;
 }
 
@@ -361,7 +318,6 @@ function addSquareBySize(width, height) {
       top: svgPaggingHalfHeight,
       scaleX: 1,
       scaleY: 1,
-      fill: "#FFFFFF",
       strokeWidth: strokeWidth,
       strokeUniform: true,
       stroke: "black",
@@ -458,7 +414,6 @@ function loadSVGPlusReset(svgString) {
           scaleY: scaleToFit,
           top: obj.top * scaleToFit + offsetY,
           left: obj.left * scaleToFit + offsetX,
-          fill: "transparent",
           stroke: obj.stroke,
           strokeWidth: strokeWidth,
           selectable: true,
@@ -471,6 +426,7 @@ function loadSVGPlusReset(svgString) {
           edit: false,
           hasBorders: true,
           cornerStyle: "rect",
+          objectCaching: false,
 
           controls: fabric.Object.prototype.controls,
         });
@@ -491,11 +447,12 @@ function loadSVGPlusReset(svgString) {
         obj.lockRotation = false;
         obj.lockScalingX = false;
         obj.lockScalingY = false;
+        obj.objectCaching = false,
 
         canvas.add(obj);
       }
     });
-    panelAllChange();
+    panelStrokeChange()
     canvas.renderAll();
   });
 
@@ -880,6 +837,24 @@ function changePanelFillColor(value) {
     canvas.requestRenderAll();
   }
 }
+
+
+function panelStrokeChange() {
+  var strokeWidthValue = document.getElementById("panelStrokeWidth").value;
+  var strokeColorValue = document.getElementById("panelStrokeColor").value;
+
+  canvas.getObjects().forEach(function (obj) {
+    if (isPanel(obj)) {
+      obj.set({
+        strokeWidth: parseFloat(strokeWidthValue),
+        strokeUniform: true,
+      });
+      obj.set("stroke", strokeColorValue);
+    }
+  });
+  canvas.requestRenderAll();
+}
+
 
 function panelAllChange() {
   var strokeWidthValue = document.getElementById("panelStrokeWidth").value;

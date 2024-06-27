@@ -145,6 +145,7 @@ function undo() {
         canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
+            resetEventHandlers(); 
             changeDoSaveHistory();
         });
     }
@@ -157,6 +158,7 @@ function redo() {
         canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
             canvas.renderAll();
             updateLayerPanel();
+            resetEventHandlers(); 
             changeDoSaveHistory();
         });
     }
@@ -168,6 +170,7 @@ function lastRedo() {
     canvas.loadFromJSON(restoreImage(stateStack[stateStack.length - 1]), function () {
         canvas.renderAll();
         updateLayerPanel();
+        resetEventHandlers(); 
         changeDoSaveHistory();
     });
 }
@@ -194,3 +197,24 @@ function initImageHistory(){
 }
 
 saveState();
+
+
+
+function resetEventHandlers() {
+    const objectMap = {};
+    canvas.getObjects().forEach(obj => {
+      if (obj.guid) {
+        objectMap[obj.guid] = obj;
+      }
+    });
+    canvas.getObjects().forEach(obj => {
+      if (obj.guids) {
+        obj.guids.forEach(guid => {
+          if (objectMap[guid]) {
+            moveSettings(objectMap[guid], obj);
+          }
+        });
+      }
+    });
+  }
+  
