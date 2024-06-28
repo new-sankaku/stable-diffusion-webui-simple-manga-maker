@@ -35,13 +35,13 @@ document.getElementById("canvas-container").addEventListener(
       var data = f.target.result;
 
       fabric.Image.fromURL(data, function (img) {
-        console.log("drop stateStack.length", stateStack.length);
+        // console.log("drop stateStack.length", stateStack.length);
         if (stateStack.length >= 2) {
           var canvasX = x / canvasContinerScale;
           var canvasY = y / canvasContinerScale;
           putImageInFrame(img, canvasX, canvasY);
         } else {
-          console.log("drop img.width, img.height", img.width, img.height);
+          // console.log("drop img.width, img.height", img.width, img.height);
           resizeCanvasByNum(img.width, img.height);
           initialPutImage(img, 0, 0);
         }
@@ -254,7 +254,7 @@ document
   });
 
 function loadBookSize(width, height, addPanel) {
-  console.log("loadBookSize addPanel", addPanel);
+  // console.log("loadBookSize addPanel", addPanel);
 
   if (stateStack.length > 2) {
     executeWithConfirmation("New Project?", function () {
@@ -287,7 +287,7 @@ function addSquareBySize(width, height) {
 
   var strokeWidthScale = canvas.width / 700;
   var strokeWidth = 2 * strokeWidthScale;
-  console.log("strokeWidth", strokeWidth);
+  // console.log("strokeWidth", strokeWidth);
 
   var widthScale = canvas.width / width;
   var heightScale = canvas.height / height;
@@ -301,10 +301,10 @@ function addSquareBySize(width, height) {
   var newWidth = width * widthScale - svgPaggingWidth - strokeWidth;
   var newHeight = height * heightScale - svgPaggingHeight - strokeWidth;
 
-  console.log("addSquareBySize height", height);
-  console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
-  console.log("addSquareBySize heightScale", heightScale);
-  console.log("addSquareBySize newHeight", newHeight);
+  // console.log("addSquareBySize height", height);
+  // console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
+  // console.log("addSquareBySize heightScale", heightScale);
+  // console.log("addSquareBySize newHeight", newHeight);
 
   var square = new fabric.Polygon(
     [
@@ -354,7 +354,7 @@ function loadSVGPlusReset(svgString) {
     var strokeWidthScale = canvas.width / 700;
     var strokeWidth = 2 * strokeWidthScale;
 
-    console.log("strokeWidth", strokeWidth);
+    // console.log("strokeWidth", strokeWidth);
 
     clipAreaCoords.left = offsetX;
     clipAreaCoords.top = offsetY;
@@ -436,7 +436,7 @@ function loadSVGPlusReset(svgString) {
 
         canvas.add(polygon);
       } else {
-        isPanel: true, (obj.scaleX = scaleToFit);
+        obj.isPanel= true, (obj.scaleX = scaleToFit);
         obj.scaleY = scaleToFit;
         obj.top = obj.top * scaleToFit + offsetY;
         obj.left = obj.left * scaleToFit + offsetX;
@@ -518,8 +518,8 @@ function addArRect() {
     return;
   }
 
-  console.log("addArRect width", width);
-  console.log("addArRect height", height);
+  // console.log("addArRect width", width);
+  // console.log("addArRect height", height);
   var canvasWidth = canvas.getWidth();
   var canvasHeight = canvas.getHeight();
 
@@ -880,7 +880,7 @@ function panelAllChange() {
 }
 
 function setPanelValue(obj) {
-  console.log("setPanelValue");
+  // console.log("setPanelValue");
   var strokeWidthValue = document.getElementById("panelStrokeWidth").value;
   var strokeColorValue = document.getElementById("panelStrokeColor").value;
   var opacityValue = document.getElementById("panelOpacity").value;
@@ -888,7 +888,7 @@ function setPanelValue(obj) {
   var fillValue = document.getElementById("panelFillColor").value;
 
   if (isPanel(obj)) {
-    console.log("setPanelValue isPanel");
+    // console.log("setPanelValue isPanel");
 
     obj.set({
       strokeWidth: parseFloat(strokeWidthValue),

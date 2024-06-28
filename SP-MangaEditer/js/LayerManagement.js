@@ -58,6 +58,8 @@ function updateLayerPanel() {
     }
   });
 
+
+
   // レイヤーパネルの更新
   finalLayerOrder.forEach((layer, index) => {
     if (!layer.excludeFromLayerPanel) {
@@ -130,24 +132,17 @@ function updateLayerPanel() {
         updateControls(layer);
       };
 
-      var isHaveGuidLayer = layers.some(
-        (layerWithGUIDs) =>
-          layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid)
-      );
-      if (isHaveGuidLayer) {
-        layerDiv.style.border = "none";
-        layerDiv.style.borderLeft = getCssValue("--boader-color-2px-solid-C");
-        layerDiv.style.borderBottom = getCssValue("--boader-color-1px-solid-D");
+      var isMatchingLayer = layers.some(layerWithGUIDs => layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid));
+      if (isMatchingLayer) {
+        layerDiv.style.border = 'none';
+        layerDiv.style.borderLeft    = getCssValue('--boader-color-2px-solid-C');
+        layerDiv.style.borderBottom  = getCssValue('--boader-color-1px-solid-D');
         layerDiv.style.marginLeft = "10px";
         layerDiv.style.paddingLeft = "5px";
       } else {
-        layerDiv.style.border = "none";
-        layerDiv.style.borderTop = getCssValue(
-          "--layer-panel-boader-color-1px-solid-B"
-        );
-        layerDiv.style.borderBottom = getCssValue(
-          "--layer-panel-boader-color-1px-solid-B"
-        );
+        layerDiv.style.border = 'none';
+        layerDiv.style.borderTop    = getCssValue('--layer-panel-boader-color-1px-solid-B');
+        layerDiv.style.borderBottom = getCssValue('--layer-panel-boader-color-1px-solid-B');
       }
       layerContent.appendChild(layerDiv);
     }
