@@ -73,7 +73,7 @@ function initialPutImage(img) {
 }
 
 function putImageInFrame(img, x, y) {
-  img.set({  left: x, top: y, });
+  img.set({ left: x, top: y, });
 
   setNotSave(img);
   canvas.add(img);
@@ -88,11 +88,11 @@ function putImageInFrame(img, x, y) {
     var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / img.height;
     var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
 
-    moveSettings( img, targetFrame);
+    moveSettings(img, targetFrame);
 
     img.set({
       left: frameCenterX - (img.width * scaleToFit) / 2,
-      top: frameCenterY  - (img.height * scaleToFit) / 2,
+      top: frameCenterY - (img.height * scaleToFit) / 2,
       scaleX: scaleToFit * 1.05,
       scaleY: scaleToFit * 1.05,
     });
@@ -298,8 +298,8 @@ function addSquareBySize(width, height) {
   var svgPaggingHalfWidth = svgPaggingWidth / 2;
   var svgPaggingHalfHeight = svgPaggingHeight / 2;
 
-  var newWidth = width * widthScale - svgPaggingWidth;
-  var newHeight = height * heightScale - svgPaggingHeight;
+  var newWidth = width * widthScale - svgPaggingWidth - strokeWidth;
+  var newHeight = height * heightScale - svgPaggingHeight - strokeWidth;
 
   console.log("addSquareBySize height", height);
   console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
@@ -349,8 +349,7 @@ function loadSVGPlusReset(svgString) {
     var overallScaleY = canvasUsableHeight / options.height;
     var scaleToFit = Math.min(overallScaleX, overallScaleY);
     var offsetX = (canvas.width - options.width * scaleToFit) / 2;
-    var offsetY =
-      svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+    var offsetY = svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
 
     var strokeWidthScale = canvas.width / 700;
     var strokeWidth = 2 * strokeWidthScale;
@@ -431,6 +430,9 @@ function loadSVGPlusReset(svgString) {
           controls: fabric.Object.prototype.controls,
         });
         setText2ImageInitPrompt(polygon);
+
+
+
 
         canvas.add(polygon);
       } else {
@@ -970,13 +972,15 @@ var gridSize = 10;
 var snapTimeout;
 var isGridVisible = false;
 
-// グリッド線を描画する関数
 function drawGrid() {
   var gridCanvas = document.createElement("canvas");
   gridCanvas.width = canvas.width;
   gridCanvas.height = canvas.height;
   var gridCtx = gridCanvas.getContext("2d");
-  gridCtx.strokeStyle = "#ccc";
+  var baseColor = "#ccc";
+
+
+  gridCtx.strokeStyle = baseColor;
 
   for (var i = 0; i <= canvas.width / gridSize; i++) {
     gridCtx.beginPath();
@@ -992,18 +996,75 @@ function drawGrid() {
     gridCtx.stroke();
   }
 
+  var centerX = canvas.width / 2;
+  var centerY = canvas.height / 2;
+  var oneThirdX = canvas.width / 3;
+  var twoThirdsX = (canvas.width / 3) * 2;
+  var oneThirdY = canvas.height / 3;
+  var twoThirdsY = (canvas.height / 3) * 2;
+
+  var crossColor = darkenColor(baseColor, 5);
+  gridCtx.strokeStyle = crossColor;
+
+  gridCtx.beginPath();
+  gridCtx.moveTo(centerX, 0);
+  gridCtx.lineTo(centerX, canvas.height);
+  gridCtx.stroke();
+
+  gridCtx.beginPath();
+  gridCtx.moveTo(0, centerY);
+  gridCtx.lineTo(canvas.width, centerY);
+  gridCtx.stroke();
+
+  crossColor = darkenColor(baseColor, -70);
+  gridCtx.strokeStyle = crossColor;
+
+  gridCtx.beginPath();
+  gridCtx.moveTo(oneThirdX, 0);
+  gridCtx.lineTo(oneThirdX, canvas.height);
+  gridCtx.stroke();
+
+  gridCtx.beginPath();
+  gridCtx.moveTo(twoThirdsX, 0);
+  gridCtx.lineTo(twoThirdsX, canvas.height);
+  gridCtx.stroke();
+
+  gridCtx.beginPath();
+  gridCtx.moveTo(0, oneThirdY);
+  gridCtx.lineTo(canvas.width, oneThirdY);
+  gridCtx.stroke();
+
+  gridCtx.beginPath();
+  gridCtx.moveTo(0, twoThirdsY);
+  gridCtx.lineTo(canvas.width, twoThirdsY);
+  gridCtx.stroke();
+
   canvas.setBackgroundImage(
     gridCanvas.toDataURL(),
     canvas.renderAll.bind(canvas)
   );
 }
 
-// グリッド線を削除する関数
+function darkenColor(color, percent) {
+  if (percent === 0) return color;
+  var num = parseInt(color.slice(1), 16),
+    amt = Math.round(2.55 * percent),
+    R = (num >> 16) - amt,
+    G = (num >> 8 & 0x00FF) - amt,
+    B = (num & 0x0000FF) - amt;
+
+  R = Math.max(Math.min(255, R), 0);
+  G = Math.max(Math.min(255, G), 0);
+  B = Math.max(Math.min(255, B), 0);
+
+  return '#' + (
+    (1 << 24) + (R << 16) + (G << 8) + B
+  ).toString(16).slice(1).toUpperCase();
+}
 function removeGrid() {
   canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
 }
 
-// グリッド線の表示/非表示を切り替える関数
 function toggleGrid() {
   if (isGridVisible) {
     removeGrid();
@@ -1015,12 +1076,8 @@ function toggleGrid() {
   canvas.renderAll();
 }
 
-// ボタンクリックでグリッド線の表示/非表示を切り替え
-document
-  .getElementById("toggleGridButton")
-  .addEventListener("click", toggleGrid);
+document.getElementById("toggleGridButton").addEventListener("click", toggleGrid);
 
-// グリッド線の幅を更新する関数
 function updateGridSize() {
   var newGridSize = parseInt(
     document.getElementById("gridSizeInput").value,
@@ -1035,12 +1092,8 @@ function updateGridSize() {
   }
 }
 
-// グリッド線の幅を変更する際に自動更新
-document
-  .getElementById("gridSizeInput")
-  .addEventListener("input", updateGridSize);
+document.getElementById("gridSizeInput").addEventListener("input", updateGridSize);
 
-// オブジェクトをグリッド線にスナップさせる関数
 function snapToGrid(target) {
   if (isGridVisible) {
     target.set({
@@ -1050,8 +1103,6 @@ function snapToGrid(target) {
     canvas.renderAll();
   }
 }
-
-// デバウンスされたスナップ関数
 function debounceSnapToGrid(target) {
   clearTimeout(snapTimeout);
   snapTimeout = setTimeout(function () {

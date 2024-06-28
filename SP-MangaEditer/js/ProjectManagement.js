@@ -19,85 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
   var settingsLoad = document.getElementById("settingsLoad");
 
   settingsSave.addEventListener("click", function () {
-    createToast('Settings Save', [
-      'Canvas Background Color...',
-      'Api port...',
-      'Api host...',
-      'Base Settings...',
-      'Dpi...',
-      'Grid Line Size...',
-      'Margin From Panel...',
-      'Save Completed!!'
-    ]);
-    const localSettingsData = {
-        canvasBgColor:                                                  document.getElementById('bg-color').value,
-        canvasDpi:                                                      document.getElementById('outputDpi').value,
-        canvasGridLineSize:                                             document.getElementById('gridSizeInput').value,
-        canvasMarginFromPanel:                                          document.getElementById('marginFromPanel').value,
-        Stable_Diffusion_WebUI_apiPort:                                 document.getElementById('Stable_Diffusion_WebUI_apiPort').value,
-        Stable_Diffusion_WebUI_apiHost:                                 document.getElementById('Stable_Diffusion_WebUI_apiHost').value,
-        text2img_basePrompt_text2img_prompt:                            text2img_basePrompt.text2img_prompt, 
-        text2img_basePrompt_text2img_negativePrompt:                    text2img_basePrompt.text2img_negativePrompt, 
-        text2img_basePrompt_text2img_seed:                              text2img_basePrompt.text2img_seed, 
-        text2img_basePrompt_text2img_cfg_scale:                         text2img_basePrompt.text2img_cfg_scale, 
-        text2img_basePrompt_text2img_width:                             text2img_basePrompt.text2img_width, 
-        text2img_basePrompt_text2img_height:                            text2img_basePrompt.text2img_height, 
-        text2img_basePrompt_text2img_samplingMethod:                    text2img_basePrompt.text2img_samplingMethod, 
-        text2img_basePrompt_text2img_samplingSteps:                     text2img_basePrompt.text2img_samplingSteps, 
-        text2img_basePrompt_text2img_scheduler:                         text2img_basePrompt.text2img_scheduler, 
-        text2img_basePrompt_text2img_model:                             text2img_basePrompt.text2img_model, 
-        text2img_basePrompt_text2img_hr_upscaler:                       text2img_basePrompt.text2img_hr_upscaler, 
-        text2img_basePrompt_text2img_basePrompt_hr_scale:               text2img_basePrompt.text2img_basePrompt_hr_scale, 
-        text2img_basePrompt_text2img_basePrompt_hr_step:                text2img_basePrompt.text2img_basePrompt_hr_step, 
-        text2img_basePrompt_text2img_basePrompt_hr_denoising_strength:  text2img_basePrompt.text2img_basePrompt_hr_denoising_strength
-    };
-    localStorage.setItem('localSettingsData', JSON.stringify(localSettingsData));
+    saveSettingsLocalStrage();
   });
 
   settingsLoad.addEventListener("click", function () {
-    createToast('Settings Load', [
-      'Canvas Background Color...',
-      'Api port...',
-      'Api host...',
-      'Base Settings...',
-      'Dpi...',
-      'Grid Line Size...',
-      'Margin From Panel...',
-      'Load Completed!!'
-    ]);
-
-    const localSettingsData = localStorage.getItem('localSettingsData');
-    if (localSettingsData) {
-        const localSettings = JSON.parse(localSettingsData);
-        
-        var bgColorInputElement = document.getElementById('bg-color');
-        bgColorInputElement.value                                       = localSettings.canvasBgColor || "#ffffff";
-        var event = new Event('input', { 'bubbles': true,'cancelable': true });
-        bgColorInputElement.dispatchEvent(event);
-
-        document.getElementById('outputDpi').value                      = localSettings.canvasDpi || "300";
-        document.getElementById('gridSizeInput').value                  = localSettings.canvasGridLineSize || "10";
-        document.getElementById('marginFromPanel').value                = localSettings.canvasMarginFromPanel || "20";
-        document.getElementById('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
-        document.getElementById('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
-        text2img_basePrompt.text2img_prompt                             = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
-        text2img_basePrompt.text2img_negativePrompt                     = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt ;
-        text2img_basePrompt.text2img_seed                               = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
-        text2img_basePrompt.text2img_cfg_scale                          = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
-        text2img_basePrompt.text2img_width                              = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
-        text2img_basePrompt.text2img_height                             = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
-        text2img_basePrompt.text2img_samplingMethod                     = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
-        text2img_basePrompt.text2img_samplingSteps                      = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
-        text2img_basePrompt.text2img_scheduler                          = localSettings.text2img_basePrompt_text2img_scheduler || text2img_basePrompt.text2img_scheduler;
-        text2img_basePrompt.text2img_model                              = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
-        text2img_basePrompt.text2img_hr_upscaler                        = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
-        text2img_basePrompt.text2img_basePrompt_hr_scale                = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
-        text2img_basePrompt.text2img_basePrompt_hr_step                 = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
-        text2img_basePrompt.text2img_basePrompt_hr_denoising_strength   = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
-
-    } else {
-      createToast("Settings Load Failed! (Local storage)", "Settings not found.");
-    }
+    loadSettingsLocalStrage();
   });
 
   saveButton.addEventListener("click", function () {
@@ -184,8 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
           var canvasInfoPromise = canvasInfoFile
             ? canvasInfoFile.async("string").then(function (content) {
-                return JSON.parse(content);
-              })
+              return JSON.parse(content);
+            })
             : Promise.resolve({ width: 750, height: 850 });
 
           // var sortedFiles = Object.keys(zip.files).sort();
@@ -198,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return numA - numB;
           });
 
-          
+
           //Image sort
           sortedFiles.map(function (fileName) {
             return zip.file(fileName).async("string").then(function (content) {
@@ -291,19 +217,111 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+
+  
+function loadSettingsLocalStrage(  ) {
+  createToast('Settings Load', [
+    'Canvas Background Color...',
+    'Api port/host/check...',
+    'Base Settings...',
+    'Dpi...',
+    'Grid Line Size...',
+    'Margin From Panel...',
+    'Knife Space Size...',
+    'Load Completed!!'
+  ]);
+
+  const localSettingsData = localStorage.getItem('localSettingsData');
+  if (localSettingsData) {
+    const localSettings = JSON.parse(localSettingsData);
+
+    var bgColorInputElement = document.getElementById('bg-color');
+    bgColorInputElement.value = localSettings.canvasBgColor || "#ffffff";
+    var event = new Event('input', { 'bubbles': true, 'cancelable': true });
+    bgColorInputElement.dispatchEvent(event);
+    document.getElementById('knifePanelSpaceSize').value = localSettings.knifePanelSpaceSize || "20";
+    document.getElementById('outputDpi').value = localSettings.canvasDpi || "300";
+    document.getElementById('gridSizeInput').value = localSettings.canvasGridLineSize || "10";
+    document.getElementById('marginFromPanel').value = localSettings.canvasMarginFromPanel || "20";
+    svgPagging = localSettings.canvasMarginFromPanel || "20";
+    document.getElementById('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
+    document.getElementById('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
+    document.getElementById('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox === "true";
+
+    text2img_basePrompt.text2img_prompt = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
+    text2img_basePrompt.text2img_negativePrompt = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
+    text2img_basePrompt.text2img_seed = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
+    text2img_basePrompt.text2img_cfg_scale = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
+    text2img_basePrompt.text2img_width = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
+    text2img_basePrompt.text2img_height = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
+    text2img_basePrompt.text2img_samplingMethod = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
+    text2img_basePrompt.text2img_samplingSteps = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
+    text2img_basePrompt.text2img_scheduler = localSettings.text2img_basePrompt_text2img_scheduler || text2img_basePrompt.text2img_scheduler;
+    text2img_basePrompt.text2img_model = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
+    text2img_basePrompt.text2img_hr_upscaler = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
+    text2img_basePrompt.text2img_basePrompt_hr_scale = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
+    text2img_basePrompt.text2img_basePrompt_hr_step = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
+    text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
+
+  } else {
+    createToast("Settings Load Failed! (Local storage)", "Settings not found.");
+  }
+}
+
+function saveSettingsLocalStrage() {
+  createToast('Settings Save', [
+    'Canvas Background Color...',
+    'Api port/host/check...',
+    'Base Settings...',
+    'Dpi...',
+    'Grid Line Size...',
+    'Margin From Panel...',
+    'Knife Space Size...',
+    'Save Completed!!'
+  ]);
+  const localSettingsData = {
+    knifePanelSpaceSize: document.getElementById('knifePanelSpaceSize').value,
+    canvasBgColor: document.getElementById('bg-color').value,
+    canvasDpi: document.getElementById('outputDpi').value,
+    canvasGridLineSize: document.getElementById('gridSizeInput').value,
+    canvasMarginFromPanel: document.getElementById('marginFromPanel').value,
+    Stable_Diffusion_WebUI_apiPort: document.getElementById('Stable_Diffusion_WebUI_apiPort').value,
+    Stable_Diffusion_WebUI_apiHost: document.getElementById('Stable_Diffusion_WebUI_apiHost').value,
+    apiHeartbeatCheckbox : document.getElementById('apiHeartbeatCheckbox').checked ,
+    text2img_basePrompt_text2img_prompt: text2img_basePrompt.text2img_prompt,
+    text2img_basePrompt_text2img_negativePrompt: text2img_basePrompt.text2img_negativePrompt,
+    text2img_basePrompt_text2img_seed: text2img_basePrompt.text2img_seed,
+    text2img_basePrompt_text2img_cfg_scale: text2img_basePrompt.text2img_cfg_scale,
+    text2img_basePrompt_text2img_width: text2img_basePrompt.text2img_width,
+    text2img_basePrompt_text2img_height: text2img_basePrompt.text2img_height,
+    text2img_basePrompt_text2img_samplingMethod: text2img_basePrompt.text2img_samplingMethod,
+    text2img_basePrompt_text2img_samplingSteps: text2img_basePrompt.text2img_samplingSteps,
+    text2img_basePrompt_text2img_scheduler: text2img_basePrompt.text2img_scheduler,
+    text2img_basePrompt_text2img_model: text2img_basePrompt.text2img_model,
+    text2img_basePrompt_text2img_hr_upscaler: text2img_basePrompt.text2img_hr_upscaler,
+    text2img_basePrompt_text2img_basePrompt_hr_scale: text2img_basePrompt.text2img_basePrompt_hr_scale,
+    text2img_basePrompt_text2img_basePrompt_hr_step: text2img_basePrompt.text2img_basePrompt_hr_step,
+    text2img_basePrompt_text2img_basePrompt_hr_denoising_strength: text2img_basePrompt.text2img_basePrompt_hr_denoising_strength
+  };
+  localStorage.setItem('localSettingsData', JSON.stringify(localSettingsData));
+}
+
+loadSettingsLocalStrage();
+
+
 function toggleAPI(event) {
   event.stopPropagation();
   event.preventDefault();
 
   const toggleCheckbox = document.getElementById('toggle-api');
   if (toggleCheckbox.checked) {
-      API_mode = apis.COMFYUI;
-      console.log('API_mode is now set to:', API_mode);
-      createToast("API CHANGE!", "COMFYUI");
+    API_mode = apis.COMFYUI;
+    console.log('API_mode is now set to:', API_mode);
+    createToast("API CHANGE!", "COMFYUI");
   } else {
-      API_mode = apis.A1111;
-      console.log('API_mode is now set to:', API_mode);
-      createToast("API CHANGE!", "WebUI(A1111/Forge)");
+    API_mode = apis.A1111;
+    console.log('API_mode is now set to:', API_mode);
+    createToast("API CHANGE!", "WebUI(A1111/Forge)");
   }
 }
 
@@ -342,14 +360,14 @@ function executeWithConfirmation(message, callback) {
   var executeWithConfirmationCloseButton = document.getElementById('executeWithConfirmationCloseButton');
 
   function handleConfirm() {
-      callback();
-      confirmModal.hide();
-      cleanup();
+    callback();
+    confirmModal.hide();
+    cleanup();
   }
 
   function handleCancel() {
-      confirmModal.hide();
-      cleanup();
+    confirmModal.hide();
+    cleanup();
   }
 
   function cleanup() {
@@ -365,7 +383,7 @@ function executeWithConfirmation(message, callback) {
 }
 
 
-document.getElementById('svgDownload').onclick = function() {
+document.getElementById('svgDownload').onclick = function () {
   var svg = canvas.toSVG();
   console.log(svg);
   svgDownload('canvas.svg', svg);

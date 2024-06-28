@@ -1,7 +1,5 @@
 function apiHeartbeat(){
-  console.log("apiHeartbeat", "start");
   const pingCheck = document.getElementById('apiHeartbeatCheckbox');
-  console.log("apiHeartbeat pingCheck", pingCheck.checked);
   if (pingCheck.checked) {
     
   } else {

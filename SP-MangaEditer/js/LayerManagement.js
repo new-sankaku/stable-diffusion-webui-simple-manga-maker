@@ -1,28 +1,26 @@
-
-
 function updateLayerPanel() {
   var layers = canvas.getObjects().slice().reverse();
   var layerContent = document.getElementById("layer-content");
   layerContent.innerHTML = "";
   var guidMap = createGUIDMap(layers);
-  var processedLayersFirst  = new Set();
+  var processedLayersFirst = new Set();
   var processedLayersSecond = new Set();
 
   // 最終的なレイヤー順序を保持する配列
   var finalLayerOrder = [];
 
-  layers.forEach(layer => {
+  layers.forEach((layer) => {
     if (layer.guids && layer.guids.length > 0) {
-    }else{
+    } else {
       layer.guids = [];
     }
   });
 
   // guidsを持つレイヤーを処理
-  layers.forEach(layer => {
+  layers.forEach((layer) => {
     if (layer.isPanel) {
       processedLayersFirst.add(layer);
-      layer.guids.forEach(guid => {
+      layer.guids.forEach((guid) => {
         var matchingLayer = guidMap.get(guid);
         if (matchingLayer) {
           processedLayersFirst.add(matchingLayer);
@@ -32,28 +30,28 @@ function updateLayerPanel() {
   });
 
   // guidsを持つレイヤーを処理
-  layers.forEach(layer => {
+  layers.forEach((layer) => {
     if (layer.isPanel) {
       finalLayerOrder.push(layer);
       processedLayersSecond.add(layer);
 
       var guidsNow = layer.guids;
       var guidsTemp = [];
-      layers.forEach(layer => {
+      layers.forEach((layer) => {
         var nowGuid = layer.guid;
-        if( guidsNow.includes(nowGuid) ){
+        if (guidsNow.includes(nowGuid)) {
           guidsTemp.push(nowGuid);
         }
       });
 
-      guidsTemp.forEach(guid => {
+      guidsTemp.forEach((guid) => {
         var matchingLayer = guidMap.get(guid);
         if (matchingLayer) {
           finalLayerOrder.push(matchingLayer);
           processedLayersSecond.add(matchingLayer);
         }
       });
-    }else{
+    } else {
       if (!processedLayersFirst.has(layer)) {
         finalLayerOrder.push(layer);
       }
@@ -63,11 +61,21 @@ function updateLayerPanel() {
   // レイヤーパネルの更新
   finalLayerOrder.forEach((layer, index) => {
     if (!layer.excludeFromLayerPanel) {
-      var layerDiv     = Object.assign(document.createElement("div"),   { className: "layer-item" });
-      var previewDiv   = Object.assign(document.createElement("div"),   { className: "layer-preview" });
-      var detailsDiv   = Object.assign(document.createElement("div"),   { className: "layer-details" });
-      var nameTextArea = Object.assign(document.createElement("input"), { className: "layer-name" });
-      var buttonsDiv   = Object.assign(document.createElement("div"),   { className: "layer-buttons" });
+      var layerDiv = Object.assign(document.createElement("div"), {
+        className: "layer-item",
+      });
+      var previewDiv = Object.assign(document.createElement("div"), {
+        className: "layer-preview",
+      });
+      var detailsDiv = Object.assign(document.createElement("div"), {
+        className: "layer-details",
+      });
+      var nameTextArea = Object.assign(document.createElement("input"), {
+        className: "layer-name",
+      });
+      var buttonsDiv = Object.assign(document.createElement("div"), {
+        className: "layer-buttons",
+      });
 
       if (isLayerPreview(layer)) {
         createPreviewImage(layer, previewDiv);
@@ -75,15 +83,18 @@ function updateLayerPanel() {
         var fullText = layer.text;
         nameTextArea.value = fullText.substring(0, 20);
       } else if (isVerticalText(layer)) {
-        var fullText = layer.getObjects().map(obj => obj.text).join('');
+        var fullText = layer
+          .getObjects()
+          .map((obj) => obj.text)
+          .join("");
         nameTextArea.value = fullText.substring(0, 15);
       }
 
       setNameTextAreaProperties(layer, nameTextArea, index);
 
       if (isText(layer)) {
-        detailsDiv.style.display = 'flex';
-        detailsDiv.style.alignItems = 'center';
+        detailsDiv.style.display = "flex";
+        detailsDiv.style.alignItems = "center";
       }
 
       detailsDiv.appendChild(nameTextArea);
@@ -94,7 +105,7 @@ function updateLayerPanel() {
         putSeedButton(buttonsDiv, layer, index);
         putCropImageDownloadButton(buttonsDiv, layer, index);
       }
-      if (layer.type == 'image') {
+      if (layer.type == "image") {
         putI2iButton(buttonsDiv, layer, index);
         putRunI2iButton(buttonsDiv, layer, index);
         putPromptButton(buttonsDiv, layer, index);
@@ -119,43 +130,51 @@ function updateLayerPanel() {
         updateControls(layer);
       };
 
-      var isMatchingLayer = layers.some(layerWithGUIDs => layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid));
-      if (isMatchingLayer) {
-        layerDiv.style.border = 'none';
-        layerDiv.style.borderLeft    = getCssValue('--boader-color-2px-solid-C');
-        layerDiv.style.borderBottom  = getCssValue('--boader-color-1px-solid-D');
+      var isHaveGuidLayer = layers.some(
+        (layerWithGUIDs) =>
+          layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid)
+      );
+      if (isHaveGuidLayer) {
+        layerDiv.style.border = "none";
+        layerDiv.style.borderLeft = getCssValue("--boader-color-2px-solid-C");
+        layerDiv.style.borderBottom = getCssValue("--boader-color-1px-solid-D");
         layerDiv.style.marginLeft = "10px";
         layerDiv.style.paddingLeft = "5px";
       } else {
-        layerDiv.style.border = 'none';
-          layerDiv.style.borderTop    = getCssValue('--layer-panel-boader-color-1px-solid-B');
-          layerDiv.style.borderBottom = getCssValue('--layer-panel-boader-color-1px-solid-B');
+        layerDiv.style.border = "none";
+        layerDiv.style.borderTop = getCssValue(
+          "--layer-panel-boader-color-1px-solid-B"
+        );
+        layerDiv.style.borderBottom = getCssValue(
+          "--layer-panel-boader-color-1px-solid-B"
+        );
       }
       layerContent.appendChild(layerDiv);
     }
   });
 }
 
-function setNameTextAreaProperties(layer, nameTextArea, index){
-  nameTextArea.value = layer.name || nameTextArea.value || layer.type + `${index + 1}`;
+function setNameTextAreaProperties(layer, nameTextArea, index) {
+  nameTextArea.value =
+    layer.name || nameTextArea.value || layer.type + `${index + 1}`;
   layer.name = nameTextArea.value;
   nameTextArea.rows = 1;
-  nameTextArea.style.resize = 'none';
-  nameTextArea.style.width = '100%';
-  nameTextArea.style.boxSizing = 'border-box';
-  nameTextArea.style.border = 'none';
+  nameTextArea.style.resize = "none";
+  nameTextArea.style.width = "100%";
+  nameTextArea.style.boxSizing = "border-box";
+  nameTextArea.style.border = "none";
   // nameTextArea.style.borderBottom = '1px solid #cccccc';
-  nameTextArea.style.outline = 'none';
-  nameTextArea.style.color = getCssValue('--text-color-B');
-  nameTextArea.style.borderColor = getCssValue('--boader-color-1px-solid-B');
-  nameTextArea.style.background = getCssValue('--background-color-B');
+  nameTextArea.style.outline = "none";
+  nameTextArea.style.color = getCssValue("--text-color-B");
+  nameTextArea.style.borderColor = getCssValue("--boader-color-1px-solid-B");
+  nameTextArea.style.background = getCssValue("--background-color-B");
   nameTextArea.oninput = function () {
     layer.name = nameTextArea.value;
   };
 
   if (isText(layer)) {
-    nameTextArea.style.flex = '1';
-    nameTextArea.style.marginRight = '5px';
+    nameTextArea.style.flex = "1";
+    nameTextArea.style.marginRight = "5px";
   }
 }
 
@@ -166,25 +185,23 @@ function putCropImageDownloadButton(buttonsDiv, layer, index) {
   button.onclick = function (e) {
     e.stopPropagation();
 
-    imageObject2DataURLByCrop(layer).then((croppedDataURL) => {
-      if (croppedDataURL) {
-        link = getLink(croppedDataURL);
-        link.click();
-      } else {
-        console.log("No valid activeObject");
-      }
-    }).catch((err) => {
-      console.error("Error cropping image:", err);
-    });
-    
-
+    imageObject2DataURLByCrop(layer)
+      .then((croppedDataURL) => {
+        if (croppedDataURL) {
+          link = getLink(croppedDataURL);
+          link.click();
+        } else {
+          console.log("No valid activeObject");
+        }
+      })
+      .catch((err) => {
+        console.error("Error cropping image:", err);
+      });
   };
 
   addTooltipByElement(button, "imageCropDownloadButton");
   buttonsDiv.appendChild(button);
-
 }
-
 
 function putImageDownloadButton(buttonsDiv, layer, index) {
   var button = document.createElement("button");
@@ -224,16 +241,15 @@ function putPromptButton(buttonsDiv, layer, index) {
   buttonsDiv.appendChild(promptButton);
 }
 
-
 function putInterrogateButtons(buttonsDiv, layer, index) {
   var clipButton = document.createElement("button");
   var deepDooruButton = document.createElement("button");
-  clipButton.innerHTML = '📎';
-  deepDooruButton.innerHTML = '📦';
+  clipButton.innerHTML = "📎";
+  deepDooruButton.innerHTML = "📦";
 
   clipButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinnerSuccess(index);
     areaHeader.appendChild(spinner);
     sdWebUI_Interrogate(layer, "clip", spinner.id);
@@ -242,7 +258,7 @@ function putInterrogateButtons(buttonsDiv, layer, index) {
 
   deepDooruButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinnerSuccess(index);
     areaHeader.appendChild(spinner);
     sdWebUI_Interrogate(layer, "deepdanbooru", spinner.id);
@@ -278,14 +294,13 @@ function putPromptButton(buttonsDiv, layer, index) {
   buttonsDiv.appendChild(promptButton);
 }
 
-
 function putRunI2iButton(buttonsDiv, layer, index) {
   var runButton = document.createElement("button");
-  runButton.id = 'runButton-' + index;
+  runButton.id = "runButton-" + index;
   runButton.innerHTML = '<i class="material-icons">directions_run</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinner(index);
     areaHeader.appendChild(spinner);
     sdWebUI_I2IProcessQueue(layer, spinner.id);
@@ -297,7 +312,6 @@ function putRunI2iButton(buttonsDiv, layer, index) {
   buttonsDiv.appendChild(runButton);
 }
 
-
 function putI2iButton(buttonsDiv, layer, index) {
   var i2iButton = document.createElement("button");
   i2iButton.innerHTML = '<i class="material-icons">settings</i>';
@@ -305,7 +319,7 @@ function putI2iButton(buttonsDiv, layer, index) {
     e.stopPropagation();
     openImage2ImagefloatingWindowItem(layer);
   };
-  
+
   addTooltipByElement(i2iButton, "i2iButton");
   buttonsDiv.appendChild(i2iButton);
 }
@@ -341,16 +355,15 @@ function putSeedButton(buttonsDiv, layer, index) {
 
 function putRunT2iButton(buttonsDiv, layer, index) {
   var runButton = document.createElement("button");
-  runButton.id = 'runButton-' + index;
+  runButton.id = "runButton-" + index;
   runButton.innerHTML = '<i class="material-icons">directions_run</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector('#layer-panel .area-header');
+    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinner(index);
     areaHeader.appendChild(spinner);
     // Call appropiate api to generate image
-    if (API_mode == apis.A1111)
-      sdWebUI_t2IProcessQueue(layer, spinner.id);
+    if (API_mode == apis.A1111) sdWebUI_t2IProcessQueue(layer, spinner.id);
     else if (API_mode == apis.COMFYUI)
       Comfyui_handle_process_queue(layer, spinner.id);
     index++;
@@ -370,13 +383,11 @@ function putT2iButton(buttonsDiv, layer, index) {
   buttonsDiv.appendChild(t2iButton);
 }
 
-
 function calculateCenter(layer) {
   const centerX = layer.left + (layer.width / 2) * layer.scaleX;
   const centerY = layer.top + (layer.height / 2) * layer.scaleY;
   return { centerX, centerY };
 }
-
 
 function createPreviewImage(layer, layerDiv) {
   var previewDiv = document.createElement("div");
@@ -409,7 +420,6 @@ function createPreviewImage(layer, layerDiv) {
     });
 
     tempCtx.restore();
-
   } else if (layer.type === "path") {
     // console.log("Layer is a path");
     var pathBounds = layer.getBoundingRect();
@@ -427,7 +437,6 @@ function createPreviewImage(layer, layerDiv) {
     layer.render(tempCtx);
 
     tempCtx.restore();
-
   } else if (isImage(layer) && typeof layer.getElement === "function") {
     var imgElement = layer.getElement();
     var imgWidth = imgElement.width;
@@ -441,21 +450,28 @@ function createPreviewImage(layer, layerDiv) {
     var offsetY = (canvasSize - drawHeight) / 2;
 
     tempCtx.drawImage(imgElement, offsetX, offsetY, drawWidth, drawHeight);
-
   } else if (isPanelType(layer)) {
     var layerCanvas = layer.toCanvasElement();
     var layerWidth = layer.width;
     var layerHeight = layer.height;
 
-    var layerScale = Math.min(canvasSize / layerWidth, canvasSize / layerHeight);
+    var layerScale = Math.min(
+      canvasSize / layerWidth,
+      canvasSize / layerHeight
+    );
     var layerDrawWidth = layerWidth * layerScale;
     var layerDrawHeight = layerHeight * layerScale;
 
     var layerOffsetX = (canvasSize - layerDrawWidth) / 2;
     var layerOffsetY = (canvasSize - layerDrawHeight) / 2;
 
-    tempCtx.drawImage(layerCanvas, layerOffsetX, layerOffsetY, layerDrawWidth, layerDrawHeight);
-
+    tempCtx.drawImage(
+      layerCanvas,
+      layerOffsetX,
+      layerOffsetY,
+      layerDrawWidth,
+      layerDrawHeight
+    );
   } else {
     layer.render(tempCtx);
   }
@@ -492,7 +508,6 @@ function highlightActiveLayer(activeIndex) {
   });
 }
 
-
 function highlightActiveLayerByCanvas() {
   var activeObject = canvas.getActiveObject();
   updateControls(activeObject);
@@ -518,9 +533,7 @@ function getActiveObjectIndex(canvas) {
   return index;
 }
 
-
 function LayersUp() {
-
   var activeObject = canvas.getActiveObject();
   if (activeObject) {
     activeObject.bringForward();
@@ -531,7 +544,6 @@ function LayersUp() {
 }
 
 function LayersDown() {
-
   var activeObject = canvas.getActiveObject();
   if (activeObject) {
     activeObject.sendBackwards();
