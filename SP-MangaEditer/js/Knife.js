@@ -359,12 +359,10 @@ function isSplitPoint(splitLine, tolerance, point) {
 
 
 function isHorizontal(resultLine, splitLine) {
-
   if (resultLine.length === 2) {
-
     let dx = splitLine[1].x - splitLine[0].x;
     let dy = splitLine[1].y - splitLine[0].y;
-    let angle = Math.atan2(dy, dx);
+    // let angle = Math.atan2(dy, dx);
     let isHorizontal = Math.abs(dy) <= Math.abs(dx);
 
     if (isHorizontal) {
