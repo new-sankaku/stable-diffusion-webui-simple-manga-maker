@@ -1145,7 +1145,7 @@ function viewPanelPrompt() {
   } else {
     canvas.getObjects().forEach((obj) => {
       if (isPanel(obj)) {
-        let viewText = obj.text2img_prompt || 'nothing';
+        let viewText = "Name:" + obj.name + "\nPrompt:" + (obj.text2img_prompt || 'nothing') ;
         const wrappedText = wrapText(viewText, obj.width * obj.scaleX - 10, 14);
         const text = new fabric.Text(wrappedText, {
           left: obj.left + 5,

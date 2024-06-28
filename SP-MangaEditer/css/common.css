@@ -47,7 +47,7 @@ body {
 }
 
 .floating-windowPromptClass .form-group {
-  margin-bottom: 5px;
+  margin: 5px;
   font-size: 13px;
 }
 
@@ -86,20 +86,22 @@ body {
 
 .prompt-replace-form-group {
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .prompt-replace-form-group textarea {
+  font-size: 13px;
   flex: 1;
   margin-right: 5px; 
   resize: none;
 }
 .prompt-replace-form-group textarea:last-child {
+  font-size: 13px;
   margin-right: 0;
 }
 
 .floating-window {
   position: fixed;
-  width: 315px;
+  width: 450px;
   height: 450px;
   bottom: 100px;
   left: 100px;

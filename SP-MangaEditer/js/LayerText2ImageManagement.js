@@ -1,6 +1,6 @@
 var floatingWindows = [];
 
-function openfloatingWindowItem(layer) {
+function openT2I_FloatingWindowItem(layer) {
   var floatingWindowItem = document.createElement("div");
   floatingWindowItem.className = "floating-windowPromptClass";
   floatingWindowItem.style.cursor = "move"; 
@@ -68,7 +68,7 @@ function openfloatingWindowItem(layer) {
 }
 
 
-function openImage2ImagefloatingWindowItem(layer) {
+function openI2I_floatingWindowItem(layer) {
   var floatingWindowItem = document.createElement("div");
   floatingWindowItem.className = "floating-windowPromptClass";
   floatingWindowItem.style.cursor = "move"; 
@@ -151,7 +151,7 @@ function adjustToMultipleOfEight(elementId) {
 function updatefloatingWindowItem(layer, floatingWindowItem) {
   floatingWindowItem.style.left = 50 + "px";
   floatingWindowItem.style.top = 50 + "px";
-  floatingWindowItem.style.width = "30%";
+  floatingWindowItem.style.width = "45%";
   
   console.log("updatefloatingWindowItem left top", floatingWindowItem.style.left, floatingWindowItem.style.top);
 }

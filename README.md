@@ -40,7 +40,7 @@ The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 </div>
 
 ## Features
-- **Multiple languages**: English, Japanese, Korean, French, Chinese, Russian, Spanish, Portuguese. Once you select a language, it will be loaded in the selected language from next time.
+- **Multiple languages**: English, Japanese, Korean, French, Chinese, Russian, Spanish, Portuguese, Thailand. Once you select a language, it will be loaded in the selected language from next time.
 - **Page Presets**: Preset comic panel layouts. 29 vertical, 16 horizontal.
 - **Panels**: Create and customize panels. Shape, color, line width, etc.
 - **Speech Bubbles**: More than 40 different speech bubble styles, each with customizable background color, line color, and transparency settings.
@@ -71,6 +71,9 @@ To use the Text2Image/Image2Image features you need to connect to the Stable Dif
 >git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git
 >cd stable-diffusion-webui-simple-manga-maker\SP-MangaEditer
 >index.html
+
+Upload
+>git fetch origin
 
 # Install(extension install)
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  

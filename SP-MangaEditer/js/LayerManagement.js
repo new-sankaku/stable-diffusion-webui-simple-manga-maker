@@ -312,7 +312,7 @@ function putI2iButton(buttonsDiv, layer, index) {
   i2iButton.innerHTML = '<i class="material-icons">settings</i>';
   i2iButton.onclick = function (e) {
     e.stopPropagation();
-    openImage2ImagefloatingWindowItem(layer);
+    openI2I_floatingWindowItem(layer);
   };
 
   addTooltipByElement(i2iButton, "i2iButton");
@@ -372,7 +372,7 @@ function putT2iButton(buttonsDiv, layer, index) {
   t2iButton.innerHTML = '<i class="material-icons">settings</i>';
   t2iButton.onclick = function (e) {
     e.stopPropagation();
-    openfloatingWindowItem(layer);
+    openT2I_FloatingWindowItem(layer);
   };
   addTooltipByElement(t2iButton, "t2iButton");
   buttonsDiv.appendChild(t2iButton);
