@@ -48,7 +48,6 @@
 
 #mangaImageCanvas {
   transform-origin: top left;
-  border: var(--border-color-3px-dashed-A);
 }
 
 
