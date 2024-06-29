@@ -1,6 +1,6 @@
 document.getElementById('knifeModeButton').addEventListener('click', function () {
   isKnifeMode = !isKnifeMode;
-  this.textContent = isKnifeMode ? 'Knife Mode(β): ON' : 'Knife Mode(β): OFF';
+  this.textContent = isKnifeMode ? 'Knife Mode: ON' : 'Knife Mode: OFF';
   changeMovement();
 });
 
@@ -164,7 +164,7 @@ function getPolygonAtPoint(point) {
   return foundPolygon;
 }
 
-
+//マイナス座標を補正
 function pointsAdjusted(points){
   // console.log("points", points);
 

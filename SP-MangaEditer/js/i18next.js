@@ -145,7 +145,6 @@ translation:{
 "A4-V-Scale":"A4 Scale Panel",
 "B4-H-Scale":"B4 Scale Panel",
 "B4-V-Scale":"B4 Scale Panel",
-"KnifeHelp":"The knife tool cuts well on a square, but sometimes doesn't work well on an angle.",
 "red":"Red",
 "green":"Green",
 "blue":"Blue",
@@ -460,7 +459,6 @@ translation:{
 "A4-V-Scale":"A4 横 縮尺パネル",
 "B4-H-Scale":"B4 縦 縮尺パネル",
 "B4-V-Scale":"B4 横 縮尺パネル",
-"KnifeHelp":"ナイフツールは正方形でうまく切れますが、角度がつくと上手く切れないことがあります。",
 "allRemove":"全て削除",
 "allRunT2I":"全て実行T2I",
 "angle":"角度",
@@ -718,10 +716,6 @@ translation:{
 "A4-V-Scale":"A4 세로 축척 패널",
 "B4-H-Scale":"B4 가로 축척 패널",
 "B4-V-Scale":"B4 세로 축척 패널",
-
-"KnifeHelp":"칼 도구는 사각형에서 잘 자르지만 때로는 각도에서 잘 작동하지 않습니다.",
-
-
 "red":"빨강",
 "green":"초록",
 "blue":"파랑",
@@ -990,9 +984,6 @@ translation:{
 "A4-V-Scale":"Échelle A4 verticale",
 "B4-H-Scale":"Échelle B4 horizontale",
 "B4-V-Scale":"Échelle B4 verticale",
-
-"KnifeHelp":"L'outil couteau coupe bien sur un carré, mais parfois ne fonctionne pas bien sur un angle.",
-
 "red":"Rouge",
 "green":"Vert",
 "blue":"Bleu",
@@ -1291,7 +1282,6 @@ translation:{
 "A4-V-Scale":"A4 纵向缩放面板",
 "B4-H-Scale":"B4 横向缩放面板",
 "B4-V-Scale":"B4 纵向缩放面板",
-"KnifeHelp":"刀具在正方形上切割效果好，但有时在角度上不太有效。",
 
 "red":"红色",
 "green":"绿色",
@@ -1592,7 +1582,6 @@ translation:{
 "A4-V-Scale":"Панель формата A4",
 "B4-H-Scale":"Панель формата B4",
 "B4-V-Scale":"Панель формата B4",
-"KnifeHelp":"Инструмент нож хорошо режет на квадрате, но иногда не работает под углом.",
 
 "red":"Красный",
 "green":"Зелёный",
@@ -1842,7 +1831,6 @@ translation:{
 "A4-V-Scale":"Panel de escala A4",
 "B4-H-Scale":"Panel de escala B4",
 "B4-V-Scale":"Panel de escala B4",
-"KnifeHelp":"La herramienta de cuchillo corta bien en un cuadrado, pero a veces no funciona bien en un ángulo.",
 
 "red":"Rojo",
 "green":"Verde",
@@ -2093,7 +2081,6 @@ translation:{
 "A4-V-Scale":"Painel de escala A4",
 "B4-H-Scale":"Painel de escala B4",
 "B4-V-Scale":"Painel de escala B4",
-"KnifeHelp":"A ferramenta de faca corta bem em um quadrado, mas às vezes não funciona bem em um ângulo.",
 
 "red":"Vermelho",
 "green":"Verde",
@@ -2361,7 +2348,6 @@ translation:{
 "A4-V-Scale":"แผงมาตราส่วน A4",
 "B4-H-Scale":"แผงมาตราส่วน B4",
 "B4-V-Scale":"แผงมาตราส่วน B4",
-"KnifeHelp":"เครื่องมือตัดใช้งานได้ดีบนสี่เหลี่ยมจัตุรัส แต่บางครั้งไม่ดีบนมุม",
 "red":"แดง",
 "green":"เขียว",
 "blue":"น้ำเงิน",

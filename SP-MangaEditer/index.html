@@ -445,9 +445,16 @@
             <div id="panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="pageManager">Page Manager</div>
                 <div id="panel-manager-items">
-
                     <hr>
-
+                    <button id="knifeModeButton">
+                        <i class="material-icons">edit_square</i>
+                        <span data-i18n="knifeMode">Knife Mode(β): OFF</span>
+                    </button>
+                    <div class="input-group">
+                        <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
+                        <input type="number" id="knifePanelSpaceSize" name="knifePanelSpaceSize" min="0" max="75" step="1" value="20">
+                    </div>
+                    <hr>
                     <button id="A4-H">
                         <i class="material-icons">crop_portrait</i>
                         <span data-i18n="A4-H-Scale">A4 Scale Panel</span>
@@ -515,9 +522,6 @@
                         <i class="fab fa-twitter"></i>
                         <span data-i18n="twitter_header">TW Head</span>
                     </button>
-                    
-                    
-
                     <hr>
                     <div class="input-group">
                         <label for="customPanelSizeX" data-i18n="customPanelSizeX">Width</label>
@@ -538,6 +542,7 @@
             <div id="custom-panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="custom-panel-manager-items">
+                    <hr>
                     <div class="input-group">
                         <label for="panelStrokeColor" data-i18n="line">Line:</label>
                         <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000"
@@ -647,18 +652,6 @@
                         <i class="material-icons">star</i>
                         <span data-i18n="star">Star</span>
                     </button>
-                    <hr>
-                    <button id="knifeModeButton">
-                        <i class="material-icons">edit_square</i>
-                        <span data-i18n="knifeMode">Knife Mode(β): OFF</span>
-                    </button>
-                    <div class="input-group">
-                        <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
-                        <input type="number" id="knifePanelSpaceSize" name="knifePanelSpaceSize" min="0" max="75" step="1" value="20">
-                    </div>
-                    <hr>
-                    <label data-i18n="KnifeHelp"></label>
-                    <hr>
                 </div>
             </div>
 
@@ -695,6 +688,7 @@
             <div id="text-area" style="display: none;">
                 <div class="area-header" data-i18n="text">Text</div>
                 <div id="text-preview-area">
+                    <hr>
                     <div class="input-group">
                         <label data-i18n="font">Font:</label>
                         <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
@@ -786,6 +780,7 @@
             <div id="tool-area" style="display: none;">
                 <div class="area-header" data-i18n="tools">Tools (β)</div>
                 <div id="tool-preview-area">
+                    <hr>
                     <button id="drawing-mode">
                         <i class="material-icons">mode_edit</i>
                         <span data-i18n="drawMode">Draw Mode</span>
@@ -859,6 +854,7 @@
             <div id="shape-area" style="display: none;">
                 <div class="area-header" data-i18n="shape">Shape</div>
                 <div id="shape-preview-area">
+                    <hr>
                     <div class="input-group">
                         <input type="text" id="svg_icon_searchInput" placeholder="Enter icon name"
                             data-i18n="svg_icon_search_placeholder"
