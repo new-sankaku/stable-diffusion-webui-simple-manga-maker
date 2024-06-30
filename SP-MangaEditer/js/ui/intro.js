@@ -11,9 +11,14 @@ function generateSteps() {
       title: i18next.t('intro_svg-container-landscape_title')
     },
     {
-      element: '#intro_panel-manager-area',
-      intro: i18next.t('intro_panel-manager-area_body'),
-      title: i18next.t('intro_panel-manager-area_title')
+      element: '#intro_page-manager-area',
+      intro: i18next.t('intro_page-manager-area_body'),
+      title: i18next.t('intro_page-manager-area_title')
+    },
+    {
+      element: '#intro_custom-panel-manager-area',
+      intro: i18next.t('intro_custom-panel-manager-area_body'),
+      title: i18next.t('intro_custom-panel-manager-area_title')
     },
     {
       element: '#intro_speech-bubble-area1',

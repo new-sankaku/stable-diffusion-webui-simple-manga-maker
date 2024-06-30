@@ -1,26 +1,5 @@
 @import url('root.css');
 
-/* :root {
-  --margin-top-base: 20px;
-  --margin-top-group: 10px;
-  --font-size-controls: 12px;
-  --min-width-controls: 180px;
-  --max-width-controls: 10%;
-  --margin-sides-controls: 5px;
-  --padding-sides-panel: 5px;
-  --margin-bottom-panel: 10px;
-  --margin-top-item: 5px;
-  --flex-label-width: 50px;
-  --input-range-width: 80%;
-  --input-color-width: 25%;
-  --input-color-height: 20px;
-  --flex-span-width: 30px;
-  --font-weight-header: bold;
-  --margin-bottom-header: 5px;
-  --margin-sides-separator: 5px;
-  --transition-collapse-icon: transform 0.3s;
-  --margin-left-toggle: 10px;
-} */
 
 .glfxControls {
   margin-top: var(--margin-top-base);

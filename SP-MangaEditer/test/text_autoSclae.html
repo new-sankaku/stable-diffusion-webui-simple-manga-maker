@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>SVG内径計算</title>
+<style>
+    svg {
+        border: 1px solid black;
+    }
+    .inner-box {
+        fill: none;
+        stroke: red;
+        stroke-width: 2;
+    }
+</style>
+</head>
+<body>
+<svg version="1.1" id="_x34_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 800 291" style="enable-background:new 0 0 800 291;" xml:space="preserve">
+<style type="text/css">
+    .st0{fill:#FFFFFF;}
+</style>
+<g>
+    <polygon points="740.1,233.8 744.5,226.3 692.1,187.8 655.8,228 708.3,243.2 702.9,254.3 780,264.4 762.1,250    "></polygon>
+    <polygon points="98.2,282.7 20,128.6 118.3,7.3 676.2,30.2 730.5,192 666.3,283.7    "></polygon>
+    <polygon class="st0" points="667.5,35.8 121.8,13.6 30.9,125.7 103.3,268.4 659.8,269.3 718,186.2    "></polygon>
+    <polygon class="st0" points="713.3,247.2 718,237.7 678.5,224.4 692.6,198.3 737.7,227.6 733.2,235.3 762.7,257.4    "></polygon>
+</g>
+<rect id="inner-box" class="inner-box" x="0" y="0" width="0" height="0"></rect>
+</svg>
+
+<script>
+window.addEventListener('load', () => {
+    // SVGから内側のpolygon要素をすべて取得
+    const innerPolygons = document.querySelectorAll('polygon.st0');
+    if (innerPolygons.length === 0) {
+        console.error('内側のpolygonが見つかりませんでした。');
+        return;
+    }
+
+    let largestPolygon = null;
+    let largestArea = 0;
+
+    // 各polygonのpoints属性を解析し、最大の領域を持つpolygonを特定
+    innerPolygons.forEach(polygon => {
+        const pointsStr = polygon.getAttribute('points');
+        const points = pointsStr.trim().split(/\s+/).map(p => p.split(',').map(Number));
+        
+        // 領域を計算するための補助関数
+        const area = calculatePolygonArea(points);
+        
+        if (area > largestArea) {
+            largestArea = area;
+            largestPolygon = points;
+        }
+    });
+
+    if (!largestPolygon) {
+        console.error('適切な内側のpolygonが見つかりませんでした。');
+        return;
+    }
+
+    // 最大の領域を持つpolygonの座標を取得
+    const points = largestPolygon;
+    
+    // 内径に接する最大の四角形を計算する
+    const boundingBox = getBoundingBox(points);
+    const innerBox = document.getElementById('inner-box');
+    innerBox.setAttribute('x', boundingBox.x);
+    innerBox.setAttribute('y', boundingBox.y);
+    innerBox.setAttribute('width', boundingBox.width);
+    innerBox.setAttribute('height', boundingBox.height);
+
+    console.log('内径の四角形:', boundingBox);
+
+    // ポリゴンの領域を計算する関数
+    function calculatePolygonArea(points) {
+        let area = 0;
+        const numPoints = points.length;
+        for (let i = 0; i < numPoints; i++) {
+            const [x1, y1] = points[i];
+            const [x2, y2] = points[(i + 1) % numPoints];
+            area += (x1 * y2 - x2 * y1);
+        }
+        return Math.abs(area) / 2;
+    }
+
+    // ポリゴンのbounding boxを計算する関数
+    function getBoundingBox(points) {
+        let minX = Number.POSITIVE_INFINITY;
+        let minY = Number.POSITIVE_INFINITY;
+        let maxX = Number.NEGATIVE_INFINITY;
+        let maxY = Number.NEGATIVE_INFINITY;
+
+        points.forEach(([x, y]) => {
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+        });
+
+        return {
+            x: minX,
+            y: minY,
+            width: maxX - minX,
+            height: maxY - minY
+        };
+    }
+});
+</script>
+</body>
+</html>

@@ -27,7 +27,6 @@
   --boader-color-2px-solid-C:2px dashed #555;
   --boader-color-1px-solid-D:1px dashed #555;
 
-  --border-color-3px-dashed-A:3px dashed  #aeaeae;
   --border-color-2px-dashed-B:2px dashed  #aeaeae;
   --border-2px-solid: 2px solid var(--border-color-C);
 
@@ -79,7 +78,6 @@
   --boader-color-2px-solid-C:2px dashed #bdbdbd;
   --boader-color-1px-solid-D:1px dashed #bdbdbd;
 
-  --border-color-3px-dashed-A:3px dashed  #656565;
   --border-color-2px-dashed-B:2px dashed  #656565;
   --border-2px-solid: 2px solid var(--border-color-C);
 
