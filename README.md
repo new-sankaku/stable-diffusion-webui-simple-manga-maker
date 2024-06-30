@@ -1,6 +1,7 @@
 [English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [Japanese](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
-# Manga Editor4o:Manga/Comic Creator for WebUI(A1111/Forge)
+# Manga Editor4o
+# Manga/Comic/Webtoon Creator for WebUI(A1111/Forge)
 This is an extension of Stable diffusion WebUI (Forge).
 The Text2Image function supports the Stable diffusion WebUI (Forge) API.
 
