@@ -2,7 +2,9 @@
 
 # Manga Editor Desu! Pro Edition
 This is an extension of Stable diffusion WebUI (Forge).
-The Text2Image function supports the Stable diffusion WebUI (Forge) API.
+
+Manga Editor Desu! is a lightweight browser application designed for intuitive operation. It supports a variety of features such as drag-and-drop image import, file selection, Text2Image functionality, and Image2Image functionality. For beginners, it offers pre-equipped panel layouts, making it easy to create manga. Additionally, it includes a knife tool that allows for professional panel layout customization, enabling you to freely cut panels. The features are continuously evolving, and regular updates are recommended.
+For those who find updates bothersome, the Demo site is recommended.
 
 ## Main Page
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/5.jpg" width="800">
