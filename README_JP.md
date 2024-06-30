@@ -1,6 +1,6 @@
 [英語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
-# Automatic1111/SD-WebUI-Forge用のマンガ/コミック作成ツール！
+# Manga Editor Desu! Pro Edition
 これはStable diffusion WebUI (Forge)の拡張機能です。
 Text2Image機能はStable diffusion WebUI (Forge) APIをサポートしています。
 
