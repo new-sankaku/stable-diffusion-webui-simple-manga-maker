@@ -1,8 +1,11 @@
 [英語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
-# Automatic1111/SD-WebUI-Forge用のマンガ/コミック作成ツール！
+# Manga Editor Desu! Pro Edition
 これはStable diffusion WebUI (Forge)の拡張機能です。
-Text2Image機能はStable diffusion WebUI (Forge) APIをサポートしています。
+
+Manga Editor Desu!は、直感的な操作を目指して設計された軽量なブラウザアプリケーションです。画像のドラッグアンドドロップ、ファイル選択によるインポート、Text2Image機能、Image2Image機能など、多彩な機能をサポートしています。初心者向けに標準装備されたコマ割りが用意されており、簡単にマンガを作成できます。また、プロ仕様のコマ割りが可能なナイフツールも備えており、自由にコマを切ることができます。機能は継続して発展し続けており、定期的なアップデートを推奨します。
+
+アップデートがめんどくさい方はDemoサイトを推奨しています。
 
 ## メインページ
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/5.jpg" width="800">
