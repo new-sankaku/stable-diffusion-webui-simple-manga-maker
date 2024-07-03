@@ -54,8 +54,8 @@ function isVisibleFloatingWindow() {
   ];
 
   const ids = [
-    'aaaaaaaaaaaaaaaId',
-    'aaaaaaaaaaaaaaaId'
+    'aaaaaaaaaaaaaaaId1',
+    'aaaaaaaaaaaaaaaId2'
   ];
   for (let className of classNames) {
     const windows = document.querySelectorAll(`.${className}`);

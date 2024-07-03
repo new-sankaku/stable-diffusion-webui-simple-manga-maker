@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SP-MangaEditer: The Premier Standalone Manga Editing Platform</title>
+    <title>Manga Editor Desu! Pro Edition: The Premier Standalone Manga Editing Platform</title>
 
     <meta name="description"
-        content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects. Perfect for both beginners and professional artists.">
+        content="Discover Manga Editor Desu! Pro Edition, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects. Perfect for both beginners and professional artists.">
     <meta name="keywords"
         content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, Stable diffusion Forge, stable-diffusion-webui-simple-manga-maker">
 
@@ -72,9 +72,9 @@
 
 <body>
     <div itemscope itemtype="http://schema.org/SoftwareApplication">
-        <meta itemprop="name" content="SP-MangaEditer">
+        <meta itemprop="name" content="Manga Editor Desu! Pro Edition">
         <meta itemprop="description"
-            content="Discover SP-MangaEditer, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects.">
+            content="Discover Manga Editor Desu! Pro Edition, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects.">
         <meta itemprop="applicationCategory" content="Multimedia">
 
         <div class="floating-window" id="myWindow">
@@ -90,7 +90,7 @@
 
         <nav class="navbar navbar-expand custom-navbar">
             <a class="navbar-brand" href="#">
-                <img src="02_images_svg/Logo/black_mode_logo.webp" alt="SP-MangaEditer Official Logo"
+                <img src="02_images_svg/Logo/black_mode_logo.webp" alt="Manga Editor Desu! Pro Edition Official Logo"
                     class="navbar-logo" id="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -1545,60 +1545,61 @@
     </div> -->
     <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
 
-
     <script src="third/jszip/jszip.min.js?v=3.1" defer></script>
     <script src="third/crypto-js/crypto-js.min.js?v=3.1"></script>
     <script src="third/Bootstrup/bootstrap.bundle.min.js?v=3.1"></script>
+
+    <script src="js/ui/intro.js?v=3.1" defer></script>
+    <script src="js/ui/Toast.js?v=3.1" defer></script>
+    <script src="js/ui/tippy.js?v=3.1" defer></script>
+    <script src="js/ui/i18next.js" defer></script>
+    <script src="js/ui/modeChange.js?v=3.1" defer></script>
+
+    <script src="js/util/FabricUtil.js?v=3.1" defer></script>
+    <script src="js/util/ImageUtil.js?v=3.1" defer></script>
+    <script src="js/util/AnimeUtil.js?v=3.1" defer></script>
+    <script src="js/util/ShareUtil.js?v=3.1" defer></script>
+
+    <script src="js/Settings.js?v=3.1" defer></script>
+    <script src="js/CanvasManager.js?v=3.1" defer></script>
+    <script src="js/ProjectManagement.js?v=3.1" defer></script>
+    <script src="js/Shortcut.js?v=3.1" defer></script>
+    <script src="js/PanelManager.js?v=3.1" defer></script>
+    <script src="js/PromptManager.js?v=3.1" defer></script>
+
+    <script src="js/layer/FloatingWindowManagement.js?v=3.1" defer></script>
+    <script src="js/layer/LayerAIManagement.js?v=3.1" defer></script>
+    <script src="js/layer/LayerManagement.js?v=3.1" defer></script>
+    <script src="js/layer/ImageHistoryManagement.js?v=3.1" defer></script>
+
+    <script src="js/sidebar/Sidebar.js?v=3.1" defer></script>
+    <script src="js/sidebar/TextEffect.js?v=3.1" defer></script>
+    <script src="js/sidebar/VerticalText.js?v=3.1" defer></script>
+    <script src="js/sidebar/SpeechBubbleEffect.js?v=3.1" defer></script>
+    <script src="js/sidebar/PenTools.js?v=3.1" defer></script>
+    <script src="js/sidebar/Knife.js?v=3.1" defer></script>
+
+    <script src="js/controle/CommonControleManagement.js?v=3.1" defer></script>
+    <script src="js/controle/ImageControleManager.js?v=3.1" defer></script>
+    <script src="js/controle/InfomationControle.js?v=3.1" defer></script>
+    <script src="js/controle/glfxControle.js?v=3.1" defer></script>
+
+    <script src="js/ai/queue/TaskQueue.js?v=3.1" defer></script>
+    <script src="js/ai/SDWebUIManagement.js?v=3.1" defer></script>
+    <script src="js/ai/ComfyuiManagement.js" defer></script>
+    <script src="js/ai/GenerativeAI.js?v=3.1" defer></script>
+
+    <script src="js/io/ImageDownload.js?v=3.1" defer></script>
+
+
+    <!-- <script src="js/effect/roughHelper.js?v=3.1" defer></script> -->
+    <script src="js/event/FabricManagement.js?v=3.1" defer></script>
 
     <script src="js/svg/GoogleIconNames.js?v=3.1"></script>
     <script src="js/svg/GoogleIconHelper.js?v=3.1"></script>
     <script src="js/svg/MangaPanelsImage_Landscape.js?v=3.1" defer></script>
     <script src="js/svg/MangaPanelsImage_Vertical.js?v=3.1" defer></script>
     <script src="js/svg/SpeechBubble.js?v=3.1" defer></script>
-    <script src="js/Settings.js?v=3.1" defer></script>
-    <script src="js/queue/TaskQueue.js?v=3.1" defer></script>
-    <script src="js/CanvasManager.js?v=3.1" defer></script>
-    <script src="js/util/FabricUtil.js?v=3.1" defer></script>
-    <script src="js/util/ImageUtil.js?v=3.1" defer></script>
-    <script src="js/Shortcut.js?v=3.1" defer></script>
-    <script src="js/PanelManager.js?v=3.1" defer></script>
-
-    <script src="js/Toast.js?v=3.1" defer></script>
-
-    <script src="js/FloatingWindowManagement.js?v=3.1" defer></script>
-
-    <script src="js/PromptManager.js?v=3.1" defer></script>
-    <script src="js/LayerText2ImageManagement.js?v=3.1" defer></script>
-    <script src="js/LayerManagement.js?v=3.1" defer></script>
-    <script src="js/CommonControleManagement.js?v=3.1" defer></script>
-    <script src="js/ImageTransformation.js?v=3.1" defer></script>
-    <script src="js/ImageHistoryManagement.js?v=3.1" defer></script>
-    <script src="js/Sidebar.js?v=3.1" defer></script>
-    <script src="js/TextEffect.js?v=3.1" defer></script>
-    <script src="js/VerticalText.js?v=3.1" defer></script>
-    <script src="js/ImageControleManager.js?v=3.1" defer></script>
-    <script src="js/SpeechBubbleEffect.js?v=3.1" defer></script>
-    <script src="js/StablediffusionWebUIManagement.js?v=3.1" defer></script>
-    <script src="js/ComfyuiManagement.js" defer></script>
-    <script src="js/ProjectManagement.js?v=3.1" defer></script>
-    <script src="js/ImageDownload.js?v=3.1" defer></script>
-    <script src="js/Anime.js?v=3.1" defer></script>
-    <script src="js/Tools.js?v=3.1" defer></script>
-    <script src="js/InfomationControle.js?v=3.1" defer></script>
-    <script src="js/effect/glfxControle.js?v=3.1" defer></script>
-
-    <script src="js/tippy/tippy.js?v=3.1" defer></script>
-    <script src="js/i18next.js?v=3.1" defer></script>
-
-    <script src="js/Knife.js?v=3.1" defer></script>
-    <!-- <script src="js/effect/roughHelper.js?v=3.1" defer></script> -->
-    <script src="js/event/FabricManagement.js?v=3.1" defer></script>
-    <script src="js/ui/modeChange.js?v=3.1" defer></script>
-
-    <script src="js/ui/intro.js?v=3.1" defer></script>
-    <script src="js/ai/GenerativeAI.js?v=3.1" defer></script>
-    <script src="js/util/ShareUtil.js?v=3.1" defer></script>
-
 </body>
 
 </html>

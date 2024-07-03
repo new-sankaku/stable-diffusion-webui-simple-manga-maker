@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>階層的タグ選択UI（画像キャッシュ機能付き）</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .upper-section {
+      display: flex;
+      flex: 1;
+      border-bottom: 1px solid #333;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #333;
+      padding: 10px;
+    }
+
+    .column:last-child {
+      border-right: none;
+    }
+
+    .column-2 {
+      flex: 2;
+    }
+
+    .column-6 {
+      flex: 6;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #ddd;
+    }
+
+    .scroll-area {
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .tag-button {
+      display: inline-block;
+      padding: 8px 15px;
+      margin: 0 5px 5px 0;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 2px solid;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tag-button:hover {
+      box-shadow: 0 0 15px currentColor;
+    }
+
+    .tag-button img {
+      max-width: 100px;
+      max-height: 100px;
+      display: block;
+      margin: 0 auto 5px;
+    }
+
+    .tag1-button {
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+    }
+
+    .tag2-button {
+      border-color: #4ecdc4;
+      color: #4ecdc4;
+    }
+
+    .tag3-button {
+      border-color: #45b7d1;
+      color: #45b7d1;
+    }
+
+    .tag4-button {
+      border-color: #f7b731;
+      color: #f7b731;
+    }
+
+    .tag5-button {
+      border-color: #a55eea;
+      color: #a55eea;
+    }
+
+    #imageContainer {
+      height: 200px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2px;
+      overflow-y: auto;
+      background-color: #2a2a2a;
+    }
+
+    #imageContainer img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      margin: 2px;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+
+    .image-placeholder {
+      width: 180px;
+      height: 180px;
+      background-color: #444;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #888;
+      font-size: 14px;
+      margin: 2px;
+      border-radius: 5px;
+    }
+
+    .selected-tag-group {
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      padding: 5px;
+      margin: 0 5px 5px 0;
+    }
+
+    .remove-tag {
+      cursor: pointer;
+      color: #ff6b6b;
+      margin-left: 5px;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background-color: #333;
+      margin: 10px 0;
+    }
+
+    /* Scrollbar styles */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #2a2a2a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="upper-section">
+      <div class="column column-2">
+        <h3>カテゴリ</h3>
+        <div id="tag1Container" class="scroll-area"></div>
+      </div>
+      <div class="column column-6">
+        <h3>中項目以降</h3>
+        <div id="tagLevels" class="scroll-area"></div>
+      </div>
+      <div class="column column-2">
+        <h3>選択されたプロンプト</h3>
+        <div id="selectedTags" class="scroll-area"></div>
+      </div>
+    </div>
+    <div id="imageContainer"></div>
+  </div>
+
+  <script>
+    const data = {
+  "High Quality Prompt": {
+    "Resolution": {
+      "4k": { "Desc": "4K解像度", "url": "4k.jpg" },
+      "8k": { "Desc": "8K解像度", "url": "8k.jpg" },
+      "ultra highres": { "Desc": "超高解像度", "url": "ultra-highres.jpg" }
+    },
+    "Visual": {
+      "beautiful": { "Desc": "美しい", "url": "beautiful.jpg" },
+      "exquisite": { "Desc": "この上なく素晴らしい", "url": "exquisite.jpg" },
+      "masterpiece": { "Desc": "傑作", "url": "masterpiece.jpg" }
+    },
+    "Quality": {
+      "best quality": { "Desc": "最高品質", "url": "best-quality.jpg" },
+      "ultra quality": { "Desc": "超高品質", "url": "ultra-quality.jpg" }
+    },
+    "Detail": {
+      "detailed": { "Desc": "詳細", "url": "detailed.jpg" },
+      "extremely detailed": { "Desc": "非常に詳細", "url": "extremely-detailed.jpg" },
+      "finely detailed": { "Desc": "細かく", "url": "finely-detailed.jpg" },
+      "insanely detailed": { "Desc": "めちゃくちゃ詳しい", "url": "insanely-detailed.jpg" },
+      "ultra detailed": { "Desc": "超精細", "url": "ultra-detailed.jpg" }
+    }
+  },
+  "Negative Prompt": {
+    "Quality": {
+      "low quality": { "Desc": "品質が低い", "url": "low-quality.jpg" },
+      "worst quality": { "Desc": "最悪の品質", "url": "worst-quality.jpg" }
+    },
+    "Focus": {
+      "out of focus": { "Desc": "ピントが合っていない", "url": "out-of-focus.jpg" }
+    },
+    "Visual": {
+      "ugly": { "Desc": "醜い", "url": "ugly.jpg" },
+      "bokeh": { "Desc": "ボケた", "url": "bokeh.jpg" },
+      "ugly face": { "Desc": "容姿が醜い顔", "url": "ugly-face.jpg" },
+      "partial face": { "Desc": "半分の顔", "url": "partial-face.jpg" },
+      "partial head": { "Desc": "半分の頭", "url": "partial-head.jpg" },
+      "bad face": { "Desc": "最悪の状態の顔", "url": "bad-face.jpg" },
+      "cropped": { "Desc": "切り取られている", "url": "cropped.jpg" }
+    },
+    "Error": {
+      "error": { "Desc": "エラー", "url": "error.jpg" }
+    },
+    "Artifacts": {
+      "JPEG artifacts": { "Desc": "JPEGの圧縮による劣化", "url": "JPEG-artifacts.jpg" }
+    },
+    "Resolution": {
+      "low resolution": { "Desc": "低解像度", "url": "low-resolution.jpg" }
+    },
+    "Anatomy": {
+      "bad anatomy": { "Desc": "人体の形状・構造が不正確", "url": "bad-anatomy.jpg" },
+      "long neck": { "Desc": "異常に長い首", "url": "long-neck.jpg" },
+      "deformed mutated disfigured": { "Desc": "変形している", "url": "deformed-mutated-disfigured.jpg" },
+      "missing arms": { "Desc": "腕が欠けている", "url": "missing-arms.jpg" },
+      "extra arms": { "Desc": "追加の腕がある", "url": "extra-arms.jpg" },
+      "mutated hands": { "Desc": "手が変形している", "url": "mutated-hands.jpg" },
+      "extra legs": { "Desc": "追加の足がある", "url": "extra-legs.jpg" },
+      "bad hands": { "Desc": "手の形が不自然または不正確", "url": "bad-hands.jpg" },
+      "poorly drawn hands": { "Desc": "手が下手に描かれている", "url": "poorly-drawn-hands.jpg" },
+      "malformed hands": { "Desc": "手が奇形", "url": "malformed-hands.jpg" },
+      "missing limb": { "Desc": "四肢が欠けている", "url": "missing-limb.jpg" },
+      "disconnected limbs": { "Desc": "繋がっていない四肢", "url": "disconnected-limbs.jpg" },
+      "extra fingers": { "Desc": "追加の指がある", "url": "extra-fingers.jpg" },
+      "bad fingers": { "Desc": "最悪の状態の手", "url": "bad-fingers.jpg" },
+      "liquid fingers": { "Desc": "溶けているような指", "url": "liquid-fingers.jpg" },
+      "poorly drawn fingers": { "Desc": "指の描写が下手", "url": "poorly-drawn-fingers.jpg" },
+      "missing fingers": { "Desc": "指が欠けている", "url": "missing-fingers.jpg" },
+      "extra digit": { "Desc": "通常より多い数の指がある", "url": "extra-digit.jpg" },
+      "fewer digits": { "Desc": "通常より少ない数の指がある", "url": "fewer-digits.jpg" },
+      "deformed eyes": { "Desc": "目が歪んでいる", "url": "deformed-eyes.jpg" }
+    },
+    "Content": {
+      "nsfw": { "Desc": "成人向けの要素を含む", "url": "nsfw.jpg" }
+    },
+    "Text": {
+      "text": { "Desc": "テキスト", "url": "text.jpg" },
+      "signature": { "Desc": "署名", "url": "signature.jpg" },
+      "watermark": { "Desc": "透かし", "url": "watermark.jpg" },
+      "username": { "Desc": "ユーザー名", "url": "username.jpg" },
+      "artist name": { "Desc": "アーティスト名", "url": "artist-name.jpg" },
+      "stamp": { "Desc": "スタンプ", "url": "stamp.jpg" },
+      "title, subtitle": { "Desc": "タイトル、サブタイトル", "url": "title-subtitle.jpg" },
+      "date": { "Desc": "日付", "url": "date.jpg" }
+    },
+    "Facial Expression": {
+      "blush": { "Desc": "ブラッシュ（頬に赤みをつけるメイク）", "url": "blush.jpg" },
+      "open mouth": { "Desc": "口を開けた", "url": "open-mouth.jpg" },
+      "make-up": { "Desc": "メイクアップ", "url": "make-up.jpg" },
+      "mascara": { "Desc": "マスカラ", "url": "mascara.jpg" },
+      "rouge": { "Desc": "ルージュ（口紅やチークなどの化粧品）", "url": "rouge.jpg" },
+      "half-open eyes": { "Desc": "半開きの目", "url": "half-open-eyes.jpg" },
+      "closed mouth": { "Desc": "口を閉じた", "url": "closed-mouth.jpg" }
+    },
+    "View": {
+      "multiple angle": { "Desc": "複数の角度", "url": "multiple-angle.jpg" },
+      "two shot": { "Desc": "二人の人物が同じ画面", "url": "two-shot.jpg" },
+      "split view": { "Desc": "画面の分割表示", "url": "split-view.jpg" },
+      "grid view": { "Desc": "グリッド表示", "url": "grid-view.jpg" }
+    }
+  },
+  "Facial Expression": {
+    "Joy": {
+      "Laughing": { "Desc": "笑っている", "url": "laughing.jpg" },
+      "Chuckling": { "Desc": "くすくすと", "url": "chuckling.jpg" },
+      "Delighted": { "Desc": "喜んで", "url": "delighted.jpg" },
+      "Excited": { "Desc": "興奮して", "url": "excited.jpg" },
+      "smirk": { "Desc": "にやっとした微笑", "url": "smirk.jpg" },
+      "Jubilant": { "Desc": "嬉々としている", "url": "jubilant.jpg" },
+      "Smiling": { "Desc": "笑顔に", "url": "smiling.jpg" },
+      "Rejoicing": { "Desc": "喜びに", "url": "rejoicing.jpg" },
+      "Joyful": { "Desc": "幸せそうに", "url": "joyful.jpg" },
+      "Bashful": { "Desc": "はにかんで", "url": "bashful.jpg" },
+      "smug": { "Desc": "得意げ", "url": "smug.jpg" },
+      "Elated": { "Desc": "大喜び", "url": "elated.jpg" }
+    },
+    "Anger": {
+      "Angry": { "Desc": "怒って", "url": "angry.jpg" },
+      "Indignant": { "Desc": "憤って", "url": "indignant.jpg" },
+      "Enraged": { "Desc": "怒りに燃えて", "url": "enraged.jpg" },
+      "Frustrated": { "Desc": "悔しがって", "url": "frustrated.jpg" },
+      "Infuriated": { "Desc": "頭にきて", "url": "infuriated.jpg" },
+      "Resentful": { "Desc": "怨みっぽく", "url": "resentful.jpg" },
+      "Aggressive": { "Desc": "攻撃的に", "url": "aggressive.jpg" },
+      "Antagonistic": { "Desc": "敵意を感じる", "url": "antagonistic.jpg" },
+      "disdain": { "Desc": "軽蔑", "url": "disdain.jpg" },
+      "Outraged": { "Desc": "憤慨して", "url": "outraged.jpg" },
+      "Yelling": { "Desc": "怒鳴って", "url": "yelling.jpg" },
+      "Complaining": { "Desc": "不平を言って", "url": "complaining.jpg" },
+      "Hostile": { "Desc": "敵意を持って", "url": "hostile.jpg" },
+      "Scowling": { "Desc": "怒り顔で", "url": "scowling.jpg" },
+      "Hateful": { "Desc": "憎しみを感じる", "url": "hateful.jpg" },
+      "Shouting": { "Desc": "怒号して", "url": "shouting.jpg" },
+      "Annoyed": { "Desc": "イライラする", "url": "annoyed.jpg" }
+    },
+    "Sad": {
+      "Saddened": { "Desc": "悲しんで", "url": "saddened.jpg" },
+      "Grieving": { "Desc": "心を痛めて", "url": "grieving.jpg" },
+      "Disheartened": { "Desc": "落胆して", "url": "disheartened.jpg" },
+      "Suffering": { "Desc": "苦しんで", "url": "suffering.jpg" },
+      "Pained": { "Desc": "痛みを感じる", "url": "pained.jpg" },
+      "despair": { "Desc": "絶望", "url": "despair.jpg" },
+      "Tearful": { "Desc": "涙ぐんで", "url": "tearful.jpg" },
+      "Painful": { "Desc": "つらい", "url": "painful.jpg" },
+      "Melancholic": { "Desc": "憂鬱に", "url": "melancholic.jpg" },
+      "Sobbing": { "Desc": "すすり泣き", "url": "sobbing.jpg" },
+      "Heavy-hearted": { "Desc": "心が重い", "url": "heavy-hearted.jpg" },
+      "shy": { "Desc": "照れる（ちょっと赤面）", "url": "shy.jpg" },
+      "red cheek": { "Desc": "赤面（頬を赤く）", "url": "red-cheek.jpg" },
+      "blush": { "Desc": "赤面した表情", "url": "blush.jpg" },
+      "nose blush": { "Desc": "鼻のあたりを赤らめる", "url": "nose-blush.jpg" },
+      "bashful": { "Desc": "はにかむ", "url": "bashful.jpg" },
+      "blush stickers": { "Desc": "ブラッシュスティッカー", "url": "blush-stickers.jpg" },
+      "embarrassed": { "Desc": "恥ずかしい", "url": "embarrassed.jpg" },
+      "full-face blush": { "Desc": "顔を真っ赤にする", "url": "full-face-blush.jpg" }
+    },
+    "Anxious": {
+      "worried": { "Desc": "心配している", "url": "worried.jpg" },
+      "nervous": { "Desc": "緊張している表情", "url": "nervous.jpg" },
+      "stressed": { "Desc": "緊張した表情", "url": "stressed.jpg" },
+      "scared": { "Desc": "怖がった表情", "url": "scared.jpg" },
+      "stupefied": { "Desc": "うろたえた表情", "url": "stupefied.jpg" },
+      "surprised": { "Desc": "驚いた表情", "url": "surprised.jpg" },
+      "shocked": { "Desc": "ショックを受けた表情", "url": "shocked.jpg" },
+      "stunned": { "Desc": "あっけにとられた表情", "url": "stunned.jpg" },
+      "painful": { "Desc": "苦しい・苦痛な表情", "url": "painful.jpg" },
+      "regrettable": { "Desc": "悔しい", "url": "regrettable.jpg" },
+      "disdain/contempt": { "Desc": "軽蔑する", "url": "disdain-contempt.jpg" },
+      "disgust/disgusted": { "Desc": "嫌悪感", "url": "disgust-disgusted.jpg" },
+      "evil smile/evil grin": { "Desc": "悪い笑顔", "url": "evil-smile-evil-grin.jpg" },
+      "grimace": { "Desc": "顔をゆがめる", "url": "grimace.jpg" },
+      "repulsed": { "Desc": "反発する", "url": "repulsed.jpg" },
+      "wince": { "Desc": "苦痛で眉をひそめる", "url": "wince.jpg" }
+    }
+  },
+  "Facial Features": {
+    "Eyes": {
+      "one eye closed": { "Desc": "片目を閉じている", "url": "one-eye-closed.jpg" },
+      "eyes closed": { "Desc": "目を閉じる", "url": "eyes-closed.jpg" },
+      "twinkle": { "Desc": "目がきらりと光る", "url": "twinkle.jpg" },
+      "sparkle": { "Desc": "目が輝く", "url": "sparkle.jpg" },
+      "watery eyes": { "Desc": "涙目", "url": "watery-eyes.jpg" },
+      "half closed eyes": { "Desc": "半目", "url": "half-closed-eyes.jpg" },
+      "tareme": { "Desc": "たれ目", "url": "tareme.jpg" },
+      "tsurime": { "Desc": "つり目", "url": "tsurime.jpg" },
+      "cute eyes": { "Desc": "可愛い目", "url": "cute-eyes.jpg" }
+    },
+    "Mouth": {
+      "close-mouth": { "Desc": "口を閉じる", "url": "close-mouth.jpg" },
+      "open-mouth": { "Desc": "口を開ける", "url": "open-mouth.jpg" },
+      "full lips": { "Desc": "ふくよかな唇", "url": "full-lips.jpg" },
+      "thin lips": { "Desc": "薄い唇", "url": "thin-lips.jpg" },
+      "plump lips": { "Desc": "ぽってりとした唇", "url": "plump-lips.jpg" },
+      "toothless smile": { "Desc": "歯のない笑顔", "url": "toothless-smile.jpg" },
+      "wide smile": { "Desc": "広い笑", "url": "wide-smile.jpg" },
+      "toothy grin": { "Desc": "歯を見せるにっこり笑顔", "url": "toothy-grin.jpg" },
+      "closed-mouth smile": { "Desc": "口を閉じた微笑み", "url": "closed-mouth-smile.jpg" },
+      "gummy smile": { "Desc": "歯茎が見える笑顔", "url": "gummy-smile.jpg" },
+      "straight teeth": { "Desc": "歯並びが良い", "url": "straight-teeth.jpg" }
+    },
+    "Nose": {
+      "straight nose": { "Desc": "直鼻", "url": "straight-nose.jpg" },
+      "upturned nose": { "Desc": "上向きの鼻", "url": "upturned-nose.jpg" },
+      "snub nose": { "Desc": "短鼻", "url": "snub-nose.jpg" },
+      "long nose": { "Desc": "長鼻", "url": "long-nose.jpg" },
+      "short nose": { "Desc": "短鼻", "url": "short-nose.jpg" },
+      "wide nose": { "Desc": "広い鼻", "url": "wide-nose.jpg" },
+      "narrow nose": { "Desc": "細い鼻", "url": "narrow-nose.jpg" },
+      "flat nose": { "Desc": "平らな鼻", "url": "flat-nose.jpg" },
+      "bulging nose": { "Desc": "膨らんだ鼻", "url": "bulging-nose.jpg" },
+      "concave nose": { "Desc": "凹んだ鼻", "url": "concave-nose.jpg" },
+      "pointed nose": { "Desc": "尖った鼻", "url": "pointed-nose.jpg" },
+      "rounded nose": { "Desc": "丸い鼻", "url": "rounded-nose.jpg" },
+      "angular nose": { "Desc": "角ばった鼻", "url": "angular-nose.jpg" }
+    }
+  },
+  "Gaze Direction": {
+    "Gaze": {
+      "Looking at Viewer": { "Desc": "カメラ目線", "url": "looking-at-viewer.jpg" },
+      "Staring Intently": { "Desc": "じっと見つめる", "url": "staring-intently.jpg" },
+      "Looking Side Glance": { "Desc": "横をちらっと見る", "url": "looking-side-glance.jpg" },
+      "Looking Over Shoulder": { "Desc": "肩越しに見る", "url": "looking-over-shoulder.jpg" },
+      "Looking Back": { "Desc": "振り返って見る", "url": "looking-back.jpg" },
+      "Gazing into the Distance": { "Desc": "遠くを見つめる", "url": "gazing-into-the-distance.jpg" },
+      "Gazing Skyward": { "Desc": "空を見上げる", "url": "gazing-skyward.jpg" },
+      "Eyes Closed": { "Desc": "目を閉じる", "url": "eyes-closed.jpg" },
+      "Gazing at Something Off-Frame": { "Desc": "フレーム外のものを見つめる", "url": "gazing-at-something-off-frame.jpg" },
+      "Glancing Elsewhere": { "Desc": "他の場所をちらっと見る", "url": "glancing-elsewhere.jpg" },
+      "Turning Head Away": { "Desc": "頭を別の方向に向ける", "url": "turning-head-away.jpg" },
+      "Gazing Upward": { "Desc": "上方を見つめる", "url": "gazing-upward.jpg" },
+      "Looking Up": { "Desc": "上を見る", "url": "looking-up.jpg" }
+    }
+  },
+  "Camera Angle": {
+    "Camera Angle": {
+      "shoot from above": { "Desc": "上からの撮影", "url": "shoot-from-above.jpg" },
+      "shoot from below": { "Desc": "下からの撮影", "url": "shoot-from-below.jpg" }
+    }
+  },
+  "Hair": {
+    "Hair Style": {
+      "straight hair": { "Desc": "ストレートヘアー", "url": "straight-hair.jpg" },
+      "bob cut": { "Desc": "ボブカット", "url": "bob-cut.jpg" },
+      "ponytail": { "Desc": "ポニーテール", "url": "ponytail.jpg" },
+      "side ponytail": { "Desc": "サイドポニーテール", "url": "side-ponytail.jpg" },
+      "drill hair": { "Desc": "ドリルカット", "url": "drill-hair.jpg" },
+      "long braid": { "Desc": "長めの三つ編み", "url": "long-braid.jpg" },
+      "single braid": { "Desc": "短めの三つ編み", "url": "single-braid.jpg" },
+      "braid hair": { "Desc": "三つ編み", "url": "braid-hair.jpg" },
+      "half updo": { "Desc": "ハーフアップ", "url": "half-updo.jpg" },
+      "low twintails": { "Desc": "ツインテール", "url": "low-twintails.jpg" },
+      "twintails": { "Desc": "ツインテール", "url": "twintails.jpg" }
+    },
+    "Hair Length": {
+      "pixie cut": { "Desc": "短髪", "url": "pixie-cut.jpg" },
+      "short hair": { "Desc": "ショートヘア", "url": "short-hair.jpg" },
+      "medium hair": { "Desc": "ミディアムヘア", "url": "medium-hair.jpg" },
+      "long hair": { "Desc": "ロングヘア", "url": "long-hair.jpg" }
+    },
+    "Hair Style": {
+      "blunt bangs": { "Desc": "前髪ぱっつん", "url": "blunt-bangs.jpg" },
+      "hair over one eye": { "Desc": "片目が髪で隠れる", "url": "hair-over-one-eye.jpg" },
+      "hime cut": { "Desc": "姫カット", "url": "hime-cut.jpg" },
+      "parted bang": { "Desc": "分け目のある前髪", "url": "parted-bang.jpg" },
+      "forehead": { "Desc": "センター分け", "url": "forehead.jpg" },
+      "asymmetrical bangs": { "Desc": "左右非対称の前髪", "url": "asymmetrical-bangs.jpg" },
+      "ponytail": { "Desc": "ポニーテール", "url": "ponytail.jpg" },
+      "side ponytail": { "Desc": "サイドポニーテール", "url": "side-ponytail.jpg" },
+      "half updo": { "Desc": "ハーフアップ", "url": "half-updo.jpg" },
+      "one side up": { "Desc": "ワンサイドアップ", "url": "one-side-up.jpg" },
+      "two side up": { "Desc": "ツーサイドアップ", "url": "two-side-up.jpg" },
+      "twintails": { "Desc": "ツインテール", "url": "twintails.jpg" },
+      "low twintails": { "Desc": "ローツインテール", "url": "low-twintails.jpg" },
+      "short twintails": { "Desc": "ショートツインテール", "url": "short-twintails.jpg" }
+    },
+    "Hair Texture": {
+      "ahoge": { "Desc": "アホ毛", "url": "ahoge.jpg" },
+      "messy hair": { "Desc": "くせ毛", "url": "messy-hair.jpg" },
+      "flipped hair": { "Desc": "外ハネ", "url": "flipped-hair.jpg" },
+      "curly inside hair": { "Desc": "内巻き毛", "url": "curly-inside-hair.jpg" },
+      "ringlets": { "Desc": "リングレット", "url": "ringlets.jpg" },
+      "hair bun": { "Desc": "お団子頭", "url": "hair-bun.jpg" }
+    },
+    "Hair Color": {
+      "red hair": { "Desc": "赤髪", "url": "red-hair.jpg" },
+      "orange hair": { "Desc": "オレンジ髪", "url": "orange-hair.jpg" },
+      "yellow hair": { "Desc": "黄色", "url": "yellow-hair.jpg" },
+      "green hair": { "Desc": "緑", "url": "green-hair.jpg" },
+      "blue hair": { "Desc": "青", "url": "blue-hair.jpg" },
+      "purple hair": { "Desc": "紫", "url": "purple-hair.jpg" },
+      "white hair": { "Desc": "白髪", "url": "white-hair.jpg" },
+      "black hair": { "Desc": "黒髪", "url": "black-hair.jpg" }
+    }
+  },
+  "Clothing": {
+    "Tops": {
+      "Shirt": { "Desc": "シャツ", "url": "shirt.jpg" },
+      "Short-sleeved shirt": { "Desc": "ショートシャツ", "url": "short-sleeved-shirt.jpg" },
+      "Shirt button": { "Desc": "シャツのボタン", "url": "shirt-button.jpg" },
+      "Casual shirt": { "Desc": "カジュアルシャツ", "url": "casual-shirt.jpg" },
+      "Polo shirt": { "Desc": "ポロシャツ", "url": "polo-shirt.jpg" },
+      "V-neck shirt": { "Desc": "Vネックシャツ", "url": "v-neck-shirt.jpg" },
+      "knit sweater": { "Desc": "ニット", "url": "knit-sweater.jpg" },
+      "Long-sleeved knit": { "Desc": "長袖", "url": "long-sleeved-knit.jpg" },
+      "Cardigan": { "Desc": "カーディガン", "url": "cardigan.jpg" },
+      "Chunky knit sweater": { "Desc": "チャンキーニット", "url": "chunky-knit-sweater.jpg" },
+      "Ribbed knit": { "Desc": "リブ編み", "url": "ribbed-knit.jpg" },
+      "Crewneck sweater": { "Desc": "クルーネック", "url": "crewneck-sweater.jpg" }
+    },
+    "Outerwear": {
+      "Jacket": { "Desc": "ジャケット", "url": "jacket.jpg" },
+      "Coat": { "Desc": "コート", "url": "coat.jpg" },
+      "Pea Coat": { "Desc": "ピーコート", "url": "pea-coat.jpg" },
+      "Biker Jacket": { "Desc": "バイカージャケット", "url": "biker-jacket.jpg" },
+      "Denim Jacket": { "Desc": "デニムジャケット", "url": "denim-jacket.jpg" },
+      "Bomber Jacket": { "Desc": "ボンバージャケット", "url": "bomber-jacket.jpg" },
+      "Raincoat": { "Desc": "レインコート", "url": "raincoat.jpg" },
+      "Double-breasted": { "Desc": "ダブルブレスト", "url": "double-breasted.jpg" },
+      "Field Jacket": { "Desc": "フィールドジャケット", "url": "field-jacket.jpg" },
+      "Anorak": { "Desc": "アノラック", "url": "anorak.jpg" }
+    },
+    "Bottoms": {
+      "Shorts": { "Desc": "ショートパンツ", "url": "shorts.jpg" },
+      "Cargo pants": { "Desc": "カーゴパンツ", "url": "cargo-pants.jpg" },
+      "Leggings": { "Desc": "レギンス", "url": "leggings.jpg" },
+      "Sweatpants": { "Desc": "スウェットパンツ", "url": "sweatpants.jpg" },
+      "Straight cut": { "Desc": "ストレートカット", "url": "straight-cut.jpg" },
+      "High-waisted": { "Desc": "ハイウエスト", "url": "high-waisted.jpg" },
+      "Wide Leg Pants": { "Desc": "ワイドパンツ", "url": "wide-leg-pants.jpg" },
+      "Jeans": { "Desc": "ジーンズ", "url": "jeans.jpg" },
+      "Slim fit": { "Desc": "スリムフィット", "url": "slim-fit.jpg" },
+      "Boot cut": { "Desc": "ブーツカット", "url": "boot-cut.jpg" },
+      "Low-waisted": { "Desc": "ローウエスト", "url": "low-waisted.jpg" }
+    },
+    "Skirt": {
+      "Mini skirt": { "Desc": "ミニスカート", "url": "mini-skirt.jpg" },
+      "Pleated skirt": { "Desc": "プリーツスカート", "url": "pleated-skirt.jpg" },
+      "A-line skirt": { "Desc": "Aラインスカート", "url": "a-line-skirt.jpg" },
+      "Denim skirt": { "Desc": "デニムスカート", "url": "denim-skirt.jpg" },
+      "High-waisted": { "Desc": "ハイウエスト", "url": "high-waisted.jpg" },
+      "Draped skirt": { "Desc": "ドレープスカート", "url": "draped-skirt.jpg" },
+      "Long skirt": { "Desc": "ロングスカート", "url": "long-skirt.jpg" },
+      "Wrap skirt": { "Desc": "ラップスカート", "url": "wrap-skirt.jpg" },
+      "Pencil skirt": { "Desc": "タイトスカート", "url": "pencil-skirt.jpg" },
+      "Flared skirt": { "Desc": "フレアスカート", "url": "flared-skirt.jpg" },
+      "Low-rise": { "Desc": "ローライズ", "url": "low-rise.jpg" },
+      "Ruffle skirt": { "Desc": "ラッフルスカート", "url": "ruffle-skirt.jpg" }
+    },
+    "Dress": {
+      "One-piece": { "Desc": "ワンピース", "url": "one-piece.jpg" },
+      "Shift Dress": { "Desc": "シフトドレス", "url": "shift-dress.jpg" },
+      "Wrap Dress": { "Desc": "ラップドレス", "url": "wrap-dress.jpg" },
+      "Pencil Dress": { "Desc": "ペンシルドレス", "url": "pencil-dress.jpg" },
+      "Halterneck Dress": { "Desc": "ホルターネック", "url": "halterneck-dress.jpg" },
+      "Maxi Dress": { "Desc": "マキシドレス", "url": "maxi-dress.jpg" },
+      "Mini Dress": { "Desc": "ミニドレス", "url": "mini-dress.jpg" },
+      "Sundress": { "Desc": "サンドレス", "url": "sundress.jpg" },
+      "Cocktail Dress": { "Desc": "カクテルドレス", "url": "cocktail-dress.jpg" },
+      "Empire Dress": { "Desc": "エンパイアドレス", "url": "empire-dress.jpg" }
+    }
+  },
+  "Body Type": {
+    "Height": {
+      "tall": { "Desc": "高い", "url": "tall.jpg" },
+      "towering": { "Desc": "そびえ立つような", "url": "towering.jpg" },
+      "lanky": { "Desc": "手足の長い", "url": "lanky.jpg" },
+      "leggy": { "Desc": "脚の長い", "url": "leggy.jpg" },
+      "heightened": { "Desc": "高まった", "url": "heightened.jpg" },
+      "elongated": { "Desc": "伸びた", "url": "elongated.jpg" },
+      "enormous": { "Desc": "巨大な", "url": "enormous.jpg" },
+      "gigantic": { "Desc": "巨大な", "url": "gigantic.jpg" },
+      "giant": { "Desc": "巨大な", "url": "giant.jpg" },
+      "petite": { "Desc": "小柄な", "url": "petite.jpg" },
+      "tiny": { "Desc": "非常に小さな", "url": "tiny.jpg" },
+      "height-challenged": { "Desc": "身長が低い（婉曲表現）", "url": "height-challenged.jpg" },
+      "short": { "Desc": "低い", "url": "short.jpg" },
+      "diminutive": { "Desc": "小柄な", "url": "diminutive.jpg" },
+      "dwarf": { "Desc": "小人", "url": "dwarf.jpg" },
+      "below average": { "Desc": "平均以下の", "url": "below-average.jpg" },
+      "out of proportion": { "Desc": "不均衡な", "url": "out-of-proportion.jpg" },
+      "short stature": { "Desc": "小柄な体格", "url": "short-stature.jpg" },
+      "short height": { "Desc": "低い身長", "url": "short-height.jpg" }
+    },
+    "Body Shape": {
+      "overweight": { "Desc": "肥満な", "url": "overweight.jpg" },
+      "obese": { "Desc": "肥満の", "url": "obese.jpg" },
+      "chubby": { "Desc": "ぽっちゃりした", "url": "chubby.jpg" },
+      "plump": { "Desc": "ふっくらした", "url": "plump.jpg" },
+      "rotund": { "Desc": "丸々とした", "url": "rotund.jpg" },
+      "portly": { "Desc": "太った", "url": "portly.jpg" },
+      "corpulent": { "Desc": "肥満の", "url": "corpulent.jpg" },
+      "slim": { "Desc": "スリム", "url": "slim.jpg" },
+      "fit": { "Desc": "ぴったりな", "url": "fit.jpg" },
+      "medium": { "Desc": "標準的な", "url": "medium.jpg" },
+      "slender": { "Desc": "細身の", "url": "slender.jpg" },
+      "underweight": { "Desc": "低体重な", "url": "underweight.jpg" },
+      "skinny": { "Desc": "やせている", "url": "skinny.jpg" },
+      "scrawny": { "Desc": "やせすぎな", "url": "scrawny.jpg" }
+    }
+  },
+  "Age": {
+    "baby": { "Desc": "赤ちゃん", "url": "baby.jpg" },
+    "infant": { "Desc": "幼児", "url": "infant.jpg" },
+    "toddler": { "Desc": "幼児", "url": "toddler.jpg" },
+    "very young child": { "Desc": "とても幼い子供", "url": "very-young-child.jpg" },
+    "child": { "Desc": "子供", "url": "child.jpg" },
+    "10 years old": { "Desc": "10歳", "url": "10-years-old.jpg" },
+    "15 years old": { "Desc": "15歳", "url": "15-years-old.jpg" },
+    "18 years old": { "Desc": "18歳", "url": "18-years-old.jpg" },
+    "college age": { "Desc": "大学時代", "url": "college-age.jpg" },
+    "20 years old": { "Desc": "20歳", "url": "20-years-old.jpg" },
+    "young adult": { "Desc": "若者", "url": "young-adult.jpg" },
+    "30 years old": { "Desc": "30歳", "url": "30-years-old.jpg" },
+    "thirties": { "Desc": "30代", "url": "thirties.jpg" },
+    "40 years old": { "Desc": "40歳", "url": "40-years-old.jpg" },
+    "forties": { "Desc": "40代", "url": "forties.jpg" },
+    "50 years old": { "Desc": "50歳", "url": "50-years-old.jpg" },
+    "age fifties": { "Desc": "50代", "url": "age-fifties.jpg" },
+    "60 years old": { "Desc": "60歳", "url": "60-years-old.jpg" },
+    "70 years old": { "Desc": "70歳", "url": "70-years-old.jpg" }
+  },
+  "Skin": {
+    "Skin Tone": {
+      "pale skin": { "Desc": "白い肌", "url": "pale-skin.jpg" },
+      "fair skin": { "Desc": "色白", "url": "fair-skin.jpg" },
+      "dark skin": { "Desc": "黒い肌", "url": "dark-skin.jpg" },
+      "tan skin": { "Desc": "日焼け肌", "url": "tan-skin.jpg" },
+      "tanned skin": { "Desc": "日焼けした肌", "url": "tanned-skin.jpg" },
+      "tanlines": { "Desc": "日焼けのライン", "url": "tanlines.jpg" },
+      "wheat skin": { "Desc": "小麦肌", "url": "wheat-skin.jpg" }
+    },
+    "Skin Texture": {
+      "shiny skin": { "Desc": "つやのある肌", "url": "shiny-skin.jpg" },
+      "oiled skin": { "Desc": "油っぽい肌", "url": "oiled-skin.jpg" },
+      "gloss skin": { "Desc": "艶やかな肌", "url": "gloss-skin.jpg" },
+      "glistening skin": { "Desc": "輝く肌", "url": "glistening-skin.jpg" },
+      "detailed skin": { "Desc": "細かい肌", "url": "detailed-skin.jpg" },
+      "porcelain skin": { "Desc": "磁器のような肌", "url": "porcelain-skin.jpg" },
+      "wet skin": { "Desc": "濡れた肌", "url": "wet-skin.jpg" },
+      "suntan": { "Desc": "日焼け", "url": "suntan.jpg" },
+      "sweaty skin": { "Desc": "汗ばんだ肌", "url": "sweaty-skin.jpg" },
+      "wrinkles skin": { "Desc": "しわ肌", "url": "wrinkles-skin.jpg" }
+    }
+  },
+  "Makeup": {
+    "Overall Makeup": {
+      "No-makeup look": { "Desc": "メイクなし", "url": "no-makeup-look.jpg" },
+      "Heavy makeup": { "Desc": "厚化粧", "url": "heavy-makeup.jpg" },
+      "Light makeup": { "Desc": "薄化粧", "url": "light-makeup.jpg" },
+      "Natural makeup": { "Desc": "ナチュラルメイク", "url": "natural-makeup.jpg" },
+      "full makeup": { "Desc": "フルメイク", "url": "full-makeup.jpg" },
+      "Glamorous makeup": { "Desc": "グラマラスメイク", "url": "glamorous-makeup.jpg" },
+      "Matte finish makeup": { "Desc": "マット仕上げ", "url": "matte-finish-makeup.jpg" },
+      "Dewy finish makeup": { "Desc": "つや肌仕上げ", "url": "dewy-finish-makeup.jpg" }
+    },
+    "Eyebrows": {
+      "thick eyebrow": { "Desc": "濃い眉毛", "url": "thick-eyebrow.jpg" },
+      "thin eyebrow": { "Desc": "薄い眉毛", "url": "thin-eyebrow.jpg" }
+    },
+    "Eyeshadow": {
+      "Eyeshadow": { "Desc": "アイシャドウ", "url": "eyeshadow.jpg" },
+      "Mascara": { "Desc": "マスカラ", "url": "mascara.jpg" },
+      "Eyeliner": { "Desc": "アイライナー", "url": "eyeliner.jpg" },
+      "False eyelashes": { "Desc": "つけまつげ", "url": "false-eyelashes.jpg" },
+      "Lash extensions": { "Desc": "まつげエクステ", "url": "lash-extensions.jpg" }
+    },
+    "Cheeks": {
+      "Cheek": { "Desc": "チーク", "url": "cheek.jpg" },
+      "Bronzer": { "Desc": "ブロンザー", "url": "bronzer.jpg" },
+      "Highlighter": { "Desc": "ハイライター", "url": "highlighter.jpg" }
+    },
+    "Lips": {
+      "red lips": { "Desc": "赤い口紅", "url": "red-lips.jpg" },
+      "pink lips": { "Desc": "ピンクの口紅", "url": "pink-lips.jpg" },
+      "orange lips": { "Desc": "オレンジの口紅", "url": "orange-lips.jpg" }
+    }
+  },
+  "Footwear": {
+    "Shoes": {
+      "sneakers": { "Desc": "スニーカー", "url": "sneakers.jpg" },
+      "sandals": { "Desc": "サンダル", "url": "sandals.jpg" },
+      "high-heels": { "Desc": "ハイヒール", "url": "high-heels.jpg" },
+      "pumps": { "Desc": "パンプス", "url": "pumps.jpg" },
+      "long boots": { "Desc": "ロングブーツ", "url": "long-boots.jpg" },
+      "ankle boots": { "Desc": "ショートブーツ", "url": "ankle-boots.jpg" },
+      "loafers": { "Desc": "ローファー", "url": "loafers.jpg" },
+      "leather shoes": { "Desc": "革靴", "url": "leather-shoes.jpg" },
+      "Running shoes": { "Desc": "ランニングシューズ", "url": "running-shoes.jpg" },
+      "rain boots": { "Desc": "レインブーツ", "url": "rain-boots.jpg" }
+    },
+    "Socks": {
+      "pantyhose": { "Desc": "パンスト", "url": "pantyhose.jpg" },
+      "thigh-high socks": { "Desc": "太もも丈", "url": "thigh-high-socks.jpg" },
+      "knee-high socks": { "Desc": "膝丈", "url": "knee-high-socks.jpg" },
+      "calf socks": { "Desc": "ふくらはぎ丈", "url": "calf-socks.jpg" },
+      "ankle socks": { "Desc": "くるぶし丈", "url": "ankle-socks.jpg" }
+    }
+  },
+  "Number of People": {
+    "Number of People": {
+      "1 boy, 2 girls": { "Desc": "1人の男の子、2人の女の子", "url": "1-boy-2-girls.jpg" },
+      "many boys, many girls": { "Desc": "複数人の男の子、複数人の女の子", "url": "many-boys-many-girls.jpg" },
+      "1 girl and 1 boy": { "Desc": "1人の女の子と1人の男の子", "url": "1-girl-1-boy.jpg" },
+      "1 father and 1 child": { "Desc": "父親と子ども", "url": "1-father-1-child.jpg" },
+      "group of friends": { "Desc": "友達のグループ", "url": "group-of-friends.jpg" },
+      "couple": { "Desc": "カップル", "url": "couple.jpg" },
+      "classmates": { "Desc": "クラスメート", "url": "classmates.jpg" },
+      "team of XX": { "Desc": "XXのチーム", "url": "team-of-xx.jpg" },
+      "group of students": { "Desc": "学生の集まり", "url": "group-of-students.jpg" }
+    }
+  },
+  "Pose": {
+    "Gesture": {
+      "raise arm": { "Desc": "片腕を上げる", "url": "raise-arm.jpg" },
+      "arms up": { "Desc": "両腕を上げる", "url": "arms-up.jpg" },
+      "arms behind back": { "Desc": "腕を後ろに回す", "url": "arms-behind-back.jpg" },
+      "cross arms in front": { "Desc": "腕を前に組む", "url": "cross-arms-in-front.jpg" },
+      "hand on hip": { "Desc": "手を腰に当てる", "url": "hand-on-hip.jpg" },
+      "peace sign": { "Desc": "ピースサイン", "url": "peace-sign.jpg" },
+      "spread arms": { "Desc": "腕を広げている", "url": "spread-arms.jpg" },
+      "praying hands": { "Desc": "手を合わせて祈る", "url": "praying-hands.jpg" },
+      "clenched fist": { "Desc": "拳を握る", "url": "clenched-fist.jpg" },
+      "hand on chest": { "Desc": "胸に手を置く", "url": "hand-on-chest.jpg" },
+      "pointing finger": { "Desc": "指をさす", "url": "pointing-finger.jpg" },
+      "thumbs up": { "Desc": "グッドポーズ", "url": "thumbs-up.jpg" },
+      "sitting": { "Desc": "座っている", "url": "sitting.jpg" },
+      "standing": { "Desc": "立っている", "url": "standing.jpg" },
+      "squatting": { "Desc": "しゃがんでいる", "url": "squatting.jpg" },
+      "cross-legged": { "Desc": "足を組む", "url": "cross-legged.jpg" },
+      "lying on back": { "Desc": "仰向けに寝る", "url": "lying-on-back.jpg" },
+      "legs spread": { "Desc": "足を広げる", "url": "legs-spread.jpg" },
+      "seiza": { "Desc": "正座", "url": "seiza.jpg" }
+    },
+    "Movement": {
+      "jumping": { "Desc": "ジャンプする", "url": "jumping.jpg" },
+      "running": { "Desc": "走る", "url": "running.jpg" },
+      "waving": { "Desc": "手を振る", "url": "waving.jpg" },
+      "walking and waving": { "Desc": "手を振りながら歩く", "url": "walking-and-waving.jpg" },
+      "punching": { "Desc": "パンチする", "url": "punching.jpg" },
+      "selfie": { "Desc": "自撮り", "url": "selfie.jpg" },
+      "singing": { "Desc": "歌う", "url": "singing.jpg" }
+    }
+  },
+  "Composition": {
+    "Camera Angle": {
+      "from front": { "Desc": "正面から", "url": "from-front.jpg" },
+      "from side": { "Desc": "横から", "url": "from-side.jpg" },
+      "from behind": { "Desc": "後ろから", "url": "from-behind.jpg" },
+      "from above": { "Desc": "上から", "url": "from-above.jpg" },
+      "from below": { "Desc": "下から", "url": "from-below.jpg" },
+      "dutch angle": { "Desc": "カメラ傾け", "url": "dutch-angle.jpg" }
+    },
+    "Size": {
+      "full body": { "Desc": "全身", "url": "full-body.jpg" },
+      "upper body": { "Desc": "上半身", "url": "upper-body.jpg" },
+      "face close-up": { "Desc": "顔アップ", "url": "face-close-up.jpg" },
+      "cowboy shot": { "Desc": "腰から上", "url": "cowboy-shot.jpg" }
+    }
+  },
+  "Background": {
+    "Weather/Sky": {
+      "clear sky": { "Desc": "晴れた空・青空・天気", "url": "clear-sky.jpg" },
+      "sunrise": { "Desc": "日の出", "url": "sunrise.jpg" },
+      "dawn": { "Desc": "明け方", "url": "dawn.jpg" },
+      "in the morning": { "Desc": "朝", "url": "in-the-morning.jpg" },
+      "in the noon": { "Desc": "昼、日中", "url": "in-the-noon.jpg" },
+      "in the evening": { "Desc": "夕方、日の入り", "url": "in-the-evening.jpg" },
+      "in the night": { "Desc": "夜", "url": "in-the-night.jpg" },
+      "cloud": { "Desc": "曇り、曇り空", "url": "cloud.jpg" },
+      "rain": { "Desc": "雨", "url": "rain.jpg" },
+      "Snowy": { "Desc": "雪景色", "url": "snowy.jpg" }
+    },
+    "Nature": {
+      "forest": { "Desc": "森、森林", "url": "forest.jpg" },
+      "cherry blossoms": { "Desc": "桜", "url": "cherry-blossoms.jpg" },
+      "river": { "Desc": "川、河", "url": "river.jpg" },
+      "mountain": { "Desc": "山", "url": "mountain.jpg" },
+      "Island": { "Desc": "島", "url": "island.jpg" },
+      "ocean": { "Desc": "海、ビーチ、海洋", "url": "ocean.jpg" },
+      "sandy beach": { "Desc": "砂浜", "url": "sandy-beach.jpg" },
+      "snow-capped mountain": { "Desc": "雪山", "url": "snow-capped-mountain.jpg" },
+      "cave": { "Desc": "洞窟", "url": "cave.jpg" },
+      "boat": { "Desc": "船、ボート、小舟", "url": "boat.jpg" }
+    },
+    "Indoor": {
+      "kitchen": { "Desc": "キッチン、調理場、炊事場", "url": "kitchen.jpg" },
+      "living": { "Desc": "リビング、居間", "url": "living.jpg" },
+      "room": { "Desc": "部屋、家の中", "url": "room.jpg" },
+      "closet": { "Desc": "クローゼット", "url": "closet.jpg" },
+      "Japanese-style room": { "Desc": "和室", "url": "japanese-style-room.jpg" },
+      "garden": { "Desc": "お庭、公園", "url": "garden.jpg" },
+      "school": { "Desc": "学校", "url": "school.jpg" },
+      "super market": { "Desc": "スーパーマーケット", "url": "super-market.jpg" },
+      "coffee shop": { "Desc": "カフェ、喫茶店", "url": "coffee-shop.jpg" },
+      "restaurant": { "Desc": "レストラン、外食", "url": "restaurant.jpg" }
+    },
+    "Commercial": {
+      "Shopping mall": { "Desc": "ショッピングモール", "url": "shopping-mall.jpg" },
+      "Market": { "Desc": "市場", "url": "market.jpg" },
+      "Skyscraper": { "Desc": "高層ビル", "url": "skyscraper.jpg" },
+      "Shopping street": { "Desc": "商店街", "url": "shopping-street.jpg" },
+      "Supermarket": { "Desc": "スーパーマーケット", "url": "supermarket.jpg" },
+      "Department store": { "Desc": "デパート", "url": "department-store.jpg" },
+      "Restaurant": { "Desc": "レストラン", "url": "restaurant.jpg" },
+      "Cafe": { "Desc": "カフェ", "url": "cafe.jpg" },
+      "Cinema": { "Desc": "映画館", "url": "cinema.jpg" },
+      "Club": { "Desc": "クラブ", "url": "club.jpg" },
+      "Hotel": { "Desc": "ホテル", "url": "hotel.jpg" },
+      "Bar": { "Desc": "バー", "url": "bar.jpg" },
+      "Art gallery": { "Desc": "美術館", "url": "art-gallery.jpg" },
+      "Hospital": { "Desc": "病院", "url": "hospital.jpg" },
+      "Bank": { "Desc": "銀行", "url": "bank.jpg" }
+    },
+    "Public Facility": {
+      "Library": { "Desc": "図書館", "url": "library.jpg" },
+      "Hospital": { "Desc": "病院", "url": "hospital.jpg" },
+      "School": { "Desc": "学校", "url": "school.jpg" },
+      "Police Station": { "Desc": "警察署", "url": "police-station.jpg" },
+      "Airport": { "Desc": "空港", "url": "airport.jpg" },
+      "Museum": { "Desc": "博物館", "url": "museum.jpg" },
+      "City Hall": { "Desc": "市役所", "url": "city-hall.jpg" },
+      "Shrine": { "Desc": "神社・寺院", "url": "shrine.jpg" },
+      "Post Office": { "Desc": "郵便局", "url": "post-office.jpg" },
+      "Park": { "Desc": "公園", "url": "park.jpg" },
+      "Bus Stop": { "Desc": "バス停", "url": "bus-stop.jpg" }
+    }
+  },
+  "Light Source": {
+    "Position": {
+      "Backlighting": { "Desc": "被写体の背後からの光源を配置する", "url": "backlighting.jpg" },
+      "Spotlight": { "Desc": "特定の場所に明るい光を当てる", "url": "spotlight.jpg" },
+      "Sidelighting": { "Desc": "横からの光による照明", "url": "sidelighting.jpg" },
+      "Underlighting": { "Desc": "下からの光による照明", "url": "underlighting.jpg" },
+      "Stage lights": { "Desc": "ステージ上で使用される照明", "url": "stage-lights.jpg" }
+    },
+    "Effect": {
+      "Volumetric lighting": { "Desc": "明確な光のビームが生じる効果で、ボリューム感を増す", "url": "volumetric-lighting.jpg" },
+      "Cinematic lighting": { "Desc": "映画的な光の表現に使用できる", "url": "cinematic-lighting.jpg" },
+      "Rim lighting": { "Desc": "被写体の周囲に光の輪郭線を加え、被写体を明るくする", "url": "rim-lighting.jpg" },
+      "Dynamic lighting": { "Desc": "動的な光で躍動感を与える", "url": "dynamic-lighting.jpg" },
+      "Sunlight": { "Desc": "画像に太陽光を追加し、自然の背景をレンダリングする", "url": "sunlight.jpg" },
+      "Dimly light": { "Desc": "暗い画像を生成するためのキーワード", "url": "dimly-light.jpg" },
+      "Crepuscular rays": { "Desc": "雲の中から光線が差し込む効果を生み出し、視覚効果を加える", "url": "crepuscular-rays.jpg" },
+      "Bokeh": { "Desc": "ボケ効果の表現に使用され、背景をぼかす効果", "url": "bokeh.jpg" }
+    },
+    "Intensity": {
+      "Strong light": { "Desc": "強い光の表現に使用され、逆光の効果もある", "url": "strong-light.jpg" },
+      "Light sparkles": { "Desc": "光の輝きの表現に使用され、光をやや強調する", "url": "light-sparkles.jpg" },
+      "Faint light": { "Desc": "微弱光の表現に使用され、かすかな光を表現する", "url": "faint-light.jpg" },
+      "Moonlight": { "Desc": "月明かりの表現に使用される", "url": "moonlight.jpg" },
+      "Darkness": { "Desc": "暗闇の表現に使用される", "url": "darkness.jpg" }
+    }
+  },
+  "Color": {
+    "Black": {
+      "black": { "Desc": "黒", "url": "black.jpg" },
+      "charcoal gray": { "Desc": "チャコールグレイ", "url": "charcoal-gray.jpg" },
+      "ivory black": { "Desc": "アイボリーブラック", "url": "ivory-black.jpg" }
+    },
+    "White": {
+      "white": { "Desc": "白", "url": "white.jpg" },
+      "gray": { "Desc": "灰色", "url": "gray.jpg" },
+      "taupe": { "Desc": "茶色とグレーを混ぜ合わせた色", "url": "taupe.jpg" },
+      "snow white": { "Desc": "雪の白", "url": "snow-white.jpg" },
+      "milky white": { "Desc": "ミルクの白", "url": "milky-white.jpg" },
+      "pearl white": { "Desc": "パールホワイト", "url": "pearl-white.jpg" },
+      "silver": { "Desc": "銀", "url": "silver.jpg" }
+    },
+    "Red": {
+      "red": { "Desc": "赤", "url": "red.jpg" },
+      "crimson": { "Desc": "クリムゾン", "url": "crimson.jpg" },
+      "garnet": { "Desc": "ガーネット", "url": "garnet.jpg" },
+      "magenta": { "Desc": "マゼンタ", "url": "magenta.jpg" },
+      "rose red": { "Desc": "バラの赤色", "url": "rose-red.jpg" },
+      "ruby": { "Desc": "ルビー", "url": "ruby.jpg" },
+      "scarlet": { "Desc": "スカーレット", "url": "scarlet.jpg" },
+      "strawberry": { "Desc": "ストロベリー", "url": "strawberry.jpg" },
+      "wine red": { "Desc": "ワインレッド", "url": "wine-red.jpg" },
+      "azalea": { "Desc": "アゼレア", "url": "azalea.jpg" }
+    },
+    "Orange": {
+      "orange": { "Desc": "オレンジ", "url": "orange.jpg" },
+      "apricot": { "Desc": "アプリコット", "url": "apricot.jpg" },
+      "burnt sienna": { "Desc": "バーントシェンナ", "url": "burnt-sienna.jpg" },
+      "cinnamon": { "Desc": "シナモン", "url": "cinnamon.jpg" },
+      "tangerine": { "Desc": "タンジェリン", "url": "tangerine.jpg" },
+      "vermilion": { "Desc": "朱色", "url": "vermilion.jpg" },
+      "persimmon orange": { "Desc": "オレンジの一種", "url": "persimmon-orange.jpg" }
+    },
+    "Brown": {
+      "brown": { "Desc": "茶", "url": "brown.jpg" },
+      "bister": { "Desc": "ビスタ", "url": "bister.jpg" },
+      "camel": { "Desc": "キャメル", "url": "camel.jpg" },
+      "chocolate": { "Desc": "チョコレート", "url": "chocolate.jpg" },
+      "hazel brown": { "Desc": "ヘーゼルブラウン", "url": "hazel-brown.jpg" },
+      "henna": { "Desc": "ヘナ", "url": "henna.jpg" },
+      "khaki": { "Desc": "カーキ色", "url": "khaki.jpg" },
+      "sepia": { "Desc": "セピア", "url": "sepia.jpg" },
+      "terracotta": { "Desc": "テラコッタ", "url": "terracotta.jpg" },
+      "umber": { "Desc": "チョコレート", "url": "umber.jpg" }
+    },
+    "Yellow": {
+      "yellow": { "Desc": "黄色", "url": "yellow.jpg" },
+      "beige": { "Desc": "ベージュ色", "url": "beige.jpg" },
+      "blond": { "Desc": "金色", "url": "blond.jpg" },
+      "maize": { "Desc": "トウモロコシ色", "url": "maize.jpg" },
+      "primrose yellow": { "Desc": "プリムローズイエロー", "url": "primrose-yellow.jpg" },
+      "marigold": { "Desc": "マリーゴールド", "url": "marigold.jpg" }
+    },
+    "Green": {
+      "green": { "Desc": "緑", "url": "green.jpg" },
+      "aquamarine": { "Desc": "アクアマリン", "url": "aquamarine.jpg" },
+      "celadon": { "Desc": "灰色がかった淡緑色", "url": "celadon.jpg" },
+      "emerald": { "Desc": "エメラルド", "url": "emerald.jpg" },
+      "forest green": { "Desc": "フォーレストグリーン", "url": "forest-green.jpg" },
+      "leaf green": { "Desc": "リーフグリーン", "url": "leaf-green.jpg" },
+      "viridian": { "Desc": "ビリジアン", "url": "viridian.jpg" }
+    },
+    "Blue": {
+      "blue": { "Desc": "青色", "url": "blue.jpg" },
+      "aqua": { "Desc": "水色", "url": "aqua.jpg" },
+      "cerulean": { "Desc": "空色", "url": "cerulean.jpg" },
+      "cyan": { "Desc": "シアン", "url": "cyan.jpg" },
+      "frosty blue": { "Desc": "フロスティブルー", "url": "frosty-blue.jpg" },
+      "indigo": { "Desc": "インディゴ", "url": "indigo.jpg" },
+      "navy blue": { "Desc": "ネイビーブルー", "url": "navy-blue.jpg" },
+      "ultramarine": { "Desc": "ウルトラマリン", "url": "ultramarine.jpg" },
+      "wedgewood blue": { "Desc": "ウェッジウッドブルー", "url": "wedgewood-blue.jpg" },
+      "azure": { "Desc": "アジュール", "url": "azure.jpg" }
+    },
+    "Purple": {
+      "purple": { "Desc": "紫", "url": "purple.jpg" },
+      "claret": { "Desc": "クラレット", "url": "claret.jpg" },
+      "crocus": { "Desc": "クロッカス", "url": "crocus.jpg" },
+      "iris": { "Desc": "アヤメ", "url": "iris.jpg" },
+      "lavender": { "Desc": "ラベンダー", "url": "lavender.jpg" },
+      "violet": { "Desc": "バイオレット", "url": "violet.jpg" },
+      "wistaria": { "Desc": "フジ属の花", "url": "wistaria.jpg" },
+      "peony": { "Desc": "ボタン", "url": "peony.jpg" }
+    }
+  },
+  "Art Style": {
+    "Style": {
+      "vector art": { "Desc": "ベクターアート", "url": "vector-art.jpg" },
+      "watercolor": { "Desc": "水彩画", "url": "watercolor.jpg" },
+      "line art": { "Desc": "線画", "url": "line-art.jpg" },
+      "gouache": { "Desc": "ガッシュ", "url": "gouache.jpg" },
+      "ink drawing": { "Desc": "インク画", "url": "ink-drawing.jpg" },
+      "pixel art": { "Desc": "ピクセルアート", "url": "pixel-art.jpg" },
+      "flat design": { "Desc": "フラットデザイン", "url": "flat-design.jpg" },
+      "sketch": { "Desc": "スケッチ", "url": "sketch.jpg" },
+      "digital painting": { "Desc": "デジタルペインティング", "url": "digital-painting.jpg" },
+      "3d model": { "Desc": "3dモデル", "url": "3d-model.jpg" },
+      "manga style": { "Desc": "マンガ風", "url": "manga-style.jpg" },
+      "pop art": { "Desc": "ポップアート", "url": "pop-art.jpg" },
+      "photorealistic": { "Desc": "フォトリアリスティック", "url": "photorealistic.jpg" },
+      "impasto": { "Desc": "厚塗り", "url": "impasto.jpg" },
+      "thick paint": { "Desc": "厚塗りのペイント", "url": "thick-paint.jpg" },
+      "oil painting": { "Desc": "油絵", "url": "oil-painting.jpg" },
+      "pastel": { "Desc": "パステル", "url": "pastel.jpg" },
+      "chiaroscuro": { "Desc": "キアロスクーロ（明暗法）", "url": "chiaroscuro.jpg" },
+      "contour drawing": { "Desc": "コンター画（輪郭画）", "url": "contour-drawing.jpg" },
+      "silhouette": { "Desc": "シルエット", "url": "silhouette.jpg" },
+      "low poly": { "Desc": "ローポリゴン", "url": "low-poly.jpg" },
+      "anime style": { "Desc": "アニメ風", "url": "anime-style.jpg" },
+      "comic style": { "Desc": "コミック風", "url": "comic-style.jpg" },
+      "realistic": { "Desc": "リアル調", "url": "realistic.jpg" }
+    }
+  }
+};
+
+
+    let currentPath = [];
+    let selectedTagGroups = [];
+    let selectedImages = [];
+    let imageCache = new Map();
+
+    document.addEventListener('DOMContentLoaded', initializeUI);
+
+    function initializeUI() {
+      showTag1();
+    }
+
+    function showTag1() {
+      const tag1Container = document.getElementById('tag1Container');
+      tag1Container.innerHTML = ''; // Clear existing buttons
+      Object.keys(data).forEach(tag => {
+        if (tag === "hr") {
+          const hr = document.createElement('hr');
+          tag1Container.appendChild(hr);
+        } else {
+          const button = createButton(tag, 1);
+          button.addEventListener('click', () => selectTag(tag, 0, data[tag]));
+          tag1Container.appendChild(button);
+        }
+      });
+    }
+
+    function createButton(text, level, url) {
+      const button = document.createElement('button');
+      button.classList.add('tag-button', `tag${level}-button`);
+      if (url) {
+        const placeholder = document.createElement('div');
+        placeholder.classList.add('image-placeholder');
+        placeholder.textContent = '読み込み中...';
+        button.appendChild(placeholder);
+
+        loadImage(url).then(img => {
+          placeholder.remove();
+          button.insertBefore(img, button.firstChild);
+        }).catch(() => {
+          placeholder.textContent = '画像を読み込めません';
+        });
+      }
+      const span = document.createElement('span');
+      span.textContent = text;
+      button.appendChild(span);
+      return button;
+    }
+
+    function loadImage(url) {
+      if (imageCache.has(url)) {
+        return Promise.resolve(imageCache.get(url).cloneNode());
+      }
+
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          imageCache.set(url, img);
+          resolve(img.cloneNode());
+        };
+        img.onerror = reject;
+        img.src = url;
+        img.alt = "";
+        img.style.maxWidth = '100px';
+        img.style.maxHeight = '100px';
+        img.style.display = 'block';
+        img.style.margin = '0 auto 5px';
+      });
+    }
+
+    function showTags(currentData, level) {
+      const tagLevels = document.getElementById('tagLevels');
+
+      // Clear all levels from the current one
+      while (tagLevels.children.length > level) {
+        tagLevels.removeChild(tagLevels.lastChild);
+      }
+
+      const levelContainer = document.createElement('div');
+
+      Object.keys(currentData).forEach(tag => {
+        const url = currentData[tag].url || (typeof currentData[tag] === 'object' && currentData[tag].hasOwnProperty('url') ? currentData[tag].url : null);
+        const button = createButton(tag, level + 1, url);
+        button.addEventListener('click', () => selectTag(tag, level, currentData[tag]));
+        levelContainer.appendChild(button);
+      });
+
+      tagLevels.appendChild(levelContainer);
+    }
+
+    function selectTag(tag, level, data) {
+      // Clear existing tags from the selected level
+      const tagLevels = document.getElementById('tagLevels');
+      while (tagLevels.children.length > level) {
+        tagLevels.removeChild(tagLevels.lastChild);
+      }
+
+      currentPath = currentPath.slice(0, level);
+      currentPath.push(tag);
+
+      if (typeof data === 'object' && !data.hasOwnProperty('Desc')) {
+        showTags(data, level + 1);
+      } else {
+        finishSelection(tag, data);
+      }
+    }
+
+    function finishSelection(tag, item) {
+      addSelectedTag(tag);
+      addImage(item.url);
+      currentPath = [];
+    }
+
+    function addSelectedTag(tag) {
+      selectedTagGroups.push(tag);
+      updateSelectedTagsDisplay();
+    }
+
+    function updateSelectedTagsDisplay() {
+      const selectedTagsElement = document.getElementById('selectedTags');
+      selectedTagsElement.innerHTML = ''; // Clear existing tags
+      selectedTagGroups.forEach((tag, index) => {
+        const groupElement = document.createElement('span');
+        groupElement.classList.add('selected-tag-group');
+        groupElement.textContent = tag;
+        const removeButton = document.createElement('span');
+        removeButton.classList.add('remove-tag');
+        removeButton.textContent = '×';
+        removeButton.addEventListener('click', () => removeTagGroup(index));
+        groupElement.appendChild(removeButton);
+        selectedTagsElement.appendChild(groupElement);
+      });
+    }
+
+    function removeTagGroup(index) {
+      selectedTagGroups.splice(index, 1);
+      selectedImages.splice(index, 1);
+      updateSelectedTagsDisplay();
+      updateImageDisplay();
+    }
+
+    function addImage(url) {
+      selectedImages.push(url);
+      updateImageDisplay();
+    }
+
+    function updateImageDisplay() {
+      const imageContainer = document.getElementById('imageContainer');
+      imageContainer.innerHTML = ''; // Clear existing images
+      selectedImages.forEach(url => {
+        if (url) {
+          loadImage(url).then(img => {
+            img.style.width = '180px';
+            img.style.height = '180px';
+            img.style.objectFit = 'contain';
+            img.style.margin = '2px';
+            img.style.border = '1px solid #444';
+            img.style.borderRadius = '5px';
+            imageContainer.appendChild(img);
+          }).catch(() => {
+            console.error('Failed to load image:', url);
+          });
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

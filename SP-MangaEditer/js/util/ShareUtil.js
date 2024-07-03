@@ -9,7 +9,7 @@ function openWindow(url) {
 function snsTweet(){
   clipCopy();
 
-  var tweetText = "\n\n #SPMangaEditer \nhttps://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker";
+  var tweetText = "\nCreated by Manga Editor Desu!\n#Manga_Editor_Desu\nhttps://new-sankaku.github.io/SP-MangaEditer/";
   var tweetUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweetText);
   openWindow(tweetUrl);
 }
