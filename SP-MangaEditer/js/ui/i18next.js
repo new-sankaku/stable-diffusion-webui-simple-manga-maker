@@ -4,6 +4,18 @@
 const resources = {
   en:{
 translation:{
+  selectClear: "Select Clear", 
+  settings: "Settings",
+  generate: "Generate",
+  editOn: "Edit Mode On",
+  editOff: "Edit Mode Off",
+  delete: "Delete",
+  copyAndPast: "Copy&Past",
+  font: "Change Font",
+  moveUp: "Move Up",
+  moveDown: "Move Down",
+  addPoint: "Add Point",
+  removePoint: "Remove Point",
 "thailand":"Thailand",
 "imageDownloadButton":"Download this image. The image includes the hidden parts.",
 "imageCropDownloadButton":"Download the image cropped within the panel frame.",
@@ -348,6 +360,18 @@ translation:{
   },
   ja:{
 translation:{
+"selectClear": "選択をクリア", 
+"settings": "設定",
+"generate": "生成",
+"editOn": "編集モードオン",
+"editOff": "編集モードオフ",
+"delete": "削除",
+"copyAndPast": "コピー＆ペースト",
+"font": "フォント変更",
+"moveUp": "上に移動",
+"moveDown": "下に移動",
+"addPoint": "ポイント追加",
+"removePoint": "ポイント削除",
 "thailand":"タイ",
 "imageDownloadButton": "この画像をダウンロードします。画像には隠れている部分も含まれます。",
 "imageCropDownloadButton": "パネル枠内で切り取られた画像をダウンロードします。",
@@ -607,7 +631,19 @@ translation:{
   },
   ko:{
 translation:{
-  "thailand":"태국",
+"selectClear": "선택 지우기", 
+"settings": "설정",
+"generate": "생성",
+"editOn": "편집 모드 켜기",
+"editOff": "편집 모드 끄기",
+"delete": "삭제",
+"copyAndPast": "복사&붙여넣기",
+"font": "글꼴 변경",
+"moveUp": "위로 이동",
+"moveDown": "아래로 이동",
+"addPoint": "포인트 추가",
+"removePoint": "포인트 삭제",
+"thailand":"태국",
 "imageDownloadButton": "이 이미지를 다운로드하십시오. 이미지에는 숨겨진 부분이 포함되어 있습니다.",
 "imageCropDownloadButton": "패널 프레임 내에서 잘린 이미지를 다운로드하십시오.",
 "accept_ratio": "비율 수락",
@@ -875,7 +911,19 @@ translation:{
   },
   fr:{
 translation:{
-  "thailand":"Thaïlande",
+"selectClear": "Sélectionner Clair", 
+"settings": "Paramètres",
+"generate": "Générer",
+"editOn": "Mode Édition Activé",
+"editOff": "Mode Édition Désactivé",
+"delete": "Supprimer",
+"copyAndPast": "Copier&Coller",
+"font": "Changer de Police",
+"moveUp": "Déplacer vers le Haut",
+"moveDown": "Déplacer vers le Bas",
+"addPoint": "Ajouter un Point",
+"removePoint": "Supprimer un Point",
+"thailand":"Thaïlande",
 "imageDownloadButton": "Téléchargez cette image. L'image comprend les parties cachées.",
 "imageCropDownloadButton": "Téléchargez l'image recadrée dans le cadre du panneau.",
 "accept_ratio": "Ratio d'acceptation",
@@ -1178,7 +1226,19 @@ translation:{
   },
   zh:{
 translation:{
-  "thailand":"泰国",
+"selectClear": "选择清除", 
+"settings": "设置",
+"generate": "生成",
+"editOn": "编辑模式开启",
+"editOff": "编辑模式关闭",
+"delete": "删除",
+"copyAndPast": "复制&粘贴",
+"font": "更改字体",
+"moveUp": "向上移动",
+"moveDown": "向下移动",
+"addPoint": "添加点",
+"removePoint": "删除点",
+"thailand":"泰国",
 "imageDownloadButton": "下载此图像。图像包含隐藏的部分。",
 "imageCropDownloadButton": "下载在面板框架内裁剪的图像。",
 "accept_ratio": "接受比例",
@@ -1479,7 +1539,19 @@ translation:{
   },
   ru:{
 translation:{
-  "thailand":"Таиланд",
+"selectClear": "Очистить выбор", 
+"settings": "Настройки",
+"generate": "Генерировать",
+"editOn": "Режим редактирования включен",
+"editOff": "Режим редактирования выключен",
+"delete": "Удалить",
+"copyAndPast": "Копировать&Вставить",
+"font": "Изменить шрифт",
+"moveUp": "Переместить вверх",
+"moveDown": "Переместить вниз",
+"addPoint": "Добавить точку",
+"removePoint": "Удалить точку",
+"thailand":"Таиланд",
 "imageDownloadButton": "Скачать это изображение. Изображение включает скрытые части.",
 "imageCropDownloadButton": "Скачать изображение, обрезанное в рамке панели.",
 "accept_ratio": "Принимаемое соотношение",
@@ -1732,7 +1804,19 @@ translation:{
   },
   es:{
 translation:{
-  "thailand":"Tailandia",
+"selectClear": "Seleccionar Borrar", 
+"settings": "Configuraciones",
+"generate": "Generar",
+"editOn": "Modo de Edición Activado",
+"editOff": "Modo de Edición Desactivado",
+"delete": "Eliminar",
+"copyAndPast": "Copiar&Pegar",
+"font": "Cambiar Fuente",
+"moveUp": "Mover Arriba",
+"moveDown": "Mover Abajo",
+"addPoint": "Agregar Punto",
+"removePoint": "Eliminar Punto",
+"thailand":"Tailandia",
 "imageDownloadButton": "Descargar esta imagen. La imagen incluye las partes ocultas.",
 "imageCropDownloadButton": "Descargar la imagen recortada dentro del marco del panel.",
 "accept_ratio": "Aceptar ratio",
@@ -1983,7 +2067,19 @@ translation:{
   },
   pt:{
 translation:{
-  "thailand":"Tailândia",
+"selectClear": "Selecionar Limpar", 
+"settings": "Configurações",
+"generate": "Gerar",
+"editOn": "Modo de Edição Ligado",
+"editOff": "Modo de Edição Desligado",
+"delete": "Excluir",
+"copyAndPast": "Copiar&Colar",
+"font": "Alterar Fonte",
+"moveUp": "Mover para Cima",
+"moveDown": "Mover para Baixo",
+"addPoint": "Adicionar Ponto",
+"removePoint": "Remover Ponto",
+"thailand":"Tailândia",
 "imageDownloadButton": "Baixar esta imagem. A imagem inclui as partes ocultas.",
 "imageCropDownloadButton": "Baixar a imagem recortada dentro do quadro do painel.",
 "accept_ratio": "Aceitar proporção",
@@ -2233,8 +2329,20 @@ translation:{
 "sdWebUIPing":"PING do SD WebUI"
 }
   },
-    "th":{
-      "translation":{
+  "th":{
+    "translation":{
+"selectClear": "เลือกเคลียร์", 
+"settings": "การตั้งค่า",
+"generate": "สร้าง",
+"editOn": "เปิดโหมดแก้ไข",
+"editOff": "ปิดโหมดแก้ไข",
+"delete": "ลบ",
+"copyAndPast": "คัดลอก&วาง",
+"font": "เปลี่ยนฟอนต์",
+"moveUp": "ย้ายขึ้น",
+"moveDown": "ย้ายลง",
+"addPoint": "เพิ่มจุด",
+"removePoint": "ลบจุด",
 "thailand":"ประเทศไทย",
 "imageDownloadButton":"ดาวน์โหลดรูปภาพนี้ รูปภาพรวมถึงส่วนที่ซ่อนอยู่",
 "imageCropDownloadButton":"ดาวน์โหลดรูปภาพที่ครอบในกรอบ",
@@ -2562,17 +2670,22 @@ console.warn(`Translation for key "${key}" not found.`);
 
 function changeLanguage(lng, event) {
   if (event) {
-event.preventDefault();
+    event.preventDefault();
   }
   i18next.changeLanguage(lng, function (err, t) {
 if (!err) {
-createToast("Save Language", "successfully!");
-localStorage.setItem('language', lng);
-updateContent();
-setLanguage(lng);
-updateLayerPanel();
+  createToast("Save Language", "successfully!");
+  localStorage.setItem('language', lng);
+  updateContent();
+  setLanguage(lng);
+  updateLayerPanel();
+
+  if (objectMenu && objectMenu.style.display === 'flex') {
+    showObjectMenu(lastClickType);
+  }
+
 } else {
-console.error('Failed to change language:', err);
+  console.error('Failed to change language:', err);
 }
   });
   reloadFont();

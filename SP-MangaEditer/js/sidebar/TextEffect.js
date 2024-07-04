@@ -375,7 +375,7 @@ function reloadFont() {
   const langAvailableFonts = [];
   const otherAvailableFonts = [];
   var langText = getSampleTextByLanguageCode();
-  console.log("langText", langText);
+  // console.log("langText", langText);
   
   for (const font of primaryFonts) {
     langAvailableFonts.push(font);

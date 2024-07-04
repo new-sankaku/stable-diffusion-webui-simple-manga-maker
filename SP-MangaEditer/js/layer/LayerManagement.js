@@ -357,10 +357,12 @@ function putRunT2iButton(buttonsDiv, layer, index) {
     var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinner(index);
     areaHeader.appendChild(spinner);
-    // Call appropiate api to generate image
-    if (API_mode == apis.A1111) sdWebUI_t2IProcessQueue(layer, spinner.id);
-    else if (API_mode == apis.COMFYUI)
+
+    if (API_mode == apis.A1111) {
+      sdWebUI_t2IProcessQueue(layer, spinner.id);
+    }else if (API_mode == apis.COMFYUI){
       Comfyui_handle_process_queue(layer, spinner.id);
+    }
     index++;
   };
   addTooltipByElement(runButton, "runButton");

@@ -64,16 +64,15 @@ function changeDoSaveHistory(){
 }
 
 function saveStateByListener(event, eventType) {
-
     if(!event){
         return;
     }
-
     if (notSave()) {
         return;
     }
-
-    if( isNotSaveObject(event) ){
+    if( eventType === 'object:removed' ){
+        //ok
+    }else if( isNotSaveObject(event) ){
         return;
     }
     saveState();
@@ -125,6 +124,7 @@ function restoreImage(json) {
 
 
 function saveState() {
+    console.log("saveState", stateStack.length);
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }

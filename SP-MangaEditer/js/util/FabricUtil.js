@@ -231,10 +231,6 @@ function imageObject2DataURLByCrop(activeObject) {
         console.log("objectWidth  activeObject.strokeWidth",objectWidth, activeObject.strokeWidth );
         console.log("objectHeight activeObject.strokeWidth",objectHeight, activeObject.strokeWidth );
 
-
-        // var strokeWidth = (activeObject.strokeWidth || 0) * Math.max(activeObject.scaleX, activeObject.scaleY);
-        // var strokeOffset = strokeWidth / 2;
-
         var scaleX = tempCanvas.width / activeObject.canvas.width;
         var scaleY = tempCanvas.height / activeObject.canvas.height;
         var cropX = (objectLeft) * scaleX;

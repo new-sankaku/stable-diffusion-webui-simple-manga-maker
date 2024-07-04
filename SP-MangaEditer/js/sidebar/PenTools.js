@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   function applyBrushSettings() {
-    console.log("applyBrushSettings");
+    // console.log("applyBrushSettings");
     if (!canvas.freeDrawingBrush) return;
     const lineStyle = document.getElementById("line-style").value;
 
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
       canvas.freeDrawingBrush.strokeDashArray = [brushWidth, brushWidth * 4];
     }
 
-    console.log("lineStyle", lineStyle);
+    // console.log("lineStyle", lineStyle);
   }
   applyBrushSettings();
 });

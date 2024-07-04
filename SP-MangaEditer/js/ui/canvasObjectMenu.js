@@ -1,0 +1,243 @@
+const languageSelector = document.getElementById('fabricjs-language-selector');
+let lastClickType = null;
+let objectMenu = null;
+let canvasMenuIndex = 100000;
+
+function createObjectMenu() {
+  if (objectMenu) {
+    objectMenu.remove();
+  }
+  objectMenu = document.createElement('div');
+  objectMenu.className = 'fabricjs-object-menu';
+  objectMenu.style.display = 'none';
+  document.body.appendChild(objectMenu);
+  objectMenu.addEventListener('click', handleMenuClick);
+}
+
+function updateObjectMenuPosition() {
+  if (!objectMenu) {
+    return;
+  }
+  const activeObject = canvas.getActiveObject();
+  if (!activeObject) {
+    return;
+  }
+
+  const boundingRect = activeObject.getBoundingRect(true, true);
+  const menuPadding = 20;
+  const canvasRect = canvas.getElement().getBoundingClientRect();
+  const canvasOffsetLeft = canvasRect.left;
+  const canvasOffsetTop = canvasRect.top;
+  const canvasWidth = canvasRect.width;
+  const canvasHeight = canvasRect.height;
+
+  let left = canvasOffsetLeft + boundingRect.left + boundingRect.width + menuPadding;
+  let top = canvasOffsetTop + boundingRect.top;
+  if (left + objectMenu.offsetWidth > canvasOffsetLeft + canvasWidth) {
+    left = Math.min(
+      canvasOffsetLeft + canvasWidth + 5,
+      window.innerWidth - objectMenu.offsetWidth
+    );
+  } else if (left < canvasOffsetLeft) {
+    left = Math.max(canvasOffsetLeft - 5, 0);
+  }
+
+  top = Math.max(top, canvasOffsetTop - 5);
+  if (top + objectMenu.offsetHeight > canvasOffsetTop + canvasHeight) {
+    top = Math.min(
+      canvasOffsetTop + canvasHeight + 5,
+      window.innerHeight - objectMenu.offsetHeight
+    );
+  }
+
+  objectMenu.style.left = `${left}px`;
+  objectMenu.style.top = `${top}px`;
+}
+
+function showObjectMenu(clickType) {
+  const activeObject = canvas.getActiveObject();
+  if (!activeObject) {
+    return;
+  }
+  if (!objectMenu) {
+    createObjectMenu();
+  }
+
+  let menuItems = [];
+  // let menuItems = ['settings', 'generate', 'edit', 'delete', 'copyAndPast', 'font', 'moveUp', 'moveDown', 'addPoint', 'removePoint', 'selectClear'];
+
+  if (isPanel(activeObject)) {
+    if (activeObject.edit) {
+      menuItems = clickType === 'right' ? [] : ['settings', 'generate', 'delete', 'editOff', 'selectClear'];
+    } else {
+      menuItems = clickType === 'right' ? [] : ['settings', 'generate', 'delete', 'editOn', 'selectClear'];
+    }
+  } else if (isImage(activeObject)) {
+    menuItems = clickType === 'right' ? [] : ['settings', 'generate', 'delete', 'selectClear'];
+
+  } else if (isText(activeObject)) {
+    menuItems = clickType === 'right' ? [] : ['delete', 'selectClear'];
+  }else{
+    menuItems = clickType === 'right' ? [] : ['delete', 'selectClear'];
+  }
+
+  if (menuItems.length === 0) {
+    return;
+  }
+
+
+  let menuContent = '';
+  menuItems.forEach(item => {
+    menuContent += `<button id="fabricjs-${item}-btn">${getText(item)}</button>`;
+  });
+
+  objectMenu.innerHTML = menuContent;
+  objectMenu.classList.add('active');
+  objectMenu.style.display = 'flex';
+  updateObjectMenuPosition();
+  lastClickType = clickType;
+}
+function handleMenuClick(e) {
+  const activeObject = canvas.getActiveObject();
+  if (!activeObject) {
+    return;
+  }
+
+  const action = e.target.id.replace('fabricjs-', '').replace('-btn', '');
+
+  switch (action) {
+    case 'settings':
+      if (isPanel(activeObject)) {
+        openT2I_FloatingWindowItem(activeObject);
+      }else if( isImage(activeObject) ){
+        openI2I_floatingWindowItem(activeObject);
+      }
+      break;
+    case 'generate':
+      if (isPanel(activeObject)) {
+        var areaHeader = document.querySelector("#layer-panel .area-header");
+        var spinner = createSpinner(canvasMenuIndex);
+        areaHeader.appendChild(spinner);
+    
+        if (API_mode == apis.A1111) {
+          sdWebUI_t2IProcessQueue(activeObject, spinner.id);
+        } else if (API_mode == apis.COMFYUI) {
+          Comfyui_handle_process_queue(activeObject, spinner.id);
+        }
+        canvasMenuIndex++;
+      } else if (isImage(activeObject)) {
+        var areaHeader = document.querySelector("#layer-panel .area-header");
+        var spinner = createSpinner(canvasMenuIndex);
+        areaHeader.appendChild(spinner);
+        sdWebUI_I2IProcessQueue(activeObject, spinner.id);
+        canvasMenuIndex++;
+      }
+      break;
+    case 'selectClear':
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+      return;
+    case 'delete':
+      canvas.remove(activeObject);
+      canvas.renderAll();
+      updateLayerPanel();
+      return;
+    case 'copyAndPast':
+      activeObject.clone(function (cloned) {
+        cloned.set({
+          left: cloned.left + 10,
+          top: cloned.top + 10
+        });
+        canvas.add(cloned);
+      });
+      break;
+    case 'moveUp':
+      canvas.bringForward(activeObject);
+      break;
+    case 'moveDown':
+      canvas.sendBackwards(activeObject);
+      break;
+    case 'editOff':
+    case 'editOn':
+      if (isPanel(activeObject)) {
+        Edit();
+      }
+      break;
+    case 'font':
+      if (activeObject instanceof fabric.IText) {
+        const newFont = activeObject.fontFamily === 'Arial' ? 'Times New Roman' : 'Arial';
+        activeObject.set('fontFamily', newFont);
+      }
+      break;
+    case 'addPoint':
+      if (activeObject instanceof fabric.Polygon) {
+        let points = activeObject.points;
+        let newPoint = {
+          x: (points[0].x + points[1].x) / 2,
+          y: (points[0].y + points[1].y) / 2
+        };
+        points.splice(1, 0, newPoint);
+        activeObject.set({ points: points });
+      }
+      break;
+    case 'removePoint':
+      if (activeObject instanceof fabric.Polygon && activeObject.points.length > 3) {
+        let points = activeObject.points;
+        points.pop();
+        activeObject.set({ points: points });
+      }
+      break;
+  }
+  canvas.renderAll();
+  
+  // メニューを再表示して更新
+  showObjectMenu(lastClickType);
+}
+
+function closeMenu() {
+  if (objectMenu) {
+    objectMenu.classList.remove('active');
+    objectMenu.style.display = 'none';
+  }
+}
+
+canvas.on('selection:created', () => {
+  showObjectMenu('left');
+});
+canvas.on('selection:updated', () => {
+  showObjectMenu('left');
+});
+
+canvas.wrapperEl.addEventListener('contextmenu', function (e) {
+  e.preventDefault();
+  const pointer = canvas.getPointer(e);
+  const clickedObject = canvas.findTarget(e, false);
+  if (clickedObject) {
+    canvas.setActiveObject(clickedObject);
+    showObjectMenu('right');
+  }
+});
+
+canvas.wrapperEl.addEventListener('mousedown', function (e) {
+  if (e.button === 0 && lastClickType === 'right') {
+    e.preventDefault();
+    const clickedObject = canvas.findTarget(e, false);
+    if (clickedObject) {
+      canvas.setActiveObject(clickedObject);
+      showObjectMenu('left');
+    }
+  }
+});
+
+canvas.on('selection:cleared', function () {
+  if (objectMenu) {
+    objectMenu.classList.remove('active');
+    objectMenu.style.display = 'none';
+  }
+});
+
+canvas.on('object:moving', updateObjectMenuPosition);
+canvas.on('object:scaling', updateObjectMenuPosition);
+canvas.on('object:rotating', updateObjectMenuPosition);
+canvas.on('after:render', updateObjectMenuPosition);
+createObjectMenu();
