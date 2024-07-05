@@ -72,7 +72,8 @@ function saveStateByListener(event, eventType) {
     }
     if( eventType === 'object:removed' ){
         //ok
-    }else if( isNotSaveObject(event) ){
+    }
+    if( isNotSaveObject(event) ){
         return;
     }
     saveState();

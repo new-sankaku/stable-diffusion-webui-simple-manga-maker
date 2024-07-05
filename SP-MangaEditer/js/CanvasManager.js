@@ -158,13 +158,7 @@ function zoomIn() {
 
   resizableContainer.scrollLeft = newScrollLeft;
   resizableContainer.scrollTop = newScrollTop;
-
-  // const offsetX = (newScrollLeft - (containerRect.left + containerRect.width / 2 - newContentRect.width / 2)) / containerRect.width * 100;
-  // const offsetY = (newScrollTop - (containerRect.top + containerRect.height / 2 - newContentRect.height / 2)) / containerRect.height * 100;
-
-  // console.log(`ズームイン後の中心位置の偏差: X = ${offsetX.toFixed(2)}%, Y = ${offsetY.toFixed(2)}%`);
   forcedAdjustCanvasSize();
-
 }
 
 function zoomFit() {
@@ -181,11 +175,6 @@ function zoomFit() {
 
   resizableContainer.scrollLeft = newScrollLeft;
   resizableContainer.scrollTop = newScrollTop;
-
-  // const offsetX = (newScrollLeft - (containerRect.left + containerRect.width / 2 - newContentRect.width / 2)) / containerRect.width * 100;
-  // const offsetY = (newScrollTop - (containerRect.top + containerRect.height / 2 - newContentRect.height / 2)) / containerRect.height * 100;
-
-  // console.log(`ズームイン後の中心位置の偏差: X = ${offsetX.toFixed(2)}%, Y = ${offsetY.toFixed(2)}%`);
   forcedAdjustCanvasSize();
 
 }
@@ -205,11 +194,6 @@ function zoomOut() {
 
     resizableContainer.scrollLeft = newScrollLeft;
     resizableContainer.scrollTop = newScrollTop;
-
-    // const offsetX = (newScrollLeft - (containerRect.left + containerRect.width / 2 - newContentRect.width / 2)) / containerRect.width * 100;
-    // const offsetY = (newScrollTop - (containerRect.top + containerRect.height / 2 - newContentRect.height / 2)) / containerRect.height * 100;
-
-    // console.log(`ズームアウト後の中心位置の偏差: X = ${offsetX.toFixed(2)}%, Y = ${offsetY.toFixed(2)}%`);
     forcedAdjustCanvasSize();
   }
 }

@@ -1,98 +1,110 @@
 
 .dark-mode {
+  --fjm-background-color: #333333;
+  --fjm-padding: 2px;
+  --fjm-z-index: 1000;
+  --fjm-border-radius: 2px;
+  --fjm-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fjm-font-size: 12px;
+  --fjm-border-color: #444444;
+  --fjm-button-margin: 2px 0;
+  --fjm-button-cursor: pointer;
+  --fjm-button-padding: 2px 3px;
+  --fjm-button-bg-color: #555555;
+  --fjm-button-border-color: #666666;
+  --fjm-button-border-radius: 3px;
+  --fjm-button-color: #cccccc;
+  --fjm-button-hover-bg-color: #666666;
+  --fjm-button-hover-color: #ffffff;
+  --fjm-button-active-bg-color: #777777;
+  --fjm-button-width: 100%;
+  --fjm-button-text-align: left;
+  --fjm-button-white-space: nowrap;
   --sidebar-gradient: linear-gradient(145deg, #262626, #363636);
-  
   --text-color-B: #dedede;
   --text-border: #ff9532;
-
   --nav-border: #212121;
   --nav-background-color:  #212121;;
   --nav-background-hover-color: #505050; 
-
   --background-color-A: #212121;;
   --background-color-B: #424242;
   --background-color-C: #505050;
   --background-color-D: #696969;
   --color-sidebar-icon: #696969;
-
   --button-text-color: #ffffff;
   --button-background: #696969;
   --button-border: 1px solid #555;
   --button-hover-background: #444;
   --button-hover-color: #fff;
-
   --boader-color-1px-solid-A:1px solid #ffffff;
   --boader-color-1px-solid-B:1px solid #555;
-
   --boader-color-2px-solid-C:2px dashed #555;
   --boader-color-1px-solid-D:1px dashed #555;
-
   --border-color-2px-dashed-B:2px dashed  #aeaeae;
   --border-2px-solid: 2px solid var(--border-color-C);
-
   --layer-panel-boader-color-1px-solid-B:1px dashed  #9b9b9b;
-  
   --border-color-C: #929292;
-
   --color-input-focus-border: #ffffff;
-
   --svg-preview-background: rgb(204, 204, 204);
-
   --dropdown-color: #e0e0e0;
   --dropdown-border: 1px solid #555;
-
   --color-dark-grey: #ccc;
   --color-scrollbar-track: #2e2e2e;
   --color-scrollbar-thumb: #555555;
-
   --select-button-color: #810000;
 }
 
 .light-mode {
-  --select-button-color: #ff9532;
+  --fjm-background-color: var(--background-color-A);
+  --fjm-padding: 2px;
+  --fjm-z-index: 1000;
+  --fjm-border-radius: 2px;
+  --fjm-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fjm-font-size: 12px;
+  --fjm-border-color: var(--nav-border);
+  --fjm-button-margin: 2px 0;
+  --fjm-button-cursor: pointer;
+  --fjm-button-padding: 2px 3px;
+  --fjm-button-bg-color: var(--button-background);
+  --fjm-button-border-color: var(--dropdown-border);
+  --fjm-button-border-radius: 3px;
+  --fjm-button-color: var(--button-text-color);
+  --fjm-button-hover-bg-color: var(--button-hover-background);
+  --fjm-button-hover-color: var(--button-hover-color);
+  --fjm-button-active-bg-color: var(--background-color-B);
+  --fjm-button-width: 100%;
+  --fjm-button-text-align: left;
+  --fjm-button-white-space: nowrap;
 
+  --select-button-color: #ff9532;
   --sidebar-gradient:rgb(255, 217, 141);
-  
   --text-color-B: #242424;
   --text-border: #ff9532;
-
   --nav-border: #dedede;
   --nav-background-color:rgb(255, 245, 226);
   --nav-background-hover-color:rgb(255, 217, 141);
-
   --background-color-A: rgb(255, 245, 226);
   --background-color-B: rgb(255, 227, 172);
   --background-color-C: rgb(255, 217, 141);
   --background-color-D: rgb(255, 212, 125);
   --color-sidebar-icon: rgb(0, 0, 0);
-
   --button-text-color: #000000;
   --button-background: #ffc993;
   --button-border: 1px solid #afafaf;
   --button-hover-background: #d25f00;
   --button-hover-color: #000000;
-
   --boader-color-1px-solid-A:1px solid #000000;
   --boader-color-1px-solid-B:1px solid #000000;
-
   --boader-color-2px-solid-C:2px dashed #bdbdbd;
   --boader-color-1px-solid-D:1px dashed #bdbdbd;
-
   --border-color-2px-dashed-B:2px dashed  #656565;
   --border-2px-solid: 2px solid var(--border-color-C);
-
   --layer-panel-boader-color-1px-solid-B:1px dashed  #404040;
-
-
   --border-color-C: #727272;
-
   --color-input-focus-border: #000000;
-
   --svg-preview-background: rgb(255, 239, 206);
-
   --dropdown-color: #4a4a4a;
   --dropdown-border: 1px solid #c0c0c0;
-
   --color-dark-grey: #5b5b5b;
   --color-scrollbar-track: rgb(255, 239, 206);
   --color-scrollbar-thumb: rgb(255, 210, 121);
@@ -100,12 +112,10 @@
 
 
 :root {
-
   --toggle-off-background: #4f9eff;
   --toggle-on-background: #ff5e57;
   --toggle-button-color: #fff;
   --toggle-button-shadow: rgba(0, 0, 0, 0.2);
-
   --color-window-border: 2px solid #007bff;
   --color-window-header-bg: #007bff;
   --color-button-hover-bg: #218838;
@@ -113,12 +123,10 @@
   /* Crop Button */
   --box-shadow-color: #007bff;
   --box-shadow-window: 0 0 15px #007bff;
-
   --checkbox-background: #1c1c1c;
   --checkbox-border: 1px solid #555;
   --checkbox-checked-background: #82aaff;
   --radio-checked-background: #82aaff;
-
   --font-family-section: aglet-mono-variable, sans-serif;
   --font-family-window: Arial, sans-serif;
   --transition-bg-color: background-color 0.3s;
@@ -137,7 +145,6 @@
   --transform-scale-hover: scale(1.1);
   --justify-content-space-between: space-between;
   --transition-collapse-icon: transform 0.3s;
-
   --flex-layer-panel: 0 0 20%;
   --navbar-padding: 0;
   --padding-button: 0px 3px;

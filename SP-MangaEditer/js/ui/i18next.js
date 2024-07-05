@@ -4,6 +4,8 @@
 const resources = {
   en:{
 translation:{
+  knifeOff:"Knife OFF",
+  knifeOn:"Knife ON",
   selectClear: "Select Clear", 
   settings: "Settings",
   generate: "Generate",
@@ -360,11 +362,13 @@ translation:{
   },
   ja:{
 translation:{
+    "knifeOff": "ナイフOFF",
+    "knifeOn": "ナイフON",
 "selectClear": "選択をクリア", 
 "settings": "設定",
 "generate": "生成",
-"editOn": "編集モードオン",
-"editOff": "編集モードオフ",
+"editOn": "編集モードON",
+"editOff": "編集モードOFF",
 "delete": "削除",
 "copyAndPast": "コピー＆ペースト",
 "font": "フォント変更",
@@ -631,6 +635,8 @@ translation:{
   },
   ko:{
 translation:{
+"knifeOff": "나이프 OFF",
+"knifeOn": "나이프 ON",
 "selectClear": "선택 지우기", 
 "settings": "설정",
 "generate": "생성",
@@ -911,6 +917,8 @@ translation:{
   },
   fr:{
 translation:{
+"knifeOff": "Couteau OFF",
+"knifeOn": "Couteau ON",
 "selectClear": "Sélectionner Clair", 
 "settings": "Paramètres",
 "generate": "Générer",
@@ -1226,6 +1234,8 @@ translation:{
   },
   zh:{
 translation:{
+    "knifeOff": "刀 OFF",
+    "knifeOn": "刀 ON",
 "selectClear": "选择清除", 
 "settings": "设置",
 "generate": "生成",
@@ -1539,6 +1549,8 @@ translation:{
   },
   ru:{
 translation:{
+    "knifeOff": "Нож ВЫКЛ",
+    "knifeOn": "Нож ВКЛ",
 "selectClear": "Очистить выбор", 
 "settings": "Настройки",
 "generate": "Генерировать",
@@ -1804,6 +1816,8 @@ translation:{
   },
   es:{
 translation:{
+    "knifeOff": "Cuchillo OFF",
+    "knifeOn": "Cuchillo ON",
 "selectClear": "Seleccionar Borrar", 
 "settings": "Configuraciones",
 "generate": "Generar",
@@ -2067,6 +2081,8 @@ translation:{
   },
   pt:{
 translation:{
+    "knifeOff": "Faca OFF",
+    "knifeOn": "Faca ON",
 "selectClear": "Selecionar Limpar", 
 "settings": "Configurações",
 "generate": "Gerar",
@@ -2331,6 +2347,8 @@ translation:{
   },
   "th":{
     "translation":{
+    "knifeOff": "มีดปิด",
+    "knifeOn": "มีดเปิด",
 "selectClear": "เลือกเคลียร์", 
 "settings": "การตั้งค่า",
 "generate": "สร้าง",

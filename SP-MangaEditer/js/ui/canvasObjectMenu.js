@@ -31,8 +31,10 @@ function updateObjectMenuPosition() {
   const canvasWidth = canvasRect.width;
   const canvasHeight = canvasRect.height;
 
-  let left = canvasOffsetLeft + boundingRect.left + boundingRect.width + menuPadding;
-  let top = canvasOffsetTop + boundingRect.top;
+  // キャンバスのスケールを考慮した計算
+  let left = canvasOffsetLeft + boundingRect.left * canvasContinerScale + boundingRect.width * canvasContinerScale + menuPadding;
+  let top = canvasOffsetTop + boundingRect.top * canvasContinerScale;
+  
   if (left + objectMenu.offsetWidth > canvasOffsetLeft + canvasWidth) {
     left = Math.min(
       canvasOffsetLeft + canvasWidth + 5,
@@ -64,27 +66,27 @@ function showObjectMenu(clickType) {
   }
 
   let menuItems = [];
-  // let menuItems = ['settings', 'generate', 'edit', 'delete', 'copyAndPast', 'font', 'moveUp', 'moveDown', 'addPoint', 'removePoint', 'selectClear'];
+  // let menuItems = ['settings', 'generate', 'edit', 'delete', 'copyAndPast', 'font', 'moveUp', 'moveDown', 'addPoint', 'removePoint', 'selectClear', 'knife'];
 
   if (isPanel(activeObject)) {
-    if (activeObject.edit) {
-      menuItems = clickType === 'right' ? [] : ['settings', 'generate', 'delete', 'editOff', 'selectClear'];
-    } else {
-      menuItems = clickType === 'right' ? [] : ['settings', 'generate', 'delete', 'editOn', 'selectClear'];
-    }
+
+    var edit = activeObject.edit ? 'editOff' : 'editOn';
+    var knife = isKnifeMode ? 'knifeOff' : 'knifeOn';
+
+    menuItems = clickType === 'left' ? [] : [edit, knife, 'settings', 'generate', 'delete', 'selectClear'];
+
   } else if (isImage(activeObject)) {
-    menuItems = clickType === 'right' ? [] : ['settings', 'generate', 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : ['settings', 'generate', 'delete', 'selectClear'];
 
   } else if (isText(activeObject)) {
-    menuItems = clickType === 'right' ? [] : ['delete', 'selectClear'];
-  }else{
-    menuItems = clickType === 'right' ? [] : ['delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : ['delete', 'selectClear'];
+  } else {
+    menuItems = clickType === 'left' ? [] : ['delete', 'selectClear'];
   }
 
   if (menuItems.length === 0) {
     return;
   }
-
 
   let menuContent = '';
   menuItems.forEach(item => {
@@ -97,6 +99,7 @@ function showObjectMenu(clickType) {
   updateObjectMenuPosition();
   lastClickType = clickType;
 }
+
 function handleMenuClick(e) {
   const activeObject = canvas.getActiveObject();
   if (!activeObject) {
@@ -109,7 +112,7 @@ function handleMenuClick(e) {
     case 'settings':
       if (isPanel(activeObject)) {
         openT2I_FloatingWindowItem(activeObject);
-      }else if( isImage(activeObject) ){
+      } else if (isImage(activeObject)) {
         openI2I_floatingWindowItem(activeObject);
       }
       break;
@@ -163,6 +166,14 @@ function handleMenuClick(e) {
         Edit();
       }
       break;
+
+    case 'knifeOff':
+    case 'knifeOn':
+      if (isPanel(activeObject)) {
+        changeKnifeMode();
+      }
+      break;
+    
     case 'font':
       if (activeObject instanceof fabric.IText) {
         const newFont = activeObject.fontFamily === 'Arial' ? 'Times New Roman' : 'Arial';
@@ -190,8 +201,8 @@ function handleMenuClick(e) {
   }
   canvas.renderAll();
   
-  // メニューを再表示して更新
-  showObjectMenu(lastClickType);
+  // メニューを閉じる
+  closeMenu();
 }
 
 function closeMenu() {
@@ -202,10 +213,10 @@ function closeMenu() {
 }
 
 canvas.on('selection:created', () => {
-  showObjectMenu('left');
+  closeMenu();
 });
 canvas.on('selection:updated', () => {
-  showObjectMenu('left');
+  closeMenu();
 });
 
 canvas.wrapperEl.addEventListener('contextmenu', function (e) {
@@ -214,26 +225,23 @@ canvas.wrapperEl.addEventListener('contextmenu', function (e) {
   const clickedObject = canvas.findTarget(e, false);
   if (clickedObject) {
     canvas.setActiveObject(clickedObject);
+    canvas.renderAll(); // 選択状態を表示するために再描画
     showObjectMenu('right');
+  } else {
+    canvas.discardActiveObject();
+    closeMenu();
   }
 });
 
 canvas.wrapperEl.addEventListener('mousedown', function (e) {
   if (e.button === 0 && lastClickType === 'right') {
-    e.preventDefault();
-    const clickedObject = canvas.findTarget(e, false);
-    if (clickedObject) {
-      canvas.setActiveObject(clickedObject);
-      showObjectMenu('left');
-    }
+    closeMenu();
+    lastClickType = 'left';  // 左クリック後はlastClickTypeをリセット
   }
 });
 
 canvas.on('selection:cleared', function () {
-  if (objectMenu) {
-    objectMenu.classList.remove('active');
-    objectMenu.style.display = 'none';
-  }
+  closeMenu();
 });
 
 canvas.on('object:moving', updateObjectMenuPosition);

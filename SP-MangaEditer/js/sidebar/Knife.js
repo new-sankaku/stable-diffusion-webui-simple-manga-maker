@@ -1,22 +1,22 @@
 document.getElementById('knifeModeButton').addEventListener('click', function () {
-  isKnifeMode = !isKnifeMode;
-  this.textContent = isKnifeMode ? 'Knife Mode: ON' : 'Knife Mode: OFF';
-  changeMovement();
+  changeKnifeMode();
 });
 
+function changeKnifeMode(){
+  var knifeModeButton = document.getElementById('knifeModeButton');
+  isKnifeMode = !isKnifeMode;
+  knifeModeButton.textContent = isKnifeMode ? getText('knifeOff') : getText('knifeOn') ;
+  changeMovement();
+}
+
 function changeMovement() {
-
   canvas.discardActiveObject();
-
   canvas.forEachObject(function (obj) {
-    //console.log("obj");
     if (isKnifeMode) {
-      //console.log("is ナイフ");
       obj.set({
         selectable: false
       });
     } else {
-      //console.log("not ナイフ");
       obj.set({
         selectable: true
       });
@@ -377,7 +377,8 @@ function isHorizontal(resultLine, splitLine) {
 
 function adjustShapesBySplitLineDirection(resultLine, splitLine) {
   const tolerance = 5;
-  const adjustment = document.getElementById('knifePanelSpaceSize').value;
+  var adjustment = document.getElementById('knifePanelSpaceSize').value;
+  adjustment = adjustment / 2;
 
   var offsetX = getCurrentLeft();
   var offsetY = getCurrentTop();
@@ -393,19 +394,24 @@ function adjustShapesBySplitLineDirection(resultLine, splitLine) {
     let angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
     // 角度に基づいて水平または垂直を判断
-    let isHorizontal = (angle > -45 && angle < 45) || (angle > 135 || angle < -135);
-    console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
+    // let isHorizontal = (angle > -45 && angle < 45) || (angle > 135 || angle < -135);
+    // console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
 
     // 分割線の中央点を計算
-    let midPoint = {
-      x: (splitLine[0].x + splitLine[1].x) / 2,
-      y: (splitLine[0].y + splitLine[1].y) / 2
-    };
+    let center1 = calculatePolygonCentroid(poly1);
+    let center2 = calculatePolygonCentroid(poly2);
+
+    console.log("ポリゴン1の中心点:", center1);
+    console.log("ポリゴン2の中心点:", center2);
+
+    let isHorizontal = Math.abs(center1.y - center2.y) > Math.abs(center1.x - center2.x);
+    console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
+
 
     if (isHorizontal) {
       // 水平の場合、Y軸のみ調整（X座標も範囲内かチェック）
       resultLine[0] = poly1.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point) || isSplitPoint(midPoint, tolerance, point)) {
+        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
           point.y -= adjustment;
           return { x: point.x, y: point.y };
         }
@@ -413,16 +419,16 @@ function adjustShapesBySplitLineDirection(resultLine, splitLine) {
       });
 
       resultLine[1] = poly2.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point) || isSplitPoint(midPoint, tolerance, point)) {
+        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
           point.y += adjustment;
-          return { x: point.x, y: point.y };
+          return { x: point.x, y: point.y }; 
         }
         return { x: point.x, y: ((point.y - offsetY)) + offsetY };
       });
     } else {
       // 垂直の場合、X軸のみ調整（Y座標も範囲内かチェック）
       resultLine[0] = poly1.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point) || isSplitPoint(midPoint, tolerance, point)) {
+        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
           point.x -= adjustment;
           return { x: point.x, y: point.y };
         }
@@ -430,7 +436,7 @@ function adjustShapesBySplitLineDirection(resultLine, splitLine) {
       });
 
       resultLine[1] = poly2.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point) || isSplitPoint(midPoint, tolerance, point)) {
+        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
           point.x += adjustment;
           return { x: point.x, y: point.y };
         }
@@ -438,6 +444,32 @@ function adjustShapesBySplitLineDirection(resultLine, splitLine) {
       });
     }
   }
+}
+
+
+function calculatePolygonCentroid(polygon) {
+  let xSum = 0;
+  let ySum = 0;
+  let signedArea = 0;
+  let a = 0;  // Partial signed area
+
+  for (let i = 0; i < polygon.length; i++) {
+    let x0 = polygon[i].x;
+    let y0 = polygon[i].y;
+    let x1 = polygon[(i + 1) % polygon.length].x;
+    let y1 = polygon[(i + 1) % polygon.length].y;
+
+    a = x0 * y1 - x1 * y0;
+    signedArea += a;
+    xSum += (x0 + x1) * a;
+    ySum += (y0 + y1) * a;
+  }
+
+  signedArea *= 0.5;
+  xSum /= (6 * signedArea);
+  ySum /= (6 * signedArea);
+
+  return { x: xSum, y: ySum };
 }
 
 
