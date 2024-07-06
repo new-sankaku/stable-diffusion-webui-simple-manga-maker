@@ -58,6 +58,7 @@ function setLanguage(language) {
     addTooltip('redo', 'redo');
     addTooltip('cropMode', 'cropMode');
     addTooltip('crop', 'crop');
+    addTooltip('rembg', 'rembg');
   });
 }
 

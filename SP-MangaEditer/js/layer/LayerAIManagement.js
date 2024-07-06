@@ -50,8 +50,8 @@ function openT2I_FloatingWindowItem(layer) {
   makeDraggable(floatingWindowItem);
   updatefloatingWindowItem(layer, floatingWindowItem);
 
-  var text2imgItem_saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
-  text2imgItem_saveButton.onclick = function () {
+  var saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
+  saveButton.onclick = function () {
     adjustToMultipleOfEight('text2img_height');
     adjustToMultipleOfEight('text2img_width');
 
@@ -59,8 +59,8 @@ function openT2I_FloatingWindowItem(layer) {
     closefloatingWindowItem(floatingWindowItem);
   };
 
-  var text2imgItem_closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
-  text2imgItem_closeButton.onclick = function () {
+  var closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
+  closeButton.onclick = function () {
     closefloatingWindowItem(floatingWindowItem);
   };
 
@@ -86,17 +86,15 @@ function openI2I_floatingWindowItem(layer) {
       <label for="text2img_seed">Seed(-1=Rundom, -2=Use Base):</label>
       <input type="number" id="text2img_seed" value="${layer.text2img_seed || -2}">
     </div>
+    
     <div class="form-group form-row">
-      <label for="text2img_width">Width(-1=Use Base):</label>
-      <input type="number" id="text2img_width" step="8"  min="0" value="${layer.text2img_width || 1024}">
+      <label for="img2imgScale">Scale:</label>
+      <input type="number" id="img2imgScale" step="0.1"  min="0.1" value="${layer.img2imgScale || 1.2 }">
     </div>
-    <div class="form-group form-row">
-      <label for="text2img_height">Height(-1=Use Base):</label>
-      <input type="number" id="text2img_height" step="8"  min="0" value="${layer.text2img_height || 1024}">
-    </div>
+    
     <div class="form-group form-row">
       <label for="img2img_denoising_strength">Denoising Strength:</label>
-      <input type="number" id="img2img_denoising_strength" step="0.01"  max="1" min="0" value="${layer.img2img_denoising_strength || 0.75}">
+      <input type="number" id="img2img_denoising_strength" step="0.01"  max="1" min="0" value="${layer.img2img_denoising_strength || 0.7}">
     </div>
     <div class="button-group">
       <button id="text2imgItem_saveButton">Save</button>
@@ -105,33 +103,17 @@ function openI2I_floatingWindowItem(layer) {
   `;
   document.body.appendChild(floatingWindowItem);
 
-  document.getElementById('text2img_height').addEventListener('blur', function() {
-    var value = parseInt(this.value);
-    if (value !== -1) {
-      this.value = Math.round(value / 8) * 8;
-    }
-  });
-  document.getElementById('text2img_width').addEventListener('blur', function() {
-    var value = parseInt(this.value);
-    if (value !== -1) {
-      this.value = Math.round(value / 8) * 8;
-    }
-  });
-
   makeDraggable(floatingWindowItem);
   updatefloatingWindowItem(layer, floatingWindowItem);
 
-  var text2imgItem_saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
-  text2imgItem_saveButton.onclick = function () {
-    adjustToMultipleOfEight('text2img_height');
-    adjustToMultipleOfEight('text2img_width');
-
+  var saveButton = floatingWindowItem.querySelector("#text2imgItem_saveButton");
+  saveButton.onclick = function () {
     saveLayerDiffusionAttributes(layer);
     closefloatingWindowItem(floatingWindowItem);
   };
 
-  var text2imgItem_closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
-  text2imgItem_closeButton.onclick = function () {
+  var closeButton = floatingWindowItem.querySelector("#text2imgItem_closeButton");
+  closeButton.onclick = function () {
     closefloatingWindowItem(floatingWindowItem);
   };
 
@@ -161,8 +143,12 @@ function saveLayerDiffusionAttributes(layer) {
   layer.text2img_prompt             = document.getElementById("text2img_prompt").value;
   layer.text2img_negativePrompt     = document.getElementById("text2img_negativePrompt").value;
   layer.text2img_seed               = parseInt(document.getElementById("text2img_seed").value);
-  layer.text2img_width              = parseInt(document.getElementById("text2img_width").value);
-  layer.text2img_height             = parseInt(document.getElementById("text2img_height").value);
+  if(isImage(layer)){
+    layer.img2imgScale              = parseFloat(document.getElementById("img2imgScale").value);
+  }else{
+    layer.text2img_width              = parseInt(document.getElementById("text2img_width").value);
+    layer.text2img_height             = parseInt(document.getElementById("text2img_height").value);
+  }
 
   if(isImage(layer)){
     layer.img2img_denoising_strength  = parseFloat(document.getElementById("img2img_denoising_strength").value);

@@ -4,6 +4,7 @@
 const resources = {
   en:{
 translation:{
+  rembg: "Remove background",
   knifeOff:"Knife OFF",
   knifeOn:"Knife ON",
   selectClear: "Select Clear", 
@@ -362,6 +363,8 @@ translation:{
   },
   ja:{
 translation:{
+  rembg: "背景を削除します",
+
     "knifeOff": "ナイフOFF",
     "knifeOn": "ナイフON",
 "selectClear": "選択をクリア", 
@@ -635,6 +638,8 @@ translation:{
   },
   ko:{
 translation:{
+  rembg: "배경을 제거합니다",
+
 "knifeOff": "나이프 OFF",
 "knifeOn": "나이프 ON",
 "selectClear": "선택 지우기", 
@@ -917,6 +922,8 @@ translation:{
   },
   fr:{
 translation:{
+  rembg: "Supprimer l'arrière-plan",
+
 "knifeOff": "Couteau OFF",
 "knifeOn": "Couteau ON",
 "selectClear": "Sélectionner Clair", 
@@ -1234,6 +1241,8 @@ translation:{
   },
   zh:{
 translation:{
+  rembg: "移除背景",
+
     "knifeOff": "刀 OFF",
     "knifeOn": "刀 ON",
 "selectClear": "选择清除", 
@@ -1549,6 +1558,8 @@ translation:{
   },
   ru:{
 translation:{
+  rembg: "Удалить фон",
+
     "knifeOff": "Нож ВЫКЛ",
     "knifeOn": "Нож ВКЛ",
 "selectClear": "Очистить выбор", 
@@ -1816,6 +1827,8 @@ translation:{
   },
   es:{
 translation:{
+  rembg: "Eliminar fondo",
+
     "knifeOff": "Cuchillo OFF",
     "knifeOn": "Cuchillo ON",
 "selectClear": "Seleccionar Borrar", 
@@ -2081,6 +2094,8 @@ translation:{
   },
   pt:{
 translation:{
+  rembg: "Remover fundo",
+
     "knifeOff": "Faca OFF",
     "knifeOn": "Faca ON",
 "selectClear": "Selecionar Limpar", 
@@ -2347,6 +2362,7 @@ translation:{
   },
   "th":{
     "translation":{
+      rembg: "ลบพื้นหลัง",
     "knifeOff": "มีดปิด",
     "knifeOn": "มีดเปิด",
 "selectClear": "เลือกเคลียร์", 

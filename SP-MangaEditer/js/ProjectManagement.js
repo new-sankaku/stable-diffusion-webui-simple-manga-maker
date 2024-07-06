@@ -248,19 +248,19 @@ function loadSettingsLocalStrage(  ) {
     document.getElementById('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
     document.getElementById('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox === "true";
 
-    text2img_basePrompt.text2img_prompt = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
+    text2img_basePrompt.text2img_prompt         = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
     text2img_basePrompt.text2img_negativePrompt = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
-    text2img_basePrompt.text2img_seed = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
-    text2img_basePrompt.text2img_cfg_scale = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
-    text2img_basePrompt.text2img_width = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
-    text2img_basePrompt.text2img_height = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
+    text2img_basePrompt.text2img_seed           = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
+    text2img_basePrompt.text2img_cfg_scale      = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
+    text2img_basePrompt.text2img_width          = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
+    text2img_basePrompt.text2img_height         = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
     text2img_basePrompt.text2img_samplingMethod = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
-    text2img_basePrompt.text2img_samplingSteps = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
-    text2img_basePrompt.text2img_scheduler = localSettings.text2img_basePrompt_text2img_scheduler || text2img_basePrompt.text2img_scheduler;
-    text2img_basePrompt.text2img_model = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
-    text2img_basePrompt.text2img_hr_upscaler = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
-    text2img_basePrompt.text2img_basePrompt_hr_scale = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
-    text2img_basePrompt.text2img_basePrompt_hr_step = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
+    text2img_basePrompt.text2img_samplingSteps  = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
+    text2img_basePrompt.text2img_scheduler      = localSettings.text2img_basePrompt_text2img_scheduler || text2img_basePrompt.text2img_scheduler;
+    text2img_basePrompt.text2img_model          = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
+    text2img_basePrompt.text2img_hr_upscaler    = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
+    text2img_basePrompt.text2img_basePrompt_hr_scale  = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
+    text2img_basePrompt.text2img_basePrompt_hr_step   = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
     text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
 
   } else {

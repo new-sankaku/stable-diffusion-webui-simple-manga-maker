@@ -10,7 +10,7 @@
   user-select: none;
   flex-direction: column;
   border: 1px solid var(--fjm-border-color);
-  opacity: 0.8;
+  opacity: 1.0;
 }
 
 .fabricjs-object-menu.active {

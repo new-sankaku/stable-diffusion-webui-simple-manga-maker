@@ -113,6 +113,7 @@ function updateLayerPanel() {
         putPromptButton(buttonsDiv, layer, index);
         putInterrogateButtons(buttonsDiv, layer, index);
         putImageDownloadButton(buttonsDiv, layer, index);
+        putRembgButton(buttonsDiv, layer, index);
       }
       putDeleteButton(buttonsDiv, layer, index);
 
@@ -198,6 +199,21 @@ function putCropImageDownloadButton(buttonsDiv, layer, index) {
   buttonsDiv.appendChild(button);
 }
 
+
+function putRembgButton(buttonsDiv, layer, index) {
+  var button = document.createElement("button");
+  button.innerHTML = '<i class="material-icons">wallpaper</i>';
+
+  button.onclick = function (e) {
+    e.stopPropagation();
+    var spinner = createSpinner(index);
+    sdWebUI_RembgProcessQueue(layer, spinner.id);
+  };
+
+  addTooltipByElement(button, "rembg");
+  buttonsDiv.appendChild(button);
+}
+
 function putImageDownloadButton(buttonsDiv, layer, index) {
   var button = document.createElement("button");
   button.innerHTML = '<i class="material-icons">download</i>';
@@ -244,21 +260,16 @@ function putInterrogateButtons(buttonsDiv, layer, index) {
 
   clipButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinnerSuccess(index);
-    areaHeader.appendChild(spinner);
     sdWebUI_Interrogate(layer, "clip", spinner.id);
-    index++;
   };
 
   deepDooruButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinnerSuccess(index);
-    areaHeader.appendChild(spinner);
     sdWebUI_Interrogate(layer, "deepdanbooru", spinner.id);
-    index++;
   };
+  
   addTooltipByElement(deepDooruButton, "deepDooruButton");
   addTooltipByElement(clipButton, "clipButton");
 
@@ -295,11 +306,8 @@ function putRunI2iButton(buttonsDiv, layer, index) {
   runButton.innerHTML = '<i class="material-icons">directions_run</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinner(index);
-    areaHeader.appendChild(spinner);
     sdWebUI_I2IProcessQueue(layer, spinner.id);
-    index++;
   };
 
   addTooltipByElement(runButton, "runButton");
@@ -354,16 +362,12 @@ function putRunT2iButton(buttonsDiv, layer, index) {
   runButton.innerHTML = '<i class="material-icons">directions_run</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
-    var areaHeader = document.querySelector("#layer-panel .area-header");
     var spinner = createSpinner(index);
-    areaHeader.appendChild(spinner);
-
     if (API_mode == apis.A1111) {
       sdWebUI_t2IProcessQueue(layer, spinner.id);
     }else if (API_mode == apis.COMFYUI){
       Comfyui_handle_process_queue(layer, spinner.id);
     }
-    index++;
   };
   addTooltipByElement(runButton, "runButton");
   buttonsDiv.appendChild(runButton);

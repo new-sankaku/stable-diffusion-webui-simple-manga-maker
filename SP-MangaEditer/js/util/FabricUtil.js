@@ -83,22 +83,23 @@ function saveInitialState(obj) {
 }
 
 function setText2ImageInitPrompt(object) {
-  object.isPanel = text2img_initPrompt.isPanel;
-  object.text2img_prompt = text2img_initPrompt.text2img_prompt;
-  object.text2img_negativePrompt = text2img_initPrompt.text2img_negativePrompt;
-  object.text2img_seed = text2img_initPrompt.text2img_seed;
-  object.text2img_width = text2img_initPrompt.text2img_width;
-  object.text2img_height = text2img_initPrompt.text2img_height;
-  object.text2img_samplingSteps = text2img_initPrompt.text2img_samplingSteps;
+  object.isPanel                  = t2i_init.isPanel;
+  object.text2img_prompt          = t2i_init.t2i_prompt;
+  object.text2img_negativePrompt  = t2i_init.t2i_negativePrompt;
+  object.text2img_seed            = t2i_init.t2i_seed;
+  object.text2img_width           = t2i_init.t2i_width;
+  object.text2img_height          = t2i_init.t2i_height;
+  object.text2img_samplingSteps   = t2i_init.t2i_samplingSteps;
 }
 function setImage2ImageInitPrompt(object) {
-  object.text2img_prompt = img2img_initPrompt.img2img_prompt;
-  object.text2img_negativePrompt = img2img_initPrompt.img2img_negativePrompt;
-  object.text2img_seed = img2img_initPrompt.img2img_seed;
-  object.text2img_width = img2img_initPrompt.img2img_width;
-  object.text2img_height = img2img_initPrompt.img2img_height;
-  object.text2img_samplingSteps = img2img_initPrompt.img2img_samplingSteps;
-  object.img2img_denoising_strength = img2img_initPrompt.img2img_denoising_strength;
+  object.text2img_prompt            = i2i_init.i2i_prompt;
+  object.text2img_negativePrompt    = i2i_init.i2i_negativePrompt;
+  object.text2img_seed              = i2i_init.i2i_seed;
+  object.text2img_width             = i2i_init.i2i_width;
+  object.text2img_height            = i2i_init.i2i_height;
+  object.text2img_samplingSteps     = i2i_init.i2i_samplingSteps;
+  object.img2img_denoising_strength = i2i_init.i2i_denoising_strength;
+  object.img2imgScale               = i2i_init.i2i_scale;
 }
 
 function deepCopy(obj) {
@@ -124,26 +125,29 @@ function deepCopy(obj) {
 }
 
 function copy(srcObject, object) {
-  object.name = srcObject.name;
-  object.isPanel = srcObject.isPanel;
-  object.text2img_prompt = srcObject.text2img_prompt;
-  object.text2img_negativePrompt = srcObject.text2img_negativePrompt;
-  object.text2img_seed = srcObject.text2img_seed;
-  object.text2img_width = srcObject.text2img_width;
-  object.text2img_height = srcObject.text2img_height;
-  object.text2img_samplingSteps = srcObject.text2img_samplingSteps;
-  object.img2img_prompt = srcObject.img2img_prompt;
-  object.img2img_negativePrompt = srcObject.img2img_negativePrompt;
-  object.img2img_seed = srcObject.img2img_seed;
-  object.img2img_width = srcObject.img2img_width;
-  object.img2img_height = srcObject.img2img_height;
-  object.img2img_samplingSteps = srcObject.img2img_samplingSteps;
-  object.img2img_denoising_strength = srcObject.img2img_denoising_strength;
-  object.top = srcObject.top;
-  object.left = srcObject.left;
+  object.name                         = srcObject.name;
+  object.isPanel                      = srcObject.isPanel;
+  object.text2img_prompt              = srcObject.text2img_prompt;
+  object.text2img_negativePrompt      = srcObject.text2img_negativePrompt;
+  object.text2img_seed                = srcObject.text2img_seed;
+  object.text2img_width               = srcObject.text2img_width;
+  object.text2img_height              = srcObject.text2img_height;
+  object.text2img_samplingSteps       = srcObject.text2img_samplingSteps;
+
+  object.img2img_prompt               = srcObject.img2img_prompt;
+  object.img2img_negativePrompt       = srcObject.img2img_negativePrompt;
+  object.img2img_seed                 = srcObject.img2img_seed;
+  object.img2img_width                = srcObject.img2img_width;
+  object.img2img_height               = srcObject.img2img_height;
+  object.img2img_samplingSteps        = srcObject.img2img_samplingSteps;
+  object.img2img_denoising_strength   = srcObject.img2img_denoising_strength;
+  object.img2imgScale                 = srcObject.img2imgScale;
+  
+  object.top    = srcObject.top;
+  object.left   = srcObject.left;
   object.scaleX = srcObject.scaleX;
   object.scaleY = srcObject.scaleY;
-  object.width = srcObject.width;
+  object.width  = srcObject.width;
   object.height = srcObject.height
 
   object.guid = srcObject.guid
@@ -160,6 +164,34 @@ function copy(srcObject, object) {
   object.initial = srcObject.initial ? srcObject.initial : undefined;
 }
 
+
+function imageObject2Base64ImageEffectKeep(layer, scaleFactor = layer.img2imgScale) {
+  const { width, height, scaleX, scaleY, clipPath, left, top } = layer;
+  const offscreenCanvas = createOffscreenCanvas(width * scaleX * scaleFactor, height * scaleY * scaleFactor);
+  renderLayerToCanvas(offscreenCanvas, layer, scaleFactor, left, top);
+  return offscreenCanvas.toDataURL('image/png');
+}
+
+function createOffscreenCanvas(width, height) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  return canvas;
+}
+
+function renderLayerToCanvas(canvas, layer, scaleFactor, left, top) {
+  const ctx = canvas.getContext('2d');
+  const originalClipPath = layer.clipPath;
+  layer.clipPath = null;
+
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.scale(scaleFactor, scaleFactor);
+  ctx.translate(-left, -top);
+  layer.render(ctx);
+
+  layer.clipPath = originalClipPath;
+}
 
 function imageObject2Base64Image(object) {
   imageObject2Base64Image(object, 1.0);

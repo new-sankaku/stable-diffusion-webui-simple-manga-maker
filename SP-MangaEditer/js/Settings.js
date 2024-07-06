@@ -55,23 +55,24 @@ const text2img_basePrompt = {
   text2img_basePrompt_hr_denoising_strength: "0.7",
 };
 
-const text2img_initPrompt = {
+const t2i_init = {
   isPanel                 : true,
-  text2img_prompt         : "",
-  text2img_negativePrompt : "",
-  text2img_seed           : -2,
-  text2img_width          : -1,
-  text2img_height         : -1,
+  t2i_prompt         : "",
+  t2i_negativePrompt : "",
+  t2i_seed           : -2,
+  t2i_width          : -1,
+  t2i_height         : -1,
 };
 
-const img2img_initPrompt = {
-  img2img_prompt         : "",
-  img2img_negativePrompt : "",
-  img2img_seed           : -2,
-  img2img_width          : -1,
-  img2img_height         : -1,
-  img2img_samplingSteps : 20,
-  img2img_denoising_strength : 0.75,
+const i2i_init = {
+  i2i_prompt         : "",
+  i2i_negativePrompt : "",
+  i2i_seed           : -2,
+  i2i_width          : -1,
+  i2i_height         : -1,
+  i2i_samplingSteps : 20,
+  i2i_denoising_strength : 0.7,
+  i2i_scale : 1.05,
 };
 
 
@@ -90,5 +91,5 @@ const commonProperties = [
 'initial', 
 'clipPath.initial',
 'name',
-"guids", "guid", "tempPrompt", "tempNegativePrompt", "tempSeed"
+"guids", "guid", "tempPrompt", "tempNegativePrompt", "tempSeed", "img2imgScale", "img2img_denoising_strength"
 ];
