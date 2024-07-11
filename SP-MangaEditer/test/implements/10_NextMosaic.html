@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Mosaic Canvas with Centered Preview and Size Logging</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <style>
+        #canvas-container {
+            border: 1px solid #ccc;
+            margin: 10px;
+        }
+
+        #controls {
+            margin: 10px;
+        }
+
+        .slider-container {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="controls">
+        <button id="toggle-mosaic-brush">Enable Mosaic Brush</button>
+        <input type="file" id="image-loader" name="image-loader" />
+        <button id="download">Download Canvas</button>
+        <button id="contextTopDownload">Download ContextTop</button>
+        <div class="slider-container">
+            <label for="mosaic-size">Mosaic Size: </label>
+            <input type="range" id="mosaic-size" min="1" max="300" value="10" />
+            <span id="mosaic-size-value">10</span>
+        </div>
+        <div class="slider-container">
+            <label for="circle-size">Circle Size: </label>
+            <input type="range" id="circle-size" min="1" max="300" value="40" />
+            <span id="circle-size-value">40</span>
+        </div>
+    </div>
+    <div id="canvas-container">
+        <canvas id="c" width="800" height="600"></canvas>
+    </div>
+    <script>
+        var canvas = new fabric.Canvas('c');
+        canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas));
+
+        fabric.MosaicBrush = fabric.util.createClass(fabric.BaseBrush, {
+            initialize: function (canvas) {
+                this.canvas = canvas;
+                this.mosaicSize = 10;
+                this.circleSize = 40;
+                this.isDrawing = false;
+                this.lastPointer = { x: this.canvas.width / 2, y: this.canvas.height / 2 };
+            },
+
+            onMouseDown: function (pointer) {
+                this.isDrawing = true;
+                this.lastPointer = pointer;
+                this.canvas.contextTop.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.drawMosaic(pointer);
+            },
+
+            onMouseMove: function (pointer) {
+                this.lastPointer = pointer;
+                if (this.isDrawing) {
+                    this.drawMosaic(pointer);
+                } else {
+                    this.drawPreviewCircle(pointer);
+                }
+            },
+
+            onMouseUp: function () {
+                this.isDrawing = false;
+                this.commitDrawing();
+                this.drawPreviewCircle(this.lastPointer);
+            },
+
+            drawMosaic: function (pointer) {
+                var ctx = this.canvas.contextTop;
+                var mainCtx = this.canvas.getContext('2d');
+
+                console.log('ContextTop canvas size:', ctx.canvas.width, 'x', ctx.canvas.height);
+                console.log('ContextTop scale      :', ctx.getTransform().a, 'x', ctx.getTransform().d);
+
+                console.log('Main canvas size      :', mainCtx.canvas.width, 'x', mainCtx.canvas.height);
+                console.log('Main context scale    :', mainCtx.getTransform().a, 'x', mainCtx.getTransform().d);
+
+
+                var mosaicSize = this.mosaicSize;
+                var circleRadius = this.circleSize / 2;
+
+                var startGridX = Math.floor(Math.max(0, pointer.x - circleRadius) / mosaicSize);
+                var startGridY = Math.floor(Math.max(0, pointer.y - circleRadius) / mosaicSize);
+                var endGridX = Math.ceil(Math.min(this.canvas.width, pointer.x + circleRadius) / mosaicSize);
+                var endGridY = Math.ceil(Math.min(this.canvas.height, pointer.y + circleRadius) / mosaicSize);
+
+                var scaleX = mainCtx.getTransform().a;
+                var scaleY = mainCtx.getTransform().d;
+
+                for (var gridX = startGridX; gridX < endGridX; gridX++) {
+                    for (var gridY = startGridY; gridY < endGridY; gridY++) {
+                        var cellCenterX = (gridX + 0.5) * mosaicSize;
+                        var cellCenterY = (gridY + 0.5) * mosaicSize;
+
+                        if (this.isInsideCircle(pointer.x, pointer.y, cellCenterX, cellCenterY, circleRadius)) {
+                            var x = gridX * mosaicSize;
+                            var y = gridY * mosaicSize;
+                            var imageData = mainCtx.getImageData(x * scaleX, y * scaleY, mosaicSize * scaleX, mosaicSize * scaleY);
+                            console.log('ImageData size:', imageData.width, 'x', imageData.height);
+                            console.log('Total pixels:', imageData.width * imageData.height);
+                            console.log('Data array length:', imageData.data.length);
+
+                            var data = imageData.data;
+                            var r = 0, g = 0, b = 0, a = 0, count = 0;
+
+                            for (var i = 0; i < data.length; i += 4) {
+                                r += data[i];
+                                g += data[i + 1];
+                                b += data[i + 2];
+                                a += data[i + 3];
+                                count++;
+                            }
+                            r = Math.floor(r / count);
+                            g = Math.floor(g / count);
+                            b = Math.floor(b / count);
+                            a = Math.floor(a / count);
+
+                            ctx.fillStyle = `rgba(${r},${g},${b},${a / 255})`;
+                            ctx.fillRect(x, y, mosaicSize, mosaicSize);
+                        }
+                    }
+                }
+            },
+
+            commitDrawing: function () {
+                var ctx = this.canvas.contextTop;
+                var scaleX = 1 / ctx.getTransform().a;
+                var scaleY = 1 / ctx.getTransform().d;
+                console.log('commitDrawing ctx    :x:', scaleX, 'y:', scaleY);
+                var dataURL = ctx.canvas.toDataURL();
+                fabric.Image.fromURL(dataURL, (img) => {
+                    img.set({
+                        left: 0,
+                        top: 0,
+                        selectable: false,
+                        evented: false,
+                        scaleX: scaleX,
+                        scaleY: scaleY,
+                    });
+                    this.canvas.add(img);
+                    this.canvas.renderAll();
+                    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                });
+            },
+
+            isInsideCircle: function (cx, cy, x, y, radius) {
+                var dx = cx - x;
+                var dy = cy - y;
+                return (dx * dx + dy * dy <= radius * radius);
+            },
+
+            drawPreviewCircle: function (pointer) {
+                var ctx = this.canvas.contextTop;
+                ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                ctx.beginPath();
+                ctx.arc(pointer.x, pointer.y, this.circleSize / 2, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
+                ctx.lineWidth = 1;
+                var startX = Math.floor(pointer.x - this.circleSize / 2);
+                var startY = Math.floor(pointer.y - this.circleSize / 2);
+                var endX = startX + this.circleSize;
+                var endY = startY + this.circleSize;
+
+                for (var x = startX; x <= endX; x += this.mosaicSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, startY);
+                    ctx.lineTo(x, endY);
+                    ctx.stroke();
+                }
+
+                for (var y = startY; y <= endY; y += this.mosaicSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(startX, y);
+                    ctx.lineTo(endX, y);
+                    ctx.stroke();
+                }
+            }
+        });
+
+        var mosaicBrush = new fabric.MosaicBrush(canvas);
+        var isMosaicBrushActive = false;
+
+        document.getElementById('toggle-mosaic-brush').addEventListener('click', function () {
+            if (isMosaicBrushActive) {
+                canvas.isDrawingMode = false;
+                canvas.freeDrawingBrush = null;
+                canvas.contextTop.clearRect(0, 0, canvas.width, canvas.height);
+                this.textContent = 'Enable Mosaic Brush';
+            } else {
+                canvas.isDrawingMode = true;
+                canvas.freeDrawingBrush = mosaicBrush;
+                canvas.freeDrawingBrush.mosaicSize = parseInt(document.getElementById('mosaic-size').value);
+                canvas.freeDrawingBrush.circleSize = parseInt(document.getElementById('circle-size').value);
+                this.textContent = 'Disable Mosaic Brush';
+                canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
+            }
+            isMosaicBrushActive = !isMosaicBrushActive;
+        });
+
+        function updatePreview() {
+            if (isMosaicBrushActive && canvas.freeDrawingBrush) {
+                canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
+            }
+        }
+
+        document.getElementById('mosaic-size').addEventListener('input', function () {
+            var value = this.value;
+            document.getElementById('mosaic-size-value').textContent = value;
+            if (canvas.freeDrawingBrush) {
+                canvas.freeDrawingBrush.mosaicSize = parseInt(value);
+                updatePreview();
+            }
+        });
+
+        document.getElementById('circle-size').addEventListener('input', function () {
+            var value = this.value;
+            document.getElementById('circle-size-value').textContent = value;
+            if (canvas.freeDrawingBrush) {
+                canvas.freeDrawingBrush.circleSize = parseInt(value);
+                updatePreview();
+            }
+        });
+
+        canvas.on('mouse:move', function (options) {
+            if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
+                canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
+            }
+        });
+
+        document.getElementById('image-loader').addEventListener('change', function (e) {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var imgObj = new Image();
+                imgObj.src = event.target.result;
+                imgObj.onload = function () {
+                    var image = new fabric.Image(imgObj);
+                    canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas), {
+                        scaleX: canvas.width / image.width,
+                        scaleY: canvas.height / image.height
+                    });
+
+                    // Log canvas size, image size, and scale
+                    console.log('Canvas size:', canvas.width, 'x', canvas.height);
+                    console.log('Image size:', image.width, 'x', image.height);
+                    console.log('Scale:', canvas.width / image.width, 'x', canvas.height / image.height);
+                };
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        document.getElementById('download').addEventListener('click', function () {
+            var originalWidth = canvas.width;
+            var originalHeight = canvas.height;
+            var scale = 3;
+
+            canvas.setWidth(originalWidth * scale);
+            canvas.setHeight(originalHeight * scale);
+            canvas.setZoom(scale);
+
+            var startTime = Date.now();
+            var dataURL = canvas.toDataURL({ format: 'png' });  // PNGは品質指定不要
+            var link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'canvas_high_res.png';
+            link.click();
+            var endTime = Date.now();
+            console.log('Download process took ' + (endTime - startTime) + 'ms');
+
+            canvas.setWidth(originalWidth);
+            canvas.setHeight(originalHeight);
+            canvas.setZoom(1);
+            canvas.renderAll();
+        });
+
+
+        document.getElementById('contextTopDownload').addEventListener('click', function () {
+            var contextTopCanvas = canvas.contextTop.canvas;
+            var dataURL = contextTopCanvas.toDataURL('image/png');
+            var link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'contextTop.png';
+            link.click();
+        });
+
+
+        console.log('Initial canvas size:', canvas.width, 'x', canvas.height);
+    </script>
+</body>
+
+</html>

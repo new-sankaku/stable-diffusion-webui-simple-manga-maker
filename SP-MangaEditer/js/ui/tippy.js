@@ -54,6 +54,7 @@ function setLanguage(language) {
     addTooltip('zoomIn', 'zoomIn');
     addTooltip('zoomOut', 'zoomOut');
     addTooltip('zoomFit', 'zoomFit');
+    addTooltip('clearMode', 'clearMode');
     addTooltip('undo', 'undo');
     addTooltip('redo', 'redo');
     addTooltip('cropMode', 'cropMode');

@@ -4,6 +4,14 @@
 const resources = {
   en:{
 translation:{
+  "clearMode": "Clears the mode (Crop, Knife, Edit, Pen)",
+  "Pencil": "Pencil",
+  "Circle": "Circle",
+  "Eraser": "Eraser",
+  "Mosaic": "Mosaic",
+  "mosaic-size": "Mosaic Size",
+  "circle-size": "Circle Size",
+
   rembg: "Remove background",
   knifeOff:"Knife OFF",
   knifeOn:"Knife ON",
@@ -363,8 +371,14 @@ translation:{
   },
   ja:{
 translation:{
+  "clearMode":"モード（Crop、ナイフ、Edit、ペン）を解除します",
+  "Pencil": "鉛筆",
+  "Circle": "円",
+  "Eraser": "消しゴム",
+  "Mosaic": "モザイク",
+  "mosaic-size": "モザイクサイズ",
+  "circle-size": "モザイク範囲",
   rembg: "背景を削除します",
-
     "knifeOff": "ナイフOFF",
     "knifeOn": "ナイフON",
 "selectClear": "選択をクリア", 
@@ -638,7 +652,14 @@ translation:{
   },
   ko:{
 translation:{
-  rembg: "배경을 제거합니다",
+  "clearMode": "모드(Crop, 나이프, Edit, 펜)를 해제합니다",
+  "Pencil": "연필",
+  "Circle": "원",
+  "Eraser": "지우개",
+  "Mosaic": "모자이크",
+  "mosaic-size": "모자이크 크기",
+  "circle-size": "모자이크 영역",
+    rembg: "배경을 제거합니다",
 
 "knifeOff": "나이프 OFF",
 "knifeOn": "나이프 ON",
@@ -922,6 +943,13 @@ translation:{
   },
   fr:{
 translation:{
+  "clearMode": "Efface le mode (Crop, Couteau, Éditer, Stylo)",
+  "Pencil": "Crayon",
+  "Circle": "Cercle",
+  "Eraser": "Gomme",
+  "Mosaic": "Mosaïque",
+  "mosaic-size": "taille de mosaïque",
+  "circle-size": "taille du cercle",
   rembg: "Supprimer l'arrière-plan",
 
 "knifeOff": "Couteau OFF",
@@ -1241,6 +1269,13 @@ translation:{
   },
   zh:{
 translation:{
+  "clearMode": "清除模式（裁剪、刀、编辑、笔）",
+  "Pencil": "铅笔",
+  "Circle": "圆",
+  "Eraser": "橡皮",
+  "Mosaic": "马赛克",
+  "mosaic-size": "马赛克大小",
+  "circle-size": "马赛克范围",
   rembg: "移除背景",
 
     "knifeOff": "刀 OFF",
@@ -1558,6 +1593,13 @@ translation:{
   },
   ru:{
 translation:{
+  "clearMode": "Очищает режим (Обрезка, Нож, Редактирование, Ручка)",
+  "Pencil": "Карандаш",
+  "Circle": "Круг",
+  "Eraser": "Ластик",
+  "Mosaic": "Мозаика",
+  "mosaic-size": "размер мозаики",
+  "circle-size": "размер круга",
   rembg: "Удалить фон",
 
     "knifeOff": "Нож ВЫКЛ",
@@ -1827,6 +1869,13 @@ translation:{
   },
   es:{
 translation:{
+  "clearMode": "Borra el modo (Recortar, Cuchillo, Editar, Pluma)",
+  "Pencil": "Lápiz",
+  "Circle": "Círculo",
+  "Eraser": "Borrador",
+  "Mosaic": "Mosaico",
+  "mosaic-size": "tamaño del mosaico",
+  "circle-size": "tamaño del círculo",
   rembg: "Eliminar fondo",
 
     "knifeOff": "Cuchillo OFF",
@@ -2094,6 +2143,13 @@ translation:{
   },
   pt:{
 translation:{
+  "clearMode": "Limpa o modo (Cortar, Faca, Editar, Caneta)",
+  "Pencil": "Lápis",
+  "Circle": "Círculo",
+  "Eraser": "Borracha",
+  "Mosaic": "Mosaico",
+  "mosaic-size": "tamanho do mosaico",
+  "circle-size": "tamanho do círculo",
   rembg: "Remover fundo",
 
     "knifeOff": "Faca OFF",
@@ -2362,6 +2418,13 @@ translation:{
   },
   "th":{
     "translation":{
+      "clearMode": "ล้างโหมด (ครอป, มีด, แก้ไข, ปากกา)",
+      "Pencil": "ดินสอ",
+      "Circle": "วงกลม",
+      "Eraser": "ยางลบ",
+      "Mosaic": "โมเสค",
+      "mosaic-size": "ขนาดโมเสค",
+      "circle-size": "ขนาดวงกลม",
       rembg: "ลบพื้นหลัง",
     "knifeOff": "มีดปิด",
     "knifeOn": "มีดเปิด",

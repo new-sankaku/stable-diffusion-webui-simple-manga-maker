@@ -43,10 +43,10 @@ function isSaveObject(activeObject){
         if( activeObject.target.saveHistory === undefined ){
             return true;
         }
-        //console.log("isSaveObject false 5");
+        console.log("isSaveObject false 5");
         return false;
     }else{
-        //console.log("isSaveObject false 6");
+        console.log("isSaveObject false 6");
         return false;
     }
 }
@@ -76,11 +76,12 @@ function saveStateByListener(event, eventType) {
     if( isNotSaveObject(event) ){
         return;
     }
+    console.log( "saveStateByListener event", event, eventType );
     saveState();
 }
 
 function saveStateByManual() {
-    //console.log( "saveStateByManual" );
+    console.log( "saveStateByManual" );
     saveState();
 }
 

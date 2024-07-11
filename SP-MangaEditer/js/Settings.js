@@ -10,7 +10,7 @@ var canvas = new fabric.Canvas("mangaImageCanvas", {
 });
 document.addEventListener("DOMContentLoaded", function() {
   loadBookSize(210, 297, false);
-
+  canvas.renderAll();
 });
 
 const mode = localStorage.getItem('mode') || 'light-mode';

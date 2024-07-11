@@ -35,38 +35,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/form.css?v=3.3">
+    <link rel="stylesheet" href="css/form.css?v=3.4">
 
-    <link rel="stylesheet" href="css/common.css?v=3.3">
-    <link rel="stylesheet" href="css/components.css?v=3.3">
-    <link rel="stylesheet" href="css/layout.css?v=3.3">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=3.3">
-    <link rel="stylesheet" href="css/anime.css?v=3.3">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=3.3">
-    <link rel="stylesheet" href="css/toast.css?v=3.3">
-    <link rel="stylesheet" href="css/ui/modeChange.css?v=3.3">
-    <link rel="stylesheet" href="css/ui/objectMenu.css?v=3.3">
-    <link rel="stylesheet" href="css/tippy.css?v=3.3">
-    <link rel="stylesheet" href="third/tippy/tippy.css?v=3.3">
+    <link rel="stylesheet" href="css/common.css?v=3.4">
+    <link rel="stylesheet" href="css/components.css?v=3.4">
+    <link rel="stylesheet" href="css/layout.css?v=3.4">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=3.4">
+    <link rel="stylesheet" href="css/anime.css?v=3.4">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=3.4">
+    <link rel="stylesheet" href="css/toast.css?v=3.4">
+    <link rel="stylesheet" href="css/ui/modeChange.css?v=3.4">
+    <link rel="stylesheet" href="css/ui/objectMenu.css?v=3.4">
+    <link rel="stylesheet" href="css/tippy.css?v=3.4">
+    <link rel="stylesheet" href="third/tippy/tippy.css?v=3.4">
 
-    <link href="third/Bootstrup/bootstrap.min.css?v=3.3" rel="stylesheet">
+    <link href="third/Bootstrup/bootstrap.min.css?v=3.4" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 
-    <script src="third/glfx/glfx.js?v=3.3"></script>
-    <script src="third/Fabric.js/fabric.min.js?v=3.3"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=3.3"></script>
-    <script src="third/i18next/i18next.min.js?v=3.3"></script>
-    <script src="third/jsts/jsts.min.js?v=3.3"></script>
-    <script src="third/browser-image-compression/browser-image-compression.js?v=3.3"></script>
-    <script src="third/intro/intro.min.js?v=3.3"></script>
+    <script src="third/glfx/glfx.js?v=3.4"></script>
+    <script src="third/Fabric.js/fabric.min.js?v=3.4"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=3.4"></script>
+    <script src="third/i18next/i18next.min.js?v=3.4"></script>
+    <script src="third/jsts/jsts.min.js?v=3.4"></script>
+    <script src="third/browser-image-compression/browser-image-compression.js?v=3.4"></script>
+    <script src="third/intro/intro.min.js?v=3.4"></script>
     <script src="js/fabric/dist/fabric-brush.min.js"></script>
-    <script src="js/fabric/brushes/ink_brush.js?v=3.3"></script>
-    <link rel="stylesheet" href="third/intro/introjs.min.css?v=3.3">
-    <link rel="stylesheet" href="css/ui/intro.css?v=3.3">
+    <script src="js/fabric/brushes/ink_brush.js?v=3.4"></script>
+    <link rel="stylesheet" href="third/intro/introjs.min.css?v=3.4">
+    <link rel="stylesheet" href="css/ui/intro.css?v=3.4">
 
-    <script src="third/tippy/popper.min.js?v=3.3"></script>
-    <script src="third/tippy/tippy-bundle.umd.min.js?v=3.3"></script>
+    <script src="third/tippy/popper.min.js?v=3.4"></script>
+    <script src="third/tippy/tippy-bundle.umd.min.js?v=3.4"></script>
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script> -->
 </head>
@@ -224,7 +224,7 @@
                             <hr>
 
                             <!--TODO COMFYUI-->
-                            <div class="Comfyui_api_content"  style="display: none;">
+                            <div class="Comfyui_api_content" style="display: none;">
                                 <li>
                                     <label>
                                         <span data-i18n="">ComufyUI(β)</span>
@@ -402,6 +402,11 @@
                                 <span>Twitter</span>
                             </a>
                         </ul>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -782,51 +787,18 @@
                 <div class="area-header" data-i18n="tools">Tools (β)</div>
                 <div id="tool-preview-area">
                     <hr>
-                    <button id="drawing-mode">
-                        <i class="material-icons">mode_edit</i>
-                        <span data-i18n="drawMode">Draw Mode</span>
-                    </button>
-                    <button id="eraser">
-                        <i class="material-icons">app_registration</i>
-                        <span data-i18n="eraserMode">Eraser Mode</span>
-                    </button>
-
                     <div class="input-group">
                         <label data-i18n="size">Size</label>
                         <input type="number" id="drawing-line-width" min="1" max="150" value="5">
                     </div>
-
                     <div class="input-group">
                         <label for="brush-color" data-i18n="color">Color</label>
                         <input type="color" id="drawing-color" value="#000000">
                     </div>
-
-                    <hr>
                     <div class="input-group">
-                        <label for="brush-type" data-i18n="type">Type</label>
-                        <select id="drawing-mode-selector">
-                            <option value="Pencil">Pencil</option>
-                            <option value="Circle">Circle</option>
-                            <option value="square">Square</option>
-                            <option value="diamond">Diamond</option>
-                            <option value="texture">Texture</option>
-
-                            <option value="Crayon">Crayon</option>
-                            <option value="Ink">Ink</option>
-                            <option value="Marker">Marker</option>
-                        </select>
+                        <label data-i18n="opacity">Opacity</label>
+                        <input type="number" id="drawing-opacity" min="1" max="100" step="1" value="100">
                     </div>
-
-                    <div class="input-group">
-                        <label for="line-style" data-i18n="lineStyle">Line Style</label>
-                        <select id="line-style">
-                            <option value="solid">Solid</option>
-                            <option value="dashed">Dashed</option>
-                            <option value="dotted">Dotted</option>
-                        </select>
-                    </div>
-
-                    <hr>
                     <div>
                         <label data-i18n="shadow">Shadow</label>
                     </div>
@@ -835,14 +807,80 @@
                         <input type="number" id="drawing-shadow-width" min="0" max="150" value="0">
                     </div>
                     <div class="input-group">
-                        <label data-i18n="shadowOffset">Offset</label>
-                        <input type="number" id="drawing-shadow-offset" min="1" max="150" value="5">
+                        <label data-i18n="svg_icon_shadow_offset_x">OffsetX</label>
+                        <input type="number" id="drawing-shadow-offsetX" min="1" max="150" value="5">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="svg_icon_shadow_offset_y">OffsetY</label>
+                        <input type="number" id="drawing-shadow-offsetY" min="1" max="150" value="5">
                     </div>
                     <div class="input-group">
                         <label for="brush-Shadow-color" data-i18n="shadowColor">Color</label>
                         <input type="color" id="drawing-shadow-color" value="#000000">
                     </div>
                     <hr>
+                    <button onclick="switchPencilType('Pencil')">
+                        <span data-i18n="Pencil">Pencil</span>
+                        <img src="03_images/preset/brush/Pencil.webp" alt="Pencil Icon" style="width: 72px; height: 24px;">
+                    </button>
+                    <button onclick="switchPencilType('Circle')">
+                        <span data-i18n="Circle">Circle</span>
+                        <img src="03_images/preset/brush/Circle.webp" alt="Circle Icon" style="width: 72px; height: 24px;">
+                    </button>
+                    <!-- <button onclick="switchPencilType('Vline')">
+                        <span data-i18n="Vline">Vline</span>
+                        <img src="03_images/preset/brush/Vline.png" alt="Vline Icon" style="width: 72px; height: 24px;">
+                    </button>                    
+                    <button onclick="switchPencilType('Hline')">
+                        <span data-i18n="Hline">Hline</span>
+                        <img src="03_images/preset/brush/Hline.png" alt="Hline Icon" style="width: 72px; height: 24px;">
+                    </button>                    
+                    <button onclick="switchPencilType('Texture')">
+                        <span data-i18n="Texture">Texture</span>
+                        <img src="03_images/preset/brush/Texture.png" alt="Texture Icon" style="width: 72px; height: 24px;">
+                    </button>
+                    <button onclick="switchPencilType('Crayon')">
+                        <span data-i18n="Crayon">Crayon</span>
+                        <img src="03_images/preset/brush/Crayon.png" alt="Crayon Icon" style="width: 72px; height: 24px;">
+                    </button>
+                    <button onclick="switchPencilType('Ink')">
+                        <span data-i18n="Ink">Ink</span>
+                        <img src="03_images/preset/brush/Ink.png" alt="Ink Icon" style="width: 72px; height: 24px;">
+                    </button>
+                    <button onclick="switchPencilType('Marker')">
+                        <span data-i18n="Marker">Marker</span>
+                        <img src="03_images/preset/brush/Marker.png" alt="Marker Icon" style="width: 72px; height: 24px;">
+                    </button> -->
+                    <div class="input-group">
+                        <label for="line-style" data-i18n="lineStyle">Line Style</label>
+                        <select id="line-style">
+                            <option value="solid">Solid</option>
+                            <option value="dashed">Dashed</option>
+                            <option value="dotted">Dotted</option>
+                        </select>
+                    </div>
+                    <hr>
+
+                    <button onclick="switchPencilType('Eraser')">
+                        <span class="material-symbols-outlined">ink_eraser</span>
+                        <span data-i18n="Eraser">Eraser</span>
+                    </button>
+                    <hr>
+
+                    <div class="input-group">
+                        <label data-i18n="circle-size">circle-size</label>
+                        <input type="number" id="circle-size" min="1" max="300" value="40" />
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="mosaic-size">mosaic-size</label>
+                        <input type="number" id="mosaic-size" min="1" max="100" value="8" />
+                    </div>
+                    <button onclick="switchPencilType('Mosaic')">
+                        <span data-i18n="Mosaic">Mosaic</span>
+                        <img src="03_images/preset/brush/Mosaic2.webp" alt="Mosaic Icon" style="width: 72px; height: 24px;">
+                    </button>
+                    <hr>
+
                 </div>
             </div>
 
@@ -916,10 +954,19 @@
                     <hr>
                     <div id="svg_icon_results"></div>
                     <hr>
-                    <label data-i18n="youCanUseGoogleIcon">You can use Google Icon.</label>
                     <a
                         href="https://fonts.google.com/icons?icon.size=24&icon.color=%235f6368&icon.query=Loading&icon.set=Material+Icons&icon.style=Filled">Google
                         Icon</a>
+                        <hr>
+                        <button id="addTv" onclick="addTv()">
+                            <i class="material-icons">tv</i>
+                            <span data-i18n="tv">tv</span>
+                        </button>
+                        <button id="addRefinedRazerKishiController" onclick="addRefinedRazerKishiController()">
+                            <i class="material-icons">videogame_asset</i>
+                            <span data-i18n="videogame_asset">videogame_asset</span>
+                        </button>
+    
                 </div>
             </div>
 
@@ -1072,6 +1119,9 @@
                     <button id="zoomFit" onclick="zoomFit()">
                         <span class="material-symbols-outlined">1x_mobiledata_badge</span>
                     </button>
+                    <button id="clearMode" onclick="operationModeClear()">
+                        <span class="material-symbols-outlined">cancel_presentation</span>
+                    </button>
 
                     <label data-i18n="view_layers" style="margin-top: 0px; margin-bottom: 0px;">
                         L
@@ -1084,6 +1134,8 @@
                     </label>
                     <input type="checkbox" id="view_controles_checkbox" checked
                         style="margin-top: 0px; margin-bottom: 0px;">
+                        
+
                 </div>
 
                 <div id="intro_content" class="content">
@@ -1546,67 +1598,68 @@
     </div> -->
     <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
 
-    <script src="js/Settings.js?v=3.3" defer></script>
+    <script src="js/Settings.js?v=3.4" defer></script>
 
-    <script src="third/jszip/jszip.min.js?v=3.3" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=3.3"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=3.3"></script>
+    <script src="third/jszip/jszip.min.js?v=3.4" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=3.4"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=3.4"></script>
 
 
-    <script src="js/ui/canvasObjectMenu.js?v=3.3" defer></script>
-    <script src="js/ui/intro.js?v=3.3" defer></script>
-    <script src="js/ui/Toast.js?v=3.3" defer></script>
-    <script src="js/ui/tippy.js?v=3.3" defer></script>
+    <script src="js/ui/canvasObjectMenu.js?v=3.4" defer></script>
+    <script src="js/ui/intro.js?v=3.4" defer></script>
+    <script src="js/ui/Toast.js?v=3.4" defer></script>
+    <script src="js/ui/tippy.js?v=3.4" defer></script>
     <script src="js/ui/i18next.js" defer></script>
-    <script src="js/ui/modeChange.js?v=3.3" defer></script>
+    <script src="js/ui/modeChange.js?v=3.4" defer></script>
 
-    <script src="js/util/FabricUtil.js?v=3.3" defer></script>
-    <script src="js/util/ImageUtil.js?v=3.3" defer></script>
-    <script src="js/util/AnimeUtil.js?v=3.3" defer></script>
-    <script src="js/util/ShareUtil.js?v=3.3" defer></script>
+    <script src="js/util/FabricUtil.js?v=3.4" defer></script>
+    <script src="js/util/ImageUtil.js?v=3.4" defer></script>
+    <script src="js/util/AnimeUtil.js?v=3.4" defer></script>
+    <script src="js/util/ShareUtil.js?v=3.4" defer></script>
 
-    <script src="js/CanvasManager.js?v=3.3" defer></script>
-    <script src="js/ProjectManagement.js?v=3.3" defer></script>
-    <script src="js/Shortcut.js?v=3.3" defer></script>
-    <script src="js/PanelManager.js?v=3.3" defer></script>
-    <script src="js/PromptManager.js?v=3.3" defer></script>
+    <script src="js/CanvasManager.js?v=3.4" defer></script>
+    <script src="js/ProjectManagement.js?v=3.4" defer></script>
+    <script src="js/Shortcut.js?v=3.4" defer></script>
+    <script src="js/PanelManager.js?v=3.4" defer></script>
+    <script src="js/PromptManager.js?v=3.4" defer></script>
 
-    <script src="js/ai/queue/Spinner.js?v=3.3" defer></script>
-    <script src="js/ai/queue/TaskQueue.js?v=3.3" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=3.3" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=3.3" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=3.3" defer></script>
+    <script src="js/ai/queue/Spinner.js?v=3.4" defer></script>
+    <script src="js/ai/queue/TaskQueue.js?v=3.4" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=3.4" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=3.4" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=3.4" defer></script>
     <script src="js/ai/ComfyuiManagement.js" defer></script>
-    <script src="js/ai/GenerativeAI.js?v=3.3" defer></script>
+    <script src="js/ai/GenerativeAI.js?v=3.4" defer></script>
 
-    <script src="js/layer/FloatingWindowManagement.js?v=3.3" defer></script>
-    <script src="js/layer/LayerAIManagement.js?v=3.3" defer></script>
-    <script src="js/layer/LayerManagement.js?v=3.3" defer></script>
-    <script src="js/layer/ImageHistoryManagement.js?v=3.3" defer></script>
+    <script src="js/layer/FloatingWindowManagement.js?v=3.4" defer></script>
+    <script src="js/layer/LayerAIManagement.js?v=3.4" defer></script>
+    <script src="js/layer/LayerManagement.js?v=3.4" defer></script>
+    <script src="js/layer/ImageHistoryManagement.js?v=3.4" defer></script>
 
-    <script src="js/sidebar/Sidebar.js?v=3.3" defer></script>
-    <script src="js/sidebar/TextEffect.js?v=3.3" defer></script>
-    <script src="js/sidebar/VerticalText.js?v=3.3" defer></script>
-    <script src="js/sidebar/SpeechBubbleEffect.js?v=3.3" defer></script>
-    <script src="js/sidebar/PenTools.js?v=3.3" defer></script>
-    <script src="js/sidebar/Knife.js?v=3.3" defer></script>
+    <script src="js/sidebar/Sidebar.js?v=3.4" defer></script>
+    <script src="js/sidebar/TextEffect.js?v=3.4" defer></script>
+    <script src="js/sidebar/VerticalText.js?v=3.4" defer></script>
+    <script src="js/sidebar/SpeechBubbleEffect.js?v=3.4" defer></script>
+    <script src="js/sidebar/OriginalBrush.js?v=3.4" defer></script>
+    <script src="js/sidebar/PenTools.js?v=3.4" defer></script>
+    <script src="js/sidebar/Knife.js?v=3.4" defer></script>
 
-    <script src="js/controle/CommonControleManagement.js?v=3.3" defer></script>
-    <script src="js/controle/ImageControleManager.js?v=3.3" defer></script>
-    <script src="js/controle/InfomationControle.js?v=3.3" defer></script>
-    <script src="js/controle/glfxControle.js?v=3.3" defer></script>
+    <script src="js/controle/CommonControleManagement.js?v=3.4" defer></script>
+    <script src="js/controle/ImageControleManager.js?v=3.4" defer></script>
+    <script src="js/controle/InfomationControle.js?v=3.4" defer></script>
+    <script src="js/controle/glfxControle.js?v=3.4" defer></script>
 
 
-    <script src="js/io/ImageDownload.js?v=3.3" defer></script>
+    <script src="js/io/ImageDownload.js?v=3.4" defer></script>
 
-    <!-- <script src="js/effect/roughHelper.js?v=3.3" defer></script> -->
-    <script src="js/event/FabricManagement.js?v=3.3" defer></script>
+    <!-- <script src="js/effect/roughHelper.js?v=3.4" defer></script> -->
+    <script src="js/event/FabricManagement.js?v=3.4" defer></script>
 
-    <script src="js/svg/GoogleIconNames.js?v=3.3"></script>
-    <script src="js/svg/GoogleIconHelper.js?v=3.3"></script>
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=3.3" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=3.3" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=3.3" defer></script>
+    <script src="js/svg/GoogleIconNames.js?v=3.4"></script>
+    <script src="js/svg/GoogleIconHelper.js?v=3.4"></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=3.4" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=3.4" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=3.4" defer></script>
 </body>
 
 </html>

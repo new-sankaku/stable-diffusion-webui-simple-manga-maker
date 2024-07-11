@@ -70,8 +70,7 @@ function flipVertically() {
   }
 }
 
-var cropFrame;
-var cropActiveObject;
+
 
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("crop").style.display = "none";
@@ -96,15 +95,18 @@ document.getElementById("crop").addEventListener("click", function (event) {
     parseInt(cropFrame.scaleY * height),
     parseInt(width * cropFrame.scaleX)
   );
-  if (cropFrame) {
-    canvas.remove(cropFrame);
-    cropFrame = null;
+  if (cropModeClear()) {
+    return true;
   }
 });
 
 document.getElementById("cropMode").addEventListener("click", function () {
   document.getElementById("crop").style.display = "inline";
   if (canvas.getActiveObject()) {
+
+    if (cropModeClear()) {
+      return true;
+    }
 
     if( isImage(canvas.getActiveObject()) ){
         console.log("canvas.getActiveObject().type", canvas.getActiveObject().type );

@@ -9,6 +9,7 @@ function changeKnifeMode(){
   changeMovement();
 }
 
+
 function changeMovement() {
   canvas.discardActiveObject();
   canvas.forEachObject(function (obj) {

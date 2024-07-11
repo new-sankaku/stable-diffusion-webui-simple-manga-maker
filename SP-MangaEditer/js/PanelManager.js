@@ -734,6 +734,388 @@ function addStar() {
   addShape(points);
 }
 
+function canvasInScale( originalWidth, originalHeight){
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const scaleX = (canvasWidth * 0.4) / originalWidth;
+  const scaleY = (canvasHeight * 0.4) / originalHeight;
+  const scale = Math.min(scaleX, scaleY);
+  return scale;
+}
+
+function addTv() {
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  
+  const originalWidth = 780;
+  const originalHeight = 580;
+  
+  const scale = canvasInScale( originalWidth, originalHeight);
+  
+  const frame = new fabric.Rect({
+    width: originalWidth,
+    height: originalHeight,
+    rx: 20,
+    ry: 20,
+    fill: '#333333',
+    stroke: '#222222',
+    strokeWidth: 2
+  });
+  
+  const screenBorder = new fabric.Rect({
+    width: 730,
+    height: 490,
+    fill: 'transparent',
+    stroke: '#444444',
+    strokeWidth: 5,
+    left: 25,
+    top: 25
+  });
+  
+  const screen = new fabric.Rect({
+    width: 720,
+    height: 480,
+    fill: '#000000',
+    left: 30,
+    top: 30
+  });
+  
+  const logo = new fabric.Text('SANKAKU', {
+    fontSize: 24,
+    fill: '#FFFFFF',
+    left: 35,
+    top: 540
+  });
+  
+  const controlPanel = new fabric.Rect({
+    width: 200,
+    height: 40,
+    fill: '#444444',
+    left: 550,
+    top: 530
+  });
+  
+  const dial1 = new fabric.Circle({
+    radius: 10,
+    fill: '#666666',
+    left: 570,
+    top: 540
+  });
+
+  const dial2 = new fabric.Circle({
+    radius: 10,
+    fill: '#666666',
+    left: 620,
+    top: 540
+  });
+
+  const dial3 = new fabric.Circle({
+    radius: 10,
+    fill: '#666666',
+    left: 670,
+    top: 540
+  });
+  
+  const tv = new fabric.Group([
+    frame, screenBorder, screen, logo, controlPanel,
+    dial1, dial2, dial3
+  ], {
+    left: (canvasWidth - originalWidth * scale) / 2,
+    top: (canvasHeight - originalHeight * scale) / 2,
+    scaleX: scale,
+    scaleY: scale
+  });
+  
+  canvas.add(tv);
+}
+
+
+function addSmartphone() {
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  
+  const originalWidth = 300;
+  const originalHeight = 600;
+  
+  const scale = canvasInScale( originalWidth, originalHeight);
+  
+  const frame = new fabric.Rect({
+      width: originalWidth,
+      height: originalHeight,
+      rx: 30,
+      ry: 30,
+      fill: '#333333',
+      stroke: '#222222',
+      strokeWidth: 2
+  });
+  
+  const screen = new fabric.Rect({
+      width: originalWidth - 20,
+      height: originalHeight - 100,  // 画面の高さを調整
+      fill: '#000000',
+      left: 10,
+      top: 40
+  });
+  
+  const homeButtonOuter = new fabric.Circle({
+      radius: 25,
+      fill: 'transparent',
+      stroke: '#FFFFFF',
+      strokeWidth: 2,
+      left: originalWidth / 2 - 25,
+      top: originalHeight - 55  // 位置を調整
+  });
+
+  const homeButtonInner = new fabric.Circle({
+      radius: 23,
+      fill: 'rgba(100, 100, 100, 0.5)',
+      left: originalWidth / 2 - 23,
+      top: originalHeight - 53  // 外側の円に合わせて調整
+  });
+  
+  const camera = new fabric.Circle({
+      radius: 5,
+      fill: '#666666',
+      left: originalWidth / 2 - 5,
+      top: 20
+  });
+  
+  const speaker = new fabric.Rect({
+      width: 50,
+      height: 5,
+      rx: 2,
+      ry: 2,
+      fill: '#666666',
+      left: originalWidth / 2 - 25,
+      top: 10
+  });
+  
+  const smartphone = new fabric.Group([
+      frame, screen, homeButtonOuter, homeButtonInner, camera, speaker
+  ], {
+      left: (canvasWidth - originalWidth * scale) / 2,
+      top: (canvasHeight - originalHeight * scale) / 2,
+      scaleX: scale,
+      scaleY: scale
+  });
+  
+  canvas.add(smartphone);
+}
+
+
+function createButton(centerX, centerY, size, color, label = '', name = '') {
+  const button = new fabric.Circle({
+      radius: size / 2,
+      fill: color,
+      stroke: '#000000',
+      strokeWidth: 2,
+      shadow: new fabric.Shadow({color: 'rgba(0,0,0,0.6)', blur: 5, offsetX: 2, offsetY: 2}),
+      originX: 'center',
+      originY: 'center',
+      left: 0,
+      top: 0
+  });
+
+  const group = new fabric.Group([button], {
+      left: centerX,
+      top: centerY,
+      originX: 'center',
+      originY: 'center',
+      name: name
+  });
+
+  // if (label) {
+  //     const text = new fabric.Text(label, {
+  //         fontSize: size / 2,
+  //         fill: '#FFFFFF',
+  //         originX: 'center',
+  //         originY: 'center',
+  //         left: 0,
+  //         top: 0,
+  //         fontWeight: 'bold'
+  //     });
+  //     group.addWithUpdate(text);
+  // }
+
+  return group;
+}
+
+function addRedDot(x, y, name) {
+  const redDot = new fabric.Circle({
+      radius: 3,
+      fill: 'red',
+      left: x,
+      top: y,
+      originX: 'center',
+      originY: 'center'
+  });
+
+  const text = new fabric.Text(name, {
+      fontSize: 12,
+      fill: 'red',
+      left: x + 5,
+      top: y - 10,
+      originX: 'left',
+      originY: 'bottom'
+  });
+
+  canvas.add(redDot);
+  canvas.add(text);
+}
+
+function addRefinedRazerKishiController() {
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  
+  const originalWidth = 200;
+  const originalHeight = 350;
+  
+  const scale = canvasInScale( originalWidth+600, originalHeight);
+  // 左右のコントローラー
+  const leftController = new fabric.Rect({
+      width: originalWidth,
+      height: originalHeight,
+      rx: 20,
+      ry: 20,
+      fill: '#2b2b2b',
+      stroke: '#000000',
+      strokeWidth: 2,
+      left: 0,
+      top: 25,
+      name: 'Left Controller'
+  });
+  const rightController = new fabric.Rect({
+      width: originalWidth,
+      height: originalHeight,
+      rx: 20,
+      ry: 20,
+      fill: '#2b2b2b',
+      stroke: '#000000',
+      strokeWidth: 2,
+      left: 800,
+      top: 25,
+      name: 'Right Controller'
+  });
+  //addRedDot(rightController.left, rightController.top, rightController.name);
+
+  // スマートフォン
+  const smartphone = new fabric.Rect({
+      width: 600,
+      height: 300,
+      rx: 20,
+      ry: 20,
+      fill: '#000000',
+      stroke: '#333333',
+      strokeWidth: 2,
+      left: 200,
+      top: 50,
+      name: 'Smartphone'
+  });
+  //addRedDot(smartphone.left, smartphone.top, smartphone.name);
+
+  // スマートフォン画面
+  const screen = new fabric.Rect({
+      width: 580,
+      height: 280,
+      rx: 15,
+      ry: 15,
+      fill: '#000000',
+      left: 210,
+      top: 60,
+      name: 'Screen'
+  });
+  //addRedDot(screen.left, screen.top, screen.name);
+
+  // 左側十字キー
+  function createDPadButton(left, top, angle = 0, name = '') {
+      const button = new fabric.Rect({
+          width: 35,
+          height: 35,
+          fill: '#4a4a4a',
+          stroke: '#000000',
+          strokeWidth: 2,
+          rx: 5,
+          ry: 5,
+          shadow: new fabric.Shadow({color: 'rgba(0,0,0,0.6)', blur: 5, offsetX: 2, offsetY: 2}),
+          angle: angle
+      });
+      //addRedDot(left, top, name);
+      return new fabric.Group([button], {left: left, top: top, name: name});
+  }
+
+  const dpadUp = createDPadButton(82, 195, 0, 'D-Pad Up');
+  const dpadDown = createDPadButton(82, 265, 0, 'D-Pad Down');
+  const dpadLeft = createDPadButton(47, 230, 0, 'D-Pad Left');
+  const dpadRight = createDPadButton(117, 230, 0, 'D-Pad Right');
+  const dpadCenter = new fabric.Rect({
+      width: 25,
+      height: 25,
+      fill: '#4a4a4a',
+      stroke: '#000000',
+      strokeWidth: 2,
+      left: 87,
+      top: 235,
+      name: 'D-Pad Center'
+  });
+  //addRedDot(dpadCenter.left, dpadCenter.top, dpadCenter.name);
+
+  // 左ジョイスティック
+  const leftStick = createButton(100, 130, 60, '#333333', '', 'Left Stick');
+  //addRedDot(leftStick.left, leftStick.top, leftStick.name);
+
+  // 右ジョイスティック
+  const rightStick = createButton(900, 130, 60, '#333333', '', 'Right Stick');
+  //addRedDot(rightStick.left, rightStick.top, rightStick.name);
+
+  // 右側4つのボタン
+  const buttonSize = 40;
+  const buttonCenterX = 900;
+  const buttonCenterY = 250;
+  const buttonOffset = 45;
+
+  const buttonA = createButton(buttonCenterX, buttonCenterY + buttonOffset, buttonSize, '#90EE90', 'A', 'Button A');
+  //addRedDot(buttonA.left, buttonA.top, buttonA.name);
+  const buttonB = createButton(buttonCenterX + buttonOffset, buttonCenterY, buttonSize, '#FFA07A', 'B', 'Button B');
+  //addRedDot(buttonB.left, buttonB.top, buttonB.name);
+  const buttonX = createButton(buttonCenterX - buttonOffset, buttonCenterY, buttonSize, '#ADD8E6', 'X', 'Button X');
+  //addRedDot(buttonX.left, buttonX.top, buttonX.name);
+  const buttonY = createButton(buttonCenterX, buttonCenterY - buttonOffset, buttonSize, '#FFFFE0', 'Y', 'Button Y');
+  //addRedDot(buttonY.left, buttonY.top, buttonY.name);
+
+  // LRボタン（シャドウ付き）
+  function createTriggerButton(left, top, name) {
+      const path = new fabric.Path('M 10 5 Q 60 0, 110 5 L 110 25 Q 60 30, 10 25 Z', {
+          fill: '#333333',
+          stroke: '#000000',
+          strokeWidth: 2,
+          left: left,
+          top: top,
+          name: name
+      });
+      //addRedDot(left, top, name);
+      return path;
+  }
+
+  const leftTrigger = createTriggerButton(45, 0, 'Left Trigger');
+  const rightTrigger = createTriggerButton(845, 0, 'Right Trigger');
+
+  // すべての要素をグループ化
+  const controller = new fabric.Group([
+      leftController, rightController, smartphone, screen,
+      dpadUp, dpadDown, dpadLeft, dpadRight, dpadCenter,
+      leftStick, rightStick,
+      buttonA, buttonB, buttonX, buttonY,
+      leftTrigger, rightTrigger
+  ], {
+    left: (canvasWidth - originalWidth * scale) / 2,
+    top: (canvasHeight - originalHeight * scale) / 2,
+    scaleX: scale,
+    scaleY: scale
+});
+  
+  canvas.add(controller);
+}
+
 function addPentagon() {
   var side = 150;
   var angle = 54;

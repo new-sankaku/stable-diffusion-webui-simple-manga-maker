@@ -1,3 +1,83 @@
+var nowMode = "";
+const MODE_PEN_PENCIL   = 'Pencil';
+const MODE_PEN_CIRCLE   = 'Circle';
+const MODE_PEN_SQUARE   = 'Square';
+const MODE_PEN_TEXTURE  = 'Texture';
+const MODE_PEN_CRAYON   = 'Crayon';
+const MODE_PEN_INK      = 'Ink';
+const MODE_PEN_MARKER   = 'Marker';
+const MODE_PEN_ERASER   = 'Eraser';
+const MODE_PEN_HLINE    = 'Hline';
+const MODE_PEN_VLINE    = 'Vline';
+const MODE_PEN_MOSAIC   = 'Mosaic';
+
+var isMosaicBrushActive = false;
+var cropFrame;
+var cropActiveObject;
+let nowPencil = "";
+
+
+function glowClearButton(){
+  var button = document.getElementById('clearMode');
+  button.setAttribute('anim', 'glow');
+  button.classList.add('glow');
+  setTimeout(function() {
+    button.removeAttribute('anim');
+    button.classList.remove('glow');
+  }, 6000);
+}
+
+function operationModeClear( ){
+  console.log("operationModeClear start")
+  cropModeClear();
+  knifeModeClear();
+  editModeClear();
+  pencilModeClear(nowPencil);
+}
+
+function cropModeClear(){
+  if (cropFrame) {
+    document.getElementById("crop").style.display = "none";
+    canvas.remove(cropFrame);
+    cropFrame = null;
+    if( cropActiveObject ){
+      cropActiveObject.set({
+        selectable: true
+      });
+    }
+    return true;
+  }
+}
+function knifeModeClear(){
+  var knifeModeButton = document.getElementById('knifeModeButton');
+  isKnifeMode = false;
+  knifeModeButton.textContent = getText('knifeOff');
+  changeMovement();
+}
+
+function editModeClear() {
+  canvas.getObjects().forEach(function (obj) {
+    if( obj.edit ){
+      obj.edit = false;
+      obj.cornerStyle = "rect";
+      obj.controls = fabric.Object.prototype.controls;
+      obj.hasBorders = true;
+      canvas.requestRenderAll();
+      updateLayerPanel();
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
 
 function toggleMode() {
   const isDarkMode = document.body.classList.toggle('dark-mode');
