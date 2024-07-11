@@ -1,69 +1,60 @@
 var mosaicBrush = new fabric.MosaicBrush(canvas);
+enhanceBrush(mosaicBrush, false);
 
 canvas.isDrawingMode = false;
 let currentPaths = [];
 
-function pencilModeClear(type) {
-    type = type || nowPencil;
-
-    if (canvas.isDrawingMode && MODE_PEN_MOSAIC == type) {
-        canvas.isDrawingMode = false;
-        isMosaicBrushActive = false;
-        canvas.freeDrawingBrush.mergeDrawings();
-        canvas.freeDrawingBrush = null;
-        canvas.contextTop.clearRect(0, 0, canvas.width, canvas.height);
-        nowPencil = "";
-        finalizeGroup();
-        return true;
-    } else if (canvas.isDrawingMode && nowPencil == type) {
-        canvas.isDrawingMode = false;
-        finalizeGroup();
-        nowPencil = "";
-        return true;
-    }
-}
-
-
-
 function switchPencilType(type) {
-  if (pencilModeClear(type)) {
-    return;
-  } else {
-    if (canvas.isDrawingMode) {
-      finalizeGroup();
+
+    if( type == nowPencil ){
+        pencilModeClear(type);
+        currentPaths = [];
+        return;
+    }else{
+        pencilModeClear(type);
+
+        canvas.isDrawingMode = true;
+        currentPaths = [];
+        nowPencil = type;
     }
-    canvas.isDrawingMode = true;
-    currentPaths = [];
-    nowPencil = type;
-  }
 
     if (type === MODE_PEN_MOSAIC) {
-      isMosaicBrushActive = true;
-      canvas.freeDrawingBrush = mosaicBrush;
-      canvas.freeDrawingBrush.mosaicSize = parseInt(document.getElementById('mosaic-size').value);
-      canvas.freeDrawingBrush.circleSize = parseInt(document.getElementById('circle-size').value);
-      canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
-    
+        isMosaicBrushActive = true;
+        canvas.freeDrawingBrush = mosaicBrush;
+        canvas.freeDrawingBrush.mosaicSize = parseInt(document.getElementById('mosaic-size').value);
+        canvas.freeDrawingBrush.circleSize = parseInt(document.getElementById('circle-size').value);
+        canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
+
     } else if (type === MODE_PEN_PENCIL) {
         setupContextTopBrush(new fabric.PencilBrush(canvas));
+
     } else if (type === MODE_PEN_TEXTURE) {
         setupContextTopBrush(new fabric.PatternBrush(canvas));
+
     } else if (type === MODE_PEN_VLINE) {
         setupContextTopBrush(getVLinePatternBrush());
+
     } else if (type === MODE_PEN_HLINE) {
         setupContextTopBrush(getHLinePatternBrush());
+
     } else if (type === MODE_PEN_CIRCLE) {
         canvas.freeDrawingBrush = new fabric.CircleBrush(canvas);
+
     } else if (type === MODE_PEN_CRAYON) {
-        canvas.freeDrawingBrush = getCrayonBrush();
+        setupContextTopBrush(enhanceBrush(getCrayonBrush(), true));
+
     } else if (type === MODE_PEN_INK) {
-        canvas.freeDrawingBrush = getInkBrush();
+        canvas.freeDrawingBrush = enhanceBrush(getInkBrush(), true);
+
     } else if (type === MODE_PEN_MARKER) {
-        canvas.freeDrawingBrush = getMarkerBrush();
+        canvas.freeDrawingBrush = enhanceBrush(getMarkerBrush(), true);
+
     } else if (type === MODE_PEN_ERASER) {
         canvas.freeDrawingBrush = getEraserBrush();
+
     } else {
         canvas.freeDrawingBrush = new fabric[type + "Brush"](canvas);
+
     }
 
     applyBrushSettings();
@@ -71,7 +62,7 @@ function switchPencilType(type) {
 
 function setupContextTopBrush(brush) {
     canvas.freeDrawingBrush = brush;
-    canvas.freeDrawingBrush._render = function() {
+    canvas.freeDrawingBrush._render = function () {
         var ctx = this.canvas.contextTop;
         var color = new fabric.Color(this.color);
         var opacity = color.getAlpha();
@@ -79,7 +70,7 @@ function setupContextTopBrush(brush) {
         ctx.strokeStyle = this.color;
         ctx.lineWidth = this.width;
         ctx.lineCap = ctx.lineJoin = 'round';
-        
+
         ctx.beginPath();
         for (var i = 0; i < this._points.length; i++) {
             var point = this._points[i];
@@ -104,8 +95,8 @@ function finalizeGroup() {
     }
 }
 
-canvas.on('path:created', function(opt) {
-  currentPaths.push(opt.path);
+canvas.on('path:created', function (opt) {
+    currentPaths.push(opt.path);
 });
 
 
@@ -164,11 +155,20 @@ function getCrayonBrush() {
 }
 
 function getInkBrush() {
-    return new fabric.InkBrush(canvas);
+    return new fabric.InkBrush(canvas, {
+        width: 70,
+        opacity: 0.6,
+        color: "#ff0000"
+    });
 }
 
 function getMarkerBrush() {
-    return new fabric.MarkerBrush(canvas);
+    return new fabric.MarkerBrush(canvas, {
+        width: 70,
+        opacity: 0.6,
+        color: "#ff0000"
+    }
+    );
 }
 
 var drawingColorEl = document.getElementById("drawing-color");
@@ -186,9 +186,9 @@ function applyBrushSettings() {
         brush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
 
         var color = new fabric.Color(drawingColorEl.value);
-        color.setAlpha(parseFloat(drawingOpacityEl.value/100) || 1);
+        color.setAlpha(parseFloat(drawingOpacityEl.value / 100) || 1);
         brush.color = color.toRgba();
-        brush.opacity = 1; 
+        brush.opacity = 1;
 
         if (brush.getPatternSrc) {
             brush.source = brush.getPatternSrc.call(brush);
@@ -204,7 +204,7 @@ function applyBrushSettings() {
                 offsetX: parseInt(drawingShadowOffsetX.value, 10) || 0,
                 offsetY: parseInt(drawingShadowOffsetY.value, 10) || 0,
                 color: drawingShadowColorEl.value,
-            });  
+            });
         } else {
             brush.shadow = null;
         }
@@ -238,30 +238,33 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function updatePreview() {
-  if (isMosaicBrushActive && canvas.freeDrawingBrush) {
-    console.log("updatePreview");
-    canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
-  }
+    if (isMosaicBrushActive && canvas.freeDrawingBrush) {
+        console.log("updatePreview");
+        canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
+    }
 }
 
 document.getElementById('mosaic-size').addEventListener('input', function () {
-  var value = this.value;
-  if (isMosaicBrushActive && canvas.freeDrawingBrush) {
-    canvas.freeDrawingBrush.mosaicSize = parseInt(value);
-    updatePreview();
-  }
+    var value = this.value;
+    if (isMosaicBrushActive && canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.mosaicSize = parseInt(value);
+        updatePreview();
+    }
 });
 
 document.getElementById('circle-size').addEventListener('input', function () {
-  var value = this.value;
-  if (isMosaicBrushActive && canvas.freeDrawingBrush) {
-    canvas.freeDrawingBrush.circleSize = parseInt(value);
-    updatePreview();
-  }
+    var value = this.value;
+    if (isMosaicBrushActive && canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.circleSize = parseInt(value);
+        updatePreview();
+    }
 });
 
 canvas.on('mouse:move', function (options) {
-  if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
-      canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
-  }
+    if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
+        canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
+    }
 });
+
+
+

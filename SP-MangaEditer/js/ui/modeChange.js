@@ -35,6 +35,34 @@ function operationModeClear( ){
   pencilModeClear(nowPencil);
 }
 
+function pencilModeClear(type) {
+  type = type || nowPencil;
+
+  if (canvas.isDrawingMode && isImageBrush(type)) {
+      canvas.isDrawingMode = false;
+      isMosaicBrushActive = false;
+      canvas.freeDrawingBrush.mergeDrawings();
+      canvas.freeDrawingBrush = null;
+      canvas.contextTop.clearRect(0, 0, canvas.width, canvas.height);
+      nowPencil = "";
+      finalizeGroup();
+      return true;
+  } else if (canvas.isDrawingMode) {
+      canvas.isDrawingMode = false;
+      finalizeGroup();
+      nowPencil = "";
+      return true;
+  }
+}
+
+function isImageBrush(type){
+  if( MODE_PEN_MOSAIC == type ) return true;
+  if( MODE_PEN_CRAYON == type ) return true;
+  if( MODE_PEN_INK == type )    return true;
+  if( MODE_PEN_MARKER == type ) return true;
+}
+
+
 function cropModeClear(){
   if (cropFrame) {
     document.getElementById("crop").style.display = "none";

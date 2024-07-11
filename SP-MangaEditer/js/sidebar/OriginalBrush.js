@@ -77,27 +77,6 @@ fabric.MosaicBrush = fabric.util.createClass(fabric.BaseBrush, {
       }
   },
 
-  commitDrawing: function () {
-      var ctx = this.canvas.contextTop;
-      var scaleX = 1 / ctx.getTransform().a;
-      var scaleY = 1 / ctx.getTransform().d;
-      var dataURL = ctx.canvas.toDataURL();
-      fabric.Image.fromURL(dataURL, (img) => {
-          img.set({
-              left: 0,
-              top: 0,
-              selectable: false,
-              evented: false,
-              scaleX: scaleX,
-              scaleY: scaleY,
-          });
-          this.canvas.add(img);
-          this.canvas.renderAll();
-          this.images.push(img); 
-          ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      });
-  },
-
   isInsideCircle: function (cx, cy, x, y, radius) {
       var dx = cx - x;
       var dy = cy - y;
@@ -134,41 +113,104 @@ fabric.MosaicBrush = fabric.util.createClass(fabric.BaseBrush, {
           ctx.lineTo(endX, y);
           ctx.stroke();
       }
-  },
-
-  mergeDrawings: function () {
-    var tempCanvas = document.createElement('canvas');
-    var tempCtx = tempCanvas.getContext('2d');
-    
-    tempCanvas.width = this.canvas.width;
-    tempCanvas.height = this.canvas.height;
-
-    this.images.forEach((img) => {
-        tempCtx.drawImage(
-            img.getElement(),
-            img.left,
-            img.top,
-            img.width * img.scaleX,
-            img.height * img.scaleY
-        );
-    });
-
-    var mergedImage = tempCanvas.toDataURL();
-    fabric.Image.fromURL(mergedImage, (img) => {
-        img.set({
-            left: 0,
-            top: 0,
-            selectable: true,
-            scaleX: 1, 
-            scaleY: 1  
-        });
-        this.canvas.add(img);
-        this.images.forEach((image) => {
-            this.canvas.remove(image);
-        });
-        this.images = [];
-
-        this.canvas.renderAll();
-    });
-}
+  }
+  
 });
+
+
+
+function enhanceBrush(brush, keepOriginalMethod) {
+    brush.images = [];
+
+    brush.commitDrawing = function () {
+        var ctx = this.canvas.contextTop;
+        var scaleX = 1 / ctx.getTransform().a;
+        var scaleY = 1 / ctx.getTransform().d;
+        var dataURL = ctx.canvas.toDataURL();
+        fabric.Image.fromURL(dataURL, (img) => {
+            img.set({
+                left: 0,
+                top: 0,
+                selectable: false,
+                evented: false,
+                scaleX: scaleX,
+                scaleY: scaleY,
+            });
+            this.canvas.add(img);
+            this.canvas.renderAll();
+            this.images.push(img); 
+            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        });
+    };
+
+
+    brush.commitDrawing = function () {
+        var ctx = this.canvas.contextTop;
+        var scaleX = 1 / ctx.getTransform().a;
+        var scaleY = 1 / ctx.getTransform().d;
+        var dataURL = ctx.canvas.toDataURL();
+        fabric.Image.fromURL(dataURL, (img) => {
+            img.set({
+                left: 0,
+                top: 0,
+                selectable: false,
+                evented: false,
+                scaleX: scaleX,
+                scaleY: scaleY,
+            });
+            this.canvas.add(img);
+            this.canvas.renderAll();
+            this.images.push(img); 
+            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        });
+    };
+  
+
+    brush.mergeDrawings = function () {
+        var tempCanvas = document.createElement('canvas');
+        var tempCtx = tempCanvas.getContext('2d');
+        
+        tempCanvas.width = this.canvas.width;
+        tempCanvas.height = this.canvas.height;
+
+        this.images.forEach((img) => {
+            tempCtx.drawImage(
+                img.getElement(),
+                img.left,
+                img.top,
+                img.width * img.scaleX,
+                img.height * img.scaleY
+            );
+        });
+
+        var mergedImage = tempCanvas.toDataURL();
+        fabric.Image.fromURL(mergedImage, (img) => {
+            img.set({
+                left: 0,
+                top: 0,
+                selectable: true,
+                scaleX: 1, 
+                scaleY: 1  
+            });
+            this.canvas.add(img);
+            this.images.forEach((image) => {
+                this.canvas.remove(image);
+            });
+            this.images = [];
+
+            this.canvas.renderAll();
+        });
+    };
+
+    if(keepOriginalMethod){
+        var originalOnMouseUp = brush.onMouseUp;
+        brush.onMouseUp = function() {
+            if (originalOnMouseUp) {
+                originalOnMouseUp.call(this);
+            }
+            this.commitDrawing();
+        };
+    }
+
+    return brush;
+}
