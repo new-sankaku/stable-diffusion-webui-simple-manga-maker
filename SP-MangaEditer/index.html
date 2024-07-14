@@ -16,19 +16,52 @@
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-YWPRKY7WKV');
-        function trackCustomEvent(eventCategory, eventAction, eventLabel) {
+
+        function trackCustomEvent(eventCategory, eventAction, eventLabel, eventValue, additionalParams) {
             gtag('event', eventAction, {
                 'event_category': eventCategory,
-                'event_label': eventLabel
+                'event_label': eventLabel,
+                'value': eventValue,
+                ...additionalParams
             });
         }
+
         document.addEventListener('click', function (event) {
             var element = event.target;
             var elementId = element.id ? element.id : 'no-id';
             var elementClasses = element.className ? element.className.split(' ').join(', ') : 'no-class';
             var tagName = element.tagName.toLowerCase();
             var textContent = element.textContent.trim().substring(0, 10);
-            trackCustomEvent('click_' + tagName, elementId + ' | ' + elementClasses, textContent);
+            var clickX = event.clientX;
+            var clickY = event.clientY;
+            var pageUrl = window.location.href;
+            var parentTag = element.parentElement ? element.parentElement.tagName.toLowerCase() : 'no-parent';
+
+            trackCustomEvent(
+                'click_' + tagName,
+                elementId + ' | ' + elementClasses,
+                textContent,
+                1,
+                {
+                    'click_x': clickX,
+                    'click_y': clickY,
+                    'page_url': pageUrl,
+                    'parent_tag': parentTag
+                }
+            );
+        });
+
+        window.addEventListener('scroll', function () {
+            var scrollDepth = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+            trackCustomEvent('scroll', 'page_scroll', 'Scroll Depth', scrollDepth, {});
+        });
+
+        window.addEventListener('load', function () {
+            trackCustomEvent('page_load', 'page_load', 'Page Load', 1, {});
+        });
+
+        window.addEventListener('beforeunload', function () {
+            trackCustomEvent('page_unload', 'page_unload', 'Page Unload', 1, {});
         });
     </script>
 
@@ -183,15 +216,16 @@
                                 <button id="Select_a1111_button"  style="margin: 0 10px; padding: 5px; background-color: #ffedd3;">A1111</button>
                                 <button id="Select_comfyui_button" style="margin: 0 10px; padding: 5px">Comfyui</button>
                             </li> -->
-                            <li  style="display: none;">
+                            <li style="display: none;">
                                 <div class="toggle-container">
                                     <span class="toggle-text">WebUI</span>
                                     <div class="toggle-switch">
-                                        <input type="checkbox" id="toggle-api" class="toggle-checkbox" onchange="toggleAPI(event)">
+                                        <input type="checkbox" id="toggle-api" class="toggle-checkbox"
+                                            onchange="toggleAPI(event)">
                                         <label for="toggle-api" class="toggle-label"></label>
                                     </div>
                                     <span class="toggle-text2">ComfyUI</span>
-                                </div>                            
+                                </div>
                             </li>
 
                             <hr>
@@ -244,8 +278,8 @@
                                 </li>
                                 <li>
                                     <label class="file-input-label">
-                                      <input type="file" id="Workflow_path_load" onchange="displayFileName()">
-                                      <span>Workflow File</span>
+                                        <input type="file" id="Workflow_path_load" onchange="displayFileName()">
+                                        <span>Workflow File</span>
                                     </label>
                                     <label>
                                         <span id="file-name">No file</span>
@@ -254,7 +288,7 @@
                                 <a href="html/API_Help/ComufyUI_settings.html" target="_blank">
                                     <i class="material-icons">help_outline</i>
                                     <span data-i18n="help_api_connect_settings">
-                                    Help:Connect Settings
+                                        Help:Connect Settings
                                     </span>
                                 </a>
                             </div>
@@ -361,8 +395,7 @@
                                     data-i18n="portuguese">Português</span>
                             </a>
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('th', event)">
-                                <span class="flag-icon flag-icon-th"></span> <span
-                                    data-i18n="thailand">Thailand</span>
+                                <span class="flag-icon flag-icon-th"></span> <span data-i18n="thailand">Thailand</span>
                             </a>
 
                         </ul>
@@ -431,15 +464,20 @@
 
         <div id="head-id" style="display: flex; flex-grow: 1;">
             <div id="sidebar">
-                <i class="material-icons" id="intro_svg-container-vertical"     onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
-                <i class="material-icons" id="intro_svg-container-landscape"    onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
-                <i class="material-icons" id="intro_page-manager-area"          onclick="toggleVisibility('panel-manager-area');">dashboard</i>
-                <i class="material-icons" id="intro_custom-panel-manager-area"  onclick="toggleVisibility('custom-panel-manager-area');">dashboard_customize</i>
-                <i class="material-icons" id="intro_speech-bubble-area1"        onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
-                <i class="material-icons" id="intro_text-area"                  onclick="toggleVisibility('text-area');">text_fields</i>
-                <i class="material-icons" id="intro_tool-area"                  onclick="toggleVisibility('tool-area');">brush</i>
-                <i class="material-icons" id="intro_shape-area"                 onclick="toggleVisibility('shape-area');">interests</i>
-                <i class="material-icons" id="intro_dummy-area4"                onclick="toggleVisibility('dummy-area4');">info</i>
+                <i class="material-icons" id="intro_svg-container-vertical"
+                    onclick="toggleVisibility('svg-container-vertical');">crop_portrait</i>
+                <i class="material-icons" id="intro_svg-container-landscape"
+                    onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
+                <i class="material-icons" id="intro_page-manager-area"
+                    onclick="toggleVisibility('panel-manager-area');">dashboard</i>
+                <i class="material-icons" id="intro_custom-panel-manager-area"
+                    onclick="toggleVisibility('custom-panel-manager-area');">dashboard_customize</i>
+                <i class="material-icons" id="intro_speech-bubble-area1"
+                    onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
+                <i class="material-icons" id="intro_text-area" onclick="toggleVisibility('text-area');">text_fields</i>
+                <i class="material-icons" id="intro_tool-area" onclick="toggleVisibility('tool-area');">brush</i>
+                <i class="material-icons" id="intro_shape-area" onclick="toggleVisibility('shape-area');">interests</i>
+                <i class="material-icons" id="intro_dummy-area4" onclick="toggleVisibility('dummy-area4');">info</i>
             </div>
 
             <div id="svg-container-vertical" style="display: none;">
@@ -462,7 +500,8 @@
                     </button>
                     <div class="input-group">
                         <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
-                        <input type="number" id="knifePanelSpaceSize" name="knifePanelSpaceSize" min="0" max="75" step="1" value="20">
+                        <input type="number" id="knifePanelSpaceSize" name="knifePanelSpaceSize" min="0" max="75"
+                            step="1" value="20">
                     </div>
                     <hr>
                     <button id="A4-H">
@@ -481,7 +520,7 @@
                         <i class="material-icons">crop_landscape</i>
                         <span data-i18n="B4-V-Scale">B4 Scale Panel</span>
                     </button>
-<hr>
+                    <hr>
                     <button id="insta">
                         <i class="fab fa-instagram"></i>
                         <span data-i18n="instagram">IG</span>
@@ -495,7 +534,7 @@
                         <span data-i18n="instagram_portrait">IG Port</span>
                     </button>
                     <hr>
-                    
+
                     <button id="fb-page-cover">
                         <i class="fab fa-facebook"></i>
                         <span data-i18n="fb_page_cover">FB Page</span>
@@ -535,17 +574,19 @@
                     <hr>
                     <div class="input-group">
                         <label for="customPanelSizeX" data-i18n="customPanelSizeX">Width</label>
-                        <input type="number" id="customPanelSizeX" name="customPanelSizeX" min="1" max="4096" step="1" value="1380">
+                        <input type="number" id="customPanelSizeX" name="customPanelSizeX" min="1" max="4096" step="1"
+                            value="1380">
                     </div>
                     <div class="input-group">
                         <label for="customPanelSizeY" data-i18n="customPanelSizeY">Height</label>
-                        <input type="number" id="customPanelSizeY" name="customPanelSizeY" min="1" max="4096" step="1" value="4000">
+                        <input type="number" id="customPanelSizeY" name="customPanelSizeY" min="1" max="4096" step="1"
+                            value="4000">
                     </div>
                     <button id="CustomPanelButton">
                         <i class="material-icons">crop_landscape</i>
                         <span data-i18n="customPanel">Custom Size</span>
                     </button>
-                    
+
                 </div>
             </div>
 
@@ -578,23 +619,23 @@
                     <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> <span
                             data-i18n="editingMode">Editing Mode</span></button>
 
-<hr>
-<div class="input-group">
-    <label data-i18n="accept_ratio">Accept Ratio</label>
-</div>
-<div class="input-group">
-    <label data-i18n="width">Width</label>
-    <input type="number" id="ar_width" name="ar_width" min="0.01" max="9999" step="1" value="3">
-</div>
-<div class="input-group">
-    <label data-i18n="height">Height</label>
-    <input type="number" id="ar_height" name="ar_height" min="0.01" max="9999" step="1" value="4">
-</div>
-<button id="addRect" onclick="addArRect()">
-    <i class="material-icons">aspect_ratio</i>
-    <span data-i18n="ar_Rect">AR Rect</span>
-</button>
-<hr>
+                    <hr>
+                    <div class="input-group">
+                        <label data-i18n="accept_ratio">Accept Ratio</label>
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="width">Width</label>
+                        <input type="number" id="ar_width" name="ar_width" min="0.01" max="9999" step="1" value="3">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="height">Height</label>
+                        <input type="number" id="ar_height" name="ar_height" min="0.01" max="9999" step="1" value="4">
+                    </div>
+                    <button id="addRect" onclick="addArRect()">
+                        <i class="material-icons">aspect_ratio</i>
+                        <span data-i18n="ar_Rect">AR Rect</span>
+                    </button>
+                    <hr>
                     <button id="addSquare" onclick="addSquare()">
                         <i class="material-icons">add_box</i>
                         <span data-i18n="square">Square</span>
@@ -619,7 +660,7 @@
                     <button id="addRightSlantingTrapezoid" onclick="addRightSlantingTrapezoid()">
                         <i class="material-icons">filter_none</i>
                         <span data-i18n="wideTrapezoid">Wide Trapezoid</span>
-                    </button>                    
+                    </button>
                     <button id="addTallTrap" onclick="addTallTrap()">
                         <i class="material-icons">filter_none</i>
                         <span data-i18n="tallTrap">Tall Trapezoid</span>
@@ -630,7 +671,7 @@
                     </button>
 
                     <button id="addTriangle" onclick="addTriangle()">
-                        <i class="material-icons">change_history</i> 
+                        <i class="material-icons">change_history</i>
                         <span data-i18n="triangle">Triangle</span>
                     </button>
                     <button id="addRhombus" onclick="addRhombus()">
@@ -638,16 +679,16 @@
                         <span data-i18n="rhombus">Rhombus</span>
                     </button>
                     <button id="addPentagon" onclick="addPentagon()">
-                        <i class="material-icons">pentagon</i> 
+                        <i class="material-icons">pentagon</i>
                         <span data-i18n="pentagon">Pentagon</span>
                     </button>
                     <button id="addHexagon" onclick="addHexagon()">
-                        <i class="material-icons">hexagon</i> 
+                        <i class="material-icons">hexagon</i>
                         <span data-i18n="hexagon">Hexagon</span>
                     </button>
 
                     <button id="addCircle" onclick="addCircle()">
-                        <i class="material-icons">radio_button_unchecked</i> 
+                        <i class="material-icons">radio_button_unchecked</i>
                         <span data-i18n="circle">Circle</span>
                     </button>
                     <button id="addEllipse" onclick="addEllipse()">
@@ -724,7 +765,7 @@
                             oninput="changeStrokeWidthSize(this.value)">
                     </div>
                     <div class="input-group-multi">
-                        <button id="align-left" class="selected"  onclick="alignText('left')">
+                        <button id="align-left" class="selected" onclick="alignText('left')">
                             <i class="material-icons">format_align_left</i>
                         </button>
                         <button id="align-center" onclick="alignText('center')">
@@ -825,11 +866,13 @@
                     <hr>
                     <button id="PencilButton" onclick="switchPencilType('Pencil')">
                         <span data-i18n="Pencil">Pencil</span>
-                        <img src="03_images/preset/brush/Pencil.webp" alt="Pencil Icon" style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Pencil.webp" alt="Pencil Icon"
+                            style="width: 72px; height: 24px;">
                     </button>
                     <button id="CircleButton" onclick="switchPencilType('Circle')">
                         <span data-i18n="Circle">Circle</span>
-                        <img src="03_images/preset/brush/Circle.webp" alt="Circle Icon" style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Circle.webp" alt="Circle Icon"
+                            style="width: 72px; height: 24px;">
                     </button>
                     <!-- <button id="VlineButton" onclick="switchPencilType('Vline')">
                         <span data-i18n="Vline">Vline</span>
@@ -845,7 +888,8 @@
                     </button> -->
                     <button id="CrayonButton" onclick="switchPencilType('Crayon')">
                         <span data-i18n="Crayon">Crayon</span>
-                        <img src="03_images/preset/brush/Crayon.webp" alt="Crayon Icon" style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Crayon.webp" alt="Crayon Icon"
+                            style="width: 72px; height: 24px;">
                     </button>
                     <button id="InkButton" onclick="switchPencilType('Ink')">
                         <span data-i18n="Ink">Ink</span>
@@ -853,7 +897,8 @@
                     </button>
                     <button id="MarkerButton" onclick="switchPencilType('Marker')">
                         <span data-i18n="Marker">Marker</span>
-                        <img src="03_images/preset/brush/Marker.webp" alt="Marker Icon" style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Marker.webp" alt="Marker Icon"
+                            style="width: 72px; height: 24px;">
                     </button>
                     <div class="input-group">
                         <label for="line-style" data-i18n="lineStyle">Line Style</label>
@@ -881,7 +926,8 @@
                     </div>
                     <button id="MosaicButton" onclick="switchPencilType('Mosaic')">
                         <span data-i18n="Mosaic">Mosaic</span>
-                        <img src="03_images/preset/brush/Mosaic2.webp" alt="Mosaic Icon" style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Mosaic2.webp" alt="Mosaic Icon"
+                            style="width: 72px; height: 24px;">
                     </button>
                     <hr>
 
@@ -961,16 +1007,16 @@
                     <a
                         href="https://fonts.google.com/icons?icon.size=24&icon.color=%235f6368&icon.query=Loading&icon.set=Material+Icons&icon.style=Filled">Google
                         Icon</a>
-                        <hr>
-                        <button id="addTv" onclick="addTv()">
-                            <i class="material-icons">tv</i>
-                            <span data-i18n="tv">tv</span>
-                        </button>
-                        <button id="addRefinedRazerKishiController" onclick="addRefinedRazerKishiController()">
-                            <i class="material-icons">videogame_asset</i>
-                            <span data-i18n="videogame_asset">videogame_asset</span>
-                        </button>
-    
+                    <hr>
+                    <button id="addTv" onclick="addTv()">
+                        <i class="material-icons">tv</i>
+                        <span data-i18n="tv">tv</span>
+                    </button>
+                    <button id="addRefinedRazerKishiController" onclick="addRefinedRazerKishiController()">
+                        <i class="material-icons">videogame_asset</i>
+                        <span data-i18n="videogame_asset">videogame_asset</span>
+                    </button>
+
                 </div>
             </div>
 
@@ -1034,7 +1080,8 @@
                             </div>
 
                             <div class="info-item"><i class="fab fa-js"></i>
-                                <a href="https://github.com/Donaldcwl/browser-image-compression" target="_blank">browser-image-compression</a>
+                                <a href="https://github.com/Donaldcwl/browser-image-compression"
+                                    target="_blank">browser-image-compression</a>
                             </div>
 
                             <div class="info-item"><i class="fab fa-google"></i>
@@ -1138,7 +1185,7 @@
                     </label>
                     <input type="checkbox" id="view_controles_checkbox" checked
                         style="margin-top: 0px; margin-bottom: 0px;">
-                        
+
 
                 </div>
 
@@ -1158,15 +1205,17 @@
                 <div id="layer-buttons">
                     <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
                     <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
-                    <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span data-i18n="baseT2I">Base T2I</span></button>
-                    <button onclick="viewPanelPrompt()"><i class="material-icons">visibility</i><span data-i18n="promptView">Prompt view</span></button>
+                    <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span
+                            data-i18n="baseT2I">Base T2I</span></button>
+                    <button onclick="viewPanelPrompt()"><i class="material-icons">visibility</i><span
+                            data-i18n="promptView">Prompt view</span></button>
                 </div>
                 <div id="canvas-buttons">
                     <button id="undo" onclick="undo()">
                         <i class="material-icons">undo</i>
                     </button>
                     <button id="redo" onclick="redo()">
-                        <i class="material-icons">redo</i> 
+                        <i class="material-icons">redo</i>
                     </button>
                     <button id="cropMode">
                         <i class="material-icons">crop_free</i>
@@ -1207,7 +1256,7 @@
                         <div class="control-item">
                             <label id="SD_WebUI_Heartbeat_Label">SD WebUI Check…</label>
                             <!--TODO COMFYUI-->
-                            <label id="ComufyUI_Heartbeat_Label"  style="display: none;">ComufyUI Check…</label>
+                            <label id="ComufyUI_Heartbeat_Label" style="display: none;">ComufyUI Check…</label>
                         </div>
                     </div>
                 </div>
@@ -1600,7 +1649,8 @@
             ここに下部の横長エリアの内容を追加します。
         </div>
     </div> -->
-    <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;"></div>
+    <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;">
+    </div>
 
     <script src="js/Settings.js?v=3.7" defer></script>
 
