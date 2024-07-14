@@ -1516,15 +1516,7 @@ document
   .addEventListener("change", function () {
     changeView("controls", this.checked);
   });
-function changeView(elementId, isVisible) {
-  var element = document.getElementById(elementId);
-  if (isVisible) {
-    element.style.display = "block";
-  } else {
-    element.style.display = "none";
-  }
-  adjustCanvasSize();
-}
+
 
 
 

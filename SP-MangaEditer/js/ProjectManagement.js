@@ -225,24 +225,30 @@ function loadSettingsLocalStrage(  ) {
     'Api port/host/check...',
     'Base Settings...',
     'Dpi...',
-    'Grid Line Size...',
+    'Grid, Layer, Controle...',
     'Margin From Panel...',
     'Knife Space Size...',
     'Load Completed!!'
   ]);
 
   const localSettingsData = localStorage.getItem('localSettingsData');
+
   if (localSettingsData) {
     const localSettings = JSON.parse(localSettingsData);
 
     var bgColorInputElement = document.getElementById('bg-color');
     bgColorInputElement.value = localSettings.canvasBgColor || "#ffffff";
+    
     var event = new Event('input', { 'bubbles': true, 'cancelable': true });
     bgColorInputElement.dispatchEvent(event);
+
+
+    document.getElementById('view_layers_checkbox').checked = localSettings.view_layers_checkbox ?? true;
+    document.getElementById('view_controles_checkbox').checked = localSettings.view_controles_checkbox ?? true;
+
     document.getElementById('knifePanelSpaceSize').value = localSettings.knifePanelSpaceSize || "20";
     document.getElementById('outputDpi').value = localSettings.canvasDpi || "300";
     document.getElementById('gridSizeInput').value = localSettings.canvasGridLineSize || "10";
-    console.log("localSettings.canvasMarginFromPanel", localSettings.canvasMarginFromPanel);
     document.getElementById('marginFromPanel').value = localSettings.canvasMarginFromPanel || "20";
     svgPagging = localSettings.canvasMarginFromPanel || "20";
     document.getElementById('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
@@ -275,12 +281,16 @@ function saveSettingsLocalStrage() {
     'Api port/host/check...',
     'Base Settings...',
     'Dpi...',
-    'Grid Line Size...',
+    'Grid, Layer, Controle...',
     'Margin From Panel...',
     'Knife Space Size...',
     'Save Completed!!'
   ]);
+
   const localSettingsData = {
+    view_layers_checkbox: document.getElementById('view_layers_checkbox').checked,
+    view_controles_checkbox: document.getElementById('view_controles_checkbox').checked,
+
     knifePanelSpaceSize: document.getElementById('knifePanelSpaceSize').value,
     canvasBgColor: document.getElementById('bg-color').value,
     canvasDpi: document.getElementById('outputDpi').value,
@@ -308,6 +318,9 @@ function saveSettingsLocalStrage() {
 }
 
 loadSettingsLocalStrage();
+
+changeView("layer-panel", document.getElementById('view_layers_checkbox').checked);
+changeView("controls", document.getElementById('view_controles_checkbox').checked);
 
 
 function toggleAPI(event) {
