@@ -1522,63 +1522,91 @@ document
 
 
 
-
-let areNamesVisible = false;
-const promptTexts = [];
-
-function viewPanelPrompt() {
-  if (areNamesVisible) {
-    promptTexts.forEach((text) => canvas.remove(text));
-    promptTexts.length = 0;
-  } else {
-    canvas.getObjects().forEach((obj) => {
-      if (isPanel(obj)) {
-        let viewText = "Name:" + obj.name + "\nPrompt:" + (obj.text2img_prompt || 'nothing') ;
-        const wrappedText = wrapText(viewText, obj.width * obj.scaleX - 10, 14);
-        const text = new fabric.Text(wrappedText, {
-          left: obj.left + 5,
-          top: obj.top + (obj.height * obj.scaleY / 4),
-          fontSize: 14,
-          fill: "black",
-          selectable: false,
-          evented: false,
-          lineHeight: 1.2,
-          textAlign: 'left',
-        });
-        saveInitialState(text);
-        promptTexts.push(text);
-        canvas.add(text);
-      }
-    });
-  }
-  areNamesVisible = !areNamesVisible;
-  canvas.renderAll();
-}
-
-function wrapText(text, width, fontSize) {
-  const words = text.split(' ');
-  let lines = [];
-  let currentLine = words[0];
-
-  for (let i = 1; i < words.length; i++) {
-    const word = words[i];
-    const testLine = currentLine + ' ' + word;
-    const testWidth = getTextWidth(testLine, fontSize);
-    if (testWidth > width) {
-      lines.push(currentLine);
-      currentLine = word;
+  let areNamesVisible = false;
+  const promptTexts = [];
+  
+  function View() {
+    if (areNamesVisible) {
+      // Clear the contextTop
+      canvas.clearContext(canvas.contextTop);
+      promptTexts.length = 0;
     } else {
-      currentLine = testLine;
+      canvas.getObjects().forEach((obj) => {
+        if (isPanel(obj)) {
+          let viewText = obj.name + "\n\nPrompt\n" + (obj.text2img_prompt || 'nothing');
+          const wrappedText = wrapText(viewText, obj.width * obj.scaleX - 20, 16);
+          const text = new fabric.Text(wrappedText, {
+            left: obj.left + 10,
+            top: obj.top + (obj.height * obj.scaleY / 4),
+            fontSize: 16,
+            fontFamily: 'Arial, sans-serif',
+            fontWeight: 'normal',
+            fill: "rgba(0, 0, 0, 0.8)",
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            selectable: false,
+            evented: false,
+            lineHeight: 1.3,
+            textAlign: 'left',
+            padding: 5,
+          });
+          promptTexts.push(text);
+        }
+      });
     }
+    areNamesVisible = !areNamesVisible;
+    canvas.renderAll();
   }
-  lines.push(currentLine);
-  return lines.join('\n');
-}
 
-function getTextWidth(text, fontSize) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  context.font = fontSize + 'px Arial';
-  const metrics = context.measureText(text);
-  return metrics.width;
-}
+
+  // カスタムレンダリングメソッドを追加
+  fabric.util.object.extend(fabric.Canvas.prototype, {
+    renderTop: function () {
+      if (areNamesVisible) {
+        const ctx = this.contextTop;
+        ctx.save();
+        ctx.transform.apply(ctx, this.viewportTransform);
+        promptTexts.forEach((text) => {
+          ctx.save();
+          text.transform(ctx);
+          text._render(ctx);
+          ctx.restore();
+        });
+        ctx.restore();
+      }
+    }
+  });
+  
+  // renderAllメソッドをオーバーライド
+  const originalRenderAll = fabric.Canvas.prototype.renderAll;
+  fabric.Canvas.prototype.renderAll = function() {
+    originalRenderAll.call(this);
+    this.renderTop();
+  };
+  
+  function wrapText(text, width, fontSize) {
+    const words = text.split(' ');
+    let lines = [];
+    let currentLine = words[0];
+  
+    for (let i = 1; i < words.length; i++) {
+      const word = words[i];
+      const testLine = currentLine + ' ' + word;
+      const testWidth = getTextWidth(testLine, fontSize);
+      if (testWidth > width) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
+    }
+    lines.push(currentLine);
+    return lines.join('\n');
+  }
+  
+  function getTextWidth(text, fontSize) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = fontSize + 'px Arial';
+    const metrics = context.measureText(text);
+    return metrics.width;
+  }
