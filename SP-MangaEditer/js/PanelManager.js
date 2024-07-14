@@ -287,7 +287,6 @@ function addSquareBySize(width, height) {
 
   var strokeWidthScale = canvas.width / 700;
   var strokeWidth = 2 * strokeWidthScale;
-  // console.log("strokeWidth", strokeWidth);
 
   var widthScale = canvas.width / width;
   var heightScale = canvas.height / height;
@@ -298,11 +297,12 @@ function addSquareBySize(width, height) {
   var svgPaggingHalfWidth = svgPaggingWidth / 2;
   var svgPaggingHalfHeight = svgPaggingHeight / 2;
 
-  var newWidth = width * widthScale - svgPaggingWidth - strokeWidth;
+  var newWidth  = width  * widthScale  - svgPaggingWidth  - strokeWidth;
   var newHeight = height * heightScale - svgPaggingHeight - strokeWidth;
 
   // console.log("addSquareBySize height", height);
-  // console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
+  console.log("addSquareBySize svgPaggingWidth", svgPaggingWidth);
+  console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
   // console.log("addSquareBySize heightScale", heightScale);
   // console.log("addSquareBySize newHeight", newHeight);
 
@@ -338,28 +338,32 @@ function addSquareBySize(width, height) {
 function loadSVGPlusReset(svgString) {
   initImageHistory();
   saveState();
-
   changeDoNotSaveHistory();
+
+  console.log("svgPagging", svgPagging);
 
   fabric.loadSVGFromString(svgString, function (objects, options) {
     resizeCanvasToObject(options.width, options.height);
 
-    var canvasUsableHeight = canvas.height - svgPagging;
-    var overallScaleX = canvas.width / options.width;
-    var overallScaleY = canvasUsableHeight / options.height;
-    var scaleToFit = Math.min(overallScaleX, overallScaleY);
-    var offsetX = (canvas.width - options.width * scaleToFit) / 2;
-    var offsetY = svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
-
     var strokeWidthScale = canvas.width / 700;
     var strokeWidth = 2 * strokeWidthScale;
 
-    // console.log("strokeWidth", strokeWidth);
+    var canvasUsableHeight = canvas.height - svgPagging - strokeWidth;
+    var canvasUsableWidth  = canvas.width  - svgPagging - strokeWidth;
+    var overallScaleX = canvasUsableWidth / options.width;
+    var overallScaleY = canvasUsableHeight / options.height;
+    var scaleToFit = Math.min(overallScaleX, overallScaleY);
+    // var offsetX = (canvas.width - options.width * scaleToFit) / 2;
+    var offsetY = (svgPagging / 2) + (canvasUsableHeight - options.height * scaleToFit) / 2;
+    var offsetX = (svgPagging / 2) + (canvasUsableWidth  - options.width  * scaleToFit) / 2;
 
-    clipAreaCoords.left = offsetX;
-    clipAreaCoords.top = offsetY;
-    clipAreaCoords.width = options.width * scaleToFit + 4;
-    clipAreaCoords.height = options.height * scaleToFit + 4;
+    // console.log("offsetY ", offsetY);
+    // console.log("offsetX ", offsetX);
+
+    // clipAreaCoords.left = offsetX;
+    // clipAreaCoords.top = offsetY;
+    // clipAreaCoords.width = options.width * scaleToFit + 4;
+    // clipAreaCoords.height = options.height * scaleToFit + 4;
 
     var bgColorInput = document.getElementById("bg-color");
     canvas.backgroundColor = bgColorInput.value;
@@ -405,7 +409,10 @@ function loadSVGPlusReset(svgString) {
           return false;
         });
 
-        // console.log("threshold, vertices", threshold, ":", vertices);
+        console.log("top ", obj.top * scaleToFit + offsetY);
+        console.log("left ", obj.left * scaleToFit + offsetX);
+        console.log("scaleX ", scaleX);
+        console.log("scaleY ", scaleY);
 
         var polygon = new fabric.Polygon(vertices, {
           isPanel: true,
@@ -436,8 +443,15 @@ function loadSVGPlusReset(svgString) {
 
         canvas.add(polygon);
       } else {
+
+
+        console.log("top ", obj.top * scaleToFit + offsetY);
+        console.log("left ", obj.left * scaleToFit + offsetX);
+        console.log("scaleToFit ", scaleToFit);
+
         obj.isPanel= true, (obj.scaleX = scaleToFit);
         obj.scaleY = scaleToFit;
+        obj.scaleX = scaleToFit;
         obj.top = obj.top * scaleToFit + offsetY;
         obj.left = obj.left * scaleToFit + offsetX;
         obj.setCoords();

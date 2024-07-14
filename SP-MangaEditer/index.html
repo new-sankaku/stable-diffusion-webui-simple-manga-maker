@@ -819,35 +819,35 @@
                         <input type="color" id="drawing-shadow-color" value="#000000">
                     </div>
                     <hr>
-                    <button onclick="switchPencilType('Pencil')">
+                    <button id="PencilButton" onclick="switchPencilType('Pencil')">
                         <span data-i18n="Pencil">Pencil</span>
                         <img src="03_images/preset/brush/Pencil.webp" alt="Pencil Icon" style="width: 72px; height: 24px;">
                     </button>
-                    <button onclick="switchPencilType('Circle')">
+                    <button id="CircleButton" onclick="switchPencilType('Circle')">
                         <span data-i18n="Circle">Circle</span>
                         <img src="03_images/preset/brush/Circle.webp" alt="Circle Icon" style="width: 72px; height: 24px;">
                     </button>
-                    <!-- <button onclick="switchPencilType('Vline')">
+                    <!-- <button id="VlineButton" onclick="switchPencilType('Vline')">
                         <span data-i18n="Vline">Vline</span>
                         <img src="03_images/preset/brush/Vline.png" alt="Vline Icon" style="width: 72px; height: 24px;">
                     </button>                    
-                    <button onclick="switchPencilType('Hline')">
+                    <button id="HlineButton" onclick="switchPencilType('Hline')">
                         <span data-i18n="Hline">Hline</span>
                         <img src="03_images/preset/brush/Hline.png" alt="Hline Icon" style="width: 72px; height: 24px;">
                     </button>                    
-                    <button onclick="switchPencilType('Texture')">
+                    <button id="TextureButton" onclick="switchPencilType('Texture')">
                         <span data-i18n="Texture">Texture</span>
                         <img src="03_images/preset/brush/Texture.png" alt="Texture Icon" style="width: 72px; height: 24px;">
                     </button> -->
-                    <button onclick="switchPencilType('Crayon')">
+                    <button id="CrayonButton" onclick="switchPencilType('Crayon')">
                         <span data-i18n="Crayon">Crayon</span>
                         <img src="03_images/preset/brush/Crayon.webp" alt="Crayon Icon" style="width: 72px; height: 24px;">
                     </button>
-                    <button onclick="switchPencilType('Ink')">
+                    <button id="InkButton" onclick="switchPencilType('Ink')">
                         <span data-i18n="Ink">Ink</span>
                         <img src="03_images/preset/brush/Ink.webp" alt="Ink Icon" style="width: 72px; height: 24px;">
                     </button>
-                    <button onclick="switchPencilType('Marker')">
+                    <button id="MarkerButton" onclick="switchPencilType('Marker')">
                         <span data-i18n="Marker">Marker</span>
                         <img src="03_images/preset/brush/Marker.webp" alt="Marker Icon" style="width: 72px; height: 24px;">
                     </button>
@@ -861,7 +861,7 @@
                     </div>
                     <hr>
 
-                    <button onclick="switchPencilType('Eraser')">
+                    <button id="EraserButton" onclick="switchPencilType('Eraser')">
                         <span class="material-symbols-outlined">ink_eraser</span>
                         <span data-i18n="Eraser">Eraser</span>
                     </button>
@@ -875,7 +875,7 @@
                         <label data-i18n="mosaic-size">mosaic-size</label>
                         <input type="number" id="mosaic-size" min="1" max="100" value="8" />
                     </div>
-                    <button onclick="switchPencilType('Mosaic')">
+                    <button id="MosaicButton" onclick="switchPencilType('Mosaic')">
                         <span data-i18n="Mosaic">Mosaic</span>
                         <img src="03_images/preset/brush/Mosaic2.webp" alt="Mosaic Icon" style="width: 72px; height: 24px;">
                     </button>

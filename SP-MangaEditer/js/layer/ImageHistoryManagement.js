@@ -76,7 +76,7 @@ function saveStateByListener(event, eventType) {
     if( isNotSaveObject(event) ){
         return;
     }
-    console.log( "saveStateByListener event", event, eventType );
+    // console.log( "saveStateByListener event", event, eventType );
     saveState();
 }
 
@@ -126,7 +126,7 @@ function restoreImage(json) {
 
 
 function saveState() {
-    console.log("saveState", stateStack.length);
+    // console.log("saveState", stateStack.length);
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }

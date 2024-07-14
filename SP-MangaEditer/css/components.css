@@ -74,7 +74,9 @@
 .input-group-multi button.selected {
   background-color: var(--select-button-color);
 }
-
+.active-button {
+    background-color: var(--select-button-color);
+}
 
 
   

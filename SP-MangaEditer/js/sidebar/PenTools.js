@@ -1,14 +1,14 @@
-var mosaicBrush = new fabric.MosaicBrush(canvas);
-enhanceBrush(mosaicBrush, false);
-
 canvas.isDrawingMode = false;
 let currentPaths = [];
 
 function switchPencilType(type) {
 
+    // console.log( "switchPencilType type", type );
+
     if( type == nowPencil ){
         pencilModeClear(type);
         currentPaths = [];
+        clearActiveButton();
         return;
     }else{
         pencilModeClear(type);
@@ -20,7 +20,7 @@ function switchPencilType(type) {
 
     if (type === MODE_PEN_MOSAIC) {
         isMosaicBrushActive = true;
-        canvas.freeDrawingBrush = mosaicBrush;
+        canvas.freeDrawingBrush = getMosaicBrush();
         canvas.freeDrawingBrush.mosaicSize = parseInt(document.getElementById('mosaic-size').value);
         canvas.freeDrawingBrush.circleSize = parseInt(document.getElementById('circle-size').value);
         canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
@@ -56,8 +56,26 @@ function switchPencilType(type) {
         canvas.freeDrawingBrush = new fabric[type + "Brush"](canvas);
 
     }
+    clearActiveButton();
 
+    document.getElementById(type+'Button').classList.add('active-button');
     applyBrushSettings();
+}
+
+function clearActiveButton() {
+    document.getElementById(MODE_PEN_PENCIL+'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_CIRCLE+'Button').classList.remove('active-button');
+    // document.getElementById(MODE_PEN_SQUARE+'Button').classList.remove('active-button');
+    // document.getElementById(MODE_PEN_TEXTURE+'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_CRAYON+'Button').classList.remove('active-button');
+
+    document.getElementById(MODE_PEN_INK+'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_MARKER+'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_ERASER+'Button').classList.remove('active-button');
+    // document.getElementById(MODE_PEN_VLINE+'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_MOSAIC+'Button').classList.remove('active-button');
+
+    // document.getElementById(MODE_PEN_HLINE+'Button').classList.remove('active-button');
 }
 
 function setupContextTopBrush(brush) {
@@ -99,6 +117,11 @@ canvas.on('path:created', function (opt) {
     currentPaths.push(opt.path);
 });
 
+
+function getMosaicBrush(){
+    const mosaicBrush = new fabric.MosaicBrush(canvas);
+    return enhanceBrush(mosaicBrush, false);
+}
 
 function getEraserBrush() {
     const eraserBrush = new fabric.EraserBrush(canvas);

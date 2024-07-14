@@ -33,12 +33,16 @@ function operationModeClear( ){
   knifeModeClear();
   editModeClear();
   pencilModeClear(nowPencil);
+  clearActiveButton();
 }
 
 function pencilModeClear(type) {
+
+  console.log( "pencilModeClear type nowPencil | ", type, nowPencil );
+
   type = type || nowPencil;
 
-  if (canvas.isDrawingMode && isImageBrush(type)) {
+  if (canvas.isDrawingMode && isImageBrush(nowPencil)) {
       canvas.isDrawingMode = false;
       isMosaicBrushActive = false;
       canvas.freeDrawingBrush.mergeDrawings();

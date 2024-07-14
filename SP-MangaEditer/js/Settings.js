@@ -20,16 +20,17 @@ if (mode === 'dark-mode') {
   canvas.backgroundColor = "white";
 }
 
-var clipAreaCoords = {
-  left: 0,
-  top: 0,
-  width: canvas.width,
-  height: canvas.height,
-};
+// var clipAreaCoords = {
+//   left: 0,
+//   top: 0,
+//   width: canvas.width,
+//   height: canvas.height,
+// };
 
-var svgPagging = 20;
+var svgPagging = document.getElementById('marginFromPanel').value;
 document.getElementById('marginFromPanel').addEventListener('input', function() {
-  svgPagging = parseInt(this.value, 20);
+  svgPagging = document.getElementById('marginFromPanel').value;
+  console.log("set svgPagging", svgPagging);
 });
 
 var sdWebUIPort = 7860;
