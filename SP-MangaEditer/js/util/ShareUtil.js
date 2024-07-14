@@ -84,7 +84,7 @@ function mangaEditorDesu_init() {
   createPopup();
   
   if (!mangaEditorDesu_popupShown) {
-      setTimeout(mangaEditorDesu_showPopup, 5 * 1000); // 5秒後に表示
+      setTimeout(mangaEditorDesu_showPopup, 5 * 60 * 1000); // 5秒後に表示
   }
 
 }
