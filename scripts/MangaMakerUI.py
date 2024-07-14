@@ -12,7 +12,8 @@ except NameError:
 
 
 def get_asset_url(file_path: pathlib.Path) -> str:
-    return f"/file={file_path.absolute()}"
+    timestamp = int(pathlib.Path(file_path).stat().st_mtime)
+    return f"/file={file_path.absolute()}?v={timestamp}"
 
 def on_ui_tabs():
     with gr.Blocks(analytics_enabled=False) as blocks:
