@@ -1,10 +1,14 @@
 
 // en ja ko fr zh ru es pt th
-//ドイツ語（de）、タイ語（th）、オランダ語（nl）、スペイン語（es）
+//ドイツ語（de）、オランダ語（nl）、スペイン語（es）
 const resources = {
   en: {
     translation: {
-"functionList": "Function List",
+      "help_message_title": "Help.",
+      "help_message_message": "There is no money for ads for this free web app developed individually. I'd be happy if more people could use it, so please share this web app. You can post it on X, Instagram, Facebook, or anywhere... Please post the following message somewhere... Thank you... I'm sorry...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[WebSite]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI Extension]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "Close",
+      "functionList": "Function List",
 "clearMode": "Clears the mode (Crop, Knife, Edit, Pen)",
 "Pencil": "Pencil",
 "Circle": "Circle",
@@ -372,7 +376,11 @@ const resources = {
   },
   ja: {
     translation: {
-"functionList": "機能リスト",
+      "help_message_title": "助けて。",
+      "help_message_message": "個人開発の無料Webアプリには広告のためのお金がありません。使ってくれる人が増えると嬉しいのでこのWebアプリを紹介して下さい…。Xでも、Instagramでも、Facebookでも構いません…。以下のメッセージをどこかに投稿してください…。ありがとう…ゴメンネ。",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[WebSite]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI Extension]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "閉じる",
+      "functionList": "機能リスト",
 "clearMode": "モード（Crop、ナイフ、Edit、ペン）を解除します",
 "Pencil": "鉛筆",
 "Circle": "円",
@@ -654,7 +662,11 @@ const resources = {
   },
   ko: {
     translation: {
-"functionList": "기능 목록",
+      "help_message_title": "도와주세요.",
+      "help_message_message": "개인 개발 무료 웹 앱에는 광고를 위한 자금이 없습니다. 사용자가 늘어나면 기쁠 것입니다. 이 웹 앱을 소개해 주세요... X, Instagram, Facebook 어디든 상관 없습니다... 아래 메시지를 어디든 게시해 주세요... 감사합니다... 미안합니다...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[웹사이트]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI 확장기능]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "닫기",
+      "functionList": "기능 목록",
 "clearMode": "모드(Crop, 나이프, Edit, 펜)를 해제합니다",
 "Pencil": "연필",
 "Circle": "원",
@@ -946,7 +958,11 @@ const resources = {
   },
   fr: {
     translation: {
-"functionList": "Liste des fonctions",
+      "help_message_title": "Aidez-moi.",
+      "help_message_message": "Il n'y a pas d'argent pour les publicités pour cette application web gratuite développée individuellement. Je serais heureux si plus de personnes pouvaient l'utiliser, alors partagez cette application web. Vous pouvez la poster sur X, Instagram, Facebook, ou n'importe où... Veuillez poster le message suivant quelque part... Merci... Désolé...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[Site Web]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[Extension WebUI]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "Fermer",
+      "functionList": "Liste des fonctions",
 "clearMode": "Efface le mode (Crop, Couteau, Éditer, Stylo)",
 "Pencil": "Crayon",
 "Circle": "Cercle",
@@ -1273,7 +1289,11 @@ const resources = {
   },
   zh: {
     translation: {
-"functionList": "功能列表",
+      "help_message_title": "帮助。",
+      "help_message_message": "这个个人开发的免费Web应用没有广告费用。如果有更多人使用，我会很高兴，所以请介绍这个Web应用。您可以在X、Instagram、Facebook上分享... 请将以下消息发布到某处... 谢谢... 对不起...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[网站]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI扩展]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "关闭",
+      "functionList": "功能列表",
 "clearMode": "清除模式（裁剪、刀、编辑、笔）",
 "Pencil": "铅笔",
 "Circle": "圆",
@@ -1598,7 +1618,11 @@ const resources = {
   },
   ru: {
     translation: {
-"functionList": "Список функций",
+      "help_message_title": "Помогите.",
+      "help_message_message": "На индивидуально разработанное бесплатное веб-приложение нет денег на рекламу. Я буду рад, если больше людей будут им пользоваться, поэтому, пожалуйста, поделитесь этим веб-приложением. Вы можете разместить его на X, Instagram, Facebook или где угодно... Пожалуйста, разместите следующее сообщение где-нибудь... Спасибо... Извините...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[Веб-сайт]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI расширение]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "Закрыть",
+      "functionList": "Список функций",
 "clearMode": "Очищает режим (Обрезка, Нож, Редактирование, Ручка)",
 "Pencil": "Карандаш",
 "Circle": "Круг",
@@ -1875,7 +1899,11 @@ const resources = {
   },
   es: {
     translation: {
-"functionList": "Lista de funciones",
+      "help_message_title": "Ayuda.",
+      "help_message_message": "No hay dinero para anuncios para esta aplicación web gratuita desarrollada individualmente. Me alegraría si más personas pudieran usarla, así que por favor comparte esta aplicación web. Puedes publicarla en X, Instagram, Facebook o donde sea... Por favor, publica el siguiente mensaje en algún lugar... Gracias... Lo siento...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[Sitio web]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[Extensión WebUI]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "Cerrar",
+      "functionList": "Lista de funciones",
 "clearMode": "Borra el modo (Recortar, Cuchillo, Editar, Pluma)",
 "Pencil": "Lápiz",
 "Circle": "Círculo",
@@ -2150,7 +2178,11 @@ const resources = {
   },
   pt: {
     translation: {
-"functionList": "Lista de funções",
+      "help_message_title": "Ajuda.",
+      "help_message_message": "Não há dinheiro para anúncios para este aplicativo web gratuito desenvolvido individualmente. Ficaria feliz se mais pessoas pudessem usá-lo, então, por favor, compartilhe este aplicativo web. Você pode postá-lo no X, Instagram, Facebook ou em qualquer lugar... Por favor, poste a seguinte mensagem em algum lugar... Obrigado... Desculpe...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[Site]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[Extensão WebUI]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "Fechar",
+      "functionList": "Lista de funções",
 "clearMode": "Limpa o modo (Cortar, Faca, Editar, Caneta)",
 "Pencil": "Lápis",
 "Circle": "Círculo",
@@ -2426,7 +2458,11 @@ const resources = {
   },
   "th": {
     "translation": {
-"functionList": "รายการฟังก์ชัน",
+      "help_message_title": "ช่วยด้วย.",
+      "help_message_message": "ไม่มีเงินสำหรับโฆษณาสำหรับเว็บแอปฟรีที่พัฒนาส่วนตัวนี้ ฉันจะดีใจถ้ามีคนใช้งานมากขึ้น ดังนั้นกรุณาแบ่งปันเว็บแอปนี้ คุณสามารถโพสต์ได้บน X, Instagram, Facebook หรือที่ใดก็ได้... กรุณาโพสต์ข้อความต่อไปนี้ที่ใดก็ได้... ขอบคุณ... ขอโทษ...",
+      "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[เว็บไซต์]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[ส่วนขยาย WebUI]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
+      "help_message_close": "ปิด",
+      "functionList": "รายการฟังก์ชัน",
 "clearMode": "ล้างโหมด (ครอป, มีด, แก้ไข, ปากกา)",
 "Pencil": "ดินสอ",
 "Circle": "วงกลม",
