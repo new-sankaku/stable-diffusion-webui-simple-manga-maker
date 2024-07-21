@@ -8,6 +8,12 @@ function isPanelType(activeObject) {
 function isImage(activeObject) {
   return (activeObject && (activeObject.type === "image"));
 }
+function haveClipPath(activeObject){
+  if (activeObject.clipPath) {
+    return true;
+  }
+  return false;
+}
 
 function isText(activeObject) {
   return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || activeObject.type === "textbox" || activeObject.type === "verticalText"));
@@ -372,3 +378,110 @@ function getObjectByGUID(searchGuid) {
   var matchingObject = layers.find(layer => layer.guid === guid);
   return matchingObject;
 }
+
+
+
+function removeClipPath(activeObject, action) {
+  let clipPath = activeObject.clipPath;
+  const canvas = activeObject.canvas;
+
+  // スケールとオフセットを考慮して点を計算する関数
+  function calculatePoint(point) {
+    return {
+      x: activeObject.left + point.x * activeObject.scaleX,
+      y: activeObject.top + point.y * activeObject.scaleY
+    };
+  }
+
+  // 各点を計算
+  let points = activeObject.points.map(calculatePoint);
+
+  // x座標とy座標の最小値と最大値を見つける
+  let xCoords = points.map(p => p.x);
+  let yCoords = points.map(p => p.y);
+  let minX = Math.min(...xCoords);
+  let maxX = Math.max(...xCoords);
+  let minY = Math.min(...yCoords);
+  let maxY = Math.max(...yCoords);
+
+  // 頂点座標を計算
+  let leftTop = points.find(p => p.x === minX && p.y === minY) || { x: minX, y: minY };
+  let rightTop = points.find(p => p.x === maxX && p.y === minY) || { x: maxX, y: minY };
+  let rightBottom = points.find(p => p.x === maxX && p.y === maxY) || { x: maxX, y: maxY };
+  let leftBottom = points.find(p => p.x === minX && p.y === maxY) || { x: minX, y: maxY };
+
+  // デバッグ用にログ出力
+  console.log("Left Top:", leftTop);
+  console.log("Right Top:", rightTop);
+  console.log("Right Bottom:", rightBottom);
+  console.log("Left Bottom:", leftBottom);
+
+  // 元の点の配列をログ出力（デバッグ用）
+  console.log("Original points:", points);
+
+  // ここに残りの関数の処理を追加...
+  // 例: clipPathの削除やその他の処理
+}
+
+// function removeClipPath(activeObject, action) {
+//   let clipPath = activeObject.clipPath;
+//   const canvas = activeObject.canvas;
+//   let points = activeObject.getCoords();
+
+//   let leftTop = { x: points[0].x, y: points[0].y };
+//   let rightTop = { x: points[1].x, y: points[1].y };
+//   let rightBottom = { x: points[2].x, y: points[2].y };
+//   let leftBottom = { x: points[3].x, y: points[3].y };
+
+//   console.log("Left Top:", leftTop);
+//   console.log("Right Top:", rightTop);
+//   console.log("Right Bottom:", rightBottom);
+//   console.log("Left Bottom:", leftBottom);
+
+
+
+//   switch (action) {
+//     case 'clearAllClipPaths':
+//       activeObject.clipPath = null;
+//       break;
+//     case 'clearTopClipPath':
+//       points[0].y = 0;
+//       points[1].y = 0;
+//       break;
+//     case 'clearBottomClipPath':
+//       points[2].y = canvas.height;
+//       points[3].y = canvas.height;
+//       break;
+//     case 'clearLeftClipPath':
+//       points[0].x = 0;
+//       points[3].x = 0;
+//       break;
+//     case 'clearRightClipPath':
+//       points[1].x = canvas.width;
+//       points[2].x = canvas.width;
+//       break;
+//     default:
+//       console.error(`[removeClipPath] Error: Unknown action "${action}"`);
+//       return;
+//   }
+
+//   if (action !== 'clearAllClipPaths') {
+//     clipPath.set({ points: points });
+//   }
+
+//   if (activeObject.clipPath) {
+//     activeObject.clipPath.initial = {
+//       left: activeObject.clipPath.left,
+//       top: activeObject.clipPath.top,
+//       scaleX: activeObject.clipPath.scaleX,
+//       scaleY: activeObject.clipPath.scaleY,
+//       canvasWidth: canvas.getWidth(),
+//       canvasHeight: canvas.getHeight(),
+//     };
+//   }
+
+//   canvas.requestRenderAll();
+// }
+
+
+

@@ -103,10 +103,6 @@ function mangaEditorDesu_closePopup() {
   popup.style.display = 'none';
 }
 
-function mangaEditorDesu_resetPopup() {
-  localStorage.removeItem('mangaEditorDesu_popupShown');
-  mangaEditorDesu_popupShown = false;
-}
 
 let mangaEditorDesu_popupShown = false;
 
@@ -114,5 +110,5 @@ function mangaEditorDesu_resetPopup() {
   localStorage.removeItem('mangaEditorDesu_popupShown');
   mangaEditorDesu_popupShown = false;
 }
-mangaEditorDesu_resetPopup();
+// mangaEditorDesu_resetPopup();
 mangaEditorDesu_init();

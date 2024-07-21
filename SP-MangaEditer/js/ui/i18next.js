@@ -4,7 +4,12 @@
 const resources = {
   en: {
     translation: {
-      "help_message_title": "Help.",
+"clearAllClipPaths": "Clear View Limits",
+"clearTopClipPath": "Clear View Limit: Upper",
+"clearBottomClipPath": "Clear View Limit: Lower",
+"clearRightClipPath": "Clear View Limit: Right",
+"clearLeftClipPath": "Clear View Limit: Left",
+        "help_message_title": "Help.",
       "help_message_message": "There is no money for ads for this free web app developed individually. I'd be happy if more people could use it, so please share this web app. You can post it on X, Instagram, Facebook, or anywhere... Please post the following message somewhere... Thank you... I'm sorry...",
       "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[WebSite]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI Extension]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
       "help_message_close": "Close",
@@ -376,6 +381,11 @@ const resources = {
   },
   ja: {
     translation: {
+"clearAllClipPaths": "表示制限の削除",
+"clearTopClipPath": "表示制限の削除:上",
+"clearBottomClipPath": "表示制限の削除:下",
+"clearRightClipPath": "表示制限の削除:右",
+"clearLeftClipPath": "表示制限の削除:左",
       "help_message_title": "助けて。",
       "help_message_message": "個人開発の無料Webアプリには広告のためのお金がありません。使ってくれる人が増えると嬉しいのでこのWebアプリを紹介して下さい…。Xでも、Instagramでも、Facebookでも構いません…。以下のメッセージをどこかに投稿してください…。ありがとう…ゴメンネ。",
       "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[WebSite]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI Extension]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",

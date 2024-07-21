@@ -78,7 +78,14 @@ function showObjectMenu(clickType) {
 
   } else if (isImage(activeObject)) {
     menuItems = clickType === 'left' ? [] : ['settings', 'generate', 'rembg', 'delete', 'selectClear'];
+    if( haveClipPath(activeObject) ){
 
+      menuItems.push('clearAllClipPaths');
+      menuItems.push('clearTopClipPath');
+      menuItems.push('clearBottomClipPath');
+      menuItems.push('clearRightClipPath');
+      menuItems.push('clearLeftClipPath');
+    }
   } else if (isText(activeObject)) {
     menuItems = clickType === 'left' ? [] : ['delete', 'selectClear'];
   } else {
@@ -198,6 +205,14 @@ function handleMenuClick(e) {
         activeObject.set({ points: points });
       }
       break;
+
+    case 'clearAllClipPaths':
+    case 'clearTopClipPath':
+    case 'clearBottomClipPath':
+    case 'clearRightClipPath':
+    case 'clearLeftClipPath':
+      removeClipPath(activeObject, action);
+    break;
   }
   canvas.renderAll();
   
