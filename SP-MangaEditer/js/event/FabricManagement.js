@@ -119,8 +119,7 @@ canvas.on("selection:cleared", closeWindow);
 
 
 
-//panelStrokeChange
-function moveSettings(img, poly){
+function moveSettings(img, poly) {
   updateClipPath(img, poly);
 
   function updateOnModification() {
@@ -128,16 +127,25 @@ function moveSettings(img, poly){
     canvas.renderAll();
   }
 
-  poly.on('moving', updateOnModification);
-  poly.on('scaling', updateOnModification);
-  poly.on('rotating', updateOnModification);
-  poly.on('skewing', updateOnModification);
-  poly.on('modified', updateOnModification);
-  img.on('moving', updateOnModification);
-  img.on('scaling', updateOnModification);
-  img.on('rotating', updateOnModification);
-  img.on('skewing', updateOnModification);
-  img.on('modified', updateOnModification);
+  img.relatedPoly = poly;
+
+  ['moving', 'scaling', 'rotating', 'skewing', 'modified'].forEach(eventName => {
+    poly.on(eventName, updateOnModification);
+    img.on(eventName, updateOnModification);
+  });
+
+  img.removeSettings = function() {
+    removeGUID(this.relatedPoly, this);
+    const events = ['moving', 'scaling', 'rotating', 'skewing', 'modified'];
+    events.forEach(eventName => {
+      this.off(eventName, updateOnModification);
+      if (this.relatedPoly) {
+        this.relatedPoly.off(eventName, updateOnModification);
+      }
+    });
+    delete this.relatedPoly;
+    delete this.removeSettings;
+  };
 }
 
 function updateClipPath(imageObj, polygonObj) {
@@ -148,6 +156,7 @@ function updateClipPath(imageObj, polygonObj) {
           y: point.y - polygonObj.pathOffset.y
       }, matrix);
   });
+
   const clipPath = new fabric.Polygon(transformedPoints, {
       absolutePositioned: true,
   });
@@ -164,7 +173,6 @@ function updateClipPath(imageObj, polygonObj) {
   }
 
   imageObj.clipPath = clipPath;
-
 }
 
 canvas.on("object:added", (e) => {

@@ -35,7 +35,6 @@ function resizeCanvasByNum(newWidth, newHeight) {
 }
 
 function resizeCanvas(newWidth, newHeight) {
-
   canvas.setDimensions({ width: newWidth, height: newHeight });
   canvas.getObjects().forEach((obj) => {
 
@@ -53,7 +52,6 @@ function resizeCanvas(newWidth, newHeight) {
     if (obj.clipPath) {
       scaleX = newWidth / obj.clipPath.initial.canvasWidth;
       scaleY = newHeight / obj.clipPath.initial.canvasHeight;
-
       const clipPath = obj.clipPath;
       clipPath.set({
         scaleX: obj.clipPath.initial.scaleX * scaleX,

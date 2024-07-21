@@ -79,12 +79,11 @@ function showObjectMenu(clickType) {
   } else if (isImage(activeObject)) {
     menuItems = clickType === 'left' ? [] : ['settings', 'generate', 'rembg', 'delete', 'selectClear'];
     if( haveClipPath(activeObject) ){
-
       menuItems.push('clearAllClipPaths');
-      menuItems.push('clearTopClipPath');
-      menuItems.push('clearBottomClipPath');
-      menuItems.push('clearRightClipPath');
-      menuItems.push('clearLeftClipPath');
+      // menuItems.push('clearTopClipPath');
+      // menuItems.push('clearBottomClipPath');
+      // menuItems.push('clearRightClipPath');
+      // menuItems.push('clearLeftClipPath');
     }
   } else if (isText(activeObject)) {
     menuItems = clickType === 'left' ? [] : ['delete', 'selectClear'];
