@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D クロスハッチ効果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        #controls {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #canvasContainer {
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        #canvasContainer div {
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+        #sliderContainer {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .slider-group {
+            margin-bottom: 10px;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        #imageInput {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <input type="file" id="imageInput" accept="image/*">
+        <div id="canvasContainer">
+            <div>
+                <h3>オリジナル</h3>
+                <canvas id="originalCanvas" width="400" height="400"></canvas>
+            </div>
+            <div>
+                <h3>クロスハッチ効果</h3>
+                <canvas id="effectCanvas" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div id="sliderContainer">
+            <div class="slider-group">
+                線の頻度: <span id="lineFrequencyValue">0.7</span>
+                <input type="range" id="lineFrequency" min="0.1" max="2" step="0.1" value="0.7">
+            </div>
+            <div class="slider-group">
+                線の太さ: <span id="lineThicknessValue">0.5</span>
+                <input type="range" id="lineThickness" min="0.1" max="2" step="0.1" value="0.5">
+            </div>
+            <div class="slider-group">
+                コントラスト: <span id="contrastValue">1</span>
+                <input type="range" id="contrast" min="0" max="2" step="0.1" value="1">
+            </div>
+            <div class="slider-group">
+                明るさ: <span id="brightnessValue">0.2</span>
+                <input type="range" id="brightness" min="-1" max="1" step="0.1" value="0.2">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const originalCanvas = document.getElementById('originalCanvas');
+        const effectCanvas = document.getElementById('effectCanvas');
+        const originalCtx = originalCanvas.getContext('2d');
+        const effectCtx = effectCanvas.getContext('2d');
+
+        const imageInput = document.getElementById('imageInput');
+        const lineFrequencySlider = document.getElementById('lineFrequency');
+        const lineThicknessSlider = document.getElementById('lineThickness');
+        const contrastSlider = document.getElementById('contrast');
+        const brightnessSlider = document.getElementById('brightness');
+
+        const lineFrequencyValue = document.getElementById('lineFrequencyValue');
+        const lineThicknessValue = document.getElementById('lineThicknessValue');
+        const contrastValue = document.getElementById('contrastValue');
+        const brightnessValue = document.getElementById('brightnessValue');
+
+        let image = new Image();
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    image.src = event.target.result;
+                    image.onload = () => {
+                        originalCtx.drawImage(image, 0, 0, 400, 400);
+                        applyEffect();
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function applyEffect() {
+            const imageData = originalCtx.getImageData(0, 0, 400, 400);
+            const data = imageData.data;
+
+            const lineFrequency = parseFloat(lineFrequencySlider.value);
+            const lineThickness = parseFloat(lineThicknessSlider.value);
+            const contrast = parseFloat(contrastSlider.value);
+            const brightness = parseFloat(brightnessSlider.value);
+
+            for (let y = 0; y < 400; y++) {
+                for (let x = 0; x < 400; x++) {
+                    const i = (y * 400 + x) * 4;
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+
+                    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                    const adjustedLuminance = Math.pow(luminance, contrast) + brightness;
+
+                    let color = 255;
+
+                    if (adjustedLuminance < 0.2) {
+                        if (Math.sin(x * lineFrequency) * Math.sin(y * lineFrequency) < lineThickness) {
+                            color = 0;
+                        }
+                    }
+                    if (adjustedLuminance < 0.5) {
+                        if (Math.sin((x + y) * lineFrequency) * Math.sin((x - y) * lineFrequency) < lineThickness) {
+                            color = 0;
+                        }
+                    }
+                    if (adjustedLuminance < 0.8) {
+                        if (Math.sin(y * lineFrequency * 2) * Math.sin(x * lineFrequency * 2) < lineThickness) {
+                            color = 0;
+                        }
+                    }
+
+                    data[i] = data[i + 1] = data[i + 2] = color;
+                }
+            }
+
+            effectCtx.putImageData(imageData, 0, 0);
+        }
+
+        lineFrequencySlider.addEventListener('input', (e) => {
+            lineFrequencyValue.textContent = e.target.value;
+            applyEffect();
+        });
+
+        lineThicknessSlider.addEventListener('input', (e) => {
+            lineThicknessValue.textContent = e.target.value;
+            applyEffect();
+        });
+
+        contrastSlider.addEventListener('input', (e) => {
+            contrastValue.textContent = e.target.value;
+            applyEffect();
+        });
+
+        brightnessSlider.addEventListener('input', (e) => {
+            brightnessValue.textContent = e.target.value;
+            applyEffect();
+        });
+    </script>
+</body>
+</html>

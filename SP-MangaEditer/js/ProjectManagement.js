@@ -249,8 +249,8 @@ function loadSettingsLocalStrage(  ) {
     document.getElementById('knifePanelSpaceSize').value = localSettings.knifePanelSpaceSize || "20";
     document.getElementById('outputDpi').value = localSettings.canvasDpi || "300";
     document.getElementById('gridSizeInput').value = localSettings.canvasGridLineSize || "10";
-    document.getElementById('marginFromPanel').value = localSettings.canvasMarginFromPanel || "20";
-    svgPagging = localSettings.canvasMarginFromPanel || "20";
+    document.getElementById('marginFromPanel').value = localSettings.canvasMarginFromPanel || 20;
+    svgPagging = localSettings.canvasMarginFromPanel || 20;
     document.getElementById('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
     document.getElementById('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
     document.getElementById('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox === "true";

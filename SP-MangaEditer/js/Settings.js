@@ -30,7 +30,7 @@ if (mode === 'dark-mode') {
 var svgPagging = document.getElementById('marginFromPanel').value;
 document.getElementById('marginFromPanel').addEventListener('input', function() {
   svgPagging = document.getElementById('marginFromPanel').value;
-  console.log("set svgPagging", svgPagging);
+  // console.log("set svgPagging", svgPagging);
 });
 
 var sdWebUIPort = 7860;

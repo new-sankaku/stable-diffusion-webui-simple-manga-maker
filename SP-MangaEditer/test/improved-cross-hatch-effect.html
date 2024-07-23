@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved Interactive WebGL Cross-Hatch Effect</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #controls {
+            margin: 20px 0;
+        }
+        #canvasContainer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+        #sliderContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .slider-group input {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <input type="file" id="imageUpload" accept="image/*">
+    </div>
+    <div id="canvasContainer">
+        <div>
+            <h3>Original</h3>
+            <canvas id="originalCanvas" width="600" height="600"></canvas>
+        </div>
+        <div>
+            <h3>Cross-Hatch Effect</h3>
+            <canvas id="effectCanvas" width="600" height="600"></canvas>
+        </div>
+    </div>
+    <div id="sliderContainer">
+        <div class="slider-group">
+            <label for="roughness">Roughness:</label>
+            <input type="range" id="roughness" min="0" max="1" step="0.01" value="0.2">
+            <span id="roughnessValue">0.2</span>
+        </div>
+        <div class="slider-group">
+            <label for="metalness">Metalness:</label>
+            <input type="range" id="metalness" min="0" max="1" step="0.01" value="0.1">
+            <span id="metalnessValue">0.1</span>
+        </div>
+        <div class="slider-group">
+            <label for="threshold">Threshold:</label>
+            <input type="range" id="threshold" min="0" max="1" step="0.01" value="0.5">
+            <span id="thresholdValue">0.5</span>
+        </div>
+        <div class="slider-group">
+            <label for="min">Min:</label>
+            <input type="range" id="min" min="0" max="1" step="0.01" value="0.4">
+            <span id="minValue">0.4</span>
+        </div>
+        <div class="slider-group">
+            <label for="max">Max:</label>
+            <input type="range" id="max" min="0" max="1" step="0.01" value="1">
+            <span id="maxValue">1</span>
+        </div>
+        <div class="slider-group">
+            <label for="e">Edge Smoothness:</label>
+            <input type="range" id="e" min="0" max="1" step="0.01" value="0.2">
+            <span id="eValue">0.2</span>
+        </div>
+    </div>
+
+    <script id="vertexShader" type="x-shader/x-vertex">
+        attribute vec2 a_position;
+        attribute vec2 a_texCoord;
+        varying vec2 v_texCoord;
+        varying vec2 vCoords;
+        void main() {
+            gl_Position = vec4(a_position, 0, 1);
+            v_texCoord = a_texCoord;
+            vCoords = a_texCoord;
+        }
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-fragment">
+        precision highp float;
+        uniform sampler2D u_image;
+        uniform sampler2D u_noiseTexture;
+        uniform vec3 u_inkColor;
+        uniform float u_threshold;
+        uniform vec2 u_range;
+        uniform float u_e;
+        varying vec2 v_texCoord;
+        varying vec2 vCoords;
+
+        #define TAU 6.28318530718
+
+        float noise(vec2 p) {
+            return texture2D(u_noiseTexture, p * 0.01).x;
+        }
+
+        float texh(vec2 p, float str) {
+            p *= 0.7;
+            float rz = 1.0;
+            for (int i = 0; i < 10; i++) {
+                float g = texture2D(u_noiseTexture, vec2(0.025, 0.5) * p).x;
+                g = smoothstep(0.0 - str * 0.1, 2.3 - str * 0.1, g);
+                rz = min(1.0 - g, rz);
+                p = p.yx;
+                p += 0.07;
+                p *= 1.2;
+                if (float(i) > str * 10.0) break;
+            }
+            return rz * 1.05;
+        }
+
+        float texcube(vec3 p, vec3 n, float str) {
+            return texh(p.xy, str);
+        }
+
+        float luma(vec3 color) {
+            return dot(color, vec3(0.299, 0.587, 0.114));
+        }
+
+        void main() {
+            vec2 flippedTexCoord = vec2(v_texCoord.x, 1.0 - v_texCoord.y);
+            vec4 color = texture2D(u_image, flippedTexCoord);
+            float l = 1.0 - luma(color.rgb);
+            l = smoothstep(u_range.x, u_range.y, l);
+            float l2 = l;
+            
+            vec3 coords = vec3(gl_FragCoord.xy * 0.01, 0.0);
+            vec3 normal = vec3(0.0, 0.0, 1.0); // Assuming a flat surface
+            float line = texcube(coords, normal, l * 10.0);
+            float line2 = clamp(0.0, 1.0, texcube(coords, normal, l2 * 10.0) - u_threshold);
+            
+            line = smoothstep(0.5 - u_e, 0.5 + u_e, line);
+            line2 = smoothstep(0.5 - u_e, 0.5 + u_e, line2);
+            
+            vec3 paperColor = vec3(1.0); // White paper
+            vec3 finalColor = mix(u_inkColor, paperColor, 0.25 + 0.75 * line);
+            finalColor += vec3(4.0 * line2);
+            
+            gl_FragColor = vec4(finalColor, 1.0);
+        }
+    </script>
+
+    <script>
+        const originalCanvas = document.getElementById('originalCanvas');
+        const effectCanvas = document.getElementById('effectCanvas');
+        const originalCtx = originalCanvas.getContext('2d');
+        const gl = effectCanvas.getContext('webgl');
+
+        if (!gl) {
+            console.error('WebGL not supported');
+            alert('WebGL is not supported in your browser');
+        }
+
+        function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        const vertexShaderSource = document.getElementById('vertexShader').text;
+        const fragmentShaderSource = document.getElementById('fragmentShader').text;
+
+        const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+        const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+        const program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.error('Program link error:', gl.getProgramInfoLog(program));
+        }
+
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1, -1,
+            1, -1,
+            -1, 1,
+            1, 1,
+        ]), gl.STATIC_DRAW);
+
+        const texCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            0, 0,
+            1, 0,
+            0, 1,
+            1, 1,
+        ]), gl.STATIC_DRAW);
+
+        const positionLocation = gl.getAttribLocation(program, 'a_position');
+        const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
+        const imageLocation = gl.getUniformLocation(program, 'u_image');
+        const noiseTextureLocation = gl.getUniformLocation(program, 'u_noiseTexture');
+        const inkColorLocation = gl.getUniformLocation(program, 'u_inkColor');
+        const thresholdLocation = gl.getUniformLocation(program, 'u_threshold');
+        const rangeLocation = gl.getUniformLocation(program, 'u_range');
+        const eLocation = gl.getUniformLocation(program, 'u_e');
+
+        const imageTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, imageTexture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+        const noiseTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, noiseTexture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+        function generateNoiseTexture() {
+            const size = 256;
+            const data = new Uint8Array(size * size);
+            for (let i = 0; i < data.length; i++) {
+                data[i] = Math.random() * 255;
+            }
+            gl.bindTexture(gl.TEXTURE_2D, noiseTexture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.LUMINANCE, size, size, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, data);
+        }
+
+        generateNoiseTexture();
+
+        function applyEffect() {
+            gl.bindTexture(gl.TEXTURE_2D, imageTexture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, originalCanvas);
+
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+            gl.useProgram(program);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+            gl.enableVertexAttribArray(texCoordLocation);
+            gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+            gl.uniform1i(imageLocation, 0);
+            gl.uniform1i(noiseTextureLocation, 1);
+
+            const inkColor = hexToRgb(document.getElementById('inkColor').value);
+            gl.uniform3f(inkColorLocation, inkColor.r / 255, inkColor.g / 255, inkColor.b / 255);
+            gl.uniform1f(thresholdLocation, parseFloat(document.getElementById('threshold').value));
+            gl.uniform2f(rangeLocation, 
+                parseFloat(document.getElementById('min').value),
+                parseFloat(document.getElementById('max').value)
+            );
+            gl.uniform1f(eLocation, parseFloat(document.getElementById('e').value));
+
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, imageTexture);
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, noiseTexture);
+
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        let originalImage = null;
+function drawImageOnCanvas(img, canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+    const x = (canvas.width / 2) - (img.width / 2) * scale;
+    const y = (canvas.height / 2) - (img.height / 2) * scale;
+    
+    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+}
+
+document.getElementById('imageUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        originalImage = new Image();
+        originalImage.onload = function() {
+            drawImageOnCanvas(originalImage, originalCanvas);
+            applyEffect(); // Apply effect after drawing the image
+        };
+        originalImage.src = event.target.result;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+// Add event listeners for sliders
+const sliders = ['roughness', 'metalness', 'threshold', 'min', 'max', 'e'];
+sliders.forEach(sliderId => {
+    const slider = document.getElementById(sliderId);
+    const valueDisplay = document.getElementById(sliderId + 'Value');
+    slider.addEventListener('input', function() {
+        valueDisplay.textContent = this.value;
+        applyEffect(); // Apply effect when slider value changes
+    });
+});
+
+// Add color picker for ink color
+const inkColorPicker = document.createElement('input');
+inkColorPicker.type = 'color';
+inkColorPicker.id = 'inkColor';
+inkColorPicker.value = '#160D04'; // Default ink color
+document.getElementById('sliderContainer').insertBefore(inkColorPicker, document.getElementById('sliderContainer').firstChild);
+
+inkColorPicker.addEventListener('input', function() {
+    applyEffect(); // Apply effect when ink color changes
+});
+
+
+
+    </script>
+</body>
+</html>
