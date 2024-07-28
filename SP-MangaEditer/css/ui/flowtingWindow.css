@@ -1,0 +1,28 @@
+.flow-floating-window {
+  position: absolute;
+  background-color: #1a1a1a;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 1000;
+  min-width: 300px;
+  min-height: 200px;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  resize: both;
+  overflow: auto;
+}
+.flow-window-header {
+  cursor: move;
+  padding: 10px;
+  background-color: #2a2a2a;
+  color: #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flow-close-button {
+  cursor: pointer;
+}
+.flow-window-content {
+  padding: 10px;
+}

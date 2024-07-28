@@ -79,6 +79,11 @@ function html() {
                                 Replace</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" onclick="createImagePromptHelperFlotingWindow()">
+                            <i class="material-icons">medical_information</i> <span data-i18n="PromptHelper">Prompt Helper</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

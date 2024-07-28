@@ -17,7 +17,7 @@ function loadContent(scriptId, targetId) {
                 document.getElementById("head-id").innerHTML = document.getElementById("head-id").innerHTML + content;
             }
             delete window.html;
-            console.log( "innerHTML:", document.getElementById("head-id").innerHTML );
+            // console.log( "innerHTML:", document.getElementById("head-id").innerHTML );
         } else {
             document.getElementById("head-id").innerHTML = `<p style="color: red;">Error: Content for ${scriptId} could not be loaded.</p>`;
         }
