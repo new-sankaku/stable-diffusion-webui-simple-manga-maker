@@ -1,15 +1,18 @@
+@import url('../root.css');
+
 .iph-container {
   display: flex;
   flex-direction: column;
   height: 75vh;
   overflow: hidden;
+  background-color: var(--background-color-A);
 }
 
 .iph-upper-section {
   height: 55vh;
   display: flex;
   flex: 1;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--fjm-border-color);
   overflow: hidden;
   min-height: 0;
 }
@@ -17,8 +20,8 @@
 .iph-column {
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #333;
-  padding: 2px;
+  border-right: 1px solid var(--fjm-border-color);
+  padding: var(--fjm-padding);
   overflow: hidden;
 }
 
@@ -38,7 +41,6 @@
   flex: 3;
 }
 
-
 .iph-scroll-area {
   flex-grow: 1;
   overflow-y: auto;
@@ -47,15 +49,16 @@
 
 .iph-tag-button {
   display: inline-block;
-  padding: 2px;
+  padding: var(--fjm-padding);
   margin: 0 3px 3px 0;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color:var(--background-color-B);
+
   border: 2px solid;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: var(--fjm-button-cursor);
   transition: all 0.3s ease;
-  color: #fff;
+  color: var(--fjm-button-color);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -102,9 +105,9 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 2px;
+  padding: var(--fjm-padding);
   overflow-y: auto;
-  background-color: #2a2a2a;
+  background-color: var(--background-color-A);
   flex-shrink: 0;
 }
 
@@ -113,7 +116,7 @@
   height: 140px;
   object-fit: contain;
   margin: 2px;
-  border: 1px solid #444;
+  border: var(--boader-color-1px-solid-B);
   border-radius: 5px;
 }
 
@@ -124,11 +127,11 @@
   max-height: 180px;
   min-width: 180px;
   min-height: 180px;
-  background-color: #444;
+  background-color: var(--background-color-B);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #888;
+  color: var(--text-color-B);
   font-size: 13px;
   margin: 2px;
   border-radius: 5px;
@@ -145,7 +148,7 @@
 
 .iph-selected-tag-group {
   display: inline-block;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--background-color-C);
   border-radius: 5px;
   padding: 5px;
   margin: 0 5px 5px 0;
@@ -160,19 +163,19 @@
   border-radius: 0;
   padding: 0;
   margin-left: 5px;
-  cursor: pointer;
+  cursor: var(--fjm-button-cursor);
   color: #ff6b6b;
 }
 
 .iph-remove-tag {
-  cursor: pointer;
+  cursor: var(--fjm-button-cursor);
   color: #ff6b6b;
   margin-left: 5px;
 }
 
 .narrow-hr {
   height: 1px;
-  background-color: #333;
+  background-color: var(--fjm-border-color);
   margin: 5px 0 !important;
   padding: 0 !important;
 }
@@ -181,14 +184,14 @@
   display: flex;
   justify-content: flex-end;
   padding: 4px;
-  border-bottom: 1px solid #333;
+  border-bottom: var(--boader-color-1px-solid-B);
   flex-shrink: 0;
 }
 
 .iph-dropdown {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
+  background-color: var(--background-color-B);
+  color: var(--dropdown-color);
+  border: var(--dropdown-border);
   border-radius: 5px;
   padding: 5px;
   margin: 0 5px;
@@ -200,34 +203,34 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #2a2a2a;
+  background: var(--color-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--color-scrollbar-thumb);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--background-color-D);
 }
 
 .iph-icon-button {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--fjm-button-color);
   font-size: 1.2em;
-  cursor: pointer;
+  cursor: var(--fjm-button-cursor);
   padding: 5px;
   margin-left: 5px;
 }
 
 .iph-icon-button:hover {
-  color: #ddd;
+  color: var(--fjm-button-hover-color);
 }
 
 .iph-icon-button:disabled {
-  color: #555;
+  color: var(--color-dark-grey);
   cursor: not-allowed;
 }
 
@@ -241,7 +244,7 @@
   width: 140px;
   height: 140px;
   object-fit: contain;
-  border: 1px solid #444;
+  border: var(--boader-color-1px-solid-B);
   border-radius: 5px;
 }
 
@@ -252,7 +255,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   padding: 2px;
-  cursor: pointer;
+  cursor: var(--fjm-button-cursor);
 }
 
 .iph-top-bar {
@@ -260,14 +263,14 @@
   justify-content: flex-end;
   align-items: center;
   padding: 4px;
-  background-color: #2a2a2a;
-  border-bottom: 1px solid #333;
+  background-color: var(--nav-background-color);
+  border-bottom: var(--boader-color-1px-solid-B);
 }
 
 #iph-name-input {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
+  background-color: var(--background-color-B);
+  color: var(--text-color-B);
+  border: var(--dropdown-border);
   border-radius: 3px;
   padding: 3px;
   margin-right: 5px;
@@ -275,27 +278,27 @@
 }
 
 #iph-save-button {
-  background-color: #790000;
-  color: #fff;
+  background-color: var(--select-button-color);
+  color: var(--button-text-color);
   border: none;
   border-radius: 5px;
   padding: 5px 5px;
-  cursor: pointer;
+  cursor: var(--fjm-button-cursor);
   transition: background-color 0.3s ease;
   margin-right: 5px;
 }
 
 #iph-save-button:hover {
-  background-color: #ff2a2a;
+  background-color: var(--button-hover-background);
 }
 
 #iph-free-input {
   width: calc(100% - 10px);
   height: 100px;
   margin-top: 5px;
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
+  background-color: var(--background-color-B);
+  color: var(--text-color-B);
+  border: var(--dropdown-border);
   border-radius: 5px;
   padding: 5px;
   resize: vertical;
@@ -313,16 +316,16 @@
   position: absolute;
   top: 5px;
   right: 5px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--button-background);
+  color: var(--text-color-B);
   border-radius: 50%;
   width: 20px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: var(--fjm-button-cursor);
   font-size: 12px;
-  color: #333;
 }
 
 .iph-remove-custom-set:hover {

@@ -293,7 +293,8 @@ function iphUpdateSelectedTagsDisplay() {
     groupElement.addEventListener('click', () => iphRemoveTagGroup(index));
     const removeButton = document.createElement('span');
     removeButton.classList.add('iph-remove-tag');
-    removeButton.innerHTML = '<i class="fas fa-times"></i>';
+    // removeButton.innerHTML = '<i class="fas fa-times"></i>';
+    removeButton.innerHTML = '✕';
     removeButton.addEventListener('click', (e) => {
       e.stopPropagation();
       iphRemoveTagGroup(index);
@@ -356,8 +357,11 @@ function iphCreateImageWrapper(url, index) {
 
   const removeButton = document.createElement('span');
   removeButton.classList.add('iph-remove-tag');
-  removeButton.innerHTML = '<i class="fas fa-times"></i>';
 
+
+  // removeButton.innerHTML = '<i class="fas fa-times"></i>';
+  removeButton.innerHTML = '✕';
+  
   imageWrapper.appendChild(imgElement);
   imageWrapper.appendChild(removeButton);
   return imageWrapper;
