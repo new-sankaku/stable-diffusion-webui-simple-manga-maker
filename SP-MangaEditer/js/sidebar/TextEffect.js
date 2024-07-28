@@ -406,7 +406,10 @@ function reloadFont() {
     select.appendChild(option);
   }
 }
-reloadFont();
+document.addEventListener('DOMContentLoaded', function() {
+  reloadFont();
+});
+
 
 function getSampleTextByLanguageCode() {
   const currentLang = i18next.language;

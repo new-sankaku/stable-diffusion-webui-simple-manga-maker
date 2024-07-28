@@ -35,25 +35,27 @@ function updateCoordinates(options) {
   }
 }
 
-fpsCheckbox.addEventListener("change", function () {
-  if (fpsCheckbox.checked) {
-    lastTime = performance.now();
-    frameCount = 0;
-    updateFPS();
-  } else {
-    cancelAnimationFrame(animFrameId);
-    fpsCheckbox.nextSibling.nodeValue = " FPS : 0";
-  }
-});
+document.addEventListener('DOMContentLoaded', function() {
+  fpsCheckbox.addEventListener("change", function () {
+    if (fpsCheckbox.checked) {
+      lastTime = performance.now();
+      frameCount = 0;
+      updateFPS();
+    } else {
+      cancelAnimationFrame(animFrameId);
+      fpsCheckbox.nextSibling.nodeValue = " FPS : 0";
+    }
+  });
 
-coordCheckbox.addEventListener("change", function () {
-  if (!coordCheckbox.checked) {
-    coordCheckbox.nextSibling.nodeValue = " X:0.0 Y:0.0";
-  }
-});
+  coordCheckbox.addEventListener("change", function () {
+    if (!coordCheckbox.checked) {
+      coordCheckbox.nextSibling.nodeValue = " X:0.0 Y:0.0";
+    }
+  });
 
-canvas.on("mouse:move", function (options) {
-  updateCoordinates(options);
-});
+  canvas.on("mouse:move", function (options) {
+    updateCoordinates(options);
+  });
 
-updateFPS();
+  updateFPS();
+});

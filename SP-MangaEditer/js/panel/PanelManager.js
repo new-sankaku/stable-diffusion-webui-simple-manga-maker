@@ -1,59 +1,62 @@
-document.getElementById("canvas-container").addEventListener(
-  "dragover",
-  function (e) {
-    e.preventDefault();
-  },
-  false
-);
-
 function handleSelection(e) {
   var selectedObject = e.target;
   updateControls(selectedObject);
 }
 
-document.getElementById("canvas-container").addEventListener(
-  "drop",
-  async function (e) {
-    e.preventDefault();
-    var file = e.dataTransfer.files[0];
-    var canvasElement = canvas.getElement();
-    var rect = canvasElement.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("canvas-container").addEventListener(
+    "dragover",
+    function (e) {
+      e.preventDefault();
+    },
+    false
+  );  
 
-    // WebPに変換
-    var webpFile;
-    try {
-      webpFile = await imgFile2webpFile(file);
-    } catch (error) {
-      console.error("Failed to convert to WebP", error);
-      return;
-    }
+  document.getElementById("canvas-container").addEventListener(
+    "drop",
+    async function (e) {
+      e.preventDefault();
+      var file = e.dataTransfer.files[0];
+      var canvasElement = canvas.getElement();
+      var rect = canvasElement.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
 
-    var reader = new FileReader();
-    reader.onload = function (f) {
-      var data = f.target.result;
+      // WebPに変換
+      var webpFile;
+      try {
+        webpFile = await imgFile2webpFile(file);
+      } catch (error) {
+        console.error("Failed to convert to WebP", error);
+        return;
+      }
 
-      fabric.Image.fromURL(data, function (img) {
-        // console.log("drop stateStack.length", stateStack.length);
-        if (stateStack.length >= 2) {
-          var canvasX = x / canvasContinerScale;
-          var canvasY = y / canvasContinerScale;
-          putImageInFrame(img, canvasX, canvasY);
-        } else {
-          // console.log("drop img.width, img.height", img.width, img.height);
-          resizeCanvasByNum(img.width, img.height);
-          initialPutImage(img, 0, 0);
-        }
+      var reader = new FileReader();
+      reader.onload = function (f) {
+        var data = f.target.result;
 
-        setImage2ImageInitPrompt(img);
-      });
-    };
+        fabric.Image.fromURL(data, function (img) {
+          // console.log("drop stateStack.length", stateStack.length);
+          if (stateStack.length >= 2) {
+            var canvasX = x / canvasContinerScale;
+            var canvasY = y / canvasContinerScale;
+            putImageInFrame(img, canvasX, canvasY);
+          } else {
+            // console.log("drop img.width, img.height", img.width, img.height);
+            resizeCanvasByNum(img.width, img.height);
+            initialPutImage(img, 0, 0);
+          }
 
-    reader.readAsDataURL(webpFile);
-  },
-  false
-);
+          setImage2ImageInitPrompt(img);
+        });
+      };
+
+      reader.readAsDataURL(webpFile);
+    },
+    false
+  );
+
+});
 
 function initialPutImage(img) {
   img.set({
@@ -570,12 +573,15 @@ function anchorWrapper(anchorIndex, fn) {
   };
 }
 
-document.getElementById("view_layers_checkbox").addEventListener("change", function () {
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("view_layers_checkbox").addEventListener("change", function () {
     changeView("layer-panel", this.checked);
   });
-document.getElementById("view_controles_checkbox").addEventListener("change", function () {
-    changeView("controls", this.checked);
+  document.getElementById("view_controles_checkbox").addEventListener("change", function () {
+      changeView("controls", this.checked);
   });
+});
+
 
 
 

@@ -107,7 +107,11 @@ function toggleGrid() {
   canvas.renderAll();
 }
 
-document.getElementById("toggleGridButton").addEventListener("click", toggleGrid);
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("toggleGridButton").addEventListener("click", toggleGrid);
+  document.getElementById("gridSizeInput").addEventListener("input", updateGridSize);
+});
+
 
 function updateGridSize() {
   var newGridSize = parseInt(
@@ -123,7 +127,6 @@ function updateGridSize() {
   }
 }
 
-document.getElementById("gridSizeInput").addEventListener("input", updateGridSize);
 
 function snapToGrid(target) {
   if (isGridVisible) {

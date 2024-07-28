@@ -74,76 +74,80 @@ function flipVertically() {
 
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("crop").style.display = "none";
-});
 
-document.getElementById("crop").addEventListener("click", function (event) {
-  document.getElementById("crop").style.display = "none";
-
-  var left = cropFrame.left - cropActiveObject.left;
-  var top = cropFrame.top - cropActiveObject.top;
-
-  left *= 1;
-  top *= 1;
-
-  var width = cropFrame.width * 1;
-  var height = cropFrame.height * 1;
-
-  cropImage(
-    cropActiveObject,
-    cropFrame.left,
-    cropFrame.top,
-    parseInt(cropFrame.scaleY * height),
-    parseInt(width * cropFrame.scaleX)
-  );
-  if (cropModeClear()) {
-    return true;
-  }
-});
-
-document.getElementById("cropMode").addEventListener("click", function () {
-  document.getElementById("crop").style.display = "inline";
-  if (canvas.getActiveObject()) {
-
+  document.getElementById("crop").addEventListener("click", function (event) {
+    document.getElementById("crop").style.display = "none";
+  
+    var left = cropFrame.left - cropActiveObject.left;
+    var top = cropFrame.top - cropActiveObject.top;
+  
+    left *= 1;
+    top *= 1;
+  
+    var width = cropFrame.width * 1;
+    var height = cropFrame.height * 1;
+  
+    cropImage(
+      cropActiveObject,
+      cropFrame.left,
+      cropFrame.top,
+      parseInt(cropFrame.scaleY * height),
+      parseInt(width * cropFrame.scaleX)
+    );
     if (cropModeClear()) {
       return true;
     }
+  });
 
-    if( isImage(canvas.getActiveObject()) ){
-        console.log("canvas.getActiveObject().type", canvas.getActiveObject().type );
-    }else{
-        createToast("Select Image!", canvas.getActiveObject().type);
-        document.getElementById("crop").style.display = "none";
-        return;
+  document.getElementById("cropMode").addEventListener("click", function () {
+    document.getElementById("crop").style.display = "inline";
+    if (canvas.getActiveObject()) {
+  
+      if (cropModeClear()) {
+        return true;
+      }
+  
+      if( isImage(canvas.getActiveObject()) ){
+          console.log("canvas.getActiveObject().type", canvas.getActiveObject().type );
+      }else{
+          createToast("Select Image!", canvas.getActiveObject().type);
+          document.getElementById("crop").style.display = "none";
+          return;
+      }
+  
+      cropActiveObject = canvas.getActiveObject();
+      cropFrame = new fabric.Rect({
+        fill: "rgba(0,0,0,0)",
+        originX: "left",
+        originY: "top",
+        stroke: "rgba(0,0,0,0)",
+        strokeWidth: 0,
+        width: 1,
+        height: 1,
+        borderColor: "#36fd00",
+        cornerColor: "green",
+        hasRotatingPoint: false,
+        selectable: true,
+      });
+  
+      cropFrame.left = canvas.getActiveObject().left;
+      cropFrame.top = canvas.getActiveObject().top;
+      cropFrame.width = canvas.getActiveObject().width * canvas.getActiveObject().scaleX;
+      cropFrame.height = canvas.getActiveObject().height * canvas.getActiveObject().scaleY;
+  
+      canvas.add(cropFrame);
+      canvas.setActiveObject(cropFrame);
+      canvas.renderAll();
+    } else {
+      createToast("Select Image!", "");
+      document.getElementById("crop").style.display = "none";
     }
+  });
+  
 
-    cropActiveObject = canvas.getActiveObject();
-    cropFrame = new fabric.Rect({
-      fill: "rgba(0,0,0,0)",
-      originX: "left",
-      originY: "top",
-      stroke: "rgba(0,0,0,0)",
-      strokeWidth: 0,
-      width: 1,
-      height: 1,
-      borderColor: "#36fd00",
-      cornerColor: "green",
-      hasRotatingPoint: false,
-      selectable: true,
-    });
-
-    cropFrame.left = canvas.getActiveObject().left;
-    cropFrame.top = canvas.getActiveObject().top;
-    cropFrame.width = canvas.getActiveObject().width * canvas.getActiveObject().scaleX;
-    cropFrame.height = canvas.getActiveObject().height * canvas.getActiveObject().scaleY;
-
-    canvas.add(cropFrame);
-    canvas.setActiveObject(cropFrame);
-    canvas.renderAll();
-  } else {
-    createToast("Select Image!", "");
-    document.getElementById("crop").style.display = "none";
-  }
 });
+
+
 
 function cropImage(png, left, top, height, width) {
   if (top < png.top) {

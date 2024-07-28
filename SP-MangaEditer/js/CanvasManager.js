@@ -133,15 +133,22 @@ function resizeCanvasToObject(objectWidth, objectHeight) {
 
 }
 
+var resizableContainer = 0;
 
-document.getElementById('bg-color').addEventListener('input', function (event) {
-  // console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
-  var color = event.target.value;
-  canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('bg-color').addEventListener('input', function (event) {
+    // console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
+    var color = event.target.value;
+    canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
+  });
+  document.getElementById('bg-color').addEventListener('input', function (event) {
+    resizableContainer = document.getElementById('canvas-container');
+  });
 });
 
+
 let canvasContinerScale = 1;
-const resizableContainer = document.getElementById('canvas-container');
+
 function zoomIn() {
   const containerRect = resizableContainer.getBoundingClientRect();
 
@@ -201,24 +208,27 @@ function inputImageFile() {
   document.getElementById('imageInput').click();
 }
 
-document.getElementById('imageInput').addEventListener('change', function(e) {
-  var files = e.target.files;
-  for (var i = 0; i < files.length; i++) {
-      (function(file) {
-          var reader = new FileReader();
-          reader.onload = function(f) {
-              var data = f.target.result;
-              fabric.Image.fromURL(data, function(img) {
-                  var scaleFactor = Math.min(canvas.width / img.width, canvas.height / img.height);
-                  img.scale(scaleFactor);
-                  canvas.add(img);
-                  canvas.renderAll();
-              });
-          };
-          reader.readAsDataURL(file);
-      })(files[i]);
-  }
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('imageInput').addEventListener('change', function(e) {
+    var files = e.target.files;
+    for (var i = 0; i < files.length; i++) {
+        (function(file) {
+            var reader = new FileReader();
+            reader.onload = function(f) {
+                var data = f.target.result;
+                fabric.Image.fromURL(data, function(img) {
+                    var scaleFactor = Math.min(canvas.width / img.width, canvas.height / img.height);
+                    img.scale(scaleFactor);
+                    canvas.add(img);
+                    canvas.renderAll();
+                });
+            };
+            reader.readAsDataURL(file);
+        })(files[i]);
+    }
+  });
 });
+
 
 
 function changeView(elementId, isVisible) {

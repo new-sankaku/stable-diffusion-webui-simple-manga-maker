@@ -44,15 +44,18 @@ function glfxResetFilterValues() {
 
 var fxCanvas, texture;
 
-document.getElementById("glfxFilter").addEventListener("change", function () {
-  var value = this.value;
-  document.querySelectorAll(".glfxCcontrol-group").forEach(function (group) {
-    group.style.display = "none";
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("glfxFilter").addEventListener("change", function () {
+    var value = this.value;
+    document.querySelectorAll(".glfxCcontrol-group").forEach(function (group) {
+      group.style.display = "none";
+    });
+    if (value) {
+      document.getElementById(value).style.display = "block";
+    }
   });
-  if (value) {
-    document.getElementById(value).style.display = "block";
-  }
 });
+
 
 function glfxApplyFilter() {
   if (!canvas) return;
@@ -309,43 +312,47 @@ function debounceGlfx(func, wait) {
   };
 }
 
-document.querySelectorAll(".glfxControls input").forEach(function (input) {
-  input.addEventListener(
-    "input",
-    debounceGlfx(function () {
-      var activeObject = canvas.getActiveObject();
-      if (!glfxOriginalImage && activeObject && activeObject.type === "image") {
-        glfxOriginalImage = activeObject.getElement();
-      }
+document.addEventListener('DOMContentLoaded', function() {
 
-      if (!activeObject) {
-        createToast("Select Image!");
-        return;
-      }
+  document.querySelectorAll(".glfxControls input").forEach(function (input) {
+    input.addEventListener(
+      "input",
+      debounceGlfx(function () {
+        var activeObject = canvas.getActiveObject();
+        if (!glfxOriginalImage && activeObject && activeObject.type === "image") {
+          glfxOriginalImage = activeObject.getElement();
+        }
 
-      changeDoNotSaveHistory();
-      if (glfxOriginalImage) {
-        glfxCopiedImage = glfxOriginalImage.cloneNode();
-        glfxApplyFilter();
+        if (!activeObject) {
+          createToast("Select Image!");
+          return;
+        }
+
+        changeDoNotSaveHistory();
+        if (glfxOriginalImage) {
+          glfxCopiedImage = glfxOriginalImage.cloneNode();
+          glfxApplyFilter();
+        }
+        changeDoSaveHistory();
+      }, 100)
+    );
+  });
+
+  document.getElementById("glfxApplyButton").addEventListener("click", function () {
+      if (glfxCopiedImage) {
+        glfxOriginalImage = glfxCopiedImage.cloneNode();
+        glfxCopiedImage = null;
+        glfxOriginalImage = null;
+        glfxResetFilterValues();
+        saveStateByManual();
       }
-      changeDoSaveHistory();
-    }, 100)
-  );
+    });
+
+  document.getElementById("glfxResetButton").addEventListener("click", function () {
+      glfxReset();
+    });
 });
 
-document.getElementById("glfxApplyButton").addEventListener("click", function () {
-    if (glfxCopiedImage) {
-      glfxOriginalImage = glfxCopiedImage.cloneNode();
-      glfxCopiedImage = null;
-      glfxOriginalImage = null;
-      glfxResetFilterValues();
-      saveStateByManual();
-    }
-  });
-
-document.getElementById("glfxResetButton").addEventListener("click", function () {
-    glfxReset();
-  });
 
 function glfxReset() {
   if (glfxOriginalImage) {

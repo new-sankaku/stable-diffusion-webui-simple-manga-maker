@@ -1,73 +1,84 @@
-const openButton = document.getElementById("openWindow");
-const myWindow = document.getElementById("myWindow");
-const textInput = document.getElementById("vertical_textInput");
+var openButton = null;
+var myWindow = null;
+var textInput = null;
 
 let isDragging = false;
 let offsetX, offsetY;
 
-openButton.addEventListener("click", function () {
-  const activeObject = canvas.getActiveObject();
-  if (isVerticalText(activeObject)) {
-    textInput.value = activeObject._objects.map((obj) => obj.text).join("");
-  } else {
-    textInput.value = "";
-  }
-  myWindow.style.display = "block";
+document.addEventListener('DOMContentLoaded', function() {
+
+  openButton = document.getElementById("openWindow");
+  myWindow = document.getElementById("myWindow");
+  textInput = document.getElementById("vertical_textInput");
+
+  openButton.addEventListener("click", function () {
+    const activeObject = canvas.getActiveObject();
+    if (isVerticalText(activeObject)) {
+      textInput.value = activeObject._objects.map((obj) => obj.text).join("");
+    } else {
+      textInput.value = "";
+    }
+    myWindow.style.display = "block";
+  });
 });
+
 
 function closeWindow() {
   myWindow.style.display = "none";
 }
 
-const header = myWindow.querySelector(".header");
-header.addEventListener("mousedown", function (e) {
-  offsetX = e.clientX - myWindow.offsetLeft;
-  offsetY = e.clientY - myWindow.offsetTop;
-  isDragging = true;
-});
-
-document.addEventListener("mousemove", function (e) {
-  if (isDragging) {
-    myWindow.style.left = `${e.clientX - offsetX}px`;
-    myWindow.style.top = `${e.clientY - offsetY}px`;
-  }
-});
-
-document.addEventListener("mouseup", function () {
-  isDragging = false;
-});
-
-
-fabric.VerticalText = fabric.util.createClass(fabric.Group, {
-  type: 'verticalText',
-
-  initialize: function(elements, options) {
-    this.callSuper('initialize', elements, options);
-  },
-
-  toObject: function() {
-    return fabric.util.object.extend(this.callSuper('toObject'), {
-      type: 'verticalText'
-    });
-  },
-
-  setGradientFill: function(gradient) {
-    this.getObjects().forEach(function(obj) {
-      obj.set('fill', gradient);
-    });
-  }
-});
-
-
-fabric.VerticalText.fromObject = function(object, callback) {
-  fabric.util.enlivenObjects(object.objects, function(enlivenedObjects) {
-    delete object.objects;
-    callback(new fabric.VerticalText(enlivenedObjects, object));
+document.addEventListener('DOMContentLoaded', function() {
+  const header = myWindow.querySelector(".header");
+  header.addEventListener("mousedown", function (e) {
+    offsetX = e.clientX - myWindow.offsetLeft;
+    offsetY = e.clientY - myWindow.offsetTop;
+    isDragging = true;
   });
-};
-
-fabric.Object.prototype.verticalText = fabric.VerticalText;
-
+  
+  document.addEventListener("mousemove", function (e) {
+    if (isDragging) {
+      myWindow.style.left = `${e.clientX - offsetX}px`;
+      myWindow.style.top = `${e.clientY - offsetY}px`;
+    }
+  });
+  
+  document.addEventListener("mouseup", function () {
+    isDragging = false;
+  });
+  
+  
+  fabric.VerticalText = fabric.util.createClass(fabric.Group, {
+    type: 'verticalText',
+  
+    initialize: function(elements, options) {
+      this.callSuper('initialize', elements, options);
+    },
+  
+    toObject: function() {
+      return fabric.util.object.extend(this.callSuper('toObject'), {
+        type: 'verticalText'
+      });
+    },
+  
+    setGradientFill: function(gradient) {
+      this.getObjects().forEach(function(obj) {
+        obj.set('fill', gradient);
+      });
+    }
+  });
+  
+  
+  fabric.VerticalText.fromObject = function(object, callback) {
+    fabric.util.enlivenObjects(object.objects, function(enlivenedObjects) {
+      delete object.objects;
+      callback(new fabric.VerticalText(enlivenedObjects, object));
+    });
+  };
+  
+  fabric.Object.prototype.verticalText = fabric.VerticalText;
+  
+  
+});
 
 
 let textGroup;

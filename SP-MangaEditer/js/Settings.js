@@ -27,11 +27,15 @@ if (mode === 'dark-mode') {
 //   height: canvas.height,
 // };
 
-var svgPagging = document.getElementById('marginFromPanel').value;
-document.getElementById('marginFromPanel').addEventListener('input', function() {
+var svgPagging = 20;
+document.addEventListener('DOMContentLoaded', function() {
   svgPagging = document.getElementById('marginFromPanel').value;
-  // console.log("set svgPagging", svgPagging);
+  document.getElementById('marginFromPanel').addEventListener('input', function() {
+    svgPagging = document.getElementById('marginFromPanel').value;
+  });
 });
+
+
 
 var sdWebUIPort = 7860;
 var sdWebUIHost = "127.0.0.1";

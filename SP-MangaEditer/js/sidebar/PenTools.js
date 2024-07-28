@@ -267,27 +267,30 @@ function updatePreview() {
     }
 }
 
-document.getElementById('mosaic-size').addEventListener('input', function () {
-    var value = this.value;
-    if (isMosaicBrushActive && canvas.freeDrawingBrush) {
-        canvas.freeDrawingBrush.mosaicSize = parseInt(value);
-        updatePreview();
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('mosaic-size').addEventListener('input', function () {
+        var value = this.value;
+        if (isMosaicBrushActive && canvas.freeDrawingBrush) {
+            canvas.freeDrawingBrush.mosaicSize = parseInt(value);
+            updatePreview();
+        }
+    });
+
+    document.getElementById('circle-size').addEventListener('input', function () {
+        var value = this.value;
+        if (isMosaicBrushActive && canvas.freeDrawingBrush) {
+            canvas.freeDrawingBrush.circleSize = parseInt(value);
+            updatePreview();
+        }
+    });
+
+    canvas.on('mouse:move', function (options) {
+        if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
+            canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
+        }
+    });
 });
 
-document.getElementById('circle-size').addEventListener('input', function () {
-    var value = this.value;
-    if (isMosaicBrushActive && canvas.freeDrawingBrush) {
-        canvas.freeDrawingBrush.circleSize = parseInt(value);
-        updatePreview();
-    }
-});
-
-canvas.on('mouse:move', function (options) {
-    if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
-        canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
-    }
-});
 
 
 

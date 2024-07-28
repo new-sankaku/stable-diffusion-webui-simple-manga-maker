@@ -13,13 +13,14 @@ function apiHeartbeat(){
   }
 }
 
+
 document.addEventListener('DOMContentLoaded', function () {
   setInterval(apiHeartbeat, 1000 * 15);
-});
-document.getElementById('apiHeartbeatCheckbox').addEventListener('change', function () {
+  document.getElementById('apiHeartbeatCheckbox').addEventListener('change', function () {
+    apiHeartbeat();
+  });
   apiHeartbeat();
 });
-apiHeartbeat();
 
 
 

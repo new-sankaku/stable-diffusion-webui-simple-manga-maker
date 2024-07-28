@@ -32,7 +32,10 @@ function attachControlEvents() {
 		};
 	});
 }
-attachControlEvents();
+document.addEventListener('DOMContentLoaded', function() {
+  attachControlEvents();
+});
+
 
 function updateControls(activeObject) {
   if (!activeObject) {

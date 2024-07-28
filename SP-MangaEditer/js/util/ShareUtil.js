@@ -40,7 +40,7 @@ function createPopup() {
   const linkSection = document.createElement('div');
   linkSection.className = 'mangaEditorDesu_link-section';
   linkSection.innerHTML = getText('help_message_links');
-  console.log( "help_message_links", getText('help_message_links') );
+  // console.log( "help_message_links", getText('help_message_links') );
 
   const closeButton = document.createElement('button');
   closeButton.id = 'mangaEditorDesu_close-popup';

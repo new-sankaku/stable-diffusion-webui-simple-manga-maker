@@ -1,8 +1,4 @@
 
-document.addEventListener('DOMContentLoaded', () => {
-  searchInitialIcons();
-});
-
 function getIconURL(iconName, style) {
   switch (style) {
       case 'outlined':
@@ -40,6 +36,10 @@ function searchInitialIcons() {
   });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    searchInitialIcons();
+});
+  
 
 function searchIcon() {
   const query = document.getElementById('svg_icon_searchInput').value.toLowerCase();

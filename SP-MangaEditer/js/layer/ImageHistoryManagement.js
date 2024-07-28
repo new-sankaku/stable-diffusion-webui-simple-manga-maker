@@ -198,7 +198,9 @@ function initImageHistory(){
     currentStateIndex = -1;
 }
 
-saveState();
+document.addEventListener('DOMContentLoaded', function() {
+    saveState();
+});
 
 
 

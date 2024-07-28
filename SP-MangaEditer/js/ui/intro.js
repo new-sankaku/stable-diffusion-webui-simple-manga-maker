@@ -96,7 +96,9 @@ function tutorialIntro() {
 }
 
 document.addEventListener('DOMContentLoaded', startupIntro);
-document.getElementById('Intro_Tutorial').addEventListener('click', function(event) {
-  event.preventDefault();
-  tutorialIntro();
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('Intro_Tutorial').addEventListener('click', function(event) {
+    event.preventDefault();
+    tutorialIntro();
+  });
 });

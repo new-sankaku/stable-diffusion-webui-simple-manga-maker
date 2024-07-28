@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
+var localSettingsData = null;
   
 function loadSettingsLocalStrage(  ) {
   createToast('Settings Load', [
@@ -287,7 +287,7 @@ function saveSettingsLocalStrage() {
     'Save Completed!!'
   ]);
 
-  const localSettingsData = {
+  localSettingsData = {
     view_layers_checkbox: document.getElementById('view_layers_checkbox').checked,
     view_controles_checkbox: document.getElementById('view_controles_checkbox').checked,
 
@@ -317,10 +317,13 @@ function saveSettingsLocalStrage() {
   localStorage.setItem('localSettingsData', JSON.stringify(localSettingsData));
 }
 
-loadSettingsLocalStrage();
+document.addEventListener('DOMContentLoaded', function() {
+  loadSettingsLocalStrage();
+  changeView("layer-panel", document.getElementById('view_layers_checkbox').checked);
+  changeView("controls", document.getElementById('view_controles_checkbox').checked);
+});
 
-changeView("layer-panel", document.getElementById('view_layers_checkbox').checked);
-changeView("controls", document.getElementById('view_controles_checkbox').checked);
+
 
 
 function toggleAPI(event) {
@@ -396,12 +399,14 @@ function executeWithConfirmation(message, callback) {
   executeWithConfirmationCloseButton.addEventListener('click', handleCancel);
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('svgDownload').onclick = function () {
+    var svg = canvas.toSVG();
+    console.log(svg);
+    svgDownload('canvas.svg', svg);
+  };
+});
 
-document.getElementById('svgDownload').onclick = function () {
-  var svg = canvas.toSVG();
-  console.log(svg);
-  svgDownload('canvas.svg', svg);
-};
 
 function svgDownload(filename, content) {
   var element = document.createElement('a');

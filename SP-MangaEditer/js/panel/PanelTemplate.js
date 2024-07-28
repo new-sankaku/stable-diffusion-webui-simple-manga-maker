@@ -80,69 +80,72 @@ function addSquareBySize(width, height) {
   updateLayerPanel();
 }
 
-document.getElementById("CustomPanelButton").addEventListener("click", function () {
-  var x = document.getElementById("customPanelSizeX").value;
-  var y = document.getElementById("customPanelSizeY").value;
-  loadBookSize(x, y, false);
-  canvas.renderAll();
-  adjustCanvasSize();
-});
+document.addEventListener('DOMContentLoaded', function() {
 
-document.getElementById("A4-H").addEventListener("click", function () {
-loadBookSize(210, 297, true);
-});
-document.getElementById("A4-V").addEventListener("click", function () {
-loadBookSize(297, 210, true);
-});
-document.getElementById("B4-H").addEventListener("click", function () {
-loadBookSize(257, 364, true);
-});
-document.getElementById("B4-V").addEventListener("click", function () {
-loadBookSize(364, 257, true);
-});
+  document.getElementById("CustomPanelButton").addEventListener("click", function () {
+    var x = document.getElementById("customPanelSizeX").value;
+    var y = document.getElementById("customPanelSizeY").value;
+    loadBookSize(x, y, false);
+    canvas.renderAll();
+    adjustCanvasSize();
+  });
 
-document.getElementById("insta").addEventListener("click", function () {
-loadBookSize(1080, 1080, true);
-});
+  document.getElementById("A4-H").addEventListener("click", function () {
+  loadBookSize(210, 297, true);
+  });
+  document.getElementById("A4-V").addEventListener("click", function () {
+  loadBookSize(297, 210, true);
+  });
+  document.getElementById("B4-H").addEventListener("click", function () {
+  loadBookSize(257, 364, true);
+  });
+  document.getElementById("B4-V").addEventListener("click", function () {
+  loadBookSize(364, 257, true);
+  });
 
-document.getElementById("insta-story").addEventListener("click", function () {
-loadBookSize(1080, 1920, true);
-});
+  document.getElementById("insta").addEventListener("click", function () {
+  loadBookSize(1080, 1080, true);
+  });
 
-document.getElementById("insta-portrait").addEventListener("click", function () {
-  loadBookSize(1080, 1350, true);
-});
+  document.getElementById("insta-story").addEventListener("click", function () {
+  loadBookSize(1080, 1920, true);
+  });
 
-document.getElementById("fb-page-cover").addEventListener("click", function () {
-loadBookSize(1640, 664, true);
-});
+  document.getElementById("insta-portrait").addEventListener("click", function () {
+    loadBookSize(1080, 1350, true);
+  });
 
-document.getElementById("fb-event").addEventListener("click", function () {
-loadBookSize(1920, 1080, true);
-});
+  document.getElementById("fb-page-cover").addEventListener("click", function () {
+  loadBookSize(1640, 664, true);
+  });
 
-document.getElementById("fb-group-header").addEventListener("click", function () {
-  loadBookSize(1640, 856, true);
-});
+  document.getElementById("fb-event").addEventListener("click", function () {
+  loadBookSize(1920, 1080, true);
+  });
 
-document.getElementById("youtube-thumbnail").addEventListener("click", function () {
-  loadBookSize(1280, 720, true);
-});
+  document.getElementById("fb-group-header").addEventListener("click", function () {
+    loadBookSize(1640, 856, true);
+  });
 
-document.getElementById("youtube-profile").addEventListener("click", function () {
-  loadBookSize(800, 800, true);
-});
+  document.getElementById("youtube-thumbnail").addEventListener("click", function () {
+    loadBookSize(1280, 720, true);
+  });
 
-document.getElementById("youtube-cover").addEventListener("click", function () {
-loadBookSize(2560, 1440, true);
-});
+  document.getElementById("youtube-profile").addEventListener("click", function () {
+    loadBookSize(800, 800, true);
+  });
 
-document.getElementById("twitter-profile").addEventListener("click", function () {
-  loadBookSize(400, 400, true);
-});
+  document.getElementById("youtube-cover").addEventListener("click", function () {
+  loadBookSize(2560, 1440, true);
+  });
 
-document.getElementById("twitter-header").addEventListener("click", function () {
-  loadBookSize(1500, 500, true);
+  document.getElementById("twitter-profile").addEventListener("click", function () {
+    loadBookSize(400, 400, true);
+  });
+
+  document.getElementById("twitter-header").addEventListener("click", function () {
+    loadBookSize(1500, 500, true);
+  });
 });
 
 

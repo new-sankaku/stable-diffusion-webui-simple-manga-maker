@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGPU Color Eraser</title>
+    <style>
+        #canvasContainer {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        canvas {
+            border: 1px solid black;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <div id="canvasContainer">
+        <canvas id="originalCanvas"></canvas>
+        <canvas id="processedCanvas"></canvas>
+    </div>
+    <script type="module">
+        const originalCanvas = document.getElementById('originalCanvas');
+        const processedCanvas = document.getElementById('processedCanvas');
+        const imageInput = document.getElementById('imageInput');
+
+        let device, originalTexture, processedTexture, sampler, pipeline, bindGroup, uniformBuffer;
+        let imageWidth, imageHeight;
+        const MAX_CANVAS_SIZE = 800;
+
+        async function initWebGPU() {
+            if (!navigator.gpu) {
+                throw new Error("WebGPU not supported on this browser.");
+            }
+            const adapter = await navigator.gpu.requestAdapter();
+            if (!adapter) {
+                throw new Error("No appropriate GPUAdapter found.");
+            }
+            device = await adapter.requestDevice();
+
+            const shaderModule = device.createShaderModule({
+                code: `
+                    struct Uniforms {
+                        selectedColor : vec4f,
+                        tolerance : f32,
+                    }
+                    @binding(0) @group(0) var<uniform> uniforms : Uniforms;
+                    @binding(1) @group(0) var inputTexture: texture_2d<f32>;
+                    @binding(2) @group(0) var inputSampler: sampler;
+
+                    struct VertexOutput {
+                        @builtin(position) position: vec4f,
+                        @location(0) texCoord: vec2f,
+                    }
+
+                    @vertex
+                    fn vertexMain(@builtin(vertex_index) vertexIndex: u32) -> VertexOutput {
+                        var pos = array<vec2f, 6>(
+                            vec2f(-1.0, -1.0),
+                            vec2f(1.0, -1.0),
+                            vec2f(1.0, 1.0),
+                            vec2f(-1.0, -1.0),
+                            vec2f(1.0, 1.0),
+                            vec2f(-1.0, 1.0)
+                        );
+                        var texCoord = array<vec2f, 6>(
+                            vec2f(0.0, 1.0),
+                            vec2f(1.0, 1.0),
+                            vec2f(1.0, 0.0),
+                            vec2f(0.0, 1.0),
+                            vec2f(1.0, 0.0),
+                            vec2f(0.0, 0.0)
+                        );
+                        var output: VertexOutput;
+                        output.position = vec4f(pos[vertexIndex], 0.0, 1.0);
+                        output.texCoord = texCoord[vertexIndex];
+                        return output;
+                    }
+
+                    @fragment
+                    fn fragmentMain(@location(0) texCoord: vec2f) -> @location(0) vec4f {
+                        let color = textureSample(inputTexture, inputSampler, texCoord);
+                        let diff = abs(color - uniforms.selectedColor);
+                        let maxDiff = max(max(diff.r, diff.g), diff.b);
+                        if (maxDiff <= uniforms.tolerance) {
+                            return vec4f(0.0, 0.0, 0.0, 0.0);
+                        }
+                        return color;
+                    }
+                `
+            });
+
+            const bindGroupLayout = device.createBindGroupLayout({
+                entries: [
+                    { binding: 0, visibility: GPUShaderStage.FRAGMENT, buffer: { type: 'uniform' } },
+                    { binding: 1, visibility: GPUShaderStage.FRAGMENT, texture: {} },
+                    { binding: 2, visibility: GPUShaderStage.FRAGMENT, sampler: {} },
+                ]
+            });
+
+            pipeline = device.createRenderPipeline({
+                layout: device.createPipelineLayout({ bindGroupLayouts: [bindGroupLayout] }),
+                vertex: {
+                    module: shaderModule,
+                    entryPoint: 'vertexMain',
+                },
+                fragment: {
+                    module: shaderModule,
+                    entryPoint: 'fragmentMain',
+                    targets: [{ format: 'bgra8unorm' }],
+                },
+                primitive: {
+                    topology: 'triangle-list',
+                },
+            });
+
+            sampler = device.createSampler({
+                magFilter: 'linear',
+                minFilter: 'linear',
+            });
+
+            uniformBuffer = device.createBuffer({
+                size: 32, // vec4f (16 bytes) + float (4 bytes) + padding
+                usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+            });
+        }
+
+        function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+            const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+            return { width: srcWidth * ratio, height: srcHeight * ratio };
+        }
+
+        async function loadImage(file) {
+            const bitmap = await createImageBitmap(file);
+            const { width, height } = calculateAspectRatioFit(bitmap.width, bitmap.height, MAX_CANVAS_SIZE, MAX_CANVAS_SIZE);
+            imageWidth = Math.floor(width);
+            imageHeight = Math.floor(height);
+            originalCanvas.width = processedCanvas.width = imageWidth;
+            originalCanvas.height = processedCanvas.height = imageHeight;
+
+            const originalCtx = originalCanvas.getContext('2d');
+            originalCtx.drawImage(bitmap, 0, 0, imageWidth, imageHeight);
+
+            const processedCtx = processedCanvas.getContext('2d');
+            processedCtx.drawImage(bitmap, 0, 0, imageWidth, imageHeight);
+
+            originalTexture = device.createTexture({
+                size: [imageWidth, imageHeight],
+                format: 'bgra8unorm',
+                usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
+            });
+
+            device.queue.copyExternalImageToTexture(
+                { source: originalCanvas },
+                { texture: originalTexture },
+                [imageWidth, imageHeight]
+            );
+
+            processedTexture = device.createTexture({
+                size: [imageWidth, imageHeight],
+                format: 'bgra8unorm',
+                usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC,
+            });
+
+            bindGroup = device.createBindGroup({
+                layout: pipeline.getBindGroupLayout(0),
+                entries: [
+                    { binding: 0, resource: { buffer: uniformBuffer } },
+                    { binding: 1, resource: originalTexture.createView() },
+                    { binding: 2, resource: sampler },
+                ],
+            });
+
+            render();
+        }
+
+        function render(clickX = -1, clickY = -1) {
+            const commandEncoder = device.createCommandEncoder();
+            const passEncoder = commandEncoder.beginRenderPass({
+                colorAttachments: [{
+                    view: processedTexture.createView(),
+                    loadOp: 'clear',
+                    storeOp: 'store',
+                }],
+            });
+
+            passEncoder.setPipeline(pipeline);
+            passEncoder.setBindGroup(0, bindGroup);
+
+            if (clickX !== -1 && clickY !== -1) {
+                const ctx = originalCanvas.getContext('2d');
+                const imageData = ctx.getImageData(clickX, clickY, 1, 1);
+                const [r, g, b] = imageData.data;
+                const selectedColor = new Float32Array([r / 255, g / 255, b / 255, 1.0]);
+                const tolerance = 0.1; // Adjust this value to change the color matching sensitivity
+                device.queue.writeBuffer(uniformBuffer, 0, selectedColor);
+                device.queue.writeBuffer(uniformBuffer, 16, new Float32Array([tolerance]));
+            }
+
+            passEncoder.draw(6);
+            passEncoder.end();
+
+            device.queue.submit([commandEncoder.finish()]);
+
+            // Copy the result to the processed canvas
+            copyTextureToCanvas(processedTexture, processedCanvas);
+        }
+
+        function copyTextureToCanvas(texture, canvas) {
+            const bytesPerRow = Math.ceil(imageWidth * 4 / 256) * 256;
+            const bufferSize = bytesPerRow * imageHeight;
+
+            const stagingBuffer = device.createBuffer({
+                size: bufferSize,
+                usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ
+            });
+
+            const commandEncoder = device.createCommandEncoder();
+            commandEncoder.copyTextureToBuffer(
+                { texture: texture },
+                { buffer: stagingBuffer, bytesPerRow: bytesPerRow },
+                [imageWidth, imageHeight]
+            );
+
+            device.queue.submit([commandEncoder.finish()]);
+
+            stagingBuffer.mapAsync(GPUMapMode.READ).then(() => {
+                const copyArrayBuffer = stagingBuffer.getMappedRange();
+                const data = new Uint8ClampedArray(copyArrayBuffer);
+                const imageData = new ImageData(imageWidth, imageHeight);
+
+                for (let y = 0; y < imageHeight; y++) {
+                    const rowOffset = y * bytesPerRow;
+                    for (let x = 0; x < imageWidth; x++) {
+                        const pixelOffset = rowOffset + x * 4;
+                        const imageDataOffset = (y * imageWidth + x) * 4;
+                        imageData.data[imageDataOffset] = data[pixelOffset + 2];     // Red
+                        imageData.data[imageDataOffset + 1] = data[pixelOffset + 1]; // Green
+                        imageData.data[imageDataOffset + 2] = data[pixelOffset];     // Blue
+                        imageData.data[imageDataOffset + 3] = data[pixelOffset + 3]; // Alpha
+                    }
+                }
+
+                const ctx = canvas.getContext('2d');
+                ctx.putImageData(imageData, 0, 0);
+
+                stagingBuffer.unmap();
+            });
+        }
+
+        imageInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                loadImage(e.target.files[0]);
+            }
+        });
+
+        originalCanvas.addEventListener('click', (e) => {
+            const rect = originalCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            render(x, y);
+        });
+
+        initWebGPU().catch(console.error);
+    </script>
+</body>
+</html>

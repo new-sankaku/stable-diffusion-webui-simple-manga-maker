@@ -1,5 +1,8 @@
-document.getElementById('knifeModeButton').addEventListener('click', function () {
-  changeKnifeMode();
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('knifeModeButton').addEventListener('click', function () {
+    changeKnifeMode();
+  });
 });
 
 function changeKnifeMode(){

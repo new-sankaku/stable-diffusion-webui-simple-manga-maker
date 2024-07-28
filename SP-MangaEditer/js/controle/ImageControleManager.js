@@ -67,19 +67,73 @@ function applyFilters() {
   }
 }
 
-document.getElementById('sepiaEffect').onchange = applyFilters;
-document.getElementById('grayscaleEffect').onchange = function () {
-  applyFilters();
-};
-document.querySelectorAll('input[name="grayscaleMode"]').forEach(function (radio) {
-  radio.onchange = applyFilters;
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('sepiaEffect').onchange = applyFilters;
+  document.getElementById('grayscaleEffect').onchange = function () {
+    applyFilters();
+  };
+  document.querySelectorAll('input[name="grayscaleMode"]').forEach(function (radio) {
+    radio.onchange = applyFilters;
+  });
+  document.getElementById('gammaRed').oninput = applyFilters;
+  document.getElementById('gammaGreen').oninput = applyFilters;
+  document.getElementById('gammaBlue').oninput = applyFilters;
+  document.getElementById('vibranceValue').oninput = applyFilters;
+  document.getElementById('blurValue').oninput = applyFilters;
+  document.getElementById('pixelateValue').oninput = applyFilters;
+
+  document.getElementById('addGlowEffectCheckBox').addEventListener('change', function () {
+
+    const selectedObject = canvas.getActiveObject();
+    if (selectedObject) {
+      if (document.getElementById('addGlowEffectCheckBox').checked) {
+        const color = document.getElementById('glowOutLineColorPicker').value;
+        const blurValue = parseInt(document.getElementById('glowOutLineSlider').value, 10);
+
+        console.log("addGlowEffectCheckBox", color, blurValue,);
+        selectedObject.set({
+          shadow: {
+            color: color,
+            blur: blurValue,
+            offsetX: 0,
+            offsetY: 0
+          }
+        });
+      } else {
+        selectedObject.set({ shadow: null });
+      }
+      canvas.renderAll();
+    }
+  });
+
+  document.getElementById('glowOutLineSlider').addEventListener('change', function () {
+    if (document.getElementById('addGlowEffectCheckBox').checked) {
+      const blurValue = parseInt(this.value, 20);
+      document.getElementById('glowOutLineSlider').innerText = blurValue;
+
+      const selectedObject = canvas.getActiveObject();
+      if (selectedObject && selectedObject.shadow) {
+        const color = document.getElementById('glowOutLineColorPicker').value;
+        selectedObject.shadow.color = color;
+        selectedObject.shadow.blur = blurValue;
+        canvas.renderAll();
+      }
+    }
+  });
+
+  document.getElementById('glowOutLineColorPicker').addEventListener('input', function () {
+    const color = this.value;
+    const selectedObject = canvas.getActiveObject();
+    if (selectedObject && selectedObject.shadow) {
+      const blurValue = parseInt(document.getElementById('glowOutLineSlider').value, 20);
+      selectedObject.shadow.color = color;
+      selectedObject.shadow.blur = blurValue;
+      canvas.renderAll();
+    }
+  });
+
 });
-document.getElementById('gammaRed').oninput = applyFilters;
-document.getElementById('gammaGreen').oninput = applyFilters;
-document.getElementById('gammaBlue').oninput = applyFilters;
-document.getElementById('vibranceValue').oninput = applyFilters;
-document.getElementById('blurValue').oninput = applyFilters;
-document.getElementById('pixelateValue').oninput = applyFilters;
+
 
 
 function imageControleTogglePanel(panelId) {
@@ -95,53 +149,3 @@ function imageControleTogglePanel(panelId) {
     console.error('Panel with ID not found:', panelId);
   }
 }
-
-document.getElementById('addGlowEffectCheckBox').addEventListener('change', function () {
-
-  const selectedObject = canvas.getActiveObject();
-  if (selectedObject) {
-    if (document.getElementById('addGlowEffectCheckBox').checked) {
-      const color = document.getElementById('glowOutLineColorPicker').value;
-      const blurValue = parseInt(document.getElementById('glowOutLineSlider').value, 10);
-
-      console.log("addGlowEffectCheckBox", color, blurValue,);
-      selectedObject.set({
-        shadow: {
-          color: color,
-          blur: blurValue,
-          offsetX: 0,
-          offsetY: 0
-        }
-      });
-    } else {
-      selectedObject.set({ shadow: null });
-    }
-    canvas.renderAll();
-  }
-});
-
-document.getElementById('glowOutLineSlider').addEventListener('change', function () {
-  if (document.getElementById('addGlowEffectCheckBox').checked) {
-    const blurValue = parseInt(this.value, 20);
-    document.getElementById('glowOutLineSlider').innerText = blurValue;
-
-    const selectedObject = canvas.getActiveObject();
-    if (selectedObject && selectedObject.shadow) {
-      const color = document.getElementById('glowOutLineColorPicker').value;
-      selectedObject.shadow.color = color;
-      selectedObject.shadow.blur = blurValue;
-      canvas.renderAll();
-    }
-  }
-});
-
-document.getElementById('glowOutLineColorPicker').addEventListener('input', function () {
-  const color = this.value;
-  const selectedObject = canvas.getActiveObject();
-  if (selectedObject && selectedObject.shadow) {
-    const blurValue = parseInt(document.getElementById('glowOutLineSlider').value, 20);
-    selectedObject.shadow.color = color;
-    selectedObject.shadow.blur = blurValue;
-    canvas.renderAll();
-  }
-});

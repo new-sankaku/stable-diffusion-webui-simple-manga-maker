@@ -128,7 +128,10 @@ function toggleMode() {
   updateLayerPanel();
 }
 
-document.getElementById('mode-toggle').addEventListener('change', toggleMode);
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('mode-toggle').addEventListener('change', toggleMode);
+});
+
 
 function initializeMode() {
   const mode = localStorage.getItem('mode') || 'light-mode';
@@ -141,7 +144,10 @@ function initializeMode() {
     logo.src = '02_images_svg/Logo/light_mode_logo.webp';
   }
 }
-initializeMode();
+
+document.addEventListener('DOMContentLoaded', function() {
+  initializeMode();
+});
 
 
 
