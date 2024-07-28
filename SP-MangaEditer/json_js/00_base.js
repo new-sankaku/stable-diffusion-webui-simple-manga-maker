@@ -261,43 +261,16 @@ var base ={
 		}
 	},
 	"Body Type": {
-		"Height": {
-			"tall": 				{"url": "03_images/imgPromptHelper/tall.webp" },
-			"towering": 			{"url": "03_images/imgPromptHelper/towering.webp" },
-			"lanky": 				{"url": "03_images/imgPromptHelper/lanky.webp" },
-			"leggy": 				{"url": "03_images/imgPromptHelper/leggy.webp" },
-			"heightened": 			{"url": "03_images/imgPromptHelper/heightened.webp" },
-			"elongated": 			{"url": "03_images/imgPromptHelper/elongated.webp" },
-			"enormous": 			{"url": "03_images/imgPromptHelper/enormous.webp" },
-			"gigantic": 			{"url": "03_images/imgPromptHelper/gigantic.webp" },
-			"giant": 				{"url": "03_images/imgPromptHelper/giant.webp" },
-			"petite": 				{"url": "03_images/imgPromptHelper/petite.webp" },
-			"tiny": 				{"url": "03_images/imgPromptHelper/tiny.webp" },
-			"height-challenged": 	{"url": "03_images/imgPromptHelper/height-challenged.webp" },
-			"short": 				{"url": "03_images/imgPromptHelper/short.webp" },
-			"diminutive": 			{"url": "03_images/imgPromptHelper/diminutive.webp" },
-			"dwarf": 				{"url": "03_images/imgPromptHelper/dwarf.webp" },
-			"below average": 		{"url": "03_images/imgPromptHelper/below-average.webp" },
-			"out of proportion": 	{"url": "03_images/imgPromptHelper/out-of-proportion.webp" },
-			"short stature": 		{"url": "03_images/imgPromptHelper/short-stature.webp" },
-			"short height": 		{"url": "03_images/imgPromptHelper/short-height.webp" }
-		},
-		"Body Shape": {
-			"overweight": 	{"url": "03_images/imgPromptHelper/overweight.webp" },
-			"obese": 		{"url": "03_images/imgPromptHelper/obese.webp" },
-			"chubby": 		{"url": "03_images/imgPromptHelper/chubby.webp" },
-			"plump": 		{"url": "03_images/imgPromptHelper/plump.webp" },
-			"rotund": 		{"url": "03_images/imgPromptHelper/rotund.webp" },
-			"portly": 		{"url": "03_images/imgPromptHelper/portly.webp" },
-			"corpulent": 	{"url": "03_images/imgPromptHelper/corpulent.webp" },
-			"slim": 		{"url": "03_images/imgPromptHelper/slim.webp" },
-			"fit": 			{"url": "03_images/imgPromptHelper/fit.webp" },
-			"medium": 		{"url": "03_images/imgPromptHelper/medium.webp" },
-			"slender": 		{"url": "03_images/imgPromptHelper/slender.webp" },
-			"underweight": 	{"url": "03_images/imgPromptHelper/underweight.webp" },
-			"skinny": 		{"url": "03_images/imgPromptHelper/skinny.webp" },
-			"scrawny": 		{"url": "03_images/imgPromptHelper/scrawny.webp" }
-		}
+		"Breast": {
+			"flat chested": 		{"url": "03_images/imgPromptHelper/breast/flat-chested.webp" },
+			"small breasts": 		{"url": "03_images/imgPromptHelper/breast/small-breasts.webp" },
+			"medium breasts": 		{"url": "03_images/imgPromptHelper/breast/medium-breasts.webp" },
+			"big breasts": 			{"url": "03_images/imgPromptHelper/breast/big-breasts.webp" },
+			"short stack": 			{"url": "03_images/imgPromptHelper/breast/short-stack.webp" },
+			"hyper breasts": 		{"url": "03_images/imgPromptHelper/breast/hyper-breasts.webp" },
+			"hanging breasts": 		{"url": "03_images/imgPromptHelper/breast/hanging-breasts.webp" },
+			"huge breasts": 		{"url": "03_images/imgPromptHelper/breast/huge-breasts.webp" }
+		}	
 	},
 	"Age": {
 		"baby": {				"url": "03_images/imgPromptHelper/baby.webp"		},
