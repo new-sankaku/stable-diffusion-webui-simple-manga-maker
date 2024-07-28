@@ -295,25 +295,25 @@ var base ={
 	},
 	"Skin": {
 		"Skin Tone": {
-			"pale skin": 		{"url": "03_images/imgPromptHelper/pale-skin.webp" },
-			"fair skin": 		{"url": "03_images/imgPromptHelper/fair-skin.webp" },
-			"dark skin": 		{"url": "03_images/imgPromptHelper/dark-skin.webp" },
-			"tan skin": 		{"url": "03_images/imgPromptHelper/tan-skin.webp" },
-			"tanned skin": 		{"url": "03_images/imgPromptHelper/tanned-skin.webp" },
-			"tanlines": 		{"url": "03_images/imgPromptHelper/tanlines.webp" },
-			"wheat skin": 		{"url": "03_images/imgPromptHelper/wheat-skin.webp" }
+			"pale skin": 		{"url": "03_images/imgPromptHelper/skin/pale-skin.webp" },
+			"fair skin": 		{"url": "03_images/imgPromptHelper/skin/fair-skin.webp" },
+			"dark skin": 		{"url": "03_images/imgPromptHelper/skin/dark-skin.webp" },
+			"tan skin": 		{"url": "03_images/imgPromptHelper/skin/tan-skin.webp" },
+			"tanned skin": 		{"url": "03_images/imgPromptHelper/skin/tanned-skin.webp" },
+			"tanlines": 		{"url": "03_images/imgPromptHelper/skin/tanlines.webp" },
+			"wheat skin": 		{"url": "03_images/imgPromptHelper/skin/wheat-skin.webp" }
 		},
 		"Skin Texture": {
-			"shiny skin": 		{"url": "03_images/imgPromptHelper/shiny-skin.webp" },
-			"oiled skin": 		{"url": "03_images/imgPromptHelper/oiled-skin.webp" },
-			"gloss skin": 		{"url": "03_images/imgPromptHelper/gloss-skin.webp" },
-			"glistening skin": 	{"url": "03_images/imgPromptHelper/glistening-skin.webp" },
-			"detailed skin": 	{"url": "03_images/imgPromptHelper/detailed-skin.webp" },
-			"porcelain skin": 	{"url": "03_images/imgPromptHelper/porcelain-skin.webp" },
-			"wet skin": 		{"url": "03_images/imgPromptHelper/wet-skin.webp" },
-			"suntan": 			{"url": "03_images/imgPromptHelper/suntan.webp" },
-			"sweaty skin": 		{"url": "03_images/imgPromptHelper/sweaty-skin.webp" },
-			"wrinkles skin": 	{"url": "03_images/imgPromptHelper/wrinkles-skin.webp" }
+			"shiny skin": 		{"url": "03_images/imgPromptHelper/skin/shiny-skin.webp" },
+			"oiled skin": 		{"url": "03_images/imgPromptHelper/skin/oiled-skin.webp" },
+			"gloss skin": 		{"url": "03_images/imgPromptHelper/skin/gloss-skin.webp" },
+			"glistening skin": 	{"url": "03_images/imgPromptHelper/skin/glistening-skin.webp" },
+			"detailed skin": 	{"url": "03_images/imgPromptHelper/skin/detailed-skin.webp" },
+			"porcelain skin": 	{"url": "03_images/imgPromptHelper/skin/porcelain-skin.webp" },
+			"wet skin": 		{"url": "03_images/imgPromptHelper/skin/wet-skin.webp" },
+			"suntan": 			{"url": "03_images/imgPromptHelper/skin/suntan.webp" },
+			"sweaty skin": 		{"url": "03_images/imgPromptHelper/skin/sweaty-skin.webp" },
+			"wrinkles skin": 	{"url": "03_images/imgPromptHelper/skin/wrinkles-skin.webp" }
 		}
 	},
 	"Makeup": {
