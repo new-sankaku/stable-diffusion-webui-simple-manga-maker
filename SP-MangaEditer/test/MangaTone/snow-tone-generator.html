@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>方向性ブラー付き楕円形雪のトーン生成器</title>
+    <style>
+        body {
+            background-color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        canvas {
+            border: 1px solid #ccc;
+        }
+        #controls {
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 10px;
+        }
+        label, input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>方向性ブラー付き楕円形雪のトーン生成器</h1>
+    <div id="controls">
+        <label for="snowDensity">雪の密度:</label>
+        <input type="range" id="snowDensity" min="50" max="500" value="200">
+        
+        <label for="frontSnowSize">手前の雪サイズ:</label>
+        <input type="range" id="frontSnowSize" min="5" max="20" value="10">
+        
+        <label for="backSnowSize">奥の雪サイズ:</label>
+        <input type="range" id="backSnowSize" min="1" max="10" value="3">
+        
+        <label for="frontBlurLength">手前のブラーの長さ:</label>
+        <input type="range" id="frontBlurLength" min="0" max="50" value="20">
+        
+        <label for="backBlurLength">奥のブラーの長さ:</label>
+        <input type="range" id="backBlurLength" min="0" max="25" value="5">
+        
+        <label for="frontColor">手前の雪の色:</label>
+        <input type="color" id="frontColor" value="#FFFFFF">
+        
+        <label for="backColor">奥の雪の色:</label>
+        <input type="color" id="backColor" value="#CCCCCC">
+        
+        <label for="snowAngle">雪の角度 (度):</label>
+        <input type="range" id="snowAngle" min="0" max="180" value="90">
+        
+        <button id="generate">生成</button>
+    </div>
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const snowDensity = document.getElementById('snowDensity');
+        const frontSnowSize = document.getElementById('frontSnowSize');
+        const backSnowSize = document.getElementById('backSnowSize');
+        const frontBlurLength = document.getElementById('frontBlurLength');
+        const backBlurLength = document.getElementById('backBlurLength');
+        const frontColor = document.getElementById('frontColor');
+        const backColor = document.getElementById('backColor');
+        const snowAngle = document.getElementById('snowAngle');
+        const generateBtn = document.getElementById('generate');
+
+        function drawSnowflake(x, y, size, blurLength, color, angle) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle * Math.PI / 180);
+
+            const gradient = ctx.createLinearGradient(0, -size/2 - blurLength, 0, size/2 + blurLength);
+            gradient.addColorStop(0, 'rgba(255,255,255,0)');
+            gradient.addColorStop(0.5 - size/(4*blurLength), 'rgba(255,255,255,0)');
+            gradient.addColorStop(0.5, color);
+            gradient.addColorStop(0.5 + size/(4*blurLength), 'rgba(255,255,255,0)');
+            gradient.addColorStop(1, 'rgba(255,255,255,0)');
+
+            ctx.beginPath();
+            ctx.ellipse(0, 0, size/4, size/2 + blurLength, 0, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function interpolateColor(color1, color2, factor) {
+            const r1 = parseInt(color1.substr(1, 2), 16);
+            const g1 = parseInt(color1.substr(3, 2), 16);
+            const b1 = parseInt(color1.substr(5, 2), 16);
+            const r2 = parseInt(color2.substr(1, 2), 16);
+            const g2 = parseInt(color2.substr(3, 2), 16);
+            const b2 = parseInt(color2.substr(5, 2), 16);
+            const r = Math.round(r1 + factor * (r2 - r1));
+            const g = Math.round(g1 + factor * (g2 - g1));
+            const b = Math.round(b1 + factor * (b2 - b1));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function generateSnowTone() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const density = parseInt(snowDensity.value);
+            const frontSize = parseInt(frontSnowSize.value);
+            const backSize = parseInt(backSnowSize.value);
+            const frontBlurLengthValue = parseInt(frontBlurLength.value);
+            const backBlurLengthValue = parseInt(backBlurLength.value);
+            const angle = parseInt(snowAngle.value);
+
+            for (let i = 0; i < density; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const depth = Math.random();
+                const size = backSize + (frontSize - backSize) * depth;
+                const blurLength = backBlurLengthValue + (frontBlurLengthValue - backBlurLengthValue) * depth;
+                const color = interpolateColor(backColor.value, frontColor.value, depth);
+                drawSnowflake(x, y, size, blurLength, color, angle);
+            }
+        }
+
+        generateBtn.addEventListener('click', generateSnowTone);
+
+        generateSnowTone();
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ノイズグラデーション漫画トーン生成器</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        canvas { border: 1px solid #ccc; }
+        .controls { margin-top: 10px; }
+        .control { margin-bottom: 5px; }
+        label { display: inline-block; width: 180px; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <div class="controls">
+        <div class="control">
+            <label for="colorPicker">色:</label>
+            <input type="color" id="colorPicker" value="#000000">
+        </div>
+        <div class="control">
+            <label for="noiseMinSlider">ノイズ最小量:</label>
+            <input type="range" id="noiseMinSlider" min="0" max="100" value="0">
+        </div>
+        <div class="control">
+            <label for="noiseMaxSlider">ノイズ最大量:</label>
+            <input type="range" id="noiseMaxSlider" min="0" max="100" value="100">
+        </div>
+        <div class="control">
+            <label for="gradientStartX">グラデーション開始 X:</label>
+            <input type="range" id="gradientStartX" min="0" max="400" value="0">
+        </div>
+        <div class="control">
+            <label for="gradientStartY">グラデーション開始 Y:</label>
+            <input type="range" id="gradientStartY" min="0" max="400" value="0">
+        </div>
+        <div class="control">
+            <label for="gradientEndX">グラデーション終了 X:</label>
+            <input type="range" id="gradientEndX" min="0" max="400" value="400">
+        </div>
+        <div class="control">
+            <label for="gradientEndY">グラデーション終了 Y:</label>
+            <input type="range" id="gradientEndY" min="0" max="400" value="400">
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const noiseMinSlider = document.getElementById('noiseMinSlider');
+        const noiseMaxSlider = document.getElementById('noiseMaxSlider');
+        const gradientStartX = document.getElementById('gradientStartX');
+        const gradientStartY = document.getElementById('gradientStartY');
+        const gradientEndX = document.getElementById('gradientEndX');
+        const gradientEndY = document.getElementById('gradientEndY');
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function generateNoiseWithGradient(color, noiseMin, noiseMax) {
+            const imageData = ctx.createImageData(canvas.width, canvas.height);
+            const data = imageData.data;
+            const rgb = hexToRgb(color);
+
+            const startX = parseInt(gradientStartX.value);
+            const startY = parseInt(gradientStartY.value);
+            const endX = parseInt(gradientEndX.value);
+            const endY = parseInt(gradientEndY.value);
+
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const index = (y * canvas.width + x) * 4;
+
+                    // Calculate gradient progress
+                    const dx = endX - startX;
+                    const dy = endY - startY;
+                    const progress = ((x - startX) * dx + (y - startY) * dy) / (dx * dx + dy * dy);
+
+                    // Interpolate noise threshold
+                    const noiseThreshold = noiseMin + progress * (noiseMax - noiseMin);
+
+                    const noise = Math.random() * 100;
+
+                    if (noise < noiseThreshold) {
+                        data[index] = rgb.r;
+                        data[index + 1] = rgb.g;
+                        data[index + 2] = rgb.b;
+                        data[index + 3] = 255;
+                    } else {
+                        data[index] = 255;
+                        data[index + 1] = 255;
+                        data[index + 2] = 255;
+                        data[index + 3] = 0;
+                    }
+                }
+            }
+
+            return imageData;
+        }
+
+        function updateCanvas() {
+            const color = colorPicker.value;
+            const noiseMin = parseInt(noiseMinSlider.value);
+            const noiseMax = parseInt(noiseMaxSlider.value);
+
+            const noiseData = generateNoiseWithGradient(color, noiseMin, noiseMax);
+            ctx.putImageData(noiseData, 0, 0);
+        }
+
+        colorPicker.addEventListener('input', updateCanvas);
+        noiseMinSlider.addEventListener('input', updateCanvas);
+        noiseMaxSlider.addEventListener('input', updateCanvas);
+        gradientStartX.addEventListener('input', updateCanvas);
+        gradientStartY.addEventListener('input', updateCanvas);
+        gradientEndX.addEventListener('input', updateCanvas);
+        gradientEndY.addEventListener('input', updateCanvas);
+
+        updateCanvas();
+    })();
+    </script>
+</body>
+</html>

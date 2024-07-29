@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>集中線ジェネレーター（中心位置、大きさ、色調整可能）</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; background-color: #f0f0f0; }
+        canvas { border: 1px solid #000; margin-bottom: 20px; }
+        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .control { display: flex; flex-direction: column; align-items: center; }
+        label { margin-bottom: 5px; }
+        input { width: 100px; }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <div class="controls">
+        <div class="control">
+            <label for="lineNum">線の数:</label>
+            <input type="range" id="lineNum" min="50" max="500" value="200">
+        </div>
+        <div class="control">
+            <label for="crMax">最大半径:</label>
+            <input type="range" id="crMax" min="100" max="400" value="200">
+        </div>
+        <div class="control">
+            <label for="crMin">最小半径:</label>
+            <input type="range" id="crMin" min="50" max="200" value="150">
+        </div>
+        <div class="control">
+            <label for="centerX">中心 X:</label>
+            <input type="range" id="centerX" min="0" max="500" value="250">
+        </div>
+        <div class="control">
+            <label for="centerY">中心 Y:</label>
+            <input type="range" id="centerY" min="0" max="500" value="250">
+        </div>
+        <div class="control">
+            <label for="lineColor">線の色:</label>
+            <input type="color" id="lineColor" value="#000000">
+        </div>
+    </div>
+    <script>
+        var focusLine = function(cs, centralX, centralY, lineWidth, lineNum, circleRadiusMax, circleRadiusMin, lineColor) {
+            var ctx = cs.getContext('2d');
+            var lines = [];
+
+            var getRandomInt = function(max, min) {
+                return Math.floor(Math.random() * (max - min)) + min;
+            };
+
+            var getCircumPos = {
+                x: function(d, r, cx) {
+                    return Math.cos(Math.PI / 180 * d) * r + cx;
+                },
+                y: function(d, r, cy) {
+                    return Math.sin(Math.PI / 180 * d) * r + cy;
+                }
+            };
+
+            var Liner = function() {
+                this.initialize();
+            };
+
+            Liner.prototype = {
+                initialize: function() {
+                    this.deg = getRandomInt(360, 0);
+                },
+                setPos: function() {
+                    this.moveDeg = this.deg + (getRandomInt(lineWidth, 1) / 10);
+                    var sizeMultiplier = 1 + Math.max(
+                        Math.abs(centralX - cs.width / 2) / (cs.width / 2),
+                        Math.abs(centralY - cs.height / 2) / (cs.height / 2)
+                    );
+                    this.endRadius = getRandomInt(circleRadiusMax, circleRadiusMin) * sizeMultiplier;
+                    var canvasRadius = Math.max(cs.width, cs.height) * sizeMultiplier;
+                    this.startPos = {
+                        x: getCircumPos.x(this.deg, canvasRadius, centralX),
+                        y: getCircumPos.y(this.deg, canvasRadius, centralY)
+                    };
+                    this.movePos = {
+                        x: getCircumPos.x(this.moveDeg, canvasRadius, centralX),
+                        y: getCircumPos.y(this.moveDeg, canvasRadius, centralY)
+                    };
+                    this.endPos = {
+                        x: getCircumPos.x(this.moveDeg, this.endRadius, centralX),
+                        y: getCircumPos.y(this.moveDeg, this.endRadius, centralY)
+                    };
+                },
+                update: function() {
+                    this.setPos();
+                },
+                draw: function() {
+                    ctx.beginPath();
+                    ctx.lineWidth = 1;
+                    ctx.fillStyle = lineColor;
+                    ctx.moveTo(this.startPos.x, this.startPos.y);
+                    ctx.lineTo(this.movePos.x, this.movePos.y);
+                    ctx.lineTo(this.endPos.x, this.endPos.y);
+                    ctx.fill();
+                    ctx.closePath();
+                },
+                render: function() {
+                    this.update();
+                    this.draw();
+                }
+            };
+
+            function createLines(num) {
+                lines = [];
+                var i = 0;
+                for (; i < num; i++) {
+                    lines[lines.length] = new Liner();
+                }
+            }
+
+            function render() {
+                var i = 0;
+                var l = lines.length;
+                ctx.clearRect(0, 0, cs.width, cs.height);
+                for (; i < l; i++) {
+                    lines[i].render();
+                }
+            }
+
+            createLines(lineNum);
+            render();
+        };
+
+        var cs = document.getElementById('myCanvas');
+        var conf = {
+            cx: cs.width / 2,
+            cy: cs.height / 2,
+            lineWidth: 30,
+            lineNum: 200,
+            crMax: 200,
+            crMin: 150,
+            color: '#000000'
+        };
+
+        function updateFocusLine() {
+            conf.lineNum = parseInt(document.getElementById('lineNum').value);
+            conf.crMax = parseInt(document.getElementById('crMax').value);
+            conf.crMin = parseInt(document.getElementById('crMin').value);
+            conf.cx = parseInt(document.getElementById('centerX').value);
+            conf.cy = parseInt(document.getElementById('centerY').value);
+            conf.color = document.getElementById('lineColor').value;
+            focusLine(cs, conf.cx, conf.cy, conf.lineWidth, conf.lineNum, conf.crMax, conf.crMin, conf.color);
+        }
+
+        document.getElementById('lineNum').addEventListener('input', updateFocusLine);
+        document.getElementById('crMax').addEventListener('input', updateFocusLine);
+        document.getElementById('crMin').addEventListener('input', updateFocusLine);
+        document.getElementById('centerX').addEventListener('input', updateFocusLine);
+        document.getElementById('centerY').addEventListener('input', updateFocusLine);
+        document.getElementById('lineColor').addEventListener('input', updateFocusLine);
+
+        updateFocusLine();
+    </script>
+</body>
+</html>

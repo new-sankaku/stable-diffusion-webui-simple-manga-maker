@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漫画トーンジェネレーター</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        #controls {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input, select {
+            margin-bottom: 10px;
+        }
+        #canvas-container {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>漫画トーンジェネレーター</h1>
+    <div id="controls">
+        <div class="control-group">
+            <label for="dotSize">ドットサイズ:</label>
+            <input type="range" id="dotSize" min="1" max="10" value="3">
+        </div>
+        <div class="control-group">
+            <label for="dotSpacing">ドット間隔:</label>
+            <input type="range" id="dotSpacing" min="1" max="20" value="5">
+        </div>
+        <div class="control-group">
+            <label for="gradientDirection">グラデーション方向:</label>
+            <select id="gradientDirection">
+                <option value="top-bottom">上から下</option>
+                <option value="bottom-top">下から上</option>
+                <option value="left-right">左から右</option>
+                <option value="right-left">右から左</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="gradientStart">グラデーション開始位置 (%):</label>
+            <input type="number" id="gradientStart" min="0" max="100" value="0">
+        </div>
+        <div class="control-group">
+            <label for="gradientEnd">グラデーション終了位置 (%):</label>
+            <input type="number" id="gradientEnd" min="0" max="100" value="100">
+        </div>
+        <button id="generate">生成</button>
+    </div>
+    <div id="canvas-container">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+
+    <script>
+        const canvas = new fabric.Canvas('canvas');
+        const dotSizeInput = document.getElementById('dotSize');
+        const dotSpacingInput = document.getElementById('dotSpacing');
+        const gradientDirectionSelect = document.getElementById('gradientDirection');
+        const gradientStartInput = document.getElementById('gradientStart');
+        const gradientEndInput = document.getElementById('gradientEnd');
+        const generateButton = document.getElementById('generate');
+
+        function generateTone() {
+            canvas.clear();
+            const dotSize = parseInt(dotSizeInput.value);
+            const dotSpacing = parseInt(dotSpacingInput.value);
+            const gradientDirection = gradientDirectionSelect.value;
+            const gradientStart = parseInt(gradientStartInput.value) / 100;
+            const gradientEnd = parseInt(gradientEndInput.value) / 100;
+            const canvasSize = 500;
+
+            for (let y = 0; y < canvasSize; y += dotSpacing) {
+                for (let x = 0; x < canvasSize; x += dotSpacing) {
+                    let gradientPosition;
+                    switch (gradientDirection) {
+                        case 'top-bottom':
+                            gradientPosition = y / canvasSize;
+                            break;
+                        case 'bottom-top':
+                            gradientPosition = 1 - (y / canvasSize);
+                            break;
+                        case 'left-right':
+                            gradientPosition = x / canvasSize;
+                            break;
+                        case 'right-left':
+                            gradientPosition = 1 - (x / canvasSize);
+                            break;
+                    }
+
+                    let opacity = (gradientPosition - gradientStart) / (gradientEnd - gradientStart);
+                    opacity = Math.max(0, Math.min(1, opacity)); // Clamp between 0 and 1
+
+                    const dot = new fabric.Circle({
+                        left: x,
+                        top: y,
+                        radius: dotSize / 2,
+                        fill: `rgba(0, 0, 0, ${1 - opacity})`,
+                        selectable: false
+                    });
+                    canvas.add(dot);
+                }
+            }
+            canvas.renderAll();
+        }
+
+        generateButton.addEventListener('click', generateTone);
+        generateTone(); // 初期表示
+    </script>
+</body>
+</html>

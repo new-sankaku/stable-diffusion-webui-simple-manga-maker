@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修正版自動スピードライン生成ツール</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; }
+        canvas { border: 1px solid black; }
+        #controls, #options { margin: 10px 0; }
+        .option-group { display: inline-block; margin: 0 10px; }
+    </style>
+</head>
+<body>
+    <h1>修正版自動スピードライン生成ツール</h1>
+    <div id="controls">
+        <button id="horizontal">水平線</button>
+        <button id="vertical">垂直線</button>
+        <button id="diagonal">斜め線</button>
+        <button id="cross">十字線</button>
+        <button id="clear">クリア</button>
+    </div>
+    <div id="options">
+        <div class="option-group">
+            <label for="density">密度: <span id="densityValue">50</span></label>
+            <input type="range" id="density" min="1" max="200" value="50">
+        </div>
+        <div class="option-group">
+            <label for="angle">角度: <span id="angleValue">0</span>°</label>
+            <input type="range" id="angle" min="0" max="359" value="0">
+        </div>
+        <div class="option-group">
+            <label for="gradientStart">グラデーション開始: <span id="gradientStartValue">0</span>%</label>
+            <input type="range" id="gradientStart" min="0" max="100" value="0">
+        </div>
+        <div class="option-group">
+            <label for="gradientEnd">グラデーション終了: <span id="gradientEndValue">100</span>%</label>
+            <input type="range" id="gradientEnd" min="0" max="100" value="100">
+        </div>
+        <div class="option-group">
+            <label for="lineColor">線の色:</label>
+            <input type="color" id="lineColor" value="#000000">
+        </div>
+        <div class="option-group">
+            <label for="gradientToggle">グラデーション:</label>
+            <input type="checkbox" id="gradientToggle" checked>
+        </div>
+    </div>
+    <canvas id="canvas" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = new fabric.Canvas('canvas');
+
+        function updateValue(id) {
+            const input = document.getElementById(id);
+            const display = document.getElementById(id + 'Value');
+            display.textContent = input.value;
+        }
+
+        ['density', 'angle', 'gradientStart', 'gradientEnd'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => updateValue(id));
+        });
+
+        function drawLine(start, end, options) {
+            const gradientToggle = document.getElementById('gradientToggle').checked;
+            const lineColor = document.getElementById('lineColor').value;
+            const gradientStart = parseInt(document.getElementById('gradientStart').value) / 100;
+            const gradientEnd = parseInt(document.getElementById('gradientEnd').value) / 100;
+
+            let line;
+            if (gradientToggle) {
+                const gradient = new fabric.Gradient({
+                    type: 'linear',
+                    coords: { x1: start.x, y1: start.y, x2: end.x, y2: end.y },
+                    colorStops: [
+                        { offset: 0, color: lineColor, opacity: gradientStart },
+                        { offset: 1, color: lineColor, opacity: gradientEnd }
+                    ]
+                });
+                line = new fabric.Line([start.x, start.y, end.x, end.y], {
+                    stroke: gradient,
+                    strokeWidth: options.strokeWidth || 1
+                });
+            } else {
+                line = new fabric.Line([start.x, start.y, end.x, end.y], {
+                    stroke: lineColor,
+                    strokeWidth: options.strokeWidth || 1,
+                    opacity: options.opacity || 1
+                });
+            }
+            canvas.add(line);
+        }
+
+        function drawSpeedlines(type) {
+            canvas.clear();
+            const density = parseInt(document.getElementById('density').value);
+            const angle = parseInt(document.getElementById('angle').value) * Math.PI / 180;
+            const width = canvas.width;
+            const height = canvas.height;
+
+            for (let i = 0; i < density; i++) {
+                let start, end;
+                switch (type) {
+                    case 'horizontal':
+                        start = { x: 0, y: i * height / density };
+                        end = { x: width, y: i * height / density };
+                        break;
+                    case 'vertical':
+                        start = { x: i * width / density, y: 0 };
+                        end = { x: i * width / density, y: height };
+                        break;
+                    case 'diagonal':
+                        start = { x: 0, y: i * (height + width) / density };
+                        end = { x: i * (height + width) / density, y: 0 };
+                        break;
+                    case 'cross':
+                        if (i < density / 2) {
+                            start = { x: 0, y: i * height / (density / 2) };
+                            end = { x: width, y: i * height / (density / 2) };
+                        } else {
+                            start = { x: (i - density / 2) * width / (density / 2), y: 0 };
+                            end = { x: (i - density / 2) * width / (density / 2), y: height };
+                        }
+                        break;
+                }
+
+                const dx = end.x - start.x;
+                const dy = end.y - start.y;
+                const rotatedEnd = {
+                    x: start.x + dx * Math.cos(angle) - dy * Math.sin(angle),
+                    y: start.y + dx * Math.sin(angle) + dy * Math.cos(angle)
+                };
+
+                drawLine(start, rotatedEnd, { opacity: 1, strokeWidth: 1 });
+            }
+            canvas.renderAll();
+        }
+
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.id === 'clear') {
+                    canvas.clear();
+                } else {
+                    drawSpeedlines(button.id);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
