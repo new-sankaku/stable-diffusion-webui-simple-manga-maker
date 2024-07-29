@@ -51,15 +51,8 @@ function loadCSS(href) {
 
 log('app.js executed');
 
-// 使用例
-Promise.all([
-    loadContent('menu-html', 'desu-nav'),
-    loadContent('sidebar-html'),
-    loadContent('canvas-html'),
-    loadContent('layer-html'),
-    loadContent('controle-html')
-  ]).then(() => {
-    console.log('All content loaded');
-  }).catch((error) => {
-    console.error('Error loading content:', error);
-  });
+loadContent('menu-html', 'desu-nav');
+loadContent('sidebar-html');
+// loadContent('canvas-html');
+// loadContent('layer-html');
+// loadContent('controle-html');
