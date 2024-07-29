@@ -5,41 +5,44 @@ function log(message, type = 'info') {
 }
 
 function loadContent(scriptId, targetId) {
-    const script = document.createElement('script');
-    script.src = 'js/html-component/' + scriptId + '.js';
-
-    script.onload = function() {
-        if (typeof window.html === 'function') {
-            const content = window.html();
-            if( targetId ){
-                document.getElementById(targetId).innerHTML = content;
-            }else{
-                document.getElementById("head-id").innerHTML = document.getElementById("head-id").innerHTML + content;
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'js/html-component/' + scriptId + '.js';
+        script.onload = function () {
+            if (typeof window.html === 'function') {
+                const content = window.html();
+                if (targetId) {
+                    document.getElementById(targetId).innerHTML = content;
+                } else {
+                    document.getElementById("head-id").innerHTML += content;
+                }
+                delete window.html;
+                resolve();
+            } else {
+                document.getElementById("head-id").innerHTML = `<p style="color: red;">Error: Content for ${scriptId} could not be loaded.</p>`;
+                reject(new Error(`Content for ${scriptId} could not be loaded.`));
             }
-            delete window.html;
-            // console.log( "innerHTML:", document.getElementById("head-id").innerHTML );
-        } else {
-            document.getElementById("head-id").innerHTML = `<p style="color: red;">Error: Content for ${scriptId} could not be loaded.</p>`;
-        }
-    };
-
-    script.onerror = function() {
-        document.getElementById("head-id").innerHTML = `<p style="color: red;">Error: Script ${scriptId}.js could not be loaded.</p>`;
-    };
-
-    document.head.appendChild(script);
+        };
+        script.onerror = function () {
+            document.getElementById("head-id").innerHTML = `<p style="color: red;">Error: Script ${scriptId}.js could not be loaded.</p>`;
+            reject(new Error(`Script ${scriptId}.js could not be loaded.`));
+        };
+        document.head.appendChild(script);
+    });
 }
+
+
 
 function loadCSS(href) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = href;
 
-    link.onload = function() {
+    link.onload = function () {
         log(`CSS ${href} loaded successfully`);
     };
 
-    link.onerror = function() {
+    link.onerror = function () {
         log(`Failed to load CSS: ${href}`, 'error');
     };
 
@@ -48,8 +51,15 @@ function loadCSS(href) {
 
 log('app.js executed');
 
-loadContent('menu-html', 'desu-nav');
-loadContent('sidebar-html');
-loadContent('canvas-html');
-loadContent('layer-html');
-loadContent('controle-html');
+// 使用例
+Promise.all([
+    loadContent('menu-html', 'desu-nav'),
+    loadContent('sidebar-html'),
+    loadContent('canvas-html'),
+    loadContent('layer-html'),
+    loadContent('controle-html')
+  ]).then(() => {
+    console.log('All content loaded');
+  }).catch((error) => {
+    console.error('Error loading content:', error);
+  });
