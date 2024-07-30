@@ -49,10 +49,10 @@ function loadCSS(href) {
     document.head.appendChild(link);
 }
 
-log('app.js executed');
+// log('app.js executed');
 
-loadContent('menu-html', 'desu-nav');
-loadContent('sidebar-html');
+// loadContent('menu-html', 'desu-nav');
+// loadContent('sidebar-html');
 // loadContent('canvas-html');
 // loadContent('layer-html');
 // loadContent('controle-html');
