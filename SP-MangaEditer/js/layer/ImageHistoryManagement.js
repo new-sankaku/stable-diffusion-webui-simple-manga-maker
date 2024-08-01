@@ -43,10 +43,10 @@ function isSaveObject(activeObject){
         if( activeObject.target.saveHistory === undefined ){
             return true;
         }
-        console.log("isSaveObject false 5");
+        // console.log("isSaveObject false 5");
         return false;
     }else{
-        console.log("isSaveObject false 6");
+        // console.log("isSaveObject false 6");
         return false;
     }
 }
@@ -144,7 +144,10 @@ function undo() {
         
         changeDoNotSaveHistory();
         currentStateIndex--;
-        canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
+
+        let state = restoreImage(stateStack[currentStateIndex]);
+        canvas.loadFromJSON(state, function () {
+            setCanvasGUID( state.canvasGuid );
             canvas.renderAll();
             updateLayerPanel();
             resetEventHandlers(); 
@@ -157,7 +160,10 @@ function redo() {
     if (currentStateIndex < stateStack.length - 1) {
         changeDoNotSaveHistory();
         currentStateIndex++;
-        canvas.loadFromJSON(restoreImage(stateStack[currentStateIndex]), function () {
+
+        let state = restoreImage(stateStack[currentStateIndex]);
+        canvas.loadFromJSON(state, function () {
+            setCanvasGUID( state.canvasGuid );
             canvas.renderAll();
             updateLayerPanel();
             resetEventHandlers(); 
@@ -166,10 +172,18 @@ function redo() {
     }
 }
 
-function lastRedo() {
+function lastRedo(guid = null) {
     changeDoNotSaveHistory();
     currentStateIndex = stateStack.length - 1;
-    canvas.loadFromJSON(restoreImage(stateStack[stateStack.length - 1]), function () {
+
+    let state = restoreImage(stateStack[stateStack.length - 1]);
+    canvas.loadFromJSON(state, function () {
+        if( guid ){
+            setCanvasGUID( guid );
+        }else{
+            setCanvasGUID( state.canvasGuid );
+        }
+
         canvas.renderAll();
         updateLayerPanel();
         resetEventHandlers(); 

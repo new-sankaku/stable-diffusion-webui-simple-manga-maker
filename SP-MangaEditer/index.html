@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Manga Editor Desu! Pro Edition: The Premier Standalone Manga Editing Platform</title>
@@ -65,8 +66,8 @@
         });
     </script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/css2.css?v=4.4">
+    <link rel="stylesheet" href="css/icon.css?v=4.4">
     <link rel="stylesheet" href="css/form.css?v=4.4">
     <link rel="stylesheet" href="css/common.css?v=4.4">
     <link rel="stylesheet" href="css/components.css?v=4.4">
@@ -83,10 +84,101 @@
 
     <link rel="stylesheet" href="css/tippy.css?v=4.4">
     <link rel="stylesheet" href="third/tippy/tippy.css?v=4.4">
-    <link href="third/Bootstrup/bootstrap.min.css?v=4.4" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css?v=4.4">
+    <link rel="stylesheet" href="css/flag-icon.min.css?v=4.4">
+    <link rel="stylesheet" href="css/all.min.css?v=4.4">
 
+
+    <style>
+        .btm-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .btm-drawer.btm-closed {
+            transform: translateY(calc(100% - 20px));
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .btm-drawer-handle {
+            height: 20px;
+            background-color: rgba(0, 255, 255, 0.1);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btm-drawer-handle:hover {
+            background-color: rgba(0, 255, 255, 0.2);
+        }
+
+        .btm-drawer-content {
+            padding: 5px;
+            height: 200px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+        }
+
+        .btm-image-container {
+            display: inline-flex;
+            height: 100%;
+        }
+
+        .btm-image-wrapper {
+            position: relative;
+            margin-right: 1vw;
+            height: 100%;
+        }
+
+        .btm-image {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .btm-close-btn {
+            position: absolute;
+            top: 0.5vh;
+            right: 0.5vh;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+            font-size: 0.8em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btm-drawer-content h2 {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+
+        .btm-drawer-content p {
+            color: #e0e0e0;
+        }
+
+        .neon-text {
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
+        }
+    </style>
 </head>
 
 <body>
@@ -106,7 +198,7 @@
                 </div>
             </div>
         </div>
-        
+
         <nav id="desu-nav" class="navbar navbar-expand custom-navbar">
 
             <a class="navbar-brand" href="#">
@@ -150,13 +242,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#" id="settingsSave" onclick="cropAndDownload()">
+                                <a class="dropdown-item" href="#" id="imageDownload" onclick="cropAndDownload()">
                                     <span class="material-symbols-outlined">imagesmode</span> <span
                                         data-i18n="imageDownload">Image Download</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#" id="settingsLoad" onclick="clipCopy()">
+                                <a class="dropdown-item" href="#" id="imageCopy" onclick="clipCopy()">
                                     <i class="material-icons">content_copy</i> <span data-i18n="imageCopy">Image
                                         Copy</span>
                                 </a>
@@ -190,7 +282,8 @@
                             </li>
                             <li>
                                 <a class="dropdown-item" onclick="createImagePromptHelperFlotingWindow()">
-                                    <i class="material-icons">medical_information</i> <span data-i18n="PromptHelper">Prompt Helper</span>
+                                    <i class="material-icons">medical_information</i> <span
+                                        data-i18n="PromptHelper">Prompt Helper</span>
                                 </a>
                             </li>
                         </ul>
@@ -218,7 +311,7 @@
                                     <span class="toggle-text2">ComfyUI</span>
                                 </div>
                             </li>
-        
+
                             <hr>
                             <!--A1111-->
                             <div class="A1111_api_content">
@@ -247,7 +340,7 @@
                                 </li>
                             </div>
                             <hr>
-        
+
                             <!--TODO COMFYUI-->
                             <div class="Comfyui_api_content" style="display: none;">
                                 <li>
@@ -298,7 +391,7 @@
                                 <span data-i18n="canvasBG">Canvas BG</span>
                                 <input type="color" id="bg-color" value="#ffffff">
                             </a>
-        
+
                             <a class="dropdown-item">
                                 <i class="material-icons">photo_size_select_large</i> <span
                                     data-i18n="downloadDpi">Download Dpi</span>
@@ -344,8 +437,8 @@
                         </ul>
                     </li>
                 </ul>
-        
-        
+
+
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -357,7 +450,7 @@
                                 <i class="material-icons">volunteer_activism</i>
                                 <span data-i18n="Tutorial">Tutorial</span>
                             </a>
-        
+
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('en', event)">
                                 <span class="flag-icon flag-icon-us"></span> <span data-i18n="english">English</span>
                             </a>
@@ -374,7 +467,7 @@
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('fr', event)">
                                 <span class="flag-icon flag-icon-fr"></span> <span data-i18n="french">Français</span>
                             </a>
-        
+
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('ru', event)">
                                 <span class="flag-icon flag-icon-ru"></span> <span data-i18n="russian">Русский</span>
                             </a>
@@ -388,7 +481,7 @@
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('th', event)">
                                 <span class="flag-icon flag-icon-th"></span> <span data-i18n="thailand">Thailand</span>
                             </a>
-        
+
                         </ul>
                     </li>
                 </ul>
@@ -414,7 +507,7 @@
                                 <i class="fab fa-github"></i>
                                 <span data-i18n="github">GitHub</span>
                             </a>
-        
+
                         </ul>
                     </li>
                 </ul>
@@ -432,7 +525,7 @@
                         </ul>
                     </li>
                 </ul>
-        
+
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                     </li>
@@ -1146,7 +1239,7 @@
                 </div>
             </div>
 
-<div id="canvas-area">
+            <div id="canvas-area">
                 <div class="area-header">
                     <span>[Canvas]:</span>
                     <button id="inputImageFile" onclick="inputImageFile()">
@@ -1193,7 +1286,7 @@
 
 
 
-<div id="layer-panel">
+            <div id="layer-panel">
                 <div class="area-header" data-i18n="layers">Layers</div>
                 <div id="layer-content"></div>
                 <div id="layer-buttons">
@@ -1223,7 +1316,7 @@
 
 
 
-<div id="controls">
+            <div id="controls">
 
                 <div class="panel" id="infomationPanel">
                     <div class="area-header" onclick="imageControleTogglePanel('infomationPanel', this)"
@@ -1638,6 +1731,17 @@
         </div>
     </div>
 
+    <div id="btm-drawer" class="btm-drawer btm-closed">
+        <div id="btm-drawer-handle" class="btm-drawer-handle neon-text">
+            OPEN
+        </div>
+        <div class="btm-drawer-content">
+            <div id="btm-image-container" class="btm-image-container"></div>
+            <button id="btm-scroll-left" class="btm-scroll-btn btm-scroll-left" style="display: none;">&lt;</button>
+            <button id="btm-scroll-right" class="btm-scroll-btn btm-scroll-right" style="display: none;">&gt;</button>
+        </div>
+    </div>
+
     <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;">
     </div>
 
@@ -1648,6 +1752,8 @@
     <script src="third/jsts/jsts.min.js?v=4.4"></script>
     <script src="third/browser-image-compression/browser-image-compression.js?v=4.4"></script>
     <script src="third/intro/intro.min.js?v=4.4"></script>
+    <script src="third/lodash/lodash.min.js?v=4.4" defer></script>
+
     <script src="js/fabric/dist/fabric-brush.min.js"></script>
     <script src="js/fabric/brushes/ink_brush.js?v=4.4"></script>
     <link rel="stylesheet" href="third/intro/introjs.min.css?v=4.4">
@@ -1670,7 +1776,7 @@
     <script src="js/html-component/hc-ImagePromptHelper.js?v=4.4" defer></script>
     <script src="js/ImagePromptHelper.js?v=4.4" defer></script>
     <script src="js/util/LoadUtil.js?v=4.4" defer></script>
-    
+
     <script src="js/util/FabricUtil.js?v=4.4" defer></script>
     <script src="js/util/ImageUtil.js?v=4.4" defer></script>
     <script src="js/util/AnimeUtil.js?v=4.4" defer></script>
@@ -1712,6 +1818,166 @@
     <script src="js/svg/MangaPanelsImage_Landscape.js?v=4.4" defer></script>
     <script src="js/svg/MangaPanelsImage_Vertical.js?v=4.4" defer></script>
     <script src="js/svg/SpeechBubble.js?v=4.4" defer></script>
+
+
+    <script>
+        const btmDrawer = document.getElementById('btm-drawer');
+        const btmDrawerHandle = document.getElementById('btm-drawer-handle');
+        const btmImageContainer = document.getElementById('btm-image-container');
+        const btmScrollLeftBtn = document.getElementById('btm-scroll-left');
+        const btmScrollRightBtn = document.getElementById('btm-scroll-right');
+
+        let btmScrollPosition = 0;
+        let btmIsDragging = false;
+
+
+        function btmToggleDrawer() {
+            btmDrawer.classList.toggle('btm-closed');
+            btmUpdateHandleText();
+            btmUpdateScrollButtons();
+        }
+
+        function btmCloseDrawer() {
+            btmDrawer.classList.add('btm-closed');
+            btmUpdateHandleText();
+        }
+
+        function btmUpdateHandleText() {
+            btmDrawerHandle.textContent = btmDrawer.classList.contains('btm-closed') ? 'OPEN' : 'CLOSE';
+        }
+
+        function btmSaveZip() {
+
+            return new Promise((resolve, reject) => {
+                var guid = getCanvasGUID();
+                var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
+                var zip = generateZip();
+                zip.generateAsync({ type: "blob" })
+                .then(function (content) {
+                    btmAddImage(previewLink, content, guid);
+                    resolve();
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+            });
+        }
+
+        const btmImageZipMap = new Map();
+        function btmAddImage(imageLink, zipBlob, guid) {
+            const zipData = btmImageZipMap.get(guid);
+
+            if ( zipData ) {
+                btmImageZipMap.set(guid, { imageLink, zipBlob });
+                const image = document.querySelector(`.btm-image[data-index="${guid}"]`);
+                if (image) {
+                    image.src = imageLink.href;
+                }
+            } else {
+                const imageWrapper = document.createElement('div');
+                imageWrapper.className = 'btm-image-wrapper';
+                const image = document.createElement('img');
+                image.src = imageLink.href;
+                image.className = 'btm-image';
+                image.dataset.index = guid;
+                image.addEventListener('click', () => {
+                    if (stateStack.length > 2) {
+                        btmSaveZip().then(() => {
+                        });
+                    }
+                    const zipData = btmImageZipMap.get(guid);
+                    JSZip.loadAsync(zipData.zipBlob).then(function (zip) {
+                        loadZip(zip, guid);
+                    }).catch(function (error) {
+                        console.error("Error loading ZIP:", error);
+                    });
+                });
+
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = '✕';
+                closeBtn.className = 'btm-close-btn';
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    btmImageZipMap.delete(guid);
+                    imageWrapper.remove();
+                    btmUpdateScrollButtons();
+                });
+
+                imageWrapper.appendChild(image);
+                imageWrapper.appendChild(closeBtn);
+                btmImageContainer.appendChild(imageWrapper);
+                btmImageZipMap.set(guid, { imageLink, zipBlob });
+            }
+
+            if (btmDrawer.classList.contains('btm-closed')) {
+                btmToggleDrawer();
+            } else {
+                btmUpdateScrollButtons();
+            }
+        }
+
+        function btmUpdateScrollButtons() {
+            const containerWidth = btmDrawer.querySelector('.btm-drawer-content').offsetWidth;
+            const scrollWidth = btmImageContainer.scrollWidth;
+            btmScrollLeftBtn.style.display = btmScrollPosition > 0 ? 'block' : 'none';
+            btmScrollRightBtn.style.display = scrollWidth > containerWidth && btmScrollPosition < scrollWidth - containerWidth ? 'block' : 'none';
+        }
+
+        function btmScroll(direction) {
+            const containerWidth = btmDrawer.querySelector('.btm-drawer-content').offsetWidth;
+            btmScrollPosition += direction * containerWidth;
+            btmScrollPosition = Math.max(0, Math.min(btmScrollPosition, btmImageContainer.scrollWidth - containerWidth));
+            btmImageContainer.style.transform = `translateX(-${btmScrollPosition}px)`;
+            btmUpdateScrollButtons();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            btmDrawerHandle.addEventListener('click', btmToggleDrawer);
+            btmScrollLeftBtn.addEventListener('click', () => btmScroll(-1));
+            btmScrollRightBtn.addEventListener('click', () => btmScroll(1));
+
+            document.addEventListener('mousedown', function (event) {
+                if (!btmDrawer.contains(event.target) && !btmDrawer.classList.contains('btm-closed')) {
+                    btmIsDragging = false;
+                }
+            });
+
+            document.addEventListener('mouseup', function (event) {
+                if (!btmDrawer.contains(event.target) && !btmDrawer.classList.contains('btm-closed') && !btmIsDragging) {
+                    btmCloseDrawer();
+                }
+                btmIsDragging = false;
+            });
+
+            function btmStartDrag(e) {
+                e.preventDefault();
+                isDragging = true;
+                let startX = e.clientX;
+                let scrollLeft = btmScrollPosition;
+
+                function btmDrag(e) {
+                    const diff = startX - e.clientX;
+                    btmScrollPosition = scrollLeft + diff;
+                    btmImageContainer.style.transform = `translateX(-${btmScrollPosition}px)`;
+                }
+
+                function btmStopDrag() {
+                    document.removeEventListener('mousemove', btmDrag);
+                    document.removeEventListener('mouseup', btmStopDrag);
+                    const containerWidth = btmDrawer.querySelector('.btm-drawer-content').offsetWidth;
+                    btmScrollPosition = Math.max(0, Math.min(btmScrollPosition, btmImageContainer.scrollWidth - containerWidth));
+                    btmImageContainer.style.transform = `translateX(-${btmScrollPosition}px)`;
+                    btmUpdateScrollButtons();
+                }
+
+                document.addEventListener('mousemove', btmDrag);
+                document.addEventListener('mouseup', btmStopDrag);
+            }
+
+            btmImageContainer.addEventListener('mousedown', btmStartDrag);
+            window.addEventListener('resize', btmUpdateScrollButtons);
+        });
+    </script>
 </body>
 
 </html>

@@ -295,6 +295,24 @@ function imageObject2DataURLByCrop(activeObject) {
 }
 
 
+function setCanvasGUID( guid = null ) {
+  if( guid ){
+    //ok
+  }else{
+    guid = generateGUID();
+  }
+  canvas.set('canvasGuid', guid);
+  return guid;
+}
+
+function getCanvasGUID() {
+  let guid = canvas.get('canvasGuid');
+  if(guid){
+    return guid;
+  }
+  return setCanvasGUID();
+}
+
 
 // set targetFram.guids
 function setGUID(targetFrame, imageObject) {
@@ -302,7 +320,7 @@ function setGUID(targetFrame, imageObject) {
     targetFrame.guids = [];
   }
   guid = getGUID(imageObject);
-  console.log(targetFrame.name + " : setGUID", guid);
+  // console.log(targetFrame.name + " : setGUID", guid);
   targetFrame.guids.push(guid);
 }
 

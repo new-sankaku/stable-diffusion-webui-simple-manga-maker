@@ -4,68 +4,149 @@ const apis = {
   COMFYUI: "comfyui"
 };
 
+function generateZip(){
+  var zip = new JSZip();
+  zip.file("text2img_basePrompt.json", JSON.stringify(text2img_basePrompt));
+
+  stateStack.forEach((json, index) => {
+    const paddedIndex = String(index).padStart(6, '0');
+    zip.file(`state_${paddedIndex}.json`, JSON.stringify(json));
+  });
+
+  imageMap.forEach((value, key) => {
+    zip.file(`${key}.img`, value);
+  });
+
+  var canvasInfo = {
+    width: canvas.width,
+    height: canvas.height
+  };
+  zip.file("canvas_info.json", JSON.stringify(canvasInfo));
+
+  removeGrid();
+  var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
+  zip.file("preview-image.jpeg", previewLink.href.substring(previewLink.href.indexOf('base64,') + 7), { base64: true });
+  if (isGridVisible) {
+    drawGrid();
+    isGridVisible = true;
+  }
+  return zip;
+}
+
+
+function loadZip(zip, guid = null){
+  stateStack = [];
+  imageMap.clear();
+
+  var text2imgBasePromptFile = zip.file("text2img_basePrompt.json");
+  if (text2imgBasePromptFile) {
+    text2imgBasePromptFile.async("string").then(function (content) {
+      Object.assign(text2img_basePrompt, JSON.parse(content));
+    });
+  }
+
+
+  var canvasInfoFile = zip.file("canvas_info.json");
+
+  var canvasInfoPromise = canvasInfoFile
+    ? canvasInfoFile.async("string").then(function (content) {
+      return JSON.parse(content);
+    })
+    : Promise.resolve({ width: 750, height: 850 });
+
+  // var sortedFiles = Object.keys(zip.files).sort();
+  var sortedFiles = Object.keys(zip.files).sort((a, b) => {
+    const numA = a.match(/(\d+)/) ? parseInt(a.match(/(\d+)/)[0]) : -1;
+    const numB = b.match(/(\d+)/) ? parseInt(b.match(/(\d+)/)[0]) : -1;
+    if (numA === numB) {
+      return a.localeCompare(b);
+    }
+    return numA - numB;
+  });
+
+
+  //Image sort
+  sortedFiles.map(function (fileName) {
+    return zip.file(fileName).async("string").then(function (content) {
+      if (fileName.endsWith(".img")) {
+        let hash = fileName.split('.')[0];
+        imageMap.set(hash, content);
+      }
+    }).catch(function (error) {
+      console.error("Failed to load file:", fileName, error);
+    });
+  });
+
+  var promises = sortedFiles.map(function (fileName) {
+    return zip.file(fileName).async("string").then(function (content) {
+      if (fileName.endsWith(".json") && fileName !== "text2img_basePrompt.json" && fileName !== "canvas_info.json") {
+        try {
+          //console.log( "fileName JSON.parse(content)", fileName, " ", JSON.parse(content).length );
+          return JSON.parse(content);
+        } catch (e) {
+          console.error("JSON parse error in file:", fileName, e);
+        }
+      }
+    }).catch(function (error) {
+      console.error("Failed to load file:", fileName, error);
+    });
+  });
+
+  Promise.all([canvasInfoPromise, ...promises]).then(function (allData) {
+    var canvasInfo = allData[0];
+    stateStack = allData.slice(1).filter((data, index) => {
+      const isDataDefined = data !== undefined;
+      return isDataDefined;
+    });
+
+    currentStateIndex = stateStack.length - 1;
+    resizeCanvasByNum(canvasInfo.width, canvasInfo.height)
+    lastRedo(guid);
+    // console.log("100 loadZip guid", guid);
+    if( guid ){
+      setCanvasGUID(guid);
+    }
+  });
+}
+
 // Variable to keep track of selected api model to use
 var API_mode = apis.A1111;
 
 document.addEventListener("DOMContentLoaded", function () {
-  var saveButton = document.getElementById("projectSave");
-  var loadButton = document.getElementById("projectLoad");
-
-  //TODO: Maybe moved this to another file
-  var selectA1111APIButton = document.getElementById("Select_a1111_button");
-  var selectComfyuiAPIButton = document.getElementById("Select_comfyui_button");
-
   var settingsSave = document.getElementById("settingsSave");
   var settingsLoad = document.getElementById("settingsLoad");
-
   settingsSave.addEventListener("click", function () {
     saveSettingsLocalStrage();
   });
-
   settingsLoad.addEventListener("click", function () {
     loadSettingsLocalStrage();
   });
 
+
+  var saveButton = document.getElementById("projectSave");
+  var loadButton = document.getElementById("projectLoad");
+
   saveButton.addEventListener("click", function () {
-    if (stateStack.length === 0) {
+    if (stateStack.length === 0 || btmImageZipMap.size === 0) {
       createToast("Save Error", "Not Found.");
       return;
     }
-    createToast("Save Project Start!", "");
-    const startTime = performance.now();
-    var zip = new JSZip();
-
-    // text2img_basePromptをzipファイルに追加
-    zip.file("text2img_basePrompt.json", JSON.stringify(text2img_basePrompt));
-
-    stateStack.forEach((json, index) => {
-      const paddedIndex = String(index).padStart(6, '0');
-      zip.file(`state_${paddedIndex}.json`, JSON.stringify(json));
-      // zip.file(`state_${index}.json`, JSON.stringify(json));
-    });
-
-    imageMap.forEach((value, key) => {
-      zip.file(`${key}.img`, value);
-    });
-    createToast("Save IMAGE", "");
-
-    // Canvasの縦横情報を追加
-    var canvasInfo = {
-      width: canvas.width,
-      height: canvas.height
-    };
-    zip.file("canvas_info.json", JSON.stringify(canvasInfo));
-
-    removeGrid();
-    var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
-    zip.file("preview-image.jpeg", previewLink.href.substring(previewLink.href.indexOf('base64,') + 7), { base64: true });
-    if (isGridVisible) {
-      drawGrid();
-      isGridVisible = true;
-    }
-
-    createToast("Save Zip Create Start!", "");
-    zip.generateAsync({ type: "blob" }).then(function (content) {
+  
+    btmSaveZip().then(() => {
+      createToast("Save Project Start!", "");
+      var zip = new JSZip();
+      var zipPromises = [];
+      btmImageZipMap.forEach((value, key) => {
+        zipPromises.push(
+          zip.file(`project_${key}.zip`, value.zipBlob, {binary: true})
+        );
+      });
+      return Promise.all(zipPromises).then(() => zip);
+    })
+    .then((zip) => {
+      return zip.generateAsync({ type: "blob" });
+    })
+    .then((content) => {
       var url = window.URL.createObjectURL(content);
       var a = document.createElement("a");
       a.href = url;
@@ -74,11 +155,14 @@ document.addEventListener("DOMContentLoaded", function () {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      const endTime = performance.now();
-      console.log(`Save operation took ${endTime - startTime} milliseconds`);
+    })
+    .catch((error) => {
+      console.error("Error during save process:", error);
     });
-
   });
+
+  
+
 
   loadButton.addEventListener("click", function () {
     var fileInput = document.createElement("input");
@@ -86,93 +170,111 @@ document.addEventListener("DOMContentLoaded", function () {
     fileInput.style.display = "none";
     document.body.appendChild(fileInput);
     fileInput.click();
-
+  
     fileInput.onchange = function () {
       var file = this.files[0];
+  
       if (file) {
-        createToast("Load Project Start!", "");
-
-        const startTime = performance.now();
-        JSZip.loadAsync(file).then(function (zip) {
-          stateStack = [];
-          imageMap.clear();
-
-
-          var text2imgBasePromptFile = zip.file("text2img_basePrompt.json");
-          if (text2imgBasePromptFile) {
-            text2imgBasePromptFile.async("string").then(function (content) {
-              Object.assign(text2img_basePrompt, JSON.parse(content));
-            });
-          }
-
-
-          var canvasInfoFile = zip.file("canvas_info.json");
-
-          var canvasInfoPromise = canvasInfoFile
-            ? canvasInfoFile.async("string").then(function (content) {
-              return JSON.parse(content);
-            })
-            : Promise.resolve({ width: 750, height: 850 });
-
-          // var sortedFiles = Object.keys(zip.files).sort();
-          var sortedFiles = Object.keys(zip.files).sort((a, b) => {
-            const numA = a.match(/(\d+)/) ? parseInt(a.match(/(\d+)/)[0]) : -1;
-            const numB = b.match(/(\d+)/) ? parseInt(b.match(/(\d+)/)[0]) : -1;
-            if (numA === numB) {
-              return a.localeCompare(b);
+        JSZip.loadAsync(file).then(function(zip) {
+          var hasNestedZip = false;
+          var fileCount = 0;
+  
+          zip.forEach(function (relativePath, zipEntry) {
+            fileCount++;
+            if (zipEntry.name.toLowerCase().endsWith('.zip')) {
+              hasNestedZip = true;
             }
-            return numA - numB;
           });
-
-
-          //Image sort
-          sortedFiles.map(function (fileName) {
-            return zip.file(fileName).async("string").then(function (content) {
-              if (fileName.endsWith(".img")) {
-                let hash = fileName.split('.')[0];
-                imageMap.set(hash, content);
-              }
-            }).catch(function (error) {
-              console.error("Failed to load file:", fileName, error);
-            });
-          });
-
-          var promises = sortedFiles.map(function (fileName) {
-            return zip.file(fileName).async("string").then(function (content) {
-              if (fileName.endsWith(".json") && fileName !== "text2img_basePrompt.json" && fileName !== "canvas_info.json") {
-                try {
-                  //console.log( "fileName JSON.parse(content)", fileName, " ", JSON.parse(content).length );
-                  return JSON.parse(content);
-                } catch (e) {
-                  console.error("JSON parse error in file:", fileName, e);
-                }
-              }
-            }).catch(function (error) {
-              console.error("Failed to load file:", fileName, error);
-            });
-          });
-
-          Promise.all([canvasInfoPromise, ...promises]).then(function (allData) {
-            var canvasInfo = allData[0];
-            stateStack = allData.slice(1).filter((data, index) => {
-              const isDataDefined = data !== undefined;
-              return isDataDefined;
-            });
-
+  
+          if (hasNestedZip) {
+            processZip(zip);
             document.body.removeChild(fileInput);
-            currentStateIndex = stateStack.length - 1;
-            resizeCanvasByNum(canvasInfo.width, canvasInfo.height)
-            lastRedo();
-
-            const endTime = performance.now();
-            console.log(`Load operation took ${endTime - startTime} milliseconds`);
-          });
+          } else {
+            loadZip(zip);
+          }
+        }).catch(function(error) {
+          console.error("Error loading ZIP:", error);
         });
       }
     };
   });
+  
+  async function processZip(zip) {
+    const zipFiles = Object.keys(zip.files).filter(filename => filename.endsWith('.zip'));
+    
+    for (let i = 0; i < zipFiles.length; i++) {
+      const zipContent = await zip.file(zipFiles[i]).async('blob');
+      const innerZip = await JSZip.loadAsync(zipContent);
+      const previewImage = innerZip.file('preview-image.jpeg');
+      if (!previewImage) {
+        continue;
+      }
+      
+      const previewImageBlob = await previewImage.async('blob');
+      const previewImageUrl = URL.createObjectURL(previewImageBlob);
+  
+      const stateFiles = Object.keys(innerZip.files).filter(filename => filename.startsWith('state_') && filename.endsWith('.json'));
+
+      var canvasGuid = null;
+
+      for (const stateFile of stateFiles) {
+        const stateContent = await innerZip.file(stateFile).async('text');
+        try {
+          const state = JSON.parse(stateContent);
+          canvasGuid = findCanvasGuid(state);
+  
+          if (canvasGuid) {
+            btmAddImage({ href: previewImageUrl }, zipContent, canvasGuid);
+            break;
+          }
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
+      }
+
+      if( canvasGuid ){
+        //skip
+      }else{
+        let guid = generateGUID();
+        btmAddImage({ href: previewImageUrl }, zipContent, guid);
+      }
+    }
+  }
+
+  
 
 
+  function findCanvasGuid(obj) {
+    if (typeof obj === 'string') {
+      try {
+        obj = JSON.parse(obj);
+      } catch (error) {
+        return null;
+      }
+    }
+    if (typeof obj !== 'object' || obj === null) {
+      return null;
+    }
+  
+    if (obj.canvasGuid) {
+      return obj.canvasGuid;
+    }
+  
+    for (let key in obj) {
+      if (typeof obj[key] === 'object') {
+        const result = findCanvasGuid(obj[key]);
+        if (result) return result;
+      }
+    }
+    return null;
+  }
+
+
+  
+  
+  //TODO: Maybe moved this to another file
+  var selectA1111APIButton = document.getElementById("Select_a1111_button");
+  var selectComfyuiAPIButton = document.getElementById("Select_comfyui_button");
   // // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
   // selectA1111APIButton.addEventListener('click', (event) => {
   //   event.stopPropagation();
@@ -402,7 +504,7 @@ function executeWithConfirmation(message, callback) {
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('svgDownload').onclick = function () {
     var svg = canvas.toSVG();
-    console.log(svg);
+    // console.log(svg);
     svgDownload('canvas.svg', svg);
   };
 });

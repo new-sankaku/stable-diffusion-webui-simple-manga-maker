@@ -96,5 +96,5 @@ const commonProperties = [
 'initial', 
 'clipPath.initial',
 'name',
-"guids", "guid", "tempPrompt", "tempNegativePrompt", "tempSeed", "img2imgScale", "img2img_denoising_strength"
+"guids", "guid", "tempPrompt", "tempNegativePrompt", "tempSeed", "img2imgScale", "img2img_denoising_strength", "canvasGuid"
 ];

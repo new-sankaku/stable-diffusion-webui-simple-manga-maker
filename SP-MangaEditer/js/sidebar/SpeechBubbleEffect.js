@@ -114,11 +114,16 @@ window.onload = function () {
         img.classList.add("svg-preview");
         img.alt = item.name;
         img.addEventListener("click", function () {
-            if( stateStack.length > 2 ){
-                executeWithConfirmation('New Project?', function() {
+
+
+
+            if (stateStack.length > 2) {
+                btmSaveZip().then(() => {
+                    setCanvasGUID();
                     loadSVGPlusReset(item.svg);
                 });
-            }else{
+            } else {
+                setCanvasGUID();
                 loadSVGPlusReset(item.svg);
             }
         });
@@ -133,11 +138,14 @@ window.onload = function () {
         img.classList.add("svg-preview");
         img.alt = item.name;
         img.addEventListener("click", function () {
-            if( stateStack.length > 2 ){
-                executeWithConfirmation('New Project?', function() {
+
+            if (stateStack.length > 2) {
+                btmSaveZip().then(() => {
+                    setCanvasGUID();
                     loadSVGPlusReset(item.svg);
                 });
-            }else{
+            } else {
+                setCanvasGUID();
                 loadSVGPlusReset(item.svg);
             }
         });

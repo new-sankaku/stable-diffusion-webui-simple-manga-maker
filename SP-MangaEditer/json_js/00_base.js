@@ -517,12 +517,6 @@ var base ={
 		}
 	},
 	"horizontalLine@104":{},
-
-
-
-
-
-
 	"Number of People": {
 		"Number of People": {
 			"1 boy, 2 girls": 		{"url": "03_images/imgPromptHelper/1-boy-2-girls.webp" },
@@ -610,144 +604,93 @@ var base ={
 
 	"Light Source": {
 		"Position": {
-			"backlighting": 		{"url": "03_images/imgPromptHelper/backlighting.webp" },
-			"spotlight": 			{"url": "03_images/imgPromptHelper/spotlight.webp" },
-			"sidelighting": 		{"url": "03_images/imgPromptHelper/sidelighting.webp" },
-			"underlighting": 		{"url": "03_images/imgPromptHelper/underlighting.webp" },
-			"stage lights": 		{"url": "03_images/imgPromptHelper/stage-lights.webp" }
+			"backlighting": 		{"url": "03_images/imgPromptHelper/style/backlighting.webp" },
+			"spotlight": 			{"url": "03_images/imgPromptHelper/style/spotlight.webp" },
+			"sidelighting": 		{"url": "03_images/imgPromptHelper/style/sidelighting.webp" },
+			"underlighting": 		{"url": "03_images/imgPromptHelper/style/underlighting.webp" },
+			"stage lights": 		{"url": "03_images/imgPromptHelper/style/stage-lights.webp" }
 		},
 		"Effect": {
-			"volumetric lighting": 	{"url": "03_images/imgPromptHelper/volumetric-lighting.webp" },
-			"cinematic lighting": 	{"url": "03_images/imgPromptHelper/cinematic-lighting.webp" },
-			"rim lighting": 		{"url": "03_images/imgPromptHelper/rim-lighting.webp" },
-			"dynamic lighting": 	{"url": "03_images/imgPromptHelper/dynamic-lighting.webp" },
-			"sunlight": 			{"url": "03_images/imgPromptHelper/sunlight.webp" },
-			"dimly light": 			{"url": "03_images/imgPromptHelper/dimly-light.webp" },
-			"crepuscular rays": 	{"url": "03_images/imgPromptHelper/crepuscular-rays.webp" },
-			"bokeh": 				{"url": "03_images/imgPromptHelper/bokeh.webp" }
+			"volumetric lighting": 	{"url": "03_images/imgPromptHelper/style/volumetric-lighting.webp" },
+			"cinematic lighting": 	{"url": "03_images/imgPromptHelper/style/cinematic-lighting.webp" },
+			"rim lighting": 		{"url": "03_images/imgPromptHelper/style/rim-lighting.webp" },
+			"dynamic lighting": 	{"url": "03_images/imgPromptHelper/style/dynamic-lighting.webp" },
+			"sunlight": 			{"url": "03_images/imgPromptHelper/style/sunlight.webp" },
+			"dimly light": 			{"url": "03_images/imgPromptHelper/style/dimly-light.webp" },
+			"crepuscular rays": 	{"url": "03_images/imgPromptHelper/style/crepuscular-rays.webp" },
+			"bokeh": 				{"url": "03_images/imgPromptHelper/style/bokeh.webp" }
 		},
 		"Intensity": {
-			"strong light": 	{"url": "03_images/imgPromptHelper/strong-light.webp" },
-			"light sparkles": 	{"url": "03_images/imgPromptHelper/light-sparkles.webp" },
-			"faint light": 		{"url": "03_images/imgPromptHelper/faint-light.webp" },
-			"moonlight": 		{"url": "03_images/imgPromptHelper/moonlight.webp" },
-			"darkness": 		{"url": "03_images/imgPromptHelper/darkness.webp" }
+			"strong light": 	{"url": "03_images/imgPromptHelper/style/strong-light.webp" },
+			"light sparkles": 	{"url": "03_images/imgPromptHelper/style/light-sparkles.webp" },
+			"faint light": 		{"url": "03_images/imgPromptHelper/style/faint-light.webp" },
+			"moonlight": 		{"url": "03_images/imgPromptHelper/style/moonlight.webp" },
+			"darkness": 		{"url": "03_images/imgPromptHelper/style/darkness.webp" }
 		}
 	},
 	"Color": {
-		"Black": {
-			"black": 			{"url": "03_images/imgPromptHelper/black.webp" },
-			"charcoal gray": 	{"url": "03_images/imgPromptHelper/charcoal-gray.webp" },
-			"ivory black": 		{"url": "03_images/imgPromptHelper/ivory-black.webp" }
-		},
-		"White": {
-			"white": 		{"url": "03_images/imgPromptHelper/white.webp" },
-			"gray": 		{"url": "03_images/imgPromptHelper/gray.webp" },
-			"taupe": 		{"url": "03_images/imgPromptHelper/taupe.webp" },
-			"snow white": 	{"url": "03_images/imgPromptHelper/snow-white.webp" },
-			"milky white": 	{"url": "03_images/imgPromptHelper/milky-white.webp" },
-			"pearl white": 	{"url": "03_images/imgPromptHelper/pearl-white.webp" },
-			"silver": 		{"url": "03_images/imgPromptHelper/silver.webp" }
-		},
-		"Red": {
-			"red": 			{"url": "03_images/imgPromptHelper/red.webp" },
-			"crimson": 		{"url": "03_images/imgPromptHelper/crimson.webp" },
-			"garnet": 		{"url": "03_images/imgPromptHelper/garnet.webp" },
-			"magenta": 		{"url": "03_images/imgPromptHelper/magenta.webp" },
-			"rose red": 	{"url": "03_images/imgPromptHelper/rose-red.webp" },
-			"ruby": 		{"url": "03_images/imgPromptHelper/ruby.webp" },
-			"scarlet": 		{"url": "03_images/imgPromptHelper/scarlet.webp" },
-			"strawberry": 	{"url": "03_images/imgPromptHelper/strawberry.webp" },
-			"wine red": 	{"url": "03_images/imgPromptHelper/wine-red.webp" },
-			"azalea": 		{"url": "03_images/imgPromptHelper/azalea.webp" }
-		},
-		"Orange": {
-			"orange": 			{"url": "03_images/imgPromptHelper/orange.webp" },
-			"apricot": 			{"url": "03_images/imgPromptHelper/apricot.webp" },
-			"burnt sienna": 	{"url": "03_images/imgPromptHelper/burnt-sienna.webp" },
-			"cinnamon": 		{"url": "03_images/imgPromptHelper/cinnamon.webp" },
-			"tangerine": 		{"url": "03_images/imgPromptHelper/tangerine.webp" },
-			"vermilion": 		{"url": "03_images/imgPromptHelper/vermilion.webp" },
-			"persimmon orange": {"url": "03_images/imgPromptHelper/persimmon-orange.webp" }
-		},
-		"Brown": {
-			"brown": 		{"url": "03_images/imgPromptHelper/brown.webp" },
-			"bister": 		{"url": "03_images/imgPromptHelper/bister.webp" },
-			"camel": 		{"url": "03_images/imgPromptHelper/camel.webp" },
-			"chocolate": 	{"url": "03_images/imgPromptHelper/chocolate.webp" },
-			"hazel brown": 	{"url": "03_images/imgPromptHelper/hazel-brown.webp" },
-			"henna": 		{"url": "03_images/imgPromptHelper/henna.webp" },
-			"khaki": 		{"url": "03_images/imgPromptHelper/khaki.webp" },
-			"sepia": 		{"url": "03_images/imgPromptHelper/sepia.webp" },
-			"terracotta": 	{"url": "03_images/imgPromptHelper/terracotta.webp" },
-			"umber": 		{"url": "03_images/imgPromptHelper/umber.webp" }
-		},
-		"Yellow": {
-			"yellow": 			{"url": "03_images/imgPromptHelper/yellow.webp" },
-			"beige": 			{"url": "03_images/imgPromptHelper/beige.webp" },
-			"blond": 			{"url": "03_images/imgPromptHelper/blond.webp" },
-			"maize": 			{"url": "03_images/imgPromptHelper/maize.webp" },
-			"primrose yellow": 	{"url": "03_images/imgPromptHelper/primrose-yellow.webp" },
-			"marigold": 		{"url": "03_images/imgPromptHelper/marigold.webp" }
-		},
-		"Green": {
-			"green": 			{"url": "03_images/imgPromptHelper/green.webp" },
-			"aquamarine": 		{"url": "03_images/imgPromptHelper/aquamarine.webp" },
-			"celadon": 			{"url": "03_images/imgPromptHelper/celadon.webp" },
-			"emerald": 			{"url": "03_images/imgPromptHelper/emerald.webp" },
-			"forest green": 	{"url": "03_images/imgPromptHelper/forest-green.webp" },
-			"leaf green": 		{"url": "03_images/imgPromptHelper/leaf-green.webp" },
-			"viridian": 		{"url": "03_images/imgPromptHelper/viridian.webp" }
-		},
-		"Blue": {
-			"blue": 			{"url": "03_images/imgPromptHelper/blue.webp" },
-			"aqua": 			{"url": "03_images/imgPromptHelper/aqua.webp" },
-			"cerulean": 		{"url": "03_images/imgPromptHelper/cerulean.webp" },
-			"cyan": 			{"url": "03_images/imgPromptHelper/cyan.webp" },
-			"frosty blue": 		{"url": "03_images/imgPromptHelper/frosty-blue.webp" },
-			"indigo": 			{"url": "03_images/imgPromptHelper/indigo.webp" },
-			"navy blue": 		{"url": "03_images/imgPromptHelper/navy-blue.webp" },
-			"ultramarine": 		{"url": "03_images/imgPromptHelper/ultramarine.webp" },
-			"wedgewood blue": 	{"url": "03_images/imgPromptHelper/wedgewood-blue.webp" },
-			"azure": 			{"url": "03_images/imgPromptHelper/azure.webp" }
-		},
-		"Purple": {
-			"purple": 		{"url": "03_images/imgPromptHelper/purple.webp" },
-			"claret": 		{"url": "03_images/imgPromptHelper/claret.webp" },
-			"crocus": 		{"url": "03_images/imgPromptHelper/crocus.webp" },
-			"iris": 		{"url": "03_images/imgPromptHelper/iris.webp" },
-			"lavender": 	{"url": "03_images/imgPromptHelper/lavender.webp" },
-			"violet": 		{"url": "03_images/imgPromptHelper/violet.webp" },
-			"wistaria": 	{"url": "03_images/imgPromptHelper/wistaria.webp" },
-			"peony": 		{"url": "03_images/imgPromptHelper/peony.webp" }
-		}
+			"black": 		{"url": "03_images/imgPromptHelper/color/black.webp" },
+			"gray": 		{"url": "03_images/imgPromptHelper/color/gray.webp" },
+			"white": 		{"url": "03_images/imgPromptHelper/color/white.webp" },
+			"snow white": 	{"url": "03_images/imgPromptHelper/color/snow-white.webp" },
+			"milky white": 	{"url": "03_images/imgPromptHelper/color/milky-white.webp" },
+			"pearl white": 	{"url": "03_images/imgPromptHelper/color/pearl-white.webp" },
+			"silver": 		{"url": "03_images/imgPromptHelper/color/silver.webp" },
+			"red": 			{"url": "03_images/imgPromptHelper/color/red.webp" },
+			"ruby": 		{"url": "03_images/imgPromptHelper/color/ruby.webp" },
+			"crimson": 		{"url": "03_images/imgPromptHelper/color/crimson.webp" },
+			"scarlet": 		{"url": "03_images/imgPromptHelper/color/scarlet.webp" },
+			"orange": 		{"url": "03_images/imgPromptHelper/color/orange.webp" },
+			"apricot": 		{"url": "03_images/imgPromptHelper/color/apricot.webp" },
+			"cinnamon": 	{"url": "03_images/imgPromptHelper/color/cinnamon.webp" },
+			"brown": 		{"url": "03_images/imgPromptHelper/color/brown.webp" },
+			"camel": 		{"url": "03_images/imgPromptHelper/color/camel.webp" },
+			"chocolate": 	{"url": "03_images/imgPromptHelper/color/chocolate.webp" },
+			"sepia": 		{"url": "03_images/imgPromptHelper/color/sepia.webp" },
+			"yellow": 		{"url": "03_images/imgPromptHelper/color/yellow.webp" },
+			"blond": 		{"url": "03_images/imgPromptHelper/color/blond.webp" },
+			"maize": 		{"url": "03_images/imgPromptHelper/color/maize.webp" },
+			"primrose yellow": 	{"url": "03_images/imgPromptHelper/color/primrose-yellow.webp" },
+			"marigold": 	{"url": "03_images/imgPromptHelper/color/marigold.webp" },
+			"aquamarine": 	{"url": "03_images/imgPromptHelper/color/aquamarine.webp" },
+			"green": 		{"url": "03_images/imgPromptHelper/color/green.webp" },
+			"celadon": 		{"url": "03_images/imgPromptHelper/color/celadon.webp" },
+			"emerald": 		{"url": "03_images/imgPromptHelper/color/emerald.webp" },
+			"navy blue": 	{"url": "03_images/imgPromptHelper/color/navy-blue.webp" },
+			"blue": 		{"url": "03_images/imgPromptHelper/color/blue.webp" },
+			"cyan": 		{"url": "03_images/imgPromptHelper/color/cyan.webp" },
+			"aqua": 		{"url": "03_images/imgPromptHelper/color/aqua.webp" },
+			"purple": 		{"url": "03_images/imgPromptHelper/color/purple.webp" },
+			"iris": 		{"url": "03_images/imgPromptHelper/color/iris.webp" },
+			"violet": 		{"url": "03_images/imgPromptHelper/color/violet.webp" },
+			"lavender": 	{"url": "03_images/imgPromptHelper/color/lavender.webp" }
 	},
 	"Art Style": {
 		"Style": {
-			"vector art": 		{"url": "03_images/imgPromptHelper/vector-art.webp" },
-			"watercolor": 		{"url": "03_images/imgPromptHelper/watercolor.webp" },
-			"line art": 		{"url": "03_images/imgPromptHelper/line-art.webp" },
-			"gouache": 			{"url": "03_images/imgPromptHelper/gouache.webp" },
-			"ink drawing": 		{"url": "03_images/imgPromptHelper/ink-drawing.webp" },
-			"pixel art": 		{"url": "03_images/imgPromptHelper/pixel-art.webp" },
-			"flat design": 		{"url": "03_images/imgPromptHelper/flat-design.webp" },
-			"sketch": 			{"url": "03_images/imgPromptHelper/sketch.webp" },
-			"digital painting": {"url": "03_images/imgPromptHelper/digital-painting.webp" },
-			"3d model": 		{"url": "03_images/imgPromptHelper/3d-model.webp" },
-			"manga style": 		{"url": "03_images/imgPromptHelper/manga-style.webp" },
-			"pop art": 			{"url": "03_images/imgPromptHelper/pop-art.webp" },
-			"photorealistic": 	{"url": "03_images/imgPromptHelper/photorealistic.webp" },
-			"impasto": 			{"url": "03_images/imgPromptHelper/impasto.webp" },
-			"thick paint": 		{"url": "03_images/imgPromptHelper/thick-paint.webp" },
-			"oil painting": 	{"url": "03_images/imgPromptHelper/oil-painting.webp" },
-			"pastel": 			{"url": "03_images/imgPromptHelper/pastel.webp" },
-			"chiaroscuro": 		{"url": "03_images/imgPromptHelper/chiaroscuro.webp" },
-			"contour drawing": 	{"url": "03_images/imgPromptHelper/contour-drawing.webp" },
-			"silhouette": 		{"url": "03_images/imgPromptHelper/silhouette.webp" },
-			"low poly": 		{"url": "03_images/imgPromptHelper/low-poly.webp" },
-			"anime style": 		{"url": "03_images/imgPromptHelper/anime-style.webp" },
-			"comic style": 		{"url": "03_images/imgPromptHelper/comic-style.webp" },
-			"realistic": 		{"url": "03_images/imgPromptHelper/realistic.webp" }
+			"vector art": 		{"url": "03_images/imgPromptHelper/style/vector-art.webp" },
+			"watercolor": 		{"url": "03_images/imgPromptHelper/style/watercolor.webp" },
+			"line art": 		{"url": "03_images/imgPromptHelper/style/line-art.webp" },
+			"gouache": 			{"url": "03_images/imgPromptHelper/style/gouache.webp" },
+			"ink drawing": 		{"url": "03_images/imgPromptHelper/style/ink-drawing.webp" },
+			"pixel art": 		{"url": "03_images/imgPromptHelper/style/pixel-art.webp" },
+			"flat design": 		{"url": "03_images/imgPromptHelper/style/flat-design.webp" },
+			"sketch": 			{"url": "03_images/imgPromptHelper/style/sketch.webp" },
+			"digital painting": {"url": "03_images/imgPromptHelper/style/digital-painting.webp" },
+			"3d model": 		{"url": "03_images/imgPromptHelper/style/3d-model.webp" },
+			"manga style": 		{"url": "03_images/imgPromptHelper/style/manga-style.webp" },
+			"pop art": 			{"url": "03_images/imgPromptHelper/style/pop-art.webp" },
+			"photorealistic": 	{"url": "03_images/imgPromptHelper/style/photorealistic.webp" },
+			"impasto": 			{"url": "03_images/imgPromptHelper/style/impasto.webp" },
+			"thick paint": 		{"url": "03_images/imgPromptHelper/style/thick-paint.webp" },
+			"oil painting": 	{"url": "03_images/imgPromptHelper/style/oil-painting.webp" },
+			"pastel": 			{"url": "03_images/imgPromptHelper/style/pastel.webp" },
+			"chiaroscuro": 		{"url": "03_images/imgPromptHelper/style/chiaroscuro.webp" },
+			"contour drawing": 	{"url": "03_images/imgPromptHelper/style/contour-drawing.webp" },
+			"silhouette": 		{"url": "03_images/imgPromptHelper/style/silhouette.webp" },
+			"low poly": 		{"url": "03_images/imgPromptHelper/style/low-poly.webp" },
+			"anime style": 		{"url": "03_images/imgPromptHelper/style/anime-style.webp" },
+			"comic style": 		{"url": "03_images/imgPromptHelper/style/comic-style.webp" },
+			"realistic": 		{"url": "03_images/imgPromptHelper/style/realistic.webp" }
 		}
 	},
 	"horizontalLine@113":{},
