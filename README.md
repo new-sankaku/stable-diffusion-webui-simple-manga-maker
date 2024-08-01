@@ -16,7 +16,7 @@ For those who find updates bothersome, the Demo site is recommended.
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/120.png" width="800">
 
 ## Support Language
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/125.png" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/125.png" height="400">
 
 ## Main Page With Txt2Img Window
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/4.jpg" width="800">
