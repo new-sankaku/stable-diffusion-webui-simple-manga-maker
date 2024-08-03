@@ -7,7 +7,16 @@ Manga Editor Desu! is a lightweight browser application designed for intuitive o
 For those who find updates bothersome, the Demo site is recommended.
 
 ## Main Page
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/5.jpg" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/130.png" width="800">
+
+## Multi Page
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/110.png" width="800">
+
+## Image Prompt Helper
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/120.png" width="800">
+
+## Support Language
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/125.png" height="400">
 
 ## Main Page With Txt2Img Window
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/4.jpg" width="800">
