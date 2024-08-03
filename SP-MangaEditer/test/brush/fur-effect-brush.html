@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ファー効果付き二重アウトラインブラシ描画</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <style>
+        #canvas-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
+
+        #controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button,
+        input {
+            margin: 0 5px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container">
+        <canvas id="canvas"></canvas>
+    </div>
+    <div id="controls">
+        <input type="color" id="brushColor" value="#000000">
+        <input type="color" id="outline1Color" value="#FFFFFF">
+        <input type="color" id="outline2Color" value="#000000">
+        <input type="number" id="brushWidth" value="20" min="1" max="50">
+        <input type="number" id="outline1Width" value="4" min="0" max="10">
+        <input type="number" id="outline2Width" value="2" min="0" max="10">
+        <input type="range" id="outline1Opacity" value="100" min="0" max="100">
+        <span id="opacity1Value">100%</span>
+        <input type="range" id="outline2Opacity" value="100" min="0" max="100">
+        <span id="opacity2Value">100%</span>
+        <input type="number" id="furLength" value="10" min="1" max="50">
+        <input type="number" id="furDensity" value="5" min="1" max="20">
+        <button id="clear">クリア</button>
+        <button id="toggleBrush">ブラシモード切替</button>
+    </div>
+
+    <script>
+        let canvas;
+        let isDrawing = false;
+        let currentPath;
+        let points = [];
+
+        fabric.FurDoubleOutlineBrush = fabric.util.createClass(fabric.PencilBrush, {
+            type: 'FurDoubleOutlineBrush',
+
+            initialize: function (canvas) {
+                this.callSuper('initialize', canvas);
+                this.color = '#000000';
+                this.width = 20;
+                this.outline1Color = '#FFFFFF';
+                this.outline1Width = 4;
+                this.outline1Opacity = 1;
+                this.outline2Color = '#000000';
+                this.outline2Width = 2;
+                this.outline2Opacity = 1;
+                this.furLength = 10;
+                this.furDensity = 5;
+                this.offscreenCanvas = document.createElement('canvas');
+                this.offscreenCanvas.width = canvas.width;
+                this.offscreenCanvas.height = canvas.height;
+                this.offscreenCtx = this.offscreenCanvas.getContext('2d');
+            },
+
+            onMouseDown: function (pointer, options) {
+                this.callSuper('onMouseDown', pointer, options);
+                isDrawing = true;
+                points = [pointer];
+                currentPath = new fabric.Path(`M ${pointer.x} ${pointer.y}`, {
+                    stroke: this.color,
+                    strokeWidth: this.width,
+                    fill: null,
+                    strokeLineCap: 'round',
+                    strokeLineJoin: 'round',
+                    outline1Color: this.outline1Color,
+                    outline1Width: this.outline1Width,
+                    outline1Opacity: this.outline1Opacity,
+                    outline2Color: this.outline2Color,
+                    outline2Width: this.outline2Width,
+                    outline2Opacity: this.outline2Opacity
+                });
+
+                this.canvas.add(currentPath);
+                this._renderCurrentPath();
+            },
+
+            onMouseMove: function (pointer, options) {
+                if (!isDrawing) return;
+                this.callSuper('onMouseMove', pointer, options);
+                points.push(pointer);
+                if (points.length > 3) {
+                    const l = points.length - 1;
+                    const xc = (points[l].x + points[l - 1].x) / 2;
+                    const yc = (points[l].y + points[l - 1].y) / 2;
+                    currentPath.path.push(['Q', points[l - 1].x, points[l - 1].y, xc, yc]);
+                    points.shift();
+                }
+                this._renderCurrentPath();
+            },
+
+            onMouseUp: function (pointer) {
+                if (!isDrawing) return;
+                this.callSuper('onMouseUp', pointer);
+                isDrawing = false;
+                if (points.length > 3) {
+                    const l = points.length - 1;
+                    currentPath.path.push(['L', points[l].x, points[l].y]);
+                }
+                this._finalizeDrawing();
+                points = [];
+            },
+
+            _renderCurrentPath: function () {
+                this.canvas.renderAll();
+                this._processOutlinesAndFur();
+            },
+
+            _finalizeDrawing: function () {
+                this._processOutlinesAndFur();
+                currentPath = null;
+            },
+
+            _processOutlinesAndFur: function () {
+                this.offscreenCtx.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
+
+                this.canvas.getObjects('path').forEach(path => {
+                    if (path.outline1Width > 0 && path.outline2Width > 0) {
+                        this._drawPathToOffscreen(path, this.offscreenCtx, 
+                            path.strokeWidth + (path.outline1Width * 2) + (path.outline2Width * 2), 
+                            path.outline2Color, path.outline2Opacity);
+                        this._drawFur(path, this.offscreenCtx, 
+                            path.strokeWidth + (path.outline1Width * 2) + (path.outline2Width * 2), 
+                            path.outline2Color, path.outline2Opacity);
+                    }
+                });
+
+                this.canvas.getObjects('path').forEach(path => {
+                    if (path.outline1Width > 0) {
+                        this._drawPathToOffscreen(path, this.offscreenCtx, 
+                            path.strokeWidth + (path.outline1Width * 2), 
+                            path.outline1Color, path.outline1Opacity);
+                        this._drawFur(path, this.offscreenCtx, 
+                            path.strokeWidth + (path.outline1Width * 2), 
+                            path.outline1Color, path.outline1Opacity);
+                    }
+                });
+
+                this.canvas.getObjects('path').forEach(path => {
+                    this._drawPathToOffscreen(path, this.offscreenCtx, path.strokeWidth, path.stroke, 1);
+                    this._drawFur(path, this.offscreenCtx, path.strokeWidth, path.stroke, 1);
+                });
+
+                if (this.outlineImage) {
+                    this.canvas.remove(this.outlineImage);
+                }
+
+                this.outlineImage = new fabric.Image(this.offscreenCanvas, {
+                    left: 0,
+                    top: 0,
+                    selectable: false,
+                    evented: false
+                });
+
+                this.canvas.insertAt(this.outlineImage, 0);
+                this.canvas.renderAll();
+            },
+
+            _drawPathToOffscreen: function (path, ctx, strokeWidth, strokeColor, opacity) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.strokeStyle = strokeColor;
+                ctx.globalAlpha = opacity;
+                ctx.lineWidth = strokeWidth;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                
+                path.path.forEach((segment, i) => {
+                    if (segment[0] === 'M') {
+                        ctx.moveTo(segment[1], segment[2]);
+                    } else if (segment[0] === 'L') {
+                        ctx.lineTo(segment[1], segment[2]);
+                    } else if (segment[0] === 'Q') {
+                        ctx.quadraticCurveTo(segment[1], segment[2], segment[3], segment[4]);
+                    }
+                });
+                
+                ctx.stroke();
+                ctx.restore();
+            },
+
+            _drawFur: function (path, ctx, strokeWidth, strokeColor, opacity) {
+                ctx.save();
+                ctx.strokeStyle = strokeColor;
+                ctx.globalAlpha = opacity;
+                ctx.lineWidth = 1;
+                ctx.lineCap = 'round';
+
+                const furLength = this.furLength;
+                const furDensity = this.furDensity;
+
+                for (let i = 1; i < path.path.length; i++) {
+                    let start, end, control;
+                    if (path.path[i][0] === 'L') {
+                        start = { x: path.path[i - 1][1], y: path.path[i - 1][2] };
+                        end = { x: path.path[i][1], y: path.path[i][2] };
+                    } else if (path.path[i][0] === 'Q') {
+                        start = { x: path.path[i - 1][1], y: path.path[i - 1][2] };
+                        control = { x: path.path[i][1], y: path.path[i][2] };
+                        end = { x: path.path[i][3], y: path.path[i][4] };
+                    }
+
+                    const length = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
+                    const steps = Math.floor(length / furDensity);
+
+                    for (let j = 0; j < steps; j++) {
+                        let t = j / steps;
+                        let point, normal;
+
+                        if (path.path[i][0] === 'L') {
+                            point = {
+                                x: start.x + (end.x - start.x) * t,
+                                y: start.y + (end.y - start.y) * t
+                            };
+                            normal = {
+                                x: -(end.y - start.y) / length,
+                                y: (end.x - start.x) / length
+                            };
+                        } else if (path.path[i][0] === 'Q') {
+                            point = this._getQuadraticPoint(start, control, end, t);
+                            let tangent = this._getQuadraticTangent(start, control, end, t);
+                            normal = {
+                                x: -tangent.y,
+                                y: tangent.x
+                            };
+                        }
+
+                        let furEnd = {
+                            x: point.x + normal.x * furLength * Math.random(),
+                            y: point.y + normal.y * furLength * Math.random()
+                        };
+
+                        ctx.beginPath();
+                        ctx.moveTo(point.x, point.y);
+                        ctx.lineTo(furEnd.x, furEnd.y);
+                        ctx.stroke();
+                    }
+                }
+
+                ctx.restore();
+            },
+
+            _getQuadraticPoint: function (start, control, end, t) {
+                return {
+                    x: Math.pow(1 - t, 2) * start.x + 2 * (1 - t) * t * control.x + Math.pow(t, 2) * end.x,
+                    y: Math.pow(1 - t, 2) * start.y + 2 * (1 - t) * t * control.y + Math.pow(t, 2) * end.y
+                };
+            },
+
+            _getQuadraticTangent: function (start, control, end, t) {
+                let dx = 2 * (1 - t) * (control.x - start.x) + 2 * t * (end.x - control.x);
+                let dy = 2 * (1 - t) * (control.y - start.y) + 2 * t * (end.y - control.y);
+                let length = Math.sqrt(dx * dx + dy * dy);
+                return {
+                    x: dx / length,
+                    y: dy / length
+                };
+            }
+        });
+
+        function initCanvas() {
+            canvas = new fabric.Canvas('canvas', {
+                isDrawingMode: true,
+                width: 800,
+                height: 600,
+            });
+            canvas.freeDrawingBrush = new fabric.FurDoubleOutlineBrush(canvas);
+            updateBrush();
+        }
+
+        function updateBrush() {
+            if (!canvas || !canvas.freeDrawingBrush) return;
+            canvas.freeDrawingBrush.color = document.getElementById('brushColor').value;
+            canvas.freeDrawingBrush.width = parseInt(document.getElementById('brushWidth').value);
+            canvas.freeDrawingBrush.outline1Color = document.getElementById('outline1Color').value;
+            canvas.freeDrawingBrush.outline1Width = parseInt(document.getElementById('outline1Width').value);
+            canvas.freeDrawingBrush.outline1Opacity = parseInt(document.getElementById('outline1Opacity').value) / 100;
+            canvas.freeDrawingBrush.outline2Color = document.getElementById('outline2Color').value;
+            canvas.freeDrawingBrush.outline2Width = parseInt(document.getElementById('outline2Width').value);
+            canvas.freeDrawingBrush.outline2Opacity = parseInt(document.getElementById('outline2Opacity').value) / 100;
+            canvas.freeDrawingBrush.furLength = parseInt(document.getElementById('furLength').value);
+            canvas.freeDrawingBrush.furDensity = parseInt(document.getElementById('furDensity').value);
+            document.getElementById('opacity1Value').textContent = `${document.getElementById('outline1Opacity').value}%`;
+            document.getElementById('opacity2Value').textContent = `${document.getElementById('outline2Opacity').value}%`;
+        }
+
+        function clearCanvas() {
+            if (!canvas) return;
+            canvas.clear();
+            if (canvas.freeDrawingBrush.outlineImage) {
+                canvas.remove(canvas.freeDrawingBrush.outlineImage);
+            }
+        }
+
+function toggleBrushMode() {
+            canvas.isDrawingMode = !canvas.isDrawingMode;
+            document.getElementById('toggleBrush').textContent = canvas.isDrawingMode ? 'ブラシモード終了' : 'ブラシモード開始';
+            if (!canvas.isDrawingMode) {
+                isDrawing = false;
+                currentPath = null;
+                canvas.selection = true;
+                canvas.forEachObject(function(obj) {
+                    obj.selectable = true;
+                });
+            } else {
+                canvas.selection = false;
+                canvas.forEachObject(function(obj) {
+                    obj.selectable = false;
+                });
+                updateBrush();
+            }
+            canvas.renderAll();
+        }
+
+        function initEventListeners() {
+            ['brushColor', 'outline1Color', 'outline2Color', 'brushWidth', 'outline1Width', 'outline2Width', 'outline1Opacity', 'outline2Opacity', 'furLength', 'furDensity'].forEach(id => {
+                const element = document.getElementById(id);
+                element.addEventListener('input', updateBrush);
+                element.addEventListener('change', updateBrush);
+            });
+            document.getElementById('clear').addEventListener('click', clearCanvas);
+            document.getElementById('toggleBrush').addEventListener('click', toggleBrushMode);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initCanvas();
+            initEventListeners();
+        });
+    </script>
+</body>
+
+</html>

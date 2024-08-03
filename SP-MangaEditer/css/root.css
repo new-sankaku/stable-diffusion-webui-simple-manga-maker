@@ -49,8 +49,8 @@
   --dropdown-color: #e0e0e0;
   --dropdown-border: 1px solid #555;
   --color-dark-grey: #ccc;
-  --color-scrollbar-track: #2e2e2e;
-  --color-scrollbar-thumb: #555555;
+  --color-scrollbar-track: #000000;
+  --color-scrollbar-thumb: #584040;
   --select-button-color: #810000;
 }
 

@@ -913,110 +913,42 @@
 
 
 
-            <div id="tool-area" style="display: none;">
+            <div id="tool-area">
                 <div class="area-header" data-i18n="tools">Tools (β)</div>
-                <div id="tool-preview-area">
-                    <hr>
-                    <div class="input-group">
-                        <label data-i18n="size">Size</label>
-                        <input type="number" id="drawing-line-width" min="1" max="150" value="5">
-                    </div>
-                    <div class="input-group">
-                        <label for="brush-color" data-i18n="color">Color</label>
-                        <input type="color" id="drawing-color" value="#000000">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="opacity">Opacity</label>
-                        <input type="number" id="drawing-opacity" min="1" max="100" step="1" value="100">
-                    </div>
-                    <div>
-                        <label data-i18n="shadow">Shadow</label>
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="shadowSize">Size</label>
-                        <input type="number" id="drawing-shadow-width" min="0" max="150" value="0">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="svg_icon_shadow_offset_x">OffsetX</label>
-                        <input type="number" id="drawing-shadow-offsetX" min="1" max="150" value="5">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="svg_icon_shadow_offset_y">OffsetY</label>
-                        <input type="number" id="drawing-shadow-offsetY" min="1" max="150" value="5">
-                    </div>
-                    <div class="input-group">
-                        <label for="brush-Shadow-color" data-i18n="shadowColor">Color</label>
-                        <input type="color" id="drawing-shadow-color" value="#000000">
-                    </div>
-                    <hr>
+                <div id="tool-buttons">
                     <button id="PencilButton" onclick="switchPencilType('Pencil')">
                         <span data-i18n="Pencil">Pencil</span>
-                        <img src="03_images/preset/brush/Pencil.webp" alt="Pencil Icon"
-                            style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Pencil.webp" alt="Pencil Icon" style="width: 100%;">
                     </button>
                     <button id="CircleButton" onclick="switchPencilType('Circle')">
                         <span data-i18n="Circle">Circle</span>
-                        <img src="03_images/preset/brush/Circle.webp" alt="Circle Icon"
-                            style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Circle.webp" alt="Circle Icon" style="width: 100%;">
                     </button>
-                    <!-- <button id="VlineButton" onclick="switchPencilType('Vline')">
-                        <span data-i18n="Vline">Vline</span>
-                        <img src="03_images/preset/brush/Vline.png" alt="Vline Icon" style="width: 72px; height: 24px;">
-                    </button>                    
-                    <button id="HlineButton" onclick="switchPencilType('Hline')">
-                        <span data-i18n="Hline">Hline</span>
-                        <img src="03_images/preset/brush/Hline.png" alt="Hline Icon" style="width: 72px; height: 24px;">
-                    </button>                    
-                    <button id="TextureButton" onclick="switchPencilType('Texture')">
-                        <span data-i18n="Texture">Texture</span>
-                        <img src="03_images/preset/brush/Texture.png" alt="Texture Icon" style="width: 72px; height: 24px;">
-                    </button> -->
                     <button id="CrayonButton" onclick="switchPencilType('Crayon')">
-                        <span data-i18n="Crayon">Crayon</span>
-                        <img src="03_images/preset/brush/Crayon.webp" alt="Crayon Icon"
-                            style="width: 72px; height: 24px;">
+                        <span data-i18n="crayon">Crayon</span>
+                        <img src="03_images/preset/brush/Crayon.webp" alt="Crayon Icon" style="width: 100%;">
                     </button>
                     <button id="InkButton" onclick="switchPencilType('Ink')">
-                        <span data-i18n="Ink">Ink</span>
-                        <img src="03_images/preset/brush/Ink.webp" alt="Ink Icon" style="width: 72px; height: 24px;">
+                        <span data-i18n="ink">Ink</span>
+                        <img src="03_images/preset/brush/Ink.webp" alt="Ink Icon" style="width: 100%;">
                     </button>
                     <button id="MarkerButton" onclick="switchPencilType('Marker')">
                         <span data-i18n="Marker">Marker</span>
-                        <img src="03_images/preset/brush/Marker.webp" alt="Marker Icon"
-                            style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Marker.webp" alt="Marker Icon" style="width: 100%;">
                     </button>
-                    <div class="input-group">
-                        <label for="line-style" data-i18n="lineStyle">Line Style</label>
-                        <select id="line-style">
-                            <option value="solid">Solid</option>
-                            <option value="dashed">Dashed</option>
-                            <option value="dotted">Dotted</option>
-                        </select>
-                    </div>
-                    <hr>
 
-                    <button id="EraserButton" onclick="switchPencilType('Eraser')">
-                        <span class="material-symbols-outlined">ink_eraser</span>
-                        <span data-i18n="Eraser">Eraser</span>
-                    </button>
-                    <hr>
-
-                    <div class="input-group">
-                        <label data-i18n="circle-size">circle-size</label>
-                        <input type="number" id="circle-size" min="1" max="300" value="40" />
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="mosaic-size">mosaic-size</label>
-                        <input type="number" id="mosaic-size" min="1" max="100" value="8" />
-                    </div>
                     <button id="MosaicButton" onclick="switchPencilType('Mosaic')">
                         <span data-i18n="Mosaic">Mosaic</span>
-                        <img src="03_images/preset/brush/Mosaic2.webp" alt="Mosaic Icon"
-                            style="width: 72px; height: 24px;">
+                        <img src="03_images/preset/brush/Mosaic1.webp" alt="Mosaic Icon" style="width: 100%;">
                     </button>
-                    <hr>
+                    <button id="EraserButton" onclick="switchPencilType('Eraser')">
+                        <span data-i18n="Eraser">Eraser</span>
+                        <img src="03_images/preset/brush/Eraser.webp" alt="Mosaic Icon" style="width: 100%;">
+                    </button>
 
                 </div>
+                <hr>
+                <div id="tool-settings"></div>
             </div>
 
 

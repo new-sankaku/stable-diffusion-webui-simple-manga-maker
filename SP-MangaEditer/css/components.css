@@ -20,6 +20,98 @@
       overflow: hidden;
   }
   
+
+
+  
+
+
+
+
+
+  #tool-settings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  
+  .pen-input-2group {
+    display: flex;
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .pen-input-3group {
+    display: grid;
+    grid-template-columns: 35% 50% 15%;
+    align-items: center;
+    gap: 0px;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .pen-input-2group > *,
+  .pen-input-3group > * {
+    min-width: 0;
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .pen-input-2group label,
+  .pen-input-3group label {
+    flex-shrink: 0;
+    margin-right: 5px;
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .pen-input-2group input,
+  .pen-input-2group select,
+  .pen-input-3group input {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .pen-input-2group input[type="color"] {
+    min-width: 40px;
+    height: 20px;
+    border: none;
+    background: none;
+    margin: 10px;
+  }
+  
+  .pen-input-3group .slider-value {
+    min-width: 10%;
+    text-align: right;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  
+#tool-buttons {
+    max-height: 50%;
+    overflow-y: auto;
+
+}
+#tool-settings {
+    max-height: 40%;
+    overflow-y: auto;
+
+}
+  
+
+
+
+
+
+
+
+
+
   #dummy-area4 {
       font-size: var(--font-size-small);
   }
