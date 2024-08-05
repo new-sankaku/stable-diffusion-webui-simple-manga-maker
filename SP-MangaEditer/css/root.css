@@ -171,8 +171,8 @@
   --font-size-base: 14px;
   --min-width-layer-panel-small: 15%;
   --max-width-150: 150px;
-  --max-width-base: 150px;
-  --min-width-base: 150px;
+  --max-width-base: 200px;
+  --min-width-base: 200px;
   --font-size-button: 15px;
   --font-size-material-icons: 16px;
   --font-size-icon-material: 16px;

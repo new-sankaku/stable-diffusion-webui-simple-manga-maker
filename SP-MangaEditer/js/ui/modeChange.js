@@ -37,9 +37,7 @@ function operationModeClear( ){
 }
 
 function pencilModeClear(type) {
-
   console.log( "pencilModeClear type nowPencil | ", type, nowPencil );
-
   type = type || nowPencil;
 
   if (canvas.isDrawingMode && isImageBrush(nowPencil)) {

@@ -4,14 +4,19 @@ let currentPaths = [];
 function switchPencilType(type) {
     switchPencilTypeUi(type);
 
-    if (type == nowPencil) {
+    console.log("switchPencilType is call", type, nowPencil);
+
+    if (type === nowPencil) {
+        console.log("type === nowPencil 1");
         pencilModeClear(type);
+        console.log("type === nowPencil 2");
         currentPaths = [];
+        console.log("type === nowPencil 3");
         clearActiveButton();
+        console.log("type === nowPencil 4");
         return;
     } else {
         pencilModeClear(type);
-
         canvas.isDrawingMode = true;
         currentPaths = [];
         nowPencil = type;
@@ -61,50 +66,6 @@ function switchPencilType(type) {
     applyBrushSettings();
 }
 
-
-function addNumber(id, label, min, max, value) {
-    const transLavel = getText(label);
-    return `
-        <div class="pen-input-2group">
-            <label for="${id}" data-i18n="${label}">${transLavel}</label>
-            <input type="number" id="${id}" min="${min}" max="${max}" value="${value}">
-        </div>
-    `;
-}
-
-function addColor(id, label, value) {
-    const transLavel = getText(label);
-    return `
-        <div class="pen-input-2group">
-            <label for="${id}" data-i18n="${label}">${transLavel}</label>
-            <input type="color" id="${id}" value="${value}">
-        </div>
-    `;
-}
-
-function addSlider(id, label, min, max, value) {
-    const transLavel = getText(label);
-    return `
-        <div class="pen-input-3group">
-            <label for="${id}" data-i18n="${label}">${transLavel}</label>
-            <input type="range" id="${id}" min="${min}" max="${max}" value="${value}" oninput="document.getElementById('${id}-value').innerText = this.value">
-            <span class="slider-value" id="${id}-value">${value}</span>
-        </div>
-    `;
-}
-
-function addDropDownByStyle(id, label) {
-    return `
-        <div class="input-2group">
-        <label for="line-style" data-i18n="lineStyle">Line Style</label>
-        <select id="line-style">
-            <option value="solid">Solid</option>
-            <option value="dashed">Dashed</option>
-            <option value="dotted">Dotted</option>
-        </select>
-        </div>`;
-}
-
 var drawingColor             = null;
 var drawingWidth             = null;
 var drawingOpacity           = null;
@@ -116,10 +77,6 @@ var drawingLineStyle         = null;
 var drawingMosaicSize        = null;
 var drawingMosaicCircleSize  = null;
 
-Map.prototype.getOrDefault = function(key, defaultValue) {
-    return this.has(key) ? this.get(key) : defaultValue;
-};
-const penValueMap = new Map();
 
 
 function switchPencilTypeUi(type) {
@@ -272,15 +229,15 @@ function addPenEventListener(){
     const elements = [drawingColor, drawingWidth, drawingOpacity, drawingShadowColor, 
                       drawingShadowWidth, drawingShadowOffsetX, drawingShadowOffsetY, drawingLineStyle];
 
-    if(drawingShadowWidth){
-        console.log("drawingShadowWidth is not null ");
-    }else{
-        console.log("drawingShadowWidth is null ");
-    }
+    // if(drawingShadowWidth){
+    //     console.log("drawingShadowWidth is not null ");
+    // }else{
+    //     console.log("drawingShadowWidth is null ");
+    // }
 
     elements.forEach(element => {
         if (element) {
-            console.log("set element", element.id);
+            // console.log("set element", element.id);
             element.addEventListener('change', () => {
                 applyBrushSettings();
                 savePenValueMap(element);
@@ -311,14 +268,10 @@ function addPenEventListener(){
     }
 }
 
-function savePenValueMap(element) {
-    penValueMap.set(element.id, element.value);
-}
-
 
 function applyBrushSettings() {
 
-    console.log( "applyBrushSettings is call" );
+    // console.log( "applyBrushSettings is call" );
 
     if (canvas.freeDrawingBrush) {
         var brush = canvas.freeDrawingBrush;
@@ -373,18 +326,19 @@ function applyBrushSettings() {
             }
         }
 
-        console.log("After applying settings:");
-        console.log("Width:", brush.width);
-        console.log("Color:", brush.color);
-        console.log("Opacity:", brush.opacity);
-        console.log("Shadow:", brush.shadow);
-        console.log("StrokeDashArray:", brush.strokeDashArray);
+        // console.log("After applying settings:");
+        // console.log("Width:", brush.width);
+        // console.log("Color:", brush.color);
+        // console.log("Opacity:", brush.opacity);
+        // console.log("Shadow:", brush.shadow);
+        // console.log("StrokeDashArray:", brush.strokeDashArray);
     }
 }
 
 
 
 function clearActiveButton() {
+    console.log("clearActiveButton is call");
     document.getElementById(MODE_PEN_PENCIL + 'Button').classList.remove('active-button');
     document.getElementById(MODE_PEN_CIRCLE + 'Button').classList.remove('active-button');
     document.getElementById(MODE_PEN_CRAYON + 'Button').classList.remove('active-button');

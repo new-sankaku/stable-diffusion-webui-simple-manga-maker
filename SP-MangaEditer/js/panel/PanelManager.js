@@ -75,59 +75,76 @@ function initialPutImage(img) {
   return img;
 }
 
-function putImageInFrame(img, x, y) {
-  img.set({ left: x, top: y, });
-
-  setNotSave(img);
-  canvas.add(img);
-
-  var targetFrameIndex = findTargetFrame(x, y);
-
-  if (targetFrameIndex !== -1) {
-    var targetFrame = canvas.item(targetFrameIndex);
-    var frameCenterX = targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
-    var frameCenterY = targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
-    var scaleToFitX = (targetFrame.width * targetFrame.scaleX) / img.width;
-    var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / img.height;
-    var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
-
-    moveSettings(img, targetFrame);
-
-    img.set({
-      left: frameCenterX - (img.width * scaleToFit) / 2,
-      top: frameCenterY - (img.height * scaleToFit) / 2,
-      scaleX: scaleToFit * 1.05,
-      scaleY: scaleToFit * 1.05,
+function putImageInFrame(imgOrSvg, x, y, isNotActive = false) {
+  let obj;
+  
+  if (typeof imgOrSvg === 'string' && imgOrSvg.startsWith('<svg')) {
+    fabric.loadSVGFromString(imgOrSvg, function(objects, options) {
+      obj = fabric.util.groupSVGElements(objects, options);
+      placeObject(obj, x, y, isNotActive);
     });
-
-    if (img.name) {
-      img.name = targetFrame.name + "-" + img.name;
-    } else {
-      img.name = targetFrame.name + " In Image";
-    }
-
-    setGUID(targetFrame, img);
   } else {
-    var scaleToCanvasWidth = 300 / img.width;
-    var scaleToCanvasHeight = 300 / img.height;
-    var scaleToCanvas = Math.min(scaleToCanvasWidth, scaleToCanvasHeight);
-
-    img.set({
-      left: 50,
-      top: 50,
-      scaleX: scaleToCanvas,
-      scaleY: scaleToCanvas,
-    });
+    obj = imgOrSvg;
+    placeObject(obj, x, y, isNotActive);
   }
 
-  canvas.setActiveObject(img);
-  saveInitialState(img);
+  function placeObject(obj, x, y, isNotActive) {
+    obj.set({ left: x, top: y });
+    setNotSave(obj);
+    canvas.add(obj);
 
-  canvas.renderAll();
-  updateLayerPanel();
-  saveStateByManual();
-  return img;
+    var targetFrameIndex = findTargetFrame(x, y);
+    if (targetFrameIndex !== -1) {
+      var targetFrame = canvas.item(targetFrameIndex);
+      var frameCenterX = targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
+      var frameCenterY = targetFrame.top + (targetFrame.height * targetFrame.scaleY) / 2;
+      var scaleToFitX = (targetFrame.width * targetFrame.scaleX) / obj.width;
+      var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / obj.height;
+      var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
+
+      moveSettings(obj, targetFrame);
+
+      obj.set({
+        left: frameCenterX - (obj.width * scaleToFit) / 2,
+        top: frameCenterY - (obj.height * scaleToFit) / 2,
+        scaleX: scaleToFit * 1.05,
+        scaleY: scaleToFit * 1.05,
+      });
+
+      if (obj.name) {
+        obj.name = targetFrame.name + "-" + obj.name;
+      } else {
+        obj.name = targetFrame.name + " In Image";
+      }
+
+      setGUID(targetFrame, obj);
+    } else {
+      var scaleToCanvasWidth = 300 / obj.width;
+      var scaleToCanvasHeight = 300 / obj.height;
+      var scaleToCanvas = Math.min(scaleToCanvasWidth, scaleToCanvasHeight);
+
+      obj.set({
+        left: 50,
+        top: 50,
+        scaleX: scaleToCanvas,
+        scaleY: scaleToCanvas,
+      });
+    }
+
+    if (!isNotActive) {
+      canvas.setActiveObject(obj);
+    }
+    saveInitialState(obj);
+
+    canvas.renderAll();
+    updateLayerPanel();
+    saveStateByManual();
+    return obj;
+  }
+
+  return obj;
 }
+
 
 function findTargetFrame(x, y) {
   //console.log( "findTargetFrame:x y, ", x, " ", y );

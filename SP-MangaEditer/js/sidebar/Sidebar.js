@@ -21,6 +21,7 @@ function toggleVisibility(id) {
     document.getElementById("speech-bubble-area1").style.display = "none";
     document.getElementById("text-area").style.display = "none";
     document.getElementById("tool-area").style.display = "none";
+    document.getElementById("manga-effect-area").style.display = "none";
     document.getElementById("dummy-area4").style.display = "none";
     document.getElementById("shape-area").style.display = "none";
     element.style.display = "block";

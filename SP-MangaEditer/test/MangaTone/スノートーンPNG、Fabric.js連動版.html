@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>方向性ブラー付き楕円形雪のトーン生成器</title>
+    <title>拡張版方向性ブラー付き楕円形雪のトーン生成器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <style>
         body {
             background-color: #333;
@@ -16,6 +17,7 @@
         }
         canvas {
             border: 1px solid #ccc;
+            margin-bottom: 20px;
         }
         #controls {
             margin-bottom: 20px;
@@ -26,10 +28,13 @@
         label, input {
             margin-right: 10px;
         }
+        button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>方向性ブラー付き楕円形雪のトーン生成器</h1>
+    <h1>拡張版方向性ブラー付き楕円形雪のトーン生成器</h1>
     <div id="controls">
         <label for="snowDensity">雪の密度:</label>
         <input type="range" id="snowDensity" min="50" max="500" value="200">
@@ -56,12 +61,15 @@
         <input type="range" id="snowAngle" min="0" max="180" value="90">
         
         <button id="generate">生成</button>
+        <button id="downloadPng">PNGダウンロード</button>
     </div>
     <canvas id="canvas" width="500" height="500"></canvas>
+    <canvas id="lowerCanvas" width="500" height="500"></canvas>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        const lowerCanvas = new fabric.Canvas('lowerCanvas');
         const snowDensity = document.getElementById('snowDensity');
         const frontSnowSize = document.getElementById('frontSnowSize');
         const backSnowSize = document.getElementById('backSnowSize');
@@ -71,6 +79,7 @@
         const backColor = document.getElementById('backColor');
         const snowAngle = document.getElementById('snowAngle');
         const generateBtn = document.getElementById('generate');
+        const downloadPngBtn = document.getElementById('downloadPng');
 
         function drawSnowflake(x, y, size, blurLength, color, angle) {
             ctx.save();
@@ -124,9 +133,50 @@
                 const color = interpolateColor(backColor.value, frontColor.value, depth);
                 drawSnowflake(x, y, size, blurLength, color, angle);
             }
+            updateLowerCanvas();
+        }
+
+        function updateLowerCanvas() {
+            lowerCanvas.clear();
+            const dataURL = canvas.toDataURL({format: 'png'});
+            fabric.Image.fromURL(dataURL, function(img) {
+                img.scaleToWidth(lowerCanvas.width);
+                lowerCanvas.add(img);
+                
+                const rect = new fabric.Rect({
+                    left: 50,
+                    top: 50,
+                    width: 200,
+                    height: 100,
+                    fill: 'transparent',
+                    stroke: 'white',
+                    strokeWidth: 2,
+                    selectable: true
+                });
+
+                lowerCanvas.add(rect);
+                lowerCanvas.renderAll();
+
+                rect.on('selected', function() {
+                    const ratio = rect.height / rect.width;
+                    canvas.height = canvas.width * ratio;
+                    lowerCanvas.setHeight(lowerCanvas.width * ratio);
+                    generateSnowTone();
+                });
+            });
+        }
+
+        function downloadPNG() {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'snow_tone.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         generateBtn.addEventListener('click', generateSnowTone);
+        downloadPngBtn.addEventListener('click', downloadPNG);
 
         generateSnowTone();
     </script>

@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ノイズグラデーション漫画トーン生成器</title>
+    <title>改善版ノイズグラデーション漫画トーン生成器（PNG対応）</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <style>
         body { font-family: sans-serif; margin: 20px; }
-        canvas { border: 1px solid #ccc; }
+        canvas { border: 1px solid #ccc; margin-bottom: 20px; }
         .controls { margin-top: 10px; }
         .control { margin-bottom: 5px; }
         label { display: inline-block; width: 180px; }
+        button { margin-top: 10px; margin-right: 10px; }
     </style>
 </head>
 <body>
-    <canvas id="canvas" width="400" height="400"></canvas>
     <div class="controls">
         <div class="control">
             <label for="colorPicker">色:</label>
@@ -44,11 +45,17 @@
             <input type="range" id="gradientEndY" min="0" max="400" value="400">
         </div>
     </div>
+    <button id="downloadPng">PNGダウンロード</button>
+    <canvas id="fabricCanvas" width="400" height="400"></canvas>
 
     <script>
     (function() {
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        const fabricCanvas = new fabric.Canvas('fabricCanvas');
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 400;
+        tempCanvas.height = 400;
+        const ctx = tempCanvas.getContext('2d');
+        
         const colorPicker = document.getElementById('colorPicker');
         const noiseMinSlider = document.getElementById('noiseMinSlider');
         const noiseMaxSlider = document.getElementById('noiseMaxSlider');
@@ -56,6 +63,7 @@
         const gradientStartY = document.getElementById('gradientStartY');
         const gradientEndX = document.getElementById('gradientEndX');
         const gradientEndY = document.getElementById('gradientEndY');
+        const downloadPngButton = document.getElementById('downloadPng');
 
         function hexToRgb(hex) {
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -67,7 +75,7 @@
         }
 
         function generateNoiseWithGradient(color, noiseMin, noiseMax) {
-            const imageData = ctx.createImageData(canvas.width, canvas.height);
+            const imageData = ctx.createImageData(tempCanvas.width, tempCanvas.height);
             const data = imageData.data;
             const rgb = hexToRgb(color);
 
@@ -76,9 +84,9 @@
             const endX = parseInt(gradientEndX.value);
             const endY = parseInt(gradientEndY.value);
 
-            for (let y = 0; y < canvas.height; y++) {
-                for (let x = 0; x < canvas.width; x++) {
-                    const index = (y * canvas.width + x) * 4;
+            for (let y = 0; y < tempCanvas.height; y++) {
+                for (let x = 0; x < tempCanvas.width; x++) {
+                    const index = (y * tempCanvas.width + x) * 4;
 
                     // Calculate gradient progress
                     const dx = endX - startX;
@@ -114,6 +122,22 @@
 
             const noiseData = generateNoiseWithGradient(color, noiseMin, noiseMax);
             ctx.putImageData(noiseData, 0, 0);
+            
+            fabricCanvas.clear();
+            fabric.Image.fromURL(tempCanvas.toDataURL(), function(img) {
+                fabricCanvas.add(img);
+                fabricCanvas.renderAll();
+            });
+
+        }
+
+        function downloadPNG() {
+            const link = document.createElement('a');
+            link.href = tempCanvas.toDataURL('image/png');
+            link.download = 'noise_gradient_tone.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         colorPicker.addEventListener('input', updateCanvas);
@@ -123,6 +147,7 @@
         gradientStartY.addEventListener('input', updateCanvas);
         gradientEndX.addEventListener('input', updateCanvas);
         gradientEndY.addEventListener('input', updateCanvas);
+        downloadPngButton.addEventListener('click', downloadPNG);
 
         updateCanvas();
     })();

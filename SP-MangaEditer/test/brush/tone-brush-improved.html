@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>改良トーンブラシ</title>
+    <style>
+      body {
+        font: 12px Arial;
+        margin: 0;
+        padding: 5px;
+        background: #f0f0f0;
+      }
+
+      #canvas {
+        border: 1px solid #ccc;
+      }
+
+      #mainContainer {
+        display: flex;
+        gap: 5px;
+      }
+
+      #controls {
+        flex: 0 0 auto;
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        margin: 2px 0;
+      }
+
+      select,
+      button,
+      input[type="color"] {
+        padding: 2px;
+        font-size: 12px;
+      }
+
+      input[type="range"] {
+        width: 100px;
+        margin: 0 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="mainContainer">
+      <canvas id="canvas" width="600" height="600"></canvas>
+      <div id="controls">
+        <button id="clearButton">クリア</button>
+        <label>
+          種別:
+          <select id="brushType">
+            <option value="dot">点</option>
+            <option value="circle">丸</option>
+            <option value="cross">十字</option>
+            <option value="x">✕</option>
+            <option value="heart">ハート</option>
+            <option value="triangle">三角形</option>
+          </select>
+        </label>
+        <label>
+          種別サイズ:
+          <input type="range" id="elementSize" min="1" max="20" value="4" />
+          <span id="elementSizeValue">4</span>
+        </label>
+        <label>
+          トーンサイズ:
+          <input type="range" id="toneSize" min="10" max="100" value="40" />
+          <span id="toneSizeValue">40</span>
+        </label>
+        <label>
+          間隔:
+          <input type="range" id="gap" min="0" max="20" value="2" />
+          <span id="gapValue">2</span>
+        </label>
+        <label>グラデーション:<input type="checkbox" id="gradient" /></label>
+        <label>
+          グラデーション方向:
+          <select id="gradientDirection">
+            <option value="tb">上から下</option>
+            <option value="bt">下から上</option>
+            <option value="rl">右から左</option>
+            <option value="lr">左から右</option>
+          </select>
+        </label>
+        <label>色1:<input type="color" id="color1" value="#000000" /></label>
+        <label>色2:<input type="color" id="color2" value="#ffffff" /></label>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById("canvas"),
+          ctx = canvas.getContext("2d");
+        let isDrawing = false,
+          lastX = 0,
+          lastY = 0,
+          elementSize = 4,
+          toneSize = 40,
+          gapSize = 2,
+          brushType = "dot",
+          pattern,
+          color1 = "#000000",
+          color2 = "#ffffff",
+          useGradient = false,
+          gradientDirection = "tb";
+
+        function createPattern(elementSize, brushType, toneSize, gapSize, color1, color2) {
+          const patternCanvas = document.createElement("canvas"),
+            patternSize = Math.ceil(toneSize / (elementSize + gapSize));
+          patternCanvas.width = patternCanvas.height = patternSize * (elementSize + gapSize);
+          const patternCtx = patternCanvas.getContext("2d");
+
+          if (useGradient) {
+            const gradient = patternCtx.createLinearGradient(
+              0,
+              0,
+              gradientDirection === "rl" || gradientDirection === "lr" ? patternCanvas.width : 0,
+              gradientDirection === "tb" || gradientDirection === "bt" ? patternCanvas.height : 0
+            );
+            gradient.addColorStop(gradientDirection === "bt" || gradientDirection === "rl" ? 1 : 0, color1);
+            gradient.addColorStop(gradientDirection === "bt" || gradientDirection === "rl" ? 0 : 1, color2);
+            patternCtx.fillStyle = patternCtx.strokeStyle = gradient;
+          } else {
+            patternCtx.fillStyle = patternCtx.strokeStyle = color1;
+          }
+
+          for (let row = 0; row < patternSize; row++)
+            for (let col = 0; col < patternSize; col++) {
+              const x = row * (elementSize + gapSize),
+                y = col * (elementSize + gapSize);
+              switch (brushType) {
+                case "dot":
+                  patternCtx.fillRect(x, y, elementSize, elementSize);
+                  break;
+                case "circle":
+                  patternCtx.beginPath();
+                  patternCtx.arc(x + elementSize / 2, y + elementSize / 2, elementSize / 2, 0, 2 * Math.PI);
+                  patternCtx.fill();
+                  break;
+                case "cross":
+                  patternCtx.lineWidth = elementSize / 4;
+                  patternCtx.beginPath();
+                  patternCtx.moveTo(x + elementSize / 2, y);
+                  patternCtx.lineTo(x + elementSize / 2, y + elementSize);
+                  patternCtx.moveTo(x, y + elementSize / 2);
+                  patternCtx.lineTo(x + elementSize, y + elementSize / 2);
+                  patternCtx.stroke();
+                  break;
+                case "x":
+                  patternCtx.lineWidth = elementSize / 4;
+                  patternCtx.beginPath();
+                  patternCtx.moveTo(x, y);
+                  patternCtx.lineTo(x + elementSize, y + elementSize);
+                  patternCtx.moveTo(x + elementSize, y);
+                  patternCtx.lineTo(x, y + elementSize);
+                  patternCtx.stroke();
+                  break;
+                case "heart":
+                  patternCtx.beginPath();
+                  const topCurveHeight = elementSize * 0.3;
+                  patternCtx.moveTo(x + elementSize / 2, y + elementSize * 0.7);
+                  // 左側の曲線
+                  patternCtx.bezierCurveTo(
+                    x + elementSize / 2, y, 
+                    x, y, 
+                    x, y + topCurveHeight
+                  );
+                  // 左下の曲線
+                  patternCtx.bezierCurveTo(
+                    x, y + (elementSize + topCurveHeight) / 2, 
+                    x + elementSize / 2, y + elementSize, 
+                    x + elementSize / 2, y + elementSize
+                  );
+                  // 右下の曲線
+                  patternCtx.bezierCurveTo(
+                    x + elementSize / 2, y + elementSize, 
+                    x + elementSize, y + (elementSize + topCurveHeight) / 2, 
+                    x + elementSize, y + topCurveHeight
+                  );
+                  // 右側の曲線
+                  patternCtx.bezierCurveTo(
+                    x + elementSize, y, 
+                    x + elementSize / 2, y, 
+                    x + elementSize / 2, y + elementSize * 0.7
+                  );
+                  patternCtx.closePath();
+                  patternCtx.fill();
+                  break;
+                case "triangle":
+                  patternCtx.beginPath();
+                  patternCtx.moveTo(x + elementSize / 2, y);
+                  patternCtx.lineTo(x, y + elementSize);
+                  patternCtx.lineTo(x + elementSize, y + elementSize);
+                  patternCtx.closePath();
+                  patternCtx.fill();
+              }
+            }
+          return ctx.createPattern(patternCanvas, "repeat");
+        }
+
+        function drawLine(startX, startY, endX, endY) {
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(endX, endY);
+          ctx.strokeStyle = pattern;
+          ctx.lineWidth = toneSize;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.stroke();
+        }
+
+        function updatePattern() {
+          pattern = createPattern(elementSize, brushType, toneSize, gapSize, color1, color2);
+        }
+
+        canvas.addEventListener("mousedown", (e) => {
+          isDrawing = true;
+          [lastX, lastY] = [e.offsetX, e.offsetY];
+        });
+
+        canvas.addEventListener("mousemove", (e) => {
+          if (isDrawing) {
+            drawLine(lastX, lastY, e.offsetX, e.offsetY);
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+          }
+        });
+
+        canvas.addEventListener("mouseup", () => isDrawing = false);
+        canvas.addEventListener("mouseout", () => isDrawing = false);
+
+        document.getElementById("clearButton").addEventListener("click", () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+
+        document.getElementById("brushType").addEventListener("change", (e) => {
+          brushType = e.target.value;
+          updatePattern();
+        });
+
+        document.getElementById("color1").addEventListener("input", (e) => {
+          color1 = e.target.value;
+          updatePattern();
+        });
+
+        document.getElementById("color2").addEventListener("input", (e) => {
+          color2 = e.target.value;
+          updatePattern();
+        });
+
+        document.getElementById("gradient").addEventListener("change", (e) => {
+          useGradient = e.target.checked;
+          updatePattern();
+        });
+
+        document.getElementById("gradientDirection").addEventListener("change", (e) => {
+          gradientDirection = e.target.value;
+          updatePattern();
+        });
+
+        ["elementSize", "toneSize", "gap"].forEach((id) => {
+          const input = document.getElementById(id),
+            valueDisplay = document.getElementById(id + "Value");
+          input.addEventListener("input", (e) => {
+            const value = parseInt(e.target.value);
+            valueDisplay.textContent = value;
+            if (id === "elementSize") elementSize = value;
+            if (id === "toneSize") toneSize = value;
+            if (id === "gap") gapSize = value;
+            updatePattern();
+          });
+        });
+
+        updatePattern();
+      });
+    </script>
+  </body>
+</html>

@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修正版自動スピードライン生成ツール</title>
+    <title>拡張版自動スピードライン生成ツール（tempCanvas使用版）</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <style>
         body { font-family: sans-serif; text-align: center; }
-        canvas { border: 1px solid black; }
+        canvas { border: 1px solid black; margin: 10px 0; }
         #controls, #options { margin: 10px 0; }
         .option-group { display: inline-block; margin: 0 10px; }
     </style>
 </head>
 <body>
-    <h1>修正版自動スピードライン生成ツール</h1>
+    <h1>拡張版自動スピードライン生成ツール（tempCanvas使用版）</h1>
     <div id="controls">
         <button id="horizontal">水平線</button>
         <button id="vertical">垂直線</button>
         <button id="diagonal">斜め線</button>
         <button id="cross">十字線</button>
         <button id="clear">クリア</button>
+        <button id="downloadSvg">SVGダウンロード</button>
     </div>
     <div id="options">
         <div class="option-group">
@@ -47,20 +48,23 @@
             <input type="checkbox" id="gradientToggle" checked>
         </div>
     </div>
-    <canvas id="canvas" width="600" height="400"></canvas>
+    <canvas id="fabricCanvas" width="600" height="400"></canvas>
 
     <script>
-        const canvas = new fabric.Canvas('canvas');
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 600;
+        tempCanvas.height = 400;
+        const tempCtx = tempCanvas.getContext('2d');
+        const fabricCanvas = new fabric.Canvas('fabricCanvas');
+        let currentType = 'horizontal';
 
         function updateValue(id) {
             const input = document.getElementById(id);
             const display = document.getElementById(id + 'Value');
-            display.textContent = input.value;
+            if (display) {
+                display.textContent = input.value;
+            }
         }
-
-        ['density', 'angle', 'gradientStart', 'gradientEnd'].forEach(id => {
-            document.getElementById(id).addEventListener('input', () => updateValue(id));
-        });
 
         function drawLine(start, end, options) {
             const gradientToggle = document.getElementById('gradientToggle').checked;
@@ -68,36 +72,29 @@
             const gradientStart = parseInt(document.getElementById('gradientStart').value) / 100;
             const gradientEnd = parseInt(document.getElementById('gradientEnd').value) / 100;
 
-            let line;
             if (gradientToggle) {
-                const gradient = new fabric.Gradient({
-                    type: 'linear',
-                    coords: { x1: start.x, y1: start.y, x2: end.x, y2: end.y },
-                    colorStops: [
-                        { offset: 0, color: lineColor, opacity: gradientStart },
-                        { offset: 1, color: lineColor, opacity: gradientEnd }
-                    ]
-                });
-                line = new fabric.Line([start.x, start.y, end.x, end.y], {
-                    stroke: gradient,
-                    strokeWidth: options.strokeWidth || 1
-                });
+                const gradient = tempCtx.createLinearGradient(start.x, start.y, end.x, end.y);
+                gradient.addColorStop(0, `${lineColor}${Math.round(gradientStart * 255).toString(16).padStart(2, '0')}`);
+                gradient.addColorStop(1, `${lineColor}${Math.round(gradientEnd * 255).toString(16).padStart(2, '0')}`);
+                tempCtx.strokeStyle = gradient;
             } else {
-                line = new fabric.Line([start.x, start.y, end.x, end.y], {
-                    stroke: lineColor,
-                    strokeWidth: options.strokeWidth || 1,
-                    opacity: options.opacity || 1
-                });
+                tempCtx.strokeStyle = lineColor;
+                tempCtx.globalAlpha = options.opacity || 1;
             }
-            canvas.add(line);
+
+            tempCtx.lineWidth = options.strokeWidth || 1;
+            tempCtx.beginPath();
+            tempCtx.moveTo(start.x, start.y);
+            tempCtx.lineTo(end.x, end.y);
+            tempCtx.stroke();
         }
 
         function drawSpeedlines(type) {
-            canvas.clear();
+            tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
             const density = parseInt(document.getElementById('density').value);
             const angle = parseInt(document.getElementById('angle').value) * Math.PI / 180;
-            const width = canvas.width;
-            const height = canvas.height;
+            const width = tempCanvas.width;
+            const height = tempCanvas.height;
 
             for (let i = 0; i < density; i++) {
                 let start, end;
@@ -111,8 +108,8 @@
                         end = { x: i * width / density, y: height };
                         break;
                     case 'diagonal':
-                        start = { x: 0, y: i * (height + width) / density };
-                        end = { x: i * (height + width) / density, y: 0 };
+                        start = { x: 0, y: i * height / (density - 1) };
+                        end = { x: width, y: i * height / (density - 1) };
                         break;
                     case 'cross':
                         if (i < density / 2) {
@@ -134,18 +131,87 @@
 
                 drawLine(start, rotatedEnd, { opacity: 1, strokeWidth: 1 });
             }
-            canvas.renderAll();
+            updateFabricCanvas();
+        }
+
+        function updateDrawing() {
+            drawSpeedlines(currentType);
         }
 
         document.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', () => {
                 if (button.id === 'clear') {
-                    canvas.clear();
+                    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+                    updateFabricCanvas();
+                } else if (button.id === 'downloadSvg') {
+                    downloadSVG();
                 } else {
-                    drawSpeedlines(button.id);
+                    currentType = button.id;
+                    drawSpeedlines(currentType);
                 }
             });
         });
+
+        ['density', 'angle', 'gradientStart', 'gradientEnd', 'lineColor'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                updateValue(id);
+                updateDrawing();
+            });
+        });
+
+        document.getElementById('gradientToggle').addEventListener('change', updateDrawing);
+
+        function convertToSVG() {
+            const svgString = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="${tempCanvas.width}" height="${tempCanvas.height}">
+                <image href="${tempCanvas.toDataURL('image/png')}" width="${tempCanvas.width}" height="${tempCanvas.height}"/>
+            </svg>`;
+            return svgString;
+        }
+
+        function downloadSVG() {
+            const svgString = convertToSVG();
+            const blob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'speedlines.svg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function updateFabricCanvas() {
+            fabricCanvas.clear();
+            fabric.Image.fromURL(tempCanvas.toDataURL(), function(img) {
+                img.scaleToWidth(fabricCanvas.width);
+                fabricCanvas.add(img);
+                fabricCanvas.renderAll();
+            });
+
+            const rect = new fabric.Rect({
+                left: 50,
+                top: 50,
+                width: 200,
+                height: 100,
+                fill: 'transparent',
+                stroke: 'black',
+                strokeWidth: 2,
+                selectable: true
+            });
+
+            fabricCanvas.add(rect);
+            fabricCanvas.renderAll();
+
+            rect.on('selected', function() {
+                const ratio = rect.height / rect.width;
+                tempCanvas.height = tempCanvas.width * ratio;
+                fabricCanvas.setHeight(fabricCanvas.width * ratio);
+                drawSpeedlines(currentType);
+            });
+        }
+
+        updateDrawing();
     </script>
 </body>
 </html>
