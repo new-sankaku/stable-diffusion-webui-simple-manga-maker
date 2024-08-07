@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シェルピンスキーのカーペット変種 - Canvas API</title>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        #controls { margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: center; }
+        #controls > div { margin: 0 10px; }
+        label { display: inline-block; width: 120px; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <div>
+            <label for="iterations">繰り返し回数:</label>
+            <input type="range" id="iterations" min="0" max="5" value="4" step="1">
+            <span id="iterationsValue">4</span>
+        </div>
+        <div>
+            <label for="patternType">パターンタイプ:</label>
+            <select id="patternType">
+                <option value="classic">クラシック</option>
+                <option value="cross">十字型</option>
+                <option value="diagonal">対角線型</option>
+                <option value="vicsek">ヴィチェック</option>
+            </select>
+        </div>
+        <div>
+            <button id="redraw">再描画</button>
+        </div>
+    </div>
+    <canvas id="canvas" width="729" height="729"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const redrawBtn = document.getElementById('redraw');
+        const iterationsSlider = document.getElementById('iterations');
+        const iterationsValue = document.getElementById('iterationsValue');
+        const patternTypeSelect = document.getElementById('patternType');
+
+        function drawPattern(x, y, size, iterations, type) {
+            if (iterations === 0) {
+                ctx.fillRect(x, y, size, size);
+                return;
+            }
+
+            const newSize = size / 3;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    switch (type) {
+                        case 'classic':
+                            if (i === 1 && j === 1) continue;
+                            break;
+                        case 'cross':
+                            if ((i === 1 && j === 1) || (i !== 1 && j !== 1)) continue;
+                            break;
+                        case 'diagonal':
+                            if ((i === j) || (i === 1 && j === 1)) continue;
+                            break;
+                        case 'vicsek':
+                            if ((i === 0 || i === 2) && (j === 0 || j === 2)) continue;
+                            break;
+                    }
+                    drawPattern(x + i * newSize, y + j * newSize, newSize, iterations - 1, type);
+                }
+            }
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const iterations = parseInt(iterationsSlider.value);
+            const patternType = patternTypeSelect.value;
+            ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+            
+            drawPattern(0, 0, canvas.width, iterations, patternType);
+        }
+
+        redrawBtn.addEventListener('click', redraw);
+        iterationsSlider.addEventListener('input', () => {
+            iterationsValue.textContent = iterationsSlider.value;
+            redraw();
+        });
+        patternTypeSelect.addEventListener('change', redraw);
+
+        redraw();
+    </script>
+</body>
+</html>

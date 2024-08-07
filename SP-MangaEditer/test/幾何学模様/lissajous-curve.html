@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リサージュ曲線 - Canvas API</title>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        #controls { display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        #controls > div { margin: 0 10px; }
+        label { display: inline-block; width: 120px; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <div>
+            <label for="freqX">X周波数:</label>
+            <input type="range" id="freqX" min="1" max="10" value="3" step="1">
+            <span id="freqXValue">3</span>
+        </div>
+        <div>
+            <label for="freqY">Y周波数:</label>
+            <input type="range" id="freqY" min="1" max="10" value="2" step="1">
+            <span id="freqYValue">2</span>
+        </div>
+        <div>
+            <label for="phase">位相差:</label>
+            <input type="range" id="phase" min="0" max="360" value="90" step="15">
+            <span id="phaseValue">90</span>
+        </div>
+        <div>
+            <button id="redraw">再描画</button>
+        </div>
+    </div>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const redrawBtn = document.getElementById('redraw');
+        const freqXSlider = document.getElementById('freqX');
+        const freqYSlider = document.getElementById('freqY');
+        const phaseSlider = document.getElementById('phase');
+        const freqXValue = document.getElementById('freqXValue');
+        const freqYValue = document.getElementById('freqYValue');
+        const phaseValue = document.getElementById('phaseValue');
+
+        function drawLissajousCurve(freqX, freqY, phase) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) * 0.4;
+
+            ctx.beginPath();
+            for (let t = 0; t <= 2 * Math.PI; t += 0.01) {
+                const x = centerX + radius * Math.sin(freqX * t);
+                const y = centerY + radius * Math.sin(freqY * t + phase * Math.PI / 180);
+                if (t === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const freqX = parseInt(freqXSlider.value);
+            const freqY = parseInt(freqYSlider.value);
+            const phase = parseInt(phaseSlider.value);
+            
+            ctx.strokeStyle = `hsl(${Math.random() * 360}, 50%, 50%)`;
+            drawLissajousCurve(freqX, freqY, phase);
+        }
+
+        redrawBtn.addEventListener('click', redraw);
+        freqXSlider.addEventListener('input', () => {
+            freqXValue.textContent = freqXSlider.value;
+            redraw();
+        });
+        freqYSlider.addEventListener('input', () => {
+            freqYValue.textContent = freqYSlider.value;
+            redraw();
+        });
+        phaseSlider.addEventListener('input', () => {
+            phaseValue.textContent = phaseSlider.value;
+            redraw();
+        });
+
+        redraw();
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドラゴン曲線のバリエーション - Canvas API</title>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        #controls { margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: center; }
+        #controls > div { margin: 0 10px; }
+        label { display: inline-block; width: 120px; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <div>
+            <label for="iterations">繰り返し回数:</label>
+            <input type="range" id="iterations" min="0" max="20" value="10" step="1">
+            <span id="iterationsValue">10</span>
+        </div>
+        <div>
+            <label for="curveType">曲線タイプ:</label>
+            <select id="curveType">
+                <option value="dragon">通常のドラゴン曲線</option>
+                <option value="twinDragon">双子ドラゴン曲線</option>
+                <option value="terDragon">三倍ドラゴン曲線</option>
+                <option value="levy">レヴィ曲線</option>
+            </select>
+        </div>
+        <div>
+            <button id="redraw">再描画</button>
+        </div>
+    </div>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const redrawBtn = document.getElementById('redraw');
+        const iterationsSlider = document.getElementById('iterations');
+        const iterationsValue = document.getElementById('iterationsValue');
+        const curveTypeSelect = document.getElementById('curveType');
+
+        function generateDragonCurvePoints(iterations, type) {
+            let points = [{x: 0, y: 0}, {x: 1, y: 0}];
+            for (let i = 0; i < iterations; i++) {
+                const newPoints = [];
+                const lastPoint = points[points.length - 1];
+                const midX = (points[0].x + lastPoint.x) / 2;
+                const midY = (points[0].y + lastPoint.y) / 2;
+                for (let j = 0; j < points.length; j++) {
+                    const point = points[j];
+                    let rotatedX, rotatedY;
+                    switch (type) {
+                        case 'dragon':
+                            rotatedX = midX + (point.y - midY);
+                            rotatedY = midY - (point.x - midX);
+                            break;
+                        case 'twinDragon':
+                            rotatedX = midX + (point.y - midY) * Math.SQRT1_2;
+                            rotatedY = midY - (point.x - midX) * Math.SQRT1_2;
+                            break;
+                        case 'terDragon':
+                            rotatedX = midX + (point.y - midY) * Math.sqrt(3) / 2;
+                            rotatedY = midY - (point.x - midX) * Math.sqrt(3) / 2;
+                            break;
+                        case 'levy':
+                            rotatedX = midX + (point.y - midY) / Math.SQRT2;
+                            rotatedY = midY - (point.x - midX) / Math.SQRT2;
+                            break;
+                    }
+                    newPoints.push({x: rotatedX, y: rotatedY});
+                }
+                points = type === 'terDragon' ? [...points, ...newPoints] : [...points, ...newPoints.reverse()];
+            }
+            return points;
+        }
+
+        function drawCurve(points) {
+            const width = canvas.width;
+            const height = canvas.height;
+
+            const minX = Math.min(...points.map(p => p.x));
+            const maxX = Math.max(...points.map(p => p.x));
+            const minY = Math.min(...points.map(p => p.y));
+            const maxY = Math.max(...points.map(p => p.y));
+
+            const scale = Math.min(width * 0.8 / (maxX - minX), height * 0.8 / (maxY - minY));
+            const offsetX = (width - (maxX + minX) * scale) / 2;
+            const offsetY = (height - (maxY + minY) * scale) / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x * scale + offsetX, points[0].y * scale + offsetY);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i].x * scale + offsetX, points[i].y * scale + offsetY);
+            }
+            ctx.stroke();
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const iterations = parseInt(iterationsSlider.value);
+            const curveType = curveTypeSelect.value;
+            ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+            ctx.lineWidth = 2;
+            
+            const points = generateDragonCurvePoints(iterations, curveType);
+            drawCurve(points);
+        }
+
+        redrawBtn.addEventListener('click', redraw);
+        iterationsSlider.addEventListener('input', () => {
+            iterationsValue.textContent = iterationsSlider.value;
+            redraw();
+        });
+        curveTypeSelect.addEventListener('change', redraw);
+
+        redraw();
+    </script>
+</body>
+</html>

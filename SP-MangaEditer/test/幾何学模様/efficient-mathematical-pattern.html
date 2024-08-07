@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>効率的な数学的パターン - Canvas API</title>
+    <style>
+        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        #controls { position: absolute; top: 10px; left: 10px; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button id="redraw">再描画</button>
+        <input type="range" id="complexity" min="1" max="7" value="4" step="1">
+        <span id="complexityValue">4</span>
+    </div>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const redrawBtn = document.getElementById('redraw');
+        const complexitySlider = document.getElementById('complexity');
+        const complexityValue = document.getElementById('complexityValue');
+
+        function drawPattern(cx, cy, radius, level) {
+            if (level <= 0) return;
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsl(${Math.random() * 360}, 50%, 50%)`;
+            ctx.stroke();
+
+            const childRadius = radius / 2;
+            const angles = [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2];
+
+            for (let angle of angles) {
+                const childX = cx + Math.cos(angle) * childRadius;
+                const childY = cy + Math.sin(angle) * childRadius;
+                drawPattern(childX, childY, childRadius, level - 1);
+            }
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const complexity = parseInt(complexitySlider.value);
+            drawPattern(400, 400, 350, complexity);
+        }
+
+        redrawBtn.addEventListener('click', redraw);
+        complexitySlider.addEventListener('input', () => {
+            complexityValue.textContent = complexitySlider.value;
+            redraw();
+        });
+
+        redraw();
+    </script>
+</body>
+</html>

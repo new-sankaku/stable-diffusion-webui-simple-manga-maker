@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シェルピンスキーの三角形 - Canvas API</title>
+    <style>
+        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        #controls { position: absolute; top: 10px; left: 10px; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button id="redraw">再描画</button>
+        <input type="range" id="iterations" min="0" max="8" value="6" step="1">
+        <span id="iterationsValue">6</span>
+    </div>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const redrawBtn = document.getElementById('redraw');
+        const iterationsSlider = document.getElementById('iterations');
+        const iterationsValue = document.getElementById('iterationsValue');
+
+        function drawTriangle(x1, y1, x2, y2, x3, y3) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.lineTo(x3, y3);
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+        function drawSierpinskiTriangle(x1, y1, x2, y2, x3, y3, depth) {
+            if (depth === 0) {
+                drawTriangle(x1, y1, x2, y2, x3, y3);
+            } else {
+                const midX1 = (x1 + x2) / 2;
+                const midY1 = (y1 + y2) / 2;
+                const midX2 = (x2 + x3) / 2;
+                const midY2 = (y2 + y3) / 2;
+                const midX3 = (x3 + x1) / 2;
+                const midY3 = (y3 + y1) / 2;
+
+                drawSierpinskiTriangle(x1, y1, midX1, midY1, midX3, midY3, depth - 1);
+                drawSierpinskiTriangle(midX1, midY1, x2, y2, midX2, midY2, depth - 1);
+                drawSierpinskiTriangle(midX3, midY3, midX2, midY2, x3, y3, depth - 1);
+            }
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const iterations = parseInt(iterationsSlider.value);
+            ctx.strokeStyle = `hsl(${Math.random() * 360}, 50%, 50%)`;
+
+            const size = Math.min(canvas.width, canvas.height) * 0.8;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const height = size * Math.sqrt(3) / 2;
+
+            drawSierpinskiTriangle(
+                centerX, centerY - height / 2,
+                centerX - size / 2, centerY + height / 2,
+                centerX + size / 2, centerY + height / 2,
+                iterations
+            );
+        }
+
+        redrawBtn.addEventListener('click', redraw);
+        iterationsSlider.addEventListener('input', () => {
+            iterationsValue.textContent = iterationsSlider.value;
+            redraw();
+        });
+
+        redraw();
+    </script>
+</body>
+</html>

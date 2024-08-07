@@ -377,9 +377,12 @@ function finalizeGroup() {
                 selectable: true,
                 evented: true
             });
+            changeDoNotSaveHistory();
             canvas.remove(...existingPaths);
             canvas.add(group);
+            changeDoSaveHistory();
             canvas.renderAll();
+            updateLayerPanel();
         }
         currentPaths = currentPaths.filter(path => !existingPaths.includes(path));
     }
@@ -432,7 +435,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function updatePreview() {
     if (isMosaicBrushActive && canvas.freeDrawingBrush) {
-        console.log("updatePreview");
+        // console.log("updatePreview");
         canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
     }
 }

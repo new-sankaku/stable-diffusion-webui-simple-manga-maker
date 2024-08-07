@@ -86,7 +86,7 @@ function switchMangaEffect(type) {
 
 function switchMangaEffectUi(type) {
 
-  console.log("switchMangaEffectUi type ", type);
+  // console.log("switchMangaEffectUi type ", type);
 
   clearPenSettings();
   let settingsHTML = '';
@@ -286,7 +286,7 @@ function addEffectEventListener(){
 
   elements.forEach(element => {
       if (element) {
-          console.log("set element", element.id);
+          // console.log("set element", element.id);
           element.addEventListener('change', () => {
               saveEffectValueMap(element);
           });

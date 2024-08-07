@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>球面パターン - Canvas API</title>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        #controls { margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: center; }
+        #controls > div { margin: 0 10px; }
+        label { display: inline-block; width: 150px; }
+        #patternType { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <div>
+            <label for="patternType">パターンタイプ:</label>
+            <select id="patternType">
+                <option value="sphericalSpiral">球面スパイラル</option>
+                <option value="fibonacciSphere">フィボナッチ球</option>
+                <option value="sphericalHarmonics">球面調和関数</option>
+                <option value="greatCircles">大円</option>
+            </select>
+        </div>
+        <div id="paramControls"></div>
+        <div>
+            <button id="redraw">再描画</button>
+        </div>
+    </div>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const redrawBtn = document.getElementById('redraw');
+        const patternTypeSelect = document.getElementById('patternType');
+        const paramControls = document.getElementById('paramControls');
+
+        let currentParams = {};
+
+        function projectToSphere(theta, phi, r) {
+            const x = r * Math.sin(phi) * Math.cos(theta);
+            const y = r * Math.sin(phi) * Math.sin(theta);
+            const z = r * Math.cos(phi);
+            return { x, y, z };
+        }
+
+        function projectTo2D(x, y, z, r) {
+            const scale = r / (r + z);
+            return {
+                x: scale * x + canvas.width / 2,
+                y: scale * y + canvas.height / 2
+            };
+        }
+
+        const patterns = {
+            sphericalSpiral: {
+                params: {
+                    turns: { min: 1, max: 50, value: 20, step: 1, label: '回転数' },
+                    points: { min: 100, max: 5000, value: 1000, step: 100, label: '点の数' }
+                },
+                draw: (params) => {
+                    const { turns, points } = params;
+                    const r = Math.min(canvas.width, canvas.height) * 0.45;
+                    ctx.beginPath();
+                    for (let i = 0; i < points; i++) {
+                        const t = i / (points - 1);
+                        const theta = 2 * Math.PI * turns * t;
+                        const phi = Math.acos(1 - 2 * t);
+                        const { x, y, z } = projectToSphere(theta, phi, r);
+                        const { x: px, y: py } = projectTo2D(x, y, z, r);
+                        if (i === 0) ctx.moveTo(px, py);
+                        else ctx.lineTo(px, py);
+                    }
+                    ctx.stroke();
+                }
+            },
+            fibonacciSphere: {
+                params: {
+                    points: { min: 10, max: 2000, value: 500, step: 10, label: '点の数' },
+                    size: { min: 1, max: 10, value: 3, step: 1, label: '点のサイズ' }
+                },
+                draw: (params) => {
+                    const { points, size } = params;
+                    const r = Math.min(canvas.width, canvas.height) * 0.45;
+                    const goldenRatio = (1 + Math.sqrt(5)) / 2;
+                    for (let i = 0; i < points; i++) {
+                        const theta = 2 * Math.PI * i / goldenRatio;
+                        const phi = Math.acos(1 - 2 * (i + 0.5) / points);
+                        const { x, y, z } = projectToSphere(theta, phi, r);
+                        const { x: px, y: py } = projectTo2D(x, y, z, r);
+                        ctx.beginPath();
+                        ctx.arc(px, py, size, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                }
+            },
+            sphericalHarmonics: {
+                params: {
+                    l: { min: 0, max: 5, value: 3, step: 1, label: '次数 (l)' },
+                    m: { min: 0, max: 5, value: 2, step: 1, label: '位数 (m)' },
+                    resolution: { min: 10, max: 100, value: 50, step: 5, label: '解像度' }
+                },
+                draw: (params) => {
+                    const { l, m, resolution } = params;
+                    const r = Math.min(canvas.width, canvas.height) * 0.45;
+                    for (let i = 0; i <= resolution; i++) {
+                        for (let j = 0; j <= resolution; j++) {
+                            const theta = i / resolution * Math.PI * 2;
+                            const phi = j / resolution * Math.PI;
+                            const value = Math.abs(sphericalHarmonic(l, m, theta, phi));
+                            const { x, y, z } = projectToSphere(theta, phi, r * (1 + value * 0.3));
+                            const { x: px, y: py } = projectTo2D(x, y, z, r);
+                            ctx.fillStyle = `hsl(${value * 360}, 70%, 50%)`;
+                            ctx.fillRect(px, py, 2, 2);
+                        }
+                    }
+                }
+            },
+            greatCircles: {
+                params: {
+                    circles: { min: 1, max: 20, value: 5, step: 1, label: '円の数' },
+                    points: { min: 100, max: 1000, value: 500, step: 50, label: '点の数/円' }
+                },
+                draw: (params) => {
+                    const { circles, points } = params;
+                    const r = Math.min(canvas.width, canvas.height) * 0.45;
+                    for (let c = 0; c < circles; c++) {
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.random() * Math.PI;
+                        ctx.beginPath();
+                        for (let i = 0; i <= points; i++) {
+                            const t = i / points * Math.PI * 2;
+                            const x = r * (Math.cos(t) * Math.cos(theta) - Math.sin(t) * Math.sin(theta) * Math.cos(phi));
+                            const y = r * (Math.cos(t) * Math.sin(theta) + Math.sin(t) * Math.cos(theta) * Math.cos(phi));
+                            const z = r * Math.sin(t) * Math.sin(phi);
+                            const { x: px, y: py } = projectTo2D(x, y, z, r);
+                            if (i === 0) ctx.moveTo(px, py);
+                            else ctx.lineTo(px, py);
+                        }
+                        ctx.stroke();
+                    }
+                }
+            }
+        };
+
+        function sphericalHarmonic(l, m, theta, phi) {
+            if (l === 0) return 0.5 * Math.sqrt(1 / Math.PI);
+            if (l === 1) {
+                if (m === 0) return 0.5 * Math.sqrt(3 / Math.PI) * Math.cos(phi);
+                if (Math.abs(m) === 1) return 0.5 * Math.sqrt(3 / (2 * Math.PI)) * Math.sin(phi) * (m === 1 ? Math.cos(theta) : Math.sin(theta));
+            }
+            return Math.cos(l * phi) * Math.cos(m * theta);
+        }
+
+        function createControls(patternType) {
+            paramControls.innerHTML = '';
+            Object.entries(patterns[patternType].params).forEach(([key, param]) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label for="${key}">${param.label}:</label>
+                    <input type="range" id="${key}" min="${param.min}" max="${param.max}" value="${param.value}" step="${param.step}">
+                    <span id="${key}Value">${param.value}</span>
+                `;
+                paramControls.appendChild(div);
+
+                const slider = div.querySelector(`#${key}`);
+                const valueSpan = div.querySelector(`#${key}Value`);
+                slider.addEventListener('input', () => {
+                    currentParams[key] = parseInt(slider.value);
+                    valueSpan.textContent = slider.value;
+                    redraw();
+                });
+                currentParams[key] = param.value;
+            });
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.lineWidth = 1;
+            
+            const patternType = patternTypeSelect.value;
+            patterns[patternType].draw(currentParams);
+        }
+
+        patternTypeSelect.addEventListener('change', () => {
+            createControls(patternTypeSelect.value);
+            redraw();
+        });
+
+        redrawBtn.addEventListener('click', redraw);
+
+        createControls(patternTypeSelect.value);
+        redraw();
+    </script>
+</body>
+</html>

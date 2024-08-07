@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas Drawing App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      background: #f0f0f0
+    }
+
+    #c {
+      border: 1px solid #000;
+      margin-bottom: 10px
+    }
+
+    #m,
+    #s,
+    #d {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 10px;
+      align-items: center
+    }
+
+    .a {
+      background: #4CAF50;
+      color: white
+    }
+
+    label {
+      margin-right: 5px
+    }
+
+    #l {
+      height: 100px;
+      width: 100%;
+      overflow-y: scroll;
+      border: 1px solid #000;
+      padding: 5px;
+      font-family: monospace;
+      font-size: 12px
+    }
+  </style>
+</head>
+
+<body><canvas id="c" width="600" height="400"></canvas>
+  <div id="m"><label>描画モード:</label><button id="f" class="a">フリーハンド</button><button id="p">座標指定</button><button
+      id="s">選択</button><button id="cl">クリア</button></div>
+  <div id="s"><label>線の色:</label><input type="color" id="sc" value="#000000"><label>塗りつぶし色:</label><input type="color"
+      id="fc" value="#ffffff"><label>線の太さ:</label><input type="number" id="sw" min="1" max="20"
+      value="2"><label>合成モード:</label><input type="checkbox" id="mg"></div>
+  <div id="d"><label>デバッグ:</label><input type="checkbox" id="db"></div>
+  <div id="l"></div><button id="downloadSvg">Download as SVG</button>
+  <script>const c = new fabric.Canvas("c", { isDrawingMode: !0, backgroundColor: "gray" }), f = document.getElementById("f"), p = document.getElementById("p"), s = document.getElementById("s"), cl = document.getElementById("cl"), sc = document.getElementById("sc"), fc = document.getElementById("fc"), sw = document.getElementById("sw"), mg = document.getElementById("mg"), db = document.getElementById("db"), l = document.getElementById("l"), downloadSvgBtn = document.getElementById("downloadSvg"), t = 30, mergeThreshold = c.width * 0.02; let m = "freehand", pts = [], C, isMerging = false, tempObjects = [], isDebugging = false, lastCursorChange = null, intersectionPoints = [], nearestShape = null; function d() { c.isDrawingMode = !1, c.selection = !1, c.forEachObject(e => { e.selectable = !1 }) } function u(b) { f.classList.remove("a"), p.classList.remove("a"), s.classList.remove("a"), b.classList.add("a") } function updateBrush() { c.freeDrawingBrush.color = sc.value; c.freeDrawingBrush.width = parseInt(sw.value) } function mergeShapes(path) { const objects = c.getObjects().filter(obj => (obj instanceof fabric.Path || obj instanceof fabric.Group) && obj !== path); let mergedObjects = [path]; objects.forEach(obj => { if (doShapesIntersect(path, obj)) { mergedObjects.push(obj); c.remove(obj) } }); return new fabric.Group(mergedObjects, { selectable: false }) } function doShapesIntersect(shape1, shape2) { if (shape1 instanceof fabric.Group) { shape1 = shape1._objects[0] } if (shape2 instanceof fabric.Group) { shape2 = shape2._objects[0] } return shape1.intersectsWithObject(shape2) } function clearTempObjects() { tempObjects.forEach(obj => c.remove(obj)); tempObjects = []; c.renderAll() } function log(msg) { if (isDebugging) { l.innerHTML += msg + "\n"; l.scrollTop = l.scrollHeight } } function completeDrawing() { if (pts.length > 2) { const closePath = pts.map((e, t) => `${0 === t ? "M" : "L"}${e.x} ${e.y}`).join(" "); clearTempObjects(); let newPath = new fabric.Path(closePath, { fill: fc.value, stroke: sc.value, strokeWidth: parseInt(sw.value), selectable: !1 }); if (isMerging) { newPath = mergeShapes(newPath) } c.add(newPath); log("New shape:"); log(newPath.toString()); log("Shape details:"); log(JSON.stringify(newPath.toObject())); log("Intersection points:"); log(JSON.stringify(intersectionPoints)); pts = []; intersectionPoints = []; c.renderAll() } } function projectPointOnLineSegment(p, v, w) { const l2 = Math.pow(w.x - v.x, 2) + Math.pow(w.y - v.y, 2); if (l2 == 0) return v; let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2; t = Math.max(0, Math.min(1, t)); return { x: v.x + t * (w.x - v.x), y: v.y + t * (w.y - v.y) } } function snapToEdge(point) { if (!nearestShape) return point; let minDistance = Infinity; let closestPoint = point; const processPath = (path) => { for (let i = 0; i < path.path.length; i++) { let p1 = path.path[i]; let p2 = path.path[(i + 1) % path.path.length]; if (p1[0] === 'M' || p1[0] === 'L') { p1 = { x: p1[1], y: p1[2] }; if (p2[0] === 'M' || p2[0] === 'L') { p2 = { x: p2[1], y: p2[2] }; let projected = projectPointOnLineSegment(point, p1, p2); let distance = Math.sqrt(Math.pow(point.x - projected.x, 2) + Math.pow(point.y - projected.y, 2)); if (distance < minDistance) { minDistance = distance; closestPoint = projected } } } } }; if (nearestShape instanceof fabric.Group) { nearestShape._objects.forEach(obj => processPath(obj)) } else { processPath(nearestShape) } return closestPoint } f.addEventListener("click", () => { m = "freehand"; c.isDrawingMode = !0; updateBrush(); u(f); intersectionPoints = [] }); p.addEventListener("click", () => { m = "point"; d(); u(p); pts = []; clearTempObjects(); intersectionPoints = [] }); s.addEventListener("click", () => { m = "select"; c.isDrawingMode = !1; c.selection = !0; c.forEachObject(e => { e.selectable = !0 }); u(s); intersectionPoints = [] }); cl.addEventListener("click", () => { c.clear(); c.backgroundColor = "gray"; c.renderAll(); pts = []; tempObjects = []; intersectionPoints = [] }); mg.addEventListener("change", e => { isMerging = e.target.checked }); db.addEventListener("change", e => { isDebugging = e.target.checked; if (!isDebugging) l.innerHTML = "" });[sc, fc, sw].forEach(el => el.addEventListener("change", updateBrush)); c.on("mouse:move", e => { if (C && c.remove(C), m !== "select") { const o = c.getPointer(e.e); let cursorColor = "red"; if (m === "point") cursorColor = "blue"; if (isMerging) { const shapes = c.getObjects().filter(obj => obj instanceof fabric.Path || obj instanceof fabric.Group); nearestShape = null; let minDistance = mergeThreshold; shapes.forEach(shape => { const distance = isPointNearShape(o, shape); if (distance !== false && distance < minDistance) { minDistance = distance; nearestShape = shape } }); if (nearestShape) { cursorColor = "green"; if (lastCursorChange !== "green") { lastCursorChange = "green"; log(`カーソル変更 (緑): x=${o.x.toFixed(2)}, y=${o.y.toFixed(2)}`) } } else if (lastCursorChange !== "default") { lastCursorChange = "default"; log(`カーソル変更 (デフォルト): x=${o.x.toFixed(2)}, y=${o.y.toFixed(2)}`) } } C = new fabric.Circle({ radius: 5, fill: cursorColor, left: o.x - 5, top: o.y - 5, selectable: !1, evented: !1 }); c.add(C); c.renderAll() } }); c.on("mouse:out", () => { C && (c.remove(C), c.renderAll()) }); c.on("mouse:down", e => { if ("point" === m) { const o = c.getPointer(e.e); let point = { x: o.x, y: o.y }; if (isMerging && nearestShape) { point = snapToEdge(point) } pts.push(new fabric.Point(point.x, point.y)); if (pts.length > 1) { const line = new fabric.Line([pts[pts.length - 2].x, pts[pts.length - 2].y, point.x, point.y], { stroke: sc.value, strokeWidth: parseInt(sw.value), selectable: !1 }); tempObjects.push(line); c.add(line) } if (isMerging && C.fill === "green") { intersectionPoints.push(new fabric.Point(point.x, point.y)); if (intersectionPoints.length >= 2) { completeDrawing() } } c.renderAll() } }); c.on("mouse:up", e => { if ("freehand" === m) { const o = c.getObjects(), n = o[o.length - 1]; if (n instanceof fabric.Path) { const r = n.path, a = r[0][1], i = r[0][2], b = r[r.length - 1][1], h = r[r.length - 1][2], j = Math.sqrt((a - b) ** 2 + (i - h) ** 2); if (j <= t) { r.push(["L", a, i]); n.set({ path: r, fill: fc.value, stroke: sc.value }); if (isMerging) { let mergedShape = mergeShapes(n); c.remove(n); c.add(mergedShape) } c.renderAll() } } } else if ("point" === m) { const o = c.getPointer(e.e); if (pts.length > 2 && !isMerging) { const n = pts[0], r = Math.sqrt((n.x - o.x) ** 2 + (n.y - o.y) ** 2); if (r <= t) { completeDrawing() } } } }); function isPointNearShape(point, shape) { if (shape instanceof fabric.Group) { return Math.min(...shape._objects.map(obj => isPointNearShape(point, obj))) } const expanded = new fabric.Path(shape.path, { strokeWidth: shape.strokeWidth + 2 * mergeThreshold }); if (expanded.containsPoint(point)) { let minDistance = Infinity; for (let i = 0; i < shape.path.length; i++) { let p1 = shape.path[i]; let p2 = shape.path[(i + 1) % shape.path.length]; if (p1[0] === 'M' || p1[0] === 'L') { p1 = { x: p1[1], y: p1[2] }; if (p2[0] === 'M' || p2[0] === 'L') { p2 = { x: p2[1], y: p2[2] }; let projected = projectPointOnLineSegment(point, p1, p2); let distance = Math.sqrt(Math.pow(point.x - projected.x, 2) + Math.pow(point.y - projected.y, 2)); minDistance = Math.min(minDistance, distance) } } } return minDistance } return false } downloadSvgBtn.addEventListener("click", () => { const svgData = c.toSVG(); const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "canvas_drawing.svg"; document.body.appendChild(link); link.click(); document.body.removeChild(link) }); updateBrush();</script>
+</body>
+
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スピログラフと派生パターン - Canvas API</title>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        #controls { margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: center; }
+        #controls > div { margin: 0 10px; }
+        label { display: inline-block; width: 150px; }
+        #patternType { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <div>
+            <label for="patternType">パターンタイプ:</label>
+            <select id="patternType">
+                <option value="classic">クラシックスピログラフ</option>
+                <option value="epicycloid">エピサイクロイド</option>
+                <option value="rose">ローズカーブ</option>
+                <option value="lissajous">リサージュ曲線</option>
+            </select>
+        </div>
+        <div id="paramControls"></div>
+        <div>
+            <button id="redraw">再描画</button>
+        </div>
+    </div>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const redrawBtn = document.getElementById('redraw');
+        const patternTypeSelect = document.getElementById('patternType');
+        const paramControls = document.getElementById('paramControls');
+
+        let currentParams = {};
+
+        const patterns = {
+            classic: {
+                params: {
+                    R: { min: 100, max: 300, value: 200, step: 10, label: '外側の円の半径 (R)' },
+                    r: { min: 10, max: 150, value: 80, step: 5, label: '内側の円の半径 (r)' },
+                    d: { min: 0, max: 150, value: 60, step: 5, label: 'ペンの位置 (d)' },
+                    rotations: { min: 1, max: 100, value: 20, step: 1, label: '回転数' }
+                },
+                draw: (params) => {
+                    const { R, r, d, rotations } = params;
+                    ctx.beginPath();
+                    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+                    const lcm = (R - r) / gcd(R - r, r);
+                    const maxT = Math.PI * 2 * lcm * rotations;
+                    const step = maxT / 10000;
+
+                    for (let t = 0; t <= maxT; t += step) {
+                        const x = (R - r) * Math.cos(t) + d * Math.cos((R - r) / r * t);
+                        const y = (R - r) * Math.sin(t) - d * Math.sin((R - r) / r * t);
+                        if (t === 0) {
+                            ctx.moveTo(x + canvas.width / 2, y + canvas.height / 2);
+                        } else {
+                            ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2);
+                        }
+                    }
+                    ctx.stroke();
+                }
+            },
+            epicycloid: {
+                params: {
+                    R: { min: 100, max: 300, value: 200, step: 10, label: '固定円の半径 (R)' },
+                    r: { min: 10, max: 150, value: 80, step: 5, label: '動く円の半径 (r)' },
+                    rotations: { min: 1, max: 20, value: 5, step: 1, label: '回転数' }
+                },
+                draw: (params) => {
+                    const { R, r, rotations } = params;
+                    ctx.beginPath();
+                    const maxT = Math.PI * 2 * rotations;
+                    const step = maxT / 1000;
+
+                    for (let t = 0; t <= maxT; t += step) {
+                        const x = (R + r) * Math.cos(t) - r * Math.cos((R + r) / r * t);
+                        const y = (R + r) * Math.sin(t) - r * Math.sin((R + r) / r * t);
+                        if (t === 0) {
+                            ctx.moveTo(x + canvas.width / 2, y + canvas.height / 2);
+                        } else {
+                            ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2);
+                        }
+                    }
+                    ctx.stroke();
+                }
+            },
+            rose: {
+                params: {
+                    a: { min: 1, max: 10, value: 5, step: 1, label: 'a (ペタルの数に影響)' },
+                    k: { min: 1, max: 10, value: 2, step: 1, label: 'k (形状に影響)' },
+                    size: { min: 50, max: 300, value: 200, step: 10, label: 'サイズ' }
+                },
+                draw: (params) => {
+                    const { a, k, size } = params;
+                    ctx.beginPath();
+                    const maxT = Math.PI * 2 * a;
+                    const step = maxT / 1000;
+
+                    for (let t = 0; t <= maxT; t += step) {
+                        const r = size * Math.cos(k * t);
+                        const x = r * Math.cos(t);
+                        const y = r * Math.sin(t);
+                        if (t === 0) {
+                            ctx.moveTo(x + canvas.width / 2, y + canvas.height / 2);
+                        } else {
+                            ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2);
+                        }
+                    }
+                    ctx.stroke();
+                }
+            },
+            lissajous: {
+                params: {
+                    a: { min: 1, max: 10, value: 3, step: 1, label: 'X周波数 (a)' },
+                    b: { min: 1, max: 10, value: 2, step: 1, label: 'Y周波数 (b)' },
+                    delta: { min: 0, max: 360, value: 90, step: 15, label: '位相差 (δ)' },
+                    size: { min: 50, max: 300, value: 200, step: 10, label: 'サイズ' }
+                },
+                draw: (params) => {
+                    const { a, b, delta, size } = params;
+                    ctx.beginPath();
+                    const maxT = Math.PI * 2;
+                    const step = maxT / 1000;
+
+                    for (let t = 0; t <= maxT; t += step) {
+                        const x = size * Math.sin(a * t);
+                        const y = size * Math.sin(b * t + delta * Math.PI / 180);
+                        if (t === 0) {
+                            ctx.moveTo(x + canvas.width / 2, y + canvas.height / 2);
+                        } else {
+                            ctx.lineTo(x + canvas.width / 2, y + canvas.height / 2);
+                        }
+                    }
+                    ctx.stroke();
+                }
+            }
+        };
+
+        function createControls(patternType) {
+            paramControls.innerHTML = '';
+            Object.entries(patterns[patternType].params).forEach(([key, param]) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label for="${key}">${param.label}:</label>
+                    <input type="range" id="${key}" min="${param.min}" max="${param.max}" value="${param.value}" step="${param.step}">
+                    <span id="${key}Value">${param.value}</span>
+                `;
+                paramControls.appendChild(div);
+
+                const slider = div.querySelector(`#${key}`);
+                const valueSpan = div.querySelector(`#${key}Value`);
+                slider.addEventListener('input', () => {
+                    currentParams[key] = parseInt(slider.value);
+                    valueSpan.textContent = slider.value;
+                    redraw();
+                });
+                currentParams[key] = param.value;
+            });
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+            ctx.lineWidth = 2;
+            
+            const patternType = patternTypeSelect.value;
+            patterns[patternType].draw(currentParams);
+        }
+
+        patternTypeSelect.addEventListener('change', () => {
+            createControls(patternTypeSelect.value);
+            redraw();
+        });
+
+        redrawBtn.addEventListener('click', redraw);
+
+        createControls(patternTypeSelect.value);
+        redraw();
+    </script>
+</body>
+</html>
