@@ -58,41 +58,61 @@ function addCheckBox(id, label, value) {
 
 
 function addDropDownBySpeedLine(id, label) {
+
+  var i18n_horizontal = getText("horizontal");
+  var i18n_vertical = getText("vertical");
+  var i18n_cross = getText("cross");
+  var i18n_label = getText(label);
+
   return `
       <div class="input-2group">
-      <label for="speed-line-style" data-i18n="${label}">Speed Line Style</label>
+      <label for="speed-line-style" data-i18n="${label}">${i18n_label}</label>
       <select id="${id}">
-          <option data-i18n="horizontal" value="horizontal">horizontal</option>
-          <option data-i18n="vertical"   value="vertical">vertical</option>
-          <option data-i18n="cross"      value="cross">cross</option>
+          <option data-i18n="horizontal" value="horizontal">${i18n_horizontal}</option>
+          <option data-i18n="vertical"   value="vertical">${i18n_vertical}</option>
+          <option data-i18n="cross"      value="cross">${i18n_cross}</option>
       </select>
       </div>`;
-//      <option data-i18n="diagonal"   value="diagonal">diagonal</option>
     }
 
 function addDropDownByStyle(id, label) {
+
+  var i18n_solid = getText("solid");
+  var i18n_dashed = getText("dashed");
+  var i18n_dotted = getText("dotted");
+  var i18n_line_style = getText("line-style");
+
   return `
       <div class="input-2group">
-      <label for="line-style" data-i18n="${label}">Line Style</label>
+      <label for="line-style" data-i18n="${label}">${i18n_line_style}</label>
       <select id="${id}">
-          <option data-i18n="solid" value="solid">Solid</option>
-          <option data-i18n="dashed" value="dashed">Dashed</option>
-          <option data-i18n="dotted" value="dotted">Dotted</option>
+          <option data-i18n="solid" value="solid">${i18n_solid}</option>
+          <option data-i18n="dashed" value="dashed">${i18n_dashed}</option>
+          <option data-i18n="dotted" value="dotted">${i18n_dotted}</option>
       </select>
       </div>`;
 }
 
 function addDropDownByDot(id, label) {
+
+  var i18n_circle = getText("circle");
+  var i18n_square = getText("square");
+  var i18n_triangle = getText("triangle");
+  var i18n_star = getText("star");
+  var i18n_cross = getText("cross");
+  var i18n_heart = getText("heart");
+  var i18n_label = getText(label);
+
   return `
         <div class="control-group">
-            <label data-i18n="${label}" for="dotShape">ドット形状</label>
+            <label data-i18n="${label}" for="dotShape">${i18n_label}</label>
             <select id="${id}">
-                <option data-i18n="circle" value="circle">円形</option>
-                <option data-i18n="square" value="square">四角形</option>
-                <option data-i18n="triangle" value="triangle">三角形</option>
-                <option data-i18n="star" value="star">星形</option>
-                <option data-i18n="cross" value="cross">十字</option>
-                <option data-i18n="heart" value="heart">ハート</option>
+                <option data-i18n="circle" value="circle">${i18n_circle}</option>
+                <option data-i18n="square" value="square">${i18n_square}</option>
+                <option data-i18n="triangle" value="triangle">${i18n_triangle}</option>
+                <option data-i18n="star" value="star">${i18n_star}</option>
+                <option data-i18n="cross" value="cross">${i18n_cross}</option>
+                <option data-i18n="heart" value="heart">${i18n_heart}</option>
             </select>
         </div>`;
 }
@@ -100,14 +120,19 @@ function addDropDownByDot(id, label) {
 
 
 function addDropDownByGrad(id, label) {
+  var i18n_tb = getText("top-bottom");
+  var i18n_bt = getText("bottom-top");
+  var i18n_lr = getText("left-right");
+  var i18n_rl = getText("right-left");
+
   return `
         <div class="control-group">
             <label data-i18n="${label}" for="gradientDirection"></label>
             <select id="${id}">
-                <option data-i18n="top-bottom" value="top-bottom"></option>
-                <option data-i18n="bottom-top" value="bottom-top"></option>
-                <option data-i18n="left-right" value="left-right"></option>
-                <option data-i18n="right-left" value="right-left"></option>
+                <option data-i18n="top-bottom" value="top-bottom">${i18n_tb}</option>
+                <option data-i18n="bottom-top" value="bottom-top">${i18n_bt}</option>
+                <option data-i18n="left-right" value="left-right">${i18n_lr}</option>
+                <option data-i18n="right-left" value="right-left">${i18n_rl}</option>
             </select>
         </div>`;
 }
