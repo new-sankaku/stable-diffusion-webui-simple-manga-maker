@@ -50,6 +50,18 @@
   transform-origin: top left;
 }
 
+.area-header a {
+  color: var(--a-link);
+  text-decoration: underline;
+
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+.area-header a:hover {
+  color: var(--a-link-hover);
+  text-decoration: underline;
+
+}
 .area-header {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);

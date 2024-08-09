@@ -52,6 +52,8 @@
   --color-scrollbar-track: #000000;
   --color-scrollbar-thumb: #584040;
   --select-button-color: #810000;
+  --a-link: #ffffff;
+  --a-link-hover: #ff7c7c;
 }
 
 .light-mode {
@@ -108,6 +110,8 @@
   --color-dark-grey: #5b5b5b;
   --color-scrollbar-track: rgb(255, 239, 206);
   --color-scrollbar-thumb: rgb(255, 210, 121);
+  --a-link: #512f00;
+  --a-link-hover: #c97500;
 }
 
 

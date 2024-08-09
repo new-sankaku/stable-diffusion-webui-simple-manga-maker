@@ -4,6 +4,8 @@
 const resources = {
   en: {
     translation: {
+"horizontal": "Horizontal",
+"vertical": "Vertical",
 "angle": "Angle",
 "backBlurSize": "Back Blur",
 "backColor": "Back Color",
@@ -48,7 +50,7 @@ const resources = {
 "left-right": "Left-Right",
 "right-left": "Right-Left",
 "dotStyle": "Dot Style",
-      "PromptHelper": "Prompt Helper",
+  "PromptHelper": "Prompt Helper",
 "name": "Name",
 "save": "Save",
 "category": "Category",
@@ -63,7 +65,7 @@ const resources = {
 "clearBottomClipPath": "Clear View Limit: Lower",
 "clearRightClipPath": "Clear View Limit: Right",
 "clearLeftClipPath": "Clear View Limit: Left",
-  "help_message_title": "Help.",
+"help_message_title": "Help.",
 "help_message_message": "There is no money for ads for this free web app developed individually. I'd be happy if more people could use it, so please share this web app. You can post it on X, Instagram, Facebook, or anywhere... Please post the following message somewhere... Thank you... I'm sorry...",
 "help_message_links": "Manga Editor Desu<br>#Manga_Editor_Desu<br>[WebSite]<br><a href='https://new-sankaku.github.io/SP-MangaEditer/' target='_blank'>https://new-sankaku.github.io/SP-MangaEditer/</a><br>[WebUI Extension]<br><a href='https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker' target='_blank'>https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker</a>",
 "help_message_close": "Close",
@@ -434,6 +436,8 @@ const resources = {
   },
   ja: {
     translation: {
+"horizontal": "水平",
+"vertical": "垂直",
 "angle": "角度", 
 "backBlurSize": "背景ブラーサイズ", 
 "backColor": "背景色", 
@@ -489,7 +493,7 @@ const resources = {
 "copy": "コピー",
 "freeInput": "自由入力エリア",
 "alerts.nameMissing": "名前を入力してください。",
-      "clearAllClipPaths": "表示制限の削除",
+  "clearAllClipPaths": "表示制限の削除",
 "clearTopClipPath": "表示制限の削除:上",
 "clearBottomClipPath": "表示制限の削除:下",
 "clearRightClipPath": "表示制限の削除:右",
@@ -780,6 +784,8 @@ const resources = {
   },
   ko: {
     translation: {
+"horizontal": "수평",
+"vertical": "수직",
 "angle": "각도",
 "backBlurSize": "배경 흐림",
 "backColor": "배경색",
@@ -824,7 +830,7 @@ const resources = {
 "left-right": "왼쪽에서 오른쪽",
 "right-left": "오른쪽에서 왼쪽",
 "dotStyle": "점 스타일",
-      "PromptHelper": "프롬프트 도우미",
+  "PromptHelper": "프롬프트 도우미",
 "name": "이름",
 "save": "저장",
 "category": "카테고리",
@@ -1135,6 +1141,8 @@ const resources = {
   },
   fr: {
     translation: {
+"horizontal": "Horizontal",
+"vertical": "Vertical",
 "angle": "Angle",
 "backBlurSize": "Flou arrière",
 "backColor": "Couleur arrière",
@@ -1179,7 +1187,7 @@ const resources = {
 "left-right": "Gauche-Droite",
 "right-left": "Droite-Gauche",
 "dotStyle": "Style point",
-      "PromptHelper": "Assistant de prompt",
+  "PromptHelper": "Assistant de prompt",
 "name": "Nom",
 "save": "Enregistrer",
 "category": "Catégorie",
@@ -1189,7 +1197,7 @@ const resources = {
 "copy": "Copier",
 "freeInput": "Zone de saisie libre",
 "alerts.nameMissing": "Veuillez entrer un nom.",
-      "clearAllClipPaths": "Supprimer les limitations d'affichage",
+  "clearAllClipPaths": "Supprimer les limitations d'affichage",
 "clearTopClipPath": "Supprimer les limitations d'affichage: Haut",
 "clearBottomClipPath": "Supprimer les limitations d'affichage: Bas",
 "clearRightClipPath": "Supprimer les limitations d'affichage: Droite",
@@ -1525,6 +1533,8 @@ const resources = {
   },
   zh: {
     translation: {
+"horizontal": "水平",
+"vertical": "垂直",
 "angle": "角度",
 "backBlurSize": "背景模糊",
 "backColor": "背景色",
@@ -1569,7 +1579,7 @@ const resources = {
 "left-right": "左到右",
 "right-left": "右到左",
 "dotStyle": "点样式",
-      "PromptHelper": "提示助手",
+  "PromptHelper": "提示助手",
 "name": "名称",
 "save": "保存",
 "category": "类别",
@@ -1913,6 +1923,8 @@ const resources = {
   },
   ru: {
     translation: {
+"horizontal": "Горизонтальный",
+"vertical": "Вертикальный",
 "angle": "Угол",
 "backBlurSize": "Размытие фона",
 "backColor": "Цвет фона",
@@ -1967,7 +1979,7 @@ const resources = {
 "copy": "Копировать",
 "freeInput": "Область свободного ввода",
 "alerts.nameMissing": "Пожалуйста, введите имя.",
-      "clearAllClipPaths": "Удалить ограничения отображения",
+  "clearAllClipPaths": "Удалить ограничения отображения",
 "clearTopClipPath": "Удалить ограничения отображения: Верх",
 "clearBottomClipPath": "Удалить ограничения отображения: Низ",
 "clearRightClipPath": "Удалить ограничения отображения: Право",
@@ -2253,6 +2265,8 @@ const resources = {
   },
   es: {
     translation: {
+"horizontal": "Horizontal",
+"vertical": "Vertical",
 "angle": "Ángulo",
 "backBlurSize": "Desenfoque fondo",
 "backColor": "Color fondo",
@@ -2297,7 +2311,7 @@ const resources = {
 "left-right": "Izquierda-Derecha",
 "right-left": "Derecha-Izquierda",
 "dotStyle": "Estilo punto",
-      "PromptHelper": "Asistente de indicaciones",
+  "PromptHelper": "Asistente de indicaciones",
 "name": "Nombre",
 "save": "Guardar",
 "category": "Categoría",
@@ -2591,6 +2605,8 @@ const resources = {
   },
   pt: {
     translation: {
+"horizontal": "Horizontal",
+"vertical": "Vertical",
 "angle": "Ângulo",
 "backBlurSize": "Desfoque fundo",
 "backColor": "Cor fundo",
@@ -2635,7 +2651,7 @@ const resources = {
 "left-right": "Esquerda-Direita",
 "right-left": "Direita-Esquerda",
 "dotStyle": "Estilo ponto",
-      "PromptHelper": "Assistente de Prompts",
+  "PromptHelper": "Assistente de Prompts",
 "name": "Nome",
 "save": "Salvar",
 "category": "Categoria",
@@ -2645,7 +2661,7 @@ const resources = {
 "copy": "Copiar",
 "freeInput": "Área de entrada livre",
 "alerts.nameMissing": "Por favor, insira um nome.",
-      "clearAllClipPaths": "Remover limitações de exibição",
+  "clearAllClipPaths": "Remover limitações de exibição",
 "clearTopClipPath": "Remover limitações de exibição: Superior",
 "clearBottomClipPath": "Remover limitações de exibição: Inferior",
 "clearRightClipPath": "Remover limitações de exibição: Direita",
@@ -2928,8 +2944,10 @@ const resources = {
 "sdWebUIPing": "PING do SD WebUI"
     }
   },
-  "th": {
-    "translation": {
+"th": {
+"translation": {
+"horizontal": "แนวนอน",
+"vertical": "แนวตั้ง",
 "angle": "มุม",
 "backBlurSize": "เบลอพื้นหลัง",
 "backColor": "สีพื้นหลัง",
@@ -2984,7 +3002,7 @@ const resources = {
 "copy": "คัดลอก",
 "freeInput": "พื้นที่ป้อนข้อมูลอิสระ",
 "alerts.nameMissing": "กรุณาใส่ชื่อ",
-      "clearAllClipPaths": "ลบข้อจำกัดการแสดงผลทั้งหมด",
+  "clearAllClipPaths": "ลบข้อจำกัดการแสดงผลทั้งหมด",
 "clearTopClipPath": "ลบข้อจำกัดการแสดงผล: ด้านบน",
 "clearBottomClipPath": "ลบข้อจำกัดการแสดงผล: ด้านล่าง",
 "clearRightClipPath": "ลบข้อจำกัดการแสดงผล: ด้านขวา",
