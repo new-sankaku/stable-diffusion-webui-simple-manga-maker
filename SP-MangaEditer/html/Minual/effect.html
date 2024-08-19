@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Color2BlackWhite</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/22.4.9/i18next.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+        background-color: #f8f8f8;
+        color: #333;
+      }
+      h1 {
+        color: #4a4a4a;
+      }
+      #ls {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      button {
+        margin-left: 5px;
+        padding: 5px 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      #c {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .s {
+        background-color: white;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ls">
+      <button onclick="cL('en')">English</button>
+      <button onclick="cL('ja')">日本語</button>
+      <button onclick="cL('zh')">中文</button>
+    </div>
+    <div id="c">
+      <h1>Color2BlackWhite</h1>
+      <p data-i18n="description"></p>
+      <p data-i18n="process"></p>
+      <ul>
+        <li data-i18n="ink"></li>
+        <li data-i18n="brightnessContrast"></li>
+        <li data-i18n="dotScreen"></li>
+      </ul>
+      <p data-i18n="sampleImages"></p>
+      <div class="s"><img src="SB\effect\c2bw\1.webp" alt="Sample 1" width="800"/></div>
+      <div class="s"><img src="SB\effect\c2bw\2.webp" alt="Sample 2" width="800"/></div>
+      <div class="s"><img src="SB\effect\c2bw\3.webp" alt="Sample 3" width="800"/></div>
+      <div class="s"><img src="SB\effect\c2bw\4.webp" alt="Sample 4" width="800"/></div>
+      <div class="s"><img src="SB\effect\c2bw\5.webp" alt="Sample 5" width="800"/></div>
+    </div>
+    <script>
+      const r = {
+        en: {
+          translation: {
+            description: "Converts color images to black and white toned images.",
+            process: "The conversion process involves the following 3 GLFX processes:",
+            ink: "Ink: First, the lines are thickened.",
+            brightnessContrast: "Brightness Contrast: Brightness and contrast are increased to remove excessive expressions when toning.",
+            dotScreen: "Dot Screen: The image is toned.",
+            sampleImages: "Sample Images"
+          },
+        },
+        ja: {
+          translation: {
+            description: "カラー画像を白黒トーン画像に変換します。",
+            process: "変換過程でGLFXの以下の3つの処理を行います。",
+            ink: "Ink：まず線を太くします。",
+            brightnessContrast: "Brightness Contrast：明るさとコントラストを上げ、トーン化したときの過剰な表現を取り除きます。",
+            dotScreen: "Dot Screen：トーン化します。",
+            sampleImages: "サンプル画像"
+          },
+        },
+        zh: {
+          translation: {
+            description: "将彩色图像转换为黑白调图像。",
+            process: "转换过程涉及以下3个GLFX处理：",
+            ink: "Ink：首先，加粗线条。",
+            brightnessContrast: "Brightness Contrast：增加亮度和对比度，以消除调子化时的过度表现。",
+            dotScreen: "Dot Screen：进行调子化。",
+            sampleImages: "示例图像"
+          },
+        },
+      };
+      function cL(e) {
+        i18next.changeLanguage(e, uC);
+      }
+      function uC() {
+        document.querySelectorAll("[data-i18n]").forEach((e) => {
+          const n = e.getAttribute("data-i18n");
+          e.textContent = i18next.t(n);
+        });
+      }
+      i18next.init(
+        { lng: "en", resources: r, fallbackLng: "en" },
+        function (e, t) {
+          if (e) return console.error("i18next init error", e);
+          uC();
+        }
+      );
+    </script>
+  </body>
+</html>

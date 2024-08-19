@@ -1,5 +1,6 @@
 var nowMode = "";
 const MODE_PEN_PENCIL   = 'Pencil';
+const MODE_PEN_OUTLINE  = 'OutlinePen';
 const MODE_PEN_CIRCLE   = 'Circle';
 const MODE_PEN_SQUARE   = 'Square';
 const MODE_PEN_TEXTURE  = 'Texture';

@@ -2,7 +2,7 @@
 
 var tmpCanvasTone = null;
 var tmpCtxTone = null;
-var nowTone = null;
+// var nowTone = null;
 var controlElementsTone = null;
 var isDrawingTone = false;
 
@@ -32,6 +32,7 @@ function toneStart() {
     gradientStart: document.getElementById(MODE_TONE + '-grad-start'),
     gradientEnd: document.getElementById(MODE_TONE + '-grad-end'),
   };
+
   updatecanvas();
 }
 

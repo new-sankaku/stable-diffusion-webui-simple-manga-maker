@@ -4,54 +4,54 @@ const MODE_TONE_SNOW       = "ToneSnow";
 const MODE_FOCUSING_LINE   = "FocusingLine";
 const MODE_SPEED_LINE      = "SpeedLine";
 
-var mangaEffectAngle = null;
-var mangaEffectBackBlurSize = null;
-var mangaEffectBackColor = null;
-var mangaEffectBackSize = null;
-var mangaEffectCenterX = null;
-var mangaEffectCenterY = null;
-var mangaEffectColor = null;
-var mangaEffectDensity = null;
-var mangaEffectDotSize = null;
-var mangaEffectDotSpacing = null;
-var mangaEffectDotStyle = null;
-var mangaEffectFrontBlurSize = null;
-var mangaEffectFrontSize = null;
-var mangaEffectGradEnd = null;
-var mangaEffectGradEndX = null;
-var mangaEffectGradEndY = null;
-var mangaEffectGradStart = null;
-var mangaEffectGradStartX = null;
-var mangaEffectGradStartY = null;
-var mangaEffectGradStyle = null;
-var mangaEffectLineSize = null;
-var mangaEffectLineWidthExpand = null;
-var mangaEffectMaxNoise = null;
-var mangaEffectMaxRadius = null;
-var mangaEffectMinNoise = null;
-var mangaEffectMinRadius = null;
+var mangaToneAngle = null;
+var mangaToneBackBlurSize = null;
+var mangaToneBackColor = null;
+var mangaToneBackSize = null;
+var mangaToneCenterX = null;
+var mangaToneCenterY = null;
+var mangaToneColor = null;
+var mangaToneDensity = null;
+var mangaToneDotSize = null;
+var mangaToneDotSpacing = null;
+var mangaToneDotStyle = null;
+var mangaToneFrontBlurSize = null;
+var mangaToneFrontSize = null;
+var mangaToneGradEnd = null;
+var mangaToneGradEndX = null;
+var mangaToneGradEndY = null;
+var mangaToneGradStart = null;
+var mangaToneGradStartX = null;
+var mangaToneGradStartY = null;
+var mangaToneGradStyle = null;
+var mangaToneLineSize = null;
+var mangaToneLineWidthExpand = null;
+var mangaToneMaxNoise = null;
+var mangaToneMaxRadius = null;
+var mangaToneMinNoise = null;
+var mangaToneMinRadius = null;
 
-let nowEffect = null;
+let nowTone = null;
 
-function switchMangaEffect(type) {
-  switchMangaEffectUi(type);
+function switchMangaTone(type) {
+  switchMangaToneUi(type);
 
-  if (nowEffect) {
-    if (type == nowEffect) {
-      clearActiveEffectButton();
+  if (nowTone) {
+    if (type == nowTone) {
+      clearActiveToneButton();
       speedLineEnd();
       focusLineEnd();
       toneNoiseEnd();
       toneEnd();
-      nowEffect = null;
+      nowTone = null;
       return;
     } else {
-      clearActiveEffectButton();
+      clearActiveToneButton();
       speedLineEnd();
       focusLineEnd();
       toneNoiseEnd();
       toneEnd();
-      nowEffect = null;
+      nowTone = null;
     }
   }
   
@@ -79,16 +79,16 @@ function switchMangaEffect(type) {
     console.error("unknown type", type);
   }
 
-  clearActiveEffectButton();
+  clearActiveToneButton();
   document.getElementById(type + 'Button').classList.add('active-button');
-  nowEffect = type;
+  nowTone = type;
 }
 
-function switchMangaEffectUi(type) {
+function switchMangaToneUi(type) {
 
-  // console.log("switchMangaEffectUi type ", type);
+  // console.log("switchMangaToneUi type ", type);
 
-  clearPenSettings();
+  clearToneSettings();
   let settingsHTML = '';
   switch (type) {
       case MODE_TONE:
@@ -100,15 +100,15 @@ function switchMangaEffectUi(type) {
         settingsHTML += addDropDownByGrad(MODE_TONE + '-grad-style', 'gradStyle');
         settingsHTML += addSlider(MODE_TONE + '-grad-start',  'grad-start',   0, 100, effectValueMap.getOrDefault( MODE_TONE + '-grad-start',0));   //grad-start-y
         settingsHTML += addSlider(MODE_TONE + '-grad-end',    'grad-end',     0, 100, effectValueMap.getOrDefault( MODE_TONE + '-grad-end',100));   //grad-end-y
-        document.getElementById('manga-effect-settings').innerHTML = settingsHTML;
+        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaEffectColor     = document.getElementById(MODE_TONE + '-color');
-        mangaEffectDotStyle  = document.getElementById(MODE_TONE + '-dot-style');
-        mangaEffectDotSize   = document.getElementById(MODE_TONE + '-dot-size');
-        mangaEffectDotSpacing= document.getElementById(MODE_TONE + '-dot-spacing');
-        mangaEffectGradStyle = document.getElementById(MODE_TONE + '-grad-style');
-        mangaEffectGradStart = document.getElementById(MODE_TONE + '-grad-start');
-        mangaEffectGradEnd   = document.getElementById(MODE_TONE + '-grad-end');
+        mangaToneColor     = document.getElementById(MODE_TONE + '-color');
+        mangaToneDotStyle  = document.getElementById(MODE_TONE + '-dot-style');
+        mangaToneDotSize   = document.getElementById(MODE_TONE + '-dot-size');
+        mangaToneDotSpacing= document.getElementById(MODE_TONE + '-dot-spacing');
+        mangaToneGradStyle = document.getElementById(MODE_TONE + '-grad-style');
+        mangaToneGradStart = document.getElementById(MODE_TONE + '-grad-start');
+        mangaToneGradEnd   = document.getElementById(MODE_TONE + '-grad-end');
         break;
       case MODE_TONE_NOISE:
         settingsHTML += addColor( MODE_TONE_NOISE + '-color',         'color',                effectValueMap.getOrDefault( MODE_TONE_NOISE + '-color','#000000'));
@@ -118,15 +118,15 @@ function switchMangaEffectUi(type) {
         settingsHTML += addSlider(MODE_TONE_NOISE + '-grad-start-y',  'grad-start-y', 0, 100, effectValueMap.getOrDefault( MODE_TONE_NOISE + '-grad-start-y',0));//grad-start-y
         settingsHTML += addSlider(MODE_TONE_NOISE + '-grad-end-x',    'grad-end-x',   0, 100, effectValueMap.getOrDefault( MODE_TONE_NOISE + '-grad-end-x',100));//grad-end-y
         settingsHTML += addSlider(MODE_TONE_NOISE + '-grad-end-y',    'grad-end-y',   0, 100, effectValueMap.getOrDefault( MODE_TONE_NOISE + '-grad-end-y',100));//grad-end-y
-        document.getElementById('manga-effect-settings').innerHTML = settingsHTML;
+        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaEffectColor        = document.getElementById(MODE_TONE_NOISE + '-color');
-        mangaEffectMaxNoise     = document.getElementById(MODE_TONE_NOISE + '-max-noise');
-        mangaEffectMinNoise     = document.getElementById(MODE_TONE_NOISE + '-min-noise');
-        mangaEffectGradStartX   = document.getElementById(MODE_TONE_NOISE + '-grad-start-x');
-        mangaEffectGradEndX     = document.getElementById(MODE_TONE_NOISE + '-grad-end-x');
-        mangaEffectGradStartY   = document.getElementById(MODE_TONE_NOISE + '-grad-start-y');
-        mangaEffectGradEndY     = document.getElementById(MODE_TONE_NOISE + '-grad-end-y');
+        mangaToneColor        = document.getElementById(MODE_TONE_NOISE + '-color');
+        mangaToneMaxNoise     = document.getElementById(MODE_TONE_NOISE + '-max-noise');
+        mangaToneMinNoise     = document.getElementById(MODE_TONE_NOISE + '-min-noise');
+        mangaToneGradStartX   = document.getElementById(MODE_TONE_NOISE + '-grad-start-x');
+        mangaToneGradEndX     = document.getElementById(MODE_TONE_NOISE + '-grad-end-x');
+        mangaToneGradStartY   = document.getElementById(MODE_TONE_NOISE + '-grad-start-y');
+        mangaToneGradEndY     = document.getElementById(MODE_TONE_NOISE + '-grad-end-y');
         break;
       case MODE_TONE_SNOW:
         settingsHTML += addColor( MODE_TONE_SNOW + '-frontColor',    'frontColor',  effectValueMap.getOrDefault( MODE_TONE_SNOW + '-frontColor','#FFFFFF'));
@@ -137,16 +137,16 @@ function switchMangaEffectUi(type) {
         settingsHTML += addSlider(MODE_TONE_SNOW + '-frontBlurSize', 'frontBlurSize', 1, 50,  effectValueMap.getOrDefault( MODE_TONE_SNOW + '-frontBlurSize', 10));    //density
         settingsHTML += addSlider(MODE_TONE_SNOW + '-backBlurSize',  'backBlurSize',  1, 50,  effectValueMap.getOrDefault( MODE_TONE_SNOW + '-backBlurSize', 3));    //density
         settingsHTML += addSlider(MODE_TONE_SNOW + '-angle',         'angle',         0, 180, effectValueMap.getOrDefault( MODE_TONE_SNOW + '-angle', 140));    //density
-        document.getElementById('manga-effect-settings').innerHTML = settingsHTML;
+        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaEffectColor         = document.getElementById(MODE_TONE_NOISE + '-frontColor');
-        mangaEffectBackColor     = document.getElementById(MODE_TONE_NOISE + '-backColor');
-        mangaEffectDensity       = document.getElementById(MODE_TONE_NOISE + '-density');
-        mangaEffectFrontSize     = document.getElementById(MODE_TONE_NOISE + '-frontSize');
-        mangaEffectBackSize      = document.getElementById(MODE_TONE_NOISE + '-backSize');
-        mangaEffectFrontBlurSize = document.getElementById(MODE_TONE_NOISE + '-frontBlurSize');
-        mangaEffectBackBlurSize  = document.getElementById(MODE_TONE_NOISE + '-backBlurSize');
-        mangaEffectAngle         = document.getElementById(MODE_TONE_NOISE + '-angle');
+        mangaToneColor         = document.getElementById(MODE_TONE_NOISE + '-frontColor');
+        mangaToneBackColor     = document.getElementById(MODE_TONE_NOISE + '-backColor');
+        mangaToneDensity       = document.getElementById(MODE_TONE_NOISE + '-density');
+        mangaToneFrontSize     = document.getElementById(MODE_TONE_NOISE + '-frontSize');
+        mangaToneBackSize      = document.getElementById(MODE_TONE_NOISE + '-backSize');
+        mangaToneFrontBlurSize = document.getElementById(MODE_TONE_NOISE + '-frontBlurSize');
+        mangaToneBackBlurSize  = document.getElementById(MODE_TONE_NOISE + '-backBlurSize');
+        mangaToneAngle         = document.getElementById(MODE_TONE_NOISE + '-angle');
 
         break;
       case MODE_FOCUSING_LINE:
@@ -158,15 +158,15 @@ function switchMangaEffectUi(type) {
         settingsHTML += addSlider(MODE_FOCUSING_LINE + '-center-x',          'centerX',           0, 100, effectValueMap.getOrDefault( MODE_FOCUSING_LINE + '-center-x',0));
         settingsHTML += addSlider(MODE_FOCUSING_LINE + '-center-y',          'centerY',           0, 100, effectValueMap.getOrDefault( MODE_FOCUSING_LINE + '-center-y',0));
         settingsHTML += addSlider(MODE_FOCUSING_LINE + '-line-width-expand', 'line-width-expand', 1, 300, effectValueMap.getOrDefault( MODE_FOCUSING_LINE + '-line-width-expand',100)); // line-width-expand
-        document.getElementById('manga-effect-settings').innerHTML = settingsHTML;
+        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaEffectColor           = document.getElementById(MODE_FOCUSING_LINE + '-color');
-        mangaEffectLineSize        = document.getElementById(MODE_FOCUSING_LINE + '-line-size');
-        mangaEffectMaxRadius       = document.getElementById(MODE_FOCUSING_LINE + '-max-radius');
-        mangaEffectMinRadius       = document.getElementById(MODE_FOCUSING_LINE + '-min-radius');
-        mangaEffectCenterX         = document.getElementById(MODE_FOCUSING_LINE + '-center-x');
-        mangaEffectCenterY         = document.getElementById(MODE_FOCUSING_LINE + '-center-y');
-        mangaEffectLineWidthExpand = document.getElementById(MODE_FOCUSING_LINE + '-line-width-expand');
+        mangaToneColor           = document.getElementById(MODE_FOCUSING_LINE + '-color');
+        mangaToneLineSize        = document.getElementById(MODE_FOCUSING_LINE + '-line-size');
+        mangaToneMaxRadius       = document.getElementById(MODE_FOCUSING_LINE + '-max-radius');
+        mangaToneMinRadius       = document.getElementById(MODE_FOCUSING_LINE + '-min-radius');
+        mangaToneCenterX         = document.getElementById(MODE_FOCUSING_LINE + '-center-x');
+        mangaToneCenterY         = document.getElementById(MODE_FOCUSING_LINE + '-center-y');
+        mangaToneLineWidthExpand = document.getElementById(MODE_FOCUSING_LINE + '-line-width-expand');
         break;
 
       case MODE_SPEED_LINE:
@@ -176,119 +176,116 @@ function switchMangaEffectUi(type) {
         settingsHTML += addCheckBox(MODE_SPEED_LINE + '-grad-check','grad-check',         effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-check', 'true'));    //density
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-start',  'grad-start', 0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-start',0));   //grad-start-y
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-end',    'grad-end',   0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-end',100));   //grad-end-y
-        document.getElementById('manga-effect-settings').innerHTML = settingsHTML;
+        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaEffectColor     = document.getElementById(MODE_TONE_NOISE + '-color');
-        mangaEffectDensity   = document.getElementById(MODE_TONE_NOISE + '-density');
-        mangaEffectGradStart = document.getElementById(MODE_TONE_NOISE + '-grad-start');
-        mangaEffectGradEnd   = document.getElementById(MODE_TONE_NOISE + '-grad-end');
+        mangaToneColor     = document.getElementById(MODE_TONE_NOISE + '-color');
+        mangaToneDensity   = document.getElementById(MODE_TONE_NOISE + '-density');
+        mangaToneGradStart = document.getElementById(MODE_TONE_NOISE + '-grad-start');
+        mangaToneGradEnd   = document.getElementById(MODE_TONE_NOISE + '-grad-end');
         break;
   }
-
-  addEffectEventListener();
 }
 
-function clearPenSettings() {
+function clearToneSettings() {
 
   const elements = [
-    mangaEffectAngle,
-    mangaEffectBackBlurSize,
-    mangaEffectBackColor,
-    mangaEffectBackSize,
-    mangaEffectCenterX,
-    mangaEffectCenterY,
-    mangaEffectColor,
-    mangaEffectDensity,
-    mangaEffectDotSize,
-    mangaEffectDotSpacing,
-    mangaEffectDotStyle,
-    mangaEffectFrontBlurSize,
-    mangaEffectFrontSize,
-    mangaEffectGradEnd,
-    mangaEffectGradEndX,
-    mangaEffectGradEndY,
-    mangaEffectGradStart,
-    mangaEffectGradStartX,
-    mangaEffectGradStartY,
-    mangaEffectGradStyle,
-    mangaEffectLineSize,
-    mangaEffectLineWidthExpand,
-    mangaEffectMaxNoise,
-    mangaEffectMaxRadius,
-    mangaEffectMinNoise,
-    mangaEffectMinRadius
+    mangaToneAngle,
+    mangaToneBackBlurSize,
+    mangaToneBackColor,
+    mangaToneBackSize,
+    mangaToneCenterX,
+    mangaToneCenterY,
+    mangaToneColor,
+    mangaToneDensity,
+    mangaToneDotSize,
+    mangaToneDotSpacing,
+    mangaToneDotStyle,
+    mangaToneFrontBlurSize,
+    mangaToneFrontSize,
+    mangaToneGradEnd,
+    mangaToneGradEndX,
+    mangaToneGradEndY,
+    mangaToneGradStart,
+    mangaToneGradStartX,
+    mangaToneGradStartY,
+    mangaToneGradStyle,
+    mangaToneLineSize,
+    mangaToneLineWidthExpand,
+    mangaToneMaxNoise,
+    mangaToneMaxRadius,
+    mangaToneMinNoise,
+    mangaToneMinRadius
   ];
 
   elements.forEach(element => {
     if (element) {
-        element.removeEventListener("change", saveEffectValueMap);
+        element.removeEventListener("change", saveValueMap);
     }
   });
-    mangaEffectAngle = null;
-    mangaEffectBackBlurSize = null;
-    mangaEffectBackColor = null;
-    mangaEffectBackSize = null;
-    mangaEffectCenterX = null;
-    mangaEffectCenterY = null;
-    mangaEffectColor = null;
-    mangaEffectDensity = null;
-    mangaEffectDotSize = null;
-    mangaEffectDotSpacing = null;
-    mangaEffectDotStyle = null;
-    mangaEffectFrontBlurSize = null;
-    mangaEffectFrontSize = null;
-    mangaEffectGradEnd = null;
-    mangaEffectGradEndX = null;
-    mangaEffectGradEndY = null;
-    mangaEffectGradStart = null;
-    mangaEffectGradStartX = null;
-    mangaEffectGradStartY = null;
-    mangaEffectGradStyle = null;
-    mangaEffectLineSize = null;
-    mangaEffectLineWidthExpand = null;
-    mangaEffectMaxNoise = null;
-    mangaEffectMaxRadius = null;
-    mangaEffectMinNoise = null;
-    mangaEffectMinRadius = null;
+    mangaToneAngle = null;
+    mangaToneBackBlurSize = null;
+    mangaToneBackColor = null;
+    mangaToneBackSize = null;
+    mangaToneCenterX = null;
+    mangaToneCenterY = null;
+    mangaToneColor = null;
+    mangaToneDensity = null;
+    mangaToneDotSize = null;
+    mangaToneDotSpacing = null;
+    mangaToneDotStyle = null;
+    mangaToneFrontBlurSize = null;
+    mangaToneFrontSize = null;
+    mangaToneGradEnd = null;
+    mangaToneGradEndX = null;
+    mangaToneGradEndY = null;
+    mangaToneGradStart = null;
+    mangaToneGradStartX = null;
+    mangaToneGradStartY = null;
+    mangaToneGradStyle = null;
+    mangaToneLineSize = null;
+    mangaToneLineWidthExpand = null;
+    mangaToneMaxNoise = null;
+    mangaToneMaxRadius = null;
+    mangaToneMinNoise = null;
+    mangaToneMinRadius = null;
   }
   
 
-function addEffectEventListener(){
+function addToneEventListener(){
 
   const elements = [
-    mangaEffectAngle,
-    mangaEffectBackBlurSize,
-    mangaEffectBackColor,
-    mangaEffectBackSize,
-    mangaEffectCenterX,
-    mangaEffectCenterY,
-    mangaEffectColor,
-    mangaEffectDensity,
-    mangaEffectDotSize,
-    mangaEffectDotSpacing,
-    mangaEffectDotStyle,
-    mangaEffectFrontBlurSize,
-    mangaEffectFrontSize,
-    mangaEffectGradEnd,
-    mangaEffectGradEndX,
-    mangaEffectGradEndY,
-    mangaEffectGradStart,
-    mangaEffectGradStartX,
-    mangaEffectGradStartY,
-    mangaEffectGradStyle,
-    mangaEffectLineSize,
-    mangaEffectLineWidthExpand,
-    mangaEffectMaxNoise,
-    mangaEffectMaxRadius,
-    mangaEffectMinNoise,
-    mangaEffectMinRadius
+    mangaToneAngle,
+    mangaToneBackBlurSize,
+    mangaToneBackColor,
+    mangaToneBackSize,
+    mangaToneCenterX,
+    mangaToneCenterY,
+    mangaToneColor,
+    mangaToneDensity,
+    mangaToneDotSize,
+    mangaToneDotSpacing,
+    mangaToneDotStyle,
+    mangaToneFrontBlurSize,
+    mangaToneFrontSize,
+    mangaToneGradEnd,
+    mangaToneGradEndX,
+    mangaToneGradEndY,
+    mangaToneGradStart,
+    mangaToneGradStartX,
+    mangaToneGradStartY,
+    mangaToneGradStyle,
+    mangaToneLineSize,
+    mangaToneLineWidthExpand,
+    mangaToneMaxNoise,
+    mangaToneMaxRadius,
+    mangaToneMinNoise,
+    mangaToneMinRadius
   ];
 
   elements.forEach(element => {
       if (element) {
-          // console.log("set element", element.id);
           element.addEventListener('change', () => {
-              saveEffectValueMap(element);
+              saveValueMap(element);
           });
       }
   });
@@ -296,7 +293,7 @@ function addEffectEventListener(){
 
 
 
-function clearActiveEffectButton() {
+function clearActiveToneButton() {
   document.getElementById(MODE_TONE + 'Button').classList.remove('active-button');
   document.getElementById(MODE_TONE_NOISE + 'Button').classList.remove('active-button');
   document.getElementById(MODE_TONE_SNOW + 'Button').classList.remove('active-button');

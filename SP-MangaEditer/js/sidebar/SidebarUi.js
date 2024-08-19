@@ -2,6 +2,8 @@ Map.prototype.getOrDefault = function (key, defaultValue) {
   return this.has(key) ? this.get(key) : defaultValue;
 };
 
+const sidebarValueMap = new Map();
+
 const penValueMap = new Map();
 const effectValueMap = new Map();
 
@@ -12,6 +14,9 @@ function saveEffectValueMap(element) {
   effectValueMap.set(element.id, element.value);
 }
 
+function saveValueMap(element) {
+  sidebarValueMap.set(element.id, element.value);
+}
 
 function addNumber(id, label, min, max, value) {
   const transLavel = getText(label);

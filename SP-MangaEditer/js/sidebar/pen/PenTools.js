@@ -4,16 +4,10 @@ let currentPaths = [];
 function switchPencilType(type) {
     switchPencilTypeUi(type);
 
-    console.log("switchPencilType is call", type, nowPencil);
-
     if (type === nowPencil) {
-        console.log("type === nowPencil 1");
         pencilModeClear(type);
-        console.log("type === nowPencil 2");
         currentPaths = [];
-        console.log("type === nowPencil 3");
         clearActiveButton();
-        console.log("type === nowPencil 4");
         return;
     } else {
         pencilModeClear(type);
@@ -31,6 +25,9 @@ function switchPencilType(type) {
 
     } else if (type === MODE_PEN_PENCIL) {
         setupContextTopBrush(new fabric.PencilBrush(canvas));
+
+    } else if (type === MODE_PEN_OUTLINE) {
+        setupContextTopBrush(new fabric.DoubleOutlineBrush(canvas));
 
     } else if (type === MODE_PEN_TEXTURE) {
         setupContextTopBrush(new fabric.PatternBrush(canvas));
@@ -76,7 +73,15 @@ var drawingShadowOffsetY     = null;
 var drawingLineStyle         = null;
 var drawingMosaicSize        = null;
 var drawingMosaicCircleSize  = null;
-
+var drawingMainOpacity      = null;
+var drawingOutline1Opacity  = null;
+var drawingOutline2Opacity  = null;
+var drawingMainColor       = null;
+var drawingOutline1Color   = null;
+var drawingOutline2Color   = null;
+var drawingMainWidth       = null;
+var drawingOutline1Width   = null;
+var drawingOutline2Width   = null;
 
 
 function switchPencilTypeUi(type) {
@@ -103,6 +108,29 @@ function switchPencilTypeUi(type) {
             drawingShadowOffsetY = document.getElementById(MODE_PEN_PENCIL + '-shadow-offset-y');
             drawingLineStyle     = document.getElementById("line-style");
         
+            break;
+        case MODE_PEN_OUTLINE:
+            settingsHTML += addColor( MODE_PEN_OUTLINE + '-main-color',        'color',           penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-color','#000000'));
+            settingsHTML += addColor( MODE_PEN_OUTLINE + '-outline1-color',    'outline1-color',  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline1-color','#FFFFFF'));
+            settingsHTML += addColor( MODE_PEN_OUTLINE + '-outline2-color',    'outline2-color',  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline2-color','#000000'));
+
+            settingsHTML += addSlider(MODE_PEN_OUTLINE + '-main-width',        'size',           1, 150,  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-main-width',    10));
+            settingsHTML += addSlider(MODE_PEN_OUTLINE + '-outline1-width',    'outline1-size',  1, 150,  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline1-width',2));
+            settingsHTML += addSlider(MODE_PEN_OUTLINE + '-outline2-width',    'outline2-size',  1, 150,  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline2-width',1));
+
+            settingsHTML += addSlider(MODE_PEN_OUTLINE + '-outline1-opacity', 'outline1-opacity', 1, 100,  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline1-opacity',100));
+            settingsHTML += addSlider(MODE_PEN_OUTLINE + '-outline2-opacity', 'outline2-opacity', 1, 100,  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline2-opacity',100));
+            document.getElementById('tool-settings').innerHTML = settingsHTML;
+    
+            drawingMainColor      = document.getElementById(MODE_PEN_OUTLINE + '-main-color');
+            drawingOutline1Color  = document.getElementById(MODE_PEN_OUTLINE + '-outline1-color');
+            drawingOutline2Color  = document.getElementById(MODE_PEN_OUTLINE + '-outline2-color');
+            drawingMainWidth      = document.getElementById(MODE_PEN_OUTLINE + '-main-width');
+            drawingOutline1Width  = document.getElementById(MODE_PEN_OUTLINE + '-outline1-width');
+            drawingOutline2Width  = document.getElementById(MODE_PEN_OUTLINE + '-outline2-width');
+
+            drawingOutline1Opacity = document.getElementById(MODE_PEN_OUTLINE + '-outline1-opacity');
+            drawingOutline2Opacity = document.getElementById(MODE_PEN_OUTLINE + '-outline2-opacity');
             break;
         case MODE_PEN_CIRCLE:
             settingsHTML += addColor( MODE_PEN_CIRCLE + '-color',             'color',                              penValueMap.getOrDefault( MODE_PEN_CIRCLE + '-color','#000000'));
@@ -164,12 +192,11 @@ function switchPencilTypeUi(type) {
             break;
     }
 
-    if( drawingWidth  ){
-        console.log("drawingWidth is not null " + type);
-    }else{
-
-        console.log("drawingWidth is null " + type);
-    }
+    // if( drawingWidth  ){
+    //     console.log("drawingWidth is not null " + type);
+    // }else{
+    //     console.log("drawingWidth is null " + type);
+    // }
 
     addPenEventListener();
 }
@@ -177,23 +204,23 @@ function switchPencilTypeUi(type) {
 function clearPenSettings(){
     if( drawingColor ){
         drawingColor.removeEventListener('change', applyBrushSettings);
-        drawingColor.removeEventListener('change', savePenValueMap);
+        drawingColor.removeEventListener('change', saveValueMap);
     }
     if( drawingWidth ){
         drawingWidth.removeEventListener('change', applyBrushSettings);
-        drawingWidth.removeEventListener('change', savePenValueMap);
+        drawingWidth.removeEventListener('change', saveValueMap);
     }
     if( drawingOpacity ){
         drawingOpacity.removeEventListener('change', applyBrushSettings);
-        drawingOpacity.removeEventListener('change', savePenValueMap);
+        drawingOpacity.removeEventListener('change', saveValueMap);
     }
     if( drawingShadowColor ){
         drawingShadowColor.removeEventListener('change', applyBrushSettings);
-        drawingShadowColor.removeEventListener('change', savePenValueMap);
+        drawingShadowColor.removeEventListener('change', saveValueMap);
     }
     if( drawingShadowWidth ){
         drawingShadowWidth.removeEventListener('change', applyBrushSettings);
-        drawingShadowWidth.removeEventListener('change', savePenValueMap);
+        drawingShadowWidth.removeEventListener('change', saveValueMap);
         console.log("drawingShadowWidth is clear ");
     }else{
         console.log("drawingShadowWidth is not clear ");
@@ -201,17 +228,64 @@ function clearPenSettings(){
     }
     if( drawingShadowOffsetX ){
         drawingShadowOffsetX.removeEventListener('change', applyBrushSettings);
-        drawingShadowOffsetX.removeEventListener('change', savePenValueMap);
+        drawingShadowOffsetX.removeEventListener('change', saveValueMap);
     }
     if( drawingShadowOffsetY ){
         drawingShadowOffsetY.removeEventListener('change', applyBrushSettings);
-        drawingShadowOffsetY.removeEventListener('change', savePenValueMap);
+        drawingShadowOffsetY.removeEventListener('change', saveValueMap);
     }
     if( drawingLineStyle ){
         drawingLineStyle.removeEventListener('change', applyBrushSettings);
-        drawingLineStyle.removeEventListener('change', savePenValueMap);
+        drawingLineStyle.removeEventListener('change', saveValueMap);
+    }
+    if( drawingMainColor ){
+        drawingMainColor.removeEventListener('change', applyBrushSettings);
+        drawingMainColor.removeEventListener('change', saveValueMap);
+    }
+    if( drawingOutline1Color ){
+        drawingOutline1Color.removeEventListener('change', applyBrushSettings);
+        drawingOutline1Color.removeEventListener('change', saveValueMap);
+    }
+    if( drawingOutline2Color ){
+        drawingOutline2Color.removeEventListener('change', applyBrushSettings);
+        drawingOutline2Color.removeEventListener('change', saveValueMap);
     }
 
+    if( drawingMainWidth ){
+        drawingMainWidth.removeEventListener('change', applyBrushSettings);
+        drawingMainWidth.removeEventListener('change', saveValueMap);
+    }
+    if( drawingOutline1Width ){
+        drawingOutline1Width.removeEventListener('change', applyBrushSettings);
+        drawingOutline1Width.removeEventListener('change', saveValueMap);
+    }
+    if( drawingOutline2Width ){
+        drawingOutline2Width.removeEventListener('change', applyBrushSettings);
+        drawingOutline2Width.removeEventListener('change', saveValueMap);
+    }
+
+    if( drawingMainOpacity ){
+        drawingMainOpacity.removeEventListener('change', applyBrushSettings);
+        drawingMainOpacity.removeEventListener('change', saveValueMap);
+    }
+    if( drawingOutline1Opacity ){
+        drawingOutline1Opacity.removeEventListener('change', applyBrushSettings);
+        drawingOutline1Opacity.removeEventListener('change', saveValueMap);
+    }
+    if( drawingOutline2Opacity ){
+        drawingOutline2Opacity.removeEventListener('change', applyBrushSettings);
+        drawingOutline2Opacity.removeEventListener('change', saveValueMap);
+    }
+
+    drawingMainOpacity      = null;
+    drawingOutline1Opacity  = null;
+    drawingOutline2Opacity  = null;
+    drawingMainColor       = null;
+    drawingOutline1Color   = null;
+    drawingOutline2Color   = null;
+    drawingMainWidth       = null;
+    drawingOutline1Width   = null;
+    drawingOutline2Width   = null;
     drawingColor             = null;
     drawingWidth             = null;
     drawingOpacity           = null;
@@ -227,20 +301,15 @@ function clearPenSettings(){
 function addPenEventListener(){
 
     const elements = [drawingColor, drawingWidth, drawingOpacity, drawingShadowColor, 
-                      drawingShadowWidth, drawingShadowOffsetX, drawingShadowOffsetY, drawingLineStyle];
-
-    // if(drawingShadowWidth){
-    //     console.log("drawingShadowWidth is not null ");
-    // }else{
-    //     console.log("drawingShadowWidth is null ");
-    // }
+                      drawingShadowWidth, drawingShadowOffsetX, drawingShadowOffsetY, drawingLineStyle,
+                      drawingMainOpacity,drawingOutline1Opacity,drawingOutline2Opacity, drawingMainColor,drawingOutline1Color,
+                      drawingOutline2Color,drawingMainWidth,drawingOutline1Width,drawingOutline2Width,];
 
     elements.forEach(element => {
         if (element) {
-            // console.log("set element", element.id);
             element.addEventListener('change', () => {
                 applyBrushSettings();
-                savePenValueMap(element);
+                saveValueMap(element);
             });
         }
     });
@@ -253,7 +322,7 @@ function addPenEventListener(){
                 updatePreview();
             }
         });
-        drawingMosaicSize.onchange         = () => savePenValueMap(drawingMosaicSize);
+        drawingMosaicSize.onchange         = () => saveValueMap(drawingMosaicSize);
     }
 
     if( drawingMosaicCircleSize ){
@@ -264,17 +333,27 @@ function addPenEventListener(){
                 updatePreview();
             }
         });
-        drawingMosaicCircleSize.onchange         = () => savePenValueMap(drawingMosaicCircleSize);
+        drawingMosaicCircleSize.onchange         = () => saveValueMap(drawingMosaicCircleSize);
     }
 }
 
 
 function applyBrushSettings() {
 
-    // console.log( "applyBrushSettings is call" );
-
     if (canvas.freeDrawingBrush) {
         var brush = canvas.freeDrawingBrush;
+
+        if( drawingMainColor ){
+            brush.color             = drawingMainColor.value;
+            brush.outline1Color     = drawingOutline1Color.value;
+            brush.outline2Color     = drawingOutline2Color.value;
+            brush.width             = parseInt(drawingMainWidth.value);
+            brush.outline1Width     = parseInt(drawingOutline1Width.value);
+            brush.outline2Width     = parseInt(drawingOutline2Width.value);
+            brush.outline1Opacity   = parseInt(drawingOutline1Opacity.value) / 100;
+            brush.outline2Opacity   = parseInt(drawingOutline2Opacity.value) / 100;
+        }
+
         if (drawingWidth) {
             brush.width = parseInt(drawingWidth.value, 10) || 1;
         }else{
@@ -339,13 +418,14 @@ function applyBrushSettings() {
 
 function clearActiveButton() {
     console.log("clearActiveButton is call");
-    document.getElementById(MODE_PEN_PENCIL + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_CIRCLE + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_CRAYON + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_INK    + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_MARKER + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_ERASER + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_MOSAIC + 'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_PENCIL  + 'Button').classList.remove('active-button');
+    // document.getElementById(MODE_PEN_OUTLINE + 'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_CIRCLE  + 'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_CRAYON  + 'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_INK     + 'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_MARKER  + 'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_ERASER  + 'Button').classList.remove('active-button');
+    document.getElementById(MODE_PEN_MOSAIC  + 'Button').classList.remove('active-button');
 }
 
 function setupContextTopBrush(brush) {
@@ -428,6 +508,7 @@ function getMarkerBrush() {
     }
     );
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     fabric.Object.prototype.transparentCorners = false;

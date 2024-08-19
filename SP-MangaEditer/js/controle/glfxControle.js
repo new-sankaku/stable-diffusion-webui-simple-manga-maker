@@ -26,12 +26,12 @@ function glfxResetFilterValues() {
   document.getElementById("glfxZoomCenterY").value = 0.5;
   document.getElementById("glfxZoomStrength").value = 0;
   document.getElementById("glfxHalftoneAngle").value = 0;
-  document.getElementById("glfxHalftoneSize").value = 10;
+  document.getElementById("glfxHalftoneSize").value = 2;
   document.getElementById("glfxDotAngle").value = 0;
-  document.getElementById("glfxDotSize").value = 10;
+  document.getElementById("glfxDotSize").value = 2;
   document.getElementById("glfxEdgeRadius").value = 0;
-  document.getElementById("glfxHexScale").value = 10;
-  document.getElementById("glfxInkStrength").value = 0;
+  document.getElementById("glfxHexScale").value = 2;
+  document.getElementById("glfxInkStrength").value = 0.2;
   document.getElementById("glfxBulgeCenterX").value = 500;
   document.getElementById("glfxBulgeCenterY").value = 500;
   document.getElementById("glfxBulgeRadius").value = 0;
@@ -56,27 +56,34 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-function glfxApplyFilter() {
-  if (!canvas) return;
+function glfxApplyFilter(filter=null) {
+  // console.log("glfxApplyFilter: Start");
+  if (!canvas) {
+    // console.log("glfxApplyFilter: Canvas is null");
+    return;
+  }
 
   var activeObject = canvas.getActiveObject();
 
   if (activeObject && activeObject.type === "image") {
-    glfxApplyFilterToObject(activeObject);
+    // console.log("glfxApplyFilter: Applying filter to object", activeObject);
+    glfxApplyFilterToObject(activeObject, filter).then(() => {
+      // console.log("glfxApplyFilter: Filter applied to object successfully");
+    });
   } else {
-    glfxApplyFilterToCanvas();
+    // console.log("glfxApplyFilter: No active image object, applying filter to canvas");
+    glfxApplyFilterToCanvas(filter);
   }
 }
 
-function glfxApplyFilterToCanvas() {
+function glfxApplyFilterToCanvas(filter=null) {
   var fabricCanvas = canvas.upperCanvasEl;
   var img = new Image();
   img.onload = function () {
     fxCanvas = fx.canvas();
     texture = fxCanvas.texture(img);
     fxCanvas.draw(texture);
-    applySelectedFilter(fxCanvas);
+    applySelectedFilter(fxCanvas, filter);
     fxCanvas.update();
     canvas
       .getContext("2d")
@@ -84,64 +91,103 @@ function glfxApplyFilterToCanvas() {
   };
   img.src = fabricCanvas.toDataURL();
 }
-function glfxApplyFilterToObject(object) {
-  if (!glfxOriginalImage) return;
 
-  var img = new Image();
-  img.onload = function () {
-    fxCanvas = fx.canvas();
-    texture = fxCanvas.texture(img);
-    fxCanvas.draw(texture);
-    applySelectedFilter(fxCanvas);
-    fxCanvas.update();
-    var filteredImage = new Image();
-    filteredImage.src = fxCanvas.toDataURL();
-    filteredImage.onload = function () {
-      var top = object.top;
-      var left = object.left;
-      var scaleX = object.scaleX;
-      var scaleY = object.scaleY;
-      var width = object.width;
-      var height = object.height;
+function glfxApplyFilterToObject(object, filter=null) {
+  return new Promise((resolve) => {
+    if (!glfxOriginalImage) {
+      // console.log("glfxApplyFilterToObject: glfxOriginalImage is null");
+      return resolve();
+    }
 
-      object.setElement(filteredImage);
-      object.top = top;
-      object.left = left;
-      object.scaleX = scaleX;
-      object.scaleY = scaleY;
-      object.width = width;
-      object.height = height;
+    var img = new Image();
+    img.onload = function () {
+      // console.log("glfxApplyFilterToObject: Image loaded for filtering");
+      fxCanvas = fx.canvas();
+      texture = fxCanvas.texture(img);
+      fxCanvas.draw(texture);
+      applySelectedFilter(fxCanvas, filter);
+      fxCanvas.update();
+      
+      var filteredImage = new Image();
+      filteredImage.src = fxCanvas.toDataURL();
+      filteredImage.onload = function () {
+        // console.log("glfxApplyFilterToObject: Filtered image loaded");
+        
+        // Log the object state before applying the filter
+        // console.log("Before applying filter:", object);
 
-      object.set({
-        left: left,
-        top: top,
-        scaleX: scaleX,
-        scaleY: scaleY,
-        width: width,
-        height: height,
-      });
+        var top = object.top;
+        var left = object.left;
+        var scaleX = object.scaleX;
+        var scaleY = object.scaleY;
+        var width = object.width;
+        var height = object.height;
 
-      canvas.requestRenderAll();
+        object.setElement(filteredImage);
+        object.top = top;
+        object.left = left;
+        object.scaleX = scaleX;
+        object.scaleY = scaleY;
+        object.width = width;
+        object.height = height;
+
+        // Log the object state after applying the filter
+        // console.log("After applying filter:", object);
+
+        object.set({
+          left: left,
+          top: top,
+          scaleX: scaleX,
+          scaleY: scaleY,
+          width: width,
+          height: height,
+        });
+
+        canvas.requestRenderAll();
+
+        // Log to confirm the canvas is rendered
+        // console.log("Canvas rendered with filtered image");
+
+        resolve();
+      };
     };
-  };
-  img.src = glfxOriginalImage.src;
+
+    img.src = glfxOriginalImage.src;
+  });
 }
 
-function applySelectedFilter(fxCanvas) {
-  var filter = document.getElementById("glfxFilter").value;
+
+function applySelectedFilter(fxCanvas, filter=null) {
+  // console.log("applySelectedFilter start");
+  var isNotAuto = true;
+  if(filter){
+    isNotAuto = false;
+  }else{
+    filter = document.getElementById("glfxFilter").value;
+  }
+  // console.log("applySelectedFilter: Selected filter is", filter);
+
+
   switch (filter) {
     case "glfxBrightnessContrast":
-      var brightness = parseFloat(
-        document.getElementById("glfxBrightness").value
-      );
-      var contrast = parseFloat(document.getElementById("glfxContrast").value);
+      var brightness = 0.29;
+      var contrast   = 0.29;
+
+      if( isNotAuto ){
+        brightness = parseFloat( document.getElementById("glfxBrightness").value );
+        contrast   = parseFloat(document.getElementById("glfxContrast").value);
+      }
+      // console.log( "glfxBrightnessContrast brightness", brightness );
+      // console.log( "glfxBrightnessContrast contrast", contrast );
       fxCanvas.brightnessContrast(brightness, contrast);
       break;
     case "glfxHueSaturation":
       var hue = parseFloat(document.getElementById("glfxHue").value);
-      var saturation = parseFloat(
-        document.getElementById("glfxSaturation").value
-      );
+      var saturation = parseFloat(document.getElementById("glfxSaturation").value);
+
+      // console.log("glfxHueSaturation hue", hue);
+      // console.log("glfxHueSaturation saturation", saturation);
+
       fxCanvas.hueSaturation(hue, saturation);
       break;
     case "glfxSepia":
@@ -232,6 +278,7 @@ function applySelectedFilter(fxCanvas) {
       var halftoneSize = parseFloat(
         document.getElementById("glfxHalftoneSize").value
       );
+
       fxCanvas.colorHalftone(
         halftoneCenterX,
         halftoneCenterY,
@@ -242,8 +289,16 @@ function applySelectedFilter(fxCanvas) {
     case "glfxDotScreen":
       var dotCenterX = 1;
       var dotCenterY = 1;
-      var dotAngle = parseFloat(document.getElementById("glfxDotAngle").value);
-      var dotSize = parseFloat(document.getElementById("glfxDotSize").value);
+      var dotAngle = 1.1;
+      var dotSize = 1.6;
+
+      if( isNotAuto ){
+        dotAngle = parseFloat(document.getElementById("glfxDotAngle").value);
+        dotSize = parseFloat(document.getElementById("glfxDotSize").value);
+      }
+      // console.log("dotAngle", dotAngle)
+      // console.log("dotSize", dotSize)
+
       fxCanvas.dotScreen(dotCenterX, dotCenterY, dotAngle, dotSize);
       break;
     case "glfxEdgeWork":
@@ -259,9 +314,12 @@ function applySelectedFilter(fxCanvas) {
       fxCanvas.hexagonalPixelate(hexCenterX, hexCenterY, hexScale);
       break;
     case "glfxInk":
-      var inkStrength = parseFloat(
-        document.getElementById("glfxInkStrength").value
-      );
+      var inkStrength = 0.26;
+      if( isNotAuto ){
+        inkStrength = parseFloat( document.getElementById("glfxInkStrength").value );
+      }
+      // console.log("applySelectedFilter: Ink strength is", inkStrength);
+
       fxCanvas.ink(inkStrength);
       break;
     case "glfxBulgePinch":
@@ -300,6 +358,8 @@ function applySelectedFilter(fxCanvas) {
       fxCanvas.swirl(swirlCenterX, swirlCenterY, swirlRadius, swirlAngle);
       break;
   }
+  // console.log("applySelectedFilter: Filter applied and canvas updated");
+
 }
 
 function debounceGlfx(func, wait) {
@@ -313,11 +373,8 @@ function debounceGlfx(func, wait) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-
   document.querySelectorAll(".glfxControls input").forEach(function (input) {
-    input.addEventListener(
-      "input",
-      debounceGlfx(function () {
+    input.addEventListener( "input", debounceGlfx(function () {
         var activeObject = canvas.getActiveObject();
         if (!glfxOriginalImage && activeObject && activeObject.type === "image") {
           glfxOriginalImage = activeObject.getElement();
@@ -339,37 +396,35 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.getElementById("glfxApplyButton").addEventListener("click", function () {
-      if (glfxCopiedImage) {
-        glfxOriginalImage = glfxCopiedImage.cloneNode();
-        glfxCopiedImage = null;
-        glfxOriginalImage = null;
-        glfxResetFilterValues();
-        saveStateByManual();
-      }
-    });
+    glfxApply();
+  });
 
   document.getElementById("glfxResetButton").addEventListener("click", function () {
       glfxReset();
     });
 });
 
+function glfxApply() {
+  if (glfxCopiedImage) {
+    glfxOriginalImage = glfxCopiedImage.cloneNode();
+    glfxCopiedImage = null;
+    glfxOriginalImage = null;
+    glfxResetFilterValues();
+    saveStateByManual();
+  }
+}
 
 function glfxReset() {
   if (glfxOriginalImage) {
     var imgObj = new Image();
     imgObj.onload = function () {
       var img = new fabric.Image(imgObj);
-
       var activeObject = lastActiveObjectState;
-
-      // console.log("activeObject", activeObject);
       if (activeObject && activeObject.type === "image") {
         var copyObject = {};
         copy(activeObject, copyObject);
         copy(copyObject, img);
-      } else {
       }
-
       canvas.remove(activeObject);
       canvas.add(img);
       canvas.setActiveObject(img);
