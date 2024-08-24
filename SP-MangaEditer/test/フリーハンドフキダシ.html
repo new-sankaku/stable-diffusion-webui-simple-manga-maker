@@ -1,0 +1,231 @@
+<html lang="ja">
+<head>
+    <style>
+        #sb-canvas { border: 1px solid #000; margin-bottom: 10px; }
+        .sb-active { background: #4CAF50; color: #fff; }
+    </style>
+</head>
+<body>
+    <div id="sb-root">
+        <canvas id="sb-canvas" width="600" height="400"></canvas>
+        <div>
+            <button id="sb-pointMode">座標</button>
+            <button id="sb-freehandMode">自由</button>
+        </div>
+        <div>
+            <label>塗色: <input type="color" id="sb-fillColor" value="#FFFFFF"></label>
+            <label>線色: <input type="color" id="sb-strokeColor" value="#000000"></label>
+            <label>線幅: <input type="number" id="sb-strokeWidth" min="1" max="20" value="2"></label>
+            <label>透明: <input type="number" id="sb-fillOpacity" min="0" max="100" value="100"></label>
+            <label>滑らかさ: <input type="checkbox" id="sb-smoothness" checked></label>
+            <label>ポイント間距離: <input type="number" id="sb-pointDistance" min="1" max="50" value="2"></label>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsts/2.9.3/jsts.min.js"></script>
+    <script>
+    (function() {
+        const $ = (id) => document.getElementById(id);
+        const canvas = new fabric.Canvas('sb-canvas');
+        const geomFactory = new jsts.geom.GeometryFactory();
+        const elements = {
+            pointMode: $("sb-pointMode"),
+            freehandMode: $("sb-freehandMode"),
+            smoothness: $("sb-smoothness"),
+            fillColor: $("sb-fillColor"),
+            strokeColor: $("sb-strokeColor"),
+            strokeWidth: $("sb-strokeWidth"),
+            fillOpacity: $("sb-fillOpacity"),
+            pointDistance: $("sb-pointDistance")
+        };
+        let state = {
+            mode: "point",
+            isDrawing: false,
+            currentPoints: [],
+            tempPoint: null,
+            currentShape: null,
+            tempLine: null
+        };
+
+        function setActiveButton(button) {
+            [elements.pointMode, elements.freehandMode].forEach(btn => btn.classList.remove("sb-active"));
+            button.classList.add("sb-active");
+        }
+
+        function getCurrentStyle() {
+            return {
+                fill: elements.fillColor.value,
+                stroke: elements.strokeColor.value,
+                strokeWidth: parseInt(elements.strokeWidth.value),
+                opacity: parseInt(elements.fillOpacity.value) / 100
+            };
+        }
+
+        function createPolygon(coords) {
+            if (coords.length < 3) return null;
+            const jstsCoords = coords.map(p => new jsts.geom.Coordinate(p.x, p.y));
+            jstsCoords.push(jstsCoords[0]);
+            try {
+                return geomFactory.createPolygon(geomFactory.createLinearRing(jstsCoords));
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function mergeShapes(shape1, shape2) {
+            try {
+                return shape1.union(shape2);
+            } catch (error) {
+                return shape1;
+            }
+        }
+
+        function mergeWithExisting(newShape) {
+            return canvas.getObjects('path').reduce((resultShape, existingPath) => {
+                if (existingPath.jstsGeom && (resultShape.intersects(existingPath.jstsGeom) || resultShape.touches(existingPath.jstsGeom))) {
+                    const mergedShape = mergeShapes(resultShape, existingPath.jstsGeom);
+                    if (mergedShape && mergedShape.isValid()) {
+                        canvas.remove(existingPath);
+                        return mergedShape;
+                    }
+                }
+                return resultShape;
+            }, newShape);
+        }
+
+        function isCloseToPoint(x, y, point, threshold = 15) {
+            return Math.abs(x - point.x) <= threshold && Math.abs(y - point.y) <= threshold;
+        }
+
+        function smoothPoints(points) {
+            if (points.length < 3) return points;
+            return points.map((point, i, arr) => {
+                if (i === 0 || i === arr.length - 1) return point;
+                const prev = arr[i - 1], next = arr[i + 1];
+                return {
+                    x: point.x * 0.5 + (prev.x + next.x) * 0.25,
+                    y: point.y * 0.5 + (prev.y + next.y) * 0.25
+                };
+            });
+        }
+
+        function removeClosePoints(points) {
+            const distance = parseInt(elements.pointDistance.value);
+            return points.filter((point, index, arr) => 
+                index === 0 || Math.hypot(point.x - arr[index-1].x, point.y - arr[index-1].y) > distance
+            );
+        }
+
+        function drawTemporaryShape() {
+            if (state.currentShape) canvas.remove(state.currentShape);
+            if (state.tempLine) canvas.remove(state.tempLine);
+
+            const style = getCurrentStyle();
+            if (state.mode === "point" && state.currentPoints.length > 0) {
+                state.currentShape = new fabric.Polyline(state.currentPoints, {
+                    ...style, fill: 'rgba(0,0,255,0.2)', selectable: false, evented: false
+                });
+                canvas.add(state.currentShape);
+
+                if (state.tempPoint) {
+                    const lastPoint = state.currentPoints[state.currentPoints.length - 1];
+                    state.tempLine = new fabric.Line([lastPoint.x, lastPoint.y, state.tempPoint.x, state.tempPoint.y], {
+                        ...style, fill: undefined, selectable: false, evented: false
+                    });
+                    canvas.add(state.tempLine);
+                }
+            } else if (state.mode === "freehand" && state.currentPoints.length > 0 && state.isDrawing) {
+                state.currentShape = new fabric.Path(state.currentPoints.map((p, i) => 
+                    `${i === 0 ? 'M' : 'L'}${p.x} ${p.y}`).join(' '), {
+                    ...style, fill: 'rgba(0,0,255,0.2)', selectable: false, evented: false
+                });
+                canvas.add(state.currentShape);
+            }
+
+            canvas.renderAll();
+        }
+
+        function finalizeShape() {
+            if (state.currentPoints.length < 3) return;
+
+            let points = [...state.currentPoints];
+            if (state.mode === "freehand" && elements.smoothness.checked) {
+                points = removeClosePoints(points);
+                points = smoothPoints(points);
+            }
+            points.push(points[0]);
+
+            const polygon = createPolygon(points);
+            if (polygon && polygon.isValid()) {
+                const mergedShape = mergeWithExisting(polygon);
+                const path = new fabric.Path(mergedShape.getCoordinates().map((c, i) => 
+                    `${i === 0 ? 'M' : 'L'}${c.x} ${c.y}`).join(' ') + 'Z', {
+                    ...getCurrentStyle(), selectable: false, evented: false
+                });
+                path.jstsGeom = mergedShape;
+                canvas.add(path);
+            }
+
+            state.currentPoints = [];
+            state.tempPoint = null;
+            if (state.currentShape) canvas.remove(state.currentShape);
+            if (state.tempLine) canvas.remove(state.tempLine);
+            state.currentShape = null;
+            state.tempLine = null;
+
+            canvas.renderAll();
+        }
+
+        canvas.on("mouse:down", ({pointer}) => {
+            state.isDrawing = true;
+            if (state.mode === "point") {
+                if (state.currentPoints.length === 0 || !isCloseToPoint(pointer.x, pointer.y, state.currentPoints[state.currentPoints.length - 1])) {
+                    state.currentPoints.push(pointer);
+                    drawTemporaryShape();
+                }
+            } else if (state.mode === "freehand") {
+                state.currentPoints = [pointer];
+                drawTemporaryShape();
+            }
+        });
+
+        canvas.on("mouse:move", ({pointer}) => {
+            if (state.mode === "point") {
+                state.tempPoint = pointer;
+                drawTemporaryShape();
+            } else if (state.mode === "freehand" && state.isDrawing) {
+                state.currentPoints.push(pointer);
+                drawTemporaryShape();
+            }
+        });
+
+        canvas.on("mouse:up", ({pointer}) => {
+            state.isDrawing = false;
+            if (state.mode === "point" && state.currentPoints.length >= 3 && isCloseToPoint(pointer.x, pointer.y, state.currentPoints[0])) {
+                finalizeShape();
+            } else if (state.mode === "freehand" && state.currentPoints.length >= 3) {
+                finalizeShape();
+            }
+        });
+
+        elements.pointMode.addEventListener("click", () => {
+            state.mode = "point";
+            setActiveButton(elements.pointMode);
+            state.currentPoints = [];
+            state.tempPoint = null;
+            drawTemporaryShape();
+        });
+
+        elements.freehandMode.addEventListener("click", () => {
+            state.mode = "freehand";
+            setActiveButton(elements.freehandMode);
+            state.currentPoints = [];
+            state.tempPoint = null;
+            drawTemporaryShape();
+        });
+
+        setActiveButton(elements.pointMode);
+    })();
+    </script>
+</body>
+</html>

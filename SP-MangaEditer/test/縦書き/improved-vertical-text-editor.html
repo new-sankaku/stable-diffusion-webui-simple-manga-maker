@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title>縦書き</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* #canvasContainer {
+      position: relative;
+    } */
+
+    #vtxtTA {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #fff;
+      color: #000;
+      caret-color: #000;
+      font-size: 20px;
+      border: none;
+      box-sizing: border-box;
+      resize: none;
+      overflow: hidden;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      letter-spacing: 0.1em;
+      padding: 5px;
+      display: none;
+    }
+
+    #vtxtControlPanel {
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-left: 1px solid #ccc;
+    }
+
+    .vtxtSettingRow {
+      margin-bottom: 10px;
+    }
+
+    .align-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .align-button.selected {
+      background-color: #e0e0e0;
+    }
+
+    .material-icons {
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="canvasContainer">
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <textarea id="vtxtTA"></textarea>
+  </div>
+  <div id="vtxtControlPanel">
+    <button id="vtxtAddTextButton">新しいテキストを追加</button>
+    <div class="vtxtSettingRow">
+      <label for="fontSizeSlider">フォントサイズ:</label>
+      <input type="range" id="fontSizeSlider" min="10" max="50" value="20" />
+      <span id="fontSizeSliderValue">20</span>
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="vtxtLineHeightSlider">行間:</label>
+      <input type="range" id="vtxtLineHeightSlider" min="0.5" max="2" step="0.1" value="1" />
+      <span id="vtxtLineHeightSliderValue">1</span>
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="vtxtCharSpacingSlider">文字間:</label>
+      <input type="range" id="vtxtCharSpacingSlider" min="0" max="0.5" step="0.05" value="0.1" />
+      <span id="vtxtCharSpacingSliderValue">0.1</span>
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="vtxtBoldCheckbox">太字:</label>
+      <input type="checkbox" id="vtxtBoldCheckbox" />
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="vtxtItalicCheckbox">斜体:</label>
+      <input type="checkbox" id="vtxtItalicCheckbox" />
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="fontSelector">フォント:</label>
+      <select id="fontSelector">
+        <option value="MS Mincho, ＭＳ 明朝, serif">ＭＳ 明朝</option>
+        <option value="MS Gothic, ＭＳ ゴシック, sans-serif">ＭＳ ゴシック</option>
+      </select>
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="textColorPicker">テキストカラー:</label>
+      <input type="color" id="textColorPicker" value="#000000">
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="textOutlineColorPicker">アウトライン色:</label>
+      <input type="color" id="textOutlineColorPicker" value="#000000">
+    </div>
+    <div class="vtxtSettingRow">
+      <label for="fontStrokeWidthSlider">アウトラインサイズ:</label>
+      <input type="range" id="fontStrokeWidthSlider" min="0" max="5" step="0.1" value="0" />
+      <span id="fontStrokeWidthSliderValue">0</span>
+    </div>
+    <div class="vtxtSettingRow">
+      <label>水平方向の配置(not work):</label>
+      <button id="align-left" class="align-button selected" data-align="left">
+        <i class="material-icons">format_align_left</i>
+      </button>
+      <button id="align-center" class="align-button" data-align="center">
+        <i class="material-icons">format_align_center</i>
+      </button>
+      <button id="align-right" class="align-button" data-align="right">
+        <i class="material-icons">format_align_right</i>
+      </button>
+    </div>
+    <div class="vtxtSettingRow">
+      <label>垂直方向の配置:</label>
+      <button id="align-top" class="align-button-vertical selected" data-align-vertical="top">
+        <i class="material-icons">vertical_align_top</i>
+      </button>
+      <button id="align-middle" class="align-button-vertical" data-align-vertical="middle">
+        <i class="material-icons">vertical_align_center</i>
+      </button>
+      <button id="align-bottom" class="align-button-vertical" data-align-vertical="bottom">
+        <i class="material-icons">vertical_align_bottom</i>
+      </button>
+    </div>
+  </div>
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    try {
+      var canvas = new fabric.Canvas("canvas");
+      var vtxtTA = $("vtxtTA");
+      var vtxtActiveVText = null;
+
+      var VtxtVerticalText = fabric.util.createClass(fabric.Object, {
+        type: "vtxtVerticalText",
+        text: "",
+        fontSize: 20,
+        fontFamily: "MS Mincho, ＭＳ 明朝, serif",
+        fill: "black",
+        padding: 8,
+        charSpacing: 0.1,
+        textAlign: "center",
+        verticalAlign: "middle",
+        fontWeight: "normal",
+        fontStyle: "normal",
+        lineHeight: 1,
+        textOffsetY: 3,
+        stroke: "#000000",
+        strokeWidth: 0,
+        initialize: function (text, options) {
+          options = options || {};
+          this.text = text || "";
+          this.callSuper("initialize", options);
+          this._vtxtUpdateDimensions();
+        },
+        _vtxtUpdateDimensions: function () {
+          var ctx = this.canvas
+            ? this.canvas.getContext("2d")
+            : fabric.util.createCanvasElement().getContext("2d");
+          ctx.font = this._vtxtGetFontDeclaration();
+          var lines = this.text.split("\n");
+          var maxLineLength = Math.max(...lines.map(line => line.length));
+          var maxCharWidth = Math.max(...this.text.split("").map(char => ctx.measureText(char).width));
+
+          var textWidth = maxCharWidth * lines.length * this.lineHeight;
+          var textHeight = maxLineLength * this.fontSize * (1 + this.charSpacing);
+          var width  = textWidth  + 2 * (this.padding * (this.fontSize /20) );
+          var height = textHeight + 2 * (this.padding * (this.fontSize /20) );
+
+          this.set({
+            width: width,
+            height: height
+          });
+          this.setCoords();
+        },
+
+        _render: function (ctx) {
+          ctx.save();
+          ctx.scale(this.scaleX, this.scaleY);
+          ctx.font = this._vtxtGetFontDeclaration();
+          ctx.fillStyle = this.fill;
+          ctx.strokeStyle = this.stroke;
+          ctx.lineWidth = this.strokeWidth;
+
+          var lines = this.text.split("\n");
+          var lineWidth = this.fontSize * this.lineHeight;
+          var totalWidth = lineWidth * lines.length;
+
+          lines.slice().reverse().forEach((line, lineIndex) => {
+            var chars = line.split("");
+            var lineHeight = chars.length * this.fontSize * (1 + this.charSpacing);
+
+            var lineX;
+            switch (this.textAlign) {
+              case "left":
+                lineX = (-this.width + this.padding*2) + (lineIndex * lineWidth) + this.padding;
+                break;
+              case "right":
+                lineX = (this.width/2) + (-this.width + this.padding*2) + (lineIndex * lineWidth) - this.padding;
+                break;
+              default: // center
+                lineX = -totalWidth / 2 + lineIndex * lineWidth - (lineWidth/2);
+            }
+
+            var startY;
+            switch (this.verticalAlign) {
+              case "top":
+                startY = -this.height / 2 + this.padding;
+                break;
+              case "bottom":
+                startY = this.height / 2 - lineHeight - this.padding;
+                break;
+              default:
+                startY = -lineHeight / 2;
+            }
+
+            chars.forEach((char, charIndex) => {
+              var charY = startY + charIndex * this.fontSize * (1 + this.charSpacing) + this.fontSize / 2;
+              if ("()（）[]［］{}｛｝<>＜＞«»《》｢｣「」『』【】〈〉〔〕=＝≒≠₌_".includes(char)) {
+                ctx.save();
+                ctx.translate(lineX + this.fontSize / 2, charY);
+                ctx.rotate(Math.PI / 2);
+                ctx.fillText(char, 0, 0);
+                if (this.strokeWidth > 0) {
+                  ctx.strokeText(char, 0, 0);
+                }
+                ctx.restore();
+              } else {
+                ctx.fillText(char, lineX + this.fontSize / 2, charY);
+                if (this.strokeWidth > 0) {
+                  ctx.strokeText(char, lineX + this.fontSize / 2, charY);
+                }
+              }
+            });
+          });
+
+          ctx.restore();
+        },
+
+        toObject: function () {
+          return fabric.util.object.extend(this.callSuper("toObject"), {
+            text: this.text,
+            fontSize: this.fontSize,
+            fontFamily: this.fontFamily,
+            fontWeight: this.fontWeight,
+            fontStyle: this.fontStyle,
+            fill: this.fill,
+            padding: this.padding,
+            charSpacing: this.charSpacing,
+            textAlign: this.textAlign,
+            verticalAlign: this.verticalAlign,
+            lineHeight: this.lineHeight,
+            textOffsetY: this.textOffsetY,
+            stroke: this.stroke,
+            strokeWidth: this.strokeWidth,
+          });
+        },
+        _vtxtGetFontDeclaration: function () {
+          return [
+            this.fontStyle,
+            this.fontWeight,
+            this.fontSize + "px",
+            this.fontFamily,
+          ].join(" ");
+        },
+        _set: function (key, value) {
+          this.callSuper("_set", key, value);
+          if (
+            key === "text" ||
+            key === "fontSize" ||
+            key === "fontFamily" ||
+            key === "fontWeight" ||
+            key === "fontStyle" ||
+            key === "charSpacing" ||
+            key === "textAlign" ||
+            key === "verticalAlign" ||
+            key === "lineHeight" ||
+            key === "textOffsetY" ||
+            key === "stroke" ||
+            key === "strokeWidth"
+          ) {
+            this._vtxtUpdateDimensions();
+            this.set("dirty", true);
+          }
+          return this;
+        },
+      });
+
+      fabric.VtxtVerticalText = VtxtVerticalText;
+      fabric.VtxtVerticalText.fromObject = function (object, callback) {
+        return fabric.Object._fromObject("VtxtVerticalText", object, callback);
+      };
+
+      function vtxtUpdateTextAreaPosition() {
+        if (!vtxtActiveVText) return;
+        var zoom = canvas.getZoom();
+        var vpt = canvas.viewportTransform;
+        var obj = vtxtActiveVText;
+        var bounds = obj.getBoundingRect();
+        var width, height, left, top;
+
+        if (Math.abs(obj.angle) < 0.001) {
+          var padding = {
+            width: 0.08 * bounds.width,
+            height: 0.08 * bounds.height,
+          };
+          width = bounds.width + padding.width;
+          height = bounds.height + padding.height;
+          left = bounds.left - padding.width;
+          top = bounds.top + padding.height / 2;
+        } else {
+          width = 1.2 * obj.width * obj.scaleX;
+          height = 1.2 * obj.height * obj.scaleY;
+          var angle = (obj.angle * Math.PI) / 180;
+          var cos = Math.cos(angle);
+          var sin = Math.sin(angle);
+          var centerX =
+            obj.left +
+            ((obj.width * obj.scaleX) / 2) * cos -
+            ((obj.height * obj.scaleY) / 2) * sin;
+          var centerY =
+            obj.top +
+            ((obj.width * obj.scaleX) / 2) * sin +
+            ((obj.height * obj.scaleY) / 2) * cos;
+          left = centerX - width / 2;
+          top = centerY - height / 2;
+        }
+
+        vtxtTA.style.left = left * zoom + vpt[4] + "px";
+        vtxtTA.style.top = top * zoom + vpt[5] + "px";
+        vtxtTA.style.width = width + "px";
+        vtxtTA.style.height = height + "px";
+        vtxtTA.style.fontSize = obj.fontSize * obj.scaleY + "px";
+        vtxtTA.style.letterSpacing = obj.charSpacing * obj.fontSize + "px";
+        vtxtTA.style.lineHeight = obj.lineHeight * 1.5;
+        vtxtTA.style.fontWeight = obj.fontWeight;
+        vtxtTA.style.fontStyle = obj.fontStyle;
+        vtxtTA.style.fontFamily = obj.fontFamily;
+        vtxtTA.style.paddingTop = obj.padding * 1.2 * obj.scaleY + "px";
+        vtxtTA.style.paddingRight = obj.padding * 1.2 * obj.scaleX + "px";
+        vtxtTA.style.transform = "scale(1, 1) rotate(0deg)";
+        vtxtTA.style.transformOrigin = "center center";
+      }
+
+      function vtxtUpdateVerticalText() {
+        if (vtxtActiveVText) {
+          var text = vtxtTA.value.replace(/\r\n/g, "\n");
+          vtxtActiveVText.set("text", text);
+          vtxtActiveVText.set("dirty", true);
+          vtxtActiveVText._vtxtUpdateDimensions();
+          canvas.requestRenderAll();
+          vtxtUpdateTextAreaPosition();
+        }
+      }
+
+      function vtxtShowTextArea(obj) {
+        vtxtActiveVText = obj;
+        vtxtTA.value = obj.text;
+        vtxtTA.style.display = "block";
+        vtxtUpdateTextAreaPosition();
+        setTimeout(function () {
+          vtxtTA.focus();
+        }, 0);
+      }
+
+      function vtxtHideTextArea() {
+        if (vtxtActiveVText) {
+          vtxtUpdateVerticalText();
+        }
+        vtxtTA.style.display = "none";
+        vtxtActiveVText = null;
+      }
+
+      vtxtTA.onblur = function () {
+        vtxtUpdateVerticalText();
+        vtxtHideTextArea();
+      };
+
+      canvas.setBackgroundColor("#FFE6E6", canvas.renderAll.bind(canvas));
+
+      var vtxtInitialVerticalText = new VtxtVerticalText("縦書き\nテキスト\n１２３\n４５６", {
+        left: 100,
+        top: 100,
+        fontSize: 20,
+        fill: "black",
+        lineHeight: 1,
+        textOffsetY: 3,
+      });
+
+      function vtxtUpdateActiveObject(property, value) {
+        var activeObject = canvas.getActiveObject();
+        if (activeObject && activeObject instanceof VtxtVerticalText) {
+          activeObject.set(property, value);
+          activeObject._vtxtUpdateDimensions();
+          canvas.requestRenderAll();
+          vtxtUpdateTextAreaPosition();
+        }
+      }
+
+      function vtxtGetControlValues() {
+        return {
+          fontSize: parseInt($("fontSizeSlider").value),
+          lineHeight: parseFloat($("vtxtLineHeightSlider").value),
+          charSpacing: parseFloat($("vtxtCharSpacingSlider").value),
+          fontWeight: $("vtxtBoldCheckbox").checked ? "bold" : "normal",
+          fontStyle: $("vtxtItalicCheckbox").checked ? "italic" : "normal",
+          fontFamily: $("fontSelector").value,
+          fill: $("textColorPicker").value,
+          stroke: $("textOutlineColorPicker").value,
+          strokeWidth: parseFloat($("fontStrokeWidthSlider").value),
+          textAlign: document.querySelector(".align-button.selected").getAttribute("data-align"),
+          verticalAlign: document.querySelector(".align-button-vertical.selected").getAttribute("data-align-vertical")
+        };
+      }
+
+      canvas.add(vtxtInitialVerticalText);
+
+      vtxtTA.addEventListener("input", function () {
+        vtxtUpdateVerticalText();
+      });
+
+      vtxtTA.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          var start = this.selectionStart;
+          var end = this.selectionEnd;
+          this.value =
+            this.value.slice(0, start) + "\n" + this.value.slice(end);
+          this.selectionStart = this.selectionEnd = start + 1;
+          vtxtUpdateVerticalText();
+        }
+      });
+
+      vtxtTA.onblur = vtxtHideTextArea;
+
+      canvas.on("mouse:down", function (options) {
+        vtxtHideTextArea();
+      });
+      canvas.on("mouse:dblclick", function (options) {
+        if (options.target && options.target instanceof VtxtVerticalText) {
+          vtxtShowTextArea(options.target);
+        }
+      });
+
+      $("vtxtAddTextButton").addEventListener("click", function () {
+        var controlValues = vtxtGetControlValues();
+        var newText = new VtxtVerticalText(
+          "新しいテキスト",
+          Object.assign(
+            {
+              left: Math.random() * (canvas.width - 100),
+              top: Math.random() * (canvas.height - 100),
+              fill: "black",
+              textOffsetY: 3,
+            },
+            controlValues
+          )
+        );
+        canvas.add(newText);
+        canvas.setActiveObject(newText);
+        canvas.requestRenderAll();
+      });
+
+      canvas.on("object:moving", vtxtUpdateTextAreaPosition);
+      canvas.on("object:scaling", function (event) {
+        var target = event.target;
+        if (target instanceof VtxtVerticalText) {
+          vtxtUpdateTextAreaPosition();
+        }
+      });
+
+      canvas.on("object:modified", function (event) {
+        var target = event.target;
+        if (target instanceof VtxtVerticalText) {
+          var left = target.left;
+          var top = target.top;
+          var width = target.width * target.scaleX;
+          var height = target.height * target.scaleY;
+          var newFontSize = target.fontSize * target.scaleY;
+          var centerX = left + width / 2;
+          var centerY = top + height / 2;
+          target.set({
+            scaleX: 1,
+            scaleY: 1,
+            fontSize: newFontSize,
+            width: width,
+            height: height,
+          });
+          target._vtxtUpdateDimensions();
+          target.set({
+            left: centerX - target.width / 2,
+            top: centerY - target.height / 2,
+          });
+          canvas.requestRenderAll();
+        }
+      });
+
+      canvas.on("object:rotating", vtxtUpdateTextAreaPosition);
+      canvas.on("zoom:changed", vtxtUpdateTextAreaPosition);
+      canvas.on("viewportTransform", vtxtUpdateTextAreaPosition);
+
+      function vtxtHandleSelection(event) {
+        var selected = canvas.getActiveObject();
+        if (selected && selected instanceof VtxtVerticalText) {
+          vtxtUpdateControlValues(selected);
+          vtxtShowTextArea(selected);
+        }
+      }
+
+      canvas.on("selection:created", vtxtHandleSelection);
+      canvas.on("selection:updated", vtxtHandleSelection);
+
+      function vtxtUpdateControlValues(obj) {
+        $("fontSizeSlider").value = obj.fontSize;
+        $("fontSizeSliderValue").textContent = obj.fontSize;
+        $("vtxtLineHeightSlider").value = obj.lineHeight;
+        $("vtxtLineHeightSliderValue").textContent = obj.lineHeight;
+        $("vtxtCharSpacingSlider").value = obj.charSpacing;
+        $("vtxtCharSpacingSliderValue").textContent = obj.charSpacing;
+        $("vtxtBoldCheckbox").checked = obj.fontWeight === "bold";
+        $("vtxtItalicCheckbox").checked = obj.fontStyle === "italic";
+        $("fontSelector").value = obj.fontFamily;
+        $("textColorPicker").value = obj.fill;
+        $("textOutlineColorPicker").value = obj.stroke;
+        $("fontStrokeWidthSlider").value = obj.strokeWidth;
+        $("fontStrokeWidthSliderValue").textContent = obj.strokeWidth;
+        updateAlignButtons(obj.textAlign);
+        updateVerticalAlignButtons(obj.verticalAlign);
+      }
+
+      canvas.on("selection:cleared", function () {
+        vtxtHideTextArea();
+      });
+
+      canvas.renderAll();
+      ["fontSizeSlider", "vtxtLineHeightSlider", "vtxtCharSpacingSlider", "fontStrokeWidthSlider"].forEach(
+        function (id) {
+          var slider = $(id); 
+          var valueSpan = $(id + "Value");
+          slider.addEventListener("input", function () {
+            if (valueSpan) {
+              valueSpan.textContent = slider.value;
+            }
+            var property = {
+              fontSizeSlider: "fontSize",
+              vtxtLineHeightSlider: "lineHeight",
+              vtxtCharSpacingSlider: "charSpacing",
+              fontStrokeWidthSlider: "strokeWidth"
+            }[id];
+            vtxtUpdateActiveObject(property, parseFloat(slider.value));
+          });
+        }
+      );
+      $("vtxtBoldCheckbox").addEventListener("change", function () {
+        var fontWeight = this.checked ? "bold" : "normal";
+        vtxtUpdateActiveObject("fontWeight", fontWeight);
+      });
+
+      $("vtxtItalicCheckbox").addEventListener("change", function () {
+        var fontStyle = this.checked ? "italic" : "normal";
+        vtxtUpdateActiveObject("fontStyle", fontStyle);
+      });
+
+      $("fontSelector").addEventListener("change", function () {
+        var fontFamily = this.value;
+        vtxtUpdateActiveObject("fontFamily", fontFamily);
+      });
+
+      $("textColorPicker").addEventListener("input", function () {
+        vtxtUpdateActiveObject("fill", this.value);
+      });
+
+      $("textOutlineColorPicker").addEventListener("input", function () {
+        vtxtUpdateActiveObject("stroke", this.value);
+      });
+
+      function updateAlignButtons(align) {
+        document.querySelectorAll(".align-button").forEach(button => {
+          button.classList.remove("selected");
+        });
+        document.querySelector(`.align-button[data-align="${align}"]`).classList.add("selected");
+      }
+
+      function updateVerticalAlignButtons(align) {
+        document.querySelectorAll(".align-button-vertical").forEach(button => {
+          button.classList.remove("selected");
+        });
+        document.querySelector(`.align-button-vertical[data-align-vertical="${align}"]`).classList.add("selected");
+      }
+
+      function alignText(align) {
+        updateAlignButtons(align);
+        vtxtUpdateActiveObject("textAlign", align);
+      }
+
+      function alignTextVertical(align) {
+        updateVerticalAlignButtons(align);
+        vtxtUpdateActiveObject("verticalAlign", align);
+      }
+
+      document.querySelectorAll(".align-button").forEach(button => {
+        button.addEventListener("click", function () {
+          alignText(this.getAttribute("data-align"));
+        });
+      });
+
+      document.querySelectorAll(".align-button-vertical").forEach(button => {
+        button.addEventListener("click", function () {
+          alignTextVertical(this.getAttribute("data-align-vertical"));
+        });
+      });
+      function updateInitialLabels() {
+        ["fontSizeSlider", "vtxtLineHeightSlider", "vtxtCharSpacingSlider", "fontStrokeWidthSlider"].forEach(
+          function (id) {
+            var slider = $(id);
+            var valueSpan = $(id + "Value");
+            if (valueSpan) {
+              valueSpan.textContent = slider.value;
+            }
+          }
+        );
+      }
+      window.addEventListener('load', updateInitialLabels);
+    } catch (error) {
+      console.error("エラー発生:", error);
+    }
+  </script>
+</body>
+
+</html>
