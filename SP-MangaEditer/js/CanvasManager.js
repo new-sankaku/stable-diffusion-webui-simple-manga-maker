@@ -6,7 +6,7 @@ let resizeTimer;
 function initResizeCanvas(event) {
   event.stopPropagation();
   event.preventDefault();
-  var container = document.getElementById("canvas-container");
+  var container = $("canvas-container");
   var containerWidth = container.clientWidth;
   var containerHeight = container.clientHeight;
 
@@ -78,7 +78,7 @@ function adjustCanvasSize() {
 
 //forced = 強制
 function adjustCanvasSize(forced) {
-  var container = document.getElementById("canvas-container");
+  var container = $("canvas-container");
   var windowWidth = container.clientWidth;
   var windowHeight = container.clientHeight;
 
@@ -108,7 +108,7 @@ window.addEventListener("resize", adjustCanvasSize);
 
 
 function resizeCanvasToObject(objectWidth, objectHeight) {
-  var container = document.getElementById("canvas-container");
+  var container = $("canvas-container");
   var containerWidth = container.clientWidth;
   var containerHeight = container.clientHeight;
 
@@ -136,13 +136,13 @@ function resizeCanvasToObject(objectWidth, objectHeight) {
 var resizableContainer = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('bg-color').addEventListener('input', function (event) {
-    // console.log("document.getElementById('bg-color').addEventListener('input', function(event) {");
+  $('bg-color').addEventListener('input', function (event) {
+    // console.log("$('bg-color').addEventListener('input', function(event) {");
     var color = event.target.value;
     canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
   });
-  document.getElementById('bg-color').addEventListener('input', function (event) {
-    resizableContainer = document.getElementById('canvas-container');
+  $('bg-color').addEventListener('input', function (event) {
+    resizableContainer = $('canvas-container');
   });
 });
 
@@ -153,9 +153,9 @@ function zoomIn() {
   const containerRect = resizableContainer.getBoundingClientRect();
 
   canvasContinerScale += 0.1;
-  document.getElementById('canvas-container').style.transform = `scale(${canvasContinerScale})`;
+  $('canvas-container').style.transform = `scale(${canvasContinerScale})`;
 
-  const newContentRect = document.getElementById('canvas-container').getBoundingClientRect();
+  const newContentRect = $('canvas-container').getBoundingClientRect();
   const centerX = containerRect.left + containerRect.width / 2;
   const centerY = containerRect.top + containerRect.height / 2;
   const newScrollLeft = (centerX - newContentRect.width / 2 - containerRect.left) + resizableContainer.scrollLeft;
@@ -170,9 +170,9 @@ function zoomFit() {
   const containerRect = resizableContainer.getBoundingClientRect();
 
   canvasContinerScale = 1.0;
-  document.getElementById('canvas-container').style.transform = `scale(${canvasContinerScale})`;
+  $('canvas-container').style.transform = `scale(${canvasContinerScale})`;
 
-  const newContentRect = document.getElementById('canvas-container').getBoundingClientRect();
+  const newContentRect = $('canvas-container').getBoundingClientRect();
   const centerX = containerRect.left + containerRect.width / 2;
   const centerY = containerRect.top + containerRect.height / 2;
   const newScrollLeft = (centerX - newContentRect.width / 2 - containerRect.left) + resizableContainer.scrollLeft;
@@ -189,9 +189,9 @@ function zoomOut() {
     const containerRect = resizableContainer.getBoundingClientRect();
 
     canvasContinerScale -= 0.1;
-    document.getElementById('canvas-container').style.transform = `scale(${canvasContinerScale})`;
+    $('canvas-container').style.transform = `scale(${canvasContinerScale})`;
 
-    const newContentRect = document.getElementById('canvas-container').getBoundingClientRect();
+    const newContentRect = $('canvas-container').getBoundingClientRect();
     const centerX = containerRect.left + containerRect.width / 2;
     const centerY = containerRect.top + containerRect.height / 2;
     const newScrollLeft = (centerX - newContentRect.width / 2 - containerRect.left) + resizableContainer.scrollLeft;
@@ -205,11 +205,11 @@ function zoomOut() {
 
 
 function inputImageFile() {
-  document.getElementById('imageInput').click();
+  $('imageInput').click();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('imageInput').addEventListener('change', function(e) {
+  $('imageInput').addEventListener('change', function(e) {
     var files = e.target.files;
     for (var i = 0; i < files.length; i++) {
         (function(file) {
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function changeView(elementId, isVisible) {
-  var element = document.getElementById(elementId);
+  var element = $(elementId);
   if (isVisible) {
     element.style.display = "block";
   } else {

@@ -113,8 +113,8 @@ function loadZip(zip, guid = null){
 var API_mode = apis.A1111;
 
 document.addEventListener("DOMContentLoaded", function () {
-  var settingsSave = document.getElementById("settingsSave");
-  var settingsLoad = document.getElementById("settingsLoad");
+  var settingsSave = $("settingsSave");
+  var settingsLoad = $("settingsLoad");
   settingsSave.addEventListener("click", function () {
     saveSettingsLocalStrage();
   });
@@ -123,8 +123,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  var saveButton = document.getElementById("projectSave");
-  var loadButton = document.getElementById("projectLoad");
+  var saveButton = $("projectSave");
+  var loadButton = $("projectLoad");
 
   saveButton.addEventListener("click", function () {
     if (stateStack.length === 0 || btmImageZipMap.size === 0) {
@@ -273,8 +273,8 @@ document.addEventListener("DOMContentLoaded", function () {
   
   
   //TODO: Maybe moved this to another file
-  var selectA1111APIButton = document.getElementById("Select_a1111_button");
-  var selectComfyuiAPIButton = document.getElementById("Select_comfyui_button");
+  var selectA1111APIButton = $("Select_a1111_button");
+  var selectComfyuiAPIButton = $("Select_comfyui_button");
   // // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
   // selectA1111APIButton.addEventListener('click', (event) => {
   //   event.stopPropagation();
@@ -338,24 +338,24 @@ function loadSettingsLocalStrage(  ) {
   if (localSettingsData) {
     const localSettings = JSON.parse(localSettingsData);
 
-    var bgColorInputElement = document.getElementById('bg-color');
+    var bgColorInputElement = $('bg-color');
     bgColorInputElement.value = localSettings.canvasBgColor || "#ffffff";
     
     var event = new Event('input', { 'bubbles': true, 'cancelable': true });
     bgColorInputElement.dispatchEvent(event);
 
 
-    document.getElementById('view_layers_checkbox').checked = localSettings.view_layers_checkbox ?? true;
-    document.getElementById('view_controles_checkbox').checked = localSettings.view_controles_checkbox ?? true;
+    $('view_layers_checkbox').checked = localSettings.view_layers_checkbox ?? true;
+    $('view_controles_checkbox').checked = localSettings.view_controles_checkbox ?? true;
 
-    document.getElementById('knifePanelSpaceSize').value = localSettings.knifePanelSpaceSize || "20";
-    document.getElementById('outputDpi').value = localSettings.canvasDpi || "300";
-    document.getElementById('gridSizeInput').value = localSettings.canvasGridLineSize || "10";
-    document.getElementById('marginFromPanel').value = localSettings.canvasMarginFromPanel || 20;
+    $('knifePanelSpaceSize').value = localSettings.knifePanelSpaceSize || "20";
+    $('outputDpi').value = localSettings.canvasDpi || "300";
+    $('gridSizeInput').value = localSettings.canvasGridLineSize || "10";
+    $('marginFromPanel').value = localSettings.canvasMarginFromPanel || 20;
     svgPagging = localSettings.canvasMarginFromPanel || 20;
-    document.getElementById('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
-    document.getElementById('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
-    document.getElementById('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox === "true";
+    $('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
+    $('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
+    $('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox === "true";
 
     text2img_basePrompt.text2img_prompt         = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
     text2img_basePrompt.text2img_negativePrompt = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
@@ -390,17 +390,17 @@ function saveSettingsLocalStrage() {
   ]);
 
   localSettingsData = {
-    view_layers_checkbox: document.getElementById('view_layers_checkbox').checked,
-    view_controles_checkbox: document.getElementById('view_controles_checkbox').checked,
+    view_layers_checkbox: $('view_layers_checkbox').checked,
+    view_controles_checkbox: $('view_controles_checkbox').checked,
 
-    knifePanelSpaceSize: document.getElementById('knifePanelSpaceSize').value,
-    canvasBgColor: document.getElementById('bg-color').value,
-    canvasDpi: document.getElementById('outputDpi').value,
-    canvasGridLineSize: document.getElementById('gridSizeInput').value,
-    canvasMarginFromPanel: document.getElementById('marginFromPanel').value,
-    Stable_Diffusion_WebUI_apiPort: document.getElementById('Stable_Diffusion_WebUI_apiPort').value,
-    Stable_Diffusion_WebUI_apiHost: document.getElementById('Stable_Diffusion_WebUI_apiHost').value,
-    apiHeartbeatCheckbox : document.getElementById('apiHeartbeatCheckbox').checked ,
+    knifePanelSpaceSize: $('knifePanelSpaceSize').value,
+    canvasBgColor: $('bg-color').value,
+    canvasDpi: $('outputDpi').value,
+    canvasGridLineSize: $('gridSizeInput').value,
+    canvasMarginFromPanel: $('marginFromPanel').value,
+    Stable_Diffusion_WebUI_apiPort: $('Stable_Diffusion_WebUI_apiPort').value,
+    Stable_Diffusion_WebUI_apiHost: $('Stable_Diffusion_WebUI_apiHost').value,
+    apiHeartbeatCheckbox : $('apiHeartbeatCheckbox').checked ,
     text2img_basePrompt_text2img_prompt: text2img_basePrompt.text2img_prompt,
     text2img_basePrompt_text2img_negativePrompt: text2img_basePrompt.text2img_negativePrompt,
     text2img_basePrompt_text2img_seed: text2img_basePrompt.text2img_seed,
@@ -421,8 +421,8 @@ function saveSettingsLocalStrage() {
 
 document.addEventListener('DOMContentLoaded', function() {
   loadSettingsLocalStrage();
-  changeView("layer-panel", document.getElementById('view_layers_checkbox').checked);
-  changeView("controls", document.getElementById('view_controles_checkbox').checked);
+  changeView("layer-panel", $('view_layers_checkbox').checked);
+  changeView("controls", $('view_controles_checkbox').checked);
 });
 
 
@@ -432,7 +432,7 @@ function toggleAPI(event) {
   event.stopPropagation();
   event.preventDefault();
 
-  const toggleCheckbox = document.getElementById('toggle-api');
+  const toggleCheckbox = $('toggle-api');
   if (toggleCheckbox.checked) {
     API_mode = apis.COMFYUI;
     console.log('API_mode is now set to:', API_mode);
@@ -471,12 +471,12 @@ function executeWithConfirmation(message, callback) {
   `;
 
   document.body.insertAdjacentHTML('beforeend', modalHtml);
-  var confirmModal = new bootstrap.Modal(document.getElementById('dynamicConfirmModal'));
+  var confirmModal = new bootstrap.Modal($('dynamicConfirmModal'));
   confirmModal.show();
 
-  var executeWithConfirmationConfirmButton = document.getElementById('executeWithConfirmationConfirmButton');
-  var executeWithConfirmationCancelButton = document.getElementById('executeWithConfirmationCancelButton');
-  var executeWithConfirmationCloseButton = document.getElementById('executeWithConfirmationCloseButton');
+  var executeWithConfirmationConfirmButton = $('executeWithConfirmationConfirmButton');
+  var executeWithConfirmationCancelButton = $('executeWithConfirmationCancelButton');
+  var executeWithConfirmationCloseButton = $('executeWithConfirmationCloseButton');
 
   function handleConfirm() {
     callback();
@@ -493,7 +493,7 @@ function executeWithConfirmation(message, callback) {
     executeWithConfirmationConfirmButton.removeEventListener('click', handleConfirm);
     executeWithConfirmationCancelButton.removeEventListener('click', handleCancel);
     executeWithConfirmationCloseButton.removeEventListener('click', handleCancel);
-    document.getElementById('dynamicConfirmModal').remove();
+    $('dynamicConfirmModal').remove();
   }
 
   executeWithConfirmationConfirmButton.addEventListener('click', handleConfirm);
@@ -502,7 +502,7 @@ function executeWithConfirmation(message, callback) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('svgDownload').onclick = function () {
+  $('svgDownload').onclick = function () {
     var svg = canvas.toSVG();
     // console.log(svg);
     svgDownload('canvas.svg', svg);

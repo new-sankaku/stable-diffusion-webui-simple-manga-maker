@@ -91,7 +91,7 @@ function mangaEditorDesu_init() {
 
 function mangaEditorDesu_showPopup() {
   if (!mangaEditorDesu_popupShown) {
-      const popup = document.getElementById('mangaEditorDesu_custom-popup');
+      const popup = $('mangaEditorDesu_custom-popup');
       popup.style.display = 'block';
       mangaEditorDesu_popupShown = true;
       localStorage.setItem('mangaEditorDesu_popupShown', 'true');
@@ -99,7 +99,7 @@ function mangaEditorDesu_showPopup() {
 }
 
 function mangaEditorDesu_closePopup() {
-  const popup = document.getElementById('mangaEditorDesu_custom-popup');
+  const popup = $('mangaEditorDesu_custom-popup');
   popup.style.display = 'none';
 }
 

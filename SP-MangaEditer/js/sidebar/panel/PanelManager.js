@@ -4,7 +4,7 @@ function handleSelection(e) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById("canvas-container").addEventListener(
+  $("canvas-container").addEventListener(
     "dragover",
     function (e) {
       e.preventDefault();
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     false
   );  
 
-  document.getElementById("canvas-container").addEventListener(
+  $("canvas-container").addEventListener(
     "drop",
     async function (e) {
       e.preventDefault();
@@ -215,7 +215,7 @@ function loadSVGPlusReset(svgString) {
     var scaleToFit = Math.min(overallScaleX, overallScaleY);
     var offsetY = (svgPagging / 2) + ((canvasUsableHeight - options.height * overallScaleY) / 2) + strokeWidth;
     var offsetX = (svgPagging / 2) + ((canvasUsableWidth  - options.width  * overallScaleX) / 2);
-    var bgColorInput = document.getElementById("bg-color");
+    var bgColorInput = $("bg-color");
     canvas.backgroundColor = bgColorInput.value;
 
     // console.log("strokeWidth:svgPagging", strokeWidth,":", svgPagging);
@@ -345,7 +345,7 @@ function loadSVGPlusReset(svgString) {
 
 /** Disallow drag-on-drop. */
 document.addEventListener("DOMContentLoaded", function () {
-  var svgPreviewArea = document.getElementById("svg-container-vertical");
+  var svgPreviewArea = $("svg-container-vertical");
   svgPreviewArea.addEventListener(
     "mousedown",
     function (event) {
@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /** Disallow drag-on-drop. */
 document.addEventListener("DOMContentLoaded", function () {
-  var svgPreviewArea = document.getElementById("svg-container-landscape");
+  var svgPreviewArea = $("svg-container-landscape");
   svgPreviewArea.addEventListener(
     "mousedown",
     function (event) {
@@ -370,12 +370,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  var svgPreviewArea = document.getElementById("speech-bubble-area1");
-
+  var svgPreviewArea = $("speech-bubble-area1");
   svgPreviewArea.addEventListener(
     "mousedown",
     function (event) {
-      // スライダーと数値入力の要素上でのマウスダウンイベントは許可する
       if (
         !event.target.closest("input[type='range']") &&
         !event.target.closest("input[type='number']")
@@ -464,8 +462,8 @@ function changePanelFillColor(value) {
 
 
 function panelStrokeChange() {
-  var strokeWidthValue = document.getElementById("panelStrokeWidth").value;
-  var strokeColorValue = document.getElementById("panelStrokeColor").value;
+  var strokeWidthValue = $("panelStrokeWidth").value;
+  var strokeColorValue = $("panelStrokeColor").value;
 
   canvas.getObjects().forEach(function (obj) {
     if (isPanel(obj)) {
@@ -481,11 +479,11 @@ function panelStrokeChange() {
 
 
 function panelAllChange() {
-  var strokeWidthValue = document.getElementById("panelStrokeWidth").value;
-  var strokeColorValue = document.getElementById("panelStrokeColor").value;
-  var opacityValue = document.getElementById("panelOpacity").value;
+  var strokeWidthValue = $("panelStrokeWidth").value;
+  var strokeColorValue = $("panelStrokeColor").value;
+  var opacityValue = $("panelOpacity").value;
   const opacity = opacityValue / 100;
-  var fillValue = document.getElementById("panelFillColor").value;
+  var fillValue = $("panelFillColor").value;
 
   canvas.getObjects().forEach(function (obj) {
     if (isPanel(obj)) {
@@ -503,11 +501,11 @@ function panelAllChange() {
 
 function setPanelValue(obj) {
   // console.log("setPanelValue");
-  var strokeWidthValue = document.getElementById("panelStrokeWidth").value;
-  var strokeColorValue = document.getElementById("panelStrokeColor").value;
-  var opacityValue = document.getElementById("panelOpacity").value;
+  var strokeWidthValue = $("panelStrokeWidth").value;
+  var strokeColorValue = $("panelStrokeColor").value;
+  var opacityValue = $("panelOpacity").value;
   const opacity = opacityValue / 100;
-  var fillValue = document.getElementById("panelFillColor").value;
+  var fillValue = $("panelFillColor").value;
 
   if (isPanel(obj)) {
     // console.log("setPanelValue isPanel");
@@ -591,10 +589,10 @@ function anchorWrapper(anchorIndex, fn) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById("view_layers_checkbox").addEventListener("change", function () {
+  $("view_layers_checkbox").addEventListener("change", function () {
     changeView("layer-panel", this.checked);
   });
-  document.getElementById("view_controles_checkbox").addEventListener("change", function () {
+  $("view_controles_checkbox").addEventListener("change", function () {
       changeView("controls", this.checked);
   });
 });

@@ -13,9 +13,9 @@ function getIconURL(iconName, style) {
 }
 
 function searchInitialIcons() {
-  const resultsDiv = document.getElementById('svg_icon_results');
+  const resultsDiv = $('svg_icon_results');
   resultsDiv.innerHTML = '';
-  const style = document.getElementById('svg_icon_iconStyle').value;
+  const style = $('svg_icon_iconStyle').value;
 
   initialIcons.forEach(iconName => {
       const iconURL = getIconURL(iconName, style);
@@ -42,10 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
 function searchIcon() {
-  const query = document.getElementById('svg_icon_searchInput').value.toLowerCase();
-  const resultsDiv = document.getElementById('svg_icon_results');
+  const query = $('svg_icon_searchInput').value.toLowerCase();
+  const resultsDiv = $('svg_icon_results');
   resultsDiv.innerHTML = '';
-  const style = document.getElementById('svg_icon_iconStyle').value;
+  const style = $('svg_icon_iconStyle').value;
 
   if (!query) {
       searchInitialIcons();
@@ -82,7 +82,7 @@ function searchIcon() {
 
 function displaySVG(svgContent, iconURL, iconName) {
 
-  const resultsDiv = document.getElementById('svg_icon_results');
+  const resultsDiv = $('svg_icon_results');
   const svgElement = document.createElement('div');
   svgElement.innerHTML = svgContent;
   svgElement.className = 'icon-result';
@@ -95,10 +95,10 @@ function displaySVG(svgContent, iconURL, iconName) {
 }
 
 function updateSVGElementStyles(svgElement) {
-  const lineColor = document.getElementById('svg_icon_lineColor').value;
-  const fillColor = document.getElementById('svg_icon_fillColor').value;
-  const fillOpacity = parseFloat(document.getElementById('svg_icon_fillOpacity').value);
-  const lineWidth = parseInt(document.getElementById('svg_icon_lineWidth').value, 10);
+  const lineColor = $('svg_icon_lineColor').value;
+  const fillColor = $('svg_icon_fillColor').value;
+  const fillOpacity = parseFloat($('svg_icon_fillOpacity').value);
+  const lineWidth = parseInt($('svg_icon_lineWidth').value, 10);
 
   svgElement.setAttribute('stroke', lineColor);
   svgElement.setAttribute('fill', fillColor);
@@ -121,14 +121,14 @@ function removeUnnecessaryElements(svgElement) {
 }
 
 function addToCanvas(iconURL, iconName) {
-  const lineColor = document.getElementById('svg_icon_lineColor').value;
-  const fillColor = document.getElementById('svg_icon_fillColor').value;
-  const fillOpacity = parseFloat(document.getElementById('svg_icon_fillOpacity').value);
-  const lineWidth = parseInt(document.getElementById('svg_icon_lineWidth').value, 10);
-  const shadowColor = document.getElementById('svg_icon_shadowColor').value;
-  const shadowBlur = parseInt(document.getElementById('svg_icon_shadowBlur').value, 10);
-  const shadowOffsetX = parseInt(document.getElementById('svg_icon_shadowOffsetX').value, 10);
-  const shadowOffsetY = parseInt(document.getElementById('svg_icon_shadowOffsetY').value, 10);
+  const lineColor = $('svg_icon_lineColor').value;
+  const fillColor = $('svg_icon_fillColor').value;
+  const fillOpacity = parseFloat($('svg_icon_fillOpacity').value);
+  const lineWidth = parseInt($('svg_icon_lineWidth').value, 10);
+  const shadowColor = $('svg_icon_shadowColor').value;
+  const shadowBlur = parseInt($('svg_icon_shadowBlur').value, 10);
+  const shadowOffsetX = parseInt($('svg_icon_shadowOffsetX').value, 10);
+  const shadowOffsetY = parseInt($('svg_icon_shadowOffsetY').value, 10);
 
   fetch(iconURL)
       .then(response => response.text())

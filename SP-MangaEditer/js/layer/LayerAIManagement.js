@@ -34,13 +34,13 @@ function openT2I_FloatingWindowItem(layer) {
   `;
   document.body.appendChild(floatingWindowItem);
 
-  document.getElementById('text2img_height').addEventListener('blur', function() {
+  $('text2img_height').addEventListener('blur', function() {
     var value = parseInt(this.value);
     if (value !== -1) {
       this.value = Math.round(value / 8) * 8;
     }
   });
-  document.getElementById('text2img_width').addEventListener('blur', function() {
+  $('text2img_width').addEventListener('blur', function() {
     var value = parseInt(this.value);
     if (value !== -1) {
       this.value = Math.round(value / 8) * 8;
@@ -123,7 +123,7 @@ function openI2I_floatingWindowItem(layer) {
 
 
 function adjustToMultipleOfEight(elementId) {
-  var inputElement = document.getElementById(elementId);
+  var inputElement = $(elementId);
   var value = parseInt(inputElement.value);
   if (value !== -1) {
     inputElement.value = Math.round(value / 8) * 8;
@@ -140,18 +140,18 @@ function updatefloatingWindowItem(layer, floatingWindowItem) {
 
 function saveLayerDiffusionAttributes(layer) {
 
-  layer.text2img_prompt             = document.getElementById("text2img_prompt").value;
-  layer.text2img_negativePrompt     = document.getElementById("text2img_negativePrompt").value;
-  layer.text2img_seed               = parseInt(document.getElementById("text2img_seed").value);
+  layer.text2img_prompt             = $("text2img_prompt").value;
+  layer.text2img_negativePrompt     = $("text2img_negativePrompt").value;
+  layer.text2img_seed               = parseInt($("text2img_seed").value);
   if(isImage(layer)){
-    layer.img2imgScale              = parseFloat(document.getElementById("img2imgScale").value);
+    layer.img2imgScale              = parseFloat($("img2imgScale").value);
   }else{
-    layer.text2img_width              = parseInt(document.getElementById("text2img_width").value);
-    layer.text2img_height             = parseInt(document.getElementById("text2img_height").value);
+    layer.text2img_width              = parseInt($("text2img_width").value);
+    layer.text2img_height             = parseInt($("text2img_height").value);
   }
 
   if(isImage(layer)){
-    layer.img2img_denoising_strength  = parseFloat(document.getElementById("img2img_denoising_strength").value);
+    layer.img2img_denoising_strength  = parseFloat($("img2img_denoising_strength").value);
   }
 
   saveState();
@@ -242,13 +242,13 @@ function openText2ImageBaseFloatingWindow() {
 
   document.body.appendChild(floatingWindow);
 
-  document.getElementById('text2img_basePrompt_height').addEventListener('blur', function() {
+  $('text2img_basePrompt_height').addEventListener('blur', function() {
     var value = parseInt(this.value);
     if (value !== -1) {
       this.value = Math.round(value / 8) * 8;
     }
   });
-  document.getElementById('text2img_basePrompt_width').addEventListener('blur', function() {
+  $('text2img_basePrompt_width').addEventListener('blur', function() {
     var value = parseInt(this.value);
     if (value !== -1) {
       this.value = Math.round(value / 8) * 8;
@@ -281,22 +281,22 @@ function openText2ImageBaseFloatingWindow() {
 function updateText2ImgBasePrompt(floatingWindow) {
   adjustToMultipleOfEight('text2img_basePrompt_width');
   adjustToMultipleOfEight('text2img_basePrompt_height');                                                           
-  text2img_basePrompt.text2img_prompt                           = document.getElementById('text2img_basePrompt_prompt').value;
-  text2img_basePrompt.text2img_negativePrompt                   = document.getElementById('text2img_basePrompt_negativePrompt').value;
-  text2img_basePrompt.text2img_seed                             = parseInt(document.getElementById('text2img_basePrompt_seed').value, 10);
-  text2img_basePrompt.text2img_cfg_scale                        = parseInt(document.getElementById('text2img_basePrompt_cfg_scale').value, 10);
-  text2img_basePrompt.text2img_width                            = parseInt(document.getElementById('text2img_basePrompt_width').value, 10);
-  text2img_basePrompt.text2img_height                           = parseInt(document.getElementById('text2img_basePrompt_height').value, 10);
-  text2img_basePrompt.text2img_samplingSteps                    = parseInt(document.getElementById('text2img_basePrompt_samplingSteps').value, 10);
-  text2img_basePrompt.text2img_hr_upscaler                      = document.getElementById('text2img_basePrompt_hr_upscaler').value;
-  text2img_basePrompt.text2img_basePrompt_hr_scale              = document.getElementById('text2img_basePrompt_hr_scale').value;
-  text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = document.getElementById('text2img_basePrompt_hr_denoising_strength').value;
-  text2img_basePrompt.text2img_basePrompt_hr_step               = document.getElementById('text2img_basePrompt_hr_step').value;
+  text2img_basePrompt.text2img_prompt                           = $('text2img_basePrompt_prompt').value;
+  text2img_basePrompt.text2img_negativePrompt                   = $('text2img_basePrompt_negativePrompt').value;
+  text2img_basePrompt.text2img_seed                             = parseInt($('text2img_basePrompt_seed').value, 10);
+  text2img_basePrompt.text2img_cfg_scale                        = parseInt($('text2img_basePrompt_cfg_scale').value, 10);
+  text2img_basePrompt.text2img_width                            = parseInt($('text2img_basePrompt_width').value, 10);
+  text2img_basePrompt.text2img_height                           = parseInt($('text2img_basePrompt_height').value, 10);
+  text2img_basePrompt.text2img_samplingSteps                    = parseInt($('text2img_basePrompt_samplingSteps').value, 10);
+  text2img_basePrompt.text2img_hr_upscaler                      = $('text2img_basePrompt_hr_upscaler').value;
+  text2img_basePrompt.text2img_basePrompt_hr_scale              = $('text2img_basePrompt_hr_scale').value;
+  text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = $('text2img_basePrompt_hr_denoising_strength').value;
+  text2img_basePrompt.text2img_basePrompt_hr_step               = $('text2img_basePrompt_hr_step').value;
 
-  var selectedModel = document.getElementById('text2img_basePrompt_model').value;
+  var selectedModel = $('text2img_basePrompt_model').value;
   text2img_basePrompt.text2img_model = selectedModel;
 
-  var selectedSampler = document.getElementById('text2img_basePrompt_samplingMethod').value;
+  var selectedSampler = $('text2img_basePrompt_samplingMethod').value;
   text2img_basePrompt.text2img_samplingMethod = selectedSampler;
 
   console.log('Updated selectedModel:', selectedModel);

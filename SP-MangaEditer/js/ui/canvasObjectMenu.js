@@ -1,4 +1,4 @@
-const languageSelector = document.getElementById('fabricjs-language-selector');
+const languageSelector = $('fabricjs-language-selector');
 let lastClickType = null;
 let objectMenu = null;
 let canvasMenuIndex = 100000;

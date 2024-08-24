@@ -2,20 +2,20 @@
 function getRoughValue() {
 
     const roughOptions = {
-      roughness: parseFloat(document.getElementById('rough_roughness').value),
-      bowing: parseFloat(document.getElementById('rough_bowing').value),
-      stroke: document.getElementById('rough_stroke').value,
-      strokeWidth: parseFloat(document.getElementById('rough_strokeWidth').value),
-      fill: document.getElementById('rough_fill').value === '#ffffff' ? 'none' : document.getElementById('fill').value,
-      fillStyle: document.getElementById('rough_fillStyle').value,
-      fillWeight: parseFloat(document.getElementById('rough_fillWeight').value),
-      hachureAngle: parseFloat(document.getElementById('rough_hachureAngle').value),
-      hachureGap: parseFloat(document.getElementById('rough_hachureGap').value),
-      curveStepCount: parseFloat(document.getElementById('rough_curveStepCount').value),
-      simplification: parseFloat(document.getElementById('rough_simplification').value),
-      dashOffset: parseFloat(document.getElementById('rough_dashOffset').value),
-      dashGap: parseFloat(document.getElementById('rough_dashGap').value),
-      zigzagOffset: parseFloat(document.getElementById('rough_zigzagOffset').value),
+      roughness: parseFloat($('rough_roughness').value),
+      bowing: parseFloat($('rough_bowing').value),
+      stroke: $('rough_stroke').value,
+      strokeWidth: parseFloat($('rough_strokeWidth').value),
+      fill: $('rough_fill').value === '#ffffff' ? 'none' : $('fill').value,
+      fillStyle: $('rough_fillStyle').value,
+      fillWeight: parseFloat($('rough_fillWeight').value),
+      hachureAngle: parseFloat($('rough_hachureAngle').value),
+      hachureGap: parseFloat($('rough_hachureGap').value),
+      curveStepCount: parseFloat($('rough_curveStepCount').value),
+      simplification: parseFloat($('rough_simplification').value),
+      dashOffset: parseFloat($('rough_dashOffset').value),
+      dashGap: parseFloat($('rough_dashGap').value),
+      zigzagOffset: parseFloat($('rough_zigzagOffset').value),
   };
   
   return roughOptions;
@@ -25,17 +25,17 @@ function getRoughValue() {
   function setRoughValueText( roughOptions ) {
   
     
-    document.getElementById('rough_roughnessValue').textContent = roughOptions.roughness;
-    document.getElementById('rough_bowingValue').textContent = roughOptions.bowing;
-    document.getElementById('rough_strokeWidthValue').textContent = roughOptions.strokeWidth;
-    document.getElementById('rough_fillWeightValue').textContent = roughOptions.fillWeight;
-    document.getElementById('rough_hachureAngleValue').textContent = roughOptions.hachureAngle;
-    document.getElementById('rough_hachureGapValue').textContent = roughOptions.hachureGap;
-    document.getElementById('rough_curveStepCountValue').textContent = roughOptions.curveStepCount;
-    document.getElementById('rough_simplificationValue').textContent = roughOptions.simplification;
-    document.getElementById('rough_dashOffsetValue').textContent = roughOptions.dashOffset;
-    document.getElementById('rough_dashGapValue').textContent = roughOptions.dashGap;
-    document.getElementById('rough_zigzagOffsetValue').textContent = roughOptions.zigzagOffset;
+    $('rough_roughnessValue').textContent = roughOptions.roughness;
+    $('rough_bowingValue').textContent = roughOptions.bowing;
+    $('rough_strokeWidthValue').textContent = roughOptions.strokeWidth;
+    $('rough_fillWeightValue').textContent = roughOptions.fillWeight;
+    $('rough_hachureAngleValue').textContent = roughOptions.hachureAngle;
+    $('rough_hachureGapValue').textContent = roughOptions.hachureGap;
+    $('rough_curveStepCountValue').textContent = roughOptions.curveStepCount;
+    $('rough_simplificationValue').textContent = roughOptions.simplification;
+    $('rough_dashOffsetValue').textContent = roughOptions.dashOffset;
+    $('rough_dashGapValue').textContent = roughOptions.dashGap;
+    $('rough_zigzagOffsetValue').textContent = roughOptions.zigzagOffset;
   }
   
   
@@ -157,20 +157,20 @@ function applyRoughToActiveObject() {
         return;
     }
 
-    const roughness = parseFloat(document.getElementById('rough_roughness').value);
-    const bowing = parseFloat(document.getElementById('rough_bowing').value);
-    const stroke = document.getElementById('rough_stroke').value;
-    const strokeWidth = parseFloat(document.getElementById('rough_strokeWidth').value);
-    const fill = document.getElementById('rough_fill').value;
-    const fillStyle = document.getElementById('rough_fillStyle').value;
-    const fillWeight = parseFloat(document.getElementById('rough_fillWeight').value);
-    const hachureAngle = parseFloat(document.getElementById('rough_hachureAngle').value);
-    const hachureGap = parseFloat(document.getElementById('rough_hachureGap').value);
-    const curveStepCount = parseInt(document.getElementById('rough_curveStepCount').value);
-    const simplification = parseFloat(document.getElementById('rough_simplification').value);
-    const dashOffset = parseFloat(document.getElementById('rough_dashOffset').value);
-    const dashGap = parseFloat(document.getElementById('rough_dashGap').value);
-    const zigzagOffset = parseFloat(document.getElementById('rough_zigzagOffset').value);
+    const roughness = parseFloat($('rough_roughness').value);
+    const bowing = parseFloat($('rough_bowing').value);
+    const stroke = $('rough_stroke').value;
+    const strokeWidth = parseFloat($('rough_strokeWidth').value);
+    const fill = $('rough_fill').value;
+    const fillStyle = $('rough_fillStyle').value;
+    const fillWeight = parseFloat($('rough_fillWeight').value);
+    const hachureAngle = parseFloat($('rough_hachureAngle').value);
+    const hachureGap = parseFloat($('rough_hachureGap').value);
+    const curveStepCount = parseInt($('rough_curveStepCount').value);
+    const simplification = parseFloat($('rough_simplification').value);
+    const dashOffset = parseFloat($('rough_dashOffset').value);
+    const dashGap = parseFloat($('rough_dashGap').value);
+    const zigzagOffset = parseFloat($('rough_zigzagOffset').value);
 
     // Rough.jsのオプションを設定
     const options = {
@@ -246,17 +246,17 @@ function applyRoughToActiveObject() {
 }
 
 // コントロールパネルの変更イベントにリスナーを追加
-document.getElementById('rough_roughness').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_bowing').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_stroke').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_strokeWidth').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_fill').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_fillStyle').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_fillWeight').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_hachureAngle').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_hachureGap').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_curveStepCount').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_simplification').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_dashOffset').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_dashGap').addEventListener('input', applyRoughToActiveObject);
-document.getElementById('rough_zigzagOffset').addEventListener('input', applyRoughToActiveObject);
+$('rough_roughness').addEventListener('input', applyRoughToActiveObject);
+$('rough_bowing').addEventListener('input', applyRoughToActiveObject);
+$('rough_stroke').addEventListener('input', applyRoughToActiveObject);
+$('rough_strokeWidth').addEventListener('input', applyRoughToActiveObject);
+$('rough_fill').addEventListener('input', applyRoughToActiveObject);
+$('rough_fillStyle').addEventListener('input', applyRoughToActiveObject);
+$('rough_fillWeight').addEventListener('input', applyRoughToActiveObject);
+$('rough_hachureAngle').addEventListener('input', applyRoughToActiveObject);
+$('rough_hachureGap').addEventListener('input', applyRoughToActiveObject);
+$('rough_curveStepCount').addEventListener('input', applyRoughToActiveObject);
+$('rough_simplification').addEventListener('input', applyRoughToActiveObject);
+$('rough_dashOffset').addEventListener('input', applyRoughToActiveObject);
+$('rough_dashGap').addEventListener('input', applyRoughToActiveObject);
+$('rough_zigzagOffset').addEventListener('input', applyRoughToActiveObject);

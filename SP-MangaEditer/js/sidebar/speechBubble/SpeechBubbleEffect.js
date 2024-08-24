@@ -46,10 +46,10 @@ function changeSpeechBubbleOpacity(value) {
 
 /** Sppech bubble */
 function loadSVGReadOnly(svgString) {
-    var apply = document.getElementById("applySpeechbubbleChange").checked;
-    var fillColor = document.getElementById("bubbleFillColor").value;
-    var strokeColor = document.getElementById("bubbleStrokeColor").value;
-    var speechBubbleOpacity = document.getElementById("speechBubbleOpacity").value / 100;
+    var apply = $("applySpeechbubbleChange").checked;
+    var fillColor = $("bubbleFillColor").value;
+    var strokeColor = $("bubbleStrokeColor").value;
+    var speechBubbleOpacity = $("speechBubbleOpacity").value / 100;
 
     fabric.loadSVGFromString(svgString, function (objects, options) {
         var canvasUsableHeight = canvas.height * 0.3 - svgPagging;
@@ -94,13 +94,13 @@ function loadSVGReadOnly(svgString) {
 }
 
 /** load svg. */
-const previewAreaVertical = document.getElementById(
+const previewAreaVertical = $(
     "svg-preview-area-vertical"
 );
-const previewAreaLandscape = document.getElementById(
+const previewAreaLandscape = $(
     "svg-preview-area-landscape"
 );
-const speechBubbleArea = document.getElementById(
+const speechBubbleArea = $(
     "speech-bubble-svg-preview-area1"
 );
 

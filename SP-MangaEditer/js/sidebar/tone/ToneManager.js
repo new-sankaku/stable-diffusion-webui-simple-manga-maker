@@ -80,7 +80,7 @@ function switchMangaTone(type) {
   }
 
   clearActiveToneButton();
-  document.getElementById(type + 'Button').classList.add('active-button');
+  $(type + 'Button').classList.add('active-button');
   nowTone = type;
 }
 
@@ -100,15 +100,15 @@ function switchMangaToneUi(type) {
         settingsHTML += addDropDownByGrad(MODE_TONE + '-grad-style', 'gradStyle');
         settingsHTML += addSlider(MODE_TONE + '-grad-start',  'grad-start',   0, 100, effectValueMap.getOrDefault( MODE_TONE + '-grad-start',0));   //grad-start-y
         settingsHTML += addSlider(MODE_TONE + '-grad-end',    'grad-end',     0, 100, effectValueMap.getOrDefault( MODE_TONE + '-grad-end',100));   //grad-end-y
-        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
+        $('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaToneColor     = document.getElementById(MODE_TONE + '-color');
-        mangaToneDotStyle  = document.getElementById(MODE_TONE + '-dot-style');
-        mangaToneDotSize   = document.getElementById(MODE_TONE + '-dot-size');
-        mangaToneDotSpacing= document.getElementById(MODE_TONE + '-dot-spacing');
-        mangaToneGradStyle = document.getElementById(MODE_TONE + '-grad-style');
-        mangaToneGradStart = document.getElementById(MODE_TONE + '-grad-start');
-        mangaToneGradEnd   = document.getElementById(MODE_TONE + '-grad-end');
+        mangaToneColor     = $(MODE_TONE + '-color');
+        mangaToneDotStyle  = $(MODE_TONE + '-dot-style');
+        mangaToneDotSize   = $(MODE_TONE + '-dot-size');
+        mangaToneDotSpacing= $(MODE_TONE + '-dot-spacing');
+        mangaToneGradStyle = $(MODE_TONE + '-grad-style');
+        mangaToneGradStart = $(MODE_TONE + '-grad-start');
+        mangaToneGradEnd   = $(MODE_TONE + '-grad-end');
         break;
       case MODE_TONE_NOISE:
         settingsHTML += addColor( MODE_TONE_NOISE + '-color',         'color',                effectValueMap.getOrDefault( MODE_TONE_NOISE + '-color','#000000'));
@@ -118,15 +118,15 @@ function switchMangaToneUi(type) {
         settingsHTML += addSlider(MODE_TONE_NOISE + '-grad-start-y',  'grad-start-y', 0, 100, effectValueMap.getOrDefault( MODE_TONE_NOISE + '-grad-start-y',0));//grad-start-y
         settingsHTML += addSlider(MODE_TONE_NOISE + '-grad-end-x',    'grad-end-x',   0, 100, effectValueMap.getOrDefault( MODE_TONE_NOISE + '-grad-end-x',100));//grad-end-y
         settingsHTML += addSlider(MODE_TONE_NOISE + '-grad-end-y',    'grad-end-y',   0, 100, effectValueMap.getOrDefault( MODE_TONE_NOISE + '-grad-end-y',100));//grad-end-y
-        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
+        $('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaToneColor        = document.getElementById(MODE_TONE_NOISE + '-color');
-        mangaToneMaxNoise     = document.getElementById(MODE_TONE_NOISE + '-max-noise');
-        mangaToneMinNoise     = document.getElementById(MODE_TONE_NOISE + '-min-noise');
-        mangaToneGradStartX   = document.getElementById(MODE_TONE_NOISE + '-grad-start-x');
-        mangaToneGradEndX     = document.getElementById(MODE_TONE_NOISE + '-grad-end-x');
-        mangaToneGradStartY   = document.getElementById(MODE_TONE_NOISE + '-grad-start-y');
-        mangaToneGradEndY     = document.getElementById(MODE_TONE_NOISE + '-grad-end-y');
+        mangaToneColor        = $(MODE_TONE_NOISE + '-color');
+        mangaToneMaxNoise     = $(MODE_TONE_NOISE + '-max-noise');
+        mangaToneMinNoise     = $(MODE_TONE_NOISE + '-min-noise');
+        mangaToneGradStartX   = $(MODE_TONE_NOISE + '-grad-start-x');
+        mangaToneGradEndX     = $(MODE_TONE_NOISE + '-grad-end-x');
+        mangaToneGradStartY   = $(MODE_TONE_NOISE + '-grad-start-y');
+        mangaToneGradEndY     = $(MODE_TONE_NOISE + '-grad-end-y');
         break;
       case MODE_TONE_SNOW:
         settingsHTML += addColor( MODE_TONE_SNOW + '-frontColor',    'frontColor',  effectValueMap.getOrDefault( MODE_TONE_SNOW + '-frontColor','#FFFFFF'));
@@ -137,16 +137,16 @@ function switchMangaToneUi(type) {
         settingsHTML += addSlider(MODE_TONE_SNOW + '-frontBlurSize', 'frontBlurSize', 1, 50,  effectValueMap.getOrDefault( MODE_TONE_SNOW + '-frontBlurSize', 10));    //density
         settingsHTML += addSlider(MODE_TONE_SNOW + '-backBlurSize',  'backBlurSize',  1, 50,  effectValueMap.getOrDefault( MODE_TONE_SNOW + '-backBlurSize', 3));    //density
         settingsHTML += addSlider(MODE_TONE_SNOW + '-angle',         'angle',         0, 180, effectValueMap.getOrDefault( MODE_TONE_SNOW + '-angle', 140));    //density
-        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
+        $('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaToneColor         = document.getElementById(MODE_TONE_NOISE + '-frontColor');
-        mangaToneBackColor     = document.getElementById(MODE_TONE_NOISE + '-backColor');
-        mangaToneDensity       = document.getElementById(MODE_TONE_NOISE + '-density');
-        mangaToneFrontSize     = document.getElementById(MODE_TONE_NOISE + '-frontSize');
-        mangaToneBackSize      = document.getElementById(MODE_TONE_NOISE + '-backSize');
-        mangaToneFrontBlurSize = document.getElementById(MODE_TONE_NOISE + '-frontBlurSize');
-        mangaToneBackBlurSize  = document.getElementById(MODE_TONE_NOISE + '-backBlurSize');
-        mangaToneAngle         = document.getElementById(MODE_TONE_NOISE + '-angle');
+        mangaToneColor         = $(MODE_TONE_NOISE + '-frontColor');
+        mangaToneBackColor     = $(MODE_TONE_NOISE + '-backColor');
+        mangaToneDensity       = $(MODE_TONE_NOISE + '-density');
+        mangaToneFrontSize     = $(MODE_TONE_NOISE + '-frontSize');
+        mangaToneBackSize      = $(MODE_TONE_NOISE + '-backSize');
+        mangaToneFrontBlurSize = $(MODE_TONE_NOISE + '-frontBlurSize');
+        mangaToneBackBlurSize  = $(MODE_TONE_NOISE + '-backBlurSize');
+        mangaToneAngle         = $(MODE_TONE_NOISE + '-angle');
 
         break;
       case MODE_FOCUSING_LINE:
@@ -158,15 +158,15 @@ function switchMangaToneUi(type) {
         settingsHTML += addSlider(MODE_FOCUSING_LINE + '-center-x',          'centerX',           0, 100, effectValueMap.getOrDefault( MODE_FOCUSING_LINE + '-center-x',0));
         settingsHTML += addSlider(MODE_FOCUSING_LINE + '-center-y',          'centerY',           0, 100, effectValueMap.getOrDefault( MODE_FOCUSING_LINE + '-center-y',0));
         settingsHTML += addSlider(MODE_FOCUSING_LINE + '-line-width-expand', 'line-width-expand', 1, 300, effectValueMap.getOrDefault( MODE_FOCUSING_LINE + '-line-width-expand',100)); // line-width-expand
-        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
+        $('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaToneColor           = document.getElementById(MODE_FOCUSING_LINE + '-color');
-        mangaToneLineSize        = document.getElementById(MODE_FOCUSING_LINE + '-line-size');
-        mangaToneMaxRadius       = document.getElementById(MODE_FOCUSING_LINE + '-max-radius');
-        mangaToneMinRadius       = document.getElementById(MODE_FOCUSING_LINE + '-min-radius');
-        mangaToneCenterX         = document.getElementById(MODE_FOCUSING_LINE + '-center-x');
-        mangaToneCenterY         = document.getElementById(MODE_FOCUSING_LINE + '-center-y');
-        mangaToneLineWidthExpand = document.getElementById(MODE_FOCUSING_LINE + '-line-width-expand');
+        mangaToneColor           = $(MODE_FOCUSING_LINE + '-color');
+        mangaToneLineSize        = $(MODE_FOCUSING_LINE + '-line-size');
+        mangaToneMaxRadius       = $(MODE_FOCUSING_LINE + '-max-radius');
+        mangaToneMinRadius       = $(MODE_FOCUSING_LINE + '-min-radius');
+        mangaToneCenterX         = $(MODE_FOCUSING_LINE + '-center-x');
+        mangaToneCenterY         = $(MODE_FOCUSING_LINE + '-center-y');
+        mangaToneLineWidthExpand = $(MODE_FOCUSING_LINE + '-line-width-expand');
         break;
 
       case MODE_SPEED_LINE:
@@ -176,12 +176,12 @@ function switchMangaToneUi(type) {
         settingsHTML += addCheckBox(MODE_SPEED_LINE + '-grad-check','grad-check',         effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-check', 'true'));    //density
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-start',  'grad-start', 0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-start',0));   //grad-start-y
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-end',    'grad-end',   0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-end',100));   //grad-end-y
-        document.getElementById('manga-tone-settings').innerHTML = settingsHTML;
+        $('manga-tone-settings').innerHTML = settingsHTML;
 
-        mangaToneColor     = document.getElementById(MODE_TONE_NOISE + '-color');
-        mangaToneDensity   = document.getElementById(MODE_TONE_NOISE + '-density');
-        mangaToneGradStart = document.getElementById(MODE_TONE_NOISE + '-grad-start');
-        mangaToneGradEnd   = document.getElementById(MODE_TONE_NOISE + '-grad-end');
+        mangaToneColor     = $(MODE_TONE_NOISE + '-color');
+        mangaToneDensity   = $(MODE_TONE_NOISE + '-density');
+        mangaToneGradStart = $(MODE_TONE_NOISE + '-grad-start');
+        mangaToneGradEnd   = $(MODE_TONE_NOISE + '-grad-end');
         break;
   }
 }
@@ -294,11 +294,11 @@ function addToneEventListener(){
 
 
 function clearActiveToneButton() {
-  document.getElementById(MODE_TONE + 'Button').classList.remove('active-button');
-  document.getElementById(MODE_TONE_NOISE + 'Button').classList.remove('active-button');
-  document.getElementById(MODE_TONE_SNOW + 'Button').classList.remove('active-button');
-  document.getElementById(MODE_FOCUSING_LINE + 'Button').classList.remove('active-button');
-  document.getElementById(MODE_SPEED_LINE + 'Button').classList.remove('active-button');
+  $(MODE_TONE + 'Button').classList.remove('active-button');
+  $(MODE_TONE_NOISE + 'Button').classList.remove('active-button');
+  $(MODE_TONE_SNOW + 'Button').classList.remove('active-button');
+  $(MODE_FOCUSING_LINE + 'Button').classList.remove('active-button');
+  $(MODE_SPEED_LINE + 'Button').classList.remove('active-button');
 }
 
 

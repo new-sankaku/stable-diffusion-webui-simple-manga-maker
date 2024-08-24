@@ -2,56 +2,56 @@ var glfxOriginalImage = null;
 var glfxCopiedImage = null;
 
 function glfxResetFilterValues() {
-  document.getElementById("glfxBrightness").value = 0;
-  document.getElementById("glfxContrast").value = 0;
-  document.getElementById("glfxHue").value = 0;
-  document.getElementById("glfxSaturation").value = 0;
-  document.getElementById("glfxSepiaAmount").value = 0;
-  document.getElementById("glfxUnsharpRadius").value = 0;
-  document.getElementById("glfxUnsharpStrength").value = 0;
-  document.getElementById("glfxVibranceAmount").value = 0;
-  document.getElementById("glfxVignetteSize").value = 0;
-  document.getElementById("glfxVignetteAmount").value = 0;
-  document.getElementById("glfxBlurRadius").value = 0;
-  document.getElementById("glfxBlurBrightness").value = 0;
-  document.getElementById("glfxBlurAngle").value = 0;
-  document.getElementById("glfxStartX").value = 0.5;
-  document.getElementById("glfxStartY").value = 0.5;
-  document.getElementById("glfxEndX").value = 0.5;
-  document.getElementById("glfxEndY").value = 0.5;
-  document.getElementById("glfxTiltBlurRadius").value = 0;
-  document.getElementById("glfxGradientRadius").value = 0.5;
-  document.getElementById("glfxTriangleRadius").value = 0;
-  document.getElementById("glfxZoomCenterX").value = 0.5;
-  document.getElementById("glfxZoomCenterY").value = 0.5;
-  document.getElementById("glfxZoomStrength").value = 0;
-  document.getElementById("glfxHalftoneAngle").value = 0;
-  document.getElementById("glfxHalftoneSize").value = 2;
-  document.getElementById("glfxDotAngle").value = 0;
-  document.getElementById("glfxDotSize").value = 2;
-  document.getElementById("glfxEdgeRadius").value = 0;
-  document.getElementById("glfxHexScale").value = 2;
-  document.getElementById("glfxInkStrength").value = 0.2;
-  document.getElementById("glfxBulgeCenterX").value = 500;
-  document.getElementById("glfxBulgeCenterY").value = 500;
-  document.getElementById("glfxBulgeRadius").value = 0;
-  document.getElementById("glfxBulgeStrength").value = 0;
-  document.getElementById("glfxSwirlCenterX").value = 256;
-  document.getElementById("glfxSwirlCenterY").value = 256;
-  document.getElementById("glfxSwirlRadius").value = 0;
-  document.getElementById("glfxSwirlAngle").value = 0;
+  $("glfxBrightness").value = 0;
+  $("glfxContrast").value = 0;
+  $("glfxHue").value = 0;
+  $("glfxSaturation").value = 0;
+  $("glfxSepiaAmount").value = 0;
+  $("glfxUnsharpRadius").value = 0;
+  $("glfxUnsharpStrength").value = 0;
+  $("glfxVibranceAmount").value = 0;
+  $("glfxVignetteSize").value = 0;
+  $("glfxVignetteAmount").value = 0;
+  $("glfxBlurRadius").value = 0;
+  $("glfxBlurBrightness").value = 0;
+  $("glfxBlurAngle").value = 0;
+  $("glfxStartX").value = 0.5;
+  $("glfxStartY").value = 0.5;
+  $("glfxEndX").value = 0.5;
+  $("glfxEndY").value = 0.5;
+  $("glfxTiltBlurRadius").value = 0;
+  $("glfxGradientRadius").value = 0.5;
+  $("glfxTriangleRadius").value = 0;
+  $("glfxZoomCenterX").value = 0.5;
+  $("glfxZoomCenterY").value = 0.5;
+  $("glfxZoomStrength").value = 0;
+  $("glfxHalftoneAngle").value = 0;
+  $("glfxHalftoneSize").value = 2;
+  $("glfxDotAngle").value = 0;
+  $("glfxDotSize").value = 2;
+  $("glfxEdgeRadius").value = 0;
+  $("glfxHexScale").value = 2;
+  $("glfxInkStrength").value = 0.2;
+  $("glfxBulgeCenterX").value = 500;
+  $("glfxBulgeCenterY").value = 500;
+  $("glfxBulgeRadius").value = 0;
+  $("glfxBulgeStrength").value = 0;
+  $("glfxSwirlCenterX").value = 256;
+  $("glfxSwirlCenterY").value = 256;
+  $("glfxSwirlRadius").value = 0;
+  $("glfxSwirlAngle").value = 0;
 }
 
 var fxCanvas, texture;
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById("glfxFilter").addEventListener("change", function () {
+  $("glfxFilter").addEventListener("change", function () {
     var value = this.value;
     document.querySelectorAll(".glfxCcontrol-group").forEach(function (group) {
       group.style.display = "none";
     });
     if (value) {
-      document.getElementById(value).style.display = "block";
+      $(value).style.display = "block";
     }
   });
 });
@@ -163,7 +163,7 @@ function applySelectedFilter(fxCanvas, filter=null) {
   if(filter){
     isNotAuto = false;
   }else{
-    filter = document.getElementById("glfxFilter").value;
+    filter = $("glfxFilter").value;
   }
   // console.log("applySelectedFilter: Selected filter is", filter);
 
@@ -174,16 +174,16 @@ function applySelectedFilter(fxCanvas, filter=null) {
       var contrast   = 0.29;
 
       if( isNotAuto ){
-        brightness = parseFloat( document.getElementById("glfxBrightness").value );
-        contrast   = parseFloat(document.getElementById("glfxContrast").value);
+        brightness = parseFloat( $("glfxBrightness").value );
+        contrast   = parseFloat($("glfxContrast").value);
       }
       // console.log( "glfxBrightnessContrast brightness", brightness );
       // console.log( "glfxBrightnessContrast contrast", contrast );
       fxCanvas.brightnessContrast(brightness, contrast);
       break;
     case "glfxHueSaturation":
-      var hue = parseFloat(document.getElementById("glfxHue").value);
-      var saturation = parseFloat(document.getElementById("glfxSaturation").value);
+      var hue = parseFloat($("glfxHue").value);
+      var saturation = parseFloat($("glfxSaturation").value);
 
       // console.log("glfxHueSaturation hue", hue);
       // console.log("glfxHueSaturation saturation", saturation);
@@ -191,56 +191,56 @@ function applySelectedFilter(fxCanvas, filter=null) {
       fxCanvas.hueSaturation(hue, saturation);
       break;
     case "glfxSepia":
-      var amount = parseFloat(document.getElementById("glfxSepiaAmount").value);
+      var amount = parseFloat($("glfxSepiaAmount").value);
       fxCanvas.sepia(amount);
       break;
     case "glfxUnsharpMask":
       var radius = parseFloat(
-        document.getElementById("glfxUnsharpRadius").value
+        $("glfxUnsharpRadius").value
       );
       var strength = parseFloat(
-        document.getElementById("glfxUnsharpStrength").value
+        $("glfxUnsharpStrength").value
       );
       fxCanvas.unsharpMask(radius, strength);
       break;
     case "glfxVibrance":
       var vibranceAmount = parseFloat(
-        document.getElementById("glfxVibranceAmount").value
+        $("glfxVibranceAmount").value
       );
       fxCanvas.vibrance(vibranceAmount);
       break;
     case "glfxVignette":
       var vignetteSize = parseFloat(
-        document.getElementById("glfxVignetteSize").value
+        $("glfxVignetteSize").value
       );
       var vignetteAmount = parseFloat(
-        document.getElementById("glfxVignetteAmount").value
+        $("glfxVignetteAmount").value
       );
       fxCanvas.vignette(vignetteSize, vignetteAmount);
       break;
     case "glfxLensBlur":
       var blurRadius = parseFloat(
-        document.getElementById("glfxBlurRadius").value
+        $("glfxBlurRadius").value
       );
       var blurBrightness = parseFloat(
-        document.getElementById("glfxBlurBrightness").value
+        $("glfxBlurBrightness").value
       );
       var blurAngle = parseFloat(
-        document.getElementById("glfxBlurAngle").value
+        $("glfxBlurAngle").value
       );
       fxCanvas.lensBlur(blurRadius, blurBrightness, blurAngle);
       break;
     case "glfxTiltShift":
-      var startX = parseFloat(document.getElementById("glfxStartX").value);
-      var startY = parseFloat(document.getElementById("glfxStartY").value);
-      var endX = parseFloat(document.getElementById("glfxEndX").value);
-      var endY = parseFloat(document.getElementById("glfxEndY").value);
+      var startX = parseFloat($("glfxStartX").value);
+      var startY = parseFloat($("glfxStartY").value);
+      var endX = parseFloat($("glfxEndX").value);
+      var endY = parseFloat($("glfxEndY").value);
 
       var tiltBlurRadius = parseFloat(
-        document.getElementById("glfxTiltBlurRadius").value
+        $("glfxTiltBlurRadius").value
       );
       var gradientRadius = parseFloat(
-        document.getElementById("glfxGradientRadius").value
+        $("glfxGradientRadius").value
       );
       fxCanvas.tiltShift(
         startX,
@@ -253,19 +253,19 @@ function applySelectedFilter(fxCanvas, filter=null) {
       break;
     case "glfxTriangleBlur":
       var triangleRadius = parseFloat(
-        document.getElementById("glfxTriangleRadius").value
+        $("glfxTriangleRadius").value
       );
       fxCanvas.triangleBlur(triangleRadius);
       break;
     case "glfxZoomBlur":
       var zoomCenterX = parseFloat(
-        document.getElementById("glfxZoomCenterX").value
+        $("glfxZoomCenterX").value
       );
       var zoomCenterY = parseFloat(
-        document.getElementById("glfxZoomCenterY").value
+        $("glfxZoomCenterY").value
       );
       var zoomStrength = parseFloat(
-        document.getElementById("glfxZoomStrength").value
+        $("glfxZoomStrength").value
       );
       fxCanvas.zoomBlur(zoomCenterX, zoomCenterY, zoomStrength);
       break;
@@ -273,10 +273,10 @@ function applySelectedFilter(fxCanvas, filter=null) {
       var halftoneCenterX = 100;
       var halftoneCenterY = 100;
       var halftoneAngle = parseFloat(
-        document.getElementById("glfxHalftoneAngle").value
+        $("glfxHalftoneAngle").value
       );
       var halftoneSize = parseFloat(
-        document.getElementById("glfxHalftoneSize").value
+        $("glfxHalftoneSize").value
       );
 
       fxCanvas.colorHalftone(
@@ -293,8 +293,8 @@ function applySelectedFilter(fxCanvas, filter=null) {
       var dotSize = 1.6;
 
       if( isNotAuto ){
-        dotAngle = parseFloat(document.getElementById("glfxDotAngle").value);
-        dotSize = parseFloat(document.getElementById("glfxDotSize").value);
+        dotAngle = parseFloat($("glfxDotAngle").value);
+        dotSize = parseFloat($("glfxDotSize").value);
       }
       // console.log("dotAngle", dotAngle)
       // console.log("dotSize", dotSize)
@@ -303,20 +303,20 @@ function applySelectedFilter(fxCanvas, filter=null) {
       break;
     case "glfxEdgeWork":
       var edgeRadius = parseFloat(
-        document.getElementById("glfxEdgeRadius").value
+        $("glfxEdgeRadius").value
       );
       fxCanvas.edgeWork(edgeRadius);
       break;
     case "glfxHexagonalPixelate":
       var hexCenterX = 1;
       var hexCenterY = 1;
-      var hexScale = parseFloat(document.getElementById("glfxHexScale").value);
+      var hexScale = parseFloat($("glfxHexScale").value);
       fxCanvas.hexagonalPixelate(hexCenterX, hexCenterY, hexScale);
       break;
     case "glfxInk":
       var inkStrength = 0.26;
       if( isNotAuto ){
-        inkStrength = parseFloat( document.getElementById("glfxInkStrength").value );
+        inkStrength = parseFloat( $("glfxInkStrength").value );
       }
       // console.log("applySelectedFilter: Ink strength is", inkStrength);
 
@@ -324,16 +324,16 @@ function applySelectedFilter(fxCanvas, filter=null) {
       break;
     case "glfxBulgePinch":
       var bulgeCenterX = parseFloat(
-        document.getElementById("glfxBulgeCenterX").value
+        $("glfxBulgeCenterX").value
       );
       var bulgeCenterY = parseFloat(
-        document.getElementById("glfxBulgeCenterY").value
+        $("glfxBulgeCenterY").value
       );
       var bulgeRadius = parseFloat(
-        document.getElementById("glfxBulgeRadius").value
+        $("glfxBulgeRadius").value
       );
       var bulgeStrength = parseFloat(
-        document.getElementById("glfxBulgeStrength").value
+        $("glfxBulgeStrength").value
       );
       fxCanvas.bulgePinch(
         bulgeCenterX,
@@ -344,16 +344,16 @@ function applySelectedFilter(fxCanvas, filter=null) {
       break;
     case "glfxSwirl":
       var swirlCenterX = parseFloat(
-        document.getElementById("glfxSwirlCenterX").value
+        $("glfxSwirlCenterX").value
       );
       var swirlCenterY = parseFloat(
-        document.getElementById("glfxSwirlCenterY").value
+        $("glfxSwirlCenterY").value
       );
       var swirlRadius = parseFloat(
-        document.getElementById("glfxSwirlRadius").value
+        $("glfxSwirlRadius").value
       );
       var swirlAngle = parseFloat(
-        document.getElementById("glfxSwirlAngle").value
+        $("glfxSwirlAngle").value
       );
       fxCanvas.swirl(swirlCenterX, swirlCenterY, swirlRadius, swirlAngle);
       break;
@@ -395,11 +395,11 @@ document.addEventListener('DOMContentLoaded', function() {
     );
   });
 
-  document.getElementById("glfxApplyButton").addEventListener("click", function () {
+  $("glfxApplyButton").addEventListener("click", function () {
     glfxApply();
   });
 
-  document.getElementById("glfxResetButton").addEventListener("click", function () {
+  $("glfxResetButton").addEventListener("click", function () {
       glfxReset();
     });
 });

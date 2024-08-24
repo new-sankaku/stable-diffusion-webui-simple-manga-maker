@@ -4,6 +4,7 @@
 const resources = {
   en: {
     translation: {
+"knifeMode": "Knife Mode",
 "horizontal": "Horizontal",
 "vertical": "Vertical",
 "angle": "Angle",

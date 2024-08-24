@@ -1,7 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-  const hostInput = document.getElementById('Stable_Diffusion_WebUI_apiHost');
-  const portInput = document.getElementById('Stable_Diffusion_WebUI_apiPort');
+  const hostInput = $('Stable_Diffusion_WebUI_apiHost');
+  const portInput = $('Stable_Diffusion_WebUI_apiPort');
   hostInput.value = sdWebUIHost;
   portInput.value = sdWebUIPort;
 

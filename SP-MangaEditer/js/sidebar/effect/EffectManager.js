@@ -32,7 +32,7 @@ function switchMangaEffect(type) {
   clearActiveEffectButton();
   if (type === MODE_EFFECT_C2BW) {
   }  else {
-    document.getElementById(type + 'Button').classList.add('active-button');
+    $(type + 'Button').classList.add('active-button');
     nowEffect = type;  
   }
 }
@@ -42,7 +42,7 @@ function switchMangaEffectUi(type) {
   let settingsHTML = '';
   switch (type) {
       case MODE_EFFECT_C2BW:
-        document.getElementById('manga-effect-settings').innerHTML = settingsHTML;
+        $('manga-effect-settings').innerHTML = settingsHTML;
         break;
   }
 
@@ -88,7 +88,7 @@ function addEffectEventListener(){
 
 
 function clearActiveEffectButton() {
-  document.getElementById(MODE_EFFECT_C2BW + 'Button').classList.remove('active-button');
+  $(MODE_EFFECT_C2BW + 'Button').classList.remove('active-button');
 }
 
 

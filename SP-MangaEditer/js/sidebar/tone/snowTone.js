@@ -46,14 +46,14 @@ var snowTone_snowAngle  = null;
 
 function addSnowToneEventListener() {
   console.log("addSnowToneEventListener start");
-  snowTone_snowDensity = document.getElementById(MODE_TONE_SNOW + '-density');
-  snowTone_frontSnowSize = document.getElementById(MODE_TONE_SNOW + '-frontSize');
-  snowTone_backSnowSize = document.getElementById(MODE_TONE_SNOW + '-backSize');
-  snowTone_frontBlurLength = document.getElementById(MODE_TONE_SNOW + '-frontBlurSize');
-  snowTone_backBlurLength = document.getElementById(MODE_TONE_SNOW + '-backBlurSize');
-  snowTone_frontColor = document.getElementById(MODE_TONE_SNOW + '-frontColor');
-  snowTone_backColor = document.getElementById(MODE_TONE_SNOW + '-backColor');
-  snowTone_snowAngle = document.getElementById(MODE_TONE_SNOW + '-angle');
+  snowTone_snowDensity = $(MODE_TONE_SNOW + '-density');
+  snowTone_frontSnowSize = $(MODE_TONE_SNOW + '-frontSize');
+  snowTone_backSnowSize = $(MODE_TONE_SNOW + '-backSize');
+  snowTone_frontBlurLength = $(MODE_TONE_SNOW + '-frontBlurSize');
+  snowTone_backBlurLength = $(MODE_TONE_SNOW + '-backBlurSize');
+  snowTone_frontColor = $(MODE_TONE_SNOW + '-frontColor');
+  snowTone_backColor = $(MODE_TONE_SNOW + '-backColor');
+  snowTone_snowAngle = $(MODE_TONE_SNOW + '-angle');
   
   snowTone_snowDensity.addEventListener("input", generateSnowTone);
   snowTone_frontSnowSize.addEventListener("input", generateSnowTone);

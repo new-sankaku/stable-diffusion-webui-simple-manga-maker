@@ -34,7 +34,7 @@ function getCropAndDownloadLink() {
 	var a5WidthInches = 148 / 25.4;
 	var a5HeightInches = 210 / 25.4;
 	
-	var dpi = parseFloat(document.getElementById('outputDpi').value);
+	var dpi = parseFloat($('outputDpi').value);
 	var canvasWidthPixels = canvas.width;
 	var canvasHeightPixels = canvas.height;
 	

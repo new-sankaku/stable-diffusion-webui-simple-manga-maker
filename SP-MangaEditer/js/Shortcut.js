@@ -14,13 +14,13 @@ document.addEventListener("keydown", function (e) {
     e.preventDefault();
     return;
   } else if (e.ctrlKey && e.key === 'l') {
-    changeView('layer-panel', document.getElementById('view_layers_checkbox').checked);
-    document.getElementById('view_layers_checkbox').click();
+    changeView('layer-panel', $('view_layers_checkbox').checked);
+    $('view_layers_checkbox').click();
     e.preventDefault();
     return;
   } else if (e.ctrlKey && e.key === 'k') {
-    changeView('controls', document.getElementById('view_controles_checkbox').checked);
-    document.getElementById('view_controles_checkbox').click();
+    changeView('controls', $('view_controles_checkbox').checked);
+    $('view_controles_checkbox').click();
     e.preventDefault();
     return;
   } else if (e.ctrlKey && e.key === '8') {

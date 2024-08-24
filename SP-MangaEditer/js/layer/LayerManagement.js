@@ -1,6 +1,6 @@
 function updateLayerPanel() {
   var layers = canvas.getObjects().slice().reverse();
-  var layerContent = document.getElementById("layer-content");
+  var layerContent = $("layer-content");
   layerContent.innerHTML = "";
   var guidMap = createGUIDMap(layers);
   var processedLayersFirst = new Set();

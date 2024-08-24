@@ -23,14 +23,14 @@ function toneStart() {
   tmpCtxTone = tmpCanvasTone.getContext("2d");
   tmpCtxTone.scale(3, 3);
   controlElementsTone = {
-    dotSize: document.getElementById(MODE_TONE + '-dot-size'),
-    dotSpacing: document.getElementById(MODE_TONE + '-dot-spacing'),
-    dotShape: document.getElementById(MODE_TONE + '-dot-style'),
-    fillColor: document.getElementById(MODE_TONE + '-color'),
-    gradientEnabled: document.getElementById(MODE_TONE + '-grad-check'),
-    gradientDirection: document.getElementById(MODE_TONE + '-grad-style'),
-    gradientStart: document.getElementById(MODE_TONE + '-grad-start'),
-    gradientEnd: document.getElementById(MODE_TONE + '-grad-end'),
+    dotSize: $(MODE_TONE + '-dot-size'),
+    dotSpacing: $(MODE_TONE + '-dot-spacing'),
+    dotShape: $(MODE_TONE + '-dot-style'),
+    fillColor: $(MODE_TONE + '-color'),
+    gradientEnabled: $(MODE_TONE + '-grad-check'),
+    gradientDirection: $(MODE_TONE + '-grad-style'),
+    gradientStart: $(MODE_TONE + '-grad-start'),
+    gradientEnd: $(MODE_TONE + '-grad-end'),
   };
 
   updatecanvas();

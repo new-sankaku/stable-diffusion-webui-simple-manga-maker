@@ -108,14 +108,14 @@ function toggleGrid() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById("toggleGridButton").addEventListener("click", toggleGrid);
-  document.getElementById("gridSizeInput").addEventListener("input", updateGridSize);
+  $("toggleGridButton").addEventListener("click", toggleGrid);
+  $("gridSizeInput").addEventListener("input", updateGridSize);
 });
 
 
 function updateGridSize() {
   var newGridSize = parseInt(
-    document.getElementById("gridSizeInput").value,
+    $("gridSizeInput").value,
     10
   );
   if (newGridSize > 0) {

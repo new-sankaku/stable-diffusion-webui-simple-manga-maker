@@ -97,7 +97,7 @@ function tutorialIntro() {
 
 document.addEventListener('DOMContentLoaded', startupIntro);
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('Intro_Tutorial').addEventListener('click', function(event) {
+  $('Intro_Tutorial').addEventListener('click', function(event) {
     event.preventDefault();
     tutorialIntro();
   });

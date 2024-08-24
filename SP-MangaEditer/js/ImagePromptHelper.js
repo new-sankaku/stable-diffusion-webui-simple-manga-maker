@@ -32,14 +32,14 @@ function initI18next(lang) {
 }
 
 function iphInitializeUI() {
-  const languageDropdown = document.getElementById('iph-language-dropdown');
-  const modelDropdown = document.getElementById('iph-model-dropdown');
+  const languageDropdown = $('iph-language-dropdown');
+  const modelDropdown = $('iph-model-dropdown');
   languageDropdown.addEventListener('change', iphLoadJsonAndRefresh);
   modelDropdown.addEventListener('change', iphLoadJsonAndRefresh);
 
   iphLoadJsonAndRefresh();
 
-  document.getElementById('iph-download-button').addEventListener('click', () => {
+  $('iph-download-button').addEventListener('click', () => {
     if (iphSelectedTagGroups.length > 0) {
       const content = iphSelectedTagGroups.join(',');
       const blob = new Blob([content], { type: 'text/plain' });
@@ -50,7 +50,7 @@ function iphInitializeUI() {
     }
   });
 
-  document.getElementById('iph-copy-button').addEventListener('click', () => {
+  $('iph-copy-button').addEventListener('click', () => {
     if (iphSelectedTagGroups.length > 0) {
       const content = iphSelectedTagGroups.join(',');
       navigator.clipboard.writeText(content).then(() => {
@@ -103,8 +103,8 @@ function iphRefreshUI() {
 }
 
 async function iphLoadData() {
-  const language = document.getElementById('iph-language-dropdown').value;
-  const model = document.getElementById('iph-model-dropdown').value.toLowerCase();
+  const language = $('iph-language-dropdown').value;
+  const model = $('iph-model-dropdown').value.toLowerCase();
 
   try {
     // 基本データとモデル固有データを読み込む
@@ -149,7 +149,7 @@ function iphFilterEnglishData(data) {
 }
 
 function iphShowTag1() {
-  const tag1Container = document.getElementById('iph-category-container');
+  const tag1Container = $('iph-category-container');
   tag1Container.innerHTML = '';
   let hrCount = 0;
   Object.keys(iphData).forEach(tag => {
@@ -228,7 +228,7 @@ function iphLoadImage(url) {
 }
 
 function iphShowTags(currentData, level) {
-  const tagLevels = document.getElementById('iph-sub-category-container');
+  const tagLevels = $('iph-sub-category-container');
 
   while (tagLevels.children.length > level) {
     tagLevels.removeChild(tagLevels.lastChild);
@@ -257,7 +257,7 @@ function iphShowTags(currentData, level) {
 }
 
 function iphSelectTag(tag, level, data) {
-  const tagLevels = document.getElementById('iph-sub-category-container');
+  const tagLevels = $('iph-sub-category-container');
   while (tagLevels.children.length > level) {
     tagLevels.removeChild(tagLevels.lastChild);
   }
@@ -284,7 +284,7 @@ function iphAddSelectedTag(tag) {
 }
 
 function iphUpdateSelectedTagsDisplay() {
-  const selectedTagsElement = document.getElementById('iph-selected-tags');
+  const selectedTagsElement = $('iph-selected-tags');
   selectedTagsElement.innerHTML = '';
   iphSelectedTagGroups.forEach((tag, index) => {
     const groupElement = document.createElement('span');
@@ -303,8 +303,8 @@ function iphUpdateSelectedTagsDisplay() {
     selectedTagsElement.appendChild(groupElement);
   });
 
-  const downloadButton = document.getElementById('iph-download-button');
-  const copyButton = document.getElementById('iph-copy-button');
+  const downloadButton = $('iph-download-button');
+  const copyButton = $('iph-copy-button');
   const hasSelectedTags = iphSelectedTagGroups.length > 0;
   downloadButton.disabled = !hasSelectedTags;
   copyButton.disabled = !hasSelectedTags;
@@ -336,7 +336,7 @@ function iphUpdateImageIndices() {
 function iphAddImage(url) {
   if (url) {
     iphSelectedImages.push(url);
-    const imageContainer = document.getElementById('iph-image-container');
+    const imageContainer = $('iph-image-container');
     const index = iphSelectedImages.length - 1;
 
     iphLoadImage(url).then(img => {
@@ -368,7 +368,7 @@ function iphCreateImageWrapper(url, index) {
 }
 
 function iphUpdateImageDisplay() {
-  const imageContainer = document.getElementById('iph-image-container');
+  const imageContainer = $('iph-image-container');
   imageContainer.innerHTML = '';
   iphImageWrappers = [];
 

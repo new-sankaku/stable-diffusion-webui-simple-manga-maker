@@ -12,6 +12,8 @@
 
     <script async src="third/GoogleAnalytics/googleAnalytics.js"></script>
     <script>
+        const $ = (id) => document.getElementById(id);
+
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
@@ -557,6 +559,7 @@
                 <i class="material-icons" id="intro_page-manager-area" onclick="toggleVisibility('panel-manager-area');">dashboard</i>
                 <i class="material-icons" id="intro_custom-panel-manager-area" onclick="toggleVisibility('custom-panel-manager-area');">dashboard_customize</i>
                 <i class="material-icons" id="intro_speech-bubble-area1" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
+                <!-- <i class="material-icons" id="intro_speech-bubble-area2" onclick="toggleVisibility('speech-bubble-area2');">reviews</i> -->
                 <i class="material-icons" id="intro_text-area" onclick="toggleVisibility('text-area');">text_fields</i>
                 <i class="material-icons" id="intro_tool-area" onclick="toggleVisibility('tool-area');">brush</i>
                 <i class="material-icons" id="intro_manga-tone-area" onclick="toggleVisibility('manga-tone-area');">blur_linear</i>
@@ -579,10 +582,11 @@
                 <div class="area-header" data-i18n="pageManager">Page Manager</div>
                 <div id="panel-manager-items">
                     <hr>
-                    <button id="knifeModeButton">
-                        <i class="material-icons">edit_square</i>
-                        <span data-i18n="knifeMode">Knife Mode: OFF</span>
-                    </button>
+                    <div class="input-group">
+                        <button id="knifeModeButton">
+                            <span data-i18n="knifeMode">Knife Mode: OFF</span>
+                        </button>
+                    </div>
                     <div class="input-group">
                         <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
                         <input type="number" id="knifePanelSpaceSize" name="knifePanelSpaceSize" min="0" max="75"
@@ -818,6 +822,44 @@
                     <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10"
                         value="3">
                     <hr>
+                </div>
+            </div>
+
+            <div id="speech-bubble-area2" style="display: none;">
+                <div class="area-header" data-i18n="custom_bubble">Custom Bubble</div>
+                <div id="speech-bubble-svg-preview-area1">
+                    <div class="input-group">
+                        <label for="sb-strokeWidth" data-i18n="lineWidth">Line Width</label>
+                        <input type="number" id="sb-strokeWidth" min="1" max="20" value="2">
+                    </div>
+                    <div class="input-group">
+                        <label for="sb-strokeColor" data-i18n="line">Line</label>
+                        <input type="color" id="sb-strokeColor" value="#000000">
+                    </div>
+                    <div class="input-group">
+                        <label for="sb-fillColor" data-i18n="fill">Fill</label>
+                        <input type="color" id="sb-fillColor" value="#FFFFFF">
+                    </div>
+                    <div class="input-group">
+                        <label for="sb-fillOpacity" data-i18n="panelOpacity">Opacity</label>
+                        <input type="number" id="sb-fillOpacity" min="0" max="100" value="100">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="sb-smoothness" data-i18n="smooth">Smooth</label>
+                        <input type="checkbox" id="sb-smoothness" checked>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="sb-pointDistance" data-i18n="pointDistance">Point distance(px)</label>
+                        <input type="number" id="sb-pointDistance" min="0" max="100" value="2">
+                    </div>
+
+                    <hr>
+                    <div class="input-group">
+                        <button id="sb-pointMode" data-i18n="pointMode" ></button>
+                        <button id="sb-freehandMode" data-i18n="freehandMode" ></button>
+                    </div>
                 </div>
             </div>
 
@@ -1740,11 +1782,9 @@
     <script src="third/browser-image-compression/browser-image-compression.js?v=4.8"></script>
     <script src="third/intro/intro.min.js?v=4.8"></script>
     <script src="third/lodash/lodash.min.js?v=4.8" defer></script>
-
-    <script src="js/fabric/dist/fabric-brush.min.js"></script>
+    <script src="js/fabric/dist/fabric-brush.min.js?v=4.8"></script>
     <script src="js/fabric/brushes/ink_brush.js?v=4.8"></script>
     <script src="js/fabric/brushes/outlineBrush.js?v=4.8"></script>
-    
     <link rel="stylesheet" href="third/intro/introjs.min.css?v=4.8">
     <link rel="stylesheet" href="css/ui/intro.css?v=4.8">
     <script src="third/tippy/popper.min.js?v=4.8"></script>
@@ -1794,6 +1834,7 @@
     <script src="js/sidebar/text/TextEffect.js?v=4.8" defer></script>
     <script src="js/sidebar/text/VerticalText.js?v=4.8" defer></script>
     <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=4.8" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=4.8" defer></script>
     <script src="js/sidebar/pen/OriginalBrush.js?v=4.8" defer></script>
     <script src="js/sidebar/pen/PenTools.js?v=4.8" defer></script>
     <script src="js/sidebar/tone/ToneManager.js?v=4.8" defer></script>

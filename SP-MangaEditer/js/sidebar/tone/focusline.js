@@ -151,13 +151,13 @@ var focusLine = function (
 
 
 function updateFocusLine() {
-  conf.lineNum = parseInt( document.getElementById(MODE_FOCUSING_LINE + '-lineNum').value );
-  conf.crMax = ((parseInt( document.getElementById(MODE_FOCUSING_LINE + "-max-radius").value ) / 100) * Math.min(tmpCanvasFL.width, tmpCanvasFL.height)) / 2;
-  conf.crMin = ((parseInt( document.getElementById(MODE_FOCUSING_LINE + "-min-radius").value ) / 100) * Math.min(tmpCanvasFL.width, tmpCanvasFL.height)) / 2;
-  conf.cx = (parseInt(document.getElementById(MODE_FOCUSING_LINE + "-center-x").value) / 100) * tmpCanvasFL.width;
-  conf.cy = (parseInt(document.getElementById(MODE_FOCUSING_LINE + "-center-y").value) / 100) * tmpCanvasFL.height;
-  conf.lineWidth = parseInt( document.getElementById(MODE_FOCUSING_LINE + "-line-size").value  );
-  conf.color = document.getElementById(MODE_FOCUSING_LINE + "-color").value;
+  conf.lineNum = parseInt( $(MODE_FOCUSING_LINE + '-lineNum').value );
+  conf.crMax = ((parseInt( $(MODE_FOCUSING_LINE + "-max-radius").value ) / 100) * Math.min(tmpCanvasFL.width, tmpCanvasFL.height)) / 2;
+  conf.crMin = ((parseInt( $(MODE_FOCUSING_LINE + "-min-radius").value ) / 100) * Math.min(tmpCanvasFL.width, tmpCanvasFL.height)) / 2;
+  conf.cx = (parseInt($(MODE_FOCUSING_LINE + "-center-x").value) / 100) * tmpCanvasFL.width;
+  conf.cy = (parseInt($(MODE_FOCUSING_LINE + "-center-y").value) / 100) * tmpCanvasFL.height;
+  conf.lineWidth = parseInt( $(MODE_FOCUSING_LINE + "-line-size").value  );
+  conf.color = $(MODE_FOCUSING_LINE + "-color").value;
   lines = focusLine(
     tmpCanvasFL,
     conf.cx,
@@ -183,7 +183,7 @@ function addFCEventListener() {
     MODE_FOCUSING_LINE + "-center-y",
     MODE_FOCUSING_LINE + "-line-width-expand",
   ].forEach((id) => {
-    document.getElementById(id).addEventListener("input", () => {
+    $(id).addEventListener("input", () => {
       updateFocusLine();
     });
   });

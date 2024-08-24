@@ -73,10 +73,10 @@ function flipVertically() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("crop").style.display = "none";
+  $("crop").style.display = "none";
 
-  document.getElementById("crop").addEventListener("click", function (event) {
-    document.getElementById("crop").style.display = "none";
+  $("crop").addEventListener("click", function (event) {
+    $("crop").style.display = "none";
   
     var left = cropFrame.left - cropActiveObject.left;
     var top = cropFrame.top - cropActiveObject.top;
@@ -99,8 +99,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  document.getElementById("cropMode").addEventListener("click", function () {
-    document.getElementById("crop").style.display = "inline";
+  $("cropMode").addEventListener("click", function () {
+    $("crop").style.display = "inline";
     if (canvas.getActiveObject()) {
   
       if (cropModeClear()) {
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log("canvas.getActiveObject().type", canvas.getActiveObject().type );
       }else{
           createToast("Select Image!", canvas.getActiveObject().type);
-          document.getElementById("crop").style.display = "none";
+          $("crop").style.display = "none";
           return;
       }
   
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
       canvas.renderAll();
     } else {
       createToast("Select Image!", "");
-      document.getElementById("crop").style.display = "none";
+      $("crop").style.display = "none";
     }
   });
   

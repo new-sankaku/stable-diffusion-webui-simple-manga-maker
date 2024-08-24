@@ -22,22 +22,22 @@ function rgbToHex(rgb) {
 function updateTextControls(object) {
   if (isVerticalText(object)) {
     let firstText = object.getObjects('text')[0];
-    let inheritedColor = firstText ? firstText.fill : document.getElementById("textColorPicker").value;
-    document.getElementById('textColorPicker').value = inheritedColor;
+    let inheritedColor = firstText ? firstText.fill : $("textColorPicker").value;
+    $('textColorPicker').value = inheritedColor;
   } else if (isText(object)) {
     if (object.fill) {
       return;
     } else {
       let hexColor = rgbToHex(object.fill);
-      document.getElementById('textColorPicker').value = hexColor;
+      $('textColorPicker').value = hexColor;
     }
-    document.getElementById('fontSizeSlider').value = object.fontSize;
+    $('fontSizeSlider').value = object.fontSize;
   }
 }
 
 function applyCSSTextEffect() {
-  var firstTextEffectColorPicker = document.getElementById('firstTextEffectColorPicker').value;
-  var secondTextEffectColorPicker = document.getElementById('secondTextEffectColorPicker').value;
+  var firstTextEffectColorPicker = $('firstTextEffectColorPicker').value;
+  var secondTextEffectColorPicker = $('secondTextEffectColorPicker').value;
 
   const activeObject = canvas.getActiveObject();
   if (isText(activeObject)) {
@@ -56,8 +56,8 @@ function applyCSSTextEffect() {
 function applyVividGradientEffect() {
   const activeObject = canvas.getActiveObject();
   if (isText(activeObject)) {
-    var firstTextEffectColorPicker = document.getElementById('firstTextEffectColorPicker').value;
-    var secondTextEffectColorPicker = document.getElementById('secondTextEffectColorPicker').value;
+    var firstTextEffectColorPicker = $('firstTextEffectColorPicker').value;
+    var secondTextEffectColorPicker = $('secondTextEffectColorPicker').value;
 
     const gradient = new fabric.Gradient({
       type: "linear",
@@ -158,8 +158,8 @@ function applyNeonEffect() {
   const activeObject = canvas.getActiveObject();
   if (isText(activeObject)) {
 
-    var firstTextEffectColorPicker = document.getElementById('firstTextEffectColorPicker').value;
-    var secondTextEffectColorPicker = document.getElementById('secondTextEffectColorPicker').value;
+    var firstTextEffectColorPicker = $('firstTextEffectColorPicker').value;
+    var secondTextEffectColorPicker = $('secondTextEffectColorPicker').value;
 
     if (!activeObject.fill || !activeObject.shadow) {
       activeObject.set({
@@ -188,13 +188,13 @@ function alignText(alignment) {
 function updateTextSelectedButton(alignment) {
   const buttons = document.querySelectorAll('.input-group-multi button');
   buttons.forEach(button => button.classList.remove('selected'));
-  document.getElementById('align-' + alignment).classList.add('selected');
+  $('align-' + alignment).classList.add('selected');
 }
 
 function createTextbox() {
-  var selectedFont = document.getElementById('fontSelector').value;
-  var fontsize = document.getElementById("fontSizeSlider").value
-  var fontStrokeWidth = document.getElementById("fontStrokeWidthSlider").value
+  var selectedFont = $('fontSelector').value;
+  var fontsize = $("fontSizeSlider").value
+  var fontStrokeWidth = $("fontStrokeWidthSlider").value
 
   console.log("selectedFont", "New Text")
   var textbox = new fabric.Textbox(selectedFont, {
@@ -203,8 +203,8 @@ function createTextbox() {
     left: 50,
     fontSize: parseInt(fontsize),
     fontFamily: selectedFont,
-    fill: document.getElementById("textColorPicker").value,
-    stroke: document.getElementById("textOutlineColorPicker").value,
+    fill: $("textColorPicker").value,
+    stroke: $("textOutlineColorPicker").value,
     strokeWidth: parseInt(fontStrokeWidth),
     textAlign: textAlignment,
   });
@@ -326,7 +326,7 @@ function updateNeonEffect(activeObject) {
       activeObject.set("shadow", null);
       activeObject.set("stroke", null);
     } else {
-      var neonColor = document.getElementById("firstTextEffectColorPicker").value;
+      var neonColor = $("firstTextEffectColorPicker").value;
       activeObject.set(
         "shadow",
         new fabric.Shadow({
@@ -348,7 +348,7 @@ function updateNeonEffect(activeObject) {
 
 
 function changeFont(font) {
-  document.getElementById("text-preview-area").style.fontFamily = font;
+  $("text-preview-area").style.fontFamily = font;
 }
 
 
@@ -367,7 +367,7 @@ function reloadFont() {
   const primaryFonts = ['KleeOne', 'Arial', 'Comic Sans MS', 'DotGothic16', 'Stick', 'DokiDokiFont2', 'OhisamaFont11', 'RampartOne-Regular', 'TrainOne-Regular', '851MkPOP_101', '851CHIKARA-DZUYOKU_kanaA'];
   const additionalFonts = ['Arial Black', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Impact', 'Times New Roman', 'Courier', 'Helvetica', 'Courier New', 'Century Gothic', 'Arial Narrow', 'MS PGothic', 'Franklin Gothic Medium', 'Segoe UI', 'Yu Gothic', 'Yu Mincho', 'Meiryo', 'Malgun Gothic', 'MS UI Gothic'];
   
-  const select = document.getElementById('fontSelector');
+  const select = $('fontSelector');
   
   // Clear existing options
   select.innerHTML = '';

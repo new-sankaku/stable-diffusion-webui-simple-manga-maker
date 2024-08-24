@@ -97,13 +97,13 @@ function generateNoiseWithGradient(color, noiseMin, noiseMax) {
 
 
 function addToneNoiseEventListener() {
-  toneNoise_colorPicker    = document.getElementById(MODE_TONE_NOISE + '-color');
-  toneNoise_noiseMinSlider = document.getElementById(MODE_TONE_NOISE + '-min-noise');
-  toneNoise_noiseMaxSlider = document.getElementById(MODE_TONE_NOISE + '-max-noise');
-  toneNoise_gradientStartX = document.getElementById(MODE_TONE_NOISE + '-grad-start-x');
-  toneNoise_gradientStartY = document.getElementById(MODE_TONE_NOISE + '-grad-start-y');
-  toneNoise_gradientEndX   = document.getElementById(MODE_TONE_NOISE + '-grad-end-x');
-  toneNoise_gradientEndY   = document.getElementById(MODE_TONE_NOISE + '-grad-end-y');
+  toneNoise_colorPicker    = $(MODE_TONE_NOISE + '-color');
+  toneNoise_noiseMinSlider = $(MODE_TONE_NOISE + '-min-noise');
+  toneNoise_noiseMaxSlider = $(MODE_TONE_NOISE + '-max-noise');
+  toneNoise_gradientStartX = $(MODE_TONE_NOISE + '-grad-start-x');
+  toneNoise_gradientStartY = $(MODE_TONE_NOISE + '-grad-start-y');
+  toneNoise_gradientEndX   = $(MODE_TONE_NOISE + '-grad-end-x');
+  toneNoise_gradientEndY   = $(MODE_TONE_NOISE + '-grad-end-y');
 
   toneNoise_colorPicker.addEventListener("input", updateToneNoise);
   toneNoise_noiseMinSlider.addEventListener("input", updateToneNoise);

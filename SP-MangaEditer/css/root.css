@@ -22,6 +22,7 @@
   --fjm-button-white-space: nowrap;
   --sidebar-gradient: linear-gradient(145deg, #262626, #363636);
   --text-color-B: #dedede;
+  --text-color-C: #ff7c7c;
   --text-border: #ff9532;
   --nav-border: #212121;
   --nav-background-color:  #212121;;
@@ -81,6 +82,7 @@
   --select-button-color: #e2842b;
   --sidebar-gradient:rgb(255, 217, 141);
   --text-color-B: #242424;
+  --text-color-C: #c97500;
   --text-border: #ff9532;
   --nav-border: #dedede;
   --nav-background-color:rgb(255, 245, 226);

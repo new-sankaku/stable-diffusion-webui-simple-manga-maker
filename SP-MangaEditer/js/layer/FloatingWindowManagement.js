@@ -68,7 +68,7 @@ function isVisibleFloatingWindow() {
     }
   }
   for (let id of ids) {
-    const win = document.getElementById(id);
+    const win = $(id);
     if (win) {
       const style = window.getComputedStyle(win);
       if (style.display !== 'none' && style.visibility !== 'hidden') {

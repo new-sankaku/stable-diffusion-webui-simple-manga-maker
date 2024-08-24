@@ -1,3 +1,4 @@
+
 fabric.Object.NUM_FRACTION_DIGITS = 100;
 
 const minCanvasSizeWidth = 600;
@@ -29,9 +30,9 @@ if (mode === 'dark-mode') {
 
 var svgPagging = 20;
 document.addEventListener('DOMContentLoaded', function() {
-  svgPagging = document.getElementById('marginFromPanel').value;
-  document.getElementById('marginFromPanel').addEventListener('input', function() {
-    svgPagging = document.getElementById('marginFromPanel').value;
+  svgPagging = $('marginFromPanel').value;
+  $('marginFromPanel').addEventListener('input', function() {
+    svgPagging = $('marginFromPanel').value;
   });
 });
 
@@ -98,3 +99,4 @@ const commonProperties = [
 'name',
 "guids", "guid", "tempPrompt", "tempNegativePrompt", "tempSeed", "img2imgScale", "img2img_denoising_strength", "canvasGuid"
 ];
+

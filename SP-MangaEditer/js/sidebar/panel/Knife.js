@@ -1,14 +1,18 @@
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('knifeModeButton').addEventListener('click', function () {
+  $('knifeModeButton').addEventListener('click', function () {
     changeKnifeMode();
   });
 });
 
 function changeKnifeMode(){
-  var knifeModeButton = document.getElementById('knifeModeButton');
+  var knifeModeButton = $('knifeModeButton');
   isKnifeMode = !isKnifeMode;
   knifeModeButton.textContent = isKnifeMode ? getText('knifeOff') : getText('knifeOn') ;
+
+  isKnifeMode ? knifeModeButton.classList.add("selected") : knifeModeButton.classList.remove("selected") ;
+  
+
   changeMovement();
 }
 
@@ -381,7 +385,7 @@ function isHorizontal(resultLine, splitLine) {
 
 function adjustShapesBySplitLineDirection(resultLine, splitLine) {
   const tolerance = 5;
-  var adjustment = document.getElementById('knifePanelSpaceSize').value;
+  var adjustment = $('knifePanelSpaceSize').value;
   adjustment = adjustment / 2;
 
   var offsetX = getCurrentLeft();

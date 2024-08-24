@@ -27,7 +27,7 @@ function addTooltipByElement(element, translationKey) {
 }
 
 function addTooltip(elementId, translationKey) {
-  const element = document.getElementById(elementId);
+  const element = $(elementId);
   if (!element) {
     console.warn(`Element with ID ${elementId} not found`);
     return;

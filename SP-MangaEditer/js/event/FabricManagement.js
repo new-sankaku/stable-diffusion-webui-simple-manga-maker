@@ -48,14 +48,14 @@ canvas.on('selection:cleared', function() {
   if (cropFrame) {
       canvas.remove(cropFrame);
       cropFrame = null;
-      document.getElementById('crop').style.display = 'none';
+      $('crop').style.display = 'none';
   }
 });
 canvas.on('selection:updated', function() {
   if (cropFrame && canvas.getActiveObject() !== cropFrame) {
     canvas.remove(cropFrame);
     cropFrame = null;
-    document.getElementById('crop').style.display = 'none';
+    $('crop').style.display = 'none';
   }
 });
 

@@ -59,7 +59,7 @@ function switchPencilType(type) {
     }
     clearActiveButton();
 
-    document.getElementById(type + 'Button').classList.add('active-button');
+    $(type + 'Button').classList.add('active-button');
     applyBrushSettings();
 }
 
@@ -97,16 +97,16 @@ function switchPencilTypeUi(type) {
             settingsHTML += addSlider(MODE_PEN_PENCIL + '-shadow-offset-x',   'svg_icon_shadow_offset_x',  1, 150,  penValueMap.getOrDefault( MODE_PEN_PENCIL + '-shadow-offset-x',5));
             settingsHTML += addSlider(MODE_PEN_PENCIL + '-shadow-offset-y',   'svg_icon_shadow_offset_y',  1, 150,  penValueMap.getOrDefault( MODE_PEN_PENCIL + '-shadow-offset-y',5));
             settingsHTML += addDropDownByStyle('line-style', 'lineStyle');
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
 
-            drawingColor         = document.getElementById(MODE_PEN_PENCIL + '-color');
-            drawingWidth         = document.getElementById(MODE_PEN_PENCIL + '-line-width');
-            drawingOpacity       = document.getElementById(MODE_PEN_PENCIL + '-opacity');
-            drawingShadowColor   = document.getElementById(MODE_PEN_PENCIL + '-shadow-color');
-            drawingShadowWidth   = document.getElementById(MODE_PEN_PENCIL + '-shadow-line-width');
-            drawingShadowOffsetX = document.getElementById(MODE_PEN_PENCIL + '-shadow-offset-x');
-            drawingShadowOffsetY = document.getElementById(MODE_PEN_PENCIL + '-shadow-offset-y');
-            drawingLineStyle     = document.getElementById("line-style");
+            drawingColor         = $(MODE_PEN_PENCIL + '-color');
+            drawingWidth         = $(MODE_PEN_PENCIL + '-line-width');
+            drawingOpacity       = $(MODE_PEN_PENCIL + '-opacity');
+            drawingShadowColor   = $(MODE_PEN_PENCIL + '-shadow-color');
+            drawingShadowWidth   = $(MODE_PEN_PENCIL + '-shadow-line-width');
+            drawingShadowOffsetX = $(MODE_PEN_PENCIL + '-shadow-offset-x');
+            drawingShadowOffsetY = $(MODE_PEN_PENCIL + '-shadow-offset-y');
+            drawingLineStyle     = $("line-style");
         
             break;
         case MODE_PEN_OUTLINE:
@@ -120,17 +120,17 @@ function switchPencilTypeUi(type) {
 
             settingsHTML += addSlider(MODE_PEN_OUTLINE + '-outline1-opacity', 'outline1-opacity', 1, 100,  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline1-opacity',100));
             settingsHTML += addSlider(MODE_PEN_OUTLINE + '-outline2-opacity', 'outline2-opacity', 1, 100,  penValueMap.getOrDefault( MODE_PEN_OUTLINE + '-outline2-opacity',100));
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
     
-            drawingMainColor      = document.getElementById(MODE_PEN_OUTLINE + '-main-color');
-            drawingOutline1Color  = document.getElementById(MODE_PEN_OUTLINE + '-outline1-color');
-            drawingOutline2Color  = document.getElementById(MODE_PEN_OUTLINE + '-outline2-color');
-            drawingMainWidth      = document.getElementById(MODE_PEN_OUTLINE + '-main-width');
-            drawingOutline1Width  = document.getElementById(MODE_PEN_OUTLINE + '-outline1-width');
-            drawingOutline2Width  = document.getElementById(MODE_PEN_OUTLINE + '-outline2-width');
+            drawingMainColor      = $(MODE_PEN_OUTLINE + '-main-color');
+            drawingOutline1Color  = $(MODE_PEN_OUTLINE + '-outline1-color');
+            drawingOutline2Color  = $(MODE_PEN_OUTLINE + '-outline2-color');
+            drawingMainWidth      = $(MODE_PEN_OUTLINE + '-main-width');
+            drawingOutline1Width  = $(MODE_PEN_OUTLINE + '-outline1-width');
+            drawingOutline2Width  = $(MODE_PEN_OUTLINE + '-outline2-width');
 
-            drawingOutline1Opacity = document.getElementById(MODE_PEN_OUTLINE + '-outline1-opacity');
-            drawingOutline2Opacity = document.getElementById(MODE_PEN_OUTLINE + '-outline2-opacity');
+            drawingOutline1Opacity = $(MODE_PEN_OUTLINE + '-outline1-opacity');
+            drawingOutline2Opacity = $(MODE_PEN_OUTLINE + '-outline2-opacity');
             break;
         case MODE_PEN_CIRCLE:
             settingsHTML += addColor( MODE_PEN_CIRCLE + '-color',             'color',                              penValueMap.getOrDefault( MODE_PEN_CIRCLE + '-color','#000000'));
@@ -139,56 +139,56 @@ function switchPencilTypeUi(type) {
             settingsHTML += addSlider(MODE_PEN_CIRCLE + '-shadow-line-width', 'size',    0, 150,                    penValueMap.getOrDefault( MODE_PEN_CIRCLE + '-shadow-line-width',0));
             settingsHTML += addSlider(MODE_PEN_CIRCLE + '-shadow-offset-x',   'svg_icon_shadow_offset_x',  1, 150,  penValueMap.getOrDefault( MODE_PEN_CIRCLE + '-shadow-offset-x',5));
             settingsHTML += addSlider(MODE_PEN_CIRCLE + '-shadow-offset-y',   'svg_icon_shadow_offset_y',  1, 150,  penValueMap.getOrDefault( MODE_PEN_CIRCLE + '-shadow-offset-y',5));
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
 
-            drawingColor         = document.getElementById(MODE_PEN_CIRCLE + '-color');
-            drawingWidth         = document.getElementById(MODE_PEN_CIRCLE + '-line-width');
-            drawingShadowColor   = document.getElementById(MODE_PEN_CIRCLE + '-shadow-color');
-            drawingShadowWidth   = document.getElementById(MODE_PEN_CIRCLE + '-shadow-line-width');
-            drawingShadowOffsetX = document.getElementById(MODE_PEN_CIRCLE + '-shadow-offset-x');
-            drawingShadowOffsetY = document.getElementById(MODE_PEN_CIRCLE + '-shadow-offset-y');
+            drawingColor         = $(MODE_PEN_CIRCLE + '-color');
+            drawingWidth         = $(MODE_PEN_CIRCLE + '-line-width');
+            drawingShadowColor   = $(MODE_PEN_CIRCLE + '-shadow-color');
+            drawingShadowWidth   = $(MODE_PEN_CIRCLE + '-shadow-line-width');
+            drawingShadowOffsetX = $(MODE_PEN_CIRCLE + '-shadow-offset-x');
+            drawingShadowOffsetY = $(MODE_PEN_CIRCLE + '-shadow-offset-y');
             break;
         case MODE_PEN_CRAYON:
             settingsHTML += addColor( MODE_PEN_CRAYON + '-color',      'color',             penValueMap.getOrDefault( MODE_PEN_CRAYON + '-color','#000000'));
             settingsHTML += addSlider(MODE_PEN_CRAYON + '-line-width', 'size',    1, 150,   penValueMap.getOrDefault( MODE_PEN_CRAYON + '-line-width',5));
             settingsHTML += addSlider(MODE_PEN_CRAYON + '-opacity',    'opacity', 1, 100,   penValueMap.getOrDefault( MODE_PEN_CRAYON + '-opacity',100));
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
 
-            drawingColor         = document.getElementById(MODE_PEN_CRAYON + '-color');
-            drawingWidth         = document.getElementById(MODE_PEN_CRAYON + '-line-width');
-            drawingOpacity       = document.getElementById(MODE_PEN_CRAYON + '-opacity');
+            drawingColor         = $(MODE_PEN_CRAYON + '-color');
+            drawingWidth         = $(MODE_PEN_CRAYON + '-line-width');
+            drawingOpacity       = $(MODE_PEN_CRAYON + '-opacity');
             break;
         case MODE_PEN_INK:
             settingsHTML += addColor( MODE_PEN_INK + '-color',      'color',            penValueMap.getOrDefault( MODE_PEN_INK + '-color','#000000'));
             settingsHTML += addSlider(MODE_PEN_INK + '-line-width', 'size',    1, 150,  penValueMap.getOrDefault( MODE_PEN_INK + '-line-width',5));
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
 
-            drawingColor         = document.getElementById(MODE_PEN_INK + '-color');
-            drawingWidth         = document.getElementById(MODE_PEN_INK + '-line-width');
+            drawingColor         = $(MODE_PEN_INK + '-color');
+            drawingWidth         = $(MODE_PEN_INK + '-line-width');
             break;
         case MODE_PEN_MARKER:
             settingsHTML += addColor( MODE_PEN_MARKER + '-color',      'color',             penValueMap.getOrDefault( MODE_PEN_MARKER + '-color','#000000'));
             settingsHTML += addSlider(MODE_PEN_MARKER + '-line-width', 'size',    1, 150,   penValueMap.getOrDefault( MODE_PEN_MARKER + '-line-width',5));
             settingsHTML += addSlider(MODE_PEN_MARKER + '-opacity',    'opacity', 1, 100,   penValueMap.getOrDefault( MODE_PEN_MARKER + '-opacity',100));
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
 
-            drawingColor         = document.getElementById(MODE_PEN_MARKER + '-color');
-            drawingWidth         = document.getElementById(MODE_PEN_MARKER + '-line-width');
-            drawingOpacity       = document.getElementById(MODE_PEN_MARKER + '-opacity');
+            drawingColor         = $(MODE_PEN_MARKER + '-color');
+            drawingWidth         = $(MODE_PEN_MARKER + '-line-width');
+            drawingOpacity       = $(MODE_PEN_MARKER + '-opacity');
             break;
         case MODE_PEN_MOSAIC:
             settingsHTML += addSlider(MODE_PEN_MOSAIC + '-size',        'mosaic-size', 1, 250, penValueMap.getOrDefault( MODE_PEN_MOSAIC + '-size',8));
             settingsHTML += addSlider(MODE_PEN_MOSAIC + '-circle-size', 'circle-size', 1, 250, penValueMap.getOrDefault( MODE_PEN_MOSAIC + '-circle-size',40));
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
 
-            drawingMosaicSize         = document.getElementById(MODE_PEN_MOSAIC + '-size');
-            drawingMosaicCircleSize   = document.getElementById(MODE_PEN_MOSAIC + '-circle-size');
+            drawingMosaicSize         = $(MODE_PEN_MOSAIC + '-size');
+            drawingMosaicCircleSize   = $(MODE_PEN_MOSAIC + '-circle-size');
             break;
         case MODE_PEN_ERASER:
             settingsHTML += addSlider(MODE_PEN_ERASER + '-line-width', 'size',    1, 150,   penValueMap.getOrDefault( MODE_PEN_ERASER + '-line-width',5));
-            document.getElementById('tool-settings').innerHTML = settingsHTML;
+            $('tool-settings').innerHTML = settingsHTML;
 
-            drawingWidth  = document.getElementById(MODE_PEN_ERASER + '-line-width');
+            drawingWidth  = $(MODE_PEN_ERASER + '-line-width');
             break;
     }
 
@@ -418,14 +418,14 @@ function applyBrushSettings() {
 
 function clearActiveButton() {
     console.log("clearActiveButton is call");
-    document.getElementById(MODE_PEN_PENCIL  + 'Button').classList.remove('active-button');
-    // document.getElementById(MODE_PEN_OUTLINE + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_CIRCLE  + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_CRAYON  + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_INK     + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_MARKER  + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_ERASER  + 'Button').classList.remove('active-button');
-    document.getElementById(MODE_PEN_MOSAIC  + 'Button').classList.remove('active-button');
+    $(MODE_PEN_PENCIL  + 'Button').classList.remove('active-button');
+    // $(MODE_PEN_OUTLINE + 'Button').classList.remove('active-button');
+    $(MODE_PEN_CIRCLE  + 'Button').classList.remove('active-button');
+    $(MODE_PEN_CRAYON  + 'Button').classList.remove('active-button');
+    $(MODE_PEN_INK     + 'Button').classList.remove('active-button');
+    $(MODE_PEN_MARKER  + 'Button').classList.remove('active-button');
+    $(MODE_PEN_ERASER  + 'Button').classList.remove('active-button');
+    $(MODE_PEN_MOSAIC  + 'Button').classList.remove('active-button');
 }
 
 function setupContextTopBrush(brush) {

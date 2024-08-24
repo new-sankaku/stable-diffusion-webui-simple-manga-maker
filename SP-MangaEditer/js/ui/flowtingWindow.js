@@ -5,12 +5,12 @@ function createImagePromptHelperFlotingWindow(){
   
   // フローティングウィンドウが作成された後に実行する処理
   setTimeout(() => {
-    const saveButton = document.getElementById('iph-save-button');
-    const nameInput = document.getElementById('iph-name-input');
-    const freeInput = document.getElementById('iph-free-input');
-    const selectedTags = document.getElementById('iph-selected-tags');
-    const languageDropdown = document.getElementById('iph-language-dropdown');
-    const modelDropdown = document.getElementById('iph-model-dropdown');
+    const saveButton = $('iph-save-button');
+    const nameInput = $('iph-name-input');
+    const freeInput = $('iph-free-input');
+    const selectedTags = $('iph-selected-tags');
+    const languageDropdown = $('iph-language-dropdown');
+    const modelDropdown = $('iph-model-dropdown');
     
     function loadSettings() {
       const settings = JSON.parse(localStorage.getItem('uiSettings') || '{}');
@@ -148,7 +148,7 @@ function flowCreateFloatingWindow(title, content, shadowColor = 'rgba(255, 255, 
  * @param {string} flowWindowId - 閉じるウィンドウのID
  */
 function flowCloseWindow(flowWindowId) {
-  const flowWindowToClose = document.getElementById(flowWindowId);
+  const flowWindowToClose = $(flowWindowId);
   if (flowWindowToClose) {
     flowWindowToClose.remove();
   }

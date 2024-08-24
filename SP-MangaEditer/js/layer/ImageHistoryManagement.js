@@ -194,7 +194,7 @@ function lastRedo(guid = null) {
 function allRemove() {
     changeDoNotSaveHistory();
 	canvas.clear();
-    var bgColorInput = document.getElementById("bg-color");
+    var bgColorInput = $("bg-color");
     canvas.backgroundColor = bgColorInput.value;
     changeDoSaveHistory();
     saveStateByManual();

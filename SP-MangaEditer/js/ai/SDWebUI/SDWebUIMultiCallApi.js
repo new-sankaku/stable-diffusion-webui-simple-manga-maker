@@ -63,7 +63,7 @@ async function fetchSD_Models() {
 
 
 function sdwebui_apiHeartbeat() {
-  const SD_WebUI_Heartbeat_Label = document.getElementById('SD_WebUI_Heartbeat_Label');
+  const SD_WebUI_Heartbeat_Label = $('SD_WebUI_Heartbeat_Label');
 
   fetch(sdWebUI_API_ping, {
     method: 'GET',

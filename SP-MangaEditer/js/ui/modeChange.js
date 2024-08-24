@@ -19,7 +19,7 @@ let nowPencil = "";
 
 
 function glowClearButton(){
-  var button = document.getElementById('clearMode');
+  var button = $('clearMode');
   button.setAttribute('anim', 'glow');
   button.classList.add('glow');
   setTimeout(function() {
@@ -68,7 +68,7 @@ function isImageBrush(type){
 
 function cropModeClear(){
   if (cropFrame) {
-    document.getElementById("crop").style.display = "none";
+    $("crop").style.display = "none";
     canvas.remove(cropFrame);
     cropFrame = null;
     if( cropActiveObject ){
@@ -80,7 +80,7 @@ function cropModeClear(){
   }
 }
 function knifeModeClear(){
-  var knifeModeButton = document.getElementById('knifeModeButton');
+  var knifeModeButton = $('knifeModeButton');
   isKnifeMode = false;
   knifeModeButton.textContent = getText('knifeOff');
   changeMovement();
@@ -112,7 +112,7 @@ function editModeClear() {
 
 function toggleMode() {
   const isDarkMode = document.body.classList.toggle('dark-mode');
-  const logo = document.getElementById('navbar-logo');
+  const logo = $('navbar-logo');
   if (isDarkMode) {
     document.body.classList.remove('light-mode');
     document.body.classList.add('dark-mode');
@@ -128,16 +128,16 @@ function toggleMode() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('mode-toggle').addEventListener('change', toggleMode);
+  $('mode-toggle').addEventListener('change', toggleMode);
 });
 
 
 function initializeMode() {
   const mode = localStorage.getItem('mode') || 'light-mode';
   document.body.classList.add(mode);
-  const logo = document.getElementById('navbar-logo');
+  const logo = $('navbar-logo');
   if (mode === 'dark-mode') {
-    document.getElementById('mode-toggle').checked = true;
+    $('mode-toggle').checked = true;
     logo.src = '02_images_svg/Logo/black_mode_logo.webp';
   } else {
     logo.src = '02_images_svg/Logo/light_mode_logo.webp';

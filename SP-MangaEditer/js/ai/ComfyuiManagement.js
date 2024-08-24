@@ -14,9 +14,9 @@ hostInput.value = comfyuiHost;
 portInput.value = comfyuiPort;
 
 document.addEventListener('DOMContentLoaded', function() {
-    hostInput = document.getElementById('Comfyui_apiHost');
-    portInput = document.getElementById('Comfyui_apiPort');
-    workflowFileLoad = document.getElementById('Workflow_path_load');
+    hostInput = $('Comfyui_apiHost');
+    portInput = $('Comfyui_apiPort');
+    workflowFileLoad = $('Workflow_path_load');
     
     hostInput.value = comfyuiHost;
     portInput.value = comfyuiPort;
@@ -72,10 +72,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function displayFileName() {
     //console.log('displayFileName関数が呼び出されました。');
-    var input = document.getElementById('Workflow_path_load');
+    var input = $('Workflow_path_load');
     var fileName = input.files.length > 0 ? input.files[0].name : 'No file chosen';
     //console.log('表示されるファイル名:', fileName);
-    document.getElementById('file-name').textContent = fileName;
+    $('file-name').textContent = fileName;
 }
 
 /* 
@@ -108,7 +108,7 @@ async function comufy_apiHeartbeat() {
 
     server_address = hostInput.value + ':' + portInput.value;
     console.log( "comufy_apiHeartbeat", "start" );
-    const ComufyUI_Heartbeat_Label = document.getElementById('ComufyUI_Heartbeat_Label');
+    const ComufyUI_Heartbeat_Label = $('ComufyUI_Heartbeat_Label');
     try {
         const url = "http://" + server_address +  "/settings";
         const response = await fetch(url, {

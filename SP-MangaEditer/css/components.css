@@ -4,6 +4,7 @@
   #svg-container-vertical,
   #svg-container-landscape,
   #speech-bubble-area1,
+  #speech-bubble-area2,
   #text-area,
   #shape-area,
   #tool-area,
@@ -154,17 +155,20 @@
     align-items: center;
 }
 
+.input-group button i,
 .input-group-multi button i {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+.input-group button,
 .input-group-multi button {
     margin: 5px;
     padding: 10px;
     cursor: pointer;
     border: none;
 }
+.input-group button.selected,
 .input-group-multi button.selected {
   background-color: var(--select-button-color);
 }

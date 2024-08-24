@@ -1,5 +1,5 @@
 function removeSpinner(spinnerId) {
-  var removeSpinner = document.getElementById(spinnerId);
+  var removeSpinner = $(spinnerId);
   if (removeSpinner) {
     removeSpinner.remove();
   }

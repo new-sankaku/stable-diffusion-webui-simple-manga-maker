@@ -1,5 +1,5 @@
-var fpsCheckbox = document.getElementById("InfomationFPS");
-var coordCheckbox = document.getElementById("InfomationCoordinate");
+var fpsCheckbox = $("InfomationFPS");
+var coordCheckbox = $("InfomationCoordinate");
 
 var frameCount = 0;
 var lastTime = performance.now();

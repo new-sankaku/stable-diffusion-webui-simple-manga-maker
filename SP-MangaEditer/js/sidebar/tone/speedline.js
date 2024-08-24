@@ -35,18 +35,18 @@ function speedLineEnd(){
 
 
 function updateSpeedLineValue(id) {
-  const input = document.getElementById(id);
-  const display = document.getElementById(id + "Value");
+  const input = $(id);
+  const display = $(id + "Value");
   if (display) {
     display.textContent = input.value;
   }
 }
 
 function drawTempCanvasSpeedLine(start, end, options) {
-  const gradientToggle  = document.getElementById(MODE_SPEED_LINE + '-grad-check').checked;
-  const lineColor       = document.getElementById(MODE_SPEED_LINE + '-color').value;
-  const gradientStart   = parseInt(document.getElementById(MODE_SPEED_LINE + '-grad-start').value) / 100;
-  const gradientEnd     = parseInt(document.getElementById(MODE_SPEED_LINE + '-grad-end').value) / 100;
+  const gradientToggle  = $(MODE_SPEED_LINE + '-grad-check').checked;
+  const lineColor       = $(MODE_SPEED_LINE + '-color').value;
+  const gradientStart   = parseInt($(MODE_SPEED_LINE + '-grad-start').value) / 100;
+  const gradientEnd     = parseInt($(MODE_SPEED_LINE + '-grad-end').value) / 100;
 
   if (gradientToggle) {
     const gradient = tempCtxSpeedLine.createLinearGradient(
@@ -81,12 +81,12 @@ function drawTempCanvasSpeedLine(start, end, options) {
 }
 function drawTempCanvasSpeedlines() {
   tempCtxSpeedLine.clearRect(0, 0, tempCanvasSpeedLine.width, tempCanvasSpeedLine.height);
-  const density = parseInt(document.getElementById(MODE_SPEED_LINE + '-density').value);
+  const density = parseInt($(MODE_SPEED_LINE + '-density').value);
   const angle = (parseInt(0) * Math.PI) / 180;
   const width = tempCanvasSpeedLine.width;
   const height = tempCanvasSpeedLine.height;
 
-  const speedLineStyle = document.getElementById('speed-line-style').value;
+  const speedLineStyle = $('speed-line-style').value;
 
   
 
@@ -137,13 +137,13 @@ function updateDrawingSpeedlines() {
 function addSppedLineEventListener(){
   [MODE_SPEED_LINE + '-density', MODE_SPEED_LINE + '-grad-start', MODE_SPEED_LINE + '-grad-end', MODE_SPEED_LINE + '-color'].forEach(
     (id) => {
-      document.getElementById(id).addEventListener("input", () => {
+      $(id).addEventListener("input", () => {
         updateSpeedLineValue(id);
         updateDrawingSpeedlines();
       });
     }
   );
-  document.getElementById(MODE_SPEED_LINE + '-grad-check').addEventListener("input", updateDrawingSpeedlines);
+  $(MODE_SPEED_LINE + '-grad-check').addEventListener("input", updateDrawingSpeedlines);
 }
 
 function removeSppedLineEventListener() {
@@ -154,13 +154,13 @@ function removeSppedLineEventListener() {
 
   [MODE_SPEED_LINE + '-density', MODE_SPEED_LINE + '-grad-start', MODE_SPEED_LINE + '-grad-end', MODE_SPEED_LINE + '-color'].forEach(
     (id) => {
-      const inputElement = document.getElementById(id);
+      const inputElement = $(id);
       const listener = updateSpeedLineValueAndDrawing.bind(null, id);
       inputElement.removeEventListener("input", listener);
     }
   );
 
-  document.getElementById(MODE_SPEED_LINE + '-grad-check').removeEventListener("input", updateDrawingSpeedlines);
+  $(MODE_SPEED_LINE + '-grad-check').removeEventListener("input", updateDrawingSpeedlines);
 }
 
 function updateSpeedLineCanvas() {

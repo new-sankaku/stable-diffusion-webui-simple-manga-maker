@@ -7,9 +7,9 @@ let offsetX, offsetY;
 
 document.addEventListener('DOMContentLoaded', function() {
 
-  openButton = document.getElementById("openWindow");
-  myWindow = document.getElementById("myWindow");
-  textInput = document.getElementById("vertical_textInput");
+  openButton = $("openWindow");
+  myWindow = $("myWindow");
+  textInput = $("vertical_textInput");
 
   openButton.addEventListener("click", function () {
     const activeObject = canvas.getActiveObject();
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 let textGroup;
 function createVerticalText(textString, options) {
-  var selectedFont = document.getElementById('fontSelector').value;
+  var selectedFont = $('fontSelector').value;
   const ignoreRegex = /[･･･…ー（）｛｝「」(){}『』【】[\]]/;
   const reverceRegex = /[、。，A-Za-z0-9!"#$%&'()=~{`+*}_?><]/;
 
@@ -106,7 +106,7 @@ function createVerticalText(textString, options) {
       fill: options.color,
       fontFamily: selectedFont, 
       angle: isIgnored ? 90 : 0,
-      stroke: document.getElementById("textOutlineColorPicker").value,
+      stroke: $("textOutlineColorPicker").value,
       strokeWidth: 1,
     });
 
@@ -143,15 +143,15 @@ function createVerticalText(textString, options) {
 }
 
 function updateVerticalText() {
-  const textString = document.getElementById("vertical_textInput").value;
+  const textString = $("vertical_textInput").value;
   const selectedObject = canvas.getActiveObject();
 
   if ( isVerticalText(selectedObject) ) {
     canvas.remove(selectedObject);
 
     let firstText = selectedObject.getObjects('text')[0];
-    let inheritedFontSize = firstText ? firstText.fontSize : parseInt(document.getElementById('fontSizeSlider').value);
-    let inheritedColor = firstText ? firstText.fill : document.getElementById("textColorPicker").value;
+    let inheritedFontSize = firstText ? firstText.fontSize : parseInt($('fontSizeSlider').value);
+    let inheritedColor = firstText ? firstText.fill : $("textColorPicker").value;
 
     const newTextGroup = createVerticalText(textString, {
       left: selectedObject.left,
@@ -164,8 +164,8 @@ function updateVerticalText() {
     const newTextGroup = createVerticalText(textString, {
       top: 50,
       left: 300,
-      fontSize: parseInt(document.getElementById('fontSizeSlider').value),
-      color: document.getElementById("textColorPicker").value
+      fontSize: parseInt($('fontSizeSlider').value),
+      color: $("textColorPicker").value
     });
     canvas.add(newTextGroup);
   }
@@ -173,8 +173,8 @@ function updateVerticalText() {
   closeWindow();
 }
 
-document.getElementById("cancelButton").addEventListener("click", closeWindow);
-document.getElementById("updateButton").addEventListener("click", updateVerticalText);
+$("cancelButton").addEventListener("click", closeWindow);
+$("updateButton").addEventListener("click", updateVerticalText);
 
 function openModalForEditing() {
   const selectedObject = canvas.getActiveObject();

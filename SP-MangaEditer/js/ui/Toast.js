@@ -5,7 +5,7 @@ function createToastError(title, messages) {
     return createToast(title, messages, true);
 }
 function createToast(title, messages, isError) {
-    const container = document.getElementById('sp-manga-toastContainer');
+    const container = $('sp-manga-toastContainer');
     if (!container) {
         console.error('Toast container not found');
         return;

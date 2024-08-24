@@ -1,5 +1,5 @@
 function apiHeartbeat(){
-  const pingCheck = document.getElementById('apiHeartbeatCheckbox');
+  const pingCheck = $('apiHeartbeatCheckbox');
   if (pingCheck.checked) {
     
   } else {
@@ -16,7 +16,7 @@ function apiHeartbeat(){
 
 document.addEventListener('DOMContentLoaded', function () {
   setInterval(apiHeartbeat, 1000 * 15);
-  document.getElementById('apiHeartbeatCheckbox').addEventListener('change', function () {
+  $('apiHeartbeatCheckbox').addEventListener('change', function () {
     apiHeartbeat();
   });
   apiHeartbeat();
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function updateUpscalerDropdown(models) {
-  const modelDropdown = document.getElementById('text2img_basePrompt_hr_upscaler');
+  const modelDropdown = $('text2img_basePrompt_hr_upscaler');
   modelDropdown.innerHTML = '';
   models.forEach(model => {
     const option = document.createElement('option');
@@ -41,7 +41,7 @@ function updateUpscalerDropdown(models) {
 }
 
 function updateSamplerDropdown(models) {
-  const modelDropdown = document.getElementById('text2img_basePrompt_samplingMethod');
+  const modelDropdown = $('text2img_basePrompt_samplingMethod');
   modelDropdown.innerHTML = '';
   text2img_basePrompt.text2img_samplingMethod
 
@@ -58,7 +58,7 @@ function updateSamplerDropdown(models) {
 }
 
 function updateModelDropdown(models) {
-  const modelDropdown = document.getElementById('text2img_basePrompt_model');
+  const modelDropdown = $('text2img_basePrompt_model');
   modelDropdown.innerHTML = '';
   models.forEach(model => {
     const option = document.createElement('option');
