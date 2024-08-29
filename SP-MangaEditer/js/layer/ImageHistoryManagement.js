@@ -155,7 +155,6 @@ function saveState() {
 
 function undo() {
     if (currentStateIndex >= 1) {
-        
         changeDoNotSaveHistory();
         currentStateIndex--;
 
@@ -167,6 +166,7 @@ function undo() {
             resetEventHandlers(); 
             changeDoSaveHistory();
         });
+        clearJSTSGeometry();
     }
 }
 
@@ -183,6 +183,7 @@ function redo() {
             resetEventHandlers(); 
             changeDoSaveHistory();
         });
+        clearJSTSGeometry();
     }
 }
 
@@ -203,6 +204,7 @@ function lastRedo(guid = null) {
         resetEventHandlers(); 
         changeDoSaveHistory();
     });
+    clearJSTSGeometry();
 }
 
 function allRemove() {

@@ -142,8 +142,20 @@ function unionGeometries(geometry1, geometry2) {
 
 function mergeOverlappingShapes(newGeometry) {
   canvas.getObjects().forEach(obj => {
-    if (obj.isSpeechBubble && obj.jstsGeom) {
-      if (newGeometry.intersects(obj.jstsGeom) || newGeometry.touches(obj.jstsGeom)) {
+    if( obj.isSpeechBubble && !obj.jstsGeom ){
+      console.log("mergeOverlappingShapes updateJSTSGeometryByObj 再作成");
+      updateJSTSGeometryByObj(obj);
+    }
+    if (obj.isSpeechBubble) {
+      var isIntersects = false;
+      try {
+        isIntersects = newGeometry.intersects(obj.jstsGeom)
+      }catch{
+        updateJSTSGeometryByObj(obj);
+        isIntersects = newGeometry.intersects(obj.jstsGeom);
+      }
+
+      if ( isIntersects || newGeometry.touches(obj.jstsGeom) ) {
         const mergedGeometry = unionGeometries(newGeometry, obj.jstsGeom);
         if (mergedGeometry && mergedGeometry.isValid()) {
           newGeometry = mergedGeometry;
@@ -471,31 +483,44 @@ canvas.on('object:scaling', updateJSTSGeometry);
 
 function updateJSTSGeometry(event) {
   const obj = event.target;
+  updateJSTSGeometryByObj(obj);
+}
 
-  if (obj.isSpeechBubble && obj.jstsGeom) {
-  const scaleX = obj.scaleX;
-  const scaleY = obj.scaleY;
-  const angle = fabric.util.degreesToRadians(obj.angle);
+function updateJSTSGeometryByObj(obj) {
 
-  const updatedCoordinates = obj.path.filter(p => p[0] !== 'Z').map(p => {
-    let x = p[1] - obj.pathOffset.x;
-    let y = p[2] - obj.pathOffset.y;
+  if (obj.isSpeechBubble) {
+    const scaleX = obj.scaleX;
+    const scaleY = obj.scaleY;
+    const angle = fabric.util.degreesToRadians(obj.angle);
 
-    x *= scaleX;
-    y *= scaleY;
+    const updatedCoordinates = obj.path.filter(p => p[0] !== 'Z').map(p => {
+      let x = p[1] - obj.pathOffset.x;
+      let y = p[2] - obj.pathOffset.y;
 
-    const rotatedX = x * Math.cos(angle) - y * Math.sin(angle);
-    const rotatedY = x * Math.sin(angle) + y * Math.cos(angle);
-    x = rotatedX + obj.left + obj.pathOffset.x * scaleX;
-    y = rotatedY + obj.top + obj.pathOffset.y * scaleY;
+      x *= scaleX;
+      y *= scaleY;
 
-    return new jsts.geom.Coordinate(x, y);
-  });
+      const rotatedX = x * Math.cos(angle) - y * Math.sin(angle);
+      const rotatedY = x * Math.sin(angle) + y * Math.cos(angle);
+      x = rotatedX + obj.left + obj.pathOffset.x * scaleX;
+      y = rotatedY + obj.top + obj.pathOffset.y * scaleY;
 
-  updatedCoordinates.push(updatedCoordinates[0]);
+      return new jsts.geom.Coordinate(x, y);
+    });
 
-  obj.jstsGeom = geometryFactory.createPolygon(
-    geometryFactory.createLinearRing(updatedCoordinates)
-  );
+    updatedCoordinates.push(updatedCoordinates[0]);
+
+    obj.jstsGeom = geometryFactory.createPolygon(
+      geometryFactory.createLinearRing(updatedCoordinates)
+    );
   }
+}
+
+
+
+
+function clearJSTSGeometry() {
+  canvas.getObjects().forEach(obj => {
+    obj.jstsGeom = null;
+  });
 }

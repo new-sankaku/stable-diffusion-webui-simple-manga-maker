@@ -826,7 +826,11 @@
             </div>
 
             <div id="speech-bubble-area2" style="display: none;">
-                <div class="area-header" data-i18n="custom_bubble">Custom Bubble</div>
+                <div class="area-header">
+                    <a href="html/Minual/custom-speechBubble.html" target="_blank" data-i18n="custom_bubble">
+                        Custom Bubble (Help)
+                    </a>
+                </div>
                 <div id="speech-bubble-svg-preview-area1">
 
                     <div class="input-group">
@@ -852,7 +856,7 @@
                     </div>
                     <div class="input-group">
                         <label for="sbSornerRadius" data-i18n="cornerRadius">Corner Radius(px)</label>
-                        <input type="number" id="sbSornerRadius" min="0" max="100" value="3">
+                        <input type="number" id="sbSornerRadius" min="0" max="15" value="3">
                     </div>
                     <div class="input-group">
                         <label for="sbPointSpace" data-i18n="pointSpace">Point Space(px)</label>
@@ -1011,7 +1015,7 @@
                 <div class="area-header">
                     <a href="html/Minual/screen-tone.html" target="_blank">
                         Screen Tone (Help)
-                    </a>    
+                    </a>
                 </div>
                 <div id="manga-tone-buttons">
                     <button id="ToneButton" onclick="switchMangaTone('Tone')">

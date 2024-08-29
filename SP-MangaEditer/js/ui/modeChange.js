@@ -33,6 +33,7 @@ function operationModeClear(){
   editModeClear();
   pencilModeClear(nowPencil);
   nonActiveClearButton();
+  currentMode = "select";
   setSelectionMode(selectButton);
 }
 
