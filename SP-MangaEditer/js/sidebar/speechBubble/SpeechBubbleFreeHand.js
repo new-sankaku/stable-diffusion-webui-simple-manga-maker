@@ -1,300 +1,501 @@
-const geomFactory = new jsts.geom.GeometryFactory(
-    new jsts.geom.PrecisionModel(1e3)
-);
 
-const sbElements = {
-    pointMode: $("sb-pointMode"),
-    freehandMode: $("sb-freehandMode"),
-    smoothness: $("sb-smoothness"),
-    fillColor: $("sb-fillColor"),
-    strokeColor: $("sb-strokeColor"),
-    strokeWidth: $("sb-strokeWidth"),
-    fillOpacity: $("sb-fillOpacity"),
-    pointDistance: $("sb-pointDistance")
-};
+const pointButton = $("sbPointButton");
+const freehandButton = $("sbFreehandButton");
+const selectButton = $("sbSelectButton");
+const movePointButton = $("sbMoveButton");
+const deletePointButton = $("sbDeleteButton");
 
-let sbState = {
-    mode: "no-mode",
-    isDrawing: false,
-    currentPoints: [],
-    tempPoint: null,
-    currentShape: null,
-    tempLine: null
-};
+const smoothingCheckbox = $("sbSmoothing");
+const fillColorInput = $("sbFillColor");
+const strokeColorInput = $("sbStrokeColor");
+const strokeWidthInput = $("sbStrokeWidth");
+const fillOpacityInput = $("sbFillOpacity");
+const cornerIterationInput = $("sbSornerRadius");
+const pointThresholdInput = $("sbPointSpace");
+const geometryFactory = new jsts.geom.GeometryFactory();
 
-function setSbActiveButton(button) {
-    [sbElements.pointMode, sbElements.freehandMode].forEach(btn => btn.classList.remove("selected"));
-    button.classList.add("selected");
+let currentMode = "select";
+let points = [];
+let mousePosition;
+let temporaryLine;
+let temporaryShape;
+let isDrawing = false;
+let editingGroup;
+let selectedObject;
+let controlPoints = [];
+let activePoint;
+let lastRenderTime = 0;
+
+function setActiveButton(button) {
+  [pointButton, freehandButton, selectButton, movePointButton, deletePointButton].forEach(btn => btn.classList.remove("selected"));
+  button.classList.add("selected");
 }
 
-function removeSbActiveButton() {
-    [sbElements.pointMode, sbElements.freehandMode].forEach(btn => btn.classList.remove("selected"));
+function createSpeechBubble(geometry) {
+  const coordinates = geometry.getCoordinates();
+  let minX = Infinity;
+  let minY = Infinity;
+  coordinates.forEach(coord => {
+    minX = Math.min(minX, coord.x);
+    minY = Math.min(minY, coord.y);
+  });
+  const adjustedCoordinates = coordinates.map(coord => ({
+    x: coord.x - minX,
+    y: coord.y - minY
+  }));
+
+  const styles = {
+    fill: fillColorInput.value,
+    stroke: strokeColorInput.value,
+    strokeWidth: parseInt(strokeWidthInput.value),
+    opacity: parseInt(fillOpacityInput.value) / 100
+  };
+
+  const path = adjustedCoordinates.map((coord, index) => 
+    (index === 0 ? "M" : "L") + coord.x.toFixed(2) + " " + coord.y.toFixed(2)
+  ).join("") + "Z";
+
+  const bubble = new fabric.Path(path, {
+    ...styles,
+    left: minX,
+    top: minY,
+    selectable: currentMode === "select",
+    evented: true,
+    isSpeechBubble: true,
+    objectCaching: false,
+    jstsGeom: geometry
+  });
+
+  sbClear();
+  canvas.add(bubble);
+
+  return bubble;
 }
 
-function getCurrentStyle() {
-    const style = {
-        fill: sbElements.fillColor.value,
-        stroke: sbElements.strokeColor.value,
-        strokeWidth: parseInt(sbElements.strokeWidth.value),
-        opacity: parseInt(sbElements.fillOpacity.value) / 100
-    };
-    return style;
-}
+function updateTemporaryShapes() {
+  removeByNotSave(temporaryLine);
+  removeByNotSave(temporaryShape);
 
-function createPolygon(coords) {
-    if (coords.length < 3) {
-        return null;
+  if (currentMode === "point" && points.length > 0) {
+    temporaryShape = new fabric.Polyline(points, {
+      fill: "rgba(0,0,255,0.2)",
+      stroke: "blue",
+      strokeWidth: parseInt(strokeWidthInput.value),
+      selectable: false,
+      evented: false,
+      excludeFromLayerPanel:true
+    });
+    addByNotSave(temporaryShape);
+
+    if (mousePosition) {
+      temporaryLine = new fabric.Line([
+        points[points.length - 1].x,
+        points[points.length - 1].y,
+        mousePosition.x,
+        mousePosition.y
+      ], {
+        stroke: "blue",
+        strokeWidth: parseInt(strokeWidthInput.value),
+        selectable: false,
+        evented: false,
+        excludeFromLayerPanel:true
+      });
+      addByNotSave(temporaryLine);
     }
-    const jstsCoords = coords.map(p => new jsts.geom.Coordinate(p.x, p.y));
-    jstsCoords.push(jstsCoords[0]);
-    try {
-        const polygon = geomFactory.createPolygon(geomFactory.createLinearRing(jstsCoords));
-        return polygon;
-    } catch (error) {
-        return null;
-    }
+  } else if (currentMode === "freehand" && points.length > 0 && isDrawing) {
+    temporaryShape = new fabric.Path(points.map((point, index) => (index === 0 ? "M" : "L") + point.x + " " + point.y).join(""), {
+      fill: "rgba(0,0,255,0.2)",
+      stroke: "blue",
+      strokeWidth: parseInt(strokeWidthInput.value),
+      selectable: false,
+      evented: false,
+      excludeFromLayerPanel:true
+    });
+    addByNotSave(temporaryShape);
+  }
+
+  requestAnimationFrame(() => canvas.renderAll());
 }
 
-function mergeShapes(shape1, shape2) {
-    try {
-        const mergedShape = shape1.union(shape2);
-        return mergedShape;
-    } catch (error) {
-        return shape1;
-    }
+function createJSTSPolygon(points) {
+  if (points.length < 3) return null;
+  let coordinates = points.map(point => new jsts.geom.Coordinate(
+    Math.round(point.x * 10) / 10,
+    Math.round(point.y * 10) / 10
+  ));
+  if (coordinates[0].x !== coordinates[coordinates.length - 1].x ||
+    coordinates[0].y !== coordinates[coordinates.length - 1].y) {
+    coordinates.push(new jsts.geom.Coordinate(coordinates[0].x, coordinates[0].y));
+  }
+  return geometryFactory.createPolygon(geometryFactory.createLinearRing(coordinates));
 }
 
-function mergeWithExisting(newShape) {
-    console.log("---マージ処理開始---");
-    console.log("新しい図形のポイント:", newShape.getCoordinates().map(c => `(${c.x}, ${c.y})`).join(', '));
+function unionGeometries(geometry1, geometry2) {
+  try {
+    const union = geometry1.union(geometry2);
+    const simplified = jsts.simplify.TopologyPreservingSimplifier.simplify(union, 0.1);
+    return jsts.precision.GeometryPrecisionReducer.reduce(simplified, new jsts.geom.PrecisionModel(1000));
+  } catch (error) {
+    return geometry1;
+  }
+}
 
-    let mergeFound = false;
-    const mergedShape = canvas.getObjects('path').reduce((resultShape, existingPath) => {
-        if (existingPath.jstsGeom && (resultShape.intersects(existingPath.jstsGeom) || resultShape.touches(existingPath.jstsGeom))) {
-            mergeFound = true;
-            console.log("マージ対象の図形が見つかりました");
-            console.log("既存パスのポイント:", existingPath.path.map(p => `(${p[1]}, ${p[2]})`).join(', '));
-            console.log("既存JSTS geometryのポイント:", existingPath.jstsGeom.getCoordinates().map(c => `(${c.x}, ${c.y})`).join(', '));
-            
-            const merged = mergeShapes(resultShape, existingPath.jstsGeom);
-            if (merged && merged.isValid()) {
-                console.log("マージ後の図形のポイント:", merged.getCoordinates().map(c => `(${c.x}, ${c.y})`).join(', '));
-                console.log("削除された既存パス - 左:", existingPath.left, "上:", existingPath.top, "スケールX:", existingPath.scaleX, "スケールY:", existingPath.scaleY, "角度:", existingPath.angle);
-                canvas.remove(existingPath);
-                return merged;
-            } else {
-                console.log("マージに失敗しました。既存の図形を保持します。");
-            }
+function mergeOverlappingShapes(newGeometry) {
+  canvas.getObjects().forEach(obj => {
+    if (obj.isSpeechBubble && obj.jstsGeom) {
+      if (newGeometry.intersects(obj.jstsGeom) || newGeometry.touches(obj.jstsGeom)) {
+        const mergedGeometry = unionGeometries(newGeometry, obj.jstsGeom);
+        if (mergedGeometry && mergedGeometry.isValid()) {
+          newGeometry = mergedGeometry;
+          canvas.remove(obj);
         }
-        return resultShape;
-    }, newShape);
-    
-    if (!mergeFound) {
-        console.log("マージ対象の図形が見つかりませんでした");
-        console.log("理由: 新しい図形が既存の図形と交差または接触していません");
+      }
     }
-    
-    console.log("---マージ処理終了---");
-    return mergedShape;
+  });
+  return newGeometry;
 }
 
-function isCloseToPoint(x, y, point, threshold = 15) {
-    return Math.abs(x - point.x) <= threshold && Math.abs(y - point.y) <= threshold;
+function isNearStartPoint(x, y, startPoint) {
+  return Math.abs(x - startPoint.x) <= 15 && Math.abs(y - startPoint.y) <= 15;
 }
 
 function smoothPoints(points) {
-    if (points.length < 3) return points;
-    const smoothedPoints = points.map((point, i, arr) => {
-        if (i === 0 || i === arr.length - 1) return point;
-        const prev = arr[i - 1], next = arr[i + 1];
-        return {
-            x: point.x * 0.5 + (prev.x + next.x) * 0.25,
-            y: point.y * 0.5 + (prev.y + next.y) * 0.25
-        };
+  if (points.length < 3) return points;
+  const smoothingFactor = smoothingCheckbox.checked ? 1 : 100;
+  let smoothedPoints = [points[0]];
+  for (let i = 1; i < points.length - 1; i++) {
+    let prev = points[i - 1];
+    let current = points[i];
+    let next = points[i + 1];
+    smoothedPoints.push({
+      x: current.x * (1 - smoothingFactor / 100) + smoothingFactor / 100 * (prev.x + next.x) / 2,
+      y: current.y * (1 - smoothingFactor / 100) + smoothingFactor / 100 * (prev.y + next.y) / 2
     });
-    return smoothedPoints;
+  }
+  smoothedPoints.push(points[points.length - 1]);
+  return smoothedPoints;
 }
 
 function removeClosePoints(points) {
-    const distance = parseInt(sbElements.pointDistance.value);
-    const filteredPoints = points.filter((point, index, arr) => 
-        index === 0 || Math.hypot(point.x - arr[index-1].x, point.y - arr[index-1].y) > distance
-    );
-    return filteredPoints;
+  const threshold = parseInt(pointThresholdInput.value);
+  if (threshold === 0 || points.length < 3) return points;
+  let filteredPoints = [points[0]];
+  for (let i = 1; i < points.length; i++) {
+    const lastPoint = filteredPoints[filteredPoints.length - 1];
+    const currentPoint = points[i];
+    if (Math.hypot(currentPoint.x - lastPoint.x, currentPoint.y - lastPoint.y) > threshold) {
+      filteredPoints.push(currentPoint);
+    }
+  }
+  if (filteredPoints[filteredPoints.length - 1] !== points[points.length - 1]) {
+    filteredPoints.push(points[points.length - 1]);
+  }
+  return filteredPoints;
 }
 
-function drawTemporaryShape() {
-    if (sbState.currentShape) {
-        canvas.remove(sbState.currentShape);
+function roundCorners(points, iterations) {
+  if (iterations === 0 || points.length < 3) return points;
+  let roundedPoints = points;
+  for (let i = 0; i < iterations; i++) {
+    let newPoints = [];
+    for (let j = 0; j < roundedPoints.length - 1; j++) {
+      const current = roundedPoints[j];
+      const next = roundedPoints[j + 1];
+      newPoints.push({
+        x: 0.75 * current.x + 0.25 * next.x,
+        y: 0.75 * current.y + 0.25 * next.y
+      });
+      newPoints.push({
+        x: 0.25 * current.x + 0.75 * next.x,
+        y: 0.25 * current.y + 0.75 * next.y
+      });
     }
-    if (sbState.tempLine) {
-        canvas.remove(sbState.tempLine);
-    }
-
-    const style = getCurrentStyle();
-    if (sbState.mode === "point" && sbState.currentPoints.length > 0) {
-        sbState.currentShape = new fabric.Polyline(sbState.currentPoints, {
-            ...style, fill: 'rgba(0,0,255,0.2)', selectable: false, evented: false
-        });
-        canvas.add(sbState.currentShape);
-
-        if (sbState.tempPoint) {
-            const lastPoint = sbState.currentPoints[sbState.currentPoints.length - 1];
-            sbState.tempLine = new fabric.Line([lastPoint.x, lastPoint.y, sbState.tempPoint.x, sbState.tempPoint.y], {
-                ...style, fill: undefined, selectable: false, evented: false
-            });
-            canvas.add(sbState.tempLine);
-        }
-    } else if (sbState.mode === "freehand" && sbState.currentPoints.length > 0 && sbState.isDrawing) {
-        sbState.currentShape = new fabric.Path(sbState.currentPoints.map((p, i) => 
-            `${i === 0 ? 'M' : 'L'}${p.x} ${p.y}`).join(' '), {
-            ...style, fill: 'rgba(0,0,255,0.2)', selectable: false, evented: false
-        });
-        canvas.add(sbState.currentShape);
-    }
-
-    canvas.renderAll();
-}
-
-function finalizeShape() {
-    if (sbState.currentPoints.length < 3) {
-        return;
-    }
-
-    let points = [...sbState.currentPoints];
-    if (sbState.mode === "freehand" && sbElements.smoothness.checked) {
-        points = removeClosePoints(points);
-        points = smoothPoints(points);
-    }
-    points.push(points[0]);
-
-    const polygon = createPolygon(points);
-    if (polygon && polygon.isValid()) {
-        const mergedShape = mergeWithExisting(polygon);
-        const path = new fabric.Path(mergedShape.getCoordinates().map((c, i) => 
-            `${i === 0 ? 'M' : 'L'}${c.x} ${c.y}`).join(' ') + 'Z', {
-            ...getCurrentStyle(), selectable: false, evented: false
-        });
-        path.jstsGeom = mergedShape;
-        path.isSpeechBubble = true;
-        canvas.add(path);
-        console.log("新しいパスを追加しました - 左:", path.left, "上:", path.top, "スケールX:", path.scaleX, "スケールY:", path.scaleY, "角度:", path.angle);
-
-        highlightExistingShapes();
-    }
-
-    sbState.currentPoints = [];
-    sbState.tempPoint = null;
-    if (sbState.currentShape) {
-        canvas.remove(sbState.currentShape);
-    }
-    if (sbState.tempLine) {
-        canvas.remove(sbState.tempLine);
-    }
-    sbState.currentShape = null;
-    sbState.tempLine = null;
-
-    canvas.renderAll();
-}
-
-function updateObjectSelectability(isSelectable) {
-    canvas.getObjects().forEach(obj => {
-        if (obj.isSpeechBubble) {
-            obj.selectable = isSelectable;
-            obj.evented = isSelectable;
-        }
-    });
-    canvas.requestRenderAll();
-}
-
-function setMode(mode) {
-    sbState.mode = mode;
-    if (mode === "no-mode") {
-        removeSbActiveButton();
-        updateObjectSelectability(true);
+    if (roundedPoints[0].x === roundedPoints[roundedPoints.length - 1].x &&
+      roundedPoints[0].y === roundedPoints[roundedPoints.length - 1].y) {
+      newPoints.push(newPoints[0]);
     } else {
-        setSbActiveButton(sbElements[mode + 'Mode']);
-        updateObjectSelectability(false);
+      newPoints.unshift(roundedPoints[0]);
+      newPoints.push(roundedPoints[roundedPoints.length - 1]);
     }
-    sbState.currentPoints = [];
-    sbState.tempPoint = null;
-    drawTemporaryShape();
+    roundedPoints = newPoints;
+  }
+  return roundedPoints;
 }
 
-function highlightExistingShapes() {
-    canvas.getObjects().forEach(obj => {
-        if (obj.isHighlight) {
-            canvas.remove(obj);
-        }
-    });
-
-    canvas.getObjects('path').forEach(obj => {
-        if (obj.isSpeechBubble) {
-            const highlight = new fabric.Path(obj.path.join(' '), {
-                stroke: 'rgba(255, 0, 0, 0.5)',
-                strokeWidth: 2,
-                fill: 'transparent',
-                selectable: false,
-                evented: false,
-                isHighlight: true
-            });
-            canvas.add(highlight);
-            console.log("既存の図形をハイライト - 左:", obj.left, "上:", obj.top, "スケールX:", obj.scaleX, "スケールY:", obj.scaleY, "角度:", obj.angle);
-        }
-    });
-
-    canvas.renderAll();
-
-    setTimeout(() => {
-        canvas.getObjects().forEach(obj => {
-            if (obj.isHighlight) {
-                canvas.remove(obj);
-            }
-        });
-        canvas.renderAll();
-    }, 5000);
+function processPoints(points) {
+  if (points[0].x !== points[points.length - 1].x || points[0].y !== points[points.length - 1].y) {
+    points.push({ x: points[0].x, y: points[0].y });
+  }
+  points = removeClosePoints(points);
+  if (smoothingCheckbox.checked) {
+    points = smoothPoints(points);
+  }
+  points = roundCorners(points, parseInt(cornerIterationInput.value));
+  return removeClosePoints(points);
 }
 
-canvas.on("mouse:down", ({pointer}) => {
-    sbState.isDrawing = true;
-    if (sbState.mode === "point") {
-        if (sbState.currentPoints.length === 0 || !isCloseToPoint(pointer.x, pointer.y, sbState.currentPoints[sbState.currentPoints.length - 1])) {
-            sbState.currentPoints.push(pointer);
-            drawTemporaryShape();
-        }
-    } else if (sbState.mode === "freehand") {
-        sbState.currentPoints = [pointer];
-        drawTemporaryShape();
+function updateObjectSelectability() {
+  canvas.forEachObject(obj => {
+    obj.set({ selectable: currentMode === "select", evented: true });
+  });
+}
+function createControlPoints(obj) {
+  controlPoints.forEach(p => removeByNotSave(p));
+  controlPoints = [];
+  if (!obj) return;
+  const path = obj.path;
+  for (let i = 1; i < path.length - 1; i++) {
+    if (path[i][0] !== 'L') continue;
+    const point = new fabric.Circle({
+      left: path[i][1] + obj.left,
+      top: path[i][2] + obj.top,
+      radius: 5,
+      fill: currentMode === "deletePoint" ? 'red' : 'blue',
+      originX: 'center',
+      originY: 'center',
+      hasBorders: false,
+      hasControls: false,
+      selectable: false,
+      evented: true,
+      data: { index: i },
+      excludeFromLayerPanel:true
+    });
+    controlPoints.push(point);
+    addByNotSave(point);
+  }
+  requestAnimationFrame(() => canvas.renderAll());
+}
+
+function updateShape(obj, pointIndex, newX, newY) {
+  const path = obj.path;
+  path[pointIndex][1] = newX - obj.left;
+  path[pointIndex][2] = newY - obj.top;
+  obj.set({ path: path });
+  obj.setCoords();
+  obj.dirty = true;
+  requestAnimationFrame(() => canvas.renderAll());
+}
+
+function deletePoint(obj, index) {
+  if (obj.path.length <= 4) {
+    return;
+  }
+  const [deletedPoint] = obj.path.splice(index, 1);
+  const firstPoint = obj.path[0];
+  if (deletedPoint[0] === 'L' && 
+    deletedPoint[1] === firstPoint[1] && 
+    deletedPoint[2] === firstPoint[2]) {
+    obj.path.shift();
+    obj.path[0][0] = 'M';
+    const secondPoint = [...obj.path[0]];
+    secondPoint[0] = 'L';
+    obj.path.splice(obj.path.length - 1, 0, secondPoint);
+  } else {
+    for (let i = index; i < obj.path.length - 1; i++) {
+      obj.path[i][0] = i === 0 ? 'M' : 'L';
     }
+  }
+
+  obj.dirty = true;
+  createControlPoints(obj);
+  requestAnimationFrame(() => canvas.renderAll());
+}
+
+pointButton.addEventListener("click", () => {
+  currentMode = "point";
+  setDrawingMode(pointButton);
 });
 
-canvas.on("mouse:move", ({pointer}) => {
-    if (sbState.mode === "point") {
-        sbState.tempPoint = pointer;
-        drawTemporaryShape();
-    } else if (sbState.mode === "freehand" && sbState.isDrawing) {
-        sbState.currentPoints.push(pointer);
-        drawTemporaryShape();
+freehandButton.addEventListener("click", () => {
+  currentMode = "freehand";
+  setDrawingMode(freehandButton);
+});
+
+selectButton.addEventListener("click", () => {
+  currentMode = "select";
+  setSelectionMode(selectButton);
+});
+
+movePointButton.addEventListener("click", () => {
+  currentMode = "movePoint";
+  setSelectionMode(movePointButton);
+});
+
+deletePointButton.addEventListener("click", () => {
+  currentMode = "deletePoint";
+  setSelectionMode(deletePointButton);
+});
+
+canvas.on("mouse:down", event => {
+  isDrawing = true;
+  const pointer = canvas.getPointer(event.e);
+  if (currentMode === "point") {
+    points.push({ x: pointer.x, y: pointer.y });
+    updateTemporaryShapes();
+  } else if (currentMode === "freehand") {
+    points = [{ x: pointer.x, y: pointer.y }];
+    updateTemporaryShapes();
+  } else if (currentMode === "movePoint" || currentMode === "deletePoint") {
+    if (event.target && event.target.isSpeechBubble) {
+      selectedObject = event.target;
+      createControlPoints(selectedObject);
+    } else if (currentMode === "deletePoint" && event.target && event.target.data && event.target.data.index !== undefined) {
+      deletePoint(selectedObject, event.target.data.index);
+    } else if (event.target && event.target.data) {
+      activePoint = event.target;
+    } else {
+      selectedObject = null;
+      createControlPoints(null);
+      activePoint = null;
     }
+  }
 });
 
-canvas.on("mouse:up", ({pointer}) => {
-    sbState.isDrawing = false;
-    if (sbState.mode === "point" && sbState.currentPoints.length >= 3 && isCloseToPoint(pointer.x, pointer.y, sbState.currentPoints[0])) {
-        finalizeShape();
-        setMode(sbState.mode === "point" ? "no-mode" : "point");
-        setMode(sbState.mode === "point" ? "no-mode" : "point");
-    } else if (sbState.mode === "freehand" && sbState.currentPoints.length >= 3) {
-        finalizeShape();
-        setMode(sbState.mode === "freehand" ? "no-mode" : "freehand");
-        setMode(sbState.mode === "freehand" ? "no-mode" : "freehand");
+canvas.on("mouse:move", event => {
+  const currentTime = Date.now();
+  if (currentTime - lastRenderTime < 16) return;
+  lastRenderTime = currentTime;
+
+  const pointer = canvas.getPointer(event.e);
+  if (currentMode === "point") {
+    mousePosition = { x: pointer.x, y: pointer.y };
+    updateTemporaryShapes();
+  } else if (currentMode === "freehand" && isDrawing) {
+    points.push({ x: pointer.x, y: pointer.y });
+    updateTemporaryShapes();
+  } else if (currentMode === "movePoint" && isDrawing && activePoint) {
+    updateShape(selectedObject, activePoint.data.index, pointer.x, pointer.y);
+    activePoint.set({ left: pointer.x, top: pointer.y });
+    requestAnimationFrame(() => canvas.renderAll());
+  }
+});
+
+canvas.on("mouse:up", event => {
+  isDrawing = false;
+  activePoint = null;
+  const pointer = canvas.getPointer(event.e);
+  if (currentMode === "point" && points.length >= 3) {
+    if (isNearStartPoint(pointer.x, pointer.y, points[0])) {
+      points.pop();
+      points.push({ x: points[0].x, y: points[0].y });
+      points = processPoints(points);
+      const geometry = createJSTSPolygon(points);
+      if (geometry && geometry.isValid()) {
+        createSpeechBubble(mergeOverlappingShapes(geometry));
+      } else {
+        console.log("jsts up error");
+      }
+
+      points = [];
+      mousePosition = null;
+
+      updateObjectSelectability();
+
+    } else {
+      updateTemporaryShapes();
     }
+  } else if (currentMode === "freehand" && points.length >= 3) {
+    points.push({ x: points[0].x, y: points[0].y });
+    points = processPoints(points);
+    const geometry = createJSTSPolygon(points);
+    if (geometry && geometry.isValid()) {
+      createSpeechBubble(mergeOverlappingShapes(geometry));
+      points = [];
+    } else {
+      console.log("jsts up error");
+    }
+    updateObjectSelectability();
+    requestAnimationFrame(() => canvas.renderAll());
+  }
 });
 
-sbElements.pointMode.addEventListener("click", () => {
-    setMode(sbState.mode === "point" ? "no-mode" : "point");
-});
+function sbClear(){
+  removeByNotSave(temporaryLine);
+  removeByNotSave(temporaryShape);
+  temporaryLine = null;
+  temporaryShape = null;
+}
 
-sbElements.freehandMode.addEventListener("click", () => {
-    setMode(sbState.mode === "freehand" ? "no-mode" : "freehand");
-});
+function setDrawingMode(button) {
+  canvas.selection = false;
+  setActiveButton(button);
+  sbClear();
+  points = [];
+  mousePosition = null;
+  updateObjectSelectability();
+  controlPoints.forEach(p => removeByNotSave(p));
+  controlPoints = [];
+  requestAnimationFrame(() => canvas.renderAll());
+
+  canvas.selection = false;
+  canvas.forEachObject(obj => {
+    obj.set({
+      selectable: false,
+      evented: false
+    });
+  });
+  canvas.renderAll();
+  activeClearButton();
+}
+
+function setSelectionMode(button) {
+  setActiveButton(button);
+  canvas.selection = currentMode === "select";
+  if (editingGroup) canvas.remove(editingGroup);
+  editingGroup = null;
+  sbClear();
+  points = [];
+  updateObjectSelectability();
+  if (currentMode === "movePoint" || currentMode === "deletePoint") {
+    canvas.forEachObject(obj => {
+      obj.set({ selectable: false, evented: true });
+    });
+    selectedObject = null;
+    createControlPoints(null);
+    activeClearButton();
+  } else if (currentMode === "select") {
+    canvas.forEachObject(obj => {
+      obj.set({ selectable: true, evented: true });
+    });
+    nonActiveClearButton();
+  }
+  controlPoints.forEach(p => removeByNotSave(p));
+  controlPoints = [];
+  requestAnimationFrame(() => canvas.renderAll());
+}
+
+setSelectionMode(selectButton);
+
+canvas.on('object:moving', updateJSTSGeometry);
+canvas.on('object:scaling', updateJSTSGeometry);
+
+function updateJSTSGeometry(event) {
+  const obj = event.target;
+
+  if (obj.isSpeechBubble && obj.jstsGeom) {
+  const scaleX = obj.scaleX;
+  const scaleY = obj.scaleY;
+  const angle = fabric.util.degreesToRadians(obj.angle);
+
+  const updatedCoordinates = obj.path.filter(p => p[0] !== 'Z').map(p => {
+    let x = p[1] - obj.pathOffset.x;
+    let y = p[2] - obj.pathOffset.y;
+
+    x *= scaleX;
+    y *= scaleY;
+
+    const rotatedX = x * Math.cos(angle) - y * Math.sin(angle);
+    const rotatedY = x * Math.sin(angle) + y * Math.cos(angle);
+    x = rotatedX + obj.left + obj.pathOffset.x * scaleX;
+    y = rotatedY + obj.top + obj.pathOffset.y * scaleY;
+
+    return new jsts.geom.Coordinate(x, y);
+  });
+
+  updatedCoordinates.push(updatedCoordinates[0]);
+
+  obj.jstsGeom = geometryFactory.createPolygon(
+    geometryFactory.createLinearRing(updatedCoordinates)
+  );
+  }
+}

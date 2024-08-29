@@ -17,24 +17,23 @@ var cropFrame;
 var cropActiveObject;
 let nowPencil = "";
 
-
-function glowClearButton(){
+function activeClearButton(){
   var button = $('clearMode');
-  button.setAttribute('anim', 'glow');
-  button.classList.add('glow');
-  setTimeout(function() {
-    button.removeAttribute('anim');
-    button.classList.remove('glow');
-  }, 6000);
+  button.classList.add('selected');
+}
+function nonActiveClearButton(){
+  var button = $('clearMode');
+  button.classList.remove('selected');
 }
 
-function operationModeClear( ){
+function operationModeClear(){
   console.log("operationModeClear start")
   cropModeClear();
   knifeModeClear();
   editModeClear();
   pencilModeClear(nowPencil);
-  clearActiveButton();
+  nonActiveClearButton();
+  setSelectionMode(selectButton);
 }
 
 function pencilModeClear(type) {

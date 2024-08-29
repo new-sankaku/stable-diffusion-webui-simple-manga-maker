@@ -9,10 +9,8 @@ function changeKnifeMode(){
   var knifeModeButton = $('knifeModeButton');
   isKnifeMode = !isKnifeMode;
   knifeModeButton.textContent = isKnifeMode ? getText('knifeOff') : getText('knifeOn') ;
-
+  isKnifeMode ? activeClearButton() : nonActiveClearButton();
   isKnifeMode ? knifeModeButton.classList.add("selected") : knifeModeButton.classList.remove("selected") ;
-  
-
   changeMovement();
 }
 

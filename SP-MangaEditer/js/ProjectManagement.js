@@ -127,7 +127,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var loadButton = $("projectLoad");
 
   saveButton.addEventListener("click", function () {
-    if (stateStack.length === 0 || btmImageZipMap.size === 0) {
+
+    console.log("stateStack.length", stateStack.length);
+
+    if (stateStack.length === 0) {
       createToast("Save Error", "Not Found.");
       return;
     }

@@ -63,6 +63,22 @@ function changeDoSaveHistory(){
     isSaveHistory = true;
 }
 
+function removeByNotSave(obj){
+    if (obj) {
+        changeDoNotSaveHistory();
+        canvas.remove(obj);
+        changeDoSaveHistory();
+    }
+}
+
+function addByNotSave(obj){
+    if (obj) {
+        changeDoNotSaveHistory();
+        canvas.add(obj);
+        changeDoSaveHistory();
+    }
+}
+
 function saveStateByListener(event, eventType) {
     if(!event){
         return;
@@ -93,8 +109,6 @@ function generateHash(imageData) {
 function customToJSON() {
     const json = canvas.toJSON(commonProperties);
     json.objects = json.objects.map(obj => {
-
-        //console.log( "customToJSON obj.type:", obj.type, "/obj.src:", obj.src, " : ", obj )
         if (obj.type === 'image' && (obj.src.startsWith('data:') || obj.src.startsWith('blob:') )) {
             const hash = generateHash(obj.src);
             if (!imageMap.has(hash)) {

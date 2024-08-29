@@ -497,3 +497,45 @@ function removeClipPath(activeObject, action) {
     canvas.requestRenderAll();
   }
 }
+
+
+
+
+
+function getPathPoints(path) {
+  return path.path.map(cmd => cmd[0] === "M" || cmd[0] === "L" ? { x: cmd[1], y: cmd[2] } : null).filter(point => point !== null);
+}
+
+function calculateTransformedPath(originalPoints, transform) {
+  const angleRad = transform.angle * Math.PI / 180;
+  const sin = Math.sin(angleRad);
+  const cos = Math.cos(angleRad);
+
+  const matrix = [
+      transform.scaleX * cos, -transform.scaleY * sin,
+      transform.scaleX * sin, transform.scaleY * cos,
+      0, 0
+  ];
+
+  var top = 0;
+  var left = 0;
+  if( transform.left != transform.initLeft ){
+    left = transform.left;
+  }
+  if( transform.top != transform.initTop ){
+    top = transform.top;
+  }
+  console.log( "calculateTransformedPath transform.initLeft, transform.initTop", transform.initLeft, transform.initTop);
+  console.log( "calculateTransformedPath transform.left, transform.top", transform.left, transform.top);
+  console.log( "calculateTransformedPath left, top", left, top);
+
+  return {
+      fullTransformMatrix: transform.calcTransformMatrix(),
+      transformedPoints: originalPoints.map(point => ({
+          x: point.x * matrix[0] + point.y * matrix[2] + left,
+          y: point.x * matrix[1] + point.y * matrix[3] + top
+      })),
+      transformMatrix: matrix
+  };
+}
+

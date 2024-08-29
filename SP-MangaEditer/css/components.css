@@ -168,8 +168,8 @@
     cursor: pointer;
     border: none;
 }
-.input-group button.selected,
-.input-group-multi button.selected {
+button.selected,
+button.selected {
   background-color: var(--select-button-color);
 }
 .active-button {

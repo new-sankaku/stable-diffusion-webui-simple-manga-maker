@@ -4,7 +4,16 @@
 const resources = {
   en: {
     translation: {
-"knifeMode": "Knife Mode",
+"sbSelectmode": "Select Mode",
+      "sbPointMode": "Point Mode",
+      "sbFreehandMode": "Free Hand",
+      "sbMoveMode": "Move Point",
+      "sbDeleteMode": "Delete Point",
+      "smooth": "Smooth",
+      "cornerRadius": "Corner rounds(count)",
+      "pointSpace": "Point Space(px)",
+      "custom_bubble": "Custom Bubble",
+      "knifeMode": "Knife Mode",
 "horizontal": "Horizontal",
 "vertical": "Vertical",
 "angle": "Angle",
@@ -436,7 +445,15 @@ const resources = {
     }
   },
   ja: {
-    translation: {
+    translation: { "sbSelectmode": "選択モード",
+      "sbPointMode": "座標モード",
+      "sbFreehandMode": "フリーハンドモード",
+      "sbMoveMode": "座標移動",
+      "sbDeleteMode": "座標削除",
+      "smooth": "滑らか",
+      "cornerRadius": "角の丸み(回数)",
+      "pointSpace": "座標間隔(px)",
+      "custom_bubble": "カスタム吹き出し",
 "horizontal": "水平",
 "vertical": "垂直",
 "angle": "角度", 
@@ -784,7 +801,15 @@ const resources = {
     }
   },
   ko: {
-    translation: {
+    translation: { "sbSelectmode": "선택 모드",
+      "sbPointMode": "포인트 모드",
+      "sbFreehandMode": "자유 손",
+      "sbMoveMode": "포인트 이동",
+      "sbDeleteMode": "포인트 삭제",
+      "smooth": "부드럽게",
+      "cornerRadius": "모서리 라운드 수(횟수)",
+      "pointSpace": "포인트 간격(px)",
+      "custom_bubble": "맞춤 말풍선",
 "horizontal": "수평",
 "vertical": "수직",
 "angle": "각도",
@@ -1141,7 +1166,15 @@ const resources = {
     }
   },
   fr: {
-    translation: {
+    translation: { "sbSelectmode": "Mode Sélection",
+      "sbPointMode": "Mode Point",
+      "sbFreehandMode": "Main Libre",
+      "sbMoveMode": "Déplacer le Point",
+      "sbDeleteMode": "Supprimer le Point",
+      "smooth": "Lisse",
+      "cornerRadius": "Arrondis des coins(nombre)",
+      "pointSpace": "Espacement des points(px)",
+      "custom_bubble": "Bulle Personnalisée",
 "horizontal": "Horizontal",
 "vertical": "Vertical",
 "angle": "Angle",
@@ -1533,7 +1566,15 @@ const resources = {
     }
   },
   zh: {
-    translation: {
+    translation: { "sbSelectmode": "选择模式",
+      "sbPointMode": "点模式",
+      "sbFreehandMode": "自由手绘",
+      "sbMoveMode": "移动点",
+      "sbDeleteMode": "删除点",
+      "smooth": "平滑",
+      "cornerRadius": "角落圆角(次数)",
+      "pointSpace": "点间距(px)",
+      "custom_bubble": "自定义气泡",
 "horizontal": "水平",
 "vertical": "垂直",
 "angle": "角度",
@@ -1923,7 +1964,15 @@ const resources = {
     }
   },
   ru: {
-    translation: {
+    translation: { "sbSelectmode": "Режим Выбора",
+      "sbPointMode": "Режим Точки",
+      "sbFreehandMode": "Свободная Рука",
+      "sbMoveMode": "Переместить Точку",
+      "sbDeleteMode": "Удалить Точку",
+      "smooth": "Гладкий",
+      "cornerRadius": "Закругления углов(количество)",
+      "pointSpace": "Интервал Между Точками(px)",
+      "custom_bubble": "Пользовательский Пузырь",
 "horizontal": "Горизонтальный",
 "vertical": "Вертикальный",
 "angle": "Угол",
@@ -2265,7 +2314,15 @@ const resources = {
     }
   },
   es: {
-    translation: {
+    translation: { "sbSelectmode": "Modo Selección",
+      "sbPointMode": "Modo Punto",
+      "sbFreehandMode": "Mano Libre",
+      "sbMoveMode": "Mover Punto",
+      "sbDeleteMode": "Eliminar Punto",
+      "smooth": "Suave",
+      "cornerRadius": "Redondeos de esquinas(número)",
+      "pointSpace": "Espacio Entre Puntos(px)",
+      "custom_bubble": "Burbuja Personalizada",
 "horizontal": "Horizontal",
 "vertical": "Vertical",
 "angle": "Ángulo",
@@ -2605,7 +2662,15 @@ const resources = {
     }
   },
   pt: {
-    translation: {
+    translation: { "sbSelectmode": "Modo de Seleção",
+      "sbPointMode": "Modo de Ponto",
+      "sbFreehandMode": "Mão Livre",
+      "sbMoveMode": "Mover Ponto",
+      "sbDeleteMode": "Excluir Ponto",
+      "smooth": "Suave",
+      "cornerRadius": "Arredondamentos de canto(quantidade)",
+      "pointSpace": "Espaço Entre Pontos(px)",
+      "custom_bubble": "Bolha Personalizada",
 "horizontal": "Horizontal",
 "vertical": "Vertical",
 "angle": "Ângulo",
@@ -2946,7 +3011,15 @@ const resources = {
     }
   },
 "th": {
-"translation": {
+"translation": { "sbSelectmode": "โหมดเลือก",
+  "sbPointMode": "โหมดจุด",
+  "sbFreehandMode": "มือฟรี",
+  "sbMoveMode": "ย้ายจุด",
+  "sbDeleteMode": "ลบจุด",
+  "smooth": "เรียบ",
+  "cornerRadius": "มุมกลม (จำนวน)",
+  "pointSpace": "ระยะห่างระหว่างจุด (px)",
+  "custom_bubble": "ฟองอากาศแบบกำหนดเอง",
 "horizontal": "แนวนอน",
 "vertical": "แนวตั้ง",
 "angle": "มุม",

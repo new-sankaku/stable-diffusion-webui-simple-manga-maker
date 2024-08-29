@@ -8,33 +8,53 @@ function drawGrid() {
   gridCanvas.width = canvas.width;
   gridCanvas.height = canvas.height;
   var gridCtx = gridCanvas.getContext("2d");
-  var baseColor = "#ccc";
-
-
-  gridCtx.strokeStyle = baseColor;
+  var baseColor = "rgba(74, 144, 226, 0.3)"; // 薄い青色（30%透明度）
+  var fiftyPxColor = "rgba(226, 74, 74, 0.5)"; // 赤みを帯びた色（50%透明度）
 
   for (var i = 0; i <= canvas.width / gridSize; i++) {
+    if (i % (50 / gridSize) === 0) {
+      gridCtx.strokeStyle = fiftyPxColor;
+    } else {
+      gridCtx.strokeStyle = baseColor;
+    }
+
     gridCtx.beginPath();
     gridCtx.moveTo(i * gridSize, 0);
     gridCtx.lineTo(i * gridSize, canvas.height);
     gridCtx.stroke();
+
+    // X軸の座標テキスト（50px単位）
+    if (i % (50 / gridSize) === 0 && i > 0) {
+      gridCtx.fillStyle = "black";
+      gridCtx.font = "10px Arial";
+      gridCtx.fillText((i * gridSize).toString(), i * gridSize + 2, 10);
+    }
   }
 
   for (var i = 0; i <= canvas.height / gridSize; i++) {
+    if (i % (50 / gridSize) === 0) {
+      gridCtx.strokeStyle = fiftyPxColor;
+    } else {
+      gridCtx.strokeStyle = baseColor;
+    }
+
     gridCtx.beginPath();
     gridCtx.moveTo(0, i * gridSize);
     gridCtx.lineTo(canvas.width, i * gridSize);
     gridCtx.stroke();
+
+    // Y軸の座標テキスト（50px単位）
+    if (i % (50 / gridSize) === 0 && i > 0) {
+      gridCtx.fillStyle = "black";
+      gridCtx.font = "10px Arial";
+      gridCtx.fillText((i * gridSize).toString(), 2, i * gridSize + 10);
+    }
   }
 
   var centerX = canvas.width / 2;
   var centerY = canvas.height / 2;
-  var oneThirdX = canvas.width / 3;
-  var twoThirdsX = (canvas.width / 3) * 2;
-  var oneThirdY = canvas.height / 3;
-  var twoThirdsY = (canvas.height / 3) * 2;
 
-  var crossColor = darkenColor(baseColor, 5);
+  var crossColor = "rgba(74, 144, 226, 0.5)"; // 中心線の色
   gridCtx.strokeStyle = crossColor;
 
   gridCtx.beginPath();
@@ -47,34 +67,12 @@ function drawGrid() {
   gridCtx.lineTo(canvas.width, centerY);
   gridCtx.stroke();
 
-  crossColor = darkenColor(baseColor, -70);
-  gridCtx.strokeStyle = crossColor;
-
-  gridCtx.beginPath();
-  gridCtx.moveTo(oneThirdX, 0);
-  gridCtx.lineTo(oneThirdX, canvas.height);
-  gridCtx.stroke();
-
-  gridCtx.beginPath();
-  gridCtx.moveTo(twoThirdsX, 0);
-  gridCtx.lineTo(twoThirdsX, canvas.height);
-  gridCtx.stroke();
-
-  gridCtx.beginPath();
-  gridCtx.moveTo(0, oneThirdY);
-  gridCtx.lineTo(canvas.width, oneThirdY);
-  gridCtx.stroke();
-
-  gridCtx.beginPath();
-  gridCtx.moveTo(0, twoThirdsY);
-  gridCtx.lineTo(canvas.width, twoThirdsY);
-  gridCtx.stroke();
-
   canvas.setBackgroundImage(
     gridCanvas.toDataURL(),
     canvas.renderAll.bind(canvas)
   );
 }
+
 
 function darkenColor(color, percent) {
   if (percent === 0) return color;
