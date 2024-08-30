@@ -66,18 +66,20 @@ function showObjectMenu(clickType) {
   }
 
   let menuItems = [];
-  // 'settings', 'generate', 'edit', 'delete', 
+  // 'visible',     'settings', 'generate', 'edit', 'delete', 
   // 'copyAndPast', 'font', 'moveUp', 'moveDown', 'addPoint', 
   // 'removePoint', 'selectClear', 'knife'
   // 'rembg', ''
 
+  var visible  = activeObject.visible ? 'visibleOff' : 'visibleOn';
+
   if (isPanel(activeObject)) {
     var edit  = activeObject.edit ? 'editOff'  : 'editOn';
     var knife = isKnifeMode       ? 'knifeOff' : 'knifeOn';
-    menuItems = clickType === 'left' ? [] : [edit, knife, 'settings', 'generate', 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, edit, knife, 'settings', 'generate', 'delete', 'selectClear'];
 
   } else if (isImage(activeObject)) {
-    menuItems = clickType === 'left' ? [] : ['settings', 'generate', 'rembg', 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, 'settings', 'generate', 'rembg', 'delete', 'selectClear'];
     if( haveClipPath(activeObject) ){
       menuItems.push('clearAllClipPaths');
       // menuItems.push('clearTopClipPath');
@@ -86,9 +88,9 @@ function showObjectMenu(clickType) {
       // menuItems.push('clearLeftClipPath');
     }
   } else if (isText(activeObject)) {
-    menuItems = clickType === 'left' ? [] : ['delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, 'delete', 'selectClear'];
   } else {
-    menuItems = clickType === 'left' ? [] : ['delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, 'delete', 'selectClear'];
   }
 
   if (menuItems.length === 0) {
@@ -116,6 +118,10 @@ function handleMenuClick(e) {
   const action = e.target.id.replace('fabricjs-', '').replace('-btn', '');
 
   switch (action) {
+    case 'visibleOn':
+    case 'visibleOff':
+      visibleChange(activeObject);
+      break;
     case 'rembg':
       var spinner = createSpinner(canvasMenuIndex);
       sdWebUI_RembgProcessQueue(activeObject, spinner.id);

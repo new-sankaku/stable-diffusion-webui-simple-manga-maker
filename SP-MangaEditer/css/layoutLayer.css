@@ -17,7 +17,7 @@
 
 
 .layer-item:hover, .layer-item.active {
-  background-color: var(--background-color-D);
+  background-color: var(--active-background-color-D);
 }
 
 .layer-preview {
@@ -43,14 +43,6 @@
 
 .layer-buttons {
   margin: var(--margin-5px);
-}
-
-#layer-buttons button .material-icons {
-  font-size: var(--font-size-12px);
-}
-
-.layer-buttons button {
-  padding: var(--padding-button);
 }
 
 #layer-panel {

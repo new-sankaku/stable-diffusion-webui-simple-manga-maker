@@ -101,6 +101,8 @@ function updateLayerPanel() {
 
       detailsDiv.appendChild(nameTextArea);
 
+      putViewButton(buttonsDiv, layer, index);
+
       if (layer.isPanel) {
         putT2iButton(buttonsDiv, layer, index);
         putRunT2iButton(buttonsDiv, layer, index);
@@ -300,6 +302,25 @@ function putPromptButton(buttonsDiv, layer, index) {
   buttonsDiv.appendChild(promptButton);
 }
 
+
+function putViewButton(buttonsDiv, layer, index) {
+  var viewButton = document.createElement("button");
+  viewButton.id = "viewButton-" + index;
+  if(layer.visible){
+    viewButton.innerHTML = '<i class="material-icons">visibility</i>';
+  }else{
+    viewButton.innerHTML = '<i class="material-icons">visibility_off</i>';
+  }
+
+  viewButton.onclick = function (e) {
+    visibleChange(layer);
+  };
+
+  addTooltipByElement(viewButton, "viewButton");
+  buttonsDiv.appendChild(viewButton);
+}
+
+
 function putRunI2iButton(buttonsDiv, layer, index) {
   var runButton = document.createElement("button");
   runButton.id = "runButton-" + index;
@@ -401,6 +422,9 @@ function createPreviewImage(layer, layerDiv) {
   var tempCtx = tempCanvas.getContext("2d");
   tempCtx.fillStyle = "#ffcccc";
 
+  var nowVisible = layer.visible;
+  layer.visible = true;
+  
   if (isGroup(layer)) {
     var boundingBox = layer.getBoundingRect();
     var groupWidth = boundingBox.width;
@@ -476,7 +500,8 @@ function createPreviewImage(layer, layerDiv) {
   } else {
     layer.render(tempCtx);
   }
-
+  layer.visible = nowVisible;
+  
   var imageUrl = tempCanvas.toDataURL();
   previewDiv.style.backgroundImage = "url(" + imageUrl + ")";
   previewDiv.style.backgroundSize = "contain";
@@ -553,3 +578,13 @@ function LayersDown() {
     saveState();
   }
 }
+
+function visibleChange(obj){
+  obj.visible = !obj.visible;
+  updateLayerPanel();
+}
+
+
+
+
+

@@ -161,14 +161,9 @@ function addArRect() {
   if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
     return;
   }
-
-  // console.log("addArRect width", width);
-  // console.log("addArRect height", height);
   var canvasWidth = canvas.getWidth();
   var canvasHeight = canvas.getHeight();
-
   var canvasSize = Math.min(canvasWidth, canvasHeight) * 0.25;
-
   var aspectRatio = width / height;
   if (width > height) {
     width = canvasSize;
@@ -177,14 +172,12 @@ function addArRect() {
     height = canvasSize;
     width = canvasSize * aspectRatio;
   }
-
   var points = [
     { x: 0, y: 0 },
     { x: width, y: 0 },
     { x: width, y: height },
     { x: 0, y: height },
   ];
-
   addShape(points);
 }
 
@@ -217,8 +210,9 @@ function addShape(points, options = {}) {
 
   var shape = new fabric.Polygon(points, options);
   setText2ImageInitPrompt(shape);
-  setPanelValue(shape);
   canvas.add(shape);
+  canvas.setActiveObject(shape);
+  setPanelValue(shape);
   updateLayerPanel();
 }
 

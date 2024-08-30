@@ -4,6 +4,8 @@
 const resources = {
   en: {
     translation: {
+      "visibleOn":"Visible On",
+      "visibleOff":"Visible Off",
 "sbSelectmode": "Select Mode",
       "sbPointMode": "Point Mode",
       "sbFreehandMode": "Free Hand",

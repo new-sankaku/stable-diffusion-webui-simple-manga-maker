@@ -517,6 +517,7 @@ function setPanelValue(obj) {
     obj.set("stroke", strokeColorValue);
     obj.set("fill", fillValue);
     obj.set("opacity", opacity);
+    
     canvas.requestRenderAll();
   }
 }

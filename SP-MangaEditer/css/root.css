@@ -31,6 +31,7 @@
   --background-color-B: #424242;
   --background-color-C: #505050;
   --background-color-D: #696969;
+  --active-background-color-D: #490000;
   --color-sidebar-icon: #696969;
   --button-text-color: #ffffff;
   --button-background: #696969;
@@ -91,6 +92,8 @@
   --background-color-B: rgb(255, 227, 172);
   --background-color-C: rgb(255, 217, 141);
   --background-color-D: rgb(255, 212, 125);
+  --active-background-color-D: rgb(255, 197, 82);
+
   --color-sidebar-icon: rgb(0, 0, 0);
   --button-text-color: #000000;
   --button-background: #ffc993;
