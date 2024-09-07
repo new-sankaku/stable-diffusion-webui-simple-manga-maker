@@ -59,7 +59,8 @@ async function post(url, requestData) {
     });
     return await response.json();
   } catch (error) {
-    createToastError("Fetch Error", "Check SD WebUI!");
+    var checkSD = getText("checkSD_webUI_Text");
+    createToastError("Fetch Error", checkSD);
     return null;
   }
 }

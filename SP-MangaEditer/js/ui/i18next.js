@@ -4,6 +4,7 @@
 const resources = {
   en: {
     translation: {
+"checkSD_webUI_Text": "Failed to connect to SD WebUI. Please check the API connection settings from the SD WebUI menu.",
 "visibleOn": "Visible",
 "visibleOff": "Not Visible",
 "viewButton": "You can toggle visibility",
@@ -448,7 +449,9 @@ const resources = {
     }
   },
   ja: {
-    translation: { "visibleOn": "表示",
+    translation: { 
+"checkSD_webUI_Text": "SD WebUIへの接続に失敗。メニューのSD WebUIからAPI接続設定を確認してください。",
+"visibleOn": "表示",
 "visibleOff": "非表示",
 "viewButton": "表示・非表示を切り替えることができます",
 "sbSelectmode": "選択モード",
@@ -807,7 +810,8 @@ const resources = {
     }
   },
   ko: {
-    translation: { 
+    translation: {
+"checkSD_webUI_Text": "SD WebUI 연결에 실패했습니다. SD WebUI 메뉴에서 API 연결 설정을 확인하세요.",
 "visibleOn": "표시",
 "visibleOff": "비표시",
 "viewButton": "표시 여부를 전환할 수 있습니다",
@@ -1177,6 +1181,7 @@ const resources = {
   },
   fr: {
     translation: {   
+"checkSD_webUI_Text": "Échec de la connexion à SD WebUI. Veuillez vérifier les paramètres de connexion API depuis le menu SD WebUI.",
 "visibleOn": "Visible",
 "visibleOff": "Non visible",
 "viewButton": "Vous pouvez basculer la visibilité",
@@ -1580,7 +1585,8 @@ const resources = {
     }
   },
   zh: {
-    translation: { 
+    translation: {
+"checkSD_webUI_Text": "连接SD WebUI失败。请从SD WebUI菜单检查API连接设置。",
 "visibleOn": "显示",
 "visibleOff": "隐藏",
 "viewButton": "您可以切换显示与隐藏",
@@ -1983,6 +1989,7 @@ const resources = {
   },
   ru: {
     translation: { 
+"checkSD_webUI_Text": "Не удалось подключиться к SD WebUI. Проверьте настройки подключения API в меню SD WebUI.",
 "visibleOn": "Видимый",
 "visibleOff": "Невидимый",
 "viewButton": "Вы можете переключать видимость",
@@ -2337,6 +2344,7 @@ const resources = {
   },
   es: {
     translation: { 
+"checkSD_webUI_Text": "Error al conectar con SD WebUI. Verifique la configuración de conexión de la API en el menú SD WebUI.",
 "visibleOn": "Visible",
 "visibleOff": "No visible",
 "viewButton": "Puede alternar la visibilidad",
@@ -2689,6 +2697,7 @@ const resources = {
   },
   pt: {
     translation: { 
+"checkSD_webUI_Text": "Falha ao conectar com o SD WebUI. Verifique as configurações da conexão API no menu SD WebUI.",
 "visibleOn": "Visível",
 "visibleOff": "Não visível",
 "viewButton": "Você pode alternar a visibilidade",
@@ -3040,7 +3049,8 @@ const resources = {
 "sdWebUIPing": "PING do SD WebUI"
     }
   },
-"th": {
+th: {
+"checkSD_webUI_Text": "ไม่สามารถเชื่อมต่อกับ SD WebUI ได้ โปรดตรวจสอบการตั้งค่าการเชื่อมต่อ API จากเมนู SD WebUI",
 "translation": { 
 "visibleOn": "มองเห็นได้",
 "visibleOff": "ไม่มองเห็น",

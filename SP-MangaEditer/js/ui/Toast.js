@@ -41,7 +41,6 @@ function createToast(title, messages, isError) {
     toast.id = toastId;
     toast.style.height = 'auto';
 
-
     container.appendChild(toast);
 
     const bsToast = new bootstrap.Toast(toast, {

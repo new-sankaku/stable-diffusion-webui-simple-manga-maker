@@ -120,7 +120,8 @@ async function sdWebUI_Interrogate(layer, model, spinnerId) {
       }
     })
     .catch(error => {
-      createToastError("Interrogate Error.", "check SD WebUI!");
+      var checkSD = getText("checkSD_webUI_Text");
+      createToastError("Interrogate Error.", checkSD);
     })
     .finally(() => {
       removeSpinner(spinnerId);
