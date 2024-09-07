@@ -1,17 +1,17 @@
 
-const pointButton = $("sbPointButton");
-const freehandButton = $("sbFreehandButton");
-const selectButton = $("sbSelectButton");
-const movePointButton = $("sbMoveButton");
-const deletePointButton = $("sbDeleteButton");
+const sbPointButton    = $("sbPointButton");
+const sbFreehandButton = $("sbFreehandButton");
+const sbSelectButton   = $("sbSelectButton");
+const sbMoveButton     = $("sbMoveButton");
+const sbDeleteButton   = $("sbDeleteButton");
 
-const smoothingCheckbox = $("sbSmoothing");
-const fillColorInput = $("sbFillColor");
-const strokeColorInput = $("sbStrokeColor");
-const strokeWidthInput = $("sbStrokeWidth");
-const fillOpacityInput = $("sbFillOpacity");
-const cornerIterationInput = $("sbSornerRadius");
-const pointThresholdInput = $("sbPointSpace");
+const sbSmoothing    = $("sbSmoothing");
+const sbFillColor    = $("sbFillColor");
+const sbStrokeColor  = $("sbStrokeColor");
+const sbStrokeWidth  = $("sbStrokeWidth");
+const sbFillOpacity  = $("sbFillOpacity");
+const sbSornerRadius = $("sbSornerRadius");
+const sbPointSpace   = $("sbPointSpace");
 const geometryFactory = new jsts.geom.GeometryFactory();
 
 let currentMode = "select";
@@ -26,8 +26,42 @@ let controlPoints = [];
 let activePoint;
 let lastRenderTime = 0;
 
+var nowLine = "sb_a";
+switchSBLine("sb_a");
+
+function switchSBLine(type){
+  clearSBLine();
+  nowLine = type;
+  $( type + "Button").classList.add("selected");
+}
+function clearSBLine(){
+  [$("sb_aButton"), $("sb_bButton"), $("sb_cButton"), $("sb_dButton"), $("sb_eButton"), $("sb_fButton"), $("sb_gButton")].forEach(btn => btn.classList.remove("selected"));
+}
+
+function getNowLineStyle(){
+  var sbopa = parseInt(sbFillOpacity.value) / 100;
+  var sbstw = parseInt(sbStrokeWidth.value);
+  switch (nowLine) {
+    case "sb_b":
+      return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa, strokeDashArray: [5, 5]}
+    case "sb_c":
+      return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa, strokeLineCap: "round", strokeDashArray: [5, 10]}
+    case "sb_d":
+      return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa, strokeDashArray: [1, 3]}
+    case "sb_e":
+      return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa, strokeDashArray: [20, 5, 10, 5]}
+    case "sb_f":
+      return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa, strokeDashArray: [15, 3, 3, 3]}
+    case "sb_g":
+      return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa, strokeDashArray: [10, 5, 2, 5]}
+    default:
+      //sb_a
+      return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa}
+  }
+}
+
 function setActiveButton(button) {
-  [pointButton, freehandButton, selectButton, movePointButton, deletePointButton].forEach(btn => btn.classList.remove("selected"));
+  [sbPointButton, sbFreehandButton, sbSelectButton, sbMoveButton, sbDeleteButton].forEach(btn => btn.classList.remove("selected"));
   button.classList.add("selected");
 }
 
@@ -44,12 +78,14 @@ function createSpeechBubble(geometry) {
     y: coord.y - minY
   }));
 
-  const styles = {
-    fill: fillColorInput.value,
-    stroke: strokeColorInput.value,
-    strokeWidth: parseInt(strokeWidthInput.value),
-    opacity: parseInt(fillOpacityInput.value) / 100
-  };
+  // const styles = {
+  //   fill: sbFillColor.value,
+  //   stroke: sbStrokeColor.value,
+  //   strokeWidth: parseInt(sbStrokeWidth.value),
+  //   opacity: parseInt(sbFillOpacity.value) / 100
+  // };
+
+  var styles = getNowLineStyle();
 
   const path = adjustedCoordinates.map((coord, index) => 
     (index === 0 ? "M" : "L") + coord.x.toFixed(2) + " " + coord.y.toFixed(2)
@@ -80,7 +116,7 @@ function updateTemporaryShapes() {
     temporaryShape = new fabric.Polyline(points, {
       fill: "rgba(0,0,255,0.2)",
       stroke: "blue",
-      strokeWidth: parseInt(strokeWidthInput.value),
+      strokeWidth: parseInt(sbStrokeWidth.value),
       selectable: false,
       evented: false,
       excludeFromLayerPanel:true
@@ -95,7 +131,7 @@ function updateTemporaryShapes() {
         mousePosition.y
       ], {
         stroke: "blue",
-        strokeWidth: parseInt(strokeWidthInput.value),
+        strokeWidth: parseInt(sbStrokeWidth.value),
         selectable: false,
         evented: false,
         excludeFromLayerPanel:true
@@ -106,7 +142,7 @@ function updateTemporaryShapes() {
     temporaryShape = new fabric.Path(points.map((point, index) => (index === 0 ? "M" : "L") + point.x + " " + point.y).join(""), {
       fill: "rgba(0,0,255,0.2)",
       stroke: "blue",
-      strokeWidth: parseInt(strokeWidthInput.value),
+      strokeWidth: parseInt(sbStrokeWidth.value),
       selectable: false,
       evented: false,
       excludeFromLayerPanel:true
@@ -173,7 +209,7 @@ function isNearStartPoint(x, y, startPoint) {
 
 function smoothPoints(points) {
   if (points.length < 3) return points;
-  const smoothingFactor = smoothingCheckbox.checked ? 1 : 100;
+  const smoothingFactor = sbSmoothing.checked ? 1 : 100;
   let smoothedPoints = [points[0]];
   for (let i = 1; i < points.length - 1; i++) {
     let prev = points[i - 1];
@@ -189,7 +225,7 @@ function smoothPoints(points) {
 }
 
 function removeClosePoints(points) {
-  const threshold = parseInt(pointThresholdInput.value);
+  const threshold = parseInt(sbPointSpace.value);
   if (threshold === 0 || points.length < 3) return points;
   let filteredPoints = [points[0]];
   for (let i = 1; i < points.length; i++) {
@@ -239,10 +275,10 @@ function processPoints(points) {
     points.push({ x: points[0].x, y: points[0].y });
   }
   points = removeClosePoints(points);
-  if (smoothingCheckbox.checked) {
+  if (sbSmoothing.checked) {
     points = smoothPoints(points);
   }
-  points = roundCorners(points, parseInt(cornerIterationInput.value));
+  points = roundCorners(points, parseInt(sbSornerRadius.value));
   return removeClosePoints(points);
 }
 
@@ -313,29 +349,29 @@ function deletePoint(obj, index) {
   requestAnimationFrame(() => canvas.renderAll());
 }
 
-pointButton.addEventListener("click", () => {
+sbPointButton.addEventListener("click", () => {
   currentMode = "point";
-  setDrawingMode(pointButton);
+  setDrawingMode(sbPointButton);
 });
 
-freehandButton.addEventListener("click", () => {
+sbFreehandButton.addEventListener("click", () => {
   currentMode = "freehand";
-  setDrawingMode(freehandButton);
+  setDrawingMode(sbFreehandButton);
 });
 
-selectButton.addEventListener("click", () => {
+sbSelectButton.addEventListener("click", () => {
   currentMode = "select";
-  setSelectionMode(selectButton);
+  setSelectionMode(sbSelectButton);
 });
 
-movePointButton.addEventListener("click", () => {
+sbMoveButton.addEventListener("click", () => {
   currentMode = "movePoint";
-  setSelectionMode(movePointButton);
+  setSelectionMode(sbMoveButton);
 });
 
-deletePointButton.addEventListener("click", () => {
+sbDeleteButton.addEventListener("click", () => {
   currentMode = "deletePoint";
-  setSelectionMode(deletePointButton);
+  setSelectionMode(sbDeleteButton);
 });
 
 canvas.on("mouse:down", event => {
@@ -476,7 +512,7 @@ function setSelectionMode(button) {
   requestAnimationFrame(() => canvas.renderAll());
 }
 
-setSelectionMode(selectButton);
+setSelectionMode(sbSelectButton);
 
 canvas.on('object:moving', updateJSTSGeometry);
 canvas.on('object:scaling', updateJSTSGeometry);

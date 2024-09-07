@@ -86,9 +86,8 @@
     <link rel="stylesheet" href="css/tippy.css?v=5.1">
     <link rel="stylesheet" href="third/tippy/tippy.css?v=5.1">
     <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css?v=5.1">
-    <link rel="stylesheet" href="css/flag-icon.min.css?v=5.1">
     <link rel="stylesheet" href="css/all.min.css?v=5.1">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.3/css/flag-icons.min.css" >
 
     <style>
         .btm-drawer {
@@ -832,7 +831,6 @@
                     </a>
                 </div>
                 <div id="speech-bubble-svg-preview-area1">
-
                     <div class="input-group">
                         <label for="sbStrokeWidth" data-i18n="lineWidth">Line Width</label>
                         <input type="number" id="sbStrokeWidth" min="1" max="20" value="1">
@@ -862,6 +860,29 @@
                         <label for="sbPointSpace" data-i18n="pointSpace">Point Space(px)</label>
                         <input type="number" id="sbPointSpace" min="0" max="100" value="4">
                     </div>
+                    <hr>
+                    <button id="sb_aButton" onclick="switchSBLine('sb_a')">
+                        <img src="03_images/preset/line/a.png">
+                    </button>
+                    <button id="sb_bButton" onclick="switchSBLine('sb_b')">
+                        <img src="03_images/preset/line/b.png">
+                    </button>
+                    <button id="sb_cButton" onclick="switchSBLine('sb_c')">
+                        <img src="03_images/preset/line/c.png">
+                    </button>
+                    <button id="sb_dButton" onclick="switchSBLine('sb_d')">
+                        <img src="03_images/preset/line/d.png">
+                    </button>
+                    <button id="sb_eButton" onclick="switchSBLine('sb_e')">
+                        <img src="03_images/preset/line/e.png">
+                    </button>
+                    <button id="sb_fButton" onclick="switchSBLine('sb_f')">
+                        <img src="03_images/preset/line/f.png">
+                    </button>
+                    <button id="sb_gButton" onclick="switchSBLine('sb_g')">
+                        <img src="03_images/preset/line/g.png">
+                    </button>
+
                     <hr>
                     <div class="input-group">
                         <button id="sbSelectButton" data-i18n="sbSelectmode" >Select Mode</button>
