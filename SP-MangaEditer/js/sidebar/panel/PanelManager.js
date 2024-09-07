@@ -12,9 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     false
   );  
 
-  $("canvas-container").addEventListener(
-    "drop",
-    async function (e) {
+  $("canvas-container").addEventListener( "drop", async function (e) {
       e.preventDefault();
       var file = e.dataTransfer.files[0];
       var canvasElement = canvas.getElement();
@@ -37,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         fabric.Image.fromURL(data, function (img) {
           // console.log("drop stateStack.length", stateStack.length);
-          if (stateStack.length >= 2) {
+          if (stateStack.length > 2) {
             var canvasX = x / canvasContinerScale;
             var canvasY = y / canvasContinerScale;
             putImageInFrame(img, canvasX, canvasY);

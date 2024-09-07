@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神聖幾何学模様 - 高度なフラワー・オブ・ライフ</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            background-color: #333;
+            border: 2px solid #fff;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .control-group {
+            margin: 10px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="range"] {
+            width: 300px;
+        }
+
+        input[type="color"] {
+            width: 50px;
+            height: 30px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="sacredGeometryCanvas"></canvas>
+    <div class="controls">
+        <div class="control-group">
+            <label for="circleRadius">円の半径</label>
+            <input type="range" id="circleRadius" min="10" max="100" value="50">
+            <span id="circleRadiusValue">50</span>
+        </div>
+        <div class="control-group">
+            <label for="numCircles">円の数</label>
+            <input type="range" id="numCircles" min="1" max="12" value="6">
+            <span id="numCirclesValue">6</span>
+        </div>
+        <div class="control-group">
+            <label for="lineWidth">線の幅</label>
+            <input type="range" id="lineWidth" min="1" max="10" value="2">
+            <span id="lineWidthValue">2</span>
+        </div>
+        <div class="control-group">
+            <label for="lineColor">線の色</label>
+            <input type="color" id="lineColor" value="#ff6b6b">
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('sacredGeometryCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 初期設定
+        canvas.width = 600;
+        canvas.height = 600;
+
+        // コントロール要素の取得
+        const circleRadiusInput = document.getElementById('circleRadius');
+        const circleRadiusValue = document.getElementById('circleRadiusValue');
+        const numCirclesInput = document.getElementById('numCircles');
+        const numCirclesValue = document.getElementById('numCirclesValue');
+        const lineWidthInput = document.getElementById('lineWidth');
+        const lineWidthValue = document.getElementById('lineWidthValue');
+        const lineColorInput = document.getElementById('lineColor');
+
+        // 円を描く関数
+        function drawCircle(x, y, radius) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+
+        // 複雑なフラワー・オブ・ライフ模様を描画する関数
+        function drawSacredGeometry() {
+            const circleRadius = parseInt(circleRadiusInput.value);
+            const numCircles = parseInt(numCirclesInput.value);
+            const lineWidth = parseInt(lineWidthInput.value);
+            const lineColor = lineColorInput.value;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvasをクリア
+
+            ctx.strokeStyle = lineColor;
+            ctx.lineWidth = lineWidth;
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            // フラワー・オブ・ライフの円を描画
+            for (let i = 0; i < numCircles; i++) {
+                let radius = circleRadius + i * (circleRadius / 2);
+                drawCircle(centerX, centerY, radius);
+
+                // 各円に対して周囲に円を描画
+                for (let j = 0; j < 6; j++) {
+                    const angle = (Math.PI / 3) * j; // 60度ごとの角度
+                    const x = centerX + radius * Math.cos(angle);
+                    const y = centerY + radius * Math.sin(angle);
+                    drawCircle(x, y, circleRadius);
+                }
+            }
+
+            // 追加の複雑なパターンを描画
+            for (let i = 0; i < numCircles; i++) {
+                let radius = circleRadius + i * (circleRadius / 4); // 複雑さを増すために小さな増分
+                for (let j = 0; j < 12; j++) {
+                    const angle = (Math.PI / 6) * j; // 30度ごとの角度
+                    const x = centerX + radius * Math.cos(angle);
+                    const y = centerY + radius * Math.sin(angle);
+                    drawCircle(x, y, circleRadius / 2); // 小さな円を描画
+                }
+            }
+        }
+
+        // コントロールのイベントリスナー
+        circleRadiusInput.addEventListener('input', () => {
+            circleRadiusValue.textContent = circleRadiusInput.value;
+            drawSacredGeometry();
+        });
+
+        numCirclesInput.addEventListener('input', () => {
+            numCirclesValue.textContent = numCirclesInput.value;
+            drawSacredGeometry();
+        });
+
+        lineWidthInput.addEventListener('input', () => {
+            lineWidthValue.textContent = lineWidthInput.value;
+            drawSacredGeometry();
+        });
+
+        lineColorInput.addEventListener('input', () => {
+            drawSacredGeometry();
+        });
+
+        // 初回描画
+        drawSacredGeometry();
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高度な幾何学模様 - メタトロンのキューブ</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #1a1a1a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    canvas {
+      background-color: #333;
+      border: 2px solid #fff;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .control-group {
+      margin: 10px 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="range"] {
+      width: 300px;
+    }
+
+    input[type="color"] {
+      width: 50px;
+      height: 30px;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="geometryCanvas"></canvas>
+  <div class="controls">
+    <div class="control-group">
+      <label for="circleRadius">円の半径</label>
+      <input type="range" id="circleRadius" min="10" max="100" value="50">
+      <span id="circleRadiusValue">50</span>
+    </div>
+    <div class="control-group">
+      <label for="circleRepeats">円の反復回数</label>
+      <input type="range" id="circleRepeats" min="3" max="24" value="12">
+      <span id="circleRepeatsValue">12</span>
+    </div>
+    <div class="control-group">
+      <label for="lineColor">線の色</label>
+      <input type="color" id="lineColor" value="#ff6b6b">
+    </div>
+    <div class="control-group">
+      <label for="fillColor">塗りつぶしの色</label>
+      <input type="color" id="fillColor" value="#ff6b6b">
+    </div>
+    <div class="control-group">
+      <label for="fillOpacity">塗りつぶしの不透明度</label>
+      <input type="range" id="fillOpacity" min="0" max="1" step="0.1" value="0.5">
+      <span id="fillOpacityValue">0.5</span>
+    </div>
+    <div class="control-group">
+      <label for="lineRepeats">線の反復回数</label>
+      <input type="range" id="lineRepeats" min="3" max="24" value="12">
+      <span id="lineRepeatsValue">12</span>
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById('geometryCanvas')
+    const ctx = canvas.getContext('2d')
+    canvas.width = 800
+    canvas.height = 800
+    const circleRadiusInput = document.getElementById('circleRadius')
+    const circleRadiusValue = document.getElementById('circleRadiusValue')
+    const circleRepeatsInput = document.getElementById('circleRepeats')
+    const circleRepeatsValue = document.getElementById('circleRepeatsValue')
+    const lineColorInput = document.getElementById('lineColor')
+    const fillColorInput = document.getElementById('fillColor')
+    const fillOpacityInput = document.getElementById('fillOpacity')
+    const fillOpacityValue = document.getElementById('fillOpacityValue')
+    const lineRepeatsInput = document.getElementById('lineRepeats')
+    const lineRepeatsValue = document.getElementById('lineRepeatsValue')
+
+    function drawMetatronCube() {
+      const circleRadius = parseInt(circleRadiusInput.value)
+      const circleRepeats = parseInt(circleRepeatsInput.value)
+      const lineColor = lineColorInput.value
+      const fillColor = fillColorInput.value
+      const fillOpacity = parseFloat(fillOpacityInput.value)
+      const lineRepeats = parseInt(lineRepeatsInput.value)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.strokeStyle = lineColor
+      ctx.lineWidth = 2
+      ctx.fillStyle = fillColor
+      ctx.globalAlpha = fillOpacity
+      const centerX = canvas.width / 2
+      const centerY = canvas.height / 2
+      for (let i = 1; i <= circleRepeats; i++) {
+        const radius = circleRadius * i
+        ctx.beginPath()
+        for (let j = 0; j < circleRepeats; j++) {
+          const angle = (2 * Math.PI / circleRepeats) * j
+          const x = centerX + radius * Math.cos(angle)
+          const y = centerY + radius * Math.sin(angle)
+          ctx.lineTo(x, y)
+        }
+        ctx.closePath()
+        ctx.stroke()
+      }
+      for (let i = 1; i <= circleRepeats; i++) {
+        const radius = circleRadius * i
+        for (let j = 0; j < circleRepeats; j++) {
+          const angle = (2 * Math.PI / circleRepeats) * j
+          const x = centerX + radius * Math.cos(angle)
+          const y = centerY + radius * Math.sin(angle)
+          ctx.beginPath()
+          ctx.arc(x, y, circleRadius / 3, 0, 2 * Math.PI)
+          ctx.stroke()
+          ctx.fill()
+        }
+        for (let i = 0; i < circleRepeats; i++) {
+          const angle = (2 * Math.PI / circleRepeats) * i
+          const x = centerX + circleRadius * Math.cos(angle)
+          const y = centerY + circleRadius * Math.sin(angle)
+          for (let j = 0; j < lineRepeats; j++) {
+            const innerAngle = (2 * Math.PI / lineRepeats) * j
+            const innerX = centerX + (circleRadius / 3) * Math.cos(innerAngle)
+            const innerY = centerY + (circleRadius / 3) * Math.sin(innerAngle)
+            ctx.beginPath()
+            ctx.moveTo(x, y)
+            ctx.lineTo(innerX, innerY)
+            ctx.stroke()
+          }
+        }
+      }
+    }
+      circleRadiusInput.addEventListener('input', () => {
+        circleRadiusValue.textContent = circleRadiusInput.value
+        drawMetatronCube()
+      })
+      circleRepeatsInput.addEventListener('input', () => {
+        circleRepeatsValue.textContent = circleRepeatsInput.value
+        drawMetatronCube()
+      })
+      lineColorInput.addEventListener('input', () => {
+        drawMetatronCube()
+      })
+      fillColorInput.addEventListener('input', () => {
+        drawMetatronCube()
+      })
+      fillOpacityInput.addEventListener('input', () => {
+        fillOpacityValue.textContent = fillOpacityInput.value
+        drawMetatronCube()
+      })
+      lineRepeatsInput.addEventListener('input', () => {
+        lineRepeatsValue.textContent = lineRepeatsInput.value
+        drawMetatronCube()
+      })
+      drawMetatronCube()
+  </script>
+</body>
+
+</html>

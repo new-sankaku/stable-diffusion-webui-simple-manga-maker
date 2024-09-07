@@ -8,8 +8,8 @@ function drawGrid() {
   gridCanvas.width = canvas.width;
   gridCanvas.height = canvas.height;
   var gridCtx = gridCanvas.getContext("2d");
-  var baseColor = "rgba(74, 144, 226, 0.3)"; // 薄い青色（30%透明度）
-  var fiftyPxColor = "rgba(226, 74, 74, 0.5)"; // 赤みを帯びた色（50%透明度）
+  var baseColor = "rgba(74, 144, 226, 0.3)";
+  var fiftyPxColor = "rgba(226, 74, 74, 0.5)";
 
   for (var i = 0; i <= canvas.width / gridSize; i++) {
     if (i % (50 / gridSize) === 0) {
