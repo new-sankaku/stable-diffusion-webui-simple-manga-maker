@@ -539,3 +539,11 @@ function calculateTransformedPath(originalPoints, transform) {
   };
 }
 
+function getObjectCount() {
+  var objescts = canvas.getObjects();
+  if( objescts ){
+    return objescts.length;
+  }else{
+    return 0;
+  }
+}

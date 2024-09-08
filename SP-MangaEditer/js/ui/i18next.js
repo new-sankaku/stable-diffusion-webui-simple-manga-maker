@@ -4,6 +4,8 @@
 const resources = {
   en: {
     translation: {
+      
+"checSD_WebUI_Announce": "<h9>If Model, Sampler, or Upscaler are not displayed, please double-check your connection to the SD WebUI. You will need to check the SD WebUI port, IP and API connection settings in the menu.<h9>",
 "checkSD_webUI_Text": "Failed to connect to SD WebUI. Please check the API connection settings from the SD WebUI menu.",
 "visibleOn": "Visible",
 "visibleOff": "Not Visible",
@@ -450,6 +452,7 @@ const resources = {
   },
   ja: {
     translation: { 
+      "checSD_WebUI_Announce": "<h9>モデル、サンプラー、またはアップスケーラーが表示されない場合は、SD WebUIへの接続を再確認してください。メニューでSD WebUIのポート、IP、API接続設定を確認する必要があります。<h9>",
 "checkSD_webUI_Text": "SD WebUIへの接続に失敗。メニューのSD WebUIからAPI接続設定を確認してください。",
 "visibleOn": "表示",
 "visibleOff": "非表示",
@@ -810,7 +813,7 @@ const resources = {
     }
   },
   ko: {
-    translation: {
+    translation: {"checSD_WebUI_Announce": "<h9>모델, 샘플러 또는 업스케일러가 표시되지 않으면 SD WebUI 연결을 다시 확인하십시오. 메뉴에서 SD WebUI 포트, IP 및 API 연결 설정을 확인해야 합니다.<h9>",
 "checkSD_webUI_Text": "SD WebUI 연결에 실패했습니다. SD WebUI 메뉴에서 API 연결 설정을 확인하세요.",
 "visibleOn": "표시",
 "visibleOff": "비표시",
@@ -1181,6 +1184,8 @@ const resources = {
   },
   fr: {
     translation: {   
+"checSD_WebUI_Announce": "<h9>Si le Modèle, le Sampler ou l'Upscaler ne sont pas affichés, veuillez vérifier votre connexion au SD WebUI. Vous devrez vérifier les paramètres de port, d'IP et de connexion API du SD WebUI dans le menu.<h9>"
+,
 "checkSD_webUI_Text": "Échec de la connexion à SD WebUI. Veuillez vérifier les paramètres de connexion API depuis le menu SD WebUI.",
 "visibleOn": "Visible",
 "visibleOff": "Non visible",
@@ -1586,6 +1591,8 @@ const resources = {
   },
   zh: {
     translation: {
+      "checSD_WebUI_Announce": "<h9>如果模型、采样器或放大器未显示，请仔细检查您与SD WebUI的连接。您需要在菜单中检查SD WebUI的端口、IP和API连接设置。<h9>"
+,
 "checkSD_webUI_Text": "连接SD WebUI失败。请从SD WebUI菜单检查API连接设置。",
 "visibleOn": "显示",
 "visibleOff": "隐藏",
@@ -1989,6 +1996,8 @@ const resources = {
   },
   ru: {
     translation: { 
+      "checSD_WebUI_Announce": "<h9>Если модель, семплер или увеличитель не отображаются, пожалуйста, проверьте подключение к SD WebUI. Вам нужно проверить настройки порта SD WebUI, IP и API подключения в меню.<h9>"
+,
 "checkSD_webUI_Text": "Не удалось подключиться к SD WebUI. Проверьте настройки подключения API в меню SD WebUI.",
 "visibleOn": "Видимый",
 "visibleOff": "Невидимый",
@@ -2344,6 +2353,7 @@ const resources = {
   },
   es: {
     translation: { 
+      "checSD_WebUI_Announce": "<h9>Si el Modelo, el Sampler o el Upscaler no se muestran, por favor verifica tu conexión con el SD WebUI. Necesitarás comprobar la configuración del puerto, IP y conexión API del SD WebUI en el menú.<h9>",
 "checkSD_webUI_Text": "Error al conectar con SD WebUI. Verifique la configuración de conexión de la API en el menú SD WebUI.",
 "visibleOn": "Visible",
 "visibleOff": "No visible",
@@ -2697,6 +2707,7 @@ const resources = {
   },
   pt: {
     translation: { 
+      "checSD_WebUI_Announce": "<h9>Se o Modelo, o Sampler ou o Upscaler não estiverem sendo exibidos, verifique sua conexão com o SD WebUI. Você precisará verificar as configurações de porta, IP e conexão da API no menu.<h9>",
 "checkSD_webUI_Text": "Falha ao conectar com o SD WebUI. Verifique as configurações da conexão API no menu SD WebUI.",
 "visibleOn": "Visível",
 "visibleOff": "Não visível",
@@ -3050,6 +3061,8 @@ const resources = {
     }
   },
 th: {
+  "checSD_WebUI_Announce": "<h9>หากไม่แสดง Model, Sampler หรือ Upscaler โปรดตรวจสอบการเชื่อมต่อกับ SD WebUI ของคุณอีกครั้ง คุณจะต้องตรวจสอบการตั้งค่าการเชื่อมต่อพอร์ต IP และ API ของ SD WebUI ในเมนู<h9>"
+,
 "checkSD_webUI_Text": "ไม่สามารถเชื่อมต่อกับ SD WebUI ได้ โปรดตรวจสอบการตั้งค่าการเชื่อมต่อ API จากเมนู SD WebUI",
 "translation": { 
 "visibleOn": "มองเห็นได้",

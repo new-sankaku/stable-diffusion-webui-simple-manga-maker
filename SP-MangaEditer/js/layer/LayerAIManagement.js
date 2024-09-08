@@ -172,6 +172,8 @@ function openText2ImageBaseFloatingWindow() {
   floatingWindow.className = "floating-windowPromptClass";
   floatingWindow.style.cursor = "move";
 
+
+  var helpAnnounce = getText("checSD_WebUI_Announce");
   // TODO: Quite a bad way of handling multiple api models I think, to be looked at.
     floatingWindow.innerHTML = `
         <h4>Text2Image Base Settings</h4>
@@ -238,6 +240,11 @@ function openText2ImageBaseFloatingWindow() {
 
         <button id="baseSaveButton">Save</button>
         <button id="baseCloseButton">Close</button>
+        <hr>
+        <div class="form-group form-row">
+          <label>${helpAnnounce}</label>
+        </div>
+
     `;
 
   document.body.appendChild(floatingWindow);

@@ -559,7 +559,8 @@
                 <i class="material-icons" id="intro_custom-panel-manager-area" onclick="toggleVisibility('custom-panel-manager-area');">dashboard_customize</i>
                 <i class="material-icons" id="intro_speech-bubble-area1" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
                 <i class="material-icons" id="intro_speech-bubble-area2" onclick="toggleVisibility('speech-bubble-area2');">reviews</i>
-                <i class="material-icons" id="intro_text-area" onclick="toggleVisibility('text-area');">text_fields</i>
+                <i class="material-icons" id="intro_text-area" onclick="toggleVisibility('text-area');">text_format</i>
+                <!-- <i class="material-icons" id="intro_text-area2" onclick="toggleVisibility('text-area2');">text_increase</i> -->
                 <i class="material-icons" id="intro_tool-area" onclick="toggleVisibility('tool-area');">brush</i>
                 <i class="material-icons" id="intro_manga-tone-area" onclick="toggleVisibility('manga-tone-area');">blur_linear</i>
                 <i class="material-icons" id="intro_manga-effect-area" onclick="toggleVisibility('manga-effect-area');">filter_b_and_w</i>
@@ -983,6 +984,100 @@
                 </div>
             </div>
 
+
+            <div id="text-area2" style="display: none;">
+                <div class="area-header" data-i18n="cutom_text">
+                    <a href="html/Minual/screen-tone.html" target="_blank">
+                        Custom Text(Help)
+                    </a>
+                </div>
+
+                <div id="text-preview-area2">
+                    <hr>
+                    <div class="input-group">
+                        <label data-i18n="font"></label>
+                        <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="textColor">Text</label>
+                        <input type="color" id="textColorPicker" value="#000000" oninput="changeTextColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="outlineColor">Outline</label>
+                        <input type="color" id="textOutlineColorPicker" value="#000000"
+                            oninput="changeOutlineTextColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="fontSize">Size</label>
+                        <input type="number" id="fontSizeSlider" min="7" max="150" value="30"
+                            oninput="changeFontSize(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="outlineSize">Outline Size</label>
+                        <input type="number" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1"
+                            oninput="changeStrokeWidthSize(this.value)">
+                    </div>
+                    <div class="input-group-multi">
+                        <button id="align-left" class="selected" onclick="alignText('left')">
+                            <i class="material-icons">format_align_left</i>
+                        </button>
+                        <button id="align-center" onclick="alignText('center')">
+                            <i class="material-icons">format_align_center</i>
+                        </button>
+                        <button id="align-right" onclick="alignText('right')">
+                            <i class="material-icons">format_align_right</i>
+                        </button>
+                    </div>
+                    <hr>
+                    <button onclick="createTextbox()">
+                        <i class="material-icons">text_fields</i>
+                        <i class="material-icons">east</i>
+                        <span data-i18n="newText">New Text</span>
+                    </button>
+                    <button id="openWindow">
+                        <i class="material-icons">text_fields</i>
+                        <i class="material-icons">south</i>
+                        <span data-i18n="newText">New Text</span>
+                    </button>
+                    <button onclick="toggleBold()">
+                        <i class="material-icons">format_bold</i>
+                        <span data-i18n="bold">Bold</span>
+                    </button>
+                    <hr>
+                    <label data-i18n="effects">Effects</label>
+                    <div class="input-group">
+                        <label data-i18n="firstColor">First Color:</label>
+                        <input type="color" id="firstTextEffectColorPicker" value="#F58220"
+                            oninput="changeNeonColor(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="secondColor">Second Color:</label>
+                        <input type="color" id="secondTextEffectColorPicker" value="#ff8080"
+                            oninput="changeNeonColor(this.value)">
+                    </div>
+                    <hr>
+                    <button onclick="applyCSSTextEffect()">
+                        <i class="material-icons">deblur</i>
+                        <span data-i18n="shadow">Shadow</span>
+                    </button>
+                    <button onclick="applyVividGradientEffect()">
+                        <i class="material-icons">filter</i>
+                        <span data-i18n="vividGradient">Vivid Gradient</span>
+                    </button>
+                    <button onclick="applyNeonEffect()">
+                        <i class="material-icons">flare</i>
+                        <span data-i18n="neon">Neon</span>
+                    </button>
+                    <hr>
+                    <label>Sample123</label>
+                    <label>参考さんサン１２３</label>
+                    <label>샘플 / 样本</label>
+                    <label>échantillon</label>
+                    <label>образец</label>
+                    <label>عينة / ตัวอย่าง</label>
+                </div>
+            </div>
 
 
 

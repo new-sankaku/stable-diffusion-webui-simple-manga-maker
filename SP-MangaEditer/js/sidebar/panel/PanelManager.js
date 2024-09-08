@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var data = f.target.result;
 
         fabric.Image.fromURL(data, function (img) {
-          // console.log("drop stateStack.length", stateStack.length);
-          if (stateStack.length > 2) {
+          console.log("drop stateStack.length", stateStack.length);
+          if (stateStack.length >= 2 && getObjectCount() > 0 ) {
             var canvasX = x / canvasContinerScale;
             var canvasY = y / canvasContinerScale;
             putImageInFrame(img, canvasX, canvasY);
