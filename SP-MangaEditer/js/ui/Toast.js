@@ -60,7 +60,7 @@ function createToast(title, messages, isError) {
         startProgressBar(toast, progressBarClass);
     } else if (Array.isArray(messages)) {
         let messageIndex = 0;
-        const messageInterval = 300;
+        const messageInterval = 50;
 
         const showNextMessage = () => {
             if (messageIndex < messages.length) {
@@ -96,7 +96,7 @@ function createToast(title, messages, isError) {
 function startProgressBar(toast, progressBarClass) {
     const progressBar = toast.querySelector("."+progressBarClass);
     const interval = 50;
-    const totalDuration = 3500;
+    const totalDuration = 2000;
     let width = 100;
     const timer = setInterval(() => {
         width -= (interval / totalDuration * 100);

@@ -340,7 +340,6 @@ function loadSettingsLocalStrage(  ) {
 
   if (localSettingsData) {
     const localSettings = JSON.parse(localSettingsData);
-
     var bgColorInputElement = $('bg-color');
     bgColorInputElement.value = localSettings.canvasBgColor || "#ffffff";
     
@@ -350,7 +349,6 @@ function loadSettingsLocalStrage(  ) {
 
     $('view_layers_checkbox').checked = localSettings.view_layers_checkbox ?? true;
     $('view_controles_checkbox').checked = localSettings.view_controles_checkbox ?? true;
-
     $('knifePanelSpaceSize').value = localSettings.knifePanelSpaceSize || "20";
     $('outputDpi').value = localSettings.canvasDpi || "300";
     $('gridSizeInput').value = localSettings.canvasGridLineSize || "10";
@@ -374,9 +372,6 @@ function loadSettingsLocalStrage(  ) {
     text2img_basePrompt.text2img_basePrompt_hr_scale  = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
     text2img_basePrompt.text2img_basePrompt_hr_step   = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
     text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
-
-  } else {
-    createToast("Settings Load Failed! (Local storage)", "Settings not found.");
   }
 }
 
