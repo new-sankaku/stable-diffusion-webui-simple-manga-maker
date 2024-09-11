@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高度な画像透明度処理 - 目立つローディング表示付き</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 20px;
+}
+.canvas-container {
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+gap: 20px;
+margin-top: 20px;
+position: relative;
+}
+canvas {
+max-width: 100%;
+height: auto;
+border: 1px solid #ddd;
+}
+.controls {
+margin-top: 20px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.loading-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.7);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+}
+.loading-message {
+color: white;
+font-size: 24px;
+text-align: center;
+}
+.spinner {
+border: 6px solid #f3f3f3;
+border-top: 6px solid #3498db;
+border-radius: 50%;
+width: 50px;
+height: 50px;
+animation: spin 1s linear infinite;
+margin-bottom: 20px;
+}
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<input type="file" id="imageInput" accept="image/*">
+<div class="controls">
+<label>
+ブラーの強さ: <input type="range" id="blurStrength" min="0" max="20" value="3" step="0.5">
+<span id="blurValue">3</span>
+</label>
+<label>
+エッジ検出の閾値: <input type="range" id="edgeThreshold" min="0" max="255" value="30" step="1">
+<span id="thresholdValue">30</span>
+</label>
+<label>
+メディアンフィルタのサイズ: <input type="range" id="medianSize" min="3" max="9" value="3" step="2">
+<span id="medianValue">3</span>
+</label>
+<label>
+モルフォロジー演算の反復回数: <input type="range" id="morphIterations" min="0" max="10" value="2" step="1">
+<span id="morphValue">2</span>
+</label>
+<button id="processButton">処理</button>
+</div>
+<div class="canvas-container">
+<canvas id="originalCanvas"></canvas>
+<canvas id="silhouetteCanvas"></canvas>
+<canvas id="modifiedCanvas"></canvas>
+</div>
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+<div>
+<div class="spinner"></div>
+<div class="loading-message">処理中...<br>しばらくお待ちください</div>
+</div>
+</div>
+<script>
+const imageInput = document.getElementById('imageInput');
+const originalCanvas = document.getElementById('originalCanvas');
+const silhouetteCanvas = document.getElementById('silhouetteCanvas');
+const modifiedCanvas = document.getElementById('modifiedCanvas');
+const originalCtx = originalCanvas.getContext('2d');
+const silhouetteCtx = silhouetteCanvas.getContext('2d');
+const modifiedCtx = modifiedCanvas.getContext('2d');
+const blurStrength = document.getElementById('blurStrength');
+const edgeThreshold = document.getElementById('edgeThreshold');
+const medianSize = document.getElementById('medianSize');
+const morphIterations = document.getElementById('morphIterations');
+const processButton = document.getElementById('processButton');
+const blurValue = document.getElementById('blurValue');
+const thresholdValue = document.getElementById('thresholdValue');
+const medianValue = document.getElementById('medianValue');
+const morphValue = document.getElementById('morphValue');
+const loadingOverlay = document.getElementById('loadingOverlay');
+let originalImageData;
+imageInput.addEventListener('change', loadImage);
+processButton.addEventListener('click', processImageWithLoading);
+blurStrength.addEventListener('input', updateBlurValue);
+edgeThreshold.addEventListener('input', updateThresholdValue);
+medianSize.addEventListener('input', updateMedianValue);
+morphIterations.addEventListener('input', updateMorphValue);
+function loadImage(e) {
+const file = e.target.files[0];
+const reader = new FileReader();
+reader.onload = function(event) {
+const img = new Image();
+img.onload = function() {
+originalCanvas.width = silhouetteCanvas.width = modifiedCanvas.width = img.width;
+originalCanvas.height = silhouetteCanvas.height = modifiedCanvas.height = img.height;
+originalCtx.drawImage(img, 0, 0);
+originalImageData = originalCtx.getImageData(0, 0, img.width, img.height);
+processImageWithLoading();
+};
+img.src = event.target.result;
+};
+reader.readAsDataURL(file);
+}
+function processImageWithLoading() {
+loadingOverlay.style.display = 'flex';
+setTimeout(() => {
+processImage();
+loadingOverlay.style.display = 'none';
+}, 50);
+}
+function processImage() {
+if (!originalImageData) return;
+const silhouetteImageData = new ImageData(
+new Uint8ClampedArray(originalImageData.data),
+originalImageData.width,
+originalImageData.height
+);
+convertToBlackAndWhite(silhouetteImageData);
+silhouetteCtx.putImageData(silhouetteImageData, 0, 0);
+const modifiedImageData = new ImageData(
+new Uint8ClampedArray(silhouetteImageData.data),
+silhouetteImageData.width,
+silhouetteImageData.height
+);
+applyGaussianBlur(modifiedImageData, parseFloat(blurStrength.value));
+applyMedianFilter(modifiedImageData, parseInt(medianSize.value));
+detectAndSmoothEdges(modifiedImageData, parseInt(edgeThreshold.value));
+applyMorphologicalOperations(modifiedImageData, parseInt(morphIterations.value));
+modifiedCtx.putImageData(modifiedImageData, 0, 0);
+}
+function convertToBlackAndWhite(imageData) {
+const data = imageData.data;
+for (let i = 0; i < data.length; i += 4) {
+if (data[i + 3] === 0) {
+data[i] = data[i + 1] = data[i + 2] = 255;
+} else {
+data[i] = data[i + 1] = data[i + 2] = 0;
+data[i + 3] = 255;
+}
+}
+}
+function applyGaussianBlur(imageData, radius) {
+const width = imageData.width;
+const height = imageData.height;
+const data = imageData.data;
+const kernel = generateGaussianKernel(radius);
+const tempData = new Uint8ClampedArray(data);
+for (let y = 0; y < height; y++) {
+for (let x = 0; x < width; x++) {
+let r = 0, g = 0, b = 0, a = 0, weight = 0;
+for (let ky = -radius; ky <= radius; ky++) {
+for (let kx = -radius; kx <= radius; kx++) {
+const px = Math.min(width - 1, Math.max(0, x + kx));
+const py = Math.min(height - 1, Math.max(0, y + ky));
+const i = (py * width + px) * 4;
+const w = kernel[ky + radius][kx + radius];
+r += tempData[i] * w;
+g += tempData[i + 1] * w;
+b += tempData[i + 2] * w;
+a += tempData[i + 3] * w;
+weight += w;
+}
+}
+const i = (y * width + x) * 4;
+data[i] = r / weight;
+data[i + 1] = g / weight;
+data[i + 2] = b / weight;
+data[i + 3] = a / weight;
+}
+}
+}
+function generateGaussianKernel(radius) {
+const kernel = [];
+const sigma = radius / 3;
+let sum = 0;
+for (let y = -radius; y <= radius; y++) {
+const row = [];
+for (let x = -radius; x <= radius; x++) {
+const exponent = -(x * x + y * y) / (2 * sigma * sigma);
+const value = Math.exp(exponent) / (2 * Math.PI * sigma * sigma);
+row.push(value);
+sum += value;
+}
+kernel.push(row);
+}
+for (let y = 0; y < kernel.length; y++) {
+for (let x = 0; x < kernel[y].length; x++) {
+kernel[y][x] /= sum;
+}
+}
+return kernel;
+}
+function detectAndSmoothEdges(imageData, threshold) {
+const width = imageData.width;
+const height = imageData.height;
+const data = imageData.data;
+for (let y = 1; y < height - 1; y++) {
+for (let x = 1; x < width - 1; x++) {
+const i = (y * width + x) * 4;
+const topLeft = data[((y - 1) * width + (x - 1)) * 4];
+const top = data[((y - 1) * width + x) * 4];
+const topRight = data[((y - 1) * width + (x + 1)) * 4];
+const left = data[(y * width + (x - 1)) * 4];
+const right = data[(y * width + (x + 1)) * 4];
+const bottomLeft = data[((y + 1) * width + (x - 1)) * 4];
+const bottom = data[((y + 1) * width + x) * 4];
+const bottomRight = data[((y + 1) * width + (x + 1)) * 4];
+const edgeStrength = Math.abs(topLeft - bottomRight) +
+Math.abs(top - bottom) +
+Math.abs(topRight - bottomLeft) +
+Math.abs(left - right);
+if (edgeStrength > threshold) {
+const avgColor = Math.round((topLeft + top + topRight + left + right + bottomLeft + bottom + bottomRight) / 8);
+data[i] = data[i + 1] = data[i + 2] = avgColor;
+}
+}
+}
+}
+function updateBlurValue() {
+blurValue.textContent = blurStrength.value;
+}
+function updateThresholdValue() {
+thresholdValue.textContent = edgeThreshold.value;
+}
+function updateMedianValue() {
+medianValue.textContent = medianSize.value;
+}
+function updateMorphValue() {
+morphValue.textContent = morphIterations.value;
+}
+function applyMedianFilter(imageData, size) {
+const width = imageData.width;
+const height = imageData.height;
+const data = imageData.data;
+const tempData = new Uint8ClampedArray(data);
+for (let y = 0; y < height; y++) {
+for (let x = 0; x < width; x++) {
+const values = [];
+for (let dy = -Math.floor(size/2); dy <= Math.floor(size/2); dy++) {
+for (let dx = -Math.floor(size/2); dx <= Math.floor(size/2); dx++) {
+const px = Math.min(width - 1, Math.max(0, x + dx));
+const py = Math.min(height - 1, Math.max(0, y + dy));
+values.push(tempData[(py * width + px) * 4]);
+}
+}
+values.sort((a, b) => a - b);
+const medianValue = values[Math.floor(values.length / 2)];
+const i = (y * width + x) * 4;
+data[i] = data[i + 1] = data[i + 2] = medianValue;
+}
+}
+}
+function applyMorphologicalOperations(imageData, iterations) {
+const width = imageData.width;
+const height = imageData.height;
+const data = imageData.data;
+erode(data, width, height, iterations);
+dilate(data, width, height, iterations);
+dilate(data, width, height, iterations);
+erode(data, width, height, iterations);
+}
+function erode(data, width, height, iterations) {
+const tempData = new Uint8ClampedArray(data);
+for (let iter = 0; iter < iterations; iter++) {
+for (let y = 1; y < height - 1; y++) {
+for (let x = 1; x < width - 1; x++) {
+const i = (y * width + x) * 4;
+let minValue = 255;
+for (let dy = -1; dy <= 1; dy++) {
+for (let dx = -1; dx <= 1; dx++) {
+const ni = ((y + dy) * width + (x + dx)) * 4;
+minValue = Math.min(minValue, tempData[ni]);
+}
+}
+data[i] = data[i + 1] = data[i + 2] = minValue;
+}
+}
+}
+}
+function dilate(data, width, height, iterations) {
+const tempData = new Uint8ClampedArray(data);
+for (let iter = 0; iter < iterations; iter++) {
+for (let y = 1; y < height - 1; y++) {
+for (let x = 1; x < width - 1; x++) {
+const i = (y * width + x) * 4;
+let maxValue = 0;
+for (let dy = -1; dy <= 1; dy++) {
+for (let dx = -1; dx <= 1; dx++) {
+const ni = ((y + dy) * width + (x + dx)) * 4;
+maxValue = Math.max(maxValue, tempData[ni]);
+}
+}
+data[i] = data[i + 1] = data[i + 2] = maxValue;
+}
+}
+}
+}
+</script>
+</body>
+</html>

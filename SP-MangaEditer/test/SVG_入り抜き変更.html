@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<style>
+body { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #f0f0f0; font-family: Arial, sans-serif; }
+.controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.control { display: flex; flex-direction: column; align-items: center; }
+label { margin-bottom: 5px; }
+input { width: 100px; }
+button, .file-input { margin-top: 10px; padding: 5px 10px; }
+#svgContainer { margin: 20px 0; max-width: 100%; max-height: 70vh; overflow: auto; }
+</style>
+</head>
+<body>
+<div class="controls">
+<div class="control">
+<label for="startThickness">入りの線の太さ:</label>
+<input type="range" id="startThickness" min="1" max="20" value="1" step="0.1">
+</div>
+<div class="control">
+<label for="midThickness">中央の線の太さ:</label>
+<input type="range" id="midThickness" min="1" max="20" value="10" step="0.1">
+</div>
+<div class="control">
+<label for="endThickness">終わりの線の太さ:</label>
+<input type="range" id="endThickness" min="1" max="20" value="1" step="0.1">
+</div>
+<div class="control">
+<label for="mainColor">線の色:</label>
+<input type="color" id="mainColor" value="#000000">
+</div>
+<div class="control">
+<label for="secondaryColor">線の第2色:</label>
+<input type="color" id="secondaryColor" value="#808080">
+</div>
+<div class="control">
+<label for="drawMethod">描画方法:</label>
+<select id="drawMethod">
+<option value="pixel">ピクセル</option>
+<option value="circle">サークル</option>
+</select>
+</div>
+</div>
+<input type="file" id="svgFile" accept=".svg" class="file-input">
+<div id="svgContainer">
+<svg width="300" height="200"></svg>
+</div>
+<button id="downloadSVG">SVGをダウンロード</button>
+<script>
+let svgPathData = "M50 150 L150 50 L250 150 Z";
+let params = {
+startThickness: 1,
+midThickness: 10,
+endThickness: 1,
+mainColor: "#000000",
+secondaryColor: "#808080",
+drawMethod: "pixel"
+};
+let svgViewBox = { x: 0, y: 0, width: 300, height: 200 };
+
+function processLine() {
+const svg = document.querySelector('svg');
+svg.innerHTML = '';
+const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+path.setAttribute("d", svgPathData);
+svg.appendChild(path);
+const edges = splitPath(path);
+edges.forEach(edge => {
+drawEdge(edge, path, svg);
+});
+svg.removeChild(path);
+}
+
+function splitPath(path) {
+const edges = [];
+const pathLength = path.getTotalLength();
+let start = 0;
+let end = 0;
+while (end < pathLength) {
+start = end;
+end = Math.min(start + path.getTotalLength() / 3, pathLength);
+edges.push({ start, end });
+}
+return edges;
+}
+
+function drawEdge(edge, path, svg) {
+const segmentsPerEdge = 1000; // 大幅に増加
+let prevPoint = null;
+let prevThickness = 0;
+for (let i = 0; i <= segmentsPerEdge; i++) {
+const t = i / segmentsPerEdge;
+const point = path.getPointAtLength(edge.start + t * (edge.end - edge.start));
+const thickness = calculateThickness(t);
+if (prevPoint) {
+const distance = Math.hypot(point.x - prevPoint.x, point.y - prevPoint.y);
+if (distance >= Math.min(thickness, prevThickness) / 2) {
+if (params.drawMethod === "pixel") {
+drawPixelPoint(point, thickness, svg);
+} else {
+drawCirclePoint(point, thickness, svg);
+}
+prevPoint = point;
+prevThickness = thickness;
+}
+} else {
+if (params.drawMethod === "pixel") {
+drawPixelPoint(point, thickness, svg);
+} else {
+drawCirclePoint(point, thickness, svg);
+}
+prevPoint = point;
+prevThickness = thickness;
+}
+}
+}
+
+function calculateThickness(t) {
+const startT = params.startThickness;
+const midT = params.midThickness;
+const endT = params.endThickness;
+// ベジェ曲線の補間を使用
+const thickness = (1 - t) * (1 - t) * startT + 2 * (1 - t) * t * midT + t * t * endT;
+return thickness;
+}
+
+function drawPixelPoint(point, thickness, svg) {
+const deviation = (Math.random() - 0.5) * 2;
+for (let j = 0; j < thickness; j++) {
+const x = point.x + (Math.random() - 0.5) * 2;
+const y = point.y + deviation - thickness / 2 + j;
+const pixel = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+pixel.setAttribute("x", x);
+pixel.setAttribute("y", y);
+pixel.setAttribute("width", "1");
+pixel.setAttribute("height", "1");
+const color = Math.random() < 0.7 ? params.mainColor : params.secondaryColor;
+pixel.setAttribute("fill", color);
+svg.appendChild(pixel);
+}
+}
+
+function drawCirclePoint(point, thickness, svg) {
+const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+circle.setAttribute("cx", point.x);
+circle.setAttribute("cy", point.y);
+circle.setAttribute("r", thickness / 2);
+circle.setAttribute("fill", params.mainColor);
+svg.appendChild(circle);
+}
+
+function updateDrawing() {
+params.startThickness = parseFloat(document.getElementById('startThickness').value);
+params.midThickness = parseFloat(document.getElementById('midThickness').value);
+params.endThickness = parseFloat(document.getElementById('endThickness').value);
+params.mainColor = document.getElementById('mainColor').value;
+params.secondaryColor = document.getElementById('secondaryColor').value;
+params.drawMethod = document.getElementById('drawMethod').value;
+processLine();
+}
+
+function downloadSVG() {
+const svg = document.querySelector('svg');
+const svgData = new XMLSerializer().serializeToString(svg);
+const svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+const svgUrl = URL.createObjectURL(svgBlob);
+const downloadLink = document.createElement("a");
+downloadLink.href = svgUrl;
+downloadLink.download = "processed_svg.svg";
+document.body.appendChild(downloadLink);
+downloadLink.click();
+document.body.removeChild(downloadLink);
+}
+
+function handleFileUpload(event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+const parser = new DOMParser();
+const svgDoc = parser.parseFromString(e.target.result, "image/svg+xml");
+const svgElement = svgDoc.documentElement;
+const paths = svgDoc.getElementsByTagName('path');
+if (paths.length > 0) {
+svgPathData = paths[0].getAttribute('d');
+updateSVGSize(svgElement);
+processLine();
+} else {
+alert('No path found in the SVG file.');
+}
+};
+reader.readAsText(file);
+}
+}
+
+function updateSVGSize(svgElement) {
+const svg = document.querySelector('svg');
+let width = svgElement.getAttribute('width');
+let height = svgElement.getAttribute('height');
+const viewBox = svgElement.getAttribute('viewBox');
+
+if (viewBox) {
+const [x, y, w, h] = viewBox.split(' ').map(Number);
+svgViewBox = { x, y, width: w, height: h };
+} else if (width && height) {
+svgViewBox = { x: 0, y: 0, width: parseFloat(width), height: parseFloat(height) };
+}
+
+svg.setAttribute('viewBox', `${svgViewBox.x} ${svgViewBox.y} ${svgViewBox.width} ${svgViewBox.height}`);
+svg.setAttribute('width', svgViewBox.width);
+svg.setAttribute('height', svgViewBox.height);
+}
+
+document.querySelectorAll('input, select').forEach(input => {
+input.addEventListener('input', updateDrawing);
+});
+
+document.getElementById('downloadSVG').addEventListener('click', downloadSVG);
+document.getElementById('svgFile').addEventListener('change', handleFileUpload);
+
+processLine();
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Warping with TPS</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="scan" width="400" height="400"></canvas>
+            <canvas id="tcan" width="400" height="400"></canvas>
+        </div>
+        <div class="controls">
+            <input type="file" id="imageUpload" accept="image/*">
+            <button id="warpBtn">Warp Image</button>
+            <button id="resetBtn">Reset</button>
+            <button id="togglePointsBtn">Toggle Points</button>
+            <button id="circularModeBtn">Circular Mode</button>
+            <div>
+                <label>Radius</label>
+                <input type="range" id="radiusSlider" min="10" max="300" value="100">
+            </div>
+            <div>
+                <label for="strengthSlider">Strength</label>
+                <input type="range" id="strengthSlider" min="-200" max="200" value="70">
+            </div>
+        </div>
+    </div>
+
+    <script src="tps.js"></script>
+    <script src="Interpolation.js"></script>
+    <script src="beforeTps.js"></script>
+    <script src="after.js"></script>
+    <script>
+        const $ = document.getElementById.bind(document);
+        const scan = $('scan');
+        const tcan = $('tcan');
+        const sourceCtx = scan.getContext('2d');
+        const targetCtx = tcan.getContext('2d');
+        const imageUpload = $('imageUpload');
+        const warpBtn = $('warpBtn');
+        const resetBtn = $('resetBtn');
+        const togglePointsBtn = $('togglePointsBtn');
+        const circularModeBtn = $('circularModeBtn');
+        const radiusSlider = $('radiusSlider');
+        const strengthSlider = $('strengthSlider');
+    </script>
+</body>
+</html>

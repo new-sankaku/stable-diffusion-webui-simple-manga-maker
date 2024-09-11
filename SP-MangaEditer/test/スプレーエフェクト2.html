@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .canvas-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        canvas { 
+            border: 1px solid #ddd;
+            max-width: 45%;
+            height: auto;
+        }
+        .controls { margin-top: 10px; }
+        .controls label { display: inline-block; width: 150px; }
+        button { margin-top: 10px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageLoader" accept="image/*">
+    <div class="canvas-container">
+        <canvas id="canvas1"></canvas>
+        <canvas id="canvas2"></canvas>
+    </div>
+    <div class="controls">
+        <label for="mode">モード:</label>
+        <select id="mode">
+            <option value="select">選択モード</option>
+            <option value="full">全エフェクトモード</option>
+        </select><br>
+        <label for="angle">方向 (度):</label>
+        <input type="range" id="angle" min="0" max="360" value="270">
+        <span id="angleValue">270</span><br>
+        <label for="length">ストローク長さ:</label>
+        <input type="range" id="length" min="1" max="50" value="20">
+        <span id="lengthValue">20</span><br>
+        <label for="intensity">強度:</label>
+        <input type="range" id="intensity" min="1" max="100" value="50">
+        <span id="intensityValue">50</span><br>
+        <label for="blockSize">ブロックサイズ:</label>
+        <input type="range" id="blockSize" min="1" max="10" value="4">
+        <span id="blockSizeValue">4</span><br>
+        <label for="edgeThreshold">エッジ検出閾値:</label>
+        <input type="range" id="edgeThreshold" min="1" max="100" value="30">
+        <span id="edgeThresholdValue">30</span><br>
+    </div>
+    <button id="applyButton">効果を適用</button>
+    <button id="clearSelectionsButton">選択をクリア</button>
+
+    <script>
+        const canvas1 = document.getElementById('canvas1');
+        const ctx1 = canvas1.getContext('2d');
+        const canvas2 = document.getElementById('canvas2');
+        const ctx2 = canvas2.getContext('2d');
+        const imageLoader = document.getElementById('imageLoader');
+        const modeSelect = document.getElementById('mode');
+        let originalImage;
+        let edgeMap;
+        let currentPath = [];
+        let paths = [];
+        let isDrawing = false;
+
+        imageLoader.addEventListener('change', handleImage, false);
+
+        function handleImage(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                originalImage = new Image();
+                originalImage.onload = function() {
+                    const aspectRatio = originalImage.width / originalImage.height;
+                    const maxWidth = window.innerWidth * 0.45;
+                    const maxHeight = window.innerHeight * 0.8;
+                    let newWidth, newHeight;
+
+                    if (originalImage.width > maxWidth || originalImage.height > maxHeight) {
+                        if (maxWidth / aspectRatio <= maxHeight) {
+                            newWidth = maxWidth;
+                            newHeight = maxWidth / aspectRatio;
+                        } else {
+                            newHeight = maxHeight;
+                            newWidth = maxHeight * aspectRatio;
+                        }
+                    } else {
+                        newWidth = originalImage.width;
+                        newHeight = originalImage.height;
+                    }
+
+                    canvas1.width = canvas2.width = newWidth;
+                    canvas1.height = canvas2.height = newHeight;
+                    ctx1.drawImage(originalImage, 0, 0, newWidth, newHeight);
+                    ctx2.drawImage(originalImage, 0, 0, newWidth, newHeight);
+                    detectEdges();
+                }
+                originalImage.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function detectEdges() {
+            const imageData = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
+            const data = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+            edgeMap = new Uint8Array(width * height);
+
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const index = (y * width + x) * 4;
+                    const gx = 
+                        -data[index - 4 - width * 4] + data[index + 4 - width * 4] +
+                        -2 * data[index - 4] + 2 * data[index + 4] +
+                        -data[index - 4 + width * 4] + data[index + 4 + width * 4];
+                    const gy = 
+                        -data[index - width * 4 - 4] - 2 * data[index - width * 4] - data[index - width * 4 + 4] +
+                        data[index + width * 4 - 4] + 2 * data[index + width * 4] + data[index + width * 4 + 4];
+                    const g = Math.sqrt(gx * gx + gy * gy);
+                    edgeMap[y * width + x] = g;
+                }
+            }
+        }
+
+        function applySprayEffect() {
+            if (!originalImage) return;
+
+            const angle = document.getElementById('angle').value * Math.PI / 180;
+            const length = parseInt(document.getElementById('length').value);
+            const intensity = parseInt(document.getElementById('intensity').value) / 100;
+            const blockSize = parseInt(document.getElementById('blockSize').value);
+            const edgeThreshold = parseInt(document.getElementById('edgeThreshold').value);
+
+            ctx2.drawImage(originalImage, 0, 0, canvas2.width, canvas2.height);
+            const imageData = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
+            const data = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+
+            if (modeSelect.value === 'select') {
+                // 選択モード: 選択された領域にのみ効果を適用
+                paths.forEach(path => {
+                    const region = new Path2D();
+                    region.moveTo(path[0].x, path[0].y);
+                    for (let i = 1; i < path.length; i++) {
+                        region.lineTo(path[i].x, path[i].y);
+                    }
+                    region.closePath();
+
+                    for (let y = 0; y < height; y += blockSize) {
+                        for (let x = 0; x < width; x += blockSize) {
+                            if (ctx2.isPointInPath(region, x, y) && edgeMap[y * width + x] > edgeThreshold) {
+                                applySprayToBlock(data, x, y, width, height, angle, length, intensity, blockSize);
+                            }
+                        }
+                    }
+                });
+            } else {
+                // 全エフェクトモード: 画像全体に効果を適用
+                for (let y = 0; y < height; y += blockSize) {
+                    for (let x = 0; x < width; x += blockSize) {
+                        if (edgeMap[y * width + x] > edgeThreshold) {
+                            applySprayToBlock(data, x, y, width, height, angle, length, intensity, blockSize);
+                        }
+                    }
+                }
+            }
+
+            ctx2.putImageData(imageData, 0, 0);
+        }
+
+        function applySprayToBlock(data, x, y, width, height, angle, length, intensity, blockSize) {
+            const spreadAngle = angle + (Math.random() - 0.5) * Math.PI / 6; // ±15度の拡散
+            const distance = Math.random() * length;
+            const endX = Math.round(x + Math.cos(spreadAngle) * distance);
+            const endY = Math.round(y + Math.sin(spreadAngle) * distance);
+
+            const steps = Math.max(Math.abs(endX - x), Math.abs(endY - y));
+            
+            for (let step = 0; step <= steps; step++) {
+                const t = step / steps;
+                const currentX = Math.round(x + (endX - x) * t);
+                const currentY = Math.round(y + (endY - y) * t);
+
+                if (currentX >= 0 && currentX < width - blockSize && currentY >= 0 && currentY < height - blockSize) {
+                    for (let dy = 0; dy < blockSize; dy++) {
+                        for (let dx = 0; dx < blockSize; dx++) {
+                            const srcIndex = ((y + dy) * width + (x + dx)) * 4;
+                            const destIndex = ((currentY + dy) * width + (currentX + dx)) * 4;
+
+                            const alpha = intensity * (1 - t);
+
+                            data[destIndex] = Math.round(data[destIndex] * (1 - alpha) + data[srcIndex] * alpha);
+                            data[destIndex + 1] = Math.round(data[destIndex + 1] * (1 - alpha) + data[srcIndex + 1] * alpha);
+                            data[destIndex + 2] = Math.round(data[destIndex + 2] * (1 - alpha) + data[srcIndex + 2] * alpha);
+                        }
+                    }
+                }
+            }
+        }
+
+        // マウスイベントの処理
+        canvas1.addEventListener('mousedown', startDrawing);
+        canvas1.addEventListener('mousemove', draw);
+        canvas1.addEventListener('mouseup', endDrawing);
+
+        function getMousePos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (evt.clientX - rect.left) * scaleX,
+                y: (evt.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            if (modeSelect.value === 'select') {
+                isDrawing = true;
+                const pos = getMousePos(canvas1, e);
+                currentPath = [pos];
+                drawAllPaths();
+            }
+        }
+
+        function draw(e) {
+            if (isDrawing && modeSelect.value === 'select') {
+                const pos = getMousePos(canvas1, e);
+                currentPath.push(pos);
+                drawAllPaths();
+            }
+        }
+
+        function endDrawing() {
+            if (isDrawing && modeSelect.value === 'select') {
+                isDrawing = false;
+                if (currentPath.length > 2) {
+                    currentPath.push(currentPath[0]); // パスを閉じる
+                    paths.push(currentPath);
+                    currentPath = [];
+                    drawAllPaths();
+                }
+            }
+        }
+
+        function drawAllPaths() {
+            ctx1.drawImage(originalImage, 0, 0, canvas1.width, canvas1.height);
+            ctx1.strokeStyle = 'red';
+            ctx1.lineWidth = 2;
+
+            // 全ての保存されたパスを描画
+            paths.forEach(path => {
+                ctx1.beginPath();
+                ctx1.moveTo(path[0].x, path[0].y);
+                for (let i = 1; i < path.length; i++) {
+                    ctx1.lineTo(path[i].x, path[i].y);
+                }
+                ctx1.stroke();
+            });
+
+            // 現在描画中のパスを描画
+            if (currentPath.length > 0) {
+                ctx1.beginPath();
+                ctx1.moveTo(currentPath[0].x, currentPath[0].y);
+                for (let i = 1; i < currentPath.length; i++) {
+                    ctx1.lineTo(currentPath[i].x, currentPath[i].y);
+                }
+                ctx1.stroke();
+            }
+        }
+
+        // スライダーの値を表示
+        ['angle', 'length', 'intensity', 'blockSize', 'edgeThreshold'].forEach(id => {
+            const slider = document.getElementById(id);
+            const output = document.getElementById(id + 'Value');
+            slider.oninput = function() {
+                output.innerHTML = this.value;
+            }
+        });
+
+        // 適用ボタンのイベントリスナー
+        document.getElementById('applyButton').addEventListener('click', applySprayEffect);
+
+        // 選択クリアボタンのイベントリスナー
+        document.getElementById('clearSelectionsButton').addEventListener('click', () => {
+            paths = [];
+            currentPath = [];
+            ctx1.drawImage(originalImage, 0, 0, canvas1.width, canvas1.height);
+        });
+
+        // モード切替時の処理
+        modeSelect.addEventListener('change', () => {
+            if (modeSelect.value === 'full') {
+                canvas1.style.cursor = 'default';
+            } else {
+                canvas1.style.cursor = 'crosshair';
+            }
+        });
+    </script>
+</body>
+</html>

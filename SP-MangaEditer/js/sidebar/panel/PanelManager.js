@@ -20,6 +20,31 @@ document.addEventListener('DOMContentLoaded', function() {
       var x = e.clientX - rect.left;
       var y = e.clientY - rect.top;
 
+
+      if (file.type === 'image/svg+xml') {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          var svgText = event.target.result;
+            if (stateStack.length >= 2 && getObjectCount() > 0 ) {
+              var canvasX = x / canvasContinerScale;
+              var canvasY = y / canvasContinerScale;
+              putImageInFrame(svgText, canvasX, canvasY);
+            } else {
+              
+              // SVGをFabric.jsのCanvasに読み込む
+              fabric.loadSVGFromString(svgText, function(objects, options) {
+                var loadedObject = fabric.util.groupSVGElements(objects, options);
+                resizeCanvasByNum(loadedObject.width, loadedObject.height);
+                initialPutImage(loadedObject, 0, 0);
+                canvas.add(loadedObject);
+                canvas.renderAll();
+              });
+            }
+        };
+        reader.readAsText(file);
+        return;
+    }
+
       // WebPに変換
       var webpFile;
       try {

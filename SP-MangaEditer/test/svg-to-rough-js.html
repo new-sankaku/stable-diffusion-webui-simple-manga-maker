@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to Rough.js Conversion with Settings</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.0.0/rough.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #canvas {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        #file-input, #settings {
+            margin-bottom: 20px;
+        }
+        #settings {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 10px;
+        }
+        label {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <input type="file" id="file-input" accept=".svg">
+    <div id="settings">
+        <label for="roughness">Roughness:</label>
+        <input type="range" id="roughness" min="0" max="5" step="0.1" value="1">
+        
+        <label for="bowing">Bowing:</label>
+        <input type="range" id="bowing" min="0" max="5" step="0.1" value="1">
+        
+        <label for="strokeWidth">Stroke Width:</label>
+        <input type="range" id="strokeWidth" min="0.1" max="10" step="0.1" value="1">
+        
+        <label for="stroke">Stroke Color:</label>
+        <input type="color" id="stroke" value="#000000">
+        
+        <label for="fill">Fill Color:</label>
+        <input type="color" id="fill" value="#ffffff">
+        
+        <label for="fillStyle">Fill Style:</label>
+        <select id="fillStyle">
+            <option value="hachure">Hachure</option>
+            <option value="solid">Solid</option>
+            <option value="zigzag">Zigzag</option>
+            <option value="cross-hatch">Cross-hatch</option>
+            <option value="dots">Dots</option>
+            <option value="dashed">Dashed</option>
+            <option value="zigzag-line">Zigzag-line</option>
+        </select>
+    </div>
+    <script>
+        const canvas = document.getElementById('canvas');
+        let rc = rough.canvas(canvas);
+        const fileInput = document.getElementById('file-input');
+        let svgPaths = [];
+
+        function getSettings() {
+            return {
+                roughness: parseFloat(document.getElementById('roughness').value),
+                bowing: parseFloat(document.getElementById('bowing').value),
+                strokeWidth: parseFloat(document.getElementById('strokeWidth').value),
+                stroke: document.getElementById('stroke').value,
+                fill: document.getElementById('fill').value,
+                fillStyle: document.getElementById('fillStyle').value
+            };
+        }
+
+        function redraw() {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const settings = getSettings();
+            svgPaths.forEach(path => {
+                rc.path(path, settings);
+            });
+        }
+
+        function resizeCanvas(width, height) {
+            canvas.width = width;
+            canvas.height = height;
+            rc = rough.canvas(canvas);
+        }
+
+        function parseSVG(svgContent) {
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
+            const svgElement = svgDoc.documentElement;
+
+            let viewBox = svgElement.getAttribute('viewBox');
+            let width, height;
+
+            if (viewBox) {
+                [, , width, height] = viewBox.split(' ').map(Number);
+            } else {
+                width = parseFloat(svgElement.getAttribute('width')) || 300;
+                height = parseFloat(svgElement.getAttribute('height')) || 200;
+            }
+
+            resizeCanvas(width, height);
+
+            svgPaths = Array.from(svgDoc.getElementsByTagName('path')).map(path => path.getAttribute('d'));
+            redraw();
+        }
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const svgContent = e.target.result;
+                    parseSVG(svgContent);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.querySelectorAll('#settings input, #settings select').forEach(input => {
+            input.addEventListener('input', redraw);
+        });
+
+        // デフォルトのキャンバスサイズとサンプル図形
+        resizeCanvas(300, 200);
+        svgPaths = ["M50 150 L150 50 L250 150 Z"];
+        redraw();
+    </script>
+</body>
+</html>
