@@ -11,13 +11,16 @@
         content="manga editing, manga editor online, manga creation tool, comic editing software, digital manga editor, Stable diffusion web ui, Stable diffusion Forge, stable-diffusion-webui-simple-manga-maker">
 
     <script async src="third/GoogleAnalytics/googleAnalytics.js"></script>
+
+    <div id="a" style="display:none">
+    </div>
+
     <script>
-        const $ = (id) => document.getElementById(id);
+const $ = (id) => document.getElementById(id);
+function addEL(a,b,c,d=!1){a.addEventListener(b,c,d)}
 
-function addEL(a, b, c, d = !1) { a.addEventListener(b, c, d) };
 
- const e = $("a"), 
- f = [
+const e=$("a"),f=[
 "Initializing core system...",
 "Sun network connection: Failed",
 "Moon network connection: Successful",
@@ -30,54 +33,64 @@ function addEL(a, b, c, d = !1) { a.addEventListener(b, c, d) };
 "Font download: Completed",
 "Coordinate measurement: Normal",
 "CSS launch: Normal",
-"Script launch: Normal"];
- 
- function g() { 
+"Script launch: Normal"
+];
+function g(){
+const a=document.createElement("div");
+a.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;color:#fff;font-size:11px;display:flex;flex-direction:column;z-index:1000;";
+const b=`<svg width="100%" height="100%" style="position:absolute;top:0;left:0;opacity:.2;"><rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="7%" width="86%" height="30%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="39%" width="40%" height="54%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="39%" width="44%" height="25%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="72%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><path d="M 7% 37% L 93% 37% M 47% 39% L 47% 93%" stroke="#aaa" stroke-width="3" fill="none"/></svg>`;
+a.innerHTML=b;
+const c=document.createElement("div");
+c.style.cssText="padding:20px;";
+const d=document.createElement("div");
+d.textContent="PIXELEDITOR PRO",d.style.cssText="font-size:24px;font-weight:700;",c.appendChild(d),a.appendChild(c);
+const e=document.createElement("div");
+e.id="h",e.style.cssText="flex-grow:1;padding:20px;",f.forEach(()=>{const a=document.createElement("div");a.style.cssText="margin:8px 0;height:1em;opacity:.9;",e.appendChild(a)}),a.appendChild(e);
+const g=`<svg width="100%" height="40" style="position:absolute;bottom:0;left:0;opacity:.5;"><defs><g id="i"><path d="M1 13L5 17L17 5L13 1L1 13Z M15 3L13 1L16 4M1 13L4 16" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="j"><path d="M3 17L7 13L15 5L13 3L5 11L1 15L3 17Z M14 4L12 2L16 6" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="k"><path d="M3 15C3 17 5 17 5 15C5 13 7 11 9 9C11 7 13 5 15 3M15 3L13 5M15 3L17 5" stroke="#aaa" stroke-width="1" fill="none"/></g></defs></svg>`,h=document.createElement("div");
+h.style.cssText="position:absolute;bottom:0;left:0;width:100%;height:40px;overflow:hidden;",h.innerHTML=g;
+const l=20,m=Math.ceil(window.innerWidth/l);
+for(let a=0;a<m;a++){const b=document.createElementNS("http://www.w3.org/2000/svg","use");b.setAttributeNS(null,"href",`#${["i","j","k"][a%3]}`),b.setAttributeNS(null,"x",a*l),b.setAttributeNS(null,"y",10),h.querySelector("svg").appendChild(b)}
+a.appendChild(h);
+const p=document.createElementNS("http://www.w3.org/2000/svg","svg");
+p.setAttribute("width","100"),p.setAttribute("height","100"),p.style.cssText="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);";
+const q=document.createElementNS("http://www.w3.org/2000/svg","polygon");
+q.setAttribute("points","50,10 90,30 90,70 50,90 10,70 10,30"),q.setAttribute("stroke","#fff"),q.setAttribute("stroke-width","2"),q.setAttribute("fill","none");
+const r=document.createElementNS("http://www.w3.org/2000/svg","polygon");
+return r.setAttribute("points","50,25 75,75 25,75"),r.setAttribute("stroke","#fff"),r.setAttribute("stroke-width","2"),r.setAttribute("fill","none"),r.style.transformOrigin="center",r.style.animation="n 1s linear infinite",p.appendChild(q),p.appendChild(r),a.appendChild(p),document.body.appendChild(a),{page:a,hexagon:q,triangle:r}
+}
+function h(a,b){
+let c=0;
+function d(){c<b.length&&(a.textContent+=b[c],c++,setTimeout(d,5+5*Math.random()))}
+d()
+}
+function i(a,b){a.setAttribute("stroke","#ffa500"),b.setAttribute("stroke","#ffa500")}
 
-const a = document.createElement("div"); 
-a.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;background-color:#000;color:#fff;font-size:11px;display:flex;flex-direction:column;"; 
-
-const b = `<svg width="100%" height="100%" style="position:absolute;top:0;left:0;opacity:.2;"><rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="7%" width="86%" height="30%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="39%" width="40%" height="54%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="39%" width="44%" height="25%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="72%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><path d="M 7% 37% L 93% 37% M 47% 39% L 47% 93%" stroke="#aaa" stroke-width="3" fill="none"/></svg>`; 
-
-a.innerHTML = b; 
-const c = document.createElement("div"); 
-c.style.cssText = "padding:20px;"; 
-const d = document.createElement("div"); 
-d.textContent = "PIXELEDITOR PRO", 
-d.style.cssText = "font-size:24px;font-weight:700;", 
-c.appendChild(d), a.appendChild(c); 
-
-const e = document.createElement("div"); 
-e.id = "h", e.style.cssText = "flex-grow:1;padding:20px;",  
-f.forEach(() => { const a = document.createElement("div"); 
-a.style.cssText = "margin:8px 0;height:1em;opacity:.9;", e.appendChild(a) }),
-a.appendChild(e);
-
-const g = `<svg width="100%" height="40" style="position:absolute;bottom:0;left:0;opacity:.5;"><defs><g id="i"><path d="M1 13L5 17L17 5L13 1L1 13Z M15 3L13 1L16 4M1 13L4 16" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="j"><path d="M3 17L7 13L15 5L13 3L5 11L1 15L3 17Z M14 4L12 2L16 6" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="k"><path d="M3 15C3 17 5 17 5 15C5 13 7 11 9 9C11 7 13 5 15 3M15 3L13 5M15 3L17 5" stroke="#aaa" stroke-width="1" fill="none"/></g></defs></svg>`, 
- 
- h = document.createElement("div"); 
- h.style.cssText = "position:absolute;bottom:0;left:0;width:100%;height:40px;overflow:hidden;", h.innerHTML = g; const l = 20, m = Math.ceil(window.innerWidth / l); for (let a = 0; a < m; a++) { const b = document.createElementNS("http://www.w3.org/2000/svg", "use"); b.setAttributeNS(null, "href", `#${["i", "j", "k"][a % 3]}`), b.setAttributeNS(null, "x", a * l), b.setAttributeNS(null, "y", 10), h.querySelector("svg").appendChild(b) } a.appendChild(h); const p = document.createElementNS("http://www.w3.org/2000/svg", "svg"); p.setAttribute("width", "100"), p.setAttribute("height", "100"), p.style.cssText = "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"; const q = document.createElementNS("http://www.w3.org/2000/svg", "polygon"); q.setAttribute("points", "50,10 90,30 90,70 50,90 10,70 10,30"), q.setAttribute("stroke", "#fff"), q.setAttribute("stroke-width", "2"), q.setAttribute("fill", "none"); const r = document.createElementNS("http://www.w3.org/2000/svg", "polygon"); return r.setAttribute("points", "50,25 75,75 25,75"), r.setAttribute("stroke", "#fff"), r.setAttribute("stroke-width", "2"), r.setAttribute("fill", "none"), r.style.transformOrigin = "center", r.style.animation = "n 1s linear infinite", p.appendChild(q), p.appendChild(r), a.appendChild(p), document.body.appendChild(a), { page: a, hexagon: q, triangle: r }} 
- 
-function h(a, b) { return new Promise(c => { let d = 0; 
-function e() { d < b.length ? (a.textContent += b[d], d++, setTimeout(e, 5 + 5 * Math.random())) : c() } e() }) } function i() { return new Promise(a => { const b = 1; setTimeout(a, b) }) } 
-function j(a, b) { a.setAttribute("stroke", "#ffa500"), b.setAttribute("stroke", "#ffa500") } 
-
-
-async function k() {
-    console.log("load k call");
-    const { page: a, hexagon: b, triangle: c } = g(), 
-    d = a.querySelectorAll("#h div"), 
-    e = (async () => { for (let a = 0; a < f.length; a++) await h(d[a], f[a]) })(), 
-    l = i();
-    await l;
-    j(b, c); 
-    setTimeout(() => { a.remove(), m() }, 100) 
-} 
-function m(){ 
+function k(){
+    const{page:a,hexagon:b,triangle:c}=g(),d=a.querySelectorAll("#h div");
+    f.forEach((a,b)=>h(d[b],a));
+    const o=Date.now();
+    
+    window.addEventListener('load', function(){
+        const p=Date.now(),q=Math.max(0,500-(p-o));
+        setTimeout(()=>{
+            i(b,c);
+            a.remove();
+            l();
+        },q);
+    });
+}
+function l(){
+    console.log("l() start");
 $('desu-nav').style.display = 'flex',
 $('head-id').style.display = 'flex',
-$('btm-drawer').style.display = 'block'} 
-addEL(window, "load", k);
+$('btm-drawer').style.display = 'block'
+$('a').style.display = 'none'
+}
+function n(){k()}
+n();
+
+
+
 
 
         window.dataLayer = window.dataLayer || [];
@@ -253,6 +266,7 @@ addEL(window, "load", k);
 </head>
 
 <body>
+    
     <div itemscope itemtype="http://schema.org/SoftwareApplication">
         <meta itemprop="name" content="Manga Editor Desu! Pro Edition">
         <meta itemprop="description"
