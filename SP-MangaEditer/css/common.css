@@ -1,197 +1,208 @@
 @import url('root.css');
 
 body {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+ display: flex;
+ flex-direction: column;
+ box-sizing: border-box;
 }
 
 .logo-container img {
-  width: 100%;
-  box-sizing: border-box;
+ width: 100%;
+ box-sizing: border-box;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+ width: 10px;
 }
+
 ::-webkit-scrollbar-track {
-  background-color: var(--color-scrollbar-track);
-  border-radius: 10px;
+ background-color: var(--color-scrollbar-track);
+ border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar-thumb);
-  border-radius: 10px;
+ background-color: var(--color-scrollbar-thumb);
+ border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-scrollbar-thumb);
+ background-color: var(--color-scrollbar-thumb);
 }
 
 .floating-windowPromptClass {
-  width: 40%;
-  position: fixed;
-  right: 0;
-  top: 10%;
-  background-color: var(--background-color-A);
-  border: var(--color-window-border);
-  box-shadow: var(--box-shadow-window);
-  padding: 5px;
-  z-index: 1000;
-  font-family: var(--font-family-window);
+ width: 40%;
+ position: fixed;
+ right: 0;
+ top: 10%;
+ background-color: var(--background-color-A);
+ border: var(--color-window-border);
+ box-shadow: var(--box-shadow-window);
+ padding: 5px;
+ z-index: 1000;
+ font-family: var(--font-family-window);
 }
 
 .floating-windowPromptClass h4 {
-  margin-top: 0;
-  background-color: var(--color-window-header-bg);
-  color: var(--background-color-A);
-  padding: 5px;
+ margin-top: 0;
+ background-color: var(--color-window-header-bg);
+ color: var(--background-color-A);
+ padding: 5px;
 }
 
 .floating-windowPromptClass .form-group {
-  margin: 5px;
-  font-size: 13px;
+ margin: 5px;
+ font-size: 13px;
 }
 
 .floating-windowPromptClass label {
-  display: block;
-  margin-bottom: 5px;
+ display: block;
+ margin-bottom: 5px;
 }
 
 .floating-windowPromptClass input[type="number"],
 .floating-windowPromptClass select,
 .floating-windowPromptClass textarea {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid var(--color-input-focus-border);
-  border-radius: 4px;
+ width: 100%;
+ padding: 5px;
+ border: 1px solid var(--color-input-focus-border);
+ border-radius: 4px;
 }
 
 .floating-windowPromptClass .button-group {
-  text-align: right;
-  margin-top: 5px;
+ text-align: right;
+ margin-top: 5px;
 }
 
 .floating-windowPromptClass button {
-  margin-left: 5px;
-  padding: 5px 5px;
-  border: none;
-  border-radius: 4px;
-  background-color: var(--color-button-bg);
-  color: white;
-  cursor: pointer;
+ margin-left: 5px;
+ padding: 5px 5px;
+ border: none;
+ border-radius: 4px;
+ background-color: var(--color-button-bg);
+ color: white;
+ cursor: pointer;
 }
 
 .floating-windowPromptClass button:hover {
-  background-color: var(--color-button-hover-bg);
+ background-color: var(--color-button-hover-bg);
 }
 
 .prompt-replace-form-group {
-  display: flex;
-  margin-bottom: 5px;
+ display: flex;
+ margin-bottom: 5px;
 }
+
 .prompt-replace-form-group textarea {
-  font-size: 13px;
-  flex: 1;
-  margin-right: 5px; 
-  resize: none;
+ font-size: 13px;
+ flex: 1;
+ margin-right: 5px;
+ resize: none;
 }
+
 .prompt-replace-form-group textarea:last-child {
-  font-size: 13px;
-  margin-right: 0;
+ font-size: 13px;
+ margin-right: 0;
 }
 
 .floating-window {
-  position: fixed;
-  width: 450px;
-  height: 450px;
-  bottom: 100px;
-  left: 100px;
-  background-color: var(--background-color-A);
-  border: var(--color-window-border);
-  box-shadow: var(--box-shadow-window);
-  z-index: 1000;
-  display: none;
-  padding: 10px;
+ position: fixed;
+ width: 450px;
+ height: 450px;
+ bottom: 100px;
+ left: 100px;
+ background-color: var(--background-color-A);
+ border: var(--color-window-border);
+ box-shadow: var(--box-shadow-window);
+ z-index: 1000;
+ display: none;
+ padding: 10px;
 }
 
 .header {
-  cursor: move;
-  padding: 5px;
-  width: 100%;
-  height: 100%;
-  border-bottom: 1px solid var(--boader-color-A);
+ cursor: move;
+ padding: 5px;
+ width: 100%;
+ height: 100%;
+ border-bottom: 1px solid var(--boader-color-A);
 }
 
 .close-btn {
-  float: right;
-  cursor: pointer;
-  padding: 0 5px;
-  line-height: 20px;
+ float: right;
+ cursor: pointer;
+ padding: 0 5px;
+ line-height: 20px;
 }
 
 .dynamic-font {
-  font-family: 'Arial',
+ font-family: 'Arial',
 }
 
 @font-face {
-  font-family: 'DotGothic16';
-  src: url('../font/DotGothic16/DotGothic16-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'DotGothic16';
+ src: url('../font/DotGothic16/DotGothic16-Regular.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
 
 @font-face {
-  font-family: 'Stick';
-  src: url('../font/Stick/Stick-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'Stick';
+ src: url('../font/Stick/Stick-Regular.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
 
 @font-face {
-  font-family: '851CHIKARA-DZUYOKU_kanaA';
-  src: url('../font/851CHIKARA-DZUYOKU_kanaA_004/851CHIKARA-DZUYOKU_kanaA_004.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: '851CHIKARA-DZUYOKU_kanaA';
+ src: url('../font/851CHIKARA-DZUYOKU_kanaA_004/851CHIKARA-DZUYOKU_kanaA_004.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
 
 @font-face {
-  font-family: '851MkPOP_101';
-  src: url('../font/851MkPOP_101/851MkPOP_101.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: '851MkPOP_101';
+ src: url('../font/851MkPOP_101/851MkPOP_101.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
+
 @font-face {
-  font-family: 'TrainOne-Regular';
-  src: url('../font/Train_One/TrainOne-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'TrainOne-Regular';
+ src: url('../font/Train_One/TrainOne-Regular.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
+
 @font-face {
-  font-family: 'KleeOne';
-  src: url('../font/Klee_One/KleeOne-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'KleeOne';
+ src: url('../font/Klee_One/KleeOne-Regular.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
+
 @font-face {
-  font-family: 'RampartOne-Regular';
-  src: url('../font/Rampart_One/RampartOne-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'RampartOne-Regular';
+ src: url('../font/Rampart_One/RampartOne-Regular.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
+
 @font-face {
-  font-family: 'OhisamaFont11';
-  src: url('../font/OhisamaFont11/OhisamaFont11.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'OhisamaFont11';
+ src: url('../font/OhisamaFont11/OhisamaFont11.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
+
 @font-face {
-  font-family: 'DokiDokiFont2';
-  src: url('../font/DokiDokiFont2/DokiDokiFantasia.otf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'DokiDokiFont2';
+ src: url('../font/DokiDokiFont2/DokiDokiFantasia.otf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }
+
 @font-face {
-  font-family: 'KleeOne';
-  src: url('../font/ChalkJP_3/Chalk-JP.otf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+ font-family: 'KleeOne';
+ src: url('../font/ChalkJP_3/Chalk-JP.otf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
 }

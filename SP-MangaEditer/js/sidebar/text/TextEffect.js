@@ -1,7 +1,5 @@
-
 var neonIntensity = 2;
 var isNeonEnabled = false;
-
 
 function rgbToHex(rgb) {
   if (rgb) {
@@ -363,11 +361,15 @@ function isFontAvailableForLanguage(font, text) {
   return newSize !== baselineSize;
 }
 
-function reloadFont() {
-  const primaryFonts = ['KleeOne', 'Arial', 'Comic Sans MS', 'DotGothic16', 'Stick', 'DokiDokiFont2', 'OhisamaFont11', 'RampartOne-Regular', 'TrainOne-Regular', '851MkPOP_101', '851CHIKARA-DZUYOKU_kanaA'];
+function reloadFont(fontId='fontSelector') {
+  var primaryFonts = ['KleeOne', 'Arial', 'Comic Sans MS', 'DotGothic16', 'Stick', 'DokiDokiFont2', 'OhisamaFont11', 'RampartOne-Regular', 'TrainOne-Regular', '851MkPOP_101', '851CHIKARA-DZUYOKU_kanaA'];
   const additionalFonts = ['Arial Black', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Impact', 'Times New Roman', 'Courier', 'Helvetica', 'Courier New', 'Century Gothic', 'Arial Narrow', 'MS PGothic', 'Franklin Gothic Medium', 'Segoe UI', 'Yu Gothic', 'Yu Mincho', 'Meiryo', 'Malgun Gothic', 'MS UI Gothic'];
-  
-  const select = $('fontSelector');
+
+  if( fontId == "fontT2Selector" ){
+    primaryFonts = ['Arial', 'Comic Sans MS', 'OhisamaFont11'];
+  }
+
+  const select = $(fontId);
   
   // Clear existing options
   select.innerHTML = '';
@@ -407,7 +409,8 @@ function reloadFont() {
   }
 }
 document.addEventListener('DOMContentLoaded', function() {
-  reloadFont();
+  reloadFont('fontSelector');
+  
 });
 
 

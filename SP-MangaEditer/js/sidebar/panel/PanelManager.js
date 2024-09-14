@@ -241,16 +241,7 @@ function loadSVGPlusReset(svgString) {
     var bgColorInput = $("bg-color");
     canvas.backgroundColor = bgColorInput.value;
 
-    // console.log("strokeWidth:svgPagging", strokeWidth,":", svgPagging);
-    // console.log("canvas  height:width", canvas.height,":", canvas.width);
-    // console.log("options height:width", options.height,":", options.width);
-    // console.log("canvasUsable height:width", canvasUsableHeight,":", canvasUsableWidth);
-    // console.log("canvas overallScaleX:overallScaleY", overallScaleX,":", overallScaleY);
-    // console.log("offset Y:X", offsetY,":", offsetX);
-
     objects.reverse().forEach(function (obj, index) {
-      // console.log(`Processing object ${index}:`, { type: obj.type, top: obj.top, left: obj.left });
-
       if (obj.type === "path") {
         var points = obj.path.map(function (item) {
           return {
@@ -291,11 +282,6 @@ function loadSVGPlusReset(svgString) {
           return false;
         });
 
-        // console.log(`Polygon ${index} position:`, { 
-        //   top: obj.top * scaleToFit + offsetY, 
-        //   left: obj.left * scaleToFit + offsetX 
-        // });
-        
         var polygon = new fabric.Polygon(vertices, {
           isPanel: true,
           scaleX: scaleToFit,
@@ -321,12 +307,6 @@ function loadSVGPlusReset(svgString) {
         setText2ImageInitPrompt(polygon);
         canvas.add(polygon);
       } else {
-        // console.log(`Object ${index} position:`, { 
-        //   top:  obj.top  * scaleToFit + offsetY, 
-        //   left: obj.left * scaleToFit + offsetX,
-        //   width: obj.width * scaleToFit, 
-        //   height: obj.height * scaleToFit
-        // });
 
         obj.isPanel= true;
         obj.scaleX = scaleToFit;
@@ -347,8 +327,6 @@ function loadSVGPlusReset(svgString) {
         canvas.add(obj);
       }
     });
-
-    // console.log("All objects processed. Canvas dimensions:", { width: canvas.width, height: canvas.height });
 
     panelStrokeChange()
     canvas.renderAll();

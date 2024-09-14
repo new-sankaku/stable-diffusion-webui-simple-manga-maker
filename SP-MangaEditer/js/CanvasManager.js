@@ -4,8 +4,11 @@ var aspectRatio = 0;
 
 let resizeTimer;
 function initResizeCanvas(event) {
-  event.stopPropagation();
-  event.preventDefault();
+  console.log("initResizeCanvas");
+  if(event){
+    event.stopPropagation();
+    event.preventDefault();  
+  }
   var container = $("canvas-container");
   var containerWidth = container.clientWidth;
   var containerHeight = container.clientHeight;
@@ -103,7 +106,7 @@ function adjustCanvasSize(forced) {
   resizeCanvas(newWidth, newHeight);
 }
 
-window.addEventListener("load", initResizeCanvas);
+// window.addEventListener("load", initResizeCanvas);
 window.addEventListener("resize", adjustCanvasSize);
 
 
@@ -137,7 +140,6 @@ var resizableContainer = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
   $('bg-color').addEventListener('input', function (event) {
-    // console.log("$('bg-color').addEventListener('input', function(event) {");
     var color = event.target.value;
     canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
   });

@@ -16,78 +16,78 @@
     </div>
 
     <script>
-const $ = (id) => document.getElementById(id);
-function addEL(a,b,c,d=!1){a.addEventListener(b,c,d)}
+        const $ = (id) => document.getElementById(id);
+        function addEL(a, b, c, d = !1) { a.addEventListener(b, c, d) }
 
 
-const e=$("a"),f=[
-"Initializing core system...",
-"Sun network connection: Failed",
-"Moon network connection: Successful",
-"Authentication process: All green",
-"CO2 emission reduction system: Started",
-"Layer launch: Completed",
-"Canvas launch: Completed",
-"Fabric.js launch: Completed",
-"Effect function initialization: Completed",
-"Font download: Completed",
-"Coordinate measurement: Normal",
-"CSS launch: Normal",
-"Script launch: Normal"
-];
-function g(){
-const a=document.createElement("div");
-a.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;color:#fff;font-size:11px;display:flex;flex-direction:column;z-index:1000;";
-const b=`<svg width="100%" height="100%" style="position:absolute;top:0;left:0;opacity:.2;"><rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="7%" width="86%" height="30%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="39%" width="40%" height="54%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="39%" width="44%" height="25%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="72%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><path d="M 7% 37% L 93% 37% M 47% 39% L 47% 93%" stroke="#aaa" stroke-width="3" fill="none"/></svg>`;
-a.innerHTML=b;
-const c=document.createElement("div");
-c.style.cssText="padding:20px;";
-const d=document.createElement("div");
-d.textContent="PIXELEDITOR PRO",d.style.cssText="font-size:24px;font-weight:700;",c.appendChild(d),a.appendChild(c);
-const e=document.createElement("div");
-e.id="h",e.style.cssText="flex-grow:1;padding:20px;",f.forEach(()=>{const a=document.createElement("div");a.style.cssText="margin:8px 0;height:1em;opacity:.9;",e.appendChild(a)}),a.appendChild(e);
-const g=`<svg width="100%" height="40" style="position:absolute;bottom:0;left:0;opacity:.5;"><defs><g id="i"><path d="M1 13L5 17L17 5L13 1L1 13Z M15 3L13 1L16 4M1 13L4 16" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="j"><path d="M3 17L7 13L15 5L13 3L5 11L1 15L3 17Z M14 4L12 2L16 6" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="k"><path d="M3 15C3 17 5 17 5 15C5 13 7 11 9 9C11 7 13 5 15 3M15 3L13 5M15 3L17 5" stroke="#aaa" stroke-width="1" fill="none"/></g></defs></svg>`,h=document.createElement("div");
-h.style.cssText="position:absolute;bottom:0;left:0;width:100%;height:40px;overflow:hidden;",h.innerHTML=g;
-const l=20,m=Math.ceil(window.innerWidth/l);
-for(let a=0;a<m;a++){const b=document.createElementNS("http://www.w3.org/2000/svg","use");b.setAttributeNS(null,"href",`#${["i","j","k"][a%3]}`),b.setAttributeNS(null,"x",a*l),b.setAttributeNS(null,"y",10),h.querySelector("svg").appendChild(b)}
-a.appendChild(h);
-const p=document.createElementNS("http://www.w3.org/2000/svg","svg");
-p.setAttribute("width","100"),p.setAttribute("height","100"),p.style.cssText="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);";
-const q=document.createElementNS("http://www.w3.org/2000/svg","polygon");
-q.setAttribute("points","50,10 90,30 90,70 50,90 10,70 10,30"),q.setAttribute("stroke","#fff"),q.setAttribute("stroke-width","2"),q.setAttribute("fill","none");
-const r=document.createElementNS("http://www.w3.org/2000/svg","polygon");
-return r.setAttribute("points","50,25 75,75 25,75"),r.setAttribute("stroke","#fff"),r.setAttribute("stroke-width","2"),r.setAttribute("fill","none"),r.style.transformOrigin="center",r.style.animation="n 1s linear infinite",p.appendChild(q),p.appendChild(r),a.appendChild(p),document.body.appendChild(a),{page:a,hexagon:q,triangle:r}
-}
-function h(a,b){
-let c=0;
-function d(){c<b.length&&(a.textContent+=b[c],c++,setTimeout(d,5+5*Math.random()))}
-d()
-}
-function i(a,b){a.setAttribute("stroke","#ffa500"),b.setAttribute("stroke","#ffa500")}
+        const e = $("a"), f = [
+            "Initializing core system...",
+            "Sun network connection: Failed",
+            "Moon network connection: Successful",
+            "Authentication process: All green",
+            "CO2 emission reduction system: Started",
+            "Layer launch: Completed",
+            "Canvas launch: Completed",
+            "Fabric.js launch: Completed",
+            "Effect function initialization: Completed",
+            "Font download: Completed",
+            "Coordinate measurement: Normal",
+            "CSS launch: Normal",
+            "Script launch: Normal"
+        ];
+        function g() {
+            const a = document.createElement("div");
+            a.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;color:#fff;font-size:11px;display:flex;flex-direction:column;z-index:1000;";
+            const b = `<svg width="100%" height="100%" style="position:absolute;top:0;left:0;opacity:.2;"><rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="7%" width="86%" height="30%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="39%" width="40%" height="54%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="39%" width="44%" height="25%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="72%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><path d="M 7% 37% L 93% 37% M 47% 39% L 47% 93%" stroke="#aaa" stroke-width="3" fill="none"/></svg>`;
+            a.innerHTML = b;
+            const c = document.createElement("div");
+            c.style.cssText = "padding:20px;";
+            const d = document.createElement("div");
+            d.textContent = "PIXELEDITOR PRO", d.style.cssText = "font-size:24px;font-weight:700;", c.appendChild(d), a.appendChild(c);
+            const e = document.createElement("div");
+            e.id = "h", e.style.cssText = "flex-grow:1;padding:20px;", f.forEach(() => { const a = document.createElement("div"); a.style.cssText = "margin:8px 0;height:1em;opacity:.9;", e.appendChild(a) }), a.appendChild(e);
+            const g = `<svg width="100%" height="40" style="position:absolute;bottom:0;left:0;opacity:.5;"><defs><g id="i"><path d="M1 13L5 17L17 5L13 1L1 13Z M15 3L13 1L16 4M1 13L4 16" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="j"><path d="M3 17L7 13L15 5L13 3L5 11L1 15L3 17Z M14 4L12 2L16 6" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="k"><path d="M3 15C3 17 5 17 5 15C5 13 7 11 9 9C11 7 13 5 15 3M15 3L13 5M15 3L17 5" stroke="#aaa" stroke-width="1" fill="none"/></g></defs></svg>`, h = document.createElement("div");
+            h.style.cssText = "position:absolute;bottom:0;left:0;width:100%;height:40px;overflow:hidden;", h.innerHTML = g;
+            const l = 20, m = Math.ceil(window.innerWidth / l);
+            for (let a = 0; a < m; a++) { const b = document.createElementNS("http://www.w3.org/2000/svg", "use"); b.setAttributeNS(null, "href", `#${["i", "j", "k"][a % 3]}`), b.setAttributeNS(null, "x", a * l), b.setAttributeNS(null, "y", 10), h.querySelector("svg").appendChild(b) }
+            a.appendChild(h);
+            const p = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            p.setAttribute("width", "100"), p.setAttribute("height", "100"), p.style.cssText = "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);";
+            const q = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            q.setAttribute("points", "50,10 90,30 90,70 50,90 10,70 10,30"), q.setAttribute("stroke", "#fff"), q.setAttribute("stroke-width", "2"), q.setAttribute("fill", "none");
+            const r = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            return r.setAttribute("points", "50,25 75,75 25,75"), r.setAttribute("stroke", "#fff"), r.setAttribute("stroke-width", "2"), r.setAttribute("fill", "none"), r.style.transformOrigin = "center", r.style.animation = "n 1s linear infinite", p.appendChild(q), p.appendChild(r), a.appendChild(p), document.body.appendChild(a), { page: a, hexagon: q, triangle: r }
+        }
+        function h(a, b) {
+            let c = 0;
+            function d() { c < b.length && (a.textContent += b[c], c++, setTimeout(d, 5 + 5 * Math.random())) }
+            d()
+        }
+        function i(a, b) { a.setAttribute("stroke", "#ffa500"), b.setAttribute("stroke", "#ffa500") }
 
-function k(){
-    const{page:a,hexagon:b,triangle:c}=g(),d=a.querySelectorAll("#h div");
-    f.forEach((a,b)=>h(d[b],a));
-    const o=Date.now();
-    
-    window.addEventListener('load', function(){
-        const p=Date.now(),q=Math.max(0,500-(p-o));
-        setTimeout(()=>{
-            i(b,c);
-            a.remove();
-            l();
-        },q);
-    });
-}
-function l(){
-    console.log("l() start");
-$('desu-nav').style.display = 'flex',
-$('head-id').style.display = 'flex',
-$('btm-drawer').style.display = 'block'
-$('a').style.display = 'none'
-}
-function n(){k()}
-n();
+        function k() {
+            const { page: a, hexagon: b, triangle: c } = g(), d = a.querySelectorAll("#h div");
+            f.forEach((a, b) => h(d[b], a));
+            const o = Date.now();
+
+            window.addEventListener('load', function () {
+                const p = Date.now(), q = Math.max(0, 500 - (p - o));
+                setTimeout(() => {
+                    i(b, c);
+                    a.remove();
+                    l();
+                }, q);
+            });
+        }
+        function l() {
+            $('desu-nav').style.display = 'flex',
+            $('head-id').style.display = 'flex',
+            $('btm-drawer').style.display = 'block'
+            $('a').style.display = 'none'
+            initResizeCanvas();
+        }
+        function n() { k() }
+        n();
 
 
 
@@ -146,33 +146,38 @@ n();
         });
     </script>
 
-    <link rel="stylesheet" href="css/css2.css?v=5.2">
-    <link rel="stylesheet" href="css/icon.css?v=5.2">
-    <link rel="stylesheet" href="css/form.css?v=5.2">
-    <link rel="stylesheet" href="css/common.css?v=5.2">
-    <link rel="stylesheet" href="css/components.css?v=5.2">
-    <link rel="stylesheet" href="css/layout.css?v=5.2">
-    <link rel="stylesheet" href="css/ImageControleManager.css?v=5.2">
-    <link rel="stylesheet" href="css/anime.css?v=5.2">
-    <link rel="stylesheet" href="css/layoutLayer.css?v=5.2">
-    <link rel="stylesheet" href="css/toast.css?v=5.2">
-    <link rel="stylesheet" href="css/ui/modeChange.css?v=5.2">
-    <link rel="stylesheet" href="css/ui/objectMenu.css?v=5.2">
-    <link rel="stylesheet" href="css/ui/share.css?v=5.2">
-    <link rel="stylesheet" href="css/ui/flowtingWindow.css?v=5.2">
-    <link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=5.2">
+    <link rel="stylesheet" href="css/css2.css?v=5.3">
+    <link rel="stylesheet" href="css/icon.css?v=5.3">
+    <link rel="stylesheet" href="css/form.css?v=5.3">
+    <link rel="stylesheet" href="css/common.css?v=5.3">
+    <link rel="stylesheet" href="css/components.css?v=5.3">
+    <link rel="stylesheet" href="css/layout.css?v=5.3">
+    <link rel="stylesheet" href="css/ImageControleManager.css?v=5.3">
+    <link rel="stylesheet" href="css/anime.css?v=5.3">
+    <link rel="stylesheet" href="css/layoutLayer.css?v=5.3">
+    <link rel="stylesheet" href="css/toast.css?v=5.3">
+    <link rel="stylesheet" href="css/ui/modeChange.css?v=5.3">
+    <link rel="stylesheet" href="css/ui/objectMenu.css?v=5.3">
+    <link rel="stylesheet" href="css/ui/share.css?v=5.3">
+    <link rel="stylesheet" href="css/ui/flowtingWindow.css?v=5.3">
+    <link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=5.3">
 
-    <link rel="stylesheet" href="css/tippy.css?v=5.2">
-    <link rel="stylesheet" href="third/tippy/tippy.css?v=5.2">
-    <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css?v=5.2">
-    <link rel="stylesheet" href="css/all.min.css?v=5.2">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.3/css/flag-icons.min.css" >
+    <link rel="stylesheet" href="css/tippy.css?v=5.3">
+    <link rel="stylesheet" href="third/tippy/tippy.css?v=5.3">
+    <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css?v=5.3">
+    <link rel="stylesheet" href="css/all.min.css?v=5.3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.3/css/flag-icons.min.css">
 
     <style>
-  @keyframes n {
-    from {transform: rotate(0deg)}
-    to {transform: rotate(360deg)}
-  }
+        @keyframes n {
+            from {
+                transform: rotate(0deg)
+            }
+
+            to {
+                transform: rotate(360deg)
+            }
+        }
 
         .btm-drawer {
             position: fixed;
@@ -266,7 +271,7 @@ n();
 </head>
 
 <body>
-    
+
     <div itemscope itemtype="http://schema.org/SoftwareApplication">
         <meta itemprop="name" content="Manga Editor Desu! Pro Edition">
         <meta itemprop="description"
@@ -645,7 +650,7 @@ n();
                 <i class="material-icons" id="intro_speech-bubble-area1" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
                 <i class="material-icons" id="intro_speech-bubble-area2" onclick="toggleVisibility('speech-bubble-area2');">reviews</i>
                 <i class="material-icons" id="intro_text-area" onclick="toggleVisibility('text-area');">text_format</i>
-                <!-- <i class="material-icons" id="intro_text-area2" onclick="toggleVisibility('text-area2');">text_increase</i> -->
+                <i class="material-icons" id="intro_text-area2" onclick="toggleVisibility('text-area2');">text_increase</i>
                 <i class="material-icons" id="intro_tool-area" onclick="toggleVisibility('tool-area');">brush</i>
                 <i class="material-icons" id="intro_manga-tone-area" onclick="toggleVisibility('manga-tone-area');">blur_linear</i>
                 <i class="material-icons" id="intro_manga-effect-area" onclick="toggleVisibility('manga-effect-area');">filter_b_and_w</i>
@@ -971,11 +976,11 @@ n();
 
                     <hr>
                     <div class="input-group">
-                        <button id="sbSelectButton" data-i18n="sbSelectmode" >Select Mode</button>
-                        <button id="sbPointButton"  data-i18n="sbPointMode" >Point Mode</button>
-                        <button id="sbFreehandButton" data-i18n="sbFreehandMode" >Free Hand</button>
-                        <button id="sbMoveButton" data-i18n="sbMoveMode" >Move Point</button>
-                        <button id="sbDeleteButton" data-i18n="sbDeleteMode" >Delete Point</button>
+                        <button id="sbSelectButton" data-i18n="sbSelectmode">Select Mode</button>
+                        <button id="sbPointButton" data-i18n="sbPointMode">Point Mode</button>
+                        <button id="sbFreehandButton" data-i18n="sbFreehandMode">Free Hand</button>
+                        <button id="sbMoveButton" data-i18n="sbMoveMode">Move Point</button>
+                        <button id="sbDeleteButton" data-i18n="sbDeleteMode">Delete Point</button>
                     </div>
                 </div>
             </div>
@@ -1071,102 +1076,25 @@ n();
 
 
             <div id="text-area2" style="display: none;">
-                <div class="area-header" data-i18n="cutom_text">
-                    <a href="html/Minual/screen-tone.html" target="_blank">
+                <div class="area-header" data-i18n="image_text">
+                    <a href="html/Minual/custom-text.html" target="_blank">
                         Custom Text(Help)
                     </a>
                 </div>
 
                 <div id="text-preview-area2">
-                    <hr>
-                    <div class="input-group">
-                        <label data-i18n="font"></label>
-                        <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="textColor">Text</label>
-                        <input type="color" id="textColorPicker" value="#000000" oninput="changeTextColor(this.value)">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="outlineColor">Outline</label>
-                        <input type="color" id="textOutlineColorPicker" value="#000000"
-                            oninput="changeOutlineTextColor(this.value)">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="fontSize">Size</label>
-                        <input type="number" id="fontSizeSlider" min="7" max="150" value="30"
-                            oninput="changeFontSize(this.value)">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="outlineSize">Outline Size</label>
-                        <input type="number" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1"
-                            oninput="changeStrokeWidthSize(this.value)">
-                    </div>
-                    <div class="input-group-multi">
-                        <button id="align-left" class="selected" onclick="alignText('left')">
-                            <i class="material-icons">format_align_left</i>
-                        </button>
-                        <button id="align-center" onclick="alignText('center')">
-                            <i class="material-icons">format_align_center</i>
-                        </button>
-                        <button id="align-right" onclick="alignText('right')">
-                            <i class="material-icons">format_align_right</i>
-                        </button>
-                    </div>
-                    <hr>
-                    <button onclick="createTextbox()">
-                        <i class="material-icons">text_fields</i>
-                        <i class="material-icons">east</i>
-                        <span data-i18n="newText">New Text</span>
-                    </button>
-                    <button id="openWindow">
-                        <i class="material-icons">text_fields</i>
-                        <i class="material-icons">south</i>
-                        <span data-i18n="newText">New Text</span>
-                    </button>
-                    <button onclick="toggleBold()">
-                        <i class="material-icons">format_bold</i>
-                        <span data-i18n="bold">Bold</span>
-                    </button>
-                    <hr>
-                    <label data-i18n="effects">Effects</label>
-                    <div class="input-group">
-                        <label data-i18n="firstColor">First Color:</label>
-                        <input type="color" id="firstTextEffectColorPicker" value="#F58220"
-                            oninput="changeNeonColor(this.value)">
-                    </div>
-                    <div class="input-group">
-                        <label data-i18n="secondColor">Second Color:</label>
-                        <input type="color" id="secondTextEffectColorPicker" value="#ff8080"
-                            oninput="changeNeonColor(this.value)">
-                    </div>
-                    <hr>
-                    <button onclick="applyCSSTextEffect()">
-                        <i class="material-icons">deblur</i>
+                    <button id="shadowButton" onclick="switchText2('shadow')">
                         <span data-i18n="shadow">Shadow</span>
+                        <img src="03_images/preset/text/t2_shadow.webp" style="width: 100%;">
                     </button>
-                    <button onclick="applyVividGradientEffect()">
-                        <i class="material-icons">filter</i>
-                        <span data-i18n="vividGradient">Vivid Gradient</span>
-                    </button>
-                    <button onclick="applyNeonEffect()">
-                        <i class="material-icons">flare</i>
-                        <span data-i18n="neon">Neon</span>
-                    </button>
-                    <hr>
-                    <label>Sample123</label>
-                    <label>参考さんサン１２３</label>
-                    <label>샘플 / 样本</label>
-                    <label>échantillon</label>
-                    <label>образец</label>
-                    <label>عينة / ตัวอย่าง</label>
                 </div>
+                <hr>
+                <div id="text-area2-settings"></div>
             </div>
 
 
 
-            <div id="tool-area">
+            <div id="tool-area" style="display: none;">
                 <div class="area-header" data-i18n="tools">Tools</div>
                 <div id="tool-buttons">
                     <button id="PencilButton" onclick="switchPencilType('Pencil')">
@@ -1211,7 +1139,7 @@ n();
 
 
 
-            
+
             <div id="manga-tone-area">
                 <div class="area-header">
                     <a href="html/Minual/screen-tone.html" target="_blank">
@@ -1245,12 +1173,12 @@ n();
             </div>
 
 
-            
+
             <div id="manga-effect-area">
                 <div class="area-header">
                     <a href="html/Minual/effect.html" target="_blank">
                         Effect (Help)
-                    </a>    
+                    </a>
                 </div>
                 <div id="manga-effect-buttons">
                     <button id="Color2BlackWhiteButton" onclick="switchMangaEffect('Color2BlackWhite')">
@@ -1263,7 +1191,7 @@ n();
                 <div id="manga-effect-settings"></div>
             </div>
 
-            
+
 
 
             <div id="shape-area" style="display: none;">
@@ -1535,7 +1463,8 @@ n();
                     <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
                     <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span
                             data-i18n="baseT2I">Base T2I</span></button>
-                    <button onclick="View()"><i class="material-icons">document_scanner</i><span data-i18n="promptView">View</span></button>
+                    <button onclick="View()"><i class="material-icons">document_scanner</i><span
+                            data-i18n="promptView">View</span></button>
                 </div>
                 <div id="canvas-buttons">
                     <button id="undo" onclick="undo()">
@@ -1984,94 +1913,97 @@ n();
     <div id="sp-manga-toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; min-width: 250px;">
     </div>
 
-    <script src="third/glfx/glfx.js?v=5.2"></script>
-    <script src="third/Fabric.js/fabric.min.js?v=5.2"></script>
-    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=5.2"></script>
-    <script src="third/i18next/i18next.min.js?v=5.2"></script>
-    <script src="third/jsts/jsts.min.js?v=5.2"></script>
-    <script src="third/browser-image-compression/browser-image-compression.js?v=5.2"></script>
-    <script src="third/intro/intro.min.js?v=5.2"></script>
-    <script src="third/lodash/lodash.min.js?v=5.2" defer></script>
-    <script src="js/fabric/dist/fabric-brush.min.js?v=5.2"></script>
-    <script src="js/fabric/brushes/ink_brush.js?v=5.2"></script>
-    <script src="js/fabric/brushes/outlineBrush.js?v=5.2"></script>
-    <link rel="stylesheet" href="third/intro/introjs.min.css?v=5.2">
-    <link rel="stylesheet" href="css/ui/intro.css?v=5.2">
-    <script src="third/tippy/popper.min.js?v=5.2"></script>
-    <script src="third/tippy/tippy-bundle.umd.min.js?v=5.2"></script>
+    <script src="third/glfx/glfx.js?v=5.3"></script>
+    <script src="third/Fabric.js/fabric.min.js?v=5.3"></script>
+    <script src="third/Fabric.js/fabric.min_PlusEraser.js?v=5.3"></script>
+    <script src="third/i18next/i18next.min.js?v=5.3"></script>
+    <script src="third/jsts/jsts.min.js?v=5.3"></script>
+    <script src="third/browser-image-compression/browser-image-compression.js?v=5.3"></script>
+    <script src="third/intro/intro.min.js?v=5.3"></script>
+    <script src="third/lodash/lodash.min.js?v=5.3" defer></script>
+    <script src="js/fabric/dist/fabric-brush.min.js?v=5.3"></script>
+    <script src="js/fabric/brushes/ink_brush.js?v=5.3"></script>
+    <script src="js/fabric/brushes/outlineBrush.js?v=5.3"></script>
+    <link rel="stylesheet" href="third/intro/introjs.min.css?v=5.3">
+    <link rel="stylesheet" href="css/ui/intro.css?v=5.3">
+    <script src="third/tippy/popper.min.js?v=5.3"></script>
+    <script src="third/tippy/tippy-bundle.umd.min.js?v=5.3"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script> -->
-    <link rel="stylesheet" href="css/styles-css.css?v=5.2">
-    <script src="js/Settings.js?v=5.2" defer></script>
-    <script src="third/jszip/jszip.min.js?v=5.2" defer></script>
-    <script src="third/crypto-js/crypto-js.min.js?v=5.2"></script>
-    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=5.2"></script>
+    <link rel="stylesheet" href="css/styles-css.css?v=5.3">
+    <script src="js/Settings.js?v=5.3" defer></script>
+    <script src="third/jszip/jszip.min.js?v=5.3" defer></script>
+    <script src="third/crypto-js/crypto-js.min.js?v=5.3"></script>
+    <script src="third/Bootstrup/bootstrap.bundle.min.js?v=5.3"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    <script src="js/ui/canvasObjectMenu.js?v=5.2" defer></script>
-    <script src="js/ui/intro.js?v=5.2" defer></script>
-    <script src="js/ui/Toast.js?v=5.2" defer></script>
-    <script src="js/ui/tippy.js?v=5.2" defer></script>
-    <script src="js/ui/i18next.js?v=5.2" defer></script>
-    <script src="js/ui/modeChange.js?v=5.2" defer></script>
-    <script src="js/ui/flowtingWindow.js?v=5.2" defer></script>
-    <script src="js/html-component/hc-ImagePromptHelper.js?v=5.2" defer></script>
-    <script src="js/ImagePromptHelper.js?v=5.2" defer></script>
-    <script src="js/util/LoadUtil.js?v=5.2" defer></script>
+    <script src="js/ui/canvasObjectMenu.js?v=5.3" defer></script>
+    <script src="js/ui/intro.js?v=5.3" defer></script>
+    <script src="js/ui/Toast.js?v=5.3" defer></script>
+    <script src="js/ui/tippy.js?v=5.3" defer></script>
+    <script src="js/ui/i18next.js?v=5.3" defer></script>
+    <script src="js/ui/modeChange.js?v=5.3" defer></script>
+    <script src="js/ui/flowtingWindow.js?v=5.3" defer></script>
+    <script src="js/html-component/hc-ImagePromptHelper.js?v=5.3" defer></script>
+    <script src="js/ImagePromptHelper.js?v=5.3" defer></script>
+    <script src="js/util/LoadUtil.js?v=5.3" defer></script>
 
-    <script src="js/util/FabricUtil.js?v=5.2" defer></script>
-    <script src="js/util/ImageUtil.js?v=5.2" defer></script>
-    <script src="js/util/AnimeUtil.js?v=5.2" defer></script>
-    <script src="js/util/ShareUtil.js?v=5.2" defer></script>
-    <script src="js/util/LogUtil.js?v=5.2" defer></script>
-    <script src="js/CanvasManager.js?v=5.2" defer></script>
-    <script src="js/ProjectManagement.js?v=5.2" defer></script>
-    <script src="js/Shortcut.js?v=5.2" defer></script>
-    <script src="js/panel/Grid.js?v=5.2" defer></script>
-    <script src="js/sidebar/panel/PanelManager.js?v=5.2" defer></script>
-    <script src="js/sidebar/panel/PanelTemplate.js?v=5.2" defer></script>
-    <script src="js/PromptManager.js?v=5.2" defer></script>
-    <script src="js/ai/queue/Spinner.js?v=5.2" defer></script>
-    <script src="js/ai/queue/TaskQueue.js?v=5.2" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=5.2" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=5.2" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=5.2" defer></script>
+    <script src="js/util/FabricUtil.js?v=5.3" defer></script>
+    <script src="js/util/ImageUtil.js?v=5.3" defer></script>
+    <script src="js/util/AnimeUtil.js?v=5.3" defer></script>
+    <script src="js/util/ShareUtil.js?v=5.3" defer></script>
+    <script src="js/util/LogUtil.js?v=5.3" defer></script>
+    <script src="js/CanvasManager.js?v=5.3" defer></script>
+    <script src="js/ProjectManagement.js?v=5.3" defer></script>
+    <script src="js/Shortcut.js?v=5.3" defer></script>
+    <script src="js/panel/Grid.js?v=5.3" defer></script>
+    <script src="js/sidebar/panel/PanelManager.js?v=5.3" defer></script>
+    <script src="js/sidebar/panel/PanelTemplate.js?v=5.3" defer></script>
+    <script src="js/PromptManager.js?v=5.3" defer></script>
+    <script src="js/ai/queue/Spinner.js?v=5.3" defer></script>
+    <script src="js/ai/queue/TaskQueue.js?v=5.3" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=5.3" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=5.3" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=5.3" defer></script>
     <script src="js/ai/ComfyuiManagement.js" defer></script>
-    <script src="js/ai/GenerativeAI.js?v=5.2" defer></script>
-    <script src="js/layer/FloatingWindowManagement.js?v=5.2" defer></script>
-    <script src="js/layer/LayerAIManagement.js?v=5.2" defer></script>
-    <script src="js/layer/LayerManagement.js?v=5.2" defer></script>
-    <script src="js/layer/ImageHistoryManagement.js?v=5.2" defer></script>
-    <script src="js/sidebar/SidebarUi.js?v=5.2" defer></script>
-    <script src="js/sidebar/Sidebar.js?v=5.2" defer></script>
-    <script src="js/sidebar/text/TextEffect.js?v=5.2" defer></script>
-    <script src="js/sidebar/text/VerticalText.js?v=5.2" defer></script>
-    <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=5.2" defer></script>
-    <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=5.2" defer></script>
-    <script src="js/sidebar/pen/OriginalBrush.js?v=5.2" defer></script>
-    <script src="js/sidebar/pen/PenTools.js?v=5.2" defer></script>
-    <script src="js/sidebar/tone/ToneManager.js?v=5.2" defer></script>
-    <script src="js/sidebar/tone/speedline.js?v=5.2" defer></script>
-    <script src="js/sidebar/tone/focusline.js?v=5.2" defer></script>
-    <script src="js/sidebar/tone/tone.js?v=5.2" defer></script>
-    <script src="js/sidebar/tone/toneNoise.js?v=5.2" defer></script>
-    <script src="js/sidebar/tone/snowTone.js?v=5.2" defer></script>
+    <script src="js/ai/GenerativeAI.js?v=5.3" defer></script>
+    <script src="js/layer/FloatingWindowManagement.js?v=5.3" defer></script>
+    <script src="js/layer/LayerAIManagement.js?v=5.3" defer></script>
+    <script src="js/layer/LayerManagement.js?v=5.3" defer></script>
+    <script src="js/layer/ImageHistoryManagement.js?v=5.3" defer></script>
+    <script src="js/sidebar/SidebarUi.js?v=5.3" defer></script>
+    <script src="js/sidebar/Sidebar.js?v=5.3" defer></script>
+    <script src="js/sidebar/text/TextEffect.js?v=5.3" defer></script>
+    <script src="js/sidebar/text/VerticalText.js?v=5.3" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=5.3" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=5.3" defer></script>
+    <script src="js/sidebar/pen/OriginalBrush.js?v=5.3" defer></script>
+    <script src="js/sidebar/pen/PenTools.js?v=5.3" defer></script>
+    <script src="js/sidebar/tone/ToneManager.js?v=5.3" defer></script>
+    <script src="js/sidebar/tone/speedline.js?v=5.3" defer></script>
+    <script src="js/sidebar/tone/focusline.js?v=5.3" defer></script>
+    <script src="js/sidebar/tone/tone.js?v=5.3" defer></script>
+    <script src="js/sidebar/tone/toneNoise.js?v=5.3" defer></script>
+    <script src="js/sidebar/tone/snowTone.js?v=5.3" defer></script>
 
-    <script src="js/sidebar/effect/EffectManager.js?v=5.2" defer></script>
-    <script src="js/sidebar/effect/c2bw_tone.js?v=5.2" defer></script>
+    <script src="js/sidebar/text/Text2Manager.js?v=5.3" defer></script>
+    <script src="js/sidebar/text/CustomShadowText.js?v=5.3" defer></script>
+
+    <script src="js/sidebar/effect/EffectManager.js?v=5.3" defer></script>
+    <script src="js/sidebar/effect/c2bw_tone.js?v=5.3" defer></script>
 
 
-    <script src="js/sidebar/panel/Knife.js?v=5.2" defer></script>
-    <script src="js/controle/CommonControleManagement.js?v=5.2" defer></script>
-    <script src="js/controle/ImageControleManager.js?v=5.2" defer></script>
-    <script src="js/controle/InfomationControle.js?v=5.2" defer></script>
-    <script src="js/controle/glfxControle.js?v=5.2" defer></script>
-    <script src="js/io/ImageDownload.js?v=5.2" defer></script>
-    <!-- <script src="js/effect/roughHelper.js?v=5.2" defer></script> -->
-    <script src="js/event/FabricManagement.js?v=5.2" defer></script>
-    <script src="js/svg/GoogleIconNames.js?v=5.2"></script>
-    <script src="js/svg/GoogleIconHelper.js?v=5.2"></script>
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=5.2" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=5.2" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=5.2" defer></script>
+    <script src="js/sidebar/panel/Knife.js?v=5.3" defer></script>
+    <script src="js/controle/CommonControleManagement.js?v=5.3" defer></script>
+    <script src="js/controle/ImageControleManager.js?v=5.3" defer></script>
+    <script src="js/controle/InfomationControle.js?v=5.3" defer></script>
+    <script src="js/controle/glfxControle.js?v=5.3" defer></script>
+    <script src="js/io/ImageDownload.js?v=5.3" defer></script>
+    <!-- <script src="js/effect/roughHelper.js?v=5.3" defer></script> -->
+    <script src="js/event/FabricManagement.js?v=5.3" defer></script>
+    <script src="js/svg/GoogleIconNames.js?v=5.3"></script>
+    <script src="js/svg/GoogleIconHelper.js?v=5.3"></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=5.3" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=5.3" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=5.3" defer></script>
 
 
     <script>
@@ -2107,13 +2039,13 @@ n();
                 var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
                 var zip = generateZip();
                 zip.generateAsync({ type: "blob" })
-                .then(function (content) {
-                    btmAddImage(previewLink, content, guid);
-                    resolve();
-                })
-                .catch(function (error) {
-                    reject(error);
-                });
+                    .then(function (content) {
+                        btmAddImage(previewLink, content, guid);
+                        resolve();
+                    })
+                    .catch(function (error) {
+                        reject(error);
+                    });
             });
         }
 
@@ -2121,7 +2053,7 @@ n();
         function btmAddImage(imageLink, zipBlob, guid) {
             const zipData = btmImageZipMap.get(guid);
 
-            if ( zipData ) {
+            if (zipData) {
                 btmImageZipMap.set(guid, { imageLink, zipBlob });
                 const image = document.querySelector(`.btm-image[data-index="${guid}"]`);
                 if (image) {

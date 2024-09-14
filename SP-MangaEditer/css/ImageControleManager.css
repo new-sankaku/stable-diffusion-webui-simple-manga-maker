@@ -2,108 +2,108 @@
 
 
 .glfxControls {
-  margin-top: var(--margin-top-base);
+ margin-top: var(--margin-top-base);
 }
 
 .glfxCcontrol-group {
-  display: none;
-  margin-top: var(--margin-top-group);
+ display: none;
+ margin-top: var(--margin-top-group);
 }
 
 #controls {
-  font-size: var(--font-size-controls);
-  min-width: var(--min-width-controls);
-  max-width: var(--max-width-controls);
-  margin-left: var(--margin-sides-controls);
-  margin-right: var(--margin-sides-controls);
+ font-size: var(--font-size-controls);
+ min-width: var(--min-width-controls);
+ max-width: var(--max-width-controls);
+ margin-left: var(--margin-sides-controls);
+ margin-right: var(--margin-sides-controls);
 }
 
 .panel {
-  padding-left: var(--padding-sides-panel);
-  padding-right: var(--padding-sides-panel);
-  margin-bottom: var(--margin-bottom-panel);
+ padding-left: var(--padding-sides-panel);
+ padding-right: var(--padding-sides-panel);
+ margin-bottom: var(--margin-bottom-panel);
 }
 
 .control-item {
-  margin-top: var(--margin-top-item);
+ margin-top: var(--margin-top-item);
 }
 
-.control-item label{
-  margin-top: 0px;
-  margin-bottom: 0px;
+.control-item label {
+ margin-top: 0px;
+ margin-bottom: 0px;
 }
 
 .control-row {
-  display: flex;
-  align-items: center;
-  margin-top: var(--margin-top-item);
+ display: flex;
+ align-items: center;
+ margin-top: var(--margin-top-item);
 }
 
 .control-row label {
-  flex: 0 0 var(--flex-label-width);
-  margin: 0;
+ flex: 0 0 var(--flex-label-width);
+ margin: 0;
 }
 
 .control-row input[type="range"] {
-  flex: 1;
-  width: var(--input-range-width);
+ flex: 1;
+ width: var(--input-range-width);
 }
 
 .control-row input[type="color"] {
-  width: var(--input-color-width);
-  height: var(--input-color-height);
-  margin: 0;
+ width: var(--input-color-width);
+ height: var(--input-color-height);
+ margin: 0;
 }
 
 .control-row span {
-  flex: 0 0 var(--flex-span-width);
-  text-align: right;
-  margin-left: var(--margin-sides-controls);
+ flex: 0 0 var(--flex-span-width);
+ text-align: right;
+ margin-left: var(--margin-sides-controls);
 }
 
 .control-row button {
-  margin-right: var(--margin-sides-controls);
-  color: white;
+ margin-right: var(--margin-sides-controls);
+ color: white;
 }
 
 .panel-header {
-  font-weight: var(--font-weight-header);
-  margin-bottom: var(--margin-bottom-header);
-  text-align: center;
-  cursor: pointer;
+ font-weight: var(--font-weight-header);
+ margin-bottom: var(--margin-bottom-header);
+ text-align: center;
+ cursor: pointer;
 }
 
 .separator {
-  margin: var(--margin-sides-separator) 0;
+ margin: var(--margin-sides-separator) 0;
 }
 
 .radio-options {
-  display: flex;
-  justify-content: space-between;
+ display: flex;
+ justify-content: space-between;
 }
 
 .radio-options label {
-  margin-right: var(--margin-sides-controls);
+ margin-right: var(--margin-sides-controls);
 }
 
 .collapse-icon {
-  margin-left: var(--margin-sides-controls);
-  transition: var(--transition-collapse-icon);
+ margin-left: var(--margin-sides-controls);
+ transition: var(--transition-collapse-icon);
 }
 
 .collapsed .collapse-icon {
-  transform: rotate(180deg);
+ transform: rotate(180deg);
 }
 
 .control-content {
-  display: block;
+ display: block;
 }
 
 .control-content.hidden {
-  display: none;
+ display: none;
 }
 
 .toggle-button {
-  cursor: pointer;
-  margin-left: var(--margin-left-toggle);
+ cursor: pointer;
+ margin-left: var(--margin-left-toggle);
 }

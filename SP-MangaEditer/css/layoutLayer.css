@@ -1,54 +1,55 @@
 @import url('root.css');
 
 #layer-content {
-  overflow-y: auto;
-  border: var(--border-2px-solid);
-  height: var(--height-85vh);
-  margin-bottom: var(--margin-bottom-5px);
+ overflow-y: auto;
+ border: var(--border-2px-solid);
+ height: var(--height-85vh);
+ margin-bottom: var(--margin-bottom-5px);
 }
 
 .layer-item {
-  display: flex;
-  align-items: center;
-  padding: var(--padding-5px);
-  border-bottom: var(--boader-color-1px-solid-A);
-  transition: var(--transition-bg-color);
+ display: flex;
+ align-items: center;
+ padding: var(--padding-5px);
+ border-bottom: var(--boader-color-1px-solid-A);
+ transition: var(--transition-bg-color);
 }
 
 
-.layer-item:hover, .layer-item.active {
-  background-color: var(--active-background-color-D);
+.layer-item:hover,
+.layer-item.active {
+ background-color: var(--active-background-color-D);
 }
 
 .layer-preview {
-  width: var(--layer-preview-width);
-  height: var(--layer-preview-height);
-  margin-right: var(--margin-right-5px);
-  background-size: var(--bg-size-contain);
-  background-repeat: var(--bg-repeat-no);
-  background-position: var(--bg-position-center); 
+ width: var(--layer-preview-width);
+ height: var(--layer-preview-height);
+ margin-right: var(--margin-right-5px);
+ background-size: var(--bg-size-contain);
+ background-repeat: var(--bg-repeat-no);
+ background-position: var(--bg-position-center);
 }
 
 .layer-details {
-  flex: var(--flex-2);
+ flex: var(--flex-2);
 }
 
 .layer-name {
-  font-size: var(--font-size-base);
-  flex-grow: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+ font-size: var(--font-size-base);
+ flex-grow: 1;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
 }
 
 .layer-buttons {
-  margin: var(--margin-5px);
+ margin: var(--margin-5px);
 }
 
 #layer-panel {
-  min-width: var(--min-width-layer-panel);
-  max-width: var(--max-width-layer-panel);
-  flex: var(--flex-layer-panel);
-  max-width: var(--max-width-layer-panel-large);
-  min-width: var(--min-width-layer-panel-small);
+ min-width: var(--min-width-layer-panel);
+ max-width: var(--max-width-layer-panel);
+ flex: var(--flex-layer-panel);
+ max-width: var(--max-width-layer-panel-large);
+ min-width: var(--min-width-layer-panel-small);
 }

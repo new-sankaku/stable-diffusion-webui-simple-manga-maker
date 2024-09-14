@@ -4,7 +4,19 @@
 const resources = {
   en: {
     translation: {
-      
+"image_text":"Image Text",
+"Text":"Text",
+"FontSize":"Size",
+"LineHeight":"Line Height",
+"LetterSpacing":"Letter Spacing",
+"ShadowSize1":"Shadow Size 1",
+"ShadowOpacity1":"Shadow Opacity 1",
+"ShadowColor1":"Shadow Color 1",
+"ShadowSize2":"Shadow Size 2",
+"ShadowOpacity2":"Shadow Opacity 2",
+"ShadowColor2":"Shadow Color 2",
+"TextColor":"Fill",
+"FillOpacity":"Fill Opacity",
 "checSD_WebUI_Announce": "<h9>If Model, Sampler, or Upscaler are not displayed, please double-check your connection to the SD WebUI. You will need to check the SD WebUI port, IP and API connection settings in the menu.<h9>",
 "checkSD_webUI_Text": "Failed to connect to SD WebUI. Please check the API connection settings from the SD WebUI menu.",
 "visibleOn": "Visible",
@@ -452,6 +464,20 @@ const resources = {
   },
   ja: {
     translation: { 
+"image_text":"イメージテキスト",
+"Text":"テキスト",
+"FontSize":"サイズ",
+"LineHeight":"行の高さ",
+"LetterSpacing":"文字間隔",
+"ShadowSize1":"1影サイズ",
+"ShadowOpacity1":"1影不透明",
+"ShadowColor1":"1影色",
+"ShadowSize2":"2影サイズ",
+"ShadowOpacity2":"2影不透明",
+"ShadowColor2":"2影色",
+"TextColor":"塗り",
+"FillOpacity":"塗り不透明",
+
       "checSD_WebUI_Announce": "<h9>モデル、サンプラー、またはアップスケーラーが表示されない場合は、SD WebUIへの接続を再確認してください。メニューでSD WebUIのポート、IP、API接続設定を確認する必要があります。<h9>",
 "checkSD_webUI_Text": "SD WebUIへの接続に失敗。メニューのSD WebUIからAPI接続設定を確認してください。",
 "visibleOn": "表示",
@@ -813,7 +839,21 @@ const resources = {
     }
   },
   ko: {
-    translation: {"checSD_WebUI_Announce": "<h9>모델, 샘플러 또는 업스케일러가 표시되지 않으면 SD WebUI 연결을 다시 확인하십시오. 메뉴에서 SD WebUI 포트, IP 및 API 연결 설정을 확인해야 합니다.<h9>",
+translation: {
+"image_text":"이미지 텍스트",
+"Text":"텍스트",
+"FontSize":"크기",
+"LineHeight":"행 높이",
+"LetterSpacing":"글자 간격",
+"ShadowSize1":"1 그림자 크기",
+"ShadowOpacity1":"1 그림자 투명도",
+"ShadowColor1":"1 그림자 색",
+"ShadowSize2":"2 그림자 크기",
+"ShadowOpacity2":"2 그림자 투명도",
+"ShadowColor2":"2 그림자 색",
+"TextColor":"채우기",
+"FillOpacity":"채우기 투명도",
+  "checSD_WebUI_Announce": "<h9>모델, 샘플러 또는 업스케일러가 표시되지 않으면 SD WebUI 연결을 다시 확인하십시오. 메뉴에서 SD WebUI 포트, IP 및 API 연결 설정을 확인해야 합니다.<h9>",
 "checkSD_webUI_Text": "SD WebUI 연결에 실패했습니다. SD WebUI 메뉴에서 API 연결 설정을 확인하세요.",
 "visibleOn": "표시",
 "visibleOff": "비표시",
@@ -1183,7 +1223,20 @@ const resources = {
     }
   },
   fr: {
-    translation: {   
+    translation: {
+"image_text":"Texte d'image",
+"Text":"Texte",
+"FontSize":"Taille",
+"LineHeight":"Hauteur de ligne",
+"LetterSpacing":"Espacement des lettres",
+"ShadowSize1":"Taille ombre 1",
+"ShadowOpacity1":"Opacité ombre 1",
+"ShadowColor1":"Couleur ombre 1",
+"ShadowSize2":"Taille ombre 2",
+"ShadowOpacity2":"Opacité ombre 2",
+"ShadowColor2":"Couleur ombre 2",
+"TextColor":"Remplissage",
+"FillOpacity":"Opacité du remplissage",
 "checSD_WebUI_Announce": "<h9>Si le Modèle, le Sampler ou l'Upscaler ne sont pas affichés, veuillez vérifier votre connexion au SD WebUI. Vous devrez vérifier les paramètres de port, d'IP et de connexion API du SD WebUI dans le menu.<h9>"
 ,
 "checkSD_webUI_Text": "Échec de la connexion à SD WebUI. Veuillez vérifier les paramètres de connexion API depuis le menu SD WebUI.",
@@ -1591,7 +1644,20 @@ const resources = {
   },
   zh: {
     translation: {
-      "checSD_WebUI_Announce": "<h9>如果模型、采样器或放大器未显示，请仔细检查您与SD WebUI的连接。您需要在菜单中检查SD WebUI的端口、IP和API连接设置。<h9>"
+"image_text":"图片文字",
+"Text":"文字",
+"FontSize":"字号",
+"LineHeight":"行高",
+"LetterSpacing":"字间距",
+"ShadowSize1":"阴影大小 1",
+"ShadowOpacity1":"阴影不透明度 1",
+"ShadowColor1":"阴影颜色 1",
+"ShadowSize2":"阴影大小 2",
+"ShadowOpacity2":"阴影不透明度 2",
+"ShadowColor2":"阴影颜色 2",
+"TextColor":"填充",
+"FillOpacity":"填充不透明度",
+"checSD_WebUI_Announce": "<h9>如果模型、采样器或放大器未显示，请仔细检查您与SD WebUI的连接。您需要在菜单中检查SD WebUI的端口、IP和API连接设置。<h9>"
 ,
 "checkSD_webUI_Text": "连接SD WebUI失败。请从SD WebUI菜单检查API连接设置。",
 "visibleOn": "显示",
@@ -1995,8 +2061,21 @@ const resources = {
     }
   },
   ru: {
-    translation: { 
-      "checSD_WebUI_Announce": "<h9>Если модель, семплер или увеличитель не отображаются, пожалуйста, проверьте подключение к SD WebUI. Вам нужно проверить настройки порта SD WebUI, IP и API подключения в меню.<h9>"
+    translation: {
+"image_text":"Текст изображения",
+"Text":"Текст",
+"FontSize":"Размер",
+"LineHeight":"Высота строки",
+"LetterSpacing":"Межбуквенный интервал",
+"ShadowSize1":"Размер тени 1",
+"ShadowOpacity1":"Прозрачность тени 1",
+"ShadowColor1":"Цвет тени 1",
+"ShadowSize2":"Размер тени 2",
+"ShadowOpacity2":"Прозрачность тени 2",
+"ShadowColor2":"Цвет тени 2",
+"TextColor":"Заливка",
+"FillOpacity":"Прозрачность заливки",
+"checSD_WebUI_Announce": "<h9>Если модель, семплер или увеличитель не отображаются, пожалуйста, проверьте подключение к SD WebUI. Вам нужно проверить настройки порта SD WebUI, IP и API подключения в меню.<h9>"
 ,
 "checkSD_webUI_Text": "Не удалось подключиться к SD WebUI. Проверьте настройки подключения API в меню SD WebUI.",
 "visibleOn": "Видимый",
@@ -2352,8 +2431,21 @@ const resources = {
     }
   },
   es: {
-    translation: { 
-      "checSD_WebUI_Announce": "<h9>Si el Modelo, el Sampler o el Upscaler no se muestran, por favor verifica tu conexión con el SD WebUI. Necesitarás comprobar la configuración del puerto, IP y conexión API del SD WebUI en el menú.<h9>",
+    translation: {
+"image_text":"Texto de imagen",
+"Text":"Texto",
+"FontSize":"Tamaño",
+"LineHeight":"Altura de línea",
+"LetterSpacing":"Espaciado entre letras",
+"ShadowSize1":"Tamaño de sombra 1",
+"ShadowOpacity1":"Opacidad de sombra 1",
+"ShadowColor1":"Color de sombra 1",
+"ShadowSize2":"Tamaño de sombra 2",
+"ShadowOpacity2":"Opacidad de sombra 2",
+"ShadowColor2":"Color de sombra 2",
+"TextColor":"Relleno",
+"FillOpacity":"Opacidad del relleno",
+"checSD_WebUI_Announce": "<h9>Si el Modelo, el Sampler o el Upscaler no se muestran, por favor verifica tu conexión con el SD WebUI. Necesitarás comprobar la configuración del puerto, IP y conexión API del SD WebUI en el menú.<h9>",
 "checkSD_webUI_Text": "Error al conectar con SD WebUI. Verifique la configuración de conexión de la API en el menú SD WebUI.",
 "visibleOn": "Visible",
 "visibleOff": "No visible",
@@ -2706,8 +2798,21 @@ const resources = {
     }
   },
   pt: {
-    translation: { 
-      "checSD_WebUI_Announce": "<h9>Se o Modelo, o Sampler ou o Upscaler não estiverem sendo exibidos, verifique sua conexão com o SD WebUI. Você precisará verificar as configurações de porta, IP e conexão da API no menu.<h9>",
+    translation: {
+"image_text":"Texto da imagem",
+"Text":"Texto",
+"FontSize":"Tamanho",
+"LineHeight":"Altura da linha",
+"LetterSpacing":"Espaçamento de letras",
+"ShadowSize1":"Tamanho da sombra 1",
+"ShadowOpacity1":"Opacidade da sombra 1",
+"ShadowColor1":"Cor da sombra 1",
+"ShadowSize2":"Tamanho da sombra 2",
+"ShadowOpacity2":"Opacidade da sombra 2",
+"ShadowColor2":"Cor da sombra 2",
+"TextColor":"Preenchimento",
+"FillOpacity":"Opacidade do preenchimento",
+"checSD_WebUI_Announce": "<h9>Se o Modelo, o Sampler ou o Upscaler não estiverem sendo exibidos, verifique sua conexão com o SD WebUI. Você precisará verificar as configurações de porta, IP e conexão da API no menu.<h9>",
 "checkSD_webUI_Text": "Falha ao conectar com o SD WebUI. Verifique as configurações da conexão API no menu SD WebUI.",
 "visibleOn": "Visível",
 "visibleOff": "Não visível",
@@ -3061,7 +3166,20 @@ const resources = {
     }
   },
 th: {
-  "checSD_WebUI_Announce": "<h9>หากไม่แสดง Model, Sampler หรือ Upscaler โปรดตรวจสอบการเชื่อมต่อกับ SD WebUI ของคุณอีกครั้ง คุณจะต้องตรวจสอบการตั้งค่าการเชื่อมต่อพอร์ต IP และ API ของ SD WebUI ในเมนู<h9>"
+"image_text":"ข้อความรูปภาพ",
+"Text":"ข้อความ",
+"FontSize":"ขนาด",
+"LineHeight":"ความสูงบรรทัด",
+"LetterSpacing":"ระยะห่างตัวอักษร",
+"ShadowSize1":"ขนาดเงา 1",
+"ShadowOpacity1":"ความทึบเงา 1",
+"ShadowColor1":"สีเงา 1",
+"ShadowSize2":"ขนาดเงา 2",
+"ShadowOpacity2":"ความทึบเงา 2",
+"ShadowColor2":"สีเงา 2",
+"TextColor":"เติม",
+"FillOpacity":"ความทึบของการเติม",
+"checSD_WebUI_Announce": "<h9>หากไม่แสดง Model, Sampler หรือ Upscaler โปรดตรวจสอบการเชื่อมต่อกับ SD WebUI ของคุณอีกครั้ง คุณจะต้องตรวจสอบการตั้งค่าการเชื่อมต่อพอร์ต IP และ API ของ SD WebUI ในเมนู<h9>"
 ,
 "checkSD_webUI_Text": "ไม่สามารถเชื่อมต่อกับ SD WebUI ได้ โปรดตรวจสอบการตั้งค่าการเชื่อมต่อ API จากเมนู SD WebUI",
 "translation": { 
@@ -3510,7 +3628,7 @@ function changeLanguage(lng, event) {
       console.error('Failed to change language:', err);
     }
   });
-  reloadFont();
+  reloadFont('fontSelector');
 }
 
 function getTranslation(key, defaultText) {
@@ -3520,5 +3638,5 @@ function getTranslation(key, defaultText) {
 
 function getText(key) {
   const translatedText = i18next.t(key);
-  return translatedText !== key ? translatedText : "";
+  return translatedText !== key ? translatedText : key;
 }

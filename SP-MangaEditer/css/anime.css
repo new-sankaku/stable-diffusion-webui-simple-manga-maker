@@ -1,118 +1,122 @@
 @import url('root.css');
 
 @keyframes glow {
-  50% {
-    box-shadow: 0 0 20px var(--box-shadow-color);
-  }
+ 50% {
+  box-shadow: 0 0 20px var(--box-shadow-color);
+ }
 }
 
 [anim="glow"]:not(.toggled) {
-  animation: glow var(--animation-duration) var(--animation-timing);
+ animation: glow var(--animation-duration) var(--animation-timing);
 }
 
 article {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-article);
-  align-items: center;
-  justify-content: center;
-  min-height: var(--min-height-article);
-  position: relative;
-  padding-block: var(--padding-block-article);
+ display: flex;
+ flex-wrap: wrap;
+ gap: var(--gap-article);
+ align-items: center;
+ justify-content: center;
+ min-height: var(--min-height-article);
+ position: relative;
+ padding-block: var(--padding-block-article);
 }
 
 section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-section);
-  flex-basis: var(--flex-basis-section);
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-family: var(--font-family-section);
+ display: flex;
+ flex-direction: column;
+ gap: var(--gap-section);
+ flex-basis: var(--flex-basis-section);
+ justify-content: center;
+ align-items: center;
+ text-align: center;
+ font-family: var(--font-family-section);
 }
 
 
 .sp-manga-toast-error {
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  border: 1px solid #333;
-  box-shadow: 0 0 10px #ea0000;
-  animation: sp-manga-slide-in 0.5s ease-out;
-  overflow: hidden;
-  transition: height 0.3s ease-in-out;
-  max-width: 500px;
-  width: auto;
-  word-wrap: break-word;
+ background-color: rgba(0, 0, 0, 0.9);
+ color: #fff;
+ border: 1px solid #333;
+ box-shadow: 0 0 10px #ea0000;
+ animation: sp-manga-slide-in 0.5s ease-out;
+ overflow: hidden;
+ transition: height 0.3s ease-in-out;
+ max-width: 500px;
+ width: auto;
+ word-wrap: break-word;
 }
+
 .sp-manga-toast-header-error {
-  background-color: #333;
-  color: #fff;
-  border-bottom: 1px solid #ea0000;
-  pointer-events: auto;
+ background-color: #333;
+ color: #fff;
+ border-bottom: 1px solid #ea0000;
+ pointer-events: auto;
 }
 
 .sp-manga-progress-bar-error {
-  background-color: #ea0000;
+ background-color: #ea0000;
 }
 
 .sp-manga-toast {
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  border: 1px solid #333;
-  box-shadow: 0 0 10px #6200ea;
-  animation: sp-manga-slide-in 0.5s ease-out;
-  overflow: hidden;
-  transition: height 0.3s ease-in-out;
-  max-width: 500px;
-  width: auto;
-  word-wrap: break-word;
+ background-color: rgba(0, 0, 0, 0.9);
+ color: #fff;
+ border: 1px solid #333;
+ box-shadow: 0 0 10px #6200ea;
+ animation: sp-manga-slide-in 0.5s ease-out;
+ overflow: hidden;
+ transition: height 0.3s ease-in-out;
+ max-width: 500px;
+ width: auto;
+ word-wrap: break-word;
 }
 
 
 .sp-manga-toast-header {
-  background-color: #333;
-  color: #fff;
-  border-bottom: 1px solid #6200ea;
-  pointer-events: auto;
+ background-color: #333;
+ color: #fff;
+ border-bottom: 1px solid #6200ea;
+ pointer-events: auto;
 }
 
 .sp-manga-progress-bar {
-  background-color: #6200ea;
+ background-color: #6200ea;
 }
 
 @keyframes sp-manga-slide-in {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+ from {
+  transform: translateX(100%);
+  opacity: 0;
+ }
+
+ to {
+  transform: translateX(0);
+  opacity: 1;
+ }
 }
 
 @keyframes sp-manga-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+ from {
+  opacity: 1;
+ }
+
+ to {
+  opacity: 0;
+ }
 }
 
 @keyframes sp-manga-fade-in-line {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+ from {
+  opacity: 0;
+  transform: translateY(-10px);
+ }
+
+ to {
+  opacity: 1;
+  transform: translateY(0);
+ }
 }
 
 .sp-manga-line {
-  opacity: 0;
-  animation: sp-manga-fade-in-line 0.3s forwards;
+ opacity: 0;
+ animation: sp-manga-fade-in-line 0.3s forwards;
 }

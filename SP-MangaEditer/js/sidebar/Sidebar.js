@@ -21,6 +21,7 @@ function toggleVisibility(id) {
     $("speech-bubble-area1").style.display = "none";
     $("speech-bubble-area2").style.display = "none";
     $("text-area").style.display = "none";
+    $("text-area2").style.display = "none";
     $("tool-area").style.display = "none";
     $("manga-tone-area").style.display = "none";
     $("manga-effect-area").style.display = "none";

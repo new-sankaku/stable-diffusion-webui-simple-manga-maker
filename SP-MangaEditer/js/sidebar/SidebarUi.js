@@ -18,12 +18,34 @@ function saveValueMap(element) {
   sidebarValueMap.set(element.id, element.value);
 }
 
-function addNumber(id, label, min, max, value) {
+function addNumber(id, label, min, max, value, step=1) {
   const transLavel = getText(label);
   return `
       <div class="pen-input-2group">
           <label for="${id}" data-i18n="${label}">${transLavel}</label>
-          <input type="number" id="${id}" min="${min}" max="${max}" value="${value}">
+          <input type="number" id="${id}" min="${min}" max="${max}" value="${value}" step="${step}">
+      </div>
+  `;
+}
+
+
+function addSubmitButton(id) {
+  const transLavel = getText("submit");
+  return `
+    <div class="input-group-multi-mini">
+      <a style="visibility: hidden;"></a>
+      <a style="visibility: hidden;"></a>
+      <button id="${id}-submit" onclick="text2Submit('${id}-submit')">
+        <span>${transLavel}</span>
+      </button>
+    </div>
+  `;
+}
+
+function addTextArea(id, label) {
+  return `
+      <div class="input-group_one">
+          <textarea id="${id}" rows="4">New Text</textarea>
       </div>
   `;
 }
@@ -38,12 +60,12 @@ function addColor(id, label, value) {
   `;
 }
 
-function addSlider(id, label, min, max, value) {
+function addSlider(id, label, min, max, value, step=1) {
   const transLavel = getText(label);
   return `
       <div class="pen-input-3group">
           <label for="${id}" data-i18n="${label}">${transLavel}</label>
-          <input type="range" id="${id}" min="${min}" max="${max}" value="${value}" oninput="document.getElementById('${id}-value').innerText = this.value">
+          <input type="range" id="${id}" min="${min}" max="${max}" value="${value}" step="${step}" oninput="document.getElementById('${id}-value').innerText = this.value">
           <span class="slider-value" id="${id}-value">${value}</span>
       </div>
   `;
@@ -61,6 +83,40 @@ function addCheckBox(id, label, value) {
 }
 
 
+function addAlignTypeButton(prefixId) {
+  return `
+  <div class="input-group-multi">
+    <button id="T2-align-left" class="selected" onclick="alignText2('start')">
+        <i class="material-icons">format_align_left</i>
+    </button>
+    <button id="T2-align-center" onclick="alignText2('middle')">
+        <i class="material-icons">format_align_center</i>
+    </button>
+    <button id="T2-align-right" onclick="alignText2('end')">
+        <i class="material-icons">format_align_right</i>
+    </button>
+  </div>`;
+}
+
+function addOrientationButton(prefixId) {
+return `<div class="input-group-multi">
+    <button id="T2-Orientation-horizontal" class="selected" onclick="orientationText2('horizontal')">
+      <i class="material-icons">east</i>
+    </button>
+    <button id="T2-Orientation-vertical" onclick="orientationText2('vertical')">
+      <i class="material-icons">south</i>
+    </button>
+  </div>`;
+}
+
+function addOneSelectBox(id) {
+  return `
+      <div class="input-group_one">
+        <select id="${id}">
+        </select>
+      </div>
+  `;
+}
 
 function addDropDownBySpeedLine(id, label) {
 
