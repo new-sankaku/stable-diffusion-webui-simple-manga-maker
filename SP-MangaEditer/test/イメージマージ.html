@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像マスキング、マージ、ダウンロードツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .canvas-container {
+            margin-bottom: 20px;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #ccc 75%),
+                              linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>画像マスキング、マージ、ダウンロードツール</h1>
+    <p>2枚の画像を選択してください。画像BのRGB部分を使って画像Aをマスクし、アルファ値に応じて薄くします。最後に結果を画像Bとマージします。</p>
+    
+    <input type="file" id="imageA" accept="image/*">
+    <input type="file" id="imageB" accept="image/*">
+    <button id="process">処理開始</button>
+
+    <div id="result">
+        <h2>結果</h2>
+        <div class="canvas-container">
+            <h3>元の画像A</h3>
+            <canvas id="canvasA"></canvas>
+            <button id="downloadA">ダウンロード</button>
+        </div>
+        <div class="canvas-container">
+            <h3>元の画像B</h3>
+            <canvas id="canvasB"></canvas>
+            <button id="downloadB">ダウンロード</button>
+        </div>
+        <div class="canvas-container">
+            <h3>マスクされた画像A</h3>
+            <canvas id="canvasMasked"></canvas>
+            <button id="downloadMasked">ダウンロード</button>
+        </div>
+        <div class="canvas-container">
+            <h3>マージされた結果</h3>
+            <canvas id="canvasMerged"></canvas>
+            <button id="downloadMerged">ダウンロード</button>
+        </div>
+    </div>
+
+    <script>
+        const imageA = document.getElementById('imageA');
+        const imageB = document.getElementById('imageB');
+        const processBtn = document.getElementById('process');
+        const canvasA = document.getElementById('canvasA');
+        const canvasB = document.getElementById('canvasB');
+        const canvasMasked = document.getElementById('canvasMasked');
+        const canvasMerged = document.getElementById('canvasMerged');
+
+        processBtn.addEventListener('click', processImages);
+
+        function processImages() {
+            const fileA = imageA.files[0];
+            const fileB = imageB.files[0];
+
+            if (!fileA || !fileB) {
+                alert('両方の画像を選択してください。');
+                return;
+            }
+
+            const readerA = new FileReader();
+            const readerB = new FileReader();
+
+            readerA.onload = function(e) {
+                const imgA = new Image();
+                imgA.onload = function() {
+                    drawImage(canvasA, imgA);
+                    processSecondImage(imgA);
+                }
+                imgA.src = e.target.result;
+            }
+
+            function processSecondImage(imgA) {
+                readerB.onload = function(e) {
+                    const imgB = new Image();
+                    imgB.onload = function() {
+                        drawImage(canvasB, imgB);
+                        const maskedData = maskImage(imgA, imgB);
+                        mergeImages(maskedData, imgB);
+                    }
+                    imgB.src = e.target.result;
+                }
+                readerB.readAsDataURL(fileB);
+            }
+
+            readerA.readAsDataURL(fileA);
+        }
+
+        function drawImage(canvas, img) {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+        }
+
+        function maskImage(imgA, imgB) {
+            const width = Math.max(imgA.width, imgB.width);
+            const height = Math.max(imgA.height, imgB.height);
+
+            canvasMasked.width = width;
+            canvasMasked.height = height;
+
+            const ctxA = canvasA.getContext('2d');
+            const ctxB = canvasB.getContext('2d');
+            const ctxMasked = canvasMasked.getContext('2d');
+
+            const dataA = ctxA.getImageData(0, 0, imgA.width, imgA.height);
+            const dataB = ctxB.getImageData(0, 0, imgB.width, imgB.height);
+
+            const maskedData = ctxMasked.createImageData(width, height);
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const i = (y * width + x) * 4;
+                    if (x >= imgA.width || y >= imgA.height || x >= imgB.width || y >= imgB.height) {
+                        maskedData.data[i + 3] = 0;
+                    } else {
+                        const alphaB = dataB.data[i + 3] / 255;  // 0 to 1
+                        const hasColorB = dataB.data[i] > 0 || dataB.data[i + 1] > 0 || dataB.data[i + 2] > 0;
+
+                        if (hasColorB) {
+                            maskedData.data[i + 3] = 0;
+                        } else {
+                            maskedData.data[i] = dataA.data[i];
+                            maskedData.data[i + 1] = dataA.data[i + 1];
+                            maskedData.data[i + 2] = dataA.data[i + 2];
+                            maskedData.data[i + 3] = dataA.data[i + 3] * (1 - alphaB);
+                        }
+                    }
+                }
+            }
+
+            ctxMasked.putImageData(maskedData, 0, 0);
+            return maskedData;
+        }
+
+        function mergeImages(maskedData, imgB) {
+            const width = imgB.width;
+            const height = imgB.height;
+
+            canvasMerged.width = width;
+            canvasMerged.height = height;
+
+            const ctxB = canvasB.getContext('2d');
+            const ctxMerged = canvasMerged.getContext('2d');
+
+            const dataB = ctxB.getImageData(0, 0, width, height);
+            const mergedData = ctxMerged.createImageData(width, height);
+
+            for (let i = 0; i < mergedData.data.length; i += 4) {
+                const alphaA = maskedData.data[i + 3] / 255;
+                const alphaB = dataB.data[i + 3] / 255;
+
+                const blendedAlpha = alphaA + alphaB * (1 - alphaA);
+                if (blendedAlpha > 0) {
+                    mergedData.data[i] = (maskedData.data[i] * alphaA + dataB.data[i] * alphaB * (1 - alphaA)) / blendedAlpha;
+                    mergedData.data[i + 1] = (maskedData.data[i + 1] * alphaA + dataB.data[i + 1] * alphaB * (1 - alphaA)) / blendedAlpha;
+                    mergedData.data[i + 2] = (maskedData.data[i + 2] * alphaA + dataB.data[i + 2] * alphaB * (1 - alphaA)) / blendedAlpha;
+                }
+                mergedData.data[i + 3] = blendedAlpha * 255;
+            }
+
+            ctxMerged.putImageData(mergedData, 0, 0);
+        }
+
+        function downloadImage(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        document.getElementById('downloadA').addEventListener('click', () => downloadImage(canvasA, '元の画像A.png'));
+        document.getElementById('downloadB').addEventListener('click', () => downloadImage(canvasB, '元の画像B.png'));
+        document.getElementById('downloadMasked').addEventListener('click', () => downloadImage(canvasMasked, 'マスクされた画像A.png'));
+        document.getElementById('downloadMerged').addEventListener('click', () => downloadImage(canvasMerged, 'マージされた結果.png'));
+    </script>
+</body>
+</html>

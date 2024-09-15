@@ -69,7 +69,7 @@ function showObjectMenu(clickType) {
   // 'visible',     'settings', 'generate', 'edit', 'delete', 
   // 'copyAndPast', 'font', 'moveUp', 'moveDown', 'addPoint', 
   // 'removePoint', 'selectClear', 'knife'
-  // 'rembg', ''
+  // 'rembg', 'panelIn'
 
   var visible  = activeObject.visible ? 'visibleOff' : 'visibleOn';
 
@@ -86,6 +86,9 @@ function showObjectMenu(clickType) {
       // menuItems.push('clearBottomClipPath');
       // menuItems.push('clearRightClipPath');
       // menuItems.push('clearLeftClipPath');
+    }else{
+      menuItems.push('panelIn');
+      menuItems.push("canvasFit");
     }
   } else if (isText(activeObject)) {
     menuItems = clickType === 'left' ? [] : [visible, 'delete', 'selectClear'];
@@ -118,6 +121,15 @@ function handleMenuClick(e) {
   const action = e.target.id.replace('fabricjs-', '').replace('-btn', '');
 
   switch (action) {
+    case 'canvasFit':
+      fitImageToCanvas(activeObject);
+      break;
+    case 'panelIn':
+      var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
+      var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
+      putImageInFrame(activeObject, canvasX, canvasY, true, true);
+      updateLayerPanel();
+      break;
     case 'visibleOn':
     case 'visibleOff':
       visibleChange(activeObject);
@@ -245,7 +257,7 @@ canvas.wrapperEl.addEventListener('contextmenu', function (e) {
   const clickedObject = canvas.findTarget(e, false);
   if (clickedObject) {
     canvas.setActiveObject(clickedObject);
-    canvas.renderAll(); // 選択状態を表示するために再描画
+    canvas.renderAll(); 
     showObjectMenu('right');
   } else {
     canvas.discardActiveObject();
@@ -256,7 +268,7 @@ canvas.wrapperEl.addEventListener('contextmenu', function (e) {
 canvas.wrapperEl.addEventListener('mousedown', function (e) {
   if (e.button === 0 && lastClickType === 'right') {
     closeMenu();
-    lastClickType = 'left';  // 左クリック後はlastClickTypeをリセット
+    lastClickType = 'left';
   }
 });
 

@@ -160,11 +160,12 @@ function updateClipPath(imageObj, polygonObj) {
   const clipPath = new fabric.Polygon(transformedPoints, {
       absolutePositioned: true,
   });
+
   clipPath.set({
-    left:   clipPath.left + polygonObj.strokeWidth-1,
-    top:    clipPath.top  + polygonObj.strokeWidth-1,
-    scaleX: 1 - (polygonObj.strokeWidth) / clipPath.width,
-    scaleY: 1 - (polygonObj.strokeWidth) / clipPath.height,
+    left:   clipPath.left + polygonObj.strokeWidth - (polygonObj.strokeWidth*0.5),
+    top:    clipPath.top  + polygonObj.strokeWidth - (polygonObj.strokeWidth*0.5),
+    scaleX: 1 - (polygonObj.strokeWidth) / (clipPath.width),
+    scaleY: 1 - (polygonObj.strokeWidth) / (clipPath.height),
     absolutePositioned: true,
   });
 

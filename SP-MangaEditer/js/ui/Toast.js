@@ -95,7 +95,7 @@ function createToast(title, messages, isError) {
 
 function startProgressBar(toast, progressBarClass) {
     const progressBar = toast.querySelector("."+progressBarClass);
-    const interval = 50;
+    const interval = 100;
     const totalDuration = 2000;
     let width = 100;
     const timer = setInterval(() => {

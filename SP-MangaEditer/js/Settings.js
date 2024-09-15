@@ -1,3 +1,6 @@
+//FabricCanvas2HtmlCanvas Scale
+const blendScale = 3;
+var webpQuality = 0.98;
 
 fabric.Object.NUM_FRACTION_DIGITS = 100;
 
@@ -20,13 +23,6 @@ if (mode === 'dark-mode') {
 }else{
   canvas.backgroundColor = "white";
 }
-
-// var clipAreaCoords = {
-//   left: 0,
-//   top: 0,
-//   width: canvas.width,
-//   height: canvas.height,
-// };
 
 var svgPagging = 20;
 document.addEventListener('DOMContentLoaded', function() {

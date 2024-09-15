@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>高度な画像編集ツール</title>
+    <!-- アイコンフォントの読み込み（Font Awesome） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #2c3e50;
+        }
+
+        #toolbar {
+            display: flex;
+            padding: 10px;
+            background-color: #34495e;
+            align-items: center;
+            color: #ecf0f1;
+        }
+
+        #toolbar button {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        #toolbar button:hover {
+            color: #1abc9c;
+        }
+
+        #toolbar input[type="color"] {
+            margin-right: 15px;
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        #toolbar input[type="range"] {
+            width: 100px;
+        }
+
+        #canvas-container {
+            position: relative;
+        }
+
+        #canvas {
+            border: 1px solid #bdc3c7;
+            display: block;
+            margin: 0 auto;
+            background-color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <button id="addSolidLayer" title="べた塗りレイヤーを追加"><i class="fas fa-fill"></i></button>
+        <input type="color" id="solidColor" value="#ffffff" title="べた塗りレイヤーの色を選択">
+        <button id="toggleGradientMode" title="グラデーションレイヤーを追加"><i class="fas fa-fill-drip"></i></button>
+        <input type="color" id="gradientColor1" value="#ff0000" title="グラデーションの開始色">
+        <input type="color" id="gradientColor2" value="#0000ff" title="グラデーションの終了色">
+        <select id="gradientType" title="グラデーションタイプ">
+            <option value="linear">線形</option>
+            <option value="radial">円形</option>
+        </select>
+        <label for="opacitySlider" style="margin-left: auto;">不透明度:</label>
+        <input type="range" id="opacitySlider" min="0" max="1" step="0.01" value="1">
+        <button id="exportImage" title="画像を保存"><i class="fas fa-save"></i></button>
+    </div>
+
+    <div id="canvas-container">
+        <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
+
+    <!-- Fabric.js ライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.2.4/fabric.min.js"></script>
+    <script>
+        // Canvasの初期化
+        const canvas = new fabric.Canvas('canvas');
+        let isGradientMode = false;
+        let isDrawing = false;
+        let startX, startY, endX, endY;
+
+        // ツールバーのボタン
+        const addSolidLayerBtn = document.getElementById('addSolidLayer');
+        const solidColorInput = document.getElementById('solidColor');
+        const toggleGradientModeBtn = document.getElementById('toggleGradientMode');
+        const gradientColor1Input = document.getElementById('gradientColor1');
+        const gradientColor2Input = document.getElementById('gradientColor2');
+        const gradientTypeSelect = document.getElementById('gradientType');
+        const opacitySlider = document.getElementById('opacitySlider');
+        const exportImageBtn = document.getElementById('exportImage');
+
+        // べた塗りレイヤーを追加
+        addSolidLayerBtn.addEventListener('click', function() {
+            const color = solidColorInput.value;
+            const rect = new fabric.Rect({
+                left: 0,
+                top: 0,
+                width: canvas.getWidth(),
+                height: canvas.getHeight(),
+                fill: color,
+                selectable: true
+            });
+            canvas.add(rect);
+            canvas.setActiveObject(rect);
+        });
+
+        // グラデーションモードの切り替え
+        toggleGradientModeBtn.addEventListener('click', function() {
+            isGradientMode = !isGradientMode;
+            this.style.color = isGradientMode ? '#1abc9c' : '#ecf0f1';
+            canvas.defaultCursor = isGradientMode ? 'crosshair' : 'default';
+        });
+
+        // キャンバス上でのマウスイベント
+        canvas.on('mouse:down', function(opt) {
+            if (!isGradientMode) return;
+            isDrawing = true;
+            const pointer = canvas.getPointer(opt.e);
+            startX = pointer.x;
+            startY = pointer.y;
+        });
+
+        canvas.on('mouse:up', function(opt) {
+            if (!isDrawing || !isGradientMode) return;
+            isDrawing = false;
+            const pointer = canvas.getPointer(opt.e);
+            endX = pointer.x;
+            endY = pointer.y;
+
+            // キャンバス全体を覆う矩形を作成
+            const rect = new fabric.Rect({
+                left: 0,
+                top: 0,
+                width: canvas.getWidth(),
+                height: canvas.getHeight(),
+                selectable: true
+            });
+
+            // グラデーションを設定
+            const gradient = createGradient(startX, startY, endX, endY);
+            rect.set('fill', gradient);
+            canvas.add(rect);
+            canvas.setActiveObject(rect);
+        });
+
+        // グラデーションを作成する関数
+        function createGradient(x1, y1, x2, y2) {
+            const color1 = gradientColor1Input.value;
+            const color2 = gradientColor2Input.value;
+            const gradientType = gradientTypeSelect.value;
+
+            if (gradientType === 'linear') {
+                // 座標をパーセンテージに変換
+                const coords = {
+                    x1: x1 / canvas.getWidth(),
+                    y1: y1 / canvas.getHeight(),
+                    x2: x2 / canvas.getWidth(),
+                    y2: y2 / canvas.getHeight()
+                };
+
+                return new fabric.Gradient({
+                    type: 'linear',
+                    gradientUnits: 'percentage',
+                    coords: coords,
+                    colorStops: [
+                        { offset: 0, color: color1 },
+                        { offset: 1, color: color2 }
+                    ]
+                });
+            } else if (gradientType === 'radial') {
+                // 中心点と半径を計算
+                const centerX = x1 / canvas.getWidth();
+                const centerY = y1 / canvas.getHeight();
+                const radius = Math.hypot(x2 - x1, y2 - y1) / Math.max(canvas.getWidth(), canvas.getHeight());
+
+                return new fabric.Gradient({
+                    type: 'radial',
+                    gradientUnits: 'percentage',
+                    coords: {
+                        x1: centerX,
+                        y1: centerY,
+                        r1: 0,
+                        x2: centerX,
+                        y2: centerY,
+                        r2: radius
+                    },
+                    colorStops: [
+                        { offset: 0, color: color1 },
+                        { offset: 1, color: color2 }
+                    ]
+                });
+            }
+        }
+
+        // 不透明度の調整
+        opacitySlider.addEventListener('input', function() {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                activeObject.set('opacity', parseFloat(this.value));
+                canvas.renderAll();
+            }
+        });
+
+        // オブジェクト選択時に不透明度スライダーを更新
+        canvas.on('selection:created', updateOpacitySlider);
+        canvas.on('selection:updated', updateOpacitySlider);
+
+        function updateOpacitySlider() {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject) {
+                opacitySlider.value = activeObject.opacity;
+            }
+        }
+
+        // 画像を保存
+        exportImageBtn.addEventListener('click', function() {
+            const dataURL = canvas.toDataURL({
+                format: 'png',
+                quality: 1.0
+            });
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'canvas.png';
+            link.click();
+        });
+    </script>
+</body>
+</html>

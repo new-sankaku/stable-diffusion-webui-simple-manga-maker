@@ -1,276 +1,273 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>太陽シミュレーター</title>
-    <style>
-        #controlPanel {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-bottom: 5px;
-        }
-        canvas {
-            border: 1px solid #000;
-        }
-    </style>
+<style>
+#controlPanel {
+display: flex;
+flex-direction: column;
+}
+label {
+margin-bottom: 5px;
+}
+canvas {
+border: 1px solid #000;
+}
+</style>
 </head>
 <body>
-    <div id="controlPanel">
-        <label>太陽色<input type="color" id="sunColor" value="#FFFFFF"></label>
-        <label>中心核<input type="range" id="coreSize" min="10" max="300" step="1" value="100"></label>
-        <label>中心核放射光強度<input type="range" id="coreIntensity" min="0" max="1" step="0.01" value="0.7"></label>
-        <label>放射光減衰率<input type="range" id="flareDecay" min="0" max="1" step="0.01" value="0.5"></label>
-        <label>ゴースト<input type="range" id="ghostSize" min="10" max="200" step="1" value="50"></label>
-        <label>ゴースト強度<input type="range" id="ghostIntensity" min="0" max="1" step="0.01" value="0.3"></label>
-        <label>光条強度<input type="range" id="rayIntensity" min="0" max="1" step="0.01" value="0.25"></label>
-        <label>光条数<input type="range" id="rayCount" min="4" max="32" step="1" value="16"></label>
-        <label>光条長ランダム率(%)<input type="range" id="rayLengthRandomness" min="1" max="100" step="1" value="50"></label>
-        <label>光条太さ<input type="range" id="rayWidth" min="1" max="10" step="0.1" value="3"></label>
-        <label>光条太さランダム率(%)<input type="range" id="rayWidthRandomness" min="1" max="100" step="1" value="50"></label>
-        <label>虹色強度<input type="range" id="rainbowIntensity" min="0" max="1" step="0.01" value="0.18"></label>
-        <label>大気散乱<input type="range" id="atmosphereIntensity" min="0" max="1" step="0.01" value="0.3"></label>
-        <label>コロナ効果<input type="range" id="coronaIntensity" min="0" max="1" step="0.01" value="0.5"></label>
-        <label>光の揺らぎ<input type="range" id="flickerIntensity" min="0" max="1" step="0.01" value="0.3"></label>
-    </div>
-    <canvas id="sunCanvas" width="800" height="600"></canvas>
+<div id="controlPanel">
+<label>太陽色<input type="color" id="sunColor" value="#FFFFFF"></label>
+<label>中心核<input type="range" id="coreSize" min="10" max="300" step="1" value="100"></label>
+<label>中心核放射光強度<input type="range" id="coreIntensity" min="0" max="1" step="0.01" value="0.7"></label>
+<label>放射光減衰率<input type="range" id="flareDecay" min="0" max="1" step="0.01" value="0.5"></label>
+<label>ゴースト<input type="range" id="ghostSize" min="10" max="200" step="1" value="50"></label>
+<label>ゴースト強度<input type="range" id="ghostIntensity" min="0" max="1" step="0.01" value="0.3"></label>
+<label>光条強度<input type="range" id="rayIntensity" min="0" max="1" step="0.01" value="0.25"></label>
+<label>光条数<input type="range" id="rayCount" min="4" max="32" step="1" value="16"></label>
+<label>光条長ランダム率(%)<input type="range" id="rayLengthRandomness" min="1" max="100" step="1" value="50"></label>
+<label>光条太さ<input type="range" id="rayWidth" min="1" max="10" step="0.1" value="3"></label>
+<label>光条太さランダム率(%)<input type="range" id="rayWidthRandomness" min="1" max="100" step="1" value="50"></label>
+<label>虹色強度<input type="range" id="rainbowIntensity" min="0" max="1" step="0.01" value="0.18"></label>
+<label>大気散乱<input type="range" id="atmosphereIntensity" min="0" max="1" step="0.01" value="0.3"></label>
+<label>コロナ効果<input type="range" id="coronaIntensity" min="0" max="1" step="0.01" value="0.5"></label>
+<label>光の揺らぎ<input type="range" id="flickerIntensity" min="0" max="1" step="0.01" value="0.3"></label>
+</div>
+<canvas id="sunCanvas" width="800" height="600"></canvas>
 
-    <script>
-    const canvas = document.getElementById('sunCanvas');
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    let sunX = width * 0.5;
-    let sunY = height * 0.4;
+<script>
+const $ = (id) => document.getElementById(id);
 
-    function drawAtmosphere(x, y, radius, intensity) {
-        const gradient = ctx.createRadialGradient(x, y, radius, x, y, radius * 3);
-        gradient.addColorStop(0, `rgba(135, 206, 235, ${intensity})`);
-        gradient.addColorStop(1, 'rgba(135, 206, 235, 0)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
-    }
+const canvas = $('sunCanvas');
+const ctx = canvas.getContext('2d');
+const width = canvas.width;
+const height = canvas.height;
+let sunX = width * 0.5;
+let sunY = height * 0.4;
 
-    function drawCorona(x, y, radius, intensity) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'screen';
-        const gradient = ctx.createRadialGradient(x, y, radius, x, y, radius * 2);
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${intensity})`);
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(x, y, radius * 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-    }
-
-    function applyFlicker(value, flickerIntensity) {
-        return value * (1 + (Math.random() - 0.5) * flickerIntensity * 0.1);
-    }
-
-    function drawSun(sunColor, coreSize, coreIntensity, flareDecay, ghostIntensity, ghostSize, rayIntensity, rayCount, rayLengthRandomness, rayWidth, rayWidthRandomness, rainbowIntensity, atmosphereIntensity, coronaIntensity, flickerIntensity) {
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 0, width, height);
-        
-        const rgbColor = hexToRgb(sunColor);
-        
-        drawAtmosphere(sunX, sunY, coreSize, atmosphereIntensity);
-        drawFlare(sunX, sunY, coreSize, applyFlicker(coreIntensity, flickerIntensity), flareDecay, rgbColor, rainbowIntensity);
-        drawSunRays(sunX, sunY, coreSize, applyFlicker(rayIntensity, flickerIntensity), rayCount, rayLengthRandomness, rayWidth, rayWidthRandomness, rgbColor, rainbowIntensity);
-        drawCorona(sunX, sunY, coreSize, coronaIntensity);
-        drawSunCore(sunX, sunY, coreSize, rgbColor);
-        drawGhosts(sunX, sunY, coreSize, applyFlicker(ghostIntensity, flickerIntensity), ghostSize, rgbColor, rainbowIntensity);
-    }
-
-    function drawSunCore(x, y, radius, color) {
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        gradient.addColorStop(0, 'rgba(255,255,255,1)');
-        gradient.addColorStop(0.3, `rgba(${color.r},${color.g},${color.b},0.9)`);
-        gradient.addColorStop(0.7, `rgba(${color.r},${color.g},${color.b},0.7)`);
-        gradient.addColorStop(1, `rgba(${color.r},${color.g},${color.b},0)`);
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-    }
-
-    function drawFlare(x, y, coreRadius, intensity, decay, color, rainbowIntensity) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'screen';
-        const maxRadius = Math.sqrt(width * width + height * height);
-        const gradient = ctx.createRadialGradient(x, y, coreRadius, x, y, maxRadius);
-        const rainbowColors = [[255,0,0],[255,127,0],[255,255,0],[0,255,0],[0,0,255],[75,0,130],[143,0,255]];
-        rainbowColors.forEach((rainbowColor, index) => {
-            const stop = index / (rainbowColors.length - 1);
-            const mixedColor = mixColors(color, rainbowColor, rainbowIntensity);
-            gradient.addColorStop(stop, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},${intensity * (1 - stop)})`);
-        });
-        gradient.addColorStop(1, `rgba(${color.r},${color.g},${color.b},0)`);
-        ctx.beginPath();
-        ctx.rect(0, 0, width, height);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-        ctx.restore();
-    }
-
-    function drawGhosts(x, y, coreSize, intensity, ghostSize, color, rainbowIntensity) {
-        const centerX = width / 2;
-        const centerY = height / 2;
-        const dx = centerX - x;
-        const dy = centerY - y;
-        const maxDistance = Math.sqrt(dx * dx + dy * dy);
-        
-        const ghostPositions = [0.5, 1.0, 1.5, 2.0].map(scale => {
-            const distance = Math.min(maxDistance * scale, Math.sqrt(width * width + height * height) / 2);
-            const angle = Math.atan2(dy, dx);
-            return {
-                x: x + Math.cos(angle) * distance,
-                y: y + Math.sin(angle) * distance,
-                size: ghostSize * (1 - scale * 0.2)
-            };
-        });
-
-        ctx.save();
-        ctx.globalCompositeOperation = 'screen';
-        const rainbowColors = [[255,0,0],[255,127,0],[255,255,0],[0,255,0],[0,0,255],[75,0,130],[143,0,255]];
-        
-        ghostPositions.forEach((ghost, index) => {
-            const distance = Math.sqrt(Math.pow(ghost.x - x, 2) + Math.pow(ghost.y - y, 2));
-            const maxDistance = Math.sqrt(width * width + height * height);
-            const ghostIntensity = intensity * (1 - distance / maxDistance);
-            
-            const gradient = ctx.createRadialGradient(ghost.x, ghost.y, 0, ghost.x, ghost.y, ghost.size);
-            rainbowColors.forEach((rainbowColor, colorIndex) => {
-                const stop = colorIndex / (rainbowColors.length - 1);
-                const mixedColor = mixColors(color, rainbowColor, rainbowIntensity);
-                gradient.addColorStop(stop, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},${ghostIntensity * (1 - stop)})`);
-            });
-            gradient.addColorStop(1, 'rgba(0,0,0,0)');
-            
-            ctx.beginPath();
-            ctx.arc(ghost.x, ghost.y, ghost.size, 0, 2 * Math.PI);
-            ctx.fillStyle = gradient;
-            ctx.fill();
-            
-            const haloGradient = ctx.createRadialGradient(ghost.x, ghost.y, ghost.size * 0.8, ghost.x, ghost.y, ghost.size * 1.2);
-            haloGradient.addColorStop(0, `rgba(${color.r},${color.g},${color.b},${ghostIntensity * 0.2})`);
-            haloGradient.addColorStop(1, 'rgba(0,0,0,0)');
-            
-            ctx.beginPath();
-            ctx.arc(ghost.x, ghost.y, ghost.size * 1.2, 0, 2 * Math.PI);
-            ctx.fillStyle = haloGradient;
-            ctx.fill();
-        });
-        
-        ctx.restore();
-    }
-
-    function drawSunRays(x, y, coreSize, intensity, count, lengthRandomness, baseWidth, widthRandomness, color, rainbowIntensity) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'screen';
-        const maxLength = Math.max(width, height);
-        const rainbowColors = [[255,0,0],[255,127,0],[255,255,0],[0,255,0],[0,0,255],[75,0,130],[143,0,255]];
-        for (let i = 0; i < count; i++) {
-            const angle = (i / count) * Math.PI * 2;
-            const baseLength = maxLength * 0.5;
-            const randomReduction = baseLength * (lengthRandomness / 100) * Math.random();
-            const length = baseLength - randomReduction;
-            const rayWidth = baseWidth - (baseWidth * (widthRandomness / 100) * Math.random());
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
-            const gradient = ctx.createLinearGradient(x, y, x + Math.cos(angle) * length, y + Math.sin(angle) * length);
-            const rainbowColor = rainbowColors[i % rainbowColors.length];
-            const mixedColor = mixColors(color, rainbowColor, rainbowIntensity);
-            gradient.addColorStop(0, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},${intensity})`);
-            gradient.addColorStop(1, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},0)`);
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = rayWidth;
-            ctx.stroke();
-        }
-        ctx.restore();
-    }
-
-    function mixColors(color1, color2, mixRatio) {
-        return {
-            r: Math.round(color1.r * (1 - mixRatio) + color2[0] * mixRatio),
-            g: Math.round(color1.g * (1 - mixRatio) + color2[1] * mixRatio),
-            b: Math.round(color1.b * (1 - mixRatio) + color2[2] * mixRatio)
-        };
-    }
-
-    function hexToRgb(hex) {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-    }
-function updateSun() {
-    const sunColor = document.getElementById('sunColor').value;
-    const coreSize = parseInt(document.getElementById('coreSize').value);
-    const coreIntensity = parseFloat(document.getElementById('coreIntensity').value);
-    const flareDecay = parseFloat(document.getElementById('flareDecay').value);
-    const ghostIntensity = parseFloat(document.getElementById('ghostIntensity').value);
-    const ghostSize = parseInt(document.getElementById('ghostSize').value);
-    const rayIntensity = parseFloat(document.getElementById('rayIntensity').value);
-    const rayCount = parseInt(document.getElementById('rayCount').value);
-    const rayLengthRandomness = parseInt(document.getElementById('rayLengthRandomness').value);
-    const rayWidth = parseFloat(document.getElementById('rayWidth').value);
-    const rayWidthRandomness = parseInt(document.getElementById('rayWidthRandomness').value);
-    const rainbowIntensity = parseFloat(document.getElementById('rainbowIntensity').value);
-    const atmosphereIntensity = parseFloat(document.getElementById('atmosphereIntensity').value);
-    const coronaIntensity = parseFloat(document.getElementById('coronaIntensity').value);
-    const flickerIntensity = parseFloat(document.getElementById('flickerIntensity').value);
-
-    drawSun(
-        sunColor,
-        coreSize,
-        coreIntensity,
-        flareDecay,
-        ghostIntensity,
-        ghostSize,
-        rayIntensity,
-        rayCount,
-        rayLengthRandomness,
-        rayWidth,
-        rayWidthRandomness,
-        rainbowIntensity,
-        atmosphereIntensity,
-        coronaIntensity,
-        flickerIntensity
-    );
+function drawAtmosphere(x, y, radius, intensity) {
+const gradient = ctx.createRadialGradient(x, y, radius, x, y, radius * 3);
+gradient.addColorStop(0, `rgba(135, 206, 235, ${intensity})`);
+gradient.addColorStop(1, 'rgba(135, 206, 235, 0)');
+ctx.fillStyle = gradient;
+ctx.fillRect(0, 0, width, height);
 }
 
-// イベントリスナーの設定
-document.getElementById('sunColor').addEventListener('input', updateSun);
-document.getElementById('coreSize').addEventListener('input', updateSun);
-document.getElementById('coreIntensity').addEventListener('input', updateSun);
-document.getElementById('flareDecay').addEventListener('input', updateSun);
-document.getElementById('ghostIntensity').addEventListener('input', updateSun);
-document.getElementById('ghostSize').addEventListener('input', updateSun);
-document.getElementById('rayIntensity').addEventListener('input', updateSun);
-document.getElementById('rayCount').addEventListener('input', updateSun);
-document.getElementById('rayLengthRandomness').addEventListener('input', updateSun);
-document.getElementById('rayWidth').addEventListener('input', updateSun);
-document.getElementById('rayWidthRandomness').addEventListener('input', updateSun);
-document.getElementById('rainbowIntensity').addEventListener('input', updateSun);
-document.getElementById('atmosphereIntensity').addEventListener('input', updateSun);
-document.getElementById('coronaIntensity').addEventListener('input', updateSun);
-document.getElementById('flickerIntensity').addEventListener('input', updateSun);
+function drawCorona(x, y, radius, intensity) {
+ctx.save();
+ctx.globalCompositeOperation = 'screen';
+const gradient = ctx.createRadialGradient(x, y, radius, x, y, radius * 2);
+gradient.addColorStop(0, `rgba(255, 255, 255, ${intensity})`);
+gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+ctx.fillStyle = gradient;
+ctx.beginPath();
+ctx.arc(x, y, radius * 2, 0, Math.PI * 2);
+ctx.fill();
+ctx.restore();
+}
 
-// キャンバスクリックイベントの設定
-canvas.addEventListener('click', function(event) {
-    const rect = canvas.getBoundingClientRect();
-    sunX = event.clientX - rect.left;
-    sunY = event.clientY - rect.top;
-    updateSun();
+function applyFlicker(value, flickerIntensity) {
+return value * (1 + (Math.random() - 0.5) * flickerIntensity * 0.1);
+}
+
+function drawSun(sunColor, coreSize, coreIntensity, flareDecay, ghostIntensity, ghostSize, rayIntensity, rayCount, rayLengthRandomness, rayWidth, rayWidthRandomness, rainbowIntensity, atmosphereIntensity, coronaIntensity, flickerIntensity) {
+ctx.clearRect(0, 0, width, height);
+ctx.fillStyle = '#000000';
+ctx.fillRect(0, 0, width, height);
+
+const rgbColor = hexToRgb(sunColor);
+
+drawAtmosphere(sunX, sunY, coreSize, atmosphereIntensity);
+drawFlare(sunX, sunY, coreSize, applyFlicker(coreIntensity, flickerIntensity), flareDecay, rgbColor, rainbowIntensity);
+drawSunRays(sunX, sunY, coreSize, applyFlicker(rayIntensity, flickerIntensity), rayCount, rayLengthRandomness, rayWidth, rayWidthRandomness, rgbColor, rainbowIntensity);
+drawCorona(sunX, sunY, coreSize, coronaIntensity);
+drawSunCore(sunX, sunY, coreSize, rgbColor);
+drawGhosts(sunX, sunY, coreSize, applyFlicker(ghostIntensity, flickerIntensity), ghostSize, rgbColor, rainbowIntensity);
+}
+
+function drawSunCore(x, y, radius, color) {
+const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+gradient.addColorStop(0, 'rgba(255,255,255,1)');
+gradient.addColorStop(0.3, `rgba(${color.r},${color.g},${color.b},0.9)`);
+gradient.addColorStop(0.7, `rgba(${color.r},${color.g},${color.b},0.7)`);
+gradient.addColorStop(1, `rgba(${color.r},${color.g},${color.b},0)`);
+ctx.beginPath();
+ctx.arc(x, y, radius, 0, 2 * Math.PI);
+ctx.fillStyle = gradient;
+ctx.fill();
+}
+
+function drawFlare(x, y, coreRadius, intensity, decay, color, rainbowIntensity) {
+ctx.save();
+ctx.globalCompositeOperation = 'screen';
+const maxRadius = Math.sqrt(width * width + height * height);
+const gradient = ctx.createRadialGradient(x, y, coreRadius, x, y, maxRadius);
+const rainbowColors = [[255,0,0],[255,127,0],[255,255,0],[0,255,0],[0,0,255],[75,0,130],[143,0,255]];
+rainbowColors.forEach((rainbowColor, index) => {
+const stop = index / (rainbowColors.length - 1);
+const mixedColor = mixColors(color, rainbowColor, rainbowIntensity);
+gradient.addColorStop(stop, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},${intensity * (1 - stop)})`);
+});
+gradient.addColorStop(1, `rgba(${color.r},${color.g},${color.b},0)`);
+ctx.beginPath();
+ctx.rect(0, 0, width, height);
+ctx.fillStyle = gradient;
+ctx.fill();
+ctx.restore();
+}
+
+function drawGhosts(x, y, coreSize, intensity, ghostSize, color, rainbowIntensity) {
+const centerX = width / 2;
+const centerY = height / 2;
+const dx = centerX - x;
+const dy = centerY - y;
+const maxDistance = Math.sqrt(dx * dx + dy * dy);
+
+const ghostPositions = [0.5, 1.0, 1.5, 2.0].map(scale => {
+const distance = Math.min(maxDistance * scale, Math.sqrt(width * width + height * height) / 2);
+const angle = Math.atan2(dy, dx);
+return {
+x: x + Math.cos(angle) * distance,
+y: y + Math.sin(angle) * distance,
+size: ghostSize * (1 - scale * 0.2)
+};
 });
 
-// 初期描画
+ctx.save();
+ctx.globalCompositeOperation = 'screen';
+const rainbowColors = [[255,0,0],[255,127,0],[255,255,0],[0,255,0],[0,0,255],[75,0,130],[143,0,255]];
+
+ghostPositions.forEach((ghost, index) => {
+const distance = Math.sqrt(Math.pow(ghost.x - x, 2) + Math.pow(ghost.y - y, 2));
+const maxDistance = Math.sqrt(width * width + height * height);
+const ghostIntensity = intensity * (1 - distance / maxDistance);
+
+const gradient = ctx.createRadialGradient(ghost.x, ghost.y, 0, ghost.x, ghost.y, ghost.size);
+rainbowColors.forEach((rainbowColor, colorIndex) => {
+const stop = colorIndex / (rainbowColors.length - 1);
+const mixedColor = mixColors(color, rainbowColor, rainbowIntensity);
+gradient.addColorStop(stop, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},${ghostIntensity * (1 - stop)})`);
+});
+gradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+ctx.beginPath();
+ctx.arc(ghost.x, ghost.y, ghost.size, 0, 2 * Math.PI);
+ctx.fillStyle = gradient;
+ctx.fill();
+
+const haloGradient = ctx.createRadialGradient(ghost.x, ghost.y, ghost.size * 0.8, ghost.x, ghost.y, ghost.size * 1.2);
+haloGradient.addColorStop(0, `rgba(${color.r},${color.g},${color.b},${ghostIntensity * 0.2})`);
+haloGradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+ctx.beginPath();
+ctx.arc(ghost.x, ghost.y, ghost.size * 1.2, 0, 2 * Math.PI);
+ctx.fillStyle = haloGradient;
+ctx.fill();
+});
+
+ctx.restore();
+}
+
+function drawSunRays(x, y, coreSize, intensity, count, lengthRandomness, baseWidth, widthRandomness, color, rainbowIntensity) {
+ctx.save();
+ctx.globalCompositeOperation = 'screen';
+const maxLength = Math.max(width, height);
+const rainbowColors = [[255,0,0],[255,127,0],[255,255,0],[0,255,0],[0,0,255],[75,0,130],[143,0,255]];
+for (let i = 0; i < count; i++) {
+const angle = (i / count) * Math.PI * 2;
+const baseLength = maxLength * 0.5;
+const randomReduction = baseLength * (lengthRandomness / 100) * Math.random();
+const length = baseLength - randomReduction;
+const rayWidth = baseWidth - (baseWidth * (widthRandomness / 100) * Math.random());
+ctx.beginPath();
+ctx.moveTo(x, y);
+ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
+const gradient = ctx.createLinearGradient(x, y, x + Math.cos(angle) * length, y + Math.sin(angle) * length);
+const rainbowColor = rainbowColors[i % rainbowColors.length];
+const mixedColor = mixColors(color, rainbowColor, rainbowIntensity);
+gradient.addColorStop(0, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},${intensity})`);
+gradient.addColorStop(1, `rgba(${mixedColor.r},${mixedColor.g},${mixedColor.b},0)`);
+ctx.strokeStyle = gradient;
+ctx.lineWidth = rayWidth;
+ctx.stroke();
+}
+ctx.restore();
+}
+
+function mixColors(color1, color2, mixRatio) {
+return {
+r: Math.round(color1.r * (1 - mixRatio) + color2[0] * mixRatio),
+g: Math.round(color1.g * (1 - mixRatio) + color2[1] * mixRatio),
+b: Math.round(color1.b * (1 - mixRatio) + color2[2] * mixRatio)
+};
+}
+
+function hexToRgb(hex) {
+const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+return result ? {
+r: parseInt(result[1], 16),
+g: parseInt(result[2], 16),
+b: parseInt(result[3], 16)
+} : null;
+}
+function updateSun() {
+const sunColor = $('sunColor').value;
+const coreSize = parseInt($('coreSize').value);
+const coreIntensity = parseFloat($('coreIntensity').value);
+const flareDecay = parseFloat($('flareDecay').value);
+const ghostIntensity = parseFloat($('ghostIntensity').value);
+const ghostSize = parseInt($('ghostSize').value);
+const rayIntensity = parseFloat($('rayIntensity').value);
+const rayCount = parseInt($('rayCount').value);
+const rayLengthRandomness = parseInt($('rayLengthRandomness').value);
+const rayWidth = parseFloat($('rayWidth').value);
+const rayWidthRandomness = parseInt($('rayWidthRandomness').value);
+const rainbowIntensity = parseFloat($('rainbowIntensity').value);
+const atmosphereIntensity = parseFloat($('atmosphereIntensity').value);
+const coronaIntensity = parseFloat($('coronaIntensity').value);
+const flickerIntensity = parseFloat($('flickerIntensity').value);
+
+drawSun(
+sunColor,
+coreSize,
+coreIntensity,
+flareDecay,
+ghostIntensity,
+ghostSize,
+rayIntensity,
+rayCount,
+rayLengthRandomness,
+rayWidth,
+rayWidthRandomness,
+rainbowIntensity,
+atmosphereIntensity,
+coronaIntensity,
+flickerIntensity
+);
+}
+
+$('sunColor').addEventListener('input', updateSun);
+$('coreSize').addEventListener('input', updateSun);
+$('coreIntensity').addEventListener('input', updateSun);
+$('flareDecay').addEventListener('input', updateSun);
+$('ghostIntensity').addEventListener('input', updateSun);
+$('ghostSize').addEventListener('input', updateSun);
+$('rayIntensity').addEventListener('input', updateSun);
+$('rayCount').addEventListener('input', updateSun);
+$('rayLengthRandomness').addEventListener('input', updateSun);
+$('rayWidth').addEventListener('input', updateSun);
+$('rayWidthRandomness').addEventListener('input', updateSun);
+$('rainbowIntensity').addEventListener('input', updateSun);
+$('atmosphereIntensity').addEventListener('input', updateSun);
+$('coronaIntensity').addEventListener('input', updateSun);
+$('flickerIntensity').addEventListener('input', updateSun);
+
+canvas.addEventListener('click', function(event) {
+const rect = canvas.getBoundingClientRect();
+sunX = event.clientX - rect.left;
+sunY = event.clientY - rect.top;
+updateSun();
+});
+
 updateSun();
 
 </script>

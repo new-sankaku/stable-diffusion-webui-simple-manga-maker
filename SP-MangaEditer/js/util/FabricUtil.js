@@ -1,3 +1,4 @@
+
 function isPanel(activeObject) {
   return (activeObject && activeObject.isPanel);
 }
@@ -546,4 +547,71 @@ function getObjectCount() {
   }else{
     return 0;
   }
+}
+
+
+function getImageObjectList(){
+  var objescts = canvas.getObjects();
+  var resultList = [];
+  if( objescts ){
+    objescts.forEach(element => {
+      if( isImage(element) ){
+        resultList.push(element);
+      }
+    });
+    return resultList;
+  }
+}
+
+function getImageObjectListByLayerChecked(){
+  var resultList = getImageObjectList();
+  return resultList.filter(layer => layer.layerCheck);
+}
+
+
+function fitImageToCanvas(fabricImage) {
+  const canvasWidth  = canvas.width;
+  const canvasHeight = canvas.height;
+
+  const imageWidth   = fabricImage.width;
+  const imageHeight  = fabricImage.height;
+
+  let scale = Math.min((canvasWidth / imageWidth), (canvasHeight / imageHeight));
+
+  fabricImage.scaleX = scale;
+  fabricImage.scaleY = scale;
+
+  fabricImage.set({
+    left: 0,
+    top:  0
+  });
+
+  saveInitialState(fabricImage);
+  canvas.renderAll();
+}
+
+
+
+function createCanvasFromFabricImage(fabricImage) {
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = canvas.width * blendScale;
+  tempCanvas.height = canvas.height * blendScale;
+  const tempCtx = tempCanvas.getContext("2d");
+  tempCtx.save();
+  tempCtx.scale(blendScale, blendScale);
+  tempCtx.translate(
+    fabricImage.left + (fabricImage.width * fabricImage.scaleX) / 2,
+    fabricImage.top + (fabricImage.height * fabricImage.scaleY) / 2
+  );
+  tempCtx.rotate((fabricImage.angle * Math.PI) / 180);
+  tempCtx.scale(
+    fabricImage.scaleX * (fabricImage.flipX ? -1 : 1),
+    fabricImage.scaleY * (fabricImage.flipY ? -1 : 1)
+  );
+
+  tempCtx.translate(-fabricImage.width / 2, -fabricImage.height / 2);
+  tempCtx.drawImage(fabricImage.getElement(),0,0,fabricImage.width,fabricImage.height,0,0,fabricImage.width,fabricImage.height);
+  tempCtx.restore();
+
+  return tempCanvas;
 }

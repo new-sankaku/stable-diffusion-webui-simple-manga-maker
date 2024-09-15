@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tagify with Images in Suggestions Only</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.7/tagify.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.7/tagify.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .tagify {
+            width: 100%;
+            max-width: 700px;
+        }
+        .tagify__dropdown__item img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <input id="tags" placeholder="タグを入力してください">
+
+    <script>
+        // サンプルのサジェストデータ
+        const suggestions = [
+            { value: 'JavaScript', image: 'images/javascript.png' },
+            { value: 'Python', image: 'images/python.png' },
+            { value: 'Java', image: 'images/java.png' },
+            { value: 'HTML', image: 'images/html.png' },
+            { value: 'CSS', image: 'images/css.png' },
+        ];
+
+        // 環境に応じて画像ソースを決定する関数
+        function getImageSource(src) {
+            if (window.location.protocol === 'file:') {
+                // ローカルファイルの場合
+                return src;
+            } else {
+                // サーバー起動の場合
+                return `/api/placeholder/20/20`;
+            }
+        }
+
+        // 画像の遅延ロード関数
+        function lazyLoadImage(img, src) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        img.src = getImageSource(src);
+                        observer.disconnect();
+                    }
+                });
+            });
+            observer.observe(img);
+        }
+
+        // Tagifyの初期化
+        var input = document.querySelector('#tags');
+        var tagify = new Tagify(input, {
+            whitelist: suggestions,
+            dropdown: {
+                maxItems: 20,
+                classname: "tags-look",
+                enabled: 0,
+                closeOnSelect: false
+            },
+            templates: {
+                tag: function(tagData) {
+                    // タグには画像を表示しない
+                    return `
+                        <tag title="${tagData.value}"
+                                contenteditable='false'
+                                spellcheck='false'
+                                tabIndex="${this.settings.a11y.focusableTags ? 0 : -1}"
+                                class="${this.settings.classNames.tag} ${tagData.class ? tagData.class : ""}"
+                                ${this.getAttributes(tagData)}>
+                            <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+                            <div>
+                                <span class='tagify__tag-text'>${tagData.value}</span>
+                            </div>
+                        </tag>
+                    `
+                },
+                dropdownItem: function(tagData) {
+                    // ドロップダウンアイテムには画像を表示
+                    return `
+                        <div ${this.getAttributes(tagData)}
+                            class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                            tabindex="0"
+                            role="option">
+                            <img width="20" height="20" data-src="${tagData.image}"/>
+                            <span>${tagData.value}</span>
+                        </div>
+                    `
+                }
+            }
+        });
+
+        // 入力時のイベント処理
+        tagify.on('input', function(e) {
+            var value = e.detail.value;
+            if (value.length > 0) {
+                tagify.dropdown.show(value);
+                // ドロップダウンが表示された後に画像を遅延ロード
+                setTimeout(() => {
+                    document.querySelectorAll('.tagify__dropdown__item img').forEach(img => {
+                        lazyLoadImage(img, img.getAttribute('data-src'));
+                    });
+                }, 0);
+            }
+        });
+    </script>
+</body>
+</html>

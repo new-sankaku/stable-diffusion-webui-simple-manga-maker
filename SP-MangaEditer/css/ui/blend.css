@@ -1,0 +1,114 @@
+#blendFloatingWindow {
+display:none;
+position:fixed;
+top:50px;
+left:50px;
+width:90%;
+height:90%;
+overflow-y:auto;
+box-shadow:0 0 15px rgba(0, 0, 0, 0.2);
+resize:both;
+padding:0;
+background-color:#e8e6d9;
+border:2px solid #7d7a6f;
+}
+
+#blendFloatingWindowHeader {
+background-color:#7d7a6f;
+color:#e8e6d9;
+padding:5px;
+cursor:move
+}
+
+#blendControls {
+position:sticky;
+top:0;
+background-color:#7d7a6f;
+padding:5px;
+display:flex;
+justify-content:flex-start;
+z-index:1000
+}
+
+#blendControls button {
+margin-right:10px
+}
+
+#sourceImages,
+#blendModes {
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+padding:5px
+}
+
+.layer-preview-blend,
+.blend-mode-container {
+margin:3px;
+text-align:center
+}
+
+.layer-preview-blend canvas,
+.blend-mode-container canvas {
+border:1px solid #000000;
+cursor:pointer;
+transition:all 0.3s ease
+}
+
+.layer-preview-blend canvas.unchecked {
+opacity:0.35;
+border-color:#ff0000
+}
+
+
+.layer-preview-blend canvas.unchecked {
+  opacity: 0.35;
+  border: 2px solid #ff0000;
+}
+
+.canvas-wrapper {
+  cursor: pointer;
+}
+
+.canvas-wrapper:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+
+.layer-checkbox-blend {
+display:none
+}
+
+#enlargedImageContainerBlend {
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-color:rgba(0, 0, 0, 0.8);
+z-index:1000
+}
+
+#enlargedImage {
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+max-width:90%;
+max-height:90%
+}
+
+#layerPreviewsBlend {
+display:flex;
+flex-wrap:nowrap;
+overflow-x:auto;
+padding:10px 0
+}
+
+.submit-blend {
+margin-top:5px;
+font-size:12px;
+padding:5px 10px
+}

@@ -98,7 +98,7 @@ function initialPutImage(img) {
   return img;
 }
 
-function putImageInFrame(imgOrSvg, x, y, isNotActive = false) {
+function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false) {
   let obj;
   
   if (typeof imgOrSvg === 'string' && imgOrSvg.startsWith('<svg')) {
@@ -108,13 +108,18 @@ function putImageInFrame(imgOrSvg, x, y, isNotActive = false) {
     });
   } else {
     obj = imgOrSvg;
-    placeObject(obj, x, y, isNotActive);
+    placeObject(obj, x, y, isNotActive, notReplace);
   }
 
-  function placeObject(obj, x, y, isNotActive) {
+  function placeObject(obj, x, y, isNotActive, notReplace) {
     obj.set({ left: x, top: y });
     setNotSave(obj);
-    canvas.add(obj);
+
+    if( notReplace ){
+      //skip
+    }else{
+      canvas.add(obj);
+    }
 
     var targetFrameIndex = findTargetFrame(x, y);
     if (targetFrameIndex !== -1) {

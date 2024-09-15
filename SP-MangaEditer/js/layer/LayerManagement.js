@@ -101,6 +101,9 @@ function updateLayerPanel() {
 
       detailsDiv.appendChild(nameTextArea);
 
+      if (isImage(layer)) {
+        putCheckButton(buttonsDiv, layer, index);
+      }      
       putViewButton(buttonsDiv, layer, index);
 
       if (layer.isPanel) {
@@ -300,6 +303,30 @@ function putPromptButton(buttonsDiv, layer, index) {
 
   addTooltipByElement(promptButton, "promptButton");
   buttonsDiv.appendChild(promptButton);
+}
+
+
+function putCheckButton(buttonsDiv, layer, index) {
+  var btn = document.createElement("button");
+  btn.id = "checkButton-" + index;
+  layer.layerCheck = true;
+  if(layer.layerCheck){
+    btn.innerHTML = '<i class="material-icons">check_circle</i>';
+  }else{
+    btn.innerHTML = '<i class="material-icons">radio_button_unchecked</i>';
+  }
+
+  btn.onclick = function (e) {
+    layer.layerCheck = !layer.layerCheck;
+    if(layer.layerCheck){
+      btn.innerHTML = '<i class="material-icons">check_circle</i>';
+    }else{
+      btn.innerHTML = '<i class="material-icons">radio_button_unchecked</i>';
+    }
+  };
+
+  addTooltipByElement(btn, "checkButton");
+  buttonsDiv.appendChild(btn);
 }
 
 
