@@ -1,8 +1,55 @@
-function sendHtmlCanvas2FabricCanvas(blendedCanvas, quality = 0.98){
-  const webpDataUrl = blendedCanvas.toDataURL('image/webp', quality);
+
+
+// 透明でない部分の境界を見つける関数
+function findNonTransparentBounds(imageData) {
+  const { width, height, data } = imageData;
+  let minX = width, minY = height, maxX = 0, maxY = 0;
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const alpha = data[(y * width + x) * 4 + 3];
+      if (alpha > 0) {
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    }
+  }
+
+  return { minX, minY, maxX, maxY };
+}
+
+// クリッピングされた部分のみを含む新しいキャンバスを作成する関数
+function createClippedCanvas(sourceCanvas, bounds) {
+  const { minX, minY, maxX, maxY } = bounds;
+  const clipWidth = maxX - minX + 1;
+  const clipHeight = maxY - minY + 1;
+
+  const clippedCanvas = document.createElement('canvas');
+  clippedCanvas.width = clipWidth;
+  clippedCanvas.height = clipHeight;
+  const clippedCtx = clippedCanvas.getContext('2d');
+  clippedCtx.drawImage(sourceCanvas, minX, minY, clipWidth, clipHeight, 0, 0, clipWidth, clipHeight);
+
+  return clippedCanvas;
+}
+
+// メイン関数
+function sendHtmlCanvas2FabricCanvas(blendedCanvas, quality = 0.98) {
+  const ctx = blendedCanvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, blendedCanvas.width, blendedCanvas.height);
+  const bounds = findNonTransparentBounds(imageData);
+  if (bounds.minX > bounds.maxX || bounds.minY > bounds.maxY) {
+    console.warn('The image is completely transparent');
+    return;
+  }
+  const clippedCanvas = createClippedCanvas(blendedCanvas, bounds);
+  const webpDataUrl = clippedCanvas.toDataURL('image/webp', quality);
   fabric.Image.fromURL(webpDataUrl, (img) => {
     img.scaleToWidth(canvas.width);
     canvas.add(img);
+    canvas.setActiveObject(img);
     canvas.renderAll();
   }, { crossOrigin: 'anonymous' });
 }

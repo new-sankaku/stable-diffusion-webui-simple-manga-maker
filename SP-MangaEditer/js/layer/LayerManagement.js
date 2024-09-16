@@ -309,7 +309,11 @@ function putPromptButton(buttonsDiv, layer, index) {
 function putCheckButton(buttonsDiv, layer, index) {
   var btn = document.createElement("button");
   btn.id = "checkButton-" + index;
-  layer.layerCheck = true;
+
+  if(layer.layerCheck == undefined){
+    layer.layerCheck = true; 
+  }
+
   if(layer.layerCheck){
     btn.innerHTML = '<i class="material-icons">check_circle</i>';
   }else{
