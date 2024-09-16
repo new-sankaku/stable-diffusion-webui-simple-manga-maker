@@ -7,38 +7,48 @@ Manga Editor Desu!は、直感的な操作を目指して設計された軽量�
 
 アップデートがめんどくさい方はDemoサイトを推奨しています。
 
-## メインページ
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/5.jpg" width="800">
+## Main Page
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
 
-## Txt2Imgウィンドウ付きメインページ
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/4.jpg" width="800">
+## Main Page With Txt2Img Window
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt.webp" width="800">
 
-## ドラッグ＆ドロップ
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/controle.png" width="800">
+## Image Prompt Helper
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="800">
 
-## エフェクト
+## Support Language
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
+
+## Grid Line / Knife Mode
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/05_gridline.webp" height="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/06_knifemode.webp" height="350">
+
+## Dark Mode / Light Mode
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
+
+## Blend Mode
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/11_blendmode.webp" height="800">
+
+## Blend Mode Sample
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
+
+## Drag on Drop
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="800">
+
+## Effect
 <div style="display: flex; align-items: flex-start;">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/output1.webp" width="400">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/output2.webp" width="400">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="400">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="400">
 </div>
 
-## テキスト、吹き出し、ペン
+## Text, Speech Bubbles, Pen
 <div style="display: flex; align-items: flex-start;">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/6.png" width="400">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/7.png" width="400">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="400">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="400">
 </div>
 
-## ペン、グリッドライン
-<div style="display: flex; align-items: flex-start;">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/8.png" width="400">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/1.jpg" width="400">
-</div>
-
-## パネルカットナイフ、翻訳
-<div style="display: flex; align-items: flex-start;">
- <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/2.jpg" width="400">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/3.jpg" width="400">
-</div>
 
 ## 機能
 - **多言語対応**: 英語、日本語、韓国語、フランス語、中国語、ロシア語、スペイン語、ポルトガル語
