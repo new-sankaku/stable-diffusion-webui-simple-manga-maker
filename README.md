@@ -57,6 +57,7 @@ For those who find updates bothersome, the Demo site is recommended.
 - **Page Presets**: Preset comic panel layouts. 29 vertical, 16 horizontal.
 - **Panels**: Create and customize panels. Shape, color, line width, etc.
 - **Speech Bubbles**: More than 40 different speech bubble styles, each with customizable background color, line color, and transparency settings.
+- **Custom speech bubbles**: Create speech bubbles with coordinate specification or freehand drawing. Seven types of lines available. Smoothing process also included.
 - **Auto-fit**: Images generated within or dropped into comic panels are automatically scaled and cropped appropriately.
 - **Overlays**: Display images as overlays when dropped outside of frames.
 - **Layers**: Manage images, text, and panels as layers that will be familiar to graphic designers and artists alike.
@@ -64,6 +65,9 @@ For those who find updates bothersome, the Demo site is recommended.
 - **Image Effects**: Sepia, grayscale, gamma, blur, vibrance, pixelation.
 - **Image Effects(Glfx)**: Unsharp Mask, Zoom Blur, Dot Screen, Hexagonal Pixelate, Ink, Hue / Saturation
 - **Text**: Vertical writing, horizontal writing, bold, shadow, outline, neon, a variety of fonts suitable for comics.
+- **Image text**: Preset text for images.
+- **Effect 1**: One-click process to convert color images to black and white tones.
+- **Effect 2**: 25 types of blend modes, similar to those found in Adobe Photoshop and other software.
 - **Undo/Redo Function**: Freely undo or redo changes while editing.
 - **Project Save/Load**: Save and load work-in-progress projects to continue from where you left off.
 - **Settings Save/Load**: Save and load settings changed in the extension for a consistent and hassle-free workflow.
