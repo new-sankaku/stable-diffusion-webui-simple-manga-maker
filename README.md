@@ -30,8 +30,8 @@ For those who find updates bothersome, the Demo site is recommended.
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/11_blendmode.webp" height="800">
 
 ## Blend Mode Sample
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/12_blend.webp" height="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/13_blend.webp" height="350">
 
 
 
