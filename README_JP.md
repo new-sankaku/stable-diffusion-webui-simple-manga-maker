@@ -90,8 +90,8 @@ Text2Image / Image2Image機能を使用するには、Stable Diffusion WebUIに�
 
 # インストール
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/install.png" width="800">
-*:すべての機能はデモサイト上で動作します。
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="800">
+*:すべての機能はデモサイトでも動作します。
 
 ## 貢献方法
 - **バグ報告**: バグを発見した場合は、[Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)に新しい問題を作成し、タイトルに**[Bug]**を含めてください。
