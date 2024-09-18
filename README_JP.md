@@ -7,6 +7,7 @@ Manga Editor Desu!は、直感的な操作を目指して設計された軽量�
 
 アップデートがめんどくさい方はDemoサイトを推奨しています。
 
+
 ## Main Page
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
 
@@ -20,19 +21,25 @@ Manga Editor Desu!は、直感的な操作を目指して設計された軽量�
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
 
 ## Grid Line / Knife Mode
+<div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/05_gridline.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/06_knifemode.webp" height="350">
+</div>
 
 ## Dark Mode / Light Mode
+<div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
+</div>
 
 ## Blend Mode
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/11_blendmode.webp" height="800">
 
 ## Blend Mode Sample
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
+<div style="display: flex; align-items: flex-start;">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/12_blend.webp" height="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/13_blend.webp" height="350">
+</div>
 
 ## Drag on Drop
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="800">
@@ -48,6 +55,7 @@ Manga Editor Desu!は、直感的な操作を目指して設計された軽量�
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="400">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="400">
 </div>
+
 
 
 ## 機能
