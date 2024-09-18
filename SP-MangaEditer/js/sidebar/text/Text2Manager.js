@@ -151,6 +151,11 @@ function switchText2Ui(type) {
     t2_orientation_v,
     t2_orientation_l
   ];
+
+  const sliders2 = document.querySelectorAll('.input-container-leftSpace input[type="range"]');
+  sliders2.forEach(slider => {
+    setupSlider(slider, '.input-container-leftSpace')
+  });
 }
 
 function clearT2Settings() {

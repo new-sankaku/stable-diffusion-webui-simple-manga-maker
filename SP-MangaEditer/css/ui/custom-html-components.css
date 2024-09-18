@@ -1,0 +1,75 @@
+
+
+/* input, select, textarea {
+  width: 100%;
+  padding: 14px 2px 2px;
+  background: #3a3a3a;
+  border: 1px solid #4a4a4a;
+  color: #fff;
+  font-size: 0.85em;
+} */
+
+
+.input-container {
+  position: relative;
+  min-width: 150px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.input-container-leftSpace {
+  position: relative;
+  min-width: 140px;
+  margin-top: 2px;
+  margin-bottom: 0px;
+  margin-left: 6px;
+}
+
+.input-container::before, 
+.input-container-leftSpace::before{ 
+    content: attr(data-label);
+  position: absolute;
+  left: 3px;
+  color: #ffffff;
+  pointer-events: none;
+}
+
+input[type="range"] {
+  padding: 7px 0;
+  margin-top: 7px;
+  margin-left: 2px;
+  margin-bottom: -7px;
+  width: calc(100% - 5px);
+}
+.slider-container {
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+.slider-value-buttons {
+  display: flex;
+  flex-direction: column;
+}
+.slider-value-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 0.9em;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.slider-value-button:hover {
+  color: #61dafb;
+}
+
+.input-container, .input-container-leftSpace {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.slider-label {
+  position: absolute;
+  pointer-events: none;
+}

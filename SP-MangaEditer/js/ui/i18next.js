@@ -4,6 +4,8 @@
 const resources = {
   ja: {
     translation: {
+"speedLineStyle":"線種別",
+
 "blendLowImages":"レイヤーの画像に丸いアイコンがあります、2つ以上チェックして下さい。ブレンドには画像が2枚以上必要です。",
 "blendResult":"ブレンド結果（ドラッグして移動できます。Layer画像をクリックするとブレンドから除外できます。)",
 "25blends":"25種類のブレンド",
@@ -3948,6 +3950,10 @@ function updateContent() {
     } else {
       console.warn(`Translation for key "${key}" not found.`);
     }
+  });
+  document.querySelectorAll('[data-i18n-label]').forEach(function(element) {
+    const key = element.getAttribute('data-i18n-label');
+    element.setAttribute('data-label', i18next.t(key));
   });
 }
 

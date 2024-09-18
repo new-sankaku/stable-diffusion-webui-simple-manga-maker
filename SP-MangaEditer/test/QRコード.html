@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アイコンマージQRコードジェネレーター (Fabric.js)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        canvas { border: 1px solid #ccc; margin-top: 20px; }
+        input, button { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>アイコンマージQRコードジェネレーター (Fabric.js)</h1>
+    <input type="text" id="text" placeholder="QRコードにしたいテキストを入力">
+    <input type="file" id="iconFile" accept="image/*">
+    <button onclick="generateQR()">生成</button>
+    <button onclick="saveImage()">画像として保存</button>
+    <br>
+    <canvas id="canvas" width="300" height="300"></canvas>
+
+    <script>
+        const canvas = new fabric.Canvas('canvas');
+
+        function generateQR() {
+            const text = document.getElementById('text').value;
+            const iconFile = document.getElementById('iconFile').files[0];
+            
+            // QRコードの生成
+            const tempDiv = document.createElement('div');
+            new QRCode(tempDiv, {
+                text: text,
+                width: 300,
+                height: 300,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H  // 最高レベルの誤り訂正
+            });
+
+            const qrImage = tempDiv.querySelector('img');
+
+            qrImage.onload = function() {
+                fabric.Image.fromURL(qrImage.src, function(img) {
+                    canvas.clear();
+                    canvas.add(img);
+
+                    if (iconFile) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            fabric.Image.fromURL(e.target.result, function(icon) {
+                                const iconSize = 60;  // アイコンのサイズ
+                                icon.scaleToWidth(iconSize);
+                                icon.set({
+                                    left: (300 - iconSize) / 2,
+                                    top: (300 - iconSize) / 2
+                                });
+
+                                // アイコンの背景を白く塗りつぶす
+                                const rect = new fabric.Rect({
+                                    left: icon.left,
+                                    top: icon.top,
+                                    width: iconSize,
+                                    height: iconSize,
+                                    fill: 'white'
+                                });
+
+                                canvas.add(rect);
+                                canvas.add(icon);
+
+                                // すべてのオブジェクトを1つの画像としてマージ
+                                canvas.renderAll();
+                                const dataURL = canvas.toDataURL({
+                                    format: 'png',
+                                    quality: 1
+                                });
+
+                                // マージした画像を新しいFabric.jsイメージとして追加
+                                fabric.Image.fromURL(dataURL, function(mergedImg) {
+                                    canvas.clear();
+                                    canvas.add(mergedImg);
+                                    canvas.renderAll();
+                                });
+                            });
+                        }
+                        reader.readAsDataURL(iconFile);
+                    }
+                });
+            }
+        }
+
+        function saveImage() {
+            const dataURL = canvas.toDataURL({
+                format: 'png',
+                quality: 1
+            });
+
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'qrcode_with_icon.png';
+            link.click();
+        }
+    </script>
+</body>
+</html>

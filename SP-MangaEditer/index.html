@@ -165,6 +165,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.3/css/flag-icons.min.css">
 <link rel="stylesheet" href="css/ui/blend.css?v=5.3">
 <link rel="stylesheet" href="css/ui/bottomBar.css?v=5.3">
+<link rel="stylesheet" href="css/ui/custom-html-components.css?v=5.3">
 
 </head>
 
@@ -532,6 +533,9 @@
 
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <button id="shortcutButton" style="margin-top: 2px; background-color: transparent;" >
+                            <i class="material-icons">keyboard_alt</i>
+                        </button>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -587,11 +591,10 @@
                             <span data-i18n="knifeMode">Knife Mode: OFF</span>
                         </button>
                     </div>
-                    <div class="input-group">
-                        <label for="spaceSizeLabel" data-i18n="spaceSizeLabel">Space Size</label>
-                        <input type="number" id="knifePanelSpaceSize" name="knifePanelSpaceSize" min="0" max="75"
-                            step="1" value="20">
+                    <div class="input-container-leftSpace" data-i18n-label="spaceSizeLabel">
+                        <input type="range" id="knifePanelSpaceSize" name="knifePanelSpaceSize" min="0" max="75" step="1" value="20">
                     </div>
+
                     <hr>
                     <button id="A4-H">
                         <i class="material-icons">crop_portrait</i>
@@ -693,16 +696,15 @@
                         <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF"
                             oninput="changePanelFillColor(this.value)">
                     </div>
-                    <div class="input-group">
-                        <label data-i18n="panelOpacity">Opacity:</label>
-                        <input type="number" id="panelOpacity" name="panelOpacity" min="0" max="100" step="1"
-                            value="100" oninput="changePanelOpacity(this.value)">
+
+                    <div class="input-container-leftSpace" data-i18n-label="lineWidth">
+                        <input type="range" id="panelStrokeWidth" name="panelStrokeWidth" min="0.1" max="10" step="0.1" value="2" oninput="changePanelStrokeWidth(this.value)">
                     </div>
-                    <div class="input-group">
-                        <label for="panelStrokeWidth" data-i18n="lineWidth">Line Width:</label>
-                        <input type="number" id="panelStrokeWidth" name="panelStrokeWidth" min="0.1" max="10" step="0.1"
-                            value="2" oninput="changePanelStrokeWidth(this.value)">
+                    <div class="input-container-leftSpace" data-i18n-label="panelOpacity">
+                        <input type="range" id="panelOpacity" name="panelOpacity" min="0" max="100" step="1" value="100" oninput="changePanelOpacity(this.value)">
                     </div>
+
+
                     <button id="add" onclick="panelAllChange()"><i class="material-icons">border_all</i> <span
                             data-i18n="all_change">All Change</span></button>
                     <button id="edit" onclick="Edit()"><i class="material-icons">edit_square</i> <span
@@ -712,14 +714,14 @@
                     <div class="input-group">
                         <label data-i18n="accept_ratio">Accept Ratio</label>
                     </div>
-                    <div class="input-group">
-                        <label data-i18n="width">Width</label>
-                        <input type="number" id="ar_width" name="ar_width" min="0.01" max="9999" step="1" value="3">
+
+                    <div class="input-container-leftSpace" data-i18n-label="width">
+                        <input type="range" id="ar_width" name="ar_width" min="1" max="1000" step="1" value="3">
                     </div>
-                    <div class="input-group">
-                        <label data-i18n="height">Height</label>
-                        <input type="number" id="ar_height" name="ar_height" min="0.01" max="9999" step="1" value="4">
+                    <div class="input-container-leftSpace" data-i18n-label="height">
+                        <input type="range" id="ar_height" name="ar_height" min="1" max="1000" step="1" value="4">
                     </div>
+
                     <button id="addRect" onclick="addArRect()">
                         <i class="material-icons">aspect_ratio</i>
                         <span data-i18n="ar_Rect">AR Rect</span>
@@ -813,14 +815,13 @@
                         <input type="color" id="bubbleStrokeColor" value="#000000"
                             oninput="changeSpeechBubbleLineColor(this.value)">
                     </div>
-                    <div class="input-group">
-                        <label data-i18n="opacity">Opacity</label>
-                        <input type="number" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100"
-                            step="1" value="100" oninput="changeSpeechBubbleOpacity(this.value)">
+
+                    <div class="input-container-leftSpace" data-i18n-label="opacity">
+                        <input type="range" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100" step="1" value="100" oninput="changeSpeechBubbleOpacity(this.value)">
                     </div>
+
                     <label style="display: none;">Line Size</label>
-                    <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10"
-                        value="3">
+                    <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10" value="3">
                     <hr>
                 </div>
             </div>
@@ -833,10 +834,6 @@
                 </div>
                 <div id="speech-bubble-svg-preview-area1">
                     <div class="input-group">
-                        <label for="sbStrokeWidth" data-i18n="lineWidth">Line Width</label>
-                        <input type="number" id="sbStrokeWidth" min="1" max="20" value="1">
-                    </div>
-                    <div class="input-group">
                         <label for="sbStrokeColor" data-i18n="line">Line</label>
                         <input type="color" id="sbStrokeColor" value="#000000">
                     </div>
@@ -845,22 +842,26 @@
                         <input type="color" id="sbFillColor" value="#FFFFFF">
                     </div>
                     <div class="input-group">
-                        <label for="sbFillOpacity" data-i18n="panelOpacity">Opacity</label>
-                        <input type="number" id="sbFillOpacity" min="0" max="100" value="100">
-                    </div>
-
-                    <div class="input-group">
                         <label for="sbSmoothing" data-i18n="smooth">Smooth</label>
                         <input type="checkbox" id="sbSmoothing" checked>
                     </div>
-                    <div class="input-group">
-                        <label for="sbSornerRadius" data-i18n="cornerRadius">Corner Radius(px)</label>
-                        <input type="number" id="sbSornerRadius" min="0" max="15" value="3">
+
+                    <div class="input-container-leftSpace" data-i18n-label="lineWidth">
+                        <input type="range" id="sbStrokeWidth" min="1" max="20" value="1">
                     </div>
-                    <div class="input-group">
-                        <label for="sbPointSpace" data-i18n="pointSpace">Point Space(px)</label>
-                        <input type="number" id="sbPointSpace" min="0" max="100" value="4">
+
+                    <div class="input-container-leftSpace" data-i18n-label="panelOpacity">
+                        <input type="range" id="sbFillOpacity" min="0" max="100" value="100">
                     </div>
+
+
+                    <div class="input-container-leftSpace" data-i18n-label="cornerRadius">
+                        <input type="range" id="sbSornerRadius" min="0" max="15" value="3">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="panelOpacity">
+                        <input type="range" id="sbFillOpacity" min="0" max="100" value="100">
+                    </div>
+
                     <hr>
                     <button id="sb_aButton" onclick="switchSBLine('sb_a')">
                         <img src="03_images/preset/line/a.png">
@@ -913,16 +914,14 @@
                         <input type="color" id="textOutlineColorPicker" value="#000000"
                             oninput="changeOutlineTextColor(this.value)">
                     </div>
-                    <div class="input-group">
-                        <label data-i18n="fontSize">Size</label>
-                        <input type="number" id="fontSizeSlider" min="7" max="150" value="30"
-                            oninput="changeFontSize(this.value)">
+
+                    <div class="input-container-leftSpace" data-i18n-label="fontSize">
+                        <input type="range" id="fontSizeSlider" min="7" max="150" value="30" oninput="changeFontSize(this.value)">
                     </div>
-                    <div class="input-group">
-                        <label data-i18n="outlineSize">Outline Size</label>
-                        <input type="number" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1"
-                            oninput="changeStrokeWidthSize(this.value)">
+                    <div class="input-container-leftSpace" data-i18n-label="outlineSize">
+                        <input type="range" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1" oninput="changeStrokeWidthSize(this.value)">
                     </div>
+
                     <div class="input-group-multi">
                         <button id="align-left" class="selected" onclick="alignText('left')">
                             <i class="material-icons">format_align_left</i>
@@ -1132,11 +1131,6 @@
 
 
                     <div class="input-group">
-                        <label for="svg_icon_lineWidth" data-i18n="svg_icon_line_width">Line Width</label>
-                        <input type="number" id="svg_icon_lineWidth" min="0" max="5" step="1" value="1"
-                            oninput="updateSVGStyles()">
-                    </div>
-                    <div class="input-group">
                         <label for="svg_icon_lineColor" data-i18n="svg_icon_line_color">Line</label>
                         <input type="color" id="svg_icon_lineColor" value="#000000" onchange="updateSVGStyles()">
                     </div>
@@ -1144,32 +1138,31 @@
                         <label for="svg_icon_fillColor" data-i18n="svg_icon_fill_color">Fill</label>
                         <input type="color" id="svg_icon_fillColor" value="#EEEEEE" onchange="updateSVGStyles()">
                     </div>
-                    <div class="input-group">
-                        <label for="svg_icon_fillOpacity" data-i18n="svg_icon_fill_opacity">Opacity</label>
-                        <input type="number" id="svg_icon_fillOpacity" min="0" max="1" step="0.1" value="1"
-                            oninput="updateSVGStyles()">
+
+                    <div class="input-container-leftSpace" data-i18n-label="svg_icon_line_width">
+                        <input type="range" id="svg_icon_lineWidth" min="0" max="5" step="1" value="1" oninput="updateSVGStyles()">
                     </div>
+                    <div class="input-container-leftSpace" data-i18n-label="svg_icon_fill_opacity">
+                        <input type="range" id="svg_icon_fillOpacity" min="0" max="1" step="0.1" value="1" oninput="updateSVGStyles()">
+                    </div>
+
                     <hr>
                     <label>Shadow</label>
                     <div class="input-group">
                         <label for="svg_icon_shadowColor" data-i18n="svg_icon_shadow_color">Color</label>
                         <input type="color" id="svg_icon_shadowColor" value="#FFFFFF" onchange="updateSVGStyles()">
                     </div>
-                    <div class="input-group">
-                        <label for="svg_icon_shadowBlur" data-i18n="svg_icon_shadow_blur">Blur</label>
-                        <input type="number" id="svg_icon_shadowBlur" min="0" max="100" step="1" value="3"
-                            oninput="updateSVGStyles()">
+
+                    <div class="input-container-leftSpace" data-i18n-label="svg_icon_shadow_blur">
+                        <input type="range" id="svg_icon_shadowBlur" min="0" max="100" step="0.1" value="3" oninput="updateSVGStyles()">
                     </div>
-                    <div class="input-group">
-                        <label for="svg_icon_shadowOffsetX" data-i18n="svg_icon_shadow_offset_x">Offset X</label>
-                        <input type="number" id="svg_icon_shadowOffsetX" min="-20" max="20" step="1" value="0"
-                            oninput="updateSVGStyles()">
+                    <div class="input-container-leftSpace" data-i18n-label="svg_icon_shadow_offset_x">
+                        <input type="range" id="svg_icon_shadowOffsetX" min="-20" max="20" step="1" value="0" oninput="updateSVGStyles()">
                     </div>
-                    <div class="input-group">
-                        <label for="svg_icon_shadowOffsetY" data-i18n="svg_icon_shadow_offset_y">Offset Y</label>
-                        <input type="number" id="svg_icon_shadowOffsetY" min="-20" max="20" step="1" value="0"
-                            oninput="updateSVGStyles()">
+                    <div class="input-container-leftSpace" data-i18n-label="svg_icon_shadow_offset_y">
+                        <input type="range" id="svg_icon_shadowOffsetY" min="-20" max="20" step="1" value="0" oninput="updateSVGStyles()">
                     </div>
+
                     <hr>
                     <div id="svg_icon_results"></div>
                     <hr>
@@ -1444,41 +1437,27 @@
                         ▼ Common Controls
                     </div>
                     <div class="control-content">
-                        <div class="control-row">
-                            <label data-i18n="angle">Angle</label>
+                        <div class="input-container" data-i18n-label="angle">
                             <input type="range" id="angle-control" min="0" max="360" value="0">
-                            <span id="angleValue">0</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="scale">Scale</label>
-                            <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01" value="1">
-                            <span id="scaleValue">1.0</span>
+                        <div class="input-container" data-i18n-label="scale">
+                            <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01" value="1.00">
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="top">Top</label>
+                        <div class="input-container" data-i18n-label="top">
                             <input type="range" id="top-control" min="-300" max="600" value="100">
-                            <span id="topValue">100</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="left">Left</label>
+                        <div class="input-container" data-i18n-label="left">
                             <input type="range" id="left-control" min="-300" max="600" value="100">
-                            <span id="leftValue">100</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="skewX">SkewX</label>
+                        <div class="input-container" data-i18n-label="skewX">
                             <input type="range" id="skewX-control" min="-60" max="60" value="0">
-                            <span id="skewXValue">0</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="skewY">SkewY</label>
+                        <div class="input-container" data-i18n-label="skewY">
                             <input type="range" id="skewY-control" min="-60" max="60" value="0">
-                            <span id="skewYValue">0</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="opacity">Opacity</label>
-                            <input type="range" id="opacity-control" name="opacity-control" min="0" max="100" step="0.1"
-                                value="100">
-                            <span id="opacityValue">0</span>
+                        <div class="input-container" data-i18n-label="opacity">
+                            <input type="range" id="opacity-control" min="0" max="100" step="0.1"
+                            value="100">
                         </div>
                     </div>
                 </div>
@@ -1504,11 +1483,11 @@
                                 Outlone Glow
                             </label>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="glowOutLineSize">Size</label>
+                        <div class="input-container" data-i18n-label="glowOutLineSize">
                             <input type="range" id="glowOutLineSlider" min="0" max="250" value="20">
-                            <span id="glowOutLineValue">20</span>
                         </div>
+
+
                         <div class="control-row">
                             <label for="glowOutLineColorPicker" data-i18n="glowOutLineColor">Color </label>
                             <input type="color" id="glowOutLineColorPicker" value="#FFFFFF">
@@ -1540,36 +1519,24 @@
                             </label>
                         </div>
                         <hr class="separator">
-                        <div class="control-row">
-                            <label data-i18n="red">Red</label>
+                        <div class="input-container" data-i18n-label="red">
                             <input type="range" id="gammaRed" min="0" max="2.2" step="0.003921" value="1">
-                            <span id="gammaRedValue">1.0</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="green">Green</label>
+                        <div class="input-container" data-i18n-label="green">
                             <input type="range" id="gammaGreen" min="0" max="2.2" step="0.003921" value="1">
-                            <span id="gammaGreenValue">1.0</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="blue">Blue</label>
+                        <div class="input-container" data-i18n-label="blue">
                             <input type="range" id="gammaBlue" min="0" max="2.2" step="0.003921" value="1">
-                            <span id="gammaBlueValue">1.0</span>
                         </div>
                         <hr class="separator">
-                        <div class="control-row">
-                            <label data-i18n="vibrance">Vibrance</label>
+                        <div class="input-container" data-i18n-label="vibrance">
                             <input type="range" id="vibranceValue" min="-1" max="1" step="0.003921" value="0">
-                            <span id="vibranceValueDisplay">0.0</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="blur">Blur</label>
+                        <div class="input-container" data-i18n-label="blur">
                             <input type="range" id="blurValue" min="0" max="0.3" step="0.003921" value="0">
-                            <span id="blurValueDisplay">0.0</span>
                         </div>
-                        <div class="control-row">
-                            <label data-i18n="pixelate">Pixelate</label>
+                        <div class="input-container" data-i18n-label="pixelate">
                             <input type="range" id="pixelateValue" min="1" max="20" step="1" value="1">
-                            <span id="pixelateValueDisplay">1</span>
                         </div>
                     </div>
                 </div>
@@ -1605,204 +1572,168 @@
 
 
                         <div id="glfxBrightnessContrast" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxBrightness" data-i18n="brightness">Brightness:</label>
+                            <div class="input-container" data-i18n-label="brightness">
                                 <input type="range" id="glfxBrightness" min="-1" max="1" step="0.01" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxContrast" data-i18n="contrast">Contrast:</label>
+                            <div class="input-container" data-i18n-label="contrast">
                                 <input type="range" id="glfxContrast" min="-1" max="1" step="0.01" value="0">
                             </div>
                         </div>
 
                         <div id="glfxHueSaturation" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxHue" data-i18n="hue">Hue:</label>
+                            <div class="input-container" data-i18n-label="hue">
                                 <input type="range" id="glfxHue" min="-1" max="1" step="0.01" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxSaturation" data-i18n="saturation">Saturation:</label>
+                            <div class="input-container" data-i18n-label="saturation">
                                 <input type="range" id="glfxSaturation" min="-1" max="1" step="0.01" value="0">
                             </div>
                         </div>
 
                         <div id="glfxSepia" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxSepiaAmount" data-i18n="sepia">Sepia:</label>
+                            <div class="input-container" data-i18n-label="sepia">
                                 <input type="range" id="glfxSepiaAmount" min="0" max="1" step="0.01" value="0">
                             </div>
                         </div>
 
                         <div id="glfxUnsharpMask" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxUnsharpRadius" data-i18n="radius">Radius:</label>
+                            <div class="input-container" data-i18n-label="radius">
                                 <input type="range" id="glfxUnsharpRadius" min="0" max="200" step="0.1" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxUnsharpStrength" data-i18n="strength">Strength:</label>
+                            <div class="input-container" data-i18n-label="strength">
                                 <input type="range" id="glfxUnsharpStrength" min="0" max="5" step="0.1" value="0">
                             </div>
                         </div>
 
                         <div id="glfxVibrance" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxVibranceAmount" data-i18n="vibrance">Vibrance:</label>
+                            <div class="input-container" data-i18n-label="vibrance">
                                 <input type="range" id="glfxVibranceAmount" min="-1" max="1" step="0.01" value="0">
                             </div>
                         </div>
 
                         <div id="glfxVignette" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxVignetteSize" data-i18n="size">Size:</label>
+                            <div class="input-container" data-i18n-label="size">
                                 <input type="range" id="glfxVignetteSize" min="0" max="1" step="0.01" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxVignetteAmount" data-i18n="amount">Amount:</label>
+                            <div class="input-container" data-i18n-label="amount">
                                 <input type="range" id="glfxVignetteAmount" min="0" max="1" step="0.01" value="0">
                             </div>
                         </div>
 
                         <div id="glfxLensBlur" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxBlurRadius" data-i18n="radius">Radius:</label>
+                            <div class="input-container" data-i18n-label="radius">
                                 <input type="range" id="glfxBlurRadius" min="0" max="50" step="1" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxBlurBrightness" data-i18n="brightness">Brightness:</label>
+                            <div class="input-container" data-i18n-label="brightness">
                                 <input type="range" id="glfxBlurBrightness" min="-1" max="1" step="0.01" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxBlurAngle" data-i18n="angle">Angle:</label>
+                            <div class="input-container" data-i18n-label="angle">
                                 <input type="range" id="glfxBlurAngle" min="-3.14" max="3.14" step="0.01" value="0">
                             </div>
                         </div>
 
                         <div id="glfxTiltShift" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxStartX" data-i18n="startX">Start X:</label>
+
+                            <div class="input-container" data-i18n-label="startX">
                                 <input type="range" id="glfxStartX" min="0" max="1" step="0.01" value="0.5">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxStartY" data-i18n="startY">Start Y:</label>
+                            <div class="input-container" data-i18n-label="startY">
                                 <input type="range" id="glfxStartY" min="0" max="1" step="0.01" value="0.5">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxEndX" data-i18n="endX">End X:</label>
+                            <div class="input-container" data-i18n-label="endX">
                                 <input type="range" id="glfxEndX" min="0" max="1" step="0.01" value="0.5">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxEndY" data-i18n="endY">End Y:</label>
+
+                            <div class="input-container" data-i18n-label="endY">
                                 <input type="range" id="glfxEndY" min="0" max="1" step="0.01" value="0.5">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxTiltBlurRadius" data-i18n="blurRadius">Blur Radius:</label>
+                            <div class="input-container" data-i18n-label="blurRadius">
                                 <input type="range" id="glfxTiltBlurRadius" min="0" max="50" step="0.01" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxGradientRadius" data-i18n="gradientRadius">Gradient Radius:</label>
+                            <div class="input-container" data-i18n-label="gradientRadius">
                                 <input type="range" id="glfxGradientRadius" min="0" max="1" step="0.01" value="0.5">
                             </div>
                         </div>
 
                         <div id="glfxTriangleBlur" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxTriangleRadius" data-i18n="radius">Radius:</label>
+                            <div class="input-container" data-i18n-label="radius">
                                 <input type="range" id="glfxTriangleRadius" min="0" max="200" step="1" value="0">
                             </div>
                         </div>
 
                         <div id="glfxZoomBlur" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxZoomCenterX" data-i18n="centerX">Center X:</label>
+                            <div class="input-container" data-i18n-label="centerX">
                                 <input type="range" id="glfxZoomCenterX" min="0" max="1024" step="0.01" value="0.5">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxZoomCenterY" data-i18n="centerY">Center Y:</label>
+                            <div class="input-container" data-i18n-label="centerY">
                                 <input type="range" id="glfxZoomCenterY" min="0" max="1024" step="0.01" value="0.5">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxZoomStrength" data-i18n="strength">Strength:</label>
+                            <div class="input-container" data-i18n-label="strength">
                                 <input type="range" id="glfxZoomStrength" min="0" max="1" step="0.01" value="0">
                             </div>
                         </div>
 
                         <div id="glfxColorHalftone" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxHalftoneAngle" data-i18n="angle">Angle:</label>
+                            <div class="input-container" data-i18n-label="angle">
                                 <input type="range" id="glfxHalftoneAngle" min="0" max="6.28" step="0.1" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxHalftoneSize" data-i18n="size">Size:</label>
-                                <input type="number" id="glfxHalftoneSize" min="1" max="100" step="0.1" value="2">
+                            <div class="input-container" data-i18n-label="size">
+                                <input type="range" id="glfxHalftoneSize" min="1" max="100" step="0.1" value="2">
                             </div>
                         </div>
 
                         <div id="glfxDotScreen" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxDotAngle" data-i18n="angle">Angle:</label>
+                            <div class="input-container" data-i18n-label="angle">
                                 <input type="range" id="glfxDotAngle" min="0" max="6.28" step="0.1" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxDotSize" data-i18n="size">Size:</label>
-                                <input type="number" id="glfxDotSize" min="1" max="100" step="0.1" value="2">
+                            <div class="input-container" data-i18n-label="size">
+                                <input type="range" id="glfxDotSize" min="1" max="100" step="0.1" value="2">
                             </div>
                         </div>
 
                         <div id="glfxEdgeWork" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxEdgeRadius" data-i18n="radius">Radius:</label>
+                            <div class="input-container" data-i18n-label="radius">
                                 <input type="range" id="glfxEdgeRadius" min="0" max="10" step="0.1" value="0">
                             </div>
                         </div>
 
                         <div id="glfxHexagonalPixelate" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxHexScale" data-i18n="scale">Scale:</label>
-                                <input type="number" id="glfxHexScale" min="1" max="100" step="0.1" value="2">
+                            <div class="input-container" data-i18n-label="scale">
+                                <input type="range" id="glfxHexScale" min="1" max="100" step="0.1" value="2">
                             </div>
                         </div>
 
                         <div id="glfxInk" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxInkStrength" data-i18n="strength">Strength:</label>
-                                <input type="number" id="glfxInkStrength" min="0" max="1" step="0.01" value="0.3">
+                            <div class="input-container" data-i18n-label="strength">
+                                <input type="range" id="glfxInkStrength" min="0" max="1" step="0.01" value="0.3">
                             </div>
                         </div>
 
                         <div id="glfxBulgePinch" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxBulgeCenterX" data-i18n="centerX">Center X:</label>
+                            <div class="input-container" data-i18n-label="centerX">
                                 <input type="range" id="glfxBulgeCenterX" min="0" max="1024" step="1" value="500">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxBulgeCenterY" data-i18n="centerY">Center Y:</label>
+                            <div class="input-container" data-i18n-label="centerY">
                                 <input type="range" id="glfxBulgeCenterY" min="0" max="1024" step="1" value="500">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxBulgeRadius" data-i18n="radius">Radius:</label>
+                            <div class="input-container" data-i18n-label="radius">
                                 <input type="range" id="glfxBulgeRadius" min="-1" max="1" step="0.01" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxBulgeStrength" data-i18n="strength">Strength:</label>
+                            <div class="input-container" data-i18n-label="strength">
                                 <input type="range" id="glfxBulgeStrength" min="0" max="600" step="1" value="0">
                             </div>
                         </div>
 
                         <div id="glfxSwirl" class="glfxCcontrol-group">
-                            <div class="control-row">
-                                <label for="glfxSwirlCenterX" data-i18n="centerX">Center X:</label>
+                            <div class="input-container" data-i18n-label="centerX">
                                 <input type="range" id="glfxSwirlCenterX" min="0" max="1024" step="1" value="256">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxSwirlCenterY" data-i18n="centerY">Center Y:</label>
+                            <div class="input-container" data-i18n-label="centerY">
                                 <input type="range" id="glfxSwirlCenterY" min="0" max="1024" step="1" value="256">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxSwirlRadius" data-i18n="radius">Radius:</label>
+                            <div class="input-container" data-i18n-label="radius">
                                 <input type="range" id="glfxSwirlRadius" min="0" max="600" step="1" value="0">
                             </div>
-                            <div class="control-row">
-                                <label for="glfxSwirlAngle" data-i18n="angle">Angle:</label>
+                            <div class="input-container" data-i18n-label="angle">
                                 <input type="range" id="glfxSwirlAngle" min="-25" max="25" step="10" value="0">
                             </div>
                         </div>
@@ -1868,6 +1799,8 @@
     <script src="js/ui/flowtingWindow.js?v=5.3" defer></script>
     <script src="js/ui/html-component/hc-ImagePromptHelper.js?v=5.3" defer></script>
     <script src="js/ui/html-component/ImagePromptHelper.js?v=5.3" defer></script>
+
+    <script src="js/ui/custom-html-component.js?v=5.3" defer></script>
     <script src="js/util/LoadUtil.js?v=5.3" defer></script>
 
     <script src="js/util/FabricUtil.js?v=5.3" defer></script>

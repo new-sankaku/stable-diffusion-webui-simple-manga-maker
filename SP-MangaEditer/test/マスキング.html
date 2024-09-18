@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<style>
+body{font-family:Arial,sans-serif;overflow:hidden}
+#container{display:flex;height:100vh}
+#canvas-container{flex:1;position:relative;overflow:hidden}
+#canvas{position:absolute;top:0;left:0}
+#toolbar{width:200px;background:#f0f0f0;display:flex;flex-direction:column}
+.tool-btn{cursor:pointer}
+#status{position:fixed;bottom:10px;left:10px;background:rgba(0,0,0,0.7);color:white;border-radius:5px}
+</style>
+</head>
+<body>
+<div id="container">
+<div id="canvas-container">
+<canvas id="canvas"></canvas>
+</div>
+<div id="toolbar">
+<input type="file" id="imageUpload" accept="image/*">
+<button class="tool-btn" id="penTool">ペン</button>
+<button class="tool-btn" id="eraserTool">消しゴム</button>
+<button class="tool-btn" id="polygonSelectTool">多角形選択</button>
+<button class="tool-btn" id="magicWandTool">マジックワンド</button>
+<input type="range" id="brushSize" min="1" max="50" value="10">
+<input type="color" id="colorPicker" value="#ff0000">
+<button class="tool-btn" id="zoomIn">拡大</button>
+<button class="tool-btn" id="zoomOut">縮小</button>
+<button class="tool-btn" id="resetView">リセット</button>
+<button class="tool-btn" id="clearMask">マスクをクリア</button>
+<button class="tool-btn" id="downloadMask">マスクをダウンロード</button>
+</div>
+</div>
+<div id="status"></div>
+<script>
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+const imageUpload=document.getElementById('imageUpload');
+const penTool=document.getElementById('penTool');
+const eraserTool=document.getElementById('eraserTool');
+const polygonSelectTool=document.getElementById('polygonSelectTool');
+const magicWandTool=document.getElementById('magicWandTool');
+const brushSize=document.getElementById('brushSize');
+const colorPicker=document.getElementById('colorPicker');
+const zoomIn=document.getElementById('zoomIn');
+const zoomOut=document.getElementById('zoomOut');
+const resetView=document.getElementById('resetView');
+const clearMaskBtn=document.getElementById('clearMask');
+const downloadMaskBtn=document.getElementById('downloadMask');
+const status=document.getElementById('status');
+let isDrawing=false;
+let currentTool='pen';
+let scale=1;
+let offsetX=0,offsetY=0;
+let image=new Image();
+let maskCanvas=document.createElement('canvas');
+let maskCtx=maskCanvas.getContext('2d');
+let lastX=0,lastY=0;
+let currentSelection=[];
+let isSelecting=false;
+function setStatus(message){
+status.textContent=message;
+setTimeout(()=>status.textContent='',3000);
+}
+imageUpload.addEventListener('change',function(e){
+const file=e.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=function(event){
+image.onload=function(){
+canvas.width=image.width;
+canvas.height=image.height;
+maskCanvas.width=image.width;
+maskCanvas.height=image.height;
+resetView.click();
+drawImage();
+setStatus('画像をロードしました');
+};
+image.src=event.target.result;
+};
+reader.onerror=function(){
+setStatus('画像の読み込みに失敗しました');
+};
+reader.readAsDataURL(file);
+});
+function drawImage(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.save();
+ctx.translate(offsetX,offsetY);
+ctx.scale(scale,scale);
+ctx.drawImage(image,0,0);
+ctx.drawImage(maskCanvas,0,0);
+if(currentTool==='polygonSelect'&&currentSelection.length>0){
+drawSelectionPreview();
+}
+ctx.restore();
+}
+canvas.addEventListener('mousedown',startDrawing);
+canvas.addEventListener('mousemove',draw);
+canvas.addEventListener('mouseup',stopDrawing);
+canvas.addEventListener('mouseout',stopDrawing);
+canvas.addEventListener('click',handleSelection);
+function startDrawing(e){
+isDrawing=true;
+[lastX,lastY]=getCanvasCoordinates(e);
+draw(e);
+}
+function draw(e){
+if(!isDrawing)return;
+const [x,y]=getCanvasCoordinates(e);
+if(currentTool==='pen'||currentTool==='eraser'){
+maskCtx.lineWidth=brushSize.value;
+maskCtx.lineCap='round';
+maskCtx.lineJoin='round';
+if(currentTool==='pen'){
+maskCtx.globalCompositeOperation='source-over';
+maskCtx.strokeStyle=colorPicker.value;
+maskCtx.fillStyle=colorPicker.value;
+}else{
+maskCtx.globalCompositeOperation='destination-out';
+}
+maskCtx.beginPath();
+maskCtx.moveTo(lastX,lastY);
+maskCtx.lineTo(x,y);
+maskCtx.stroke();
+const radius=brushSize.value/2;
+maskCtx.beginPath();
+maskCtx.arc(x,y,radius,0,Math.PI*2);
+maskCtx.fill();
+[lastX,lastY]=[x,y];
+drawImage();
+}
+}
+function stopDrawing(){
+isDrawing=false;
+}
+function getCanvasCoordinates(e){
+const rect=canvas.getBoundingClientRect();
+return [
+(e.clientX-rect.left-offsetX)/scale,
+(e.clientY-rect.top-offsetY)/scale
+];
+}
+function handleSelection(e){
+if(currentTool==='polygonSelect'){
+const [x,y]=getCanvasCoordinates(e);
+if(currentSelection.length>0&&
+Math.abs(x-currentSelection[0].x)<5&&
+Math.abs(y-currentSelection[0].y)<5){
+completePolygonSelection();
+}else{
+currentSelection.push({x,y});
+drawImage();
+}
+}else if(currentTool==='magicWand'){
+const [x,y]=getCanvasCoordinates(e);
+magicWandSelect(Math.floor(x),Math.floor(y),30);
+}
+}
+function drawSelectionPreview(){
+ctx.strokeStyle='#ff0000';
+ctx.lineWidth=2/scale;
+ctx.beginPath();
+currentSelection.forEach((point,index)=>{
+if(index===0)ctx.moveTo(point.x,point.y);
+else ctx.lineTo(point.x,point.y);
+});
+if(currentSelection.length>1){
+ctx.lineTo(currentSelection[0].x,currentSelection[0].y);
+}
+ctx.stroke();
+}
+function completePolygonSelection(){
+maskCtx.fillStyle=colorPicker.value;
+maskCtx.beginPath();
+currentSelection.forEach((point,index)=>{
+if(index===0)maskCtx.moveTo(point.x,point.y);
+else maskCtx.lineTo(point.x,point.y);
+});
+maskCtx.closePath();
+maskCtx.fill();
+currentSelection=[];
+drawImage();
+setStatus('多角形選択を完了しました');
+}
+function magicWandSelect(x,y,tolerance){
+const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+const targetColor=getPixelColor(imageData,x,y);
+const stack=[{x,y}];
+const visited=new Set();
+while(stack.length){
+const pixel=stack.pop();
+const key=`${pixel.x},${pixel.y}`;
+if(visited.has(key))continue;
+visited.add(key);
+const color=getPixelColor(imageData,pixel.x,pixel.y);
+if(colorDistance(targetColor,color)<=tolerance){
+maskCtx.fillStyle=colorPicker.value;
+maskCtx.fillRect(pixel.x,pixel.y,1,1);
+[[0,1],[0,-1],[1,0],[-1,0]].forEach(([dx,dy])=>{
+const newX=pixel.x+dx;
+const newY=pixel.y+dy;
+if(newX>=0&&newX<canvas.width&&newY>=0&&newY<canvas.height){
+stack.push({x:newX,y:newY});
+}
+});
+}
+}
+drawImage();
+setStatus('マジックワンド選択を完了しました');
+}
+function getPixelColor(imageData,x,y){
+const index=(y*imageData.width+x)*4;
+return {
+r:imageData.data[index],
+g:imageData.data[index+1],
+b:imageData.data[index+2],
+a:imageData.data[index+3]
+};
+}
+function colorDistance(color1,color2){
+return Math.sqrt(
+Math.pow(color1.r-color2.r,2)+
+Math.pow(color1.g-color2.g,2)+
+Math.pow(color1.b-color2.b,2)
+);
+}
+penTool.addEventListener('click',()=>{currentTool='pen';setStatus('ペンツールを選択しました');});
+eraserTool.addEventListener('click',()=>{currentTool='eraser';setStatus('消しゴムツールを選択しました');});
+polygonSelectTool.addEventListener('click',()=>{currentTool='polygonSelect';currentSelection=[];setStatus('多角形選択ツールを選択しました');});
+magicWandTool.addEventListener('click',()=>{currentTool='magicWand';setStatus('マジックワンドツールを選択しました');});
+zoomIn.addEventListener('click',()=>{
+scale*=1.1;
+drawImage();
+setStatus('拡大しました');
+});
+zoomOut.addEventListener('click',()=>{
+scale/=1.1;
+drawImage();
+setStatus('縮小しました');
+});
+resetView.addEventListener('click',()=>{
+scale=1;
+offsetX=0;
+offsetY=0;
+drawImage();
+setStatus('ビューをリセットしました');
+});
+clearMaskBtn.addEventListener('click',()=>{
+maskCtx.clearRect(0,0,maskCanvas.width,maskCanvas.height);
+currentSelection=[];
+drawImage();
+setStatus('マスクをクリアしました');
+});
+downloadMaskBtn.addEventListener('click',()=>{
+const link=document.createElement('a');
+link.download='mask.png';
+maskCanvas.toBlob(blob=>{
+link.href=URL.createObjectURL(blob);
+link.click();
+setStatus('マスクをダウンロードしました');
+});
+});
+window.addEventListener('resize',()=>{
+canvas.width=canvas.offsetWidth;
+canvas.height=canvas.offsetHeight;
+drawImage();
+});
+</script>
+</body>
+</html>

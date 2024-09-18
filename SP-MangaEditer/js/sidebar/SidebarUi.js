@@ -63,10 +63,8 @@ function addColor(id, label, value) {
 function addSlider(id, label, min, max, value, step=1) {
   const transLavel = getText(label);
   return `
-      <div class="pen-input-3group">
-          <label for="${id}" data-i18n="${label}">${transLavel}</label>
-          <input type="range" id="${id}" min="${min}" max="${max}" value="${value}" step="${step}" oninput="document.getElementById('${id}-value').innerText = this.value">
-          <span class="slider-value" id="${id}-value">${value}</span>
+      <div class="input-container-leftSpace" data-label="${transLavel}">
+          <input type="range" id="${id}" min="${min}" max="${max}" value="${value}" step="${step}">
       </div>
   `;
 }

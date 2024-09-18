@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background-color:#f0f0f0}
+.container{display:flex;gap:20px}
+.controls{display:flex;flex-direction:column;gap:10px}
+canvas{border:1px solid #000}
+.slider-container{display:flex;justify-content:space-between;align-items:center}
+.slider-value{min-width:30px;text-align:right}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="controls">
+<div class="slider-container">
+<label>主線幅: <input type="range" id="mainWidth" min="1" max="10" value="2"></label>
+<span class="slider-value" id="mainWidthValue">2</span>
+</div>
+<div class="slider-container">
+<label>主線の長さ: <input type="range" id="mainLength" min="1" max="200" value="100"></label>
+<span class="slider-value" id="mainLengthValue">100</span>
+</div>
+<div class="slider-container">
+<label>副線幅: <input type="range" id="subWidth" min="1" max="10" value="2"></label>
+<span class="slider-value" id="subWidthValue">2</span>
+</div>
+<div class="slider-container">
+<label>副線の長さ: <input type="range" id="subLength" min="1" max="200" value="100"></label>
+<span class="slider-value" id="subLengthValue">100</span>
+</div>
+<div class="slider-container">
+<label>主線と副線の最大ズレ: <input type="range" id="maxOffset" min="0" max="50" value="20"></label>
+<span class="slider-value" id="maxOffsetValue">20</span>
+</div>
+<div class="slider-container">
+<label>次の縦線との幅: <input type="range" id="gap" min="1" max="20" value="10"></label>
+<span class="slider-value" id="gapValue">10</span>
+</div>
+<div class="slider-container">
+<label>縦線の位置ランダム度: <input type="range" id="positionRandomness" min="0" max="100" value="50"></label>
+<span class="slider-value" id="positionRandomnessValue">50</span>
+</div>
+<div class="slider-container">
+<label>繰り返し回数: <input type="range" id="repeat" min="1" max="50" value="20"></label>
+<span class="slider-value" id="repeatValue">20</span>
+</div>
+<div class="slider-container">
+<label>線の細さ: <input type="range" id="thinness" min="0" max="100" value="50"></label>
+<span class="slider-value" id="thinnessValue">50</span>
+</div>
+<div class="slider-container">
+<label>線の変動: <input type="range" id="lineVariation" min="0" max="100" value="50"></label>
+<span class="slider-value" id="lineVariationValue">50</span>
+</div>
+<label>主線色: <input type="color" id="mainColor" value="#000000"></label>
+<label>副線色: <input type="color" id="subColor" value="#ffffff"></label>
+<label>ブラー色: <input type="color" id="blurColor" value="#0000ff"></label>
+<label><input type="checkbox" id="blurToggle" checked> ブラーON/OFF</label>
+</div>
+<canvas id="canvas" width="800" height="600"></canvas>
+</div>
+<script>
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+
+function drawPattern(){
+const mainWidth=parseInt(document.getElementById('mainWidth').value);
+const mainLength=parseInt(document.getElementById('mainLength').value);
+const subWidth=parseInt(document.getElementById('subWidth').value);
+const subLength=parseInt(document.getElementById('subLength').value);
+const maxOffset=parseInt(document.getElementById('maxOffset').value);
+const gap=parseInt(document.getElementById('gap').value);
+const positionRandomness=parseInt(document.getElementById('positionRandomness').value)/100;
+const repeat=parseInt(document.getElementById('repeat').value);
+const thinness=parseInt(document.getElementById('thinness').value)/100;
+const lineVariation=parseInt(document.getElementById('lineVariation').value)/100;
+const mainColor=document.getElementById('mainColor').value;
+const subColor=document.getElementById('subColor').value;
+const blurColor=document.getElementById('blurColor').value;
+const blurToggle=document.getElementById('blurToggle').checked;
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+const maxLength=Math.max(mainLength,subLength);
+const totalWidth=repeat*(mainWidth+subWidth+gap);
+let x=(canvas.width-totalWidth)/2;
+
+for(let i=0;i<repeat;i++){
+const y=(canvas.height-maxLength)/2+(Math.random()*2-1)*positionRandomness*maxLength/2;
+const offset=Math.random()*maxOffset;
+
+const mainPoints=[{x:x,y:y},{x:x,y:y+mainLength}];
+const subPoints=[{x:x+mainWidth,y:y+offset},{x:x+mainWidth,y:y+offset+subLength}];
+
+drawVariableWidthPath(mainPoints,mainWidth,mainColor,blurToggle,blurColor,lineVariation);
+drawVariableWidthPath(subPoints,subWidth,subColor,false,blurColor,lineVariation);
+
+x+=mainWidth+subWidth+gap+(Math.random()*2-1)*gap/2;
+}
+}
+
+function drawVariableWidthPath(points,maxWidth,color,blurEnabled,blurColor,lineVariation){
+ctx.strokeStyle=color;
+for(let i=0;i<points.length-1;i++){
+const current=points[i];
+const next=points[i+1];
+const midX=(current.x+next.x)/2;
+const midY=(current.y+next.y)/2;
+const controlY=midY+(next.y-current.y)*0.2*(Math.random()*0.5+0.75);
+
+const segments=50;
+for(let j=0;j<segments;j++){
+const t=j/segments;
+const x=quadraticBezier(current.x,midX,next.x,t);
+const y=quadraticBezier(current.y,controlY,next.y,t);
+const nextT=(j+1)/segments;
+const nextX=quadraticBezier(current.x,midX,next.x,nextT);
+const nextY=quadraticBezier(current.y,controlY,next.y,nextT);
+
+const width=calculateLineWidth(t,maxWidth,lineVariation);
+ctx.beginPath();
+ctx.moveTo(x,y);
+ctx.lineTo(nextX,nextY);
+ctx.lineWidth=width;
+if(blurEnabled){
+ctx.shadowColor=blurColor;
+ctx.shadowBlur=5;
+}else{
+ctx.shadowColor='transparent';
+ctx.shadowBlur=0;
+}
+ctx.stroke();
+}
+}
+}
+
+function calculateLineWidth(t,maxWidth,lineVariation){
+const baseWidth=Math.sin(t*Math.PI);
+return maxWidth*(lineVariation===0?1:Math.pow(baseWidth,1/lineVariation));
+}
+
+function quadraticBezier(p0,p1,p2,t){
+return Math.pow(1-t,2)*p0+2*(1-t)*t*p1+Math.pow(t,2)*p2;
+}
+
+function updateSliderValue(sliderId){
+const slider=document.getElementById(sliderId);
+const valueSpan=document.getElementById(sliderId+'Value');
+valueSpan.textContent=slider.value;
+}
+
+document.querySelectorAll('input[type="range"]').forEach(slider=>{
+slider.addEventListener('input',()=>{
+updateSliderValue(slider.id);
+drawPattern();
+});
+});
+
+document.querySelectorAll('input:not([type="range"])').forEach(input=>{
+input.addEventListener('input',drawPattern);
+});
+
+drawPattern();
+</script>
+</body>
+</html>

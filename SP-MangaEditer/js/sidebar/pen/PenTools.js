@@ -177,8 +177,8 @@ function switchPencilTypeUi(type) {
             drawingOpacity       = $(MODE_PEN_MARKER + '-opacity');
             break;
         case MODE_PEN_MOSAIC:
-            settingsHTML += addSlider(MODE_PEN_MOSAIC + '-size',        'mosaic-size', 1, 250, penValueMap.getOrDefault( MODE_PEN_MOSAIC + '-size',8));
             settingsHTML += addSlider(MODE_PEN_MOSAIC + '-circle-size', 'circle-size', 1, 250, penValueMap.getOrDefault( MODE_PEN_MOSAIC + '-circle-size',40));
+            settingsHTML += addSlider(MODE_PEN_MOSAIC + '-size',        'mosaic-size', 1, 250, penValueMap.getOrDefault( MODE_PEN_MOSAIC + '-size',8));
             $('tool-settings').innerHTML = settingsHTML;
 
             drawingMosaicSize         = $(MODE_PEN_MOSAIC + '-size');
@@ -198,6 +198,10 @@ function switchPencilTypeUi(type) {
     //     console.log("drawingWidth is null " + type);
     // }
 
+    const sliders2 = document.querySelectorAll('.input-container-leftSpace input[type="range"]');
+    sliders2.forEach(slider => {
+      setupSlider(slider, '.input-container-leftSpace')
+    });
     addPenEventListener();
 }
 
@@ -325,8 +329,11 @@ function addPenEventListener(){
         drawingMosaicSize.onchange         = () => saveValueMap(drawingMosaicSize);
     }
 
+    console.log("drawingMosaicCircleSize");
     if( drawingMosaicCircleSize ){
-        drawingMosaicCircleSize.addEventListener('input', function () {
+        console.log("drawingMosaicCircleSize in");
+        drawingMosaicCircleSize.addEventListener('change', function () {
+            console.log("drawingMosaicCircleSize input in");
             var value = this.value;
             if (isMosaicBrushActive && canvas.freeDrawingBrush) {
                 canvas.freeDrawingBrush.circleSize = parseInt(value);

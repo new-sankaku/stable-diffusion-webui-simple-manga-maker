@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+body{display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background-color:#f0f0f0}
+.container{display:flex;flex-direction:column;align-items:center;background-color:white;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+canvas{border:1px solid #ddd}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.control-group{display:flex;flex-direction:column}
+input[type="range"],input[type="color"]{width:100%}
+</style>
+</head>
+<body>
+<div class="container">
+<canvas id="mountainCanvas" width="300" height="300"></canvas>
+<div class="controls">
+<div class="control-group">
+<label for="width">横サイズ: <span id="widthValue">250</span></label>
+<input type="range" id="width" min="100" max="300" value="250">
+<label for="height">縦サイズ: <span id="heightValue">150</span></label>
+<input type="range" id="height" min="100" max="300" value="150">
+<label for="mountains">山の数: <span id="mountainsValue">5</span></label>
+<input type="range" id="mountains" min="2" max="10" value="5">
+<label for="peakMountain">頂点の山: <span id="peakMountainValue">3</span></label>
+<input type="range" id="peakMountain" min="1" max="10" value="3">
+<label for="lineWidth">線幅: <span id="lineWidthValue">3</span></label>
+<input type="range" id="lineWidth" min="1" max="10" value="3">
+<label for="concavity">凹みの深さ: <span id="concavityValue">120</span>%</label>
+<input type="range" id="concavity" min="0" max="150" value="120">
+<label for="lineVariation">線の変化: <span id="lineVariationValue">1.0</span></label>
+<input type="range" id="lineVariation" min="0" max="5" step="0.1" value="1.0">
+</div>
+<div class="control-group">
+<label for="randomness">ランダム性: <span id="randomnessMinValue">10</span>-<span id="randomnessMaxValue">50</span>%</label>
+<input type="range" id="randomnessMin" min="0" max="100" value="10">
+<input type="range" id="randomnessMax" min="0" max="100" value="50">
+<label for="irregularity">不規則性: <span id="irregularityValue">15</span>%</label>
+<input type="range" id="irregularity" min="0" max="100" value="15">
+<label for="lineColor">線色:</label>
+<input type="color" id="lineColor" value="#000000">
+<label for="blurColor">ブラー色:</label>
+<input type="color" id="blurColor" value="#000000">
+<div>
+<input type="checkbox" id="blurEnabled">
+<label for="blurEnabled">ブラー有効</label>
+</div>
+<label for="outlineWidth">アウトライン幅: <span id="outlineWidthValue">0</span></label>
+<input type="range" id="outlineWidth" min="0" max="10" value="0">
+<label for="outlineColor">アウトライン色:</label>
+<input type="color" id="outlineColor" value="#ffffff">
+</div>
+</div>
+</div>
+<script>
+const canvas=document.getElementById('mountainCanvas');
+const ctx=canvas.getContext('2d');
+let width=250;
+let height=150;
+let mountains=5;
+let peakMountain=3;
+let lineWidth=3;
+let lineColor='#000000';
+let blurColor='#000000';
+let blurEnabled=false;
+let concavity=1.2;
+let randomnessMin=0.1;
+let randomnessMax=0.5;
+let irregularity=0.15;
+let outlineWidth=0;
+let outlineColor='#ffffff';
+let lineVariation=1.0;
+
+function updateMountains(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+const marginX=(canvas.width-width)/2;
+const marginY=(canvas.height-height)/2;
+const points=generatePoints(marginX,marginY);
+drawMountains(points,marginX,marginY);
+}
+
+function generatePoints(marginX,marginY){
+const points=[];
+for(let i=0;i<mountains;i++){
+const x=(i/(mountains-1))*width+marginX;
+const maxHeight=height*0.8;
+const randomFactor=1+(Math.random()*(randomnessMax-randomnessMin)+randomnessMin);
+const irregularFactor=1+(Math.random()*2-1)*irregularity;
+let y;
+if(i===0||i===mountains-1){
+y=canvas.height-marginY;
+}else if(i===peakMountain-1){
+y=canvas.height-marginY-maxHeight*randomFactor*irregularFactor;
+}else{
+const distanceFromPeak=Math.abs(i-(peakMountain-1))/(mountains-1);
+y=canvas.height-marginY-(Math.sin((1-distanceFromPeak)*Math.PI)*maxHeight*randomFactor*irregularFactor);
+}
+points.push({x,y});
+}
+return points;
+}
+
+function drawMountains(points,marginX,marginY){
+ctx.lineCap='round';
+ctx.lineJoin='round';
+
+if(outlineWidth>0){
+drawVariableWidthPath(points,marginX,marginY,outlineWidth+lineWidth,outlineColor);
+}
+drawVariableWidthPath(points,marginX,marginY,lineWidth,lineColor);
+}
+
+function drawVariableWidthPath(points,marginX,marginY,maxWidth,color){
+ctx.strokeStyle=color;
+for(let i=0;i<points.length-1;i++){
+const current=points[i];
+const next=points[i+1];
+const midX=(current.x+next.x)/2;
+const midY=(current.y+next.y)/2;
+const controlY=midY+height*concavity*(Math.random()*0.5+0.75);
+
+const segments=100;
+for(let j=0;j<segments;j++){
+const t=j/segments;
+const x=quadraticBezier(current.x,midX,next.x,t);
+const y=quadraticBezier(current.y,controlY,next.y,t);
+const nextT=(j+1)/segments;
+const nextX=quadraticBezier(current.x,midX,next.x,nextT);
+const nextY=quadraticBezier(current.y,controlY,next.y,nextT);
+
+const width=calculateLineWidth(t,maxWidth);
+ctx.beginPath();
+ctx.moveTo(x,y);
+ctx.lineTo(nextX,nextY);
+ctx.lineWidth=width;
+if(blurEnabled&&color===lineColor){
+ctx.shadowColor=blurColor;
+ctx.shadowBlur=10;
+}else{
+ctx.shadowColor='transparent';
+ctx.shadowBlur=0;
+}
+ctx.stroke();
+}
+}
+}
+
+function calculateLineWidth(t,maxWidth){
+const baseWidth=Math.sin(t*Math.PI);
+return maxWidth*(lineVariation===0?1:Math.pow(baseWidth,1/lineVariation));
+}
+
+function quadraticBezier(p0,p1,p2,t){
+return (1-t)*(1-t)*p0+2*(1-t)*t*p1+t*t*p2;
+}
+
+function updateValue(id){
+const element=document.getElementById(id);
+const value=element.value;
+const valueElement=document.getElementById(id+'Value');
+if(valueElement){
+valueElement.textContent=value;
+}
+return Number(value);
+}
+
+function updateRandomness(){
+randomnessMin=updateValue('randomnessMin')/100;
+randomnessMax=updateValue('randomnessMax')/100;
+const maxValueElement=document.getElementById('randomnessMaxValue');
+if(maxValueElement){
+maxValueElement.textContent=document.getElementById('randomnessMax').value;
+}
+if(randomnessMin>randomnessMax){
+document.getElementById('randomnessMax').value=randomnessMin*100;
+randomnessMax=randomnessMin;
+if(maxValueElement){
+maxValueElement.textContent=Math.round(randomnessMax*100);
+}
+}
+updateMountains();
+}
+
+document.querySelectorAll('input').forEach(input=>{
+input.addEventListener('input',()=>{
+width=updateValue('width');
+height=updateValue('height');
+mountains=updateValue('mountains');
+peakMountain=updateValue('peakMountain');
+if(peakMountain>mountains){
+peakMountain=mountains;
+document.getElementById('peakMountain').value=mountains;
+updateValue('peakMountain');
+}
+lineWidth=updateValue('lineWidth');
+concavity=updateValue('concavity')/100;
+irregularity=updateValue('irregularity')/100;
+lineColor=document.getElementById('lineColor').value;
+blurColor=document.getElementById('blurColor').value;
+blurEnabled=document.getElementById('blurEnabled').checked;
+outlineWidth=updateValue('outlineWidth');
+outlineColor=document.getElementById('outlineColor').value;
+lineVariation=updateValue('lineVariation');
+if(input.id==='randomnessMin'||input.id==='randomnessMax'){
+updateRandomness();
+}else{
+updateMountains();
+}
+});
+});
+
+updateMountains();
+</script>
+</body>
+</html>

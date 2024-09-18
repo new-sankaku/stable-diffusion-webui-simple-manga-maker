@@ -1,35 +1,3 @@
-function updateSliderValue(sliderId, displayId) {
-  document.querySelector(sliderId).addEventListener("input", function () {
-    document.querySelector(displayId).textContent = parseFloat(this.value).toFixed(3);
-  });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  updateSliderValue("#glowOutLineSlider", "#glowOutLineValue");
-  updateSliderValue("#gammaRed", "#gammaRedValue");
-  updateSliderValue("#gammaGreen", "#gammaGreenValue");
-  updateSliderValue("#gammaBlue", "#gammaBlueValue");
-  updateSliderValue("#vibranceValue", "#vibranceValueDisplay");
-  updateSliderValue("#blurValue", "#blurValueDisplay");
-  updateSliderValue("#pixelateValue", "#pixelateValueDisplay");
-
-  document.querySelector("#glowOutLineValue").textContent = parseFloat(document.querySelector("#glowOutLineSlider").value).toFixed(2);
-  document.querySelector("#gammaRedValue").textContent = parseFloat(document.querySelector("#gammaRed").value).toFixed(2);
-  document.querySelector("#gammaGreenValue").textContent = parseFloat(document.querySelector("#gammaGreen").value).toFixed(2);
-  document.querySelector("#gammaBlueValue").textContent = parseFloat(document.querySelector("#gammaBlue").value).toFixed(2);
-  document.querySelector("#vibranceValueDisplay").textContent = parseFloat(document.querySelector("#vibranceValue").value).toFixed(2);
-  document.querySelector("#blurValueDisplay").textContent = parseFloat(document.querySelector("#blurValue").value).toFixed(2);
-  document.querySelector("#pixelateValueDisplay").textContent = parseFloat(document.querySelector("#pixelateValue").value).toFixed(0);
-
-  updateSliderValue("#angle-control", "#angleValue");
-  updateSliderValue("#scale-control", "#scaleValue");
-  updateSliderValue("#top-control", "#topValue");
-  updateSliderValue("#left-control", "#leftValue");
-  updateSliderValue("#skewX-control", "#skewXValue");
-  updateSliderValue("#skewY-control", "#skewYValue");
-  updateSliderValue("#opacity-control", "#opacityValue");
-});
-
 function applyFilters() {
   var activeObject = canvas.getActiveObject();
   if (activeObject) {

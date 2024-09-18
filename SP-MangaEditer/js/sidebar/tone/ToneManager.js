@@ -94,10 +94,10 @@ function switchMangaToneUi(type) {
       case MODE_TONE:
         settingsHTML += addDropDownByDot(MODE_TONE + '-dot-style', 'dotStyle');
         settingsHTML += addColor( MODE_TONE + '-color',       'color',                effectValueMap.getOrDefault( MODE_TONE + '-color','#000000'));
-        settingsHTML += addSlider( MODE_TONE + '-dot-size',    'dot-size',     1, 100, effectValueMap.getOrDefault( MODE_TONE + '-dot-size',5));    //density
-        settingsHTML += addSlider(MODE_TONE + '-dot-spacing', 'dot-spacing',  1, 100, effectValueMap.getOrDefault( MODE_TONE + '-dot-spacing',5));    //density
         settingsHTML += addCheckBox(MODE_TONE + '-grad-check','grad-check',           effectValueMap.getOrDefault( MODE_TONE + '-grad-check', 'true'));    //density
         settingsHTML += addDropDownByGrad(MODE_TONE + '-grad-style', 'gradStyle');
+        settingsHTML += addSlider( MODE_TONE + '-dot-size',    'dot-size',     1, 100, effectValueMap.getOrDefault( MODE_TONE + '-dot-size',5));    //density
+        settingsHTML += addSlider(MODE_TONE + '-dot-spacing', 'dot-spacing',  1, 100, effectValueMap.getOrDefault( MODE_TONE + '-dot-spacing',5));    //density
         settingsHTML += addSlider(MODE_TONE + '-grad-start',  'grad-start',   0, 100, effectValueMap.getOrDefault( MODE_TONE + '-grad-start',0));   //grad-start-y
         settingsHTML += addSlider(MODE_TONE + '-grad-end',    'grad-end',     0, 100, effectValueMap.getOrDefault( MODE_TONE + '-grad-end',100));   //grad-end-y
         $('manga-tone-settings').innerHTML = settingsHTML;
@@ -172,8 +172,8 @@ function switchMangaToneUi(type) {
       case MODE_SPEED_LINE:
         settingsHTML += addColor( MODE_SPEED_LINE + '-color',       'color',              effectValueMap.getOrDefault( MODE_SPEED_LINE + '-color','#000000'));
         settingsHTML += addDropDownBySpeedLine("speed-line-style", "speedLineStyle");
-        settingsHTML += addSlider(MODE_SPEED_LINE + '-density',     'density',    1, 1500, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-density',150));    //density
         settingsHTML += addCheckBox(MODE_SPEED_LINE + '-grad-check','grad-check',         effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-check', 'true'));    //density
+        settingsHTML += addSlider(MODE_SPEED_LINE + '-density',     'density',    1, 1500, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-density',150));    //density
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-start',  'grad-start', 0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-start',0));   //grad-start-y
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-end',    'grad-end',   0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-end',100));   //grad-end-y
         $('manga-tone-settings').innerHTML = settingsHTML;
@@ -184,6 +184,11 @@ function switchMangaToneUi(type) {
         mangaToneGradEnd   = $(MODE_TONE_NOISE + '-grad-end');
         break;
   }
+
+  const sliders2 = document.querySelectorAll('.input-container-leftSpace input[type="range"]');
+  sliders2.forEach(slider => {
+    setupSlider(slider, '.input-container-leftSpace')
+  });
 }
 
 function clearToneSettings() {

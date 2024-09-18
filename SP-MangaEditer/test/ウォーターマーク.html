@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+<style>
+body { font-family: Arial, sans-serif; }
+#canvas-container { margin-bottom: 20px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.controls > div { flex: 1; min-width: 200px; }
+input[type="range"] { width: 100%; }
+</style>
+</head>
+<body>
+<h1>Fabric.js ウォーターマークエディタ</h1>
+<div id="canvas-container">
+<canvas id="canvas" width="800" height="600"></canvas>
+</div>
+<div class="controls">
+<div>
+<button id="toggleWatermark">ウォーターマーク表示/非表示</button>
+</div>
+<div>
+<label for="watermarkText">ウォーターマークテキスト:</label>
+<input type="text" id="watermarkText" value="ウォーターマーク">
+</div>
+<div>
+<label for="watermarkColor">色:</label>
+<input type="color" id="watermarkColor" value="#000000">
+</div>
+<div>
+<label for="watermarkOpacity">不透明度:</label>
+<input type="range" id="watermarkOpacity" min="0" max="1" step="0.1" value="0.5">
+</div>
+<div>
+<label for="watermarkBlur">ブラー:</label>
+<input type="range" id="watermarkBlur" min="0" max="50" step="1" value="0">
+</div>
+<div>
+<label for="blurColor">ブラー色:</label>
+<input type="color" id="blurColor" value="#000000">
+</div>
+<div>
+<label for="watermarkAngle">角度:</label>
+<input type="range" id="watermarkAngle" min="-180" max="180" step="1" value="-45">
+</div>
+<div>
+<label for="watermarkLayout">レイアウト:</label>
+<select id="watermarkLayout">
+<option value="single">単一</option>
+<option value="grid">グリッド</option>
+<option value="random">ランダム</option>
+</select>
+</div>
+<div>
+<label for="watermarkSpacing">間隔:</label>
+<input type="range" id="watermarkSpacing" min="0" max="500" step="10" value="200">
+</div>
+<div>
+<label for="watermarkPositionX">X軸位置:</label>
+<input type="range" id="watermarkPositionX" min="0" max="100" step="1" value="50">
+</div>
+<div>
+<label for="watermarkPositionY">Y軸位置:</label>
+<input type="range" id="watermarkPositionY" min="0" max="100" step="1" value="50">
+</div>
+<div>
+<label for="watermarkFontSize">文字サイズ:</label>
+<input type="range" id="watermarkFontSize" min="10" max="200" step="1" value="50">
+</div>
+<div>
+<label for="randomColor">ランダムカラー:</label>
+<input type="checkbox" id="randomColor">
+</div>
+</div>
+<div>
+<input type="file" id="imageUpload" accept="image/*">
+</div>
+
+<script>
+const canvas = new fabric.Canvas('canvas');
+let watermarks = [];
+
+function getRandomColor() {
+return `#${Math.floor(Math.random()*16777215).toString(16)}`;
+}
+
+function createWatermark() {
+const text = document.getElementById('watermarkText').value;
+const color = document.getElementById('watermarkColor').value;
+const opacity = parseFloat(document.getElementById('watermarkOpacity').value);
+const blur = parseInt(document.getElementById('watermarkBlur').value);
+const blurColor = document.getElementById('blurColor').value;
+const angle = parseInt(document.getElementById('watermarkAngle').value);
+const layout = document.getElementById('watermarkLayout').value;
+const spacing = parseInt(document.getElementById('watermarkSpacing').value);
+const positionX = parseInt(document.getElementById('watermarkPositionX').value) / 100;
+const positionY = parseInt(document.getElementById('watermarkPositionY').value) / 100;
+const fontSize = parseInt(document.getElementById('watermarkFontSize').value);
+const randomColor = document.getElementById('randomColor').checked;
+
+watermarks.forEach(w => canvas.remove(w));
+watermarks = [];
+
+const createSingleWatermark = (left, top) => {
+const watermarkColor = randomColor ? getRandomColor() : color;
+const watermark = new fabric.Text(text, {
+left: left,
+top: top,
+fontSize: fontSize,
+fill: watermarkColor,
+opacity: opacity,
+angle: angle,
+originX: 'center',
+originY: 'center',
+selectable: false,
+shadow: new fabric.Shadow({
+color: blurColor,
+blur: blur,
+offsetX: 0,
+offsetY: 0
+})
+});
+
+canvas.add(watermark);
+watermarks.push(watermark);
+
+return watermark;
+};
+
+const textObj = new fabric.Text(text, { fontSize: fontSize });
+const textWidth = textObj.width;
+const textHeight = textObj.height;
+
+if (layout === 'single') {
+const left = canvas.width * positionX;
+const top = canvas.height * positionY;
+createSingleWatermark(left, top);
+} else if (layout === 'grid') {
+const spacingX = textWidth + spacing;
+const spacingY = textHeight + spacing;
+for (let x = -spacingX; x < canvas.width + spacingX; x += spacingX) {
+for (let y = -spacingY; y < canvas.height + spacingY; y += spacingY) {
+createSingleWatermark(x, y);
+}
+}
+} else if (layout === 'random') {
+const count = Math.floor((canvas.width * canvas.height) / (textWidth * textHeight) / 2);
+for (let i = 0; i < count; i++) {
+const left = Math.random() * canvas.width;
+const top = Math.random() * canvas.height;
+createSingleWatermark(left, top);
+}
+}
+
+canvas.renderAll();
+}
+
+// デバウンス関数
+function debounce(func, wait) {
+let timeout;
+return function executedFunction(...args) {
+const later = () => {
+clearTimeout(timeout);
+func(...args);
+};
+clearTimeout(timeout);
+timeout = setTimeout(later, wait);
+};
+}
+
+// デバウンスされた更新関数
+const debouncedCreateWatermark = debounce(createWatermark, 100);
+
+document.getElementById('toggleWatermark').addEventListener('click', function() {
+if (watermarks.length > 0) {
+watermarks.forEach(w => canvas.remove(w));
+watermarks = [];
+} else {
+createWatermark();
+}
+canvas.renderAll();
+});
+
+['watermarkText', 'watermarkColor', 'watermarkOpacity', 'watermarkBlur', 'blurColor', 'watermarkAngle', 'watermarkLayout', 'watermarkSpacing', 'watermarkPositionX', 'watermarkPositionY', 'watermarkFontSize', 'randomColor'].forEach(id => {
+document.getElementById(id).addEventListener('input', debouncedCreateWatermark);
+});
+
+document.getElementById('imageUpload').addEventListener('change', function(e) {
+const file = e.target.files[0];
+const reader = new FileReader();
+
+reader.onload = function(f) {
+fabric.Image.fromURL(f.target.result, function(img) {
+canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+scaleX: canvas.width / img.width,
+scaleY: canvas.height / img.height
+});
+});
+};
+
+reader.readAsDataURL(file);
+});
+
+createWatermark();
+</script>
+</body>
+</html>
