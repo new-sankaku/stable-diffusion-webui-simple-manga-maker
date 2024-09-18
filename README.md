@@ -19,20 +19,25 @@ For those who find updates bothersome, the Demo site is recommended.
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
 
 ## Grid Line / Knife Mode
+<div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/05_gridline.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/06_knifemode.webp" height="350">
+</div>
 
 ## Dark Mode / Light Mode
+<div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
+</div>
 
 ## Blend Mode
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/11_blendmode.webp" height="800">
 
 ## Blend Mode Sample
+<div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/12_blend.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/13_blend.webp" height="350">
-
+</div>
 
 
 
