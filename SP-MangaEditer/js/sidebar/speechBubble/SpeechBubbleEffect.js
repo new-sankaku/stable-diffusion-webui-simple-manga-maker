@@ -142,11 +142,11 @@ window.onload = function () {
             if (stateStack.length > 2) {
                 btmSaveZip().then(() => {
                     setCanvasGUID();
-                    loadSVGPlusReset(item.svg);
+                    loadSVGPlusReset(item.svg, true);
                 });
             } else {
                 setCanvasGUID();
-                loadSVGPlusReset(item.svg);
+                loadSVGPlusReset(item.svg, true);
             }
         });
         previewAreaLandscape.appendChild(img);

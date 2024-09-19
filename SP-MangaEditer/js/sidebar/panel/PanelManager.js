@@ -225,7 +225,7 @@ function adjustImageToFitFrame(image, frame) {
 
 
 /** Load SVG(Verfical, Landscope) */
-function loadSVGPlusReset(svgString) {
+function loadSVGPlusReset(svgString, isLand=false) {
   initImageHistory();
   saveState();
   changeDoNotSaveHistory();
@@ -316,8 +316,13 @@ function loadSVGPlusReset(svgString) {
         obj.isPanel= true;
         obj.scaleX = scaleToFit;
         obj.scaleY = scaleToFit;
-        obj.top = obj.top   * scaleToFit + offsetY;
-        obj.left = obj.left * scaleToFit + offsetX;
+        if(isLand){
+          obj.top  = obj.top  * scaleToFit + offsetY - (strokeWidth);
+          obj.left = obj.left * scaleToFit + offsetX;
+        }else{
+          obj.top  = obj.top  * scaleToFit + offsetY - (strokeWidth);
+          obj.left = obj.left * scaleToFit + offsetX;
+        }
         obj.setCoords();
         obj.strokeWidth = strokeWidth;
         obj.selectable = true;
