@@ -212,9 +212,10 @@ button.selected {
  background-color: var(--select-button-color);
 }
 
-.active-button {
+.active-button{
  background-color: var(--select-button-color);
 }
+
 
 .input-group_one textarea,
 .input-group_one select{

@@ -318,7 +318,7 @@ function loadSVGPlusReset(svgString, isLand=false) {
         obj.scaleY = scaleToFit;
         if(isLand){
           obj.top  = obj.top  * scaleToFit + offsetY - (strokeWidth);
-          obj.left = obj.left * scaleToFit + offsetX;
+          obj.left = obj.left * scaleToFit + offsetX + (strokeWidth/2);
         }else{
           obj.top  = obj.top  * scaleToFit + offsetY - (strokeWidth);
           obj.left = obj.left * scaleToFit + offsetX;

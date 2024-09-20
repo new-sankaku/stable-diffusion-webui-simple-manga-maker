@@ -533,13 +533,6 @@
 
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <button id="shortcutButton" style="margin-top: 2px; background-color: transparent;" >
-                            <i class="material-icons">keyboard_alt</i>
-                        </button>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
                         <i class="fas fa-sun"></i>
                         <label class="toggle-switchTermaMode">
                             <input type="checkbox" id="mode-toggle">
@@ -1090,7 +1083,7 @@
             <div id="manga-effect-area">
                 <div class="area-header">
                     <a href="html/Minual/effect.html" target="_blank">
-                        Effect (Help)
+                        Fast Effect (Help)
                     </a>
                 </div>
                 <div id="manga-effect-buttons">
@@ -1099,10 +1092,13 @@
                         <span data-i18n="Color2BlackWhite">Color2BlackWhite</span>
                         <img src="03_images/preset/effect/color2mono.webp" style="width: 100%;">
                     </button>
-
-                    <button id="blendButton" onclick="handleBlend()">
+                    <button id="blendButton" onclick="switchMangaEffect('EffectBlend')">
                         <span data-i18n="25blends"></span>
                         <img src="03_images/preset/effect/25_blend.webp" style="width: 100%;">
+                    </button>
+                    <button id="EffectGlowButton" onclick="switchMangaEffect('EffectGlow')">
+                        <span data-i18n="Glow"></span>
+                        <img src="03_images/preset/effect/glow.webp" style="width: 100%;">
                     </button>
                 </div>
                 <hr>
@@ -1477,25 +1473,6 @@
                             <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> <span
                                     data-i18n="flip">Flip</span></button>
                         </div>
-                        <hr class="separator">
-
-
-                        <!-- addGlowButton -> addGlowEffect -->
-                        <div class="control-item">
-                            <input type="checkbox" id="addGlowEffectCheckBox">
-                            <label data-i18n="outloneGlow">
-                                Outlone Glow
-                            </label>
-                        </div>
-                        <div class="input-container" data-i18n-label="glowOutLineSize">
-                            <input type="range" id="glowOutLineSlider" min="0" max="250" value="20">
-                        </div>
-
-
-                        <div class="control-row">
-                            <label for="glowOutLineColorPicker" data-i18n="glowOutLineColor">Color </label>
-                            <input type="color" id="glowOutLineColorPicker" value="#FFFFFF">
-                        </div>
 
                         <hr class="separator">
                         <div class="control-item">
@@ -1533,12 +1510,6 @@
                             <input type="range" id="gammaBlue" min="0" max="2.2" step="0.003921" value="1">
                         </div>
                         <hr class="separator">
-                        <div class="input-container" data-i18n-label="vibrance">
-                            <input type="range" id="vibranceValue" min="-1" max="1" step="0.003921" value="0">
-                        </div>
-                        <div class="input-container" data-i18n-label="blur">
-                            <input type="range" id="blurValue" min="0" max="0.3" step="0.003921" value="0">
-                        </div>
                         <div class="input-container" data-i18n-label="pixelate">
                             <input type="range" id="pixelateValue" min="1" max="20" step="1" value="1">
                         </div>

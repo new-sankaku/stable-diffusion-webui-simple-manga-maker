@@ -55,14 +55,8 @@ function updateControls(activeObject) {
     $("gammaGreen").value = 1.0;
     $("gammaBlue").value = 1.0;
     
-    $("vibranceValue").value = 0.0;
-    
-    $("blurValue").value = 0.0;
-    
     $("pixelateValue").value = 1;
 
-    $("glowOutLineSlider").value = 20;
-    $("glowOutLineColorPicker").value = "#FFFFFF";
 
     return;
   }
@@ -91,25 +85,9 @@ function updateControls(activeObject) {
       $("gammaBlue").value = filter.gamma[2];
       
     }
-    if (filter.type === 'Vibrance') {
-      $("vibranceValue").value = filter.vibrance;
-    }
-    if (filter.type === 'Blur') {
-      $("blurValue").value = filter.blur;
-    }
     if (filter.type === 'Pixelate') {
       $("pixelateValue").value = filter.blocksize;
     }
   });
 
-  if (activeObject && activeObject.shadow) {
-    const shadowColor = activeObject.shadow.color.toString(); 
-    $('addGlowEffectCheckBox').checked = true;
-    $('glowOutLineColorPicker').value = shadowColor;
-    $('glowOutLineSlider').value = activeObject.shadow.blur;
-  } else {
-      $('addGlowEffectCheckBox').checked = false;
-      $('glowOutLineColorPicker').value = "#FFFFFF";
-      $('glowOutLineSlider').value = 20;
-  }
 }

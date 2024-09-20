@@ -17,14 +17,6 @@ function applyFilters() {
     var v3 = parseFloat($('gammaBlue').value);
     filters.push(new fabric.Image.filters.Gamma({ gamma: [v1, v2, v3] }));
 
-    filters.push(new fabric.Image.filters.Vibrance({
-      vibrance: parseFloat($('vibranceValue').value)
-    }));
-
-    filters.push(new fabric.Image.filters.Blur({
-      blur: parseFloat($('blurValue').value)
-    }));
-
     filters.push(new fabric.Image.filters.Pixelate({
       blocksize: parseInt($('pixelateValue').value, 10)
     }));
@@ -46,60 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
   $('gammaRed').oninput = applyFilters;
   $('gammaGreen').oninput = applyFilters;
   $('gammaBlue').oninput = applyFilters;
-  $('vibranceValue').oninput = applyFilters;
-  $('blurValue').oninput = applyFilters;
   $('pixelateValue').oninput = applyFilters;
-
-  $('addGlowEffectCheckBox').addEventListener('change', function () {
-
-    const selectedObject = canvas.getActiveObject();
-    if (selectedObject) {
-      if ($('addGlowEffectCheckBox').checked) {
-        const color = $('glowOutLineColorPicker').value;
-        const blurValue = parseInt($('glowOutLineSlider').value, 10);
-
-        console.log("addGlowEffectCheckBox", color, blurValue,);
-        selectedObject.set({
-          shadow: {
-            color: color,
-            blur: blurValue,
-            offsetX: 0,
-            offsetY: 0
-          }
-        });
-      } else {
-        selectedObject.set({ shadow: null });
-      }
-      canvas.renderAll();
-    }
-  });
-
-  $('glowOutLineSlider').addEventListener('change', function () {
-    if ($('addGlowEffectCheckBox').checked) {
-      const blurValue = parseInt(this.value, 20);
-      $('glowOutLineSlider').innerText = blurValue;
-
-      const selectedObject = canvas.getActiveObject();
-      if (selectedObject && selectedObject.shadow) {
-        const color = $('glowOutLineColorPicker').value;
-        selectedObject.shadow.color = color;
-        selectedObject.shadow.blur = blurValue;
-        canvas.renderAll();
-      }
-    }
-  });
-
-  $('glowOutLineColorPicker').addEventListener('input', function () {
-    const color = this.value;
-    const selectedObject = canvas.getActiveObject();
-    if (selectedObject && selectedObject.shadow) {
-      const blurValue = parseInt($('glowOutLineSlider').value, 20);
-      selectedObject.shadow.color = color;
-      selectedObject.shadow.blur = blurValue;
-      canvas.renderAll();
-    }
-  });
-
 });
 
 

@@ -228,6 +228,11 @@ button:hover {
  color: var(--button-hover-color);
 }
 
+button.active-button:hover {
+  background-color: var(--select-button-color);
+ }
+ 
+
 button .material-icons {
  font-size: var(--font-size-icon-material);
  vertical-align: middle;

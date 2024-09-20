@@ -173,6 +173,10 @@ function enhanceBrush(brush, keepOriginalMethod) {
         tempCanvas.width = this.canvas.width;
         tempCanvas.height = this.canvas.height;
 
+        if( this.images.length == 0  ){
+            return ;
+        }
+
         this.images.forEach((img) => {
             tempCtx.drawImage(
                 img.getElement(),

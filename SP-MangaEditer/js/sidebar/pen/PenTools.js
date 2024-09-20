@@ -192,12 +192,6 @@ function switchPencilTypeUi(type) {
             break;
     }
 
-    // if( drawingWidth  ){
-    //     console.log("drawingWidth is not null " + type);
-    // }else{
-    //     console.log("drawingWidth is null " + type);
-    // }
-
     const sliders2 = document.querySelectorAll('.input-container-leftSpace input[type="range"]');
     sliders2.forEach(slider => {
       setupSlider(slider, '.input-container-leftSpace')
@@ -205,105 +199,29 @@ function switchPencilTypeUi(type) {
     addPenEventListener();
 }
 
-function clearPenSettings(){
-    if( drawingColor ){
-        drawingColor.removeEventListener('change', applyBrushSettings);
-        drawingColor.removeEventListener('change', saveValueMap);
-    }
-    if( drawingWidth ){
-        drawingWidth.removeEventListener('change', applyBrushSettings);
-        drawingWidth.removeEventListener('change', saveValueMap);
-    }
-    if( drawingOpacity ){
-        drawingOpacity.removeEventListener('change', applyBrushSettings);
-        drawingOpacity.removeEventListener('change', saveValueMap);
-    }
-    if( drawingShadowColor ){
-        drawingShadowColor.removeEventListener('change', applyBrushSettings);
-        drawingShadowColor.removeEventListener('change', saveValueMap);
-    }
-    if( drawingShadowWidth ){
-        drawingShadowWidth.removeEventListener('change', applyBrushSettings);
-        drawingShadowWidth.removeEventListener('change', saveValueMap);
-        console.log("drawingShadowWidth is clear ");
-    }else{
-        console.log("drawingShadowWidth is not clear ");
-
-    }
-    if( drawingShadowOffsetX ){
-        drawingShadowOffsetX.removeEventListener('change', applyBrushSettings);
-        drawingShadowOffsetX.removeEventListener('change', saveValueMap);
-    }
-    if( drawingShadowOffsetY ){
-        drawingShadowOffsetY.removeEventListener('change', applyBrushSettings);
-        drawingShadowOffsetY.removeEventListener('change', saveValueMap);
-    }
-    if( drawingLineStyle ){
-        drawingLineStyle.removeEventListener('change', applyBrushSettings);
-        drawingLineStyle.removeEventListener('change', saveValueMap);
-    }
-    if( drawingMainColor ){
-        drawingMainColor.removeEventListener('change', applyBrushSettings);
-        drawingMainColor.removeEventListener('change', saveValueMap);
-    }
-    if( drawingOutline1Color ){
-        drawingOutline1Color.removeEventListener('change', applyBrushSettings);
-        drawingOutline1Color.removeEventListener('change', saveValueMap);
-    }
-    if( drawingOutline2Color ){
-        drawingOutline2Color.removeEventListener('change', applyBrushSettings);
-        drawingOutline2Color.removeEventListener('change', saveValueMap);
-    }
-
-    if( drawingMainWidth ){
-        drawingMainWidth.removeEventListener('change', applyBrushSettings);
-        drawingMainWidth.removeEventListener('change', saveValueMap);
-    }
-    if( drawingOutline1Width ){
-        drawingOutline1Width.removeEventListener('change', applyBrushSettings);
-        drawingOutline1Width.removeEventListener('change', saveValueMap);
-    }
-    if( drawingOutline2Width ){
-        drawingOutline2Width.removeEventListener('change', applyBrushSettings);
-        drawingOutline2Width.removeEventListener('change', saveValueMap);
-    }
-
-    if( drawingMainOpacity ){
-        drawingMainOpacity.removeEventListener('change', applyBrushSettings);
-        drawingMainOpacity.removeEventListener('change', saveValueMap);
-    }
-    if( drawingOutline1Opacity ){
-        drawingOutline1Opacity.removeEventListener('change', applyBrushSettings);
-        drawingOutline1Opacity.removeEventListener('change', saveValueMap);
-    }
-    if( drawingOutline2Opacity ){
-        drawingOutline2Opacity.removeEventListener('change', applyBrushSettings);
-        drawingOutline2Opacity.removeEventListener('change', saveValueMap);
-    }
-
-    drawingMainOpacity      = null;
-    drawingOutline1Opacity  = null;
-    drawingOutline2Opacity  = null;
-    drawingMainColor       = null;
-    drawingOutline1Color   = null;
-    drawingOutline2Color   = null;
-    drawingMainWidth       = null;
-    drawingOutline1Width   = null;
-    drawingOutline2Width   = null;
-    drawingColor             = null;
-    drawingWidth             = null;
-    drawingOpacity           = null;
-    drawingShadowColor       = null;
-    drawingShadowWidth       = null;
-    drawingShadowOffsetX     = null;
-    drawingShadowOffsetY     = null;
-    drawingLineStyle         = null;
-    drawingMosaicSize        = null;
-    drawingMosaicCircleSize  = null;
+function clearPenSettings() {
+    const elements = [
+        drawingColor, drawingWidth, drawingOpacity,
+        drawingShadowColor, drawingShadowWidth, drawingShadowOffsetX, drawingShadowOffsetY,
+        drawingLineStyle, drawingMainColor, drawingOutline1Color, drawingOutline2Color,
+        drawingMainWidth, drawingOutline1Width, drawingOutline2Width,
+        drawingMainOpacity, drawingOutline1Opacity, drawingOutline2Opacity
+    ];
+    elements.forEach(el => {
+        if (el) {
+            el.removeEventListener('change', applyBrushSettings);
+            el.removeEventListener('change', saveValueMap);
+        }
+    });
+    [drawingColor, drawingWidth, drawingOpacity, drawingShadowColor, drawingShadowWidth, 
+     drawingShadowOffsetX, drawingShadowOffsetY, drawingLineStyle, drawingMainColor, 
+     drawingOutline1Color, drawingOutline2Color, drawingMainWidth, drawingOutline1Width, 
+     drawingOutline2Width, drawingMainOpacity, drawingOutline1Opacity, 
+     drawingOutline2Opacity, drawingMosaicSize, drawingMosaicCircleSize] = Array(20).fill(null);
 }
 
-function addPenEventListener(){
 
+function addPenEventListener(){
     const elements = [drawingColor, drawingWidth, drawingOpacity, drawingShadowColor, 
                       drawingShadowWidth, drawingShadowOffsetX, drawingShadowOffsetY, drawingLineStyle,
                       drawingMainOpacity,drawingOutline1Opacity,drawingOutline2Opacity, drawingMainColor,drawingOutline1Color,
@@ -318,6 +236,20 @@ function addPenEventListener(){
         }
     });
 
+    if(drawingWidth){
+        drawingWidth.addEventListener('input', function() {
+            const size = parseInt(this.value);
+            drawCircle(size);
+        });
+    }
+    if(drawingMainWidth){
+        drawingMainWidth.addEventListener('input', function() {
+            const size = parseInt(this.value);
+            drawCircle(size);
+        });
+    }
+
+
     if( drawingMosaicSize ){
         drawingMosaicSize.addEventListener('input', function () {
             var value = this.value;
@@ -326,14 +258,11 @@ function addPenEventListener(){
                 updatePreview();
             }
         });
-        drawingMosaicSize.onchange         = () => saveValueMap(drawingMosaicSize);
+        drawingMosaicSize.onchange = () => saveValueMap(drawingMosaicSize);
     }
 
-    console.log("drawingMosaicCircleSize");
     if( drawingMosaicCircleSize ){
-        console.log("drawingMosaicCircleSize in");
         drawingMosaicCircleSize.addEventListener('change', function () {
-            console.log("drawingMosaicCircleSize input in");
             var value = this.value;
             if (isMosaicBrushActive && canvas.freeDrawingBrush) {
                 canvas.freeDrawingBrush.circleSize = parseInt(value);
@@ -412,12 +341,6 @@ function applyBrushSettings() {
             }
         }
 
-        // console.log("After applying settings:");
-        // console.log("Width:", brush.width);
-        // console.log("Color:", brush.color);
-        // console.log("Opacity:", brush.opacity);
-        // console.log("Shadow:", brush.shadow);
-        // console.log("StrokeDashArray:", brush.strokeDashArray);
     }
 }
 
@@ -457,9 +380,12 @@ function setupContextTopBrush(brush) {
     };
 }
 function finalizeGroup() {
+    
     if (currentPaths.length > 0) {
+        console.log("currentPaths.length1 ", currentPaths.length);
         const existingPaths = currentPaths.filter(path => canvas.contains(path));
         if (existingPaths.length > 0) {
+            console.log("existingPaths.length2 ", existingPaths.length);
             let group = new fabric.Group(existingPaths, {
                 selectable: true,
                 evented: true
@@ -470,8 +396,12 @@ function finalizeGroup() {
             changeDoSaveHistory();
             canvas.renderAll();
             updateLayerPanel();
+        }else{
+            console.log("existingPaths.length3 ", existingPaths.length);
         }
         currentPaths = currentPaths.filter(path => !existingPaths.includes(path));
+    }else{
+        console.log("currentPaths.length4 ", currentPaths.length);
     }
 }
 
@@ -523,7 +453,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function updatePreview() {
     if (isMosaicBrushActive && canvas.freeDrawingBrush) {
-        // console.log("updatePreview");
         canvas.freeDrawingBrush.drawPreviewCircle({ x: canvas.width / 2, y: canvas.height / 2 });
     }
 }
@@ -538,4 +467,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+let currentCircle = null;
+let removeTimeout = null;
+
+function createCheckeredPattern(size) {
+    const patternCanvas = document.createElement('canvas');
+    const patternContext = patternCanvas.getContext('2d');
+    const patternSize = 10;
+    patternCanvas.width = patternSize * 2;
+    patternCanvas.height = patternSize * 2;
+
+    patternContext.fillStyle = 'white';
+    patternContext.fillRect(0, 0, patternSize * 2, patternSize * 2);
+
+    patternContext.fillStyle = '#E0E0E0';  // 薄いグレー
+    patternContext.fillRect(0, 0, patternSize, patternSize);
+    patternContext.fillRect(patternSize, patternSize, patternSize, patternSize);
+
+    return new fabric.Pattern({
+        source: patternCanvas,
+        repeat: 'repeat'
+    });
+}
+
+function drawCircle(size) {
+    if (currentCircle) {
+        canvas.remove(currentCircle);
+    }
+
+    if (removeTimeout) {
+        clearTimeout(removeTimeout);
+    }
+
+    const checkeredPattern = createCheckeredPattern(size);
+
+    currentCircle = new fabric.Circle({
+        radius: size / 2,
+        fill: checkeredPattern,
+        stroke: 'green',
+        strokeWidth: 2,
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        originX: 'center',
+        originY: 'center',
+        opacity: 0.5
+    });
+
+    canvas.add(currentCircle);
+    canvas.renderAll();
+
+    removeTimeout = setTimeout(() => {
+        if (currentCircle) {
+            canvas.remove(currentCircle);
+            canvas.renderAll();
+            currentCircle = null;
+        }
+    }, 1000);
+}
 
