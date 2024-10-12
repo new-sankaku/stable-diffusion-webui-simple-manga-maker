@@ -2,14 +2,19 @@
 document.addEventListener('DOMContentLoaded', function() {
   openButton = $("openWindow");
   openButton.addEventListener("click", function () {
+    var selectedFont = $('fontSelector').value;
+    var fontsize = $("fontSizeSlider").value
+    var fontStrokeWidth = $("fontStrokeWidthSlider").value
+
     let style = {
-      "fill": "#292929",
-      "editable": true,
-      "fontSize": 30,
-      "left": 100,
-      "top": 50,
-      "width": 100,
-      "height": 100
+      top: 50,
+      left: 50,
+      fontSize: parseInt(fontsize),
+      fontFamily: selectedFont,
+      fill: $("textColorPicker").value,
+      stroke: $("textOutlineColorPicker").value,
+      strokeWidth: parseInt(fontStrokeWidth),
+      textAlign: textAlignment,
     };
     
     const cjkText = new VerticalTextbox("new", style);
