@@ -85,11 +85,15 @@ function updateLayerPanel() {
         var fullText = layer.text;
         nameTextArea.value = fullText.substring(0, 20);
       } else if (isVerticalText(layer)) {
-        var fullText = layer
-          .getObjects()
-          .map((obj) => obj.text)
-          .join("");
-        nameTextArea.value = fullText.substring(0, 15);
+        var fullText = layer.name;
+        if( fullText ){
+          nameTextArea.value = fullText.substring(0, 15);
+        }else{
+          layer.name = "verticalText";
+          fullText = layer.name;
+          nameTextArea.value = fullText.substring(0, 15);
+        }
+        
       }
 
       setNameTextAreaProperties(layer, nameTextArea, index);

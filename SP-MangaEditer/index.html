@@ -1003,6 +1003,18 @@
             <div id="tool-area" style="display: none;">
                 <div class="area-header" data-i18n="tools">Tools</div>
                 <div id="tool-buttons">
+                    <button id="MarkerButton" onclick="switchPencilType('Marker')">
+                        <span data-i18n="Marker">Marker</span>
+                        <img src="03_images/preset/brush/Marker.webp" alt="Marker Icon" style="width: 100%;">
+                    </button>
+                    <button id="InkButton" onclick="switchPencilType('Ink')">
+                        <span data-i18n="ink">Ink</span>
+                        <img src="03_images/preset/brush/Ink.webp" alt="Ink Icon" style="width: 100%;">
+                    </button>
+                    <button id="CrayonButton" onclick="switchPencilType('Crayon')">
+                        <span data-i18n="crayon">Crayon</span>
+                        <img src="03_images/preset/brush/Crayon.webp" alt="Crayon Icon" style="width: 100%;">
+                    </button>
                     <button id="PencilButton" onclick="switchPencilType('Pencil')">
                         <span data-i18n="Pencil">Pencil</span>
                         <img src="03_images/preset/brush/Pencil.webp" alt="Pencil Icon" style="width: 100%;">
@@ -1014,18 +1026,6 @@
                     <button id="CircleButton" onclick="switchPencilType('Circle')">
                         <span data-i18n="Circle">Circle</span>
                         <img src="03_images/preset/brush/Circle.webp" alt="Circle Icon" style="width: 100%;">
-                    </button>
-                    <button id="CrayonButton" onclick="switchPencilType('Crayon')">
-                        <span data-i18n="crayon">Crayon</span>
-                        <img src="03_images/preset/brush/Crayon.webp" alt="Crayon Icon" style="width: 100%;">
-                    </button>
-                    <button id="InkButton" onclick="switchPencilType('Ink')">
-                        <span data-i18n="ink">Ink</span>
-                        <img src="03_images/preset/brush/Ink.webp" alt="Ink Icon" style="width: 100%;">
-                    </button>
-                    <button id="MarkerButton" onclick="switchPencilType('Marker')">
-                        <span data-i18n="Marker">Marker</span>
-                        <img src="03_images/preset/brush/Marker.webp" alt="Marker Icon" style="width: 100%;">
                     </button>
 
                     <button id="MosaicButton" onclick="switchPencilType('Mosaic')">
@@ -1808,6 +1808,8 @@
     <script src="js/sidebar/Sidebar.js?v=5.3" defer></script>
     <script src="js/sidebar/text/TextEffect.js?v=5.3" defer></script>
     <script src="js/sidebar/text/VerticalText.js?v=5.3" defer></script>
+    <script src="js/sidebar/text/VerticalTextbox.js?v=5.3"></script>
+
     <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=5.3" defer></script>
     <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=5.3" defer></script>
     <script src="js/sidebar/pen/OriginalBrush.js?v=5.3" defer></script>

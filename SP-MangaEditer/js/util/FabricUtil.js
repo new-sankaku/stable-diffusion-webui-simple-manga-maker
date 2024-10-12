@@ -17,11 +17,12 @@ function haveClipPath(activeObject){
 }
 
 function isText(activeObject) {
-  return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || activeObject.type === "textbox" || activeObject.type === "verticalText"));
+  return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || 
+                           activeObject.type === "textbox" || activeObject.type === "vertical-textbox"));
 }
 
 function isVerticalText(activeObject) {
-  return (activeObject && (activeObject.type === "verticalText"));
+  return (activeObject && (activeObject.type === "vertical-textbox"));
 }
 
 function isHorizontalText(activeObject) {

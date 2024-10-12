@@ -19,9 +19,12 @@ function rgbToHex(rgb) {
 
 function updateTextControls(object) {
   if (isVerticalText(object)) {
-    let firstText = object.getObjects('text')[0];
-    let inheritedColor = firstText ? firstText.fill : $("textColorPicker").value;
-    $('textColorPicker').value = inheritedColor;
+    if (object.fill) {
+      return;
+    } else {
+      let hexColor = rgbToHex(object.fill);
+      $('textColorPicker').value = hexColor;
+    }
   } else if (isText(object)) {
     if (object.fill) {
       return;
@@ -174,12 +177,29 @@ function applyNeonEffect() {
 
 var textAlignment = 'left';
 function alignText(alignment) {
+
+  console.log("call alignment");
   textAlignment = alignment;
   var activeObject = canvas.getActiveObject();
-  if (activeObject && isText(activeObject)) {
+
+  if( isVerticalText(activeObject) ){
+    switch(alignment){
+      case "left":
+        textAlignment = "top";
+        break
+      case "center":
+        textAlignment = "middle";
+        break
+      case "right":
+        textAlignment = "bottom";
+        break
+    }
+    activeObject.set('verticalAlign', textAlignment);
+    activeObject.set('dirty', true);
+  }else if(isText(activeObject)){
     activeObject.set('textAlign', alignment);
-    canvas.renderAll();
   }
+  canvas.renderAll();
   updateTextSelectedButton(alignment);
 }
 
@@ -258,11 +278,7 @@ function changeFontSize(size) {
 function changeStrokeWidthSize(size) {
   var activeObject = canvas.getActiveObject();
   if (isVerticalText(activeObject)) {
-    activeObject.getObjects().forEach(function (obj) {
-      if (obj.type === 'text') {
-        obj.set("strokeWidth", parseInt(size));
-      }
-    });
+    activeObject.set("strokeWidth", parseInt(size));
     canvas.renderAll();
   } else if (isText(activeObject)) {
     activeObject.set("strokeWidth", parseInt(size));
@@ -275,11 +291,7 @@ function changeTextColor(color) {
   var activeObject = canvas.getActiveObject();
 
   if (isVerticalText(activeObject)) {
-    activeObject.getObjects().forEach(function (obj) {
-      if (obj.type === 'text') {
-        obj.set("fill", color);
-      }
-    });
+    activeObject.set("fill", color);
     canvas.renderAll();
   } else if (isText(activeObject)) {
     activeObject.set("fill", color);
@@ -290,11 +302,7 @@ function changeOutlineTextColor(color) {
   var activeObject = canvas.getActiveObject();
 
   if (isVerticalText(activeObject)) {
-    activeObject.getObjects().forEach(function (obj) {
-      if (obj.type === 'text') {
-        obj.set("stroke", color);
-      }
-    });
+    activeObject.set("stroke", color);
     canvas.renderAll();
   } else if (isText(activeObject)) {
     activeObject.set("stroke", color);

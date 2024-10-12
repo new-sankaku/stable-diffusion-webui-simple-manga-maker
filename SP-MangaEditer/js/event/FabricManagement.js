@@ -98,27 +98,6 @@ canvas.on('selection:updated', function(event) {
   }
 });
 
-//縦書きTextのフローティングウインドウ表示処理
-canvas.on("selection:created", function () {
-  const selectedObject = canvas.getActiveObject();
-  if (isVerticalText(selectedObject)) {
-    openModalForEditing();
-  } else {
-    myWindow.style.display = "none";
-  }
-});
-canvas.on("selection:updated", function () {
-  const selectedObject = canvas.getActiveObject();
-  if (isVerticalText(selectedObject)) {
-    openModalForEditing();
-  } else {
-    myWindow.style.display = "none";
-  }
-});
-canvas.on("selection:cleared", closeWindow);
-
-
-
 function moveSettings(img, poly) {
   updateClipPath(img, poly);
 

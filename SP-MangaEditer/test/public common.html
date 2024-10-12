@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>CC画像処理</title>
+<style>
+body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 10px; }
+h1 { font-size: 1.2em; margin: 0 0 10px 0; }
+#dropArea { border: 2px dashed #ccc; border-radius: 10px; width: 100%; height: 100px; display: flex; justify-content: center; align-items: center; margin-bottom: 10px; font-size: 0.9em; }
+#dropArea.highlight { border-color: #000; }
+#fileInput { display: none; }
+#progress { width: 100%; height: 10px; background-color: #f0f0f0; margin-bottom: 10px; }
+#progressBar { width: 0; height: 100%; background-color: #4CAF50; transition: width 0.3s; }
+#progressText { font-size: 0.8em; text-align: center; margin-top: 2px; }
+#ccIcons { display: flex; justify-content: center; gap: 5px; margin-bottom: 10px; }
+.ccIcon { width: 40px; height: 40px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+.ccIcon img { max-width: 100%; max-height: 100%; }
+.ccIcon.selected { outline: 2px solid #4CAF50; }
+#downloadContainer { display: flex; flex-wrap: wrap; gap: 5px; }
+.downloadBtn, #bulkDownloadBtn { margin: 2px; padding: 5px; background-color: #4CAF50; color: white; border: none; cursor: pointer; font-size: 0.8em; }
+#logContainer { border: 1px solid #ccc; padding: 5px; margin-top: 10px; max-height: 100px; overflow-y: auto; font-size: 0.8em; }
+.slider-container { display: flex; align-items: center; margin-bottom: 5px; font-size: 0.9em; }
+.slider-container label { width: 80px; }
+.slider-container input[type="range"] { width: 150px; margin: 0 5px; }
+.slider-container span { width: 30px; text-align: right; }
+</style>
+</head>
+<body>
+<h1>CC画像処理</h1>
+<div id="ccIcons"></div>
+<div class="slider-container">
+<label for="opacitySlider">不透明度:</label>
+<input type="range" id="opacitySlider" min="0" max="1" step="0.1" value="0.8">
+<span id="opacityValue">0.8</span>
+</div>
+<div class="slider-container">
+<label for="sizeSlider">サイズ:</label>
+<input type="range" id="sizeSlider" min="1" max="50" step="1" value="10">
+<span id="sizeValue">10%</span>
+</div>
+<div id="dropArea">画像をドロップまたはクリックして選択</div>
+<input type="file" id="fileInput" multiple accept="image/*">
+<div id="progress"><div id="progressBar"></div></div>
+<div id="progressText"></div>
+<div id="downloadContainer"></div>
+<button id="bulkDownloadBtn" style="display: none;">一括ダウンロード</button>
+<div id="logContainer"></div>
+<script src="svg/cc.js"></script>
+<script>
+const dropArea = document.getElementById('dropArea');
+const fileInput = document.getElementById('fileInput');
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const downloadContainer = document.getElementById('downloadContainer');
+const logContainer = document.getElementById('logContainer');
+const ccIconsContainer = document.getElementById('ccIcons');
+const opacitySlider = document.getElementById('opacitySlider');
+const opacityValue = document.getElementById('opacityValue');
+const sizeSlider = document.getElementById('sizeSlider');
+const sizeValue = document.getElementById('sizeValue');
+const bulkDownloadBtn = document.getElementById('bulkDownloadBtn');
+let selectedCC = 'cc-zero';
+let iconOpacity = 0.8;
+let iconSize = 0.1;
+let processedImages = [];
+function initializeApp() {
+cc.forEach(icon => {
+const div = document.createElement('div');
+div.className = 'ccIcon';
+div.dataset.cc = icon.name;
+if (icon.name === selectedCC) div.classList.add('selected');
+const img = document.createElement('img');
+img.src = `data:image/svg+xml;base64,${btoa(icon.svg)}`;
+img.alt = icon.name.toUpperCase();
+div.appendChild(img);
+div.addEventListener('click', () => {
+ccIconsContainer.querySelectorAll('.ccIcon').forEach(i => i.classList.remove('selected'));
+div.classList.add('selected');
+selectedCC = icon.name;
+});
+ccIconsContainer.appendChild(div);
+});
+}
+function initializeEventListeners() {
+dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('highlight'); });
+dropArea.addEventListener('dragleave', () => dropArea.classList.remove('highlight'));
+dropArea.addEventListener('drop', handleDrop);
+dropArea.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+opacitySlider.addEventListener('input', (e) => {
+iconOpacity = parseFloat(e.target.value);
+opacityValue.textContent = iconOpacity.toFixed(1);
+});
+sizeSlider.addEventListener('input', (e) => {
+iconSize = parseFloat(e.target.value) / 100;
+sizeValue.textContent = e.target.value + '%';
+});
+bulkDownloadBtn.addEventListener('click', bulkDownload);
+}
+function handleDrop(e) {
+e.preventDefault();
+dropArea.classList.remove('highlight');
+handleFiles(e.dataTransfer.files);
+}
+async function handleFiles(files) {
+processedImages = [];
+const totalFiles = files.length;
+for (let i = 0; i < totalFiles; i++) {
+if (files[i].type.startsWith('image/')) {
+const processedImage = await processImage(files[i]);
+processedImages.push({ name: files[i].name, data: processedImage });
+updateProgress(i + 1, totalFiles);
+}
+}
+if (processedImages.length > 0) bulkDownloadBtn.style.display = 'block';
+}
+function updateProgress(processed, total) {
+const percent = (processed / total) * 100;
+progressBar.style.width = percent + '%';
+progressText.textContent = `処理中... ${processed}/${total}`;
+}
+async function processImage(file) {
+const img = await loadImage(file);
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = img.width;
+canvas.height = img.height;
+ctx.drawImage(img, 0, 0);
+await addCCIcon(ctx, canvas.width, canvas.height);
+const processedImageUrl = canvas.toDataURL('image/png');
+createDownloadButton(processedImageUrl, file.name);
+return processedImageUrl;
+}
+function loadImage(file) {
+return new Promise((resolve) => {
+const img = new Image();
+img.onload = () => resolve(img);
+img.src = URL.createObjectURL(file);
+});
+}
+function addCCIcon(ctx, width, height) {
+return new Promise((resolve) => {
+const maxIconSize = Math.min(width, height) * iconSize;
+const padding = maxIconSize * 0.1;
+const selectedIcon = cc.find(icon => icon.name === selectedCC);
+const img = new Image();
+img.onload = () => {
+const aspectRatio = img.width / img.height;
+let drawWidth, drawHeight;
+if (aspectRatio > 1) {
+drawWidth = maxIconSize;
+drawHeight = maxIconSize / aspectRatio;
+} else {
+drawHeight = maxIconSize;
+drawWidth = maxIconSize * aspectRatio;
+}
+const x = width - drawWidth - padding;
+const y = height - drawHeight - padding;
+ctx.globalAlpha = iconOpacity;
+ctx.drawImage(img, x, y, drawWidth, drawHeight);
+ctx.globalAlpha = 1.0;
+resolve();
+};
+img.src = `data:image/svg+xml;base64,${btoa(selectedIcon.svg)}`;
+});
+}
+function createDownloadButton(imageUrl, fileName) {
+const downloadBtn = document.createElement('button');
+downloadBtn.textContent = `${fileName}`;
+downloadBtn.className = 'downloadBtn';
+downloadBtn.onclick = () => downloadImage(imageUrl, fileName);
+downloadContainer.appendChild(downloadBtn);
+}
+function downloadImage(imageUrl, fileName) {
+const link = document.createElement('a');
+link.href = imageUrl;
+link.download = fileName;
+link.click();
+}
+function bulkDownload() {
+processedImages.forEach(image => downloadImage(image.data, image.name));
+}
+initializeApp();
+initializeEventListeners();
+</script>
+</body>
+</html>

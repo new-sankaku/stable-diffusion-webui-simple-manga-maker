@@ -192,6 +192,7 @@ function lastRedo(guid = null) {
     currentStateIndex = stateStack.length - 1;
 
     let state = restoreImage(stateStack[stateStack.length - 1]);
+    // console.log("state", JSON.stringify(state));
     canvas.loadFromJSON(state, function () {
         if( guid ){
             setCanvasGUID( guid );
