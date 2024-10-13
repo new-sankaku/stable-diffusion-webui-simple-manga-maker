@@ -44,18 +44,6 @@ function glfxResetFilterValues() {
 
 var fxCanvas, texture;
 
-document.addEventListener('DOMContentLoaded', function() {
-  $("glfxFilter").addEventListener("change", function () {
-    var value = this.value;
-    document.querySelectorAll(".glfxCcontrol-group").forEach(function (group) {
-      group.style.display = "none";
-    });
-    if (value) {
-      $(value).style.display = "block";
-    }
-  });
-});
-
 function glfxApplyFilter(filter=null) {
   // console.log("glfxApplyFilter: Start");
   if (!canvas) {
@@ -372,7 +360,17 @@ function debounceGlfx(func, wait) {
   };
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+
+function glfxAddEvent(){
+  $("glfxFilter").addEventListener("change", function () {
+    var value = this.value;
+    document.querySelectorAll(".glfxCcontrol-group").forEach(function (group) {
+      group.style.display = "none";
+    });
+    if (value) {
+      $(value).style.display = "block";
+    }
+  });
   document.querySelectorAll(".glfxControls input").forEach(function (input) {
     input.addEventListener( "input", debounceGlfx(function () {
         var activeObject = canvas.getActiveObject();
@@ -402,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
   $("glfxResetButton").addEventListener("click", function () {
       glfxReset();
     });
-});
+}
 
 function glfxApply() {
   if (glfxCopiedImage) {

@@ -47,21 +47,9 @@ function updateControls(activeObject) {
     $("skewY-control").value = 0;
     $("opacity-control").value = 1;
     
-    $("sepiaEffect").checked = false;
-    $("grayscaleEffect").checked = false;
-    document.querySelector('input[name="grayscaleMode"][value="average"]').checked = true;
-    
-    $("gammaRed").value = 1.0;
-    $("gammaGreen").value = 1.0;
-    $("gammaBlue").value = 1.0;
-    
-    $("pixelateValue").value = 1;
-
-
     return;
   }
 
-  // 既存のコントロールの値を設定
   $("angle-control").value = activeObject.angle || 0;
   $("scale-control").value = activeObject.scaleX || 1;
   $("top-control").value = activeObject.top || 0;
@@ -69,25 +57,4 @@ function updateControls(activeObject) {
   $("skewX-control").value = activeObject.skewX || 0;
   $("skewY-control").value = activeObject.skewY || 0;
   $("opacity-control").value = activeObject.opacity*100 || 100;
-  
-  var filters = activeObject.filters || [];
-  filters.forEach(function(filter) {
-    if (filter.type === 'Sepia') {
-      $("sepiaEffect").checked = true;
-    }
-    if (filter.type === 'Grayscale') {
-      $("grayscaleEffect").checked = true;
-      document.querySelector(`input[name="grayscaleMode"][value="${filter.mode}"]`).checked = true;
-    }
-    if (filter.type === 'Gamma') {
-      $("gammaRed").value = filter.gamma[0];
-      $("gammaGreen").value = filter.gamma[1];
-      $("gammaBlue").value = filter.gamma[2];
-      
-    }
-    if (filter.type === 'Pixelate') {
-      $("pixelateValue").value = filter.blocksize;
-    }
-  });
-
 }

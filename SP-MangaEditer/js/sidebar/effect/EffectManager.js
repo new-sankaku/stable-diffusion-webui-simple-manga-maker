@@ -3,6 +3,7 @@ const effectMap = new Map();
 const MODE_EFFECT_C2BW = "Color2BlackWhite";
 const MODE_EFFECT_GLOW = "EffectGlow";
 const MODE_EFFECT_BLEND = "EffectBlend";
+const MODE_EFFECT_GLFX = "EffectGLFX";
 
 var effectCheck = null;
 var effectSize1 = null;
@@ -35,6 +36,9 @@ function switchMangaEffect(type) {
     return;    
   }else if(type === MODE_EFFECT_GLOW){
     //skip
+  }else if(type === MODE_EFFECT_GLFX){
+    setGlfxI18NextLabel();
+    glfxAddEvent();
   }else {
     console.error("unknown type", type);
   }
@@ -54,12 +58,14 @@ function switchMangaEffectUi(type) {
       settingsHTML += addCheckBox("addGlowEffectCheckBox", "outloneGlow", false)
       settingsHTML += addSlider("glowOutLineSlider", "glowOutLineSize", 0, 250, effectMap.getOrDefault("glowOutLineSlider", 20));
       settingsHTML += addColor("glowOutLineColorPicker", "glowOutLineColor", effectMap.getOrDefault("glowOutLineColorPicker", '#FFFFFF'));
-
+      settingsHTML += addTextArea("glowInfomation", "glowInfomation");
       $('manga-effect-settings').innerHTML = settingsHTML;
-
       effectCheck = $("addGlowEffectCheckBox");
       effectSize1 = $("glowOutLineSlider");
       effectColor = $("glowOutLineColorPicker");    
+      break;
+    case MODE_EFFECT_GLFX:
+      $('manga-effect-settings').innerHTML = gpifHTML;
       break;
     default:
       $('manga-effect-settings').innerHTML = settingsHTML;

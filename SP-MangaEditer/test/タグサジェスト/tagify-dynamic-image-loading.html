@@ -3,64 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tagify with Images in Suggestions Only</title>
+    <title>Tagify with Initial Tag Search and Detailed Metrics</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.7/tagify.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.7/tagify.min.css" rel="stylesheet" type="text/css" />
     <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+        #inputArea {
+            flex: 1;
+            padding: 20px;
+        }
+        #metricsArea {
+            flex: 1;
+            padding: 20px;
+            background-color: #f0f0f0;
+            overflow-y: auto;
+            height: 100vh;
+        }
         .tagify {
             width: 100%;
-            max-width: 700px;
+            max-width: 100%;
         }
-        .tagify__dropdown__item img {
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-            border-radius: 50%;
-            vertical-align: middle;
+        .tagify__input {
+            min-height: 100px;
+        }
+        .tagify__dropdown__item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .tagify__dropdown__item span {
+            display: inline-block;
+        }
+        .tagify__dropdown__item .tag-popularity {
+            font-size: 0.8em;
+            color: #888;
+        }
+        #searchMetrics {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .metric {
+            flex: 1;
+            text-align: center;
+        }
+        #searchHistory {
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
-    <input id="tags" placeholder="タグを入力してください">
+    <div id="inputArea">
+        <h2>タグ入力</h2>
+        <input id="tags" placeholder="タグを入力してください">
+    </div>
+    <div id="metricsArea">
+        <h2>検索メトリクス</h2>
+        <div id="searchMetrics">
+            <div class="metric" id="latestTime">最新: - ms</div>
+            <div class="metric" id="averageTime">平均: - ms</div>
+        </div>
+        <h3>検索履歴</h3>
+        <div id="searchHistory"></div>
+    </div>
 
+    <script src="merged_taglist.js"></script>
     <script>
-        // サンプルのサジェストデータ
-        const suggestions = [
-            { value: 'JavaScript', image: 'images/javascript.png' },
-            { value: 'Python', image: 'images/python.png' },
-            { value: 'Java', image: 'images/java.png' },
-            { value: 'HTML', image: 'images/html.png' },
-            { value: 'CSS', image: 'images/css.png' },
-        ];
+        // タグをpの降順でソート
+        tags.sort((a, b) => b.p - a.p);
 
-        // 環境に応じて画像ソースを決定する関数
-        function getImageSource(src) {
-            if (window.location.protocol === 'file:') {
-                // ローカルファイルの場合
-                return src;
-            } else {
-                // サーバー起動の場合
-                return `/api/placeholder/20/20`;
-            }
+        // 曖昧検索用の関数
+        function fuzzySearch(query, text) {
+            const pattern = query.split("").map(char => `(?=.*${char})`).join("");
+            const regex = new RegExp(pattern, "i");
+            return regex.test(text);
         }
 
-        // 画像の遅延ロード関数
-        function lazyLoadImage(img, src) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        img.src = getImageSource(src);
-                        observer.disconnect();
-                    }
-                });
-            });
-            observer.observe(img);
+        // 検索メトリクス
+        let searchTimes = [];
+        function updateSearchMetrics(time) {
+            searchTimes.push(time);
+            const avgTime = searchTimes.reduce((a, b) => a + b, 0) / searchTimes.length;
+            
+            document.getElementById('latestTime').textContent = `最新: ${time.toFixed(2)} ms`;
+            document.getElementById('averageTime').textContent = `平均: ${avgTime.toFixed(2)} ms`;
+
+            const historyEntry = document.createElement('div');
+            historyEntry.textContent = `検索時間: ${time.toFixed(2)} ms`;
+            document.getElementById('searchHistory').prepend(historyEntry);
+        }
+
+        // タグ検索関数
+        function searchTags(value) {
+            const startTime = performance.now();
+            const results = tags
+                .filter(tag => fuzzySearch(value, tag.n))
+                .map(tag => ({ value: tag.n, n: tag.n, p: tag.p }));
+            const endTime = performance.now();
+            updateSearchMetrics(endTime - startTime);
+            return results;
         }
 
         // Tagifyの初期化
         var input = document.querySelector('#tags');
         var tagify = new Tagify(input, {
-            whitelist: suggestions,
+            whitelist: tags.map(tag => ({ value: tag.n, n: tag.n, p: tag.p })),
             dropdown: {
                 maxItems: 20,
                 classname: "tags-look",
@@ -68,31 +119,14 @@
                 closeOnSelect: false
             },
             templates: {
-                tag: function(tagData) {
-                    // タグには画像を表示しない
-                    return `
-                        <tag title="${tagData.value}"
-                                contenteditable='false'
-                                spellcheck='false'
-                                tabIndex="${this.settings.a11y.focusableTags ? 0 : -1}"
-                                class="${this.settings.classNames.tag} ${tagData.class ? tagData.class : ""}"
-                                ${this.getAttributes(tagData)}>
-                            <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-                            <div>
-                                <span class='tagify__tag-text'>${tagData.value}</span>
-                            </div>
-                        </tag>
-                    `
-                },
                 dropdownItem: function(tagData) {
-                    // ドロップダウンアイテムには画像を表示
                     return `
                         <div ${this.getAttributes(tagData)}
                             class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
                             tabindex="0"
                             role="option">
-                            <img width="20" height="20" data-src="${tagData.image}"/>
-                            <span>${tagData.value}</span>
+                            <span>${tagData.n}</span>
+                            <span class="tag-popularity">(${tagData.p})</span>
                         </div>
                     `
                 }
@@ -103,14 +137,19 @@
         tagify.on('input', function(e) {
             var value = e.detail.value;
             if (value.length > 0) {
+                tagify.whitelist = searchTags(value);
                 tagify.dropdown.show(value);
-                // ドロップダウンが表示された後に画像を遅延ロード
-                setTimeout(() => {
-                    document.querySelectorAll('.tagify__dropdown__item img').forEach(img => {
-                        lazyLoadImage(img, img.getAttribute('data-src'));
-                    });
-                }, 0);
             }
+        });
+
+        // 起動時に "1girl" を検索して表示
+        window.addEventListener('load', function() {
+            const initialTag = "1girl";
+            const initialResults = searchTags(initialTag);
+            if (initialResults.length > 0) {
+                tagify.addTags([initialResults[0]]);
+            }
+            console.log(`Initial search for "${initialTag}" found ${initialResults.length} results`);
         });
     </script>
 </body>

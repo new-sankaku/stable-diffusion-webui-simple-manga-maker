@@ -111,13 +111,11 @@ function updateLayerPanel() {
       putViewButton(buttonsDiv, layer, index);
 
       if (layer.isPanel) {
-        putT2iButton(buttonsDiv, layer, index);
         putRunT2iButton(buttonsDiv, layer, index);
         putSeedButton(buttonsDiv, layer, index);
         putCropImageDownloadButton(buttonsDiv, layer, index);
       }
       if (layer.type == "image") {
-        putI2iButton(buttonsDiv, layer, index);
         putRunI2iButton(buttonsDiv, layer, index);
         putPromptButton(buttonsDiv, layer, index);
         putInterrogateButtons(buttonsDiv, layer, index);
@@ -363,7 +361,7 @@ function putRunI2iButton(buttonsDiv, layer, index) {
   runButton.onclick = function (e) {
     e.stopPropagation();
     var spinner = createSpinner(index);
-    sdWebUI_I2IProcessQueue(layer, spinner.id);
+    I2I(layer, spinner);
   };
 
   addTooltipByElement(runButton, "runButton");
@@ -371,17 +369,7 @@ function putRunI2iButton(buttonsDiv, layer, index) {
   buttonsDiv.appendChild(runButton);
 }
 
-function putI2iButton(buttonsDiv, layer, index) {
-  var i2iButton = document.createElement("button");
-  i2iButton.innerHTML = '<i class="material-icons">settings</i>';
-  i2iButton.onclick = function (e) {
-    e.stopPropagation();
-    openI2I_floatingWindowItem(layer);
-  };
 
-  addTooltipByElement(i2iButton, "i2iButton");
-  buttonsDiv.appendChild(i2iButton);
-}
 
 function putDeleteButton(buttonsDiv, layer, index) {
   var deleteButton = document.createElement("button");
@@ -419,26 +407,12 @@ function putRunT2iButton(buttonsDiv, layer, index) {
   runButton.onclick = function (e) {
     e.stopPropagation();
     var spinner = createSpinner(index);
-    if (API_mode == apis.A1111) {
-      sdWebUI_t2IProcessQueue(layer, spinner.id);
-    }else if (API_mode == apis.COMFYUI){
-      Comfyui_handle_process_queue(layer, spinner.id);
-    }
+    T2I( layer, spinner );
   };
   addTooltipByElement(runButton, "runButton");
   buttonsDiv.appendChild(runButton);
 }
 
-function putT2iButton(buttonsDiv, layer, index) {
-  var t2iButton = document.createElement("button");
-  t2iButton.innerHTML = '<i class="material-icons">settings</i>';
-  t2iButton.onclick = function (e) {
-    e.stopPropagation();
-    openT2I_FloatingWindowItem(layer);
-  };
-  addTooltipByElement(t2iButton, "t2iButton");
-  buttonsDiv.appendChild(t2iButton);
-}
 
 function calculateCenter(layer) {
   const centerX = layer.left + (layer.width / 2) * layer.scaleX;
@@ -572,6 +546,12 @@ function highlightActiveLayer(activeIndex) {
 function highlightActiveLayerByCanvas() {
   var activeObject = canvas.getActiveObject();
   updateControls(activeObject);
+
+  if( isPanel(activeObject) ){
+    showT2IPrompts(activeObject);
+  }else if( isImage(activeObject)){
+    showI2IPrompts(activeObject);
+  }
 
   var activeIndex = getActiveObjectIndex(canvas);
   var layers = document.querySelectorAll(".layer-item");

@@ -4,13 +4,17 @@
 const resources = {
   ja: {
     translation: {
+"glowInfomation":"輪郭にGlowを行います、画像の背景が透明である必要があります。背景除去などを行ってください。",
+"Controle": "コントロール",
+"baseControls":"▼ Base Prompt",
+"otherControls":"▼ Other Prompt",
+"checkButton":"ブレンドに使用するかどうか",
 "speedLineStyle":"線種別",
 
 "blendLowImages":"レイヤーの画像に丸いアイコンがあります、2つ以上チェックして下さい。ブレンドには画像が2枚以上必要です。",
 "blendResult":"ブレンド結果（ドラッグして移動できます。Layer画像をクリックするとブレンドから除外できます。)",
 "25blends":"25種類のブレンド",
 "Color2BlackWhite":"カラーを白黒",
-
 "canvasFit":"画像をフィット",
 "panelIn":"パネル内に配置",
 "promptView":"プロンプト表示",
@@ -419,7 +423,15 @@ const resources = {
   },
 en: {
     translation: {
-  "blendLowImages": "There are round icons on the layer images. Please check 2 or more. Blending requires at least 2 images.",
+"glowInfomation": "Applies glow to the outline. The image background must be transparent. Please perform background removal or similar tasks.",
+"Controle": "Control",
+"baseControls": "▼ Base Prompt",
+"otherControls": "▼ Other Prompt",
+"checkButton": "Whether to use for blending",
+"speedLineStyle": "Line type",
+
+
+      "blendLowImages": "There are round icons on the layer images. Please check 2 or more. Blending requires at least 2 images.",
   "blendResult": "Blend result (You can drag to move. Click on a layer image to exclude it from blending.)",
   "25blends": "25 blend types",
   "Color2BlackWhite": "Color to Black & White",
@@ -917,6 +929,13 @@ en: {
 
   ko: {
 translation: {
+"glowInfomation": "윤곽에 글로우를 적용합니다. 이미지 배경이 투명해야 합니다. 배경 제거 등을 수행하세요.",
+"Controle": "컨트롤",
+"baseControls": "▼ 기본 프롬프트",
+"otherControls": "▼ 기타 프롬프트",
+"checkButton": "블렌드에 사용할지 여부",
+"speedLineStyle": "선 종류",
+
 "blendLowImages": "레이어 이미지에 둥근 아이콘이 있습니다. 2개 이상의 이미지를 선택하세요. 블렌딩에는 2개 이상의 이미지가 필요합니다.",
 "blendResult": "블렌드 결과 (드래그하여 이동할 수 있습니다. 레이어 이미지를 클릭하면 블렌드에서 제외됩니다.)",
 "25blends": "25가지 블렌드",
@@ -1340,7 +1359,15 @@ translation: {
   },
   fr: {
     translation: {
-    "blendLowImages": "Les images des calques ont des icônes rondes. Veuillez en sélectionner 2 ou plus. Le mélange nécessite au moins 2 images.",
+"glowInfomation": "Applique un effet de halo au contour. L'arrière-plan de l'image doit être transparent. Veuillez effectuer la suppression de l'arrière-plan ou une action similaire.",
+"Controle": "Contrôle",
+"baseControls": "▼ Invite de base",
+"otherControls": "▼ Autres invites",
+"checkButton": "Utiliser pour le mélange ou non",
+"speedLineStyle": "Type de ligne",
+
+
+      "blendLowImages": "Les images des calques ont des icônes rondes. Veuillez en sélectionner 2 ou plus. Le mélange nécessite au moins 2 images.",
     "blendResult": "Résultat du mélange (Faites glisser pour déplacer. Cliquez sur une image de calque pour l'exclure du mélange.)",
     "25blends": "25 types de mélanges",
     "Color2BlackWhite": "Couleur en Noir & Blanc",
@@ -1799,7 +1826,14 @@ translation: {
   },
   zh: {
     translation: {
-    "blendLowImages": "图层图片上有圆形图标，请选择至少两个图像。混合需要至少两张图片。",
+"glowInfomation": "为轮廓添加发光效果，图像背景必须是透明的。请执行背景去除等操作。",
+"Controle": "控制",
+"baseControls": "▼ 基础提示",
+"otherControls": "▼ 其他提示",
+"checkButton": "是否用于混合",
+"speedLineStyle": "线条类型",
+
+      "blendLowImages": "图层图片上有圆形图标，请选择至少两个图像。混合需要至少两张图片。",
     "blendResult": "混合结果（可以拖动移动。点击图层图片可将其从混合中排除。）",
     "25blends": "25种混合效果",
     "Color2BlackWhite": "彩色转黑白",
@@ -2256,7 +2290,14 @@ translation: {
   },
   ru: {
     translation: {
-    "blendLowImages": "На изображениях слоев есть круглые значки. Выберите 2 или более изображений. Для смешивания требуется не менее 2 изображений.",
+"glowInfomation": "Применяет свечение к контуру. Фон изображения должен быть прозрачным. Пожалуйста, выполните удаление фона или аналогичные действия.",
+"Controle": "Управление",
+"baseControls": "▼ Основная подсказка",
+"otherControls": "▼ Другие подсказки",
+"checkButton": "Использовать для смешивания или нет",
+"speedLineStyle": "Тип линии",
+
+      "blendLowImages": "На изображениях слоев есть круглые значки. Выберите 2 или более изображений. Для смешивания требуется не менее 2 изображений.",
     "blendResult": "Результат смешивания (Перетащите для перемещения. Нажмите на изображение слоя, чтобы исключить его из смешивания.)",
     "25blends": "25 видов смешивания",
     "Color2BlackWhite": "Цвет в Чёрно-белое",
@@ -2665,7 +2706,14 @@ translation: {
   },
   es: {
     translation: {
-    "blendLowImages": "Las imágenes de las capas tienen iconos redondos. Selecciona 2 o más. Se necesitan al menos 2 imágenes para mezclar.",
+"glowInfomation": "Aplica un resplandor al contorno. El fondo de la imagen debe ser transparente. Por favor, realice la eliminación del fondo u otras tareas similares.",
+"Controle": "Control",
+"baseControls": "▼ Indicaciones básicas",
+"otherControls": "▼ Otras indicaciones",
+"checkButton": "Si se debe usar para la mezcla",
+"speedLineStyle": "Tipo de línea",
+
+      "blendLowImages": "Las imágenes de las capas tienen iconos redondos. Selecciona 2 o más. Se necesitan al menos 2 imágenes para mezclar.",
     "blendResult": "Resultado de mezcla (Arrastra para mover. Haz clic en una imagen de capa para excluirla de la mezcla.)",
     "25blends": "25 tipos de mezcla",
     "Color2BlackWhite": "Color a Blanco y Negro",
@@ -3071,7 +3119,14 @@ translation: {
   },
   pt: {
     translation: {
-    "blendLowImages": "As imagens das camadas têm ícones redondos. Selecione 2 ou mais. A mistura requer pelo menos 2 imagens.",
+"glowInfomation": "Aplica brilho ao contorno. O fundo da imagem deve ser transparente. Por favor, remova o fundo ou faça algo similar.",
+"Controle": "Controle",
+"baseControls": "▼ Prompt Base",
+"otherControls": "▼ Outros Prompts",
+"checkButton": "Usar para mistura ou não",
+"speedLineStyle": "Tipo de linha",
+
+      "blendLowImages": "As imagens das camadas têm ícones redondos. Selecione 2 ou mais. A mistura requer pelo menos 2 imagens.",
     "blendResult": "Resultado da mistura (Arraste para mover. Clique em uma imagem de camada para excluí-la da mistura.)",
     "25blends": "25 tipos de mistura",
     "Color2BlackWhite": "Cor para Preto & Branco",
@@ -3474,7 +3529,13 @@ translation: {
     }
   },
 th: {
-translation: { 
+translation: {
+"glowInfomation": "ใช้เอฟเฟกต์แสงเรืองกับขอบ เส้นขอบ รูปภาพต้องมีพื้นหลังโปร่งใส กรุณาลบพื้นหลังหรือทำการจัดการที่คล้ายกัน",
+"Controle": "การควบคุม",
+"baseControls": "▼ คำแนะนำพื้นฐาน",
+"otherControls": "▼ คำแนะนำอื่นๆ",
+"checkButton": "ใช้สำหรับการผสมหรือไม่",
+"speedLineStyle": "ประเภทของเส้น",
 "blendLowImages": "ภาพเลเยอร์มีไอคอนกลม กรุณาเลือกอย่างน้อย 2 ภาพ การผสมต้องใช้ภาพอย่างน้อย 2 ภาพ",
 "blendResult": "ผลลัพธ์การผสม (ลากเพื่อย้ายได้ คลิกที่ภาพเลเยอร์เพื่อเอาออกจากการผสม)",
 "25blends": "25 รูปแบบการผสม",
@@ -3990,3 +4051,4 @@ function getText(key) {
   const translatedText = i18next.t(key);
   return translatedText !== key ? translatedText : key;
 }
+

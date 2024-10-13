@@ -1,20 +1,10 @@
 @import url('root.css');
 
-#svg-container-vertical,
-#svg-container-landscape,
-#speech-bubble-area1,
-#speech-bubble-area2,
-#text-area,
-#text-area2,
-#tool-area,
-#shape-area,
-#manga-tone-area,
-#manga-effect-area,
-#panel-manager-area,
-#custom-panel-manager-area,
-#dummy-area4 {
+.left_area {
  font-size: var(--font-size-base);
  margin-right: var(--margin-right-base);
+ /* margin-top: 2px;
+ margin-bottom: 2px; */
  max-width: var(--max-width-base);
  min-width: var(--min-width-base);
  height: auto;
@@ -139,14 +129,7 @@
  padding: 2px;
 }
 
-#svg-preview-area-vertical,
-#svg-preview-area-landscape,
-#speech-bubble-svg-preview-area1,
-#text-preview-area,
-#shape-preview-area,
-#panel-manager-items,
-#custom-panel-manager-items,
-#dummy-svg-preview-area4 {
+.left_area {
  max-width: var(--max-width-base);
  min-width: var(--min-width-base);
  height: calc(100vh - 12vh);
@@ -275,12 +258,7 @@ button.selected {
  margin-bottom: 5px;
 }
 
-#text-preview-area button .material-icons,
-#layer-content button .material-icons,
-#shape-preview-area button .material-icons,
-#speech-bubble-svg-preview-area1 button .material-icons,
-#panel-manager-items button .material-icons,
-#custom-panel-manager-items button .material-icons {
+.left_area button .material-icons {
  font-size: 16px;
  vertical-align: middle;
 }
@@ -303,25 +281,17 @@ button.selected {
  text-align: left;
 }
 
-#speech-bubble-svg-preview-area1 button img {
+.left_area button img {
  width: 90%;
  display: block;
  margin: 0 auto;
 }
 
-#text-preview-area label,
-#shape-preview-area label,
-#panel-manager-items label,
-#custom-panel-manager-items label,
-#speech-bubble-svg-preview-area1 label {
+.left_area label{
  margin: 1px;
 }
 
-#text-preview-area hr,
-#shape-preview-area hr,
-#panel-manager-items hr,
-#custom-panel-manager-items hr,
-#speech-bubble-svg-preview-area1 hr {
+.left_area hr {
  display: block;
  width: 92%;
  margin: 6px;

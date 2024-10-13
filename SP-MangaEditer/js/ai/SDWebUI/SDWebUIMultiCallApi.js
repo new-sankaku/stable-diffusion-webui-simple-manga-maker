@@ -73,6 +73,11 @@ function sdwebui_apiHeartbeat() {
       if (response.ok) {
         SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge ON';
         SD_WebUI_Heartbeat_Label.style.color = 'green';
+
+        if(firstSDConnection){
+          getDiffusionInfomation();
+          firstSDConnection = false;
+        }
       } else {
         SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge OFF';
         SD_WebUI_Heartbeat_Label.style.color = 'red';

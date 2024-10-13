@@ -76,10 +76,10 @@ function showObjectMenu(clickType) {
   if (isPanel(activeObject)) {
     var edit  = activeObject.edit ? 'editOff'  : 'editOn';
     var knife = isKnifeMode       ? 'knifeOff' : 'knifeOn';
-    menuItems = clickType === 'left' ? [] : [visible, edit, knife, 'settings', 'generate', 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, edit, knife, 'generate', 'delete', 'selectClear'];
 
   } else if (isImage(activeObject)) {
-    menuItems = clickType === 'left' ? [] : [visible, 'settings', 'generate', 'rembg', 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, 'generate', 'rembg', 'delete', 'selectClear'];
     if( haveClipPath(activeObject) ){
       menuItems.push('clearAllClipPaths');
       // menuItems.push('clearTopClipPath');
@@ -137,27 +137,14 @@ function handleMenuClick(e) {
     case 'rembg':
       var spinner = createSpinner(canvasMenuIndex);
       sdWebUI_RembgProcessQueue(activeObject, spinner.id);
-
-      break;
-    case 'settings':
-      if (isPanel(activeObject)) {
-        openT2I_FloatingWindowItem(activeObject);
-      } else if (isImage(activeObject)) {
-        openI2I_floatingWindowItem(activeObject);
-      }
       break;
     case 'generate':
       if (isPanel(activeObject)) {
         var spinner = createSpinner(canvasMenuIndex);
-    
-        if (API_mode == apis.A1111) {
-          sdWebUI_t2IProcessQueue(activeObject, spinner.id);
-        } else if (API_mode == apis.COMFYUI) {
-          Comfyui_handle_process_queue(activeObject, spinner.id);
-        }
+        T2I( activeObject, spinner );
       } else if (isImage(activeObject)) {
         var spinner = createSpinner(canvasMenuIndex);
-        sdWebUI_I2IProcessQueue(activeObject, spinner.id);
+        I2I( activeObject, spinner );
       }
       break;
     case 'selectClear':
@@ -232,8 +219,6 @@ function handleMenuClick(e) {
     break;
   }
   canvas.renderAll();
-  
-  // メニューを閉じる
   closeMenu();
 }
 

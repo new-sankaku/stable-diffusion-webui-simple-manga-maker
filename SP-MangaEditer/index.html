@@ -12,30 +12,29 @@
 
     <div id="a" style="display:none">
     </div>
-
     <script>
+        
+
         const $ = (id) => document.getElementById(id);
         function addEL(a, b, c, d = !1) { a.addEventListener(b, c, d) }
 
         const e = $("a"), f = [
-            "Initializing core system...",
-            "Sun network connection: Failed",
-            "Moon network connection: Successful",
-            "Authentication process: All green",
-            "CO2 emission reduction system: Started",
-            "Layer launch: Completed",
-            "Canvas launch: Completed",
-            "Fabric.js launch: Completed",
-            "Effect function initialization: Completed",
-            "Font download: Completed",
-            "Coordinate measurement: Normal",
-            "CSS launch: Normal",
-            "Script launch: Normal"
+"Initializing core system...","Sun network connection: Failed","Moon network connection: Successful","Authentication process: All green","CO2 emission reduction system: Started",
+"Layer launch: Completed","Canvas launch: Completed","Fabric.js launch: Completed","Effect function initialization: Completed",
+"Font download: Completed","Coordinate measurement: Normal","CSS launch: Normal","Script launch: Normal"
         ];
         function g() {
             const a = document.createElement("div");
             a.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;color:#fff;font-size:11px;display:flex;flex-direction:column;z-index:1000;";
-            const b = `<svg width="100%" height="100%" style="position:absolute;top:0;left:0;opacity:.2;"><rect x="5%" y="5%" width="90%" height="90%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="7%" width="86%" height="30%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="7%" y="39%" width="40%" height="54%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="39%" width="44%" height="25%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="49%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><rect x="72%" y="66%" width="21%" height="27%" fill="none" stroke="#aaa" stroke-width="3"/><path d="M 7% 37% L 93% 37% M 47% 39% L 47% 93%" stroke="#aaa" stroke-width="3" fill="none"/></svg>`;
+const b = `<svg viewBox="0 0 100 100" width="100%" height="100%" style="position:absolute;top:0;left:0;opacity:.2;">
+  <rect x="5" y="5" width="90" height="90" fill="none" stroke="#aaa" stroke-width="3"/>
+  <rect x="7" y="7" width="86" height="30" fill="none" stroke="#aaa" stroke-width="3"/>
+  <rect x="7" y="39" width="40" height="54" fill="none" stroke="#aaa" stroke-width="3"/>
+  <rect x="49" y="39" width="44" height="25" fill="none" stroke="#aaa" stroke-width="3"/>
+  <rect x="49" y="66" width="21" height="27" fill="none" stroke="#aaa" stroke-width="3"/>
+  <rect x="72" y="66" width="21" height="27" fill="none" stroke="#aaa" stroke-width="3"/>
+  <path d="M 7 37 L 93 37 M 47 39 L 47 93" stroke="#aaa" stroke-width="3" fill="none"/>
+</svg>`;
             a.innerHTML = b;
             const c = document.createElement("div");
             c.style.cssText = "padding:20px;";
@@ -87,6 +86,10 @@
         n();
 
 
+
+
+
+
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
@@ -102,30 +105,38 @@
         }
 
         document.addEventListener('click', function (event) {
-            var element = event.target;
-            var elementId = element.id ? element.id : 'no-id';
-            var elementClasses = element.className ? element.className.split(' ').join(', ') : 'no-class';
-            var tagName = element.tagName.toLowerCase();
-            var textContent = element.textContent.trim().substring(0, 10);
-            var clickX = event.clientX;
-            var clickY = event.clientY;
-            var pageUrl = window.location.href;
-            var parentTag = element.parentElement ? element.parentElement.tagName.toLowerCase() : 'no-parent';
+    var element = event.target;
+    var elementId = element.id || 'no-id';
+    var elementClasses = getElementClasses(element);
+    var tagName = element.tagName.toLowerCase();
+    var textContent = (element.textContent || '').trim().substring(0, 10);
+    var clickX = event.clientX;
+    var clickY = event.clientY;
+    var pageUrl = window.location.href;
+    var parentTag = element.parentElement ? element.parentElement.tagName.toLowerCase() : 'no-parent';
 
-            trackCustomEvent(
-                'click_' + tagName,
-                elementId + ' | ' + elementClasses,
-                textContent,
-                1,
-                {
-                    'click_x': clickX,
-                    'click_y': clickY,
-                    'page_url': pageUrl,
-                    'parent_tag': parentTag
-                }
-            );
-        });
+    trackCustomEvent(
+        'click_' + tagName,
+        elementId + ' | ' + elementClasses,
+        textContent,
+        1,
+        {
+            'click_x': clickX,
+            'click_y': clickY,
+            'page_url': pageUrl,
+            'parent_tag': parentTag
+        }
+    );
+});
 
+function getElementClasses(element) {
+    if (element.className && typeof element.className === 'string') {
+        return element.className.split(' ').join(', ');
+    } else if (element.classList && element.classList.length) {
+        return Array.from(element.classList).join(', ');
+    }
+    return 'no-class';
+}
         window.addEventListener('scroll', function () {
             var scrollDepth = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
             trackCustomEvent('scroll', 'page_scroll', 'Scroll Depth', scrollDepth, {});
@@ -143,6 +154,7 @@
 <link rel="stylesheet" href="css/css2.css?v=5.3">
 <link rel="stylesheet" href="css/icon.css?v=5.3">
 <link rel="stylesheet" href="css/form.css?v=5.3">
+<link rel="stylesheet" href="css/controls-mini.css?v=5.3">
 <link rel="stylesheet" href="css/common.css?v=5.3">
 <link rel="stylesheet" href="css/components.css?v=5.3">
 <link rel="stylesheet" href="css/layout.css?v=5.3">
@@ -437,7 +449,12 @@
                                 <i class="material-icons">filter_b_and_w</i>
                                 <span>Effect</span>
                             </a>
-
+                            <a class="dropdown-item" href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank">
+                                <i class="material-icons">help_outline</i>
+                                <span data-i18n="help_api_connect_settings">
+                                    Help:Connect Settings
+                                </span>
+                            </a>
 
                         </ul>
                     </li>
@@ -561,21 +578,22 @@
                 <i class="material-icons" id="intro_tool-area" onclick="toggleVisibility('tool-area');">brush</i>
                 <i class="material-icons" id="intro_manga-tone-area" onclick="toggleVisibility('manga-tone-area');">blur_linear</i>
                 <i class="material-icons" id="intro_manga-effect-area" onclick="toggleVisibility('manga-effect-area');">filter_b_and_w</i>
+                <i class="material-icons" id="intro_controle-area" onclick="toggleVisibility('controle-area');">videogame_asset</i>
                 <i class="material-icons" id="intro_shape-area" onclick="toggleVisibility('shape-area');">interests</i>
                 <i class="material-icons" id="intro_dummy-area4" onclick="toggleVisibility('dummy-area4');">info</i>
             </div>
 
-            <div id="svg-container-vertical" style="display: none;">
+            <div class="left_area" id="svg-container-vertical" style="display: none;">
                 <div class="area-header" data-i18n="panelsVertical">Panels</div>
                 <div id="svg-preview-area-vertical"></div>
             </div>
 
-            <div id="svg-container-landscape" style="display: none;">
+            <div class="left_area" id="svg-container-landscape" style="display: none;">
                 <div class="area-header" data-i18n="panelsLandscape">Panels</div>
                 <div id="svg-preview-area-landscape"></div>
             </div>
 
-            <div id="panel-manager-area" style="display: none;">
+            <div class="left_area" id="panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="pageManager">Page Manager</div>
                 <div id="panel-manager-items">
                     <hr>
@@ -675,7 +693,7 @@
                 </div>
             </div>
 
-            <div id="custom-panel-manager-area" style="display: none;">
+            <div class="left_area" id="custom-panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="custom-panel-manager-items">
                     <hr>
@@ -790,7 +808,7 @@
                 </div>
             </div>
 
-            <div id="speech-bubble-area1" style="display: none;">
+            <div class="left_area" id="speech-bubble-area1" style="display: none;">
                 <div class="area-header" data-i18n="bubble">Bubble</div>
                 <div id="speech-bubble-svg-preview-area1">
                     <div class="input-group">
@@ -819,7 +837,7 @@
                 </div>
             </div>
 
-            <div id="speech-bubble-area2" style="display: none;">
+            <div class="left_area" id="speech-bubble-area2" style="display: none;">
                 <div class="area-header">
                     <a href="html/Minual/custom-speechBubble.html" target="_blank" data-i18n="custom_bubble">
                         Custom Bubble (Help)
@@ -893,7 +911,7 @@
                 </div>
             </div>
 
-            <div id="text-area" style="display: none;">
+            <div class="left_area" id="text-area" style="display: none;">
                 <div class="area-header" data-i18n="text">Text</div>
                 <div id="text-preview-area">
                     <hr>
@@ -981,7 +999,7 @@
             </div>
 
 
-            <div id="text-area2" style="display: none;">
+            <div class="left_area" id="text-area2" style="display: none;">
                 <div class="area-header" data-i18n="image_text">
                     <a href="html/Minual/custom-text.html" target="_blank">
                         Custom Text(Help)
@@ -1000,7 +1018,7 @@
 
 
 
-            <div id="tool-area" style="display: none;">
+            <div class="left_area" id="tool-area" style="display: none;">
                 <div class="area-header" data-i18n="tools">Tools</div>
                 <div id="tool-buttons">
                     <button id="MarkerButton" onclick="switchPencilType('Marker')">
@@ -1046,7 +1064,7 @@
 
 
 
-            <div id="manga-tone-area">
+            <div class="left_area" id="manga-tone-area">
                 <div class="area-header">
                     <a href="html/Minual/screen-tone.html" target="_blank">
                         Screen Tone (Help)
@@ -1080,7 +1098,7 @@
 
 
 
-            <div id="manga-effect-area">
+            <div class="left_area" id="manga-effect-area">
                 <div class="area-header">
                     <a href="html/Minual/effect.html" target="_blank">
                         Fast Effect (Help)
@@ -1100,6 +1118,10 @@
                         <span data-i18n="Glow"></span>
                         <img src="03_images/preset/effect/glow.webp" style="width: 100%;">
                     </button>
+                    <button id="EffectGLFXButton" onclick="switchMangaEffect('EffectGLFX')">
+                        <span data-i18n="GLFX"></span>
+                        <img src="03_images/preset/effect/glfx.webp" style="width: 100%;">
+                    </button>
                 </div>
                 <hr>
                 <div id="manga-effect-settings"></div>
@@ -1107,8 +1129,68 @@
 
 
 
+            <div class="left_area" id="controle-area" style="display: none;">
+                <div class="area-header" data-i18n="Controle">Controle</div>
+                <div id="controle-preview-area">
+                    <hr>
+                    <div class="input-group">
+                        <label>
+                            <input type="checkbox" id="InfomationFPS" checked>
+                            FPS :0
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <label>
+                            <input type="checkbox" id="InfomationCoordinate" checked>
+                            X:0.0 Y:0.0
+                        </label>
+                    </div>
 
-            <div id="shape-area" style="display: none;">
+                    <hr>
+
+                    <div class="input-container-leftSpace" data-i18n-label="angle">
+                        <input type="range" id="angle-control" min="0" max="360" value="0">
+                    </div>
+
+                    <div class="input-container-leftSpace" data-i18n-label="scale">
+                        <input type="range" id="scale-control" min="0.01" max="10.0" step="0.01" value="1.00">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="top">
+                        <input type="range" id="top-control" min="-300" max="600" value="100">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="left">
+                        <input type="range" id="left-control" min="-300" max="600" value="100">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="skewX">
+                        <input type="range" id="skewX-control" min="-60" max="60" value="0">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="skewY">
+                        <input type="range" id="skewY-control" min="-60" max="60" value="0">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="opacity">
+                        <input type="range" id="opacity-control" min="0" max="100" step="0.1" value="100">
+                    </div>
+                    <hr>
+
+                    <div class="input-group-multi">
+                        <button onclick="flipHorizontally()">
+                            <i class="material-icons">swap_horiz</i> 
+                        </button>
+                        <button onclick="flipVertically()">
+                            <i class="material-icons">swap_vert</i> 
+                        </button>
+                        <button style="visibility: hidden;">
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+            <div class="left_area" id="shape-area" style="display: none;">
                 <div class="area-header" data-i18n="shape">Shape</div>
                 <div id="shape-preview-area">
                     <hr>
@@ -1189,7 +1271,7 @@
 
 
 
-            <div id="dummy-area4" style="display: none;">
+            <div class="left_area" id="dummy-area4" style="display: none;">
                 <div class="area-header" data-i18n="information">Information</div>
                 <div id="dummy-svg-preview-area4">
                     <div id="license-info">
@@ -1361,21 +1443,14 @@
             </div>
 
 
-
-
             <div id="layer-panel">
                 <div class="area-header" data-i18n="layers">Layers</div>
                 <div id="layer-content"></div>
                 <div id="layer-buttons">
                     <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
                     <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
-                    <button onclick="openText2ImageBaseFloatingWindow()"><i class="material-icons">settings</i> <span
-                            data-i18n="baseT2I">Base T2I</span></button>
-
                     <button onclick="View()"><i class="material-icons">document_scanner</i><span
                             data-i18n="promptView">View</span></button>
-
-
                 </div>
                 <div id="canvas-buttons">
                     <button id="undo" onclick="undo()">
@@ -1397,328 +1472,101 @@
 
 
             <div id="controls">
-
-                <div class="panel" id="infomationPanel">
-                    <div class="area-header" onclick="imageControleTogglePanel('infomationPanel', this)"
-                        data-i18n="informationControls">
-                        ▼ Infomation Controls
+                <div class="panel" id="baseControlsPanel">
+                    <div class="area-header" data-i18n="baseControls">
                     </div>
-                    <div class="control-content">
-                        <div class="control-item">
-                            <label>
-                                <input type="checkbox" id="InfomationFPS" checked>
-                                FPS :0
-                            </label>
+                    <div id="base-controls-mini" class="controls-mini">
+                        <div class="control textarea-control">
+                            <div class="textarea-label-wrapper">
+                                <label class="textarea-label" for="textarea">Prompt</label>
+                            </div>
+                            <textarea id="text2img_basePrompt_prompt" name="textarea" placeholder=" "></textarea>
                         </div>
-                        <div class="control-item">
-                            <label>
-                                <input type="checkbox" id="InfomationCoordinate" checked>
-                                X:0.0 Y:0.0
-                            </label>
+                        <div class="control textarea-control">
+                            <div class="textarea-label-wrapper">
+                                <label class="textarea-label" for="textarea">Negative</label>
+                            </div>
+                            <textarea id="text2img_basePrompt_negativePrompt" name="textarea" placeholder=" "></textarea>
                         </div>
-                        <div id="intro_SD_WebUI_pingCheck_Label" class="control-item A1111_api_content">
-                            <label id="SD_WebUI_pingCheck_Label">
-                                <input type="checkbox" id="apiHeartbeatCheckbox" checked>
-                                AI Check
-                            </label>
+                    
+                        <div class="control">
+                            <select id="text2img_basePrompt_model" name="dropdown">
+                            </select>
+                            <span class="label">Model</span>
                         </div>
-                        <div class="control-item">
-                            <label id="SD_WebUI_Heartbeat_Label">SD WebUI Check…</label>
-                            <!--TODO COMFYUI-->
-                            <label id="ComufyUI_Heartbeat_Label" style="display: none;">ComufyUI Check…</label>
+                    
+                        <div class="dual-number-control">
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_samplingSteps" name="number-input-1" placeholder=" ">
+                                <span class="label">Steps</span>
+                            </div>
+                            <div class="control">
+                                <select id="text2img_basePrompt_samplingMethod" name="dropdown">
+                                </select>
+                                <span class="label">Method</span>
+                            </div>
                         </div>
+                    
+                        <div class="dual-number-control">
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_width" name="number-input-1" placeholder=" ">
+                                <span class="label">Width</span>
+                            </div>
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_height" name="number-input-1" placeholder=" ">
+                                <span class="label">Height</span>
+                            </div>
+                        </div>
+                    
+                        <div class="dual-number-control">
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_seed" name="number-input-1" placeholder=" ">
+                                <span class="label">Seed</span>
+                            </div>
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_cfg_scale" name="number-input-1" placeholder=" " min="1" max="30" step="0.1" >
+                                <span class="label">CFG</span>
+                            </div>
+                        </div>
+                    
+                        <div class="dual-number-control">
+                            <div class="control">
+                                <select id="text2img_basePrompt_hr_upscaler" name="dropdown">
+                                </select>
+                                <span class="label">Upscaler</span>
+                            </div>
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_hr_step" name="number-input-1" placeholder=" ">
+                                <span class="label">Step</span>
+                            </div>
+                        </div>
+                        <div class="dual-number-control">
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_hr_denoising_strength" name="number-input-1" placeholder=" ">
+                                <span class="label">Denoising</span>
+                            </div>
+                            <div class="control">
+                                <input type="number" id="text2img_basePrompt_hr_scale" name="number-input-1" placeholder=" ">
+                                <span class="label">Scale</span>
+                            </div>
+                        </div>
+                        <label style="font-size: 10px;" data-i18n="checSD_WebUI_Announce"/>
                     </div>
-                </div>
-
-
-                <div class="panel" id="commonControlsPanel">
-                    <div class="area-header" onclick="imageControleTogglePanel('commonControlsPanel', this)"
-                        data-i18n="commonControls">
-                        ▼ Common Controls
-                    </div>
-                    <div class="control-content">
-                        <div class="input-container" data-i18n-label="angle">
-                            <input type="range" id="angle-control" min="0" max="360" value="0">
-                        </div>
-                        <div class="input-container" data-i18n-label="scale">
-                            <input type="range" id="scale-control" min="0.01" max="2.5" step="0.01" value="1.00">
-                        </div>
-                        <div class="input-container" data-i18n-label="top">
-                            <input type="range" id="top-control" min="-300" max="600" value="100">
-                        </div>
-                        <div class="input-container" data-i18n-label="left">
-                            <input type="range" id="left-control" min="-300" max="600" value="100">
-                        </div>
-                        <div class="input-container" data-i18n-label="skewX">
-                            <input type="range" id="skewX-control" min="-60" max="60" value="0">
-                        </div>
-                        <div class="input-container" data-i18n-label="skewY">
-                            <input type="range" id="skewY-control" min="-60" max="60" value="0">
-                        </div>
-                        <div class="input-container" data-i18n-label="opacity">
-                            <input type="range" id="opacity-control" min="0" max="100" step="0.1"
-                            value="100">
-                        </div>
-                    </div>
-                </div>
-                <div class="panel" id="imageControlPanel">
-                    <div class="area-header" onclick="imageControleTogglePanel('imageControlPanel', this)"
-                        data-i18n="imageControls">
-                        ▼ Fast Image Effect
-                    </div>
-                    <div class="control-content">
-                        <div class="control-row">
-                            <button onclick="flipHorizontally()"><i class="material-icons">swap_horiz</i> <span
-                                    data-i18n="flip">Flip</span></button>
-                            <button onclick="flipVertically()"><i class="material-icons">swap_vert</i> <span
-                                    data-i18n="flip">Flip</span></button>
-                        </div>
-
-                        <hr class="separator">
-                        <div class="control-item">
-                            <input type="checkbox" id="sepiaEffect">
-                            <label data-i18n="sepia">
-                                Sepia
-                            </label>
-                        </div>
-                        <hr class="separator">
-                        <div class="control-item">
-                            <input type="checkbox" id="grayscaleEffect">
-                            <label data-i18n="grayscale">
-                                Grayscale
-                            </label>
-                        </div>
-                        <div class="control-item radio-options" id="grayscaleOptions">
-                            <input type="radio" name="grayscaleMode" value="average" checked>
-                            <label data-i18n="average">
-                                Average
-                            </label>
-
-                            <input type="radio" name="grayscaleMode" value="luminosity">
-                            <label data-i18n="luminosity">
-                                Luminosity
-                            </label>
-                        </div>
-                        <hr class="separator">
-                        <div class="input-container" data-i18n-label="red">
-                            <input type="range" id="gammaRed" min="0" max="2.2" step="0.003921" value="1">
-                        </div>
-                        <div class="input-container" data-i18n-label="green">
-                            <input type="range" id="gammaGreen" min="0" max="2.2" step="0.003921" value="1">
-                        </div>
-                        <div class="input-container" data-i18n-label="blue">
-                            <input type="range" id="gammaBlue" min="0" max="2.2" step="0.003921" value="1">
-                        </div>
-                        <hr class="separator">
-                        <div class="input-container" data-i18n-label="pixelate">
-                            <input type="range" id="pixelateValue" min="1" max="20" step="1" value="1">
-                        </div>
+                    <div class="input-group">
+                        <label id="SD_WebUI_pingCheck_Label">
+                            <input type="checkbox" id="apiHeartbeatCheckbox" checked>
+                            AI Check
+                        </label>
+                        <label id="SD_WebUI_Heartbeat_Label">SD WebUI Check…</label>
                     </div>
                 </div>
 
-                <div class="panel" id="glfxImageControlPanel">
-                    <div class="area-header" onclick="imageControleTogglePanel('glfxImageControlPanel', this)"
-                        data-i18n="glfxImageControls">
-                        ▼ <span data-i18n="glfxImageControls">Glfx Image Controls</span>
+                <div class="panel" id="otherControlsPanel">
+                    <div class="area-header" data-i18n="otherControls">
                     </div>
-                    <div class="control-content glfxControls">
-                        <select id="glfxFilter">
-                            <option value="" data-i18n="select">Select</option>
-                            <option value="glfxBrightnessContrast" data-i18n="brightnessContrast">Brightness / Contrast
-                            </option>
-                            <option value="glfxHueSaturation" data-i18n="hueSaturation">Hue / Saturation</option>
-                            <option value="glfxSepia" data-i18n="sepia">Sepia</option>
-                            <option value="glfxUnsharpMask" data-i18n="unsharpMask">Unsharp Mask</option>
-                            <option value="glfxVibrance" data-i18n="vibrance">Vibrance</option>
-                            <option value="glfxVignette" data-i18n="vignette">Vignette</option>
-                            <option value="glfxLensBlur" data-i18n="lensBlur">Lens Blur</option>
-                            <!-- <option value="glfxTiltShift" data-i18n="tiltShift">Tilt Shift</option> -->
-                            <option value="glfxTriangleBlur" data-i18n="triangleBlur">Triangle Blur</option>
-                            <option value="glfxZoomBlur" data-i18n="zoomBlur">Zoom Blur</option>
-                            <option value="glfxColorHalftone" data-i18n="colorHalftone">Color Halftone</option>
-                            <option value="glfxDotScreen" data-i18n="dotScreen">Dot Screen</option>
-                            <option value="glfxEdgeWork" data-i18n="edgeWork">Edge Work</option>
-                            <option value="glfxHexagonalPixelate" data-i18n="hexagonalPixelate">Hexagonal Pixelate
-                            </option>
-                            <option value="glfxInk" data-i18n="ink">Ink</option>
-                            <!-- <option value="glfxBulgePinch" data-i18n="bulgePinch">Bulge / Pinch</option> -->
-                            <option value="glfxSwirl" data-i18n="swirl">Swirl</option>
-                        </select>
-
-
-                        <div id="glfxBrightnessContrast" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="brightness">
-                                <input type="range" id="glfxBrightness" min="-1" max="1" step="0.01" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="contrast">
-                                <input type="range" id="glfxContrast" min="-1" max="1" step="0.01" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxHueSaturation" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="hue">
-                                <input type="range" id="glfxHue" min="-1" max="1" step="0.01" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="saturation">
-                                <input type="range" id="glfxSaturation" min="-1" max="1" step="0.01" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxSepia" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="sepia">
-                                <input type="range" id="glfxSepiaAmount" min="0" max="1" step="0.01" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxUnsharpMask" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="radius">
-                                <input type="range" id="glfxUnsharpRadius" min="0" max="200" step="0.1" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="strength">
-                                <input type="range" id="glfxUnsharpStrength" min="0" max="5" step="0.1" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxVibrance" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="vibrance">
-                                <input type="range" id="glfxVibranceAmount" min="-1" max="1" step="0.01" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxVignette" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="size">
-                                <input type="range" id="glfxVignetteSize" min="0" max="1" step="0.01" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="amount">
-                                <input type="range" id="glfxVignetteAmount" min="0" max="1" step="0.01" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxLensBlur" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="radius">
-                                <input type="range" id="glfxBlurRadius" min="0" max="50" step="1" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="brightness">
-                                <input type="range" id="glfxBlurBrightness" min="-1" max="1" step="0.01" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="angle">
-                                <input type="range" id="glfxBlurAngle" min="-3.14" max="3.14" step="0.01" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxTiltShift" class="glfxCcontrol-group">
-
-                            <div class="input-container" data-i18n-label="startX">
-                                <input type="range" id="glfxStartX" min="0" max="1" step="0.01" value="0.5">
-                            </div>
-                            <div class="input-container" data-i18n-label="startY">
-                                <input type="range" id="glfxStartY" min="0" max="1" step="0.01" value="0.5">
-                            </div>
-                            <div class="input-container" data-i18n-label="endX">
-                                <input type="range" id="glfxEndX" min="0" max="1" step="0.01" value="0.5">
-                            </div>
-
-                            <div class="input-container" data-i18n-label="endY">
-                                <input type="range" id="glfxEndY" min="0" max="1" step="0.01" value="0.5">
-                            </div>
-                            <div class="input-container" data-i18n-label="blurRadius">
-                                <input type="range" id="glfxTiltBlurRadius" min="0" max="50" step="0.01" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="gradientRadius">
-                                <input type="range" id="glfxGradientRadius" min="0" max="1" step="0.01" value="0.5">
-                            </div>
-                        </div>
-
-                        <div id="glfxTriangleBlur" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="radius">
-                                <input type="range" id="glfxTriangleRadius" min="0" max="200" step="1" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxZoomBlur" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="centerX">
-                                <input type="range" id="glfxZoomCenterX" min="0" max="1024" step="0.01" value="0.5">
-                            </div>
-                            <div class="input-container" data-i18n-label="centerY">
-                                <input type="range" id="glfxZoomCenterY" min="0" max="1024" step="0.01" value="0.5">
-                            </div>
-                            <div class="input-container" data-i18n-label="strength">
-                                <input type="range" id="glfxZoomStrength" min="0" max="1" step="0.01" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxColorHalftone" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="angle">
-                                <input type="range" id="glfxHalftoneAngle" min="0" max="6.28" step="0.1" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="size">
-                                <input type="range" id="glfxHalftoneSize" min="1" max="100" step="0.1" value="2">
-                            </div>
-                        </div>
-
-                        <div id="glfxDotScreen" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="angle">
-                                <input type="range" id="glfxDotAngle" min="0" max="6.28" step="0.1" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="size">
-                                <input type="range" id="glfxDotSize" min="1" max="100" step="0.1" value="2">
-                            </div>
-                        </div>
-
-                        <div id="glfxEdgeWork" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="radius">
-                                <input type="range" id="glfxEdgeRadius" min="0" max="10" step="0.1" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxHexagonalPixelate" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="scale">
-                                <input type="range" id="glfxHexScale" min="1" max="100" step="0.1" value="2">
-                            </div>
-                        </div>
-
-                        <div id="glfxInk" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="strength">
-                                <input type="range" id="glfxInkStrength" min="0" max="1" step="0.01" value="0.3">
-                            </div>
-                        </div>
-
-                        <div id="glfxBulgePinch" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="centerX">
-                                <input type="range" id="glfxBulgeCenterX" min="0" max="1024" step="1" value="500">
-                            </div>
-                            <div class="input-container" data-i18n-label="centerY">
-                                <input type="range" id="glfxBulgeCenterY" min="0" max="1024" step="1" value="500">
-                            </div>
-                            <div class="input-container" data-i18n-label="radius">
-                                <input type="range" id="glfxBulgeRadius" min="-1" max="1" step="0.01" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="strength">
-                                <input type="range" id="glfxBulgeStrength" min="0" max="600" step="1" value="0">
-                            </div>
-                        </div>
-
-                        <div id="glfxSwirl" class="glfxCcontrol-group">
-                            <div class="input-container" data-i18n-label="centerX">
-                                <input type="range" id="glfxSwirlCenterX" min="0" max="1024" step="1" value="256">
-                            </div>
-                            <div class="input-container" data-i18n-label="centerY">
-                                <input type="range" id="glfxSwirlCenterY" min="0" max="1024" step="1" value="256">
-                            </div>
-                            <div class="input-container" data-i18n-label="radius">
-                                <input type="range" id="glfxSwirlRadius" min="0" max="600" step="1" value="0">
-                            </div>
-                            <div class="input-container" data-i18n-label="angle">
-                                <input type="range" id="glfxSwirlAngle" min="-25" max="25" step="10" value="0">
-                            </div>
-                        </div>
-                        <div style="margin-top: 5px;">
-                            <button id="glfxApplyButton" data-i18n="apply">Apply</button>
-                            <button id="glfxResetButton" data-i18n="reset">Reset</button>
-                        </div>
+                    <div id="other-controls-mini" class="controls-mini">
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -1765,6 +1613,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     
+    <script src="js/ui/glfxUI.js?v=5.3" defer></script>
     <script src="js/ui/canvasObjectMenu.js?v=5.3" defer></script>
     <script src="js/ui/intro.js?v=5.3" defer></script>
     <script src="js/ui/Toast.js?v=5.3" defer></script>
@@ -1774,6 +1623,7 @@
     <script src="js/ui/flowtingWindow.js?v=5.3" defer></script>
     <script src="js/ui/html-component/hc-ImagePromptHelper.js?v=5.3" defer></script>
     <script src="js/ui/html-component/ImagePromptHelper.js?v=5.3" defer></script>
+    <script src="js/ui/ai/Prompt.js?v=5.3" defer></script>
 
     <script src="js/ui/custom-html-component.js?v=5.3" defer></script>
     <!-- <script src="js/ui/cursor.js?v=5.3" defer></script> -->
@@ -1798,8 +1648,8 @@
     <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=5.3" defer></script>
     <script src="js/ai/ComfyuiManagement.js" defer></script>
     <script src="js/ai/GenerativeAI.js?v=5.3" defer></script>
+    <script src="js/ai/prompt/BaseEventListener.js?v=5.3" defer></script>
     <script src="js/layer/FloatingWindowManagement.js?v=5.3" defer></script>
-    <script src="js/layer/LayerAIManagement.js?v=5.3" defer></script>
     <script src="js/layer/LayerManagement.js?v=5.3" defer></script>
     <script src="js/layer/ImageHistoryManagement.js?v=5.3" defer></script>
     <script src="js/layer/blend/Blend.js?v=5.3" defer></script>
@@ -2000,6 +1850,19 @@
         });
 
     </script>
+
+
+<script>
+    var controlsMini = document.querySelector('.controls-mini');
+    var textarea = controlsMini.querySelector('textarea');
+    if (textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    }
+</script>
+
 </body>
 
 </html>

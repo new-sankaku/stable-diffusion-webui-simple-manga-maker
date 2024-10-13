@@ -3,7 +3,6 @@ Map.prototype.getOrDefault = function (key, defaultValue) {
 };
 
 const sidebarValueMap = new Map();
-
 const penValueMap = new Map();
 const effectValueMap = new Map();
 
@@ -42,13 +41,6 @@ function addSubmitButton(id) {
   `;
 }
 
-function addTextArea(id, label) {
-  return `
-      <div class="input-group_one">
-          <textarea id="${id}" rows="4">New Text</textarea>
-      </div>
-  `;
-}
 
 function addColor(id, label, value) {
   const transLavel = getText(label);
@@ -198,4 +190,19 @@ function addDropDownByGrad(id, label) {
 
 
 
-
+function addTextArea(id, label) {
+  const transLavel = getText(label);
+  if( transLavel ){
+    return `
+    <div class="input-group_one">
+        <textarea id="${id}" rows="4">${transLavel}</textarea>
+    </div>
+`;
+  }else{
+    return `
+    <div class="input-group_one">
+        <textarea id="${id}" rows="4">New Text</textarea>
+    </div>
+`;
+  }
+}

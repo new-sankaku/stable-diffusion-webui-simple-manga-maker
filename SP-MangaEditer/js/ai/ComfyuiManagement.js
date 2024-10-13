@@ -123,6 +123,11 @@ async function comufy_apiHeartbeat() {
           console.log("apiHeartbeat", "comufy_isAlive");
           ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI ON';
           ComufyUI_Heartbeat_Label.style.color = 'green';
+          
+          if(firstComfyConnection){
+            getDiffusionInfomation();
+            firstComfyConnection = false;
+          }
         }else{
           console.log("apiHeartbeat", "comufy_notAlive");
           ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI OFF';

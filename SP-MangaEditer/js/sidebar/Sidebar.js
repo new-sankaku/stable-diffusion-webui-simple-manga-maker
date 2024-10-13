@@ -27,6 +27,7 @@ function toggleVisibility(id) {
     $("manga-effect-area").style.display = "none";
     $("dummy-area4").style.display = "none";
     $("shape-area").style.display = "none";
+    $("controle-area").style.display = "none";
     element.style.display = "block";
   } else {
     element.style.display = "none";

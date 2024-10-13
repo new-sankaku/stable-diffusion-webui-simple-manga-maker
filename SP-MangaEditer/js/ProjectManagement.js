@@ -5,6 +5,9 @@ const apis = {
 };
 
 function generateZip(){
+
+  saveState();
+
   var zip = new JSZip();
   zip.file("text2img_basePrompt.json", JSON.stringify(text2img_basePrompt));
 
@@ -47,7 +50,6 @@ function loadZip(zip, guid = null){
 
 
   var canvasInfoFile = zip.file("canvas_info.json");
-
   var canvasInfoPromise = canvasInfoFile
     ? canvasInfoFile.async("string").then(function (content) {
       return JSON.parse(content);
@@ -63,7 +65,6 @@ function loadZip(zip, guid = null){
     }
     return numA - numB;
   });
-
 
   //Image sort
   sortedFiles.map(function (fileName) {
@@ -278,46 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //TODO: Maybe moved this to another file
   var selectA1111APIButton = $("Select_a1111_button");
   var selectComfyuiAPIButton = $("Select_comfyui_button");
-  // // TODO: this is a bit of a scuffed soloution and requires a lot of extra work if a third api model would be added.
-  // selectA1111APIButton.addEventListener('click', (event) => {
-  //   event.stopPropagation();
 
-  //   API_mode = apis.A1111;
-
-  //   // // Hide comfyui elements and show A1111 elements
-  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
-  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
-
-  //   // selectA1111APIButton.style.backgroundColor = "#ffedd3";
-  //   // for (let i = 0; i < a1111Elements.length; i++) {
-  //   //   a1111Elements[i].style.display = "block";
-  //   // }
-
-  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffe1b7"
-  //   // for (let i = 0; i < comfyuiElements.length; i++) {
-  //   //   comfyuiElements[i].style.display = "none";
-  //   // }
-  // });
-
-  // selectComfyuiAPIButton.addEventListener('click', (event) => {
-  //   event.stopPropagation();
-
-  //   API_mode = apis.COMFYUI;
-
-  //   // // Show comfyui elements and hide A1111 elements
-  //   // let a1111Elements = document.getElementsByClassName("A1111_api_content");
-  //   // let comfyuiElements = document.getElementsByClassName("Comfyui_api_content");
-
-  //   // selectA1111APIButton.style.backgroundColor = "#ffe1b7";
-  //   // for (let i = 0; i < a1111Elements.length; i++) {
-  //   //   a1111Elements[i].style.display = "none";
-  //   // }
-
-  //   // selectComfyuiAPIButton.style.backgroundColor = "#ffedd3"
-  //   // for (let i = 0; i < comfyuiElements.length; i++) {
-  //   //   comfyuiElements[i].style.display = "block";
-  //   // }
-  // });
 
 });
 
@@ -358,20 +320,46 @@ function loadSettingsLocalStrage(  ) {
     $('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
     $('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox === "true";
 
-    text2img_basePrompt.text2img_prompt         = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
-    text2img_basePrompt.text2img_negativePrompt = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
-    text2img_basePrompt.text2img_seed           = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
-    text2img_basePrompt.text2img_cfg_scale      = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
-    text2img_basePrompt.text2img_width          = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
-    text2img_basePrompt.text2img_height         = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
-    text2img_basePrompt.text2img_samplingMethod = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
-    text2img_basePrompt.text2img_samplingSteps  = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
-    text2img_basePrompt.text2img_scheduler      = localSettings.text2img_basePrompt_text2img_scheduler || text2img_basePrompt.text2img_scheduler;
-    text2img_basePrompt.text2img_model          = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
-    text2img_basePrompt.text2img_hr_upscaler    = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
-    text2img_basePrompt.text2img_basePrompt_hr_scale  = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
-    text2img_basePrompt.text2img_basePrompt_hr_step   = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
-    text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
+$('text2img_basePrompt_model').value                  = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
+$('text2img_basePrompt_samplingMethod').value         = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
+$('text2img_basePrompt_prompt').value                 = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
+$('text2img_basePrompt_negativePrompt').value         = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
+$('text2img_basePrompt_seed').value                   = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
+$('text2img_basePrompt_cfg_scale').value              = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
+$('text2img_basePrompt_width').value                  = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
+$('text2img_basePrompt_height').value                 = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
+$('text2img_basePrompt_samplingSteps').value          = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
+$('text2img_basePrompt_hr_upscaler').value            = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
+$('text2img_basePrompt_hr_scale').value               = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
+$('text2img_basePrompt_hr_denoising_strength').value  = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
+$('text2img_basePrompt_hr_step').value                = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
+
+$('text2img_basePrompt_height').addEventListener('blur', function() {
+  var value = parseInt(this.value);
+  if (value !== -1) {
+    this.value = Math.round(value / 8) * 8;
+  }
+});
+$('text2img_basePrompt_width').addEventListener('blur', function() {
+  var value = parseInt(this.value);
+  if (value !== -1) {
+    this.value = Math.round(value / 8) * 8;
+  }
+});
+
+text2img_basePrompt.text2img_prompt = $('text2img_basePrompt_prompt').value;
+text2img_basePrompt.text2img_negativePrompt = $('text2img_basePrompt_negativePrompt').value;
+text2img_basePrompt.text2img_model = $('text2img_basePrompt_model').value;
+text2img_basePrompt.text2img_samplingSteps = $('text2img_basePrompt_samplingSteps').value;
+text2img_basePrompt.text2img_samplingMethod = $('text2img_basePrompt_samplingMethod').value;
+text2img_basePrompt.text2img_width = $('text2img_basePrompt_width').value;
+text2img_basePrompt.text2img_height = $('text2img_basePrompt_height').value;
+text2img_basePrompt.text2img_seed = $('text2img_basePrompt_seed').value;
+text2img_basePrompt.text2img_cfg_scale = $('text2img_basePrompt_cfg_scale').value;
+text2img_basePrompt.text2img_hr_upscaler = $('text2img_basePrompt_hr_upscaler').value;
+text2img_basePrompt.text2img_basePrompt_hr_step = $('text2img_basePrompt_hr_step').value;
+text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = $('text2img_basePrompt_hr_denoising_strength').value;
+text2img_basePrompt.text2img_basePrompt_hr_scale = $('text2img_basePrompt_hr_scale').value;
   }
 }
 
@@ -447,57 +435,6 @@ function toggleAPI(event) {
 
 
 
-function executeWithConfirmation(message, callback) {
-  var modalHtml = `
-      <div class="modal fade" id="dynamicConfirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
-                      <button type="button" class="btn-close" id="executeWithConfirmationCloseButton" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                      ${message}
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" id="executeWithConfirmationCancelButton">Cancel</button>
-                      <button type="button" class="btn btn-primary" id="executeWithConfirmationConfirmButton">Yes</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-  `;
-
-  document.body.insertAdjacentHTML('beforeend', modalHtml);
-  var confirmModal = new bootstrap.Modal($('dynamicConfirmModal'));
-  confirmModal.show();
-
-  var executeWithConfirmationConfirmButton = $('executeWithConfirmationConfirmButton');
-  var executeWithConfirmationCancelButton = $('executeWithConfirmationCancelButton');
-  var executeWithConfirmationCloseButton = $('executeWithConfirmationCloseButton');
-
-  function handleConfirm() {
-    callback();
-    confirmModal.hide();
-    cleanup();
-  }
-
-  function handleCancel() {
-    confirmModal.hide();
-    cleanup();
-  }
-
-  function cleanup() {
-    executeWithConfirmationConfirmButton.removeEventListener('click', handleConfirm);
-    executeWithConfirmationCancelButton.removeEventListener('click', handleCancel);
-    executeWithConfirmationCloseButton.removeEventListener('click', handleCancel);
-    $('dynamicConfirmModal').remove();
-  }
-
-  executeWithConfirmationConfirmButton.addEventListener('click', handleConfirm);
-  executeWithConfirmationCancelButton.addEventListener('click', handleCancel);
-  executeWithConfirmationCloseButton.addEventListener('click', handleCancel);
-}
 
 document.addEventListener('DOMContentLoaded', function() {
   $('svgDownload').onclick = function () {

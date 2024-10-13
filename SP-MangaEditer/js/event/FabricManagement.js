@@ -83,8 +83,8 @@ canvas.on("object:moving", function (e) {
 });
 
 //CommonControl, ImageControlの更新処理
-canvas.on("selection:created", handleSelection);
-canvas.on("selection:updated", handleSelection);
+// canvas.on("selection:created", handleSelection);
+// canvas.on("selection:updated", handleSelection);
 
 //Textの更新処理
 canvas.on('selection:created', function(event) {

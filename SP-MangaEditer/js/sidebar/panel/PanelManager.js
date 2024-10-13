@@ -1,7 +1,7 @@
-function handleSelection(e) {
-  var selectedObject = e.target;
-  updateControls(selectedObject);
-}
+// function handleSelection(e) {
+//   var selectedObject = e.target;
+//   updateControls(selectedObject);
+// }
 
 document.addEventListener('DOMContentLoaded', function() {
   $("canvas-container").addEventListener(

@@ -104,6 +104,7 @@ function baseRequestData(layer) {
     "cfg_scale": text2img_basePrompt.text2img_cfg_scale,
     "scheduler": text2img_basePrompt.text2img_scheduler,
     "do_not_save_grid": true,
+    "save_images": true,
   };
 
   if (text2img_basePrompt.text2img_hr_upscaler && text2img_basePrompt.text2img_hr_upscaler != 'None') {

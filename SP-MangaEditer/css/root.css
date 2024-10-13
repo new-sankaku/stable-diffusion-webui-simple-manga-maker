@@ -178,7 +178,7 @@
  --font-size-12px: 12px;
  --font-size-controls: 12px;
  --font-size-small: 12px;
- --font-size-base: 14px;
+ --font-size-base: 12px;
  --min-width-layer-panel-small: 15%;
  --max-width-150: 150px;
  --max-width-base: 200px;
@@ -189,7 +189,7 @@
  --gap-section: 16px;
  --padding-block-article: 16px;
  --max-width-layer-panel: 18%;
- --min-width-controls: 180px;
+ --min-width-controls: 300px;
  --flex-basis-section: 180px;
  --font-size-icon-material-outlined: 18px;
  --flex-2: 2;
