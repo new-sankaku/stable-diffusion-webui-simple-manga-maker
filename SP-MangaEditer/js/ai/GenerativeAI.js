@@ -96,11 +96,18 @@ function updateModelDropdown(models) {
     option.value = model.title;
     option.textContent = model.model_name;
 
-    if (text2img_basePrompt.text2img_model === model.title) {
+    // console.log("updateModelDropdown ", text2img_basePrompt.text2img_model, ":", removeHashStr(model.title))
+    if (text2img_basePrompt.text2img_model === removeHashStr(model.title)) {
       option.selected = true;
     }
     modelDropdown.appendChild(option);
   });
+}
+
+//Before:ABC.safetensors [23e4fa2b6f]
+//After :ABC.safetensors
+function removeHashStr(str) {
+  return str.replace(/\s*\[[^\]]+\]\s*$/, '');
 }
 
 $('text2img_basePrompt_model').addEventListener('change', function(event){
@@ -111,18 +118,3 @@ $('text2img_basePrompt_model').addEventListener('change', function(event){
   }
 
 });
-
-function updateModelDropdown(models) {
-  const modelDropdown = $('text2img_basePrompt_model');
-  modelDropdown.innerHTML = '';
-  models.forEach(model => {
-    const option = document.createElement('option');
-    option.value = model.title;
-    option.textContent = model.model_name;
-
-    if (text2img_basePrompt.text2img_model === model.title) {
-      option.selected = true;
-    }
-    modelDropdown.appendChild(option);
-  });
-}

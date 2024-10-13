@@ -94,8 +94,8 @@ function baseRequestData(layer) {
 
 
   const requestData = {
-    "prompt": text2img_basePrompt.text2img_prompt + layer.text2img_prompt,
-    "negative_prompt": text2img_basePrompt.text2img_negativePrompt + layer.text2img_negativePrompt,
+    "prompt": text2img_basePrompt.text2img_prompt + ", " + layer.text2img_prompt,
+    "negative_prompt": text2img_basePrompt.text2img_negativePrompt + ", " + layer.text2img_negativePrompt,
     "seed": seed,
     "width": width,
     "height": height,
