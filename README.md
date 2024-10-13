@@ -47,7 +47,7 @@ For those who find updates bothersome, the Demo site is recommended.
 ## Drag on Drop
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="800">
 
-## Effect
+## Effect(GLFX)
 <div style="display: flex; align-items: flex-start;">
     <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="400">
     <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="400">
