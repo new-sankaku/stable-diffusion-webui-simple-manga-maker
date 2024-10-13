@@ -272,3 +272,9 @@
  padding: var(--padding-bottom-bar-content);
  text-align: var(--text-align-center-bottom-bar-content);
 }
+
+
+#controls {
+  max-height: 100vh; 
+  overflow-y: auto;
+}

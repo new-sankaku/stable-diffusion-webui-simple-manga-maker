@@ -139,6 +139,7 @@ function addEffectEventListener() {
 
 function clearActiveEffectButton() {
   $(MODE_EFFECT_GLOW + 'Button').classList.remove('active-button');
+  $(MODE_EFFECT_GLFX + 'Button').classList.remove('active-button');
 }
 
 

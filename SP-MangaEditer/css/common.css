@@ -138,6 +138,20 @@ body {
 }
 
 @font-face {
+  font-family: 'Bangers';
+  src: url('../font/Bangers/Bangers-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+ }
+ @font-face {
+  font-family: 'Kalam';
+  src: url('../font/Kalam/Kalam-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+ }
+  
+
+@font-face {
  font-family: 'DotGothic16';
  src: url('../font/DotGothic16/DotGothic16-Regular.ttf') format('truetype');
  font-weight: normal;

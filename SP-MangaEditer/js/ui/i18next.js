@@ -4,13 +4,19 @@
 const resources = {
   ja: {
     translation: {
-"glowInfomation":"輪郭にGlowを行います、画像の背景が透明である必要があります。背景除去などを行ってください。",
+"esApiControls":"▼ 外部サービス",
+"esApiControlsByClose":"◀ 外部サービス",
+"externalServices":"外部サービス",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ 全体AI設定",
+"baseControlsByClose":"◀ 全体AI設定",
+"otherControls":"▼ 各AI設定(コマ or 画像)",
+"otherControlsByClose":"◀ 各AI設定(コマ or 画像)",
+
 "Controle": "コントロール",
-"baseControls":"▼ Base Prompt",
-"otherControls":"▼ Other Prompt",
+"glowInfomation":"輪郭にGlowを行います、画像の背景が透明である必要があります。背景除去などを行ってください。",
 "checkButton":"ブレンドに使用するかどうか",
 "speedLineStyle":"線種別",
-
 "blendLowImages":"レイヤーの画像に丸いアイコンがあります、2つ以上チェックして下さい。ブレンドには画像が2枚以上必要です。",
 "blendResult":"ブレンド結果（ドラッグして移動できます。Layer画像をクリックするとブレンドから除外できます。)",
 "25blends":"25種類のブレンド",
@@ -423,10 +429,17 @@ const resources = {
   },
 en: {
     translation: {
+"esApiControls":"▼ External Services",
+"esApiControlsByClose":"◀ External Services",
+"externalServices":"External Services",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ General AI Settings",
+"baseControlsByClose":"◀ General AI Settings",
+"otherControls":"▼ Individual AI Settings (Text or Image)",
+"otherControlsByClose":"◀ Individual AI Settings (Text or Image)",
+
 "glowInfomation": "Applies glow to the outline. The image background must be transparent. Please perform background removal or similar tasks.",
 "Controle": "Control",
-"baseControls": "▼ Base Prompt",
-"otherControls": "▼ Other Prompt",
 "checkButton": "Whether to use for blending",
 "speedLineStyle": "Line type",
 
@@ -929,10 +942,17 @@ en: {
 
   ko: {
 translation: {
+  "esApiControls":"▼ 외부 서비스",
+"esApiControlsByClose":"◀ 외부 서비스",
+"externalServices":"외부 서비스",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ 전체 AI 설정",
+"baseControlsByClose":"◀ 전체 AI 설정",
+"otherControls":"▼ 개별 AI 설정 (텍스트 또는 이미지)",
+"otherControlsByClose":"◀ 개별 AI 설정 (텍스트 또는 이미지)",
+
 "glowInfomation": "윤곽에 글로우를 적용합니다. 이미지 배경이 투명해야 합니다. 배경 제거 등을 수행하세요.",
 "Controle": "컨트롤",
-"baseControls": "▼ 기본 프롬프트",
-"otherControls": "▼ 기타 프롬프트",
 "checkButton": "블렌드에 사용할지 여부",
 "speedLineStyle": "선 종류",
 
@@ -1359,10 +1379,17 @@ translation: {
   },
   fr: {
     translation: {
+      "esApiControls":"▼ Services Externes",
+"esApiControlsByClose":"◀ Services Externes",
+"externalServices":"Services Externes",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ Paramètres Généraux de l'IA",
+"baseControlsByClose":"◀ Paramètres Généraux de l'IA",
+"otherControls":"▼ Paramètres Individuels de l'IA (Texte ou Image)",
+"otherControlsByClose":"◀ Paramètres Individuels de l'IA (Texte ou Image)",
+
 "glowInfomation": "Applique un effet de halo au contour. L'arrière-plan de l'image doit être transparent. Veuillez effectuer la suppression de l'arrière-plan ou une action similaire.",
 "Controle": "Contrôle",
-"baseControls": "▼ Invite de base",
-"otherControls": "▼ Autres invites",
 "checkButton": "Utiliser pour le mélange ou non",
 "speedLineStyle": "Type de ligne",
 
@@ -1826,10 +1853,17 @@ translation: {
   },
   zh: {
     translation: {
+      "esApiControls":"▼ 外部服务",
+"esApiControlsByClose":"◀ 外部服务",
+"externalServices":"外部服务",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ 全局AI设置",
+"baseControlsByClose":"◀ 全局AI设置",
+"otherControls":"▼ 各AI设置（文本或图片）",
+"otherControlsByClose":"◀ 各AI设置（文本或图片）",
+
 "glowInfomation": "为轮廓添加发光效果，图像背景必须是透明的。请执行背景去除等操作。",
 "Controle": "控制",
-"baseControls": "▼ 基础提示",
-"otherControls": "▼ 其他提示",
 "checkButton": "是否用于混合",
 "speedLineStyle": "线条类型",
 
@@ -2290,10 +2324,17 @@ translation: {
   },
   ru: {
     translation: {
+      "esApiControls":"▼ Внешние Сервисы",
+"esApiControlsByClose":"◀ Внешние Сервисы",
+"externalServices":"Внешние Сервисы",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ Общие Настройки ИИ",
+"baseControlsByClose":"◀ Общие Настройки ИИ",
+"otherControls":"▼ Индивидуальные Настройки ИИ (Текст или Изображение)",
+"otherControlsByClose":"◀ Индивидуальные Настройки ИИ (Текст или Изображение)",
+
 "glowInfomation": "Применяет свечение к контуру. Фон изображения должен быть прозрачным. Пожалуйста, выполните удаление фона или аналогичные действия.",
 "Controle": "Управление",
-"baseControls": "▼ Основная подсказка",
-"otherControls": "▼ Другие подсказки",
 "checkButton": "Использовать для смешивания или нет",
 "speedLineStyle": "Тип линии",
 
@@ -2706,10 +2747,17 @@ translation: {
   },
   es: {
     translation: {
+      "esApiControls":"▼ Servicios Externos",
+"esApiControlsByClose":"◀ Servicios Externos",
+"externalServices":"Servicios Externos",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ Configuración General de la IA",
+"baseControlsByClose":"◀ Configuración General de la IA",
+"otherControls":"▼ Configuración Individual de la IA (Texto o Imagen)",
+"otherControlsByClose":"◀ Configuración Individual de la IA (Texto o Imagen)",
+
 "glowInfomation": "Aplica un resplandor al contorno. El fondo de la imagen debe ser transparente. Por favor, realice la eliminación del fondo u otras tareas similares.",
 "Controle": "Control",
-"baseControls": "▼ Indicaciones básicas",
-"otherControls": "▼ Otras indicaciones",
 "checkButton": "Si se debe usar para la mezcla",
 "speedLineStyle": "Tipo de línea",
 
@@ -3119,10 +3167,17 @@ translation: {
   },
   pt: {
     translation: {
+      "esApiControls":"▼ Serviços Externos",
+"esApiControlsByClose":"◀ Serviços Externos",
+"externalServices":"Serviços Externos",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ Configurações Gerais da IA",
+"baseControlsByClose":"◀ Configurações Gerais da IA",
+"otherControls":"▼ Configurações Individuais da IA (Texto ou Imagem)",
+"otherControlsByClose":"◀ Configurações Individuais da IA (Texto ou Imagem)",
+
 "glowInfomation": "Aplica brilho ao contorno. O fundo da imagem deve ser transparente. Por favor, remova o fundo ou faça algo similar.",
 "Controle": "Controle",
-"baseControls": "▼ Prompt Base",
-"otherControls": "▼ Outros Prompts",
 "checkButton": "Usar para mistura ou não",
 "speedLineStyle": "Tipo de linha",
 
@@ -3530,10 +3585,17 @@ translation: {
   },
 th: {
 translation: {
+  "esApiControls":"▼ บริการภายนอก",
+"esApiControlsByClose":"◀ บริการภายนอก",
+"externalServices":"บริการภายนอก",
+"comfyUI": "ComfyUI",
+"baseControls":"▼ การตั้งค่า AI ทั่วไป",
+"baseControlsByClose":"◀ การตั้งค่า AI ทั่วไป",
+"otherControls":"▼ การตั้งค่า AI แยกต่างหาก (ข้อความหรือรูปภาพ)",
+"otherControlsByClose":"◀ การตั้งค่า AI แยกต่างหาก (ข้อความหรือรูปภาพ)",
+
 "glowInfomation": "ใช้เอฟเฟกต์แสงเรืองกับขอบ เส้นขอบ รูปภาพต้องมีพื้นหลังโปร่งใส กรุณาลบพื้นหลังหรือทำการจัดการที่คล้ายกัน",
 "Controle": "การควบคุม",
-"baseControls": "▼ คำแนะนำพื้นฐาน",
-"otherControls": "▼ คำแนะนำอื่นๆ",
 "checkButton": "ใช้สำหรับการผสมหรือไม่",
 "speedLineStyle": "ประเภทของเส้น",
 "blendLowImages": "ภาพเลเยอร์มีไอคอนกลม กรุณาเลือกอย่างน้อย 2 ภาพ การผสมต้องใช้ภาพอย่างน้อย 2 ภาพ",

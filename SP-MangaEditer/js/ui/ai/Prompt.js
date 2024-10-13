@@ -74,6 +74,8 @@ function showT2IPrompts(layer) {
     }
     layer.text2img_width = this.value;
   });
+
+  setAutoSizeingControlMini();
 }
 
 function showI2IPrompts(layer) {
@@ -143,6 +145,8 @@ function showI2IPrompts(layer) {
   $("img2img_denoising_strength").addEventListener("input", function () {
     layer.img2img_denoising_strength = this.value;
   });
+
+  setAutoSizeingControlMini();
 }
 
 function adjustToMultipleOfEight(elementId) {

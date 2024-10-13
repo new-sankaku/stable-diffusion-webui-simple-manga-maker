@@ -167,17 +167,58 @@ function getElementClasses(element) {
 <link rel="stylesheet" href="css/ui/share.css?v=5.4">
 <link rel="stylesheet" href="css/ui/flowtingWindow.css?v=5.4">
 <link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=5.4">
-
 <link rel="stylesheet" href="css/tippy.css?v=5.4">
-
 <link rel="stylesheet" href="third/tippy/tippy.css">
 <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css">
-
 <link rel="stylesheet" href="css/all.min.css?v=5.4">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.3/css/flag-icons.min.css">
 <link rel="stylesheet" href="css/ui/blend.css?v=5.4">
 <link rel="stylesheet" href="css/ui/bottomBar.css?v=5.4">
 <link rel="stylesheet" href="css/ui/custom-html-components.css?v=5.4">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.css" rel="stylesheet" type="text/css" />
+
+
+
+<style>
+        .tagify {
+            --tags-border-color: #3a3a3a;
+            --tags-hover-border-color: #6200ee;
+            --tags-focus-border-color: #6200ee;
+            width: 100%;
+            max-width: none;
+            background-color: #2a2a2a;
+        }
+        .tagify__tag {
+            --tag-bg: #3700b3;
+            --tag-hover: #6200ee;
+            --tag-text-color: #e0e0e0;
+            --tag-border-radius: 4px;
+            --tag-pad: 0.3em 0.5em;
+        }
+        .tagify__tag > div {
+            color: #e0e0e0 !important;
+        }
+        .tagify__tag__removeBtn {
+            color: #bb86fc;
+        }
+        .tagify__input {
+            color: #e0e0e0;
+        }
+        .tagify__input::placeholder {
+            color: #9e9e9e;
+            opacity: 1;
+        }
+        .tagify__dropdown {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+        }
+        .tagify__dropdown__item--active {
+            background-color: #3700b3;
+        }
+
+</style>
 
 </head>
 
@@ -294,26 +335,9 @@ function getElementClasses(element) {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="intro_sdWebUI" data-i18n="sdWebUI">SD API</span>
+                            <span id="intro_sdWebUI" data-i18n="externalServices"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <!-- <li style="display: flex; justify-content: center; align-items: center; list-style: none; padding: 10px">
-                                <button id="Select_a1111_button"  style="margin: 0 10px; padding: 5px; background-color: #ffedd3;">A1111</button>
-                                <button id="Select_comfyui_button" style="margin: 0 10px; padding: 5px">Comfyui</button>
-                            </li> -->
-                            <li style="display: none;">
-                                <div class="toggle-container">
-                                    <span class="toggle-text">WebUI</span>
-                                    <div class="toggle-switch">
-                                        <input type="checkbox" id="toggle-api" class="toggle-checkbox"
-                                            onchange="toggleAPI(event)">
-                                        <label for="toggle-api" class="toggle-label"></label>
-                                    </div>
-                                    <span class="toggle-text2">ComfyUI</span>
-                                </div>
-                            </li>
-
-                            <hr>
                             <!--A1111-->
                             <div class="A1111_api_content">
                                 <li>
@@ -332,7 +356,7 @@ function getElementClasses(element) {
                                     </label>
                                 </li>
                                 <li>
-                                    <a href="html/API_Help/stablediffusion_web_ui_settings.html" target="_blank">
+                                    <a href="html/API_Help/sdwebui_settings.html" target="_blank">
                                         <i class="material-icons">help_outline</i>
                                         <span data-i18n="help_api_connect_settings">
                                             Help:Connect Settings
@@ -341,12 +365,10 @@ function getElementClasses(element) {
                                 </li>
                             </div>
                             <hr>
-
-                            <!--TODO COMFYUI-->
                             <div class="Comfyui_api_content" style="display: none;">
                                 <li>
                                     <label>
-                                        <span data-i18n="">ComufyUI(β)</span>
+                                        <span data-i18n="comfyUI">ComfyUI</span>
                                     </label>
                                 </li>
                                 <li>
@@ -359,15 +381,6 @@ function getElementClasses(element) {
                                     <label for="Comfyui_apiPort">
                                         <span data-i18n="apiPort">API Port:</span>
                                         <input type="text" id="Comfyui_apiPort">
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="file-input-label">
-                                        <input type="file" id="Workflow_path_load" onchange="displayFileName()">
-                                        <span>Workflow File</span>
-                                    </label>
-                                    <label>
-                                        <span id="file-name">No file</span>
                                     </label>
                                 </li>
                                 <a href="html/API_Help/ComufyUI_settings.html" target="_blank">
@@ -1470,10 +1483,35 @@ function getElementClasses(element) {
             </div>
 
 
-
             <div id="controls">
+
+                <div class="panel" id="esApiControlsPanel">
+                    <div class="area-header" data-i18n="esApiControls" onclick='changeHiddenById("esApi-controls-mini", "esApiControls", "esApiControlsByClose")'>
+                    </div>
+                    <div id="esApi-controls-mini" class="controls-mini">
+                        <div class="input-group">
+                            <button id="sdWebUIButton" class="selected" onclick="changeExternalAPI('sdWebUIButton')">
+                                WebUI or Forge
+                            </button>
+                            <button id="comfyUIButton" onclick="changeExternalAPI('comfyUIButton')"  style="display: none;">
+                                ComfyUI
+                            </button>
+                        </div>
+                        <hr>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label id="SD_WebUI_pingCheck_Label">
+                            <input type="checkbox" id="apiHeartbeatCheckbox" checked>
+                            AI Check
+                        </label>
+                        <label id="ExternalService_Heartbeat_Label">SD WebUI Check…</label>
+                    </div>
+                </div>
+
                 <div class="panel" id="baseControlsPanel">
-                    <div class="area-header" data-i18n="baseControls">
+                    <div class="area-header" data-i18n="baseControls" onclick='changeHiddenById("base-controls-mini", "baseControls", "baseControlsByClose")'>
                     </div>
                     <div id="base-controls-mini" class="controls-mini">
                         <div class="control textarea-control">
@@ -1488,7 +1526,7 @@ function getElementClasses(element) {
                             </div>
                             <textarea id="text2img_basePrompt_negativePrompt" name="textarea" placeholder=" "></textarea>
                         </div>
-                    
+                        <hr>
                         <div class="control">
                             <select id="text2img_basePrompt_model" name="dropdown">
                             </select>
@@ -1509,11 +1547,11 @@ function getElementClasses(element) {
                     
                         <div class="dual-number-control">
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_width" name="number-input-1" placeholder=" ">
+                                <input type="number" id="text2img_basePrompt_width" name="number-input-1" placeholder=" " step="8">
                                 <span class="label">Width</span>
                             </div>
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_height" name="number-input-1" placeholder=" ">
+                                <input type="number" id="text2img_basePrompt_height" name="number-input-1" placeholder=" " step="8">
                                 <span class="label">Height</span>
                             </div>
                         </div>
@@ -1528,7 +1566,7 @@ function getElementClasses(element) {
                                 <span class="label">CFG</span>
                             </div>
                         </div>
-                    
+                        <hr>
                         <div class="dual-number-control">
                             <div class="control">
                                 <select id="text2img_basePrompt_hr_upscaler" name="dropdown">
@@ -1550,21 +1588,39 @@ function getElementClasses(element) {
                                 <span class="label">Scale</span>
                             </div>
                         </div>
+                        <hr>
+                        <div class="control textarea-control" style="display: none;">
+                            <label>Adetailer</label>
+                            <input type="checkbox" id="AdetailerCheck">
+                        </div>
+                        <div class="control textarea-control" style="display: none;">
+                            <div class="textarea-label-wrapper">
+                                <label class="textarea-label" for="textarea">Adetiler</label>
+                            </div>
+                            <textarea id="AdetilerModels" name="textarea" placeholder=" "></textarea>
+                        </div>
+                        <div class="control textarea-control" style="display: none;">
+                            <div class="textarea-label-wrapper">
+                                <label class="textarea-label" for="textarea">Prompt</label>
+                            </div>
+                            <textarea id="AdetilerModelsPrompt" name="textarea" placeholder=" "></textarea>
+                        </div>
+                        <div class="control textarea-control" style="display: none;">
+                            <div class="textarea-label-wrapper">
+                                <label class="textarea-label" for="textarea">Negative</label>
+                            </div>
+                            <textarea id="AdetilerModelsNegative" name="textarea" placeholder=" "></textarea>
+                        </div>
+                        <hr>
                         <label style="font-size: 10px;" data-i18n="checSD_WebUI_Announce"/>
-                    </div>
-                    <div class="input-group">
-                        <label id="SD_WebUI_pingCheck_Label">
-                            <input type="checkbox" id="apiHeartbeatCheckbox" checked>
-                            AI Check
-                        </label>
-                        <label id="SD_WebUI_Heartbeat_Label">SD WebUI Check…</label>
                     </div>
                 </div>
 
                 <div class="panel" id="otherControlsPanel">
-                    <div class="area-header" data-i18n="otherControls">
+                    <div class="area-header" data-i18n="otherControls" onclick='changeHiddenById("other-controls-mini", "otherControls", "otherControlsByClose")'>
                     </div>
                     <div id="other-controls-mini" class="controls-mini">
+                        <label>Text or Image Prpmpt…</label>
                     </div>
                 </div>
             </div>
@@ -1689,179 +1745,108 @@ function getElementClasses(element) {
     <script src="js/svg/MangaPanelsImage_Landscape.js?v=5.4" defer></script>
     <script src="js/svg/MangaPanelsImage_Vertical.js?v=5.4" defer></script>
     <script src="js/svg/SpeechBubble.js?v=5.4" defer></script>
-
-
-    <script>
-        const btmDrawer = document.getElementById('btm-drawer');
-        const btmDrawerHandle = document.getElementById('btm-drawer-handle');
-        const btmImageContainer = document.getElementById('btm-image-container');
-        const btmScrollLeftBtn = document.getElementById('btm-scroll-left');
-        const btmScrollRightBtn = document.getElementById('btm-scroll-right');
-
-        let btmScrollPosition = 0;
-        let btmIsDragging = false;
-
-
-        function btmToggleDrawer() {
-            btmDrawer.classList.toggle('btm-closed');
-            btmUpdateHandleText();
-            btmUpdateScrollButtons();
-        }
-
-        function btmCloseDrawer() {
-            btmDrawer.classList.add('btm-closed');
-            btmUpdateHandleText();
-        }
-
-        function btmUpdateHandleText() {
-            btmDrawerHandle.textContent = btmDrawer.classList.contains('btm-closed') ? 'OPEN' : 'CLOSE';
-        }
-
-        function btmSaveZip() {
-
-            return new Promise((resolve, reject) => {
-                var guid = getCanvasGUID();
-                var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
-                var zip = generateZip();
-                zip.generateAsync({ type: "blob" })
-                    .then(function (content) {
-                        btmAddImage(previewLink, content, guid);
-                        resolve();
-                    })
-                    .catch(function (error) {
-                        reject(error);
-                    });
-            });
-        }
-
-        const btmImageZipMap = new Map();
-        function btmAddImage(imageLink, zipBlob, guid) {
-            const zipData = btmImageZipMap.get(guid);
-
-            if (zipData) {
-                btmImageZipMap.set(guid, { imageLink, zipBlob });
-                const image = document.querySelector(`.btm-image[data-index="${guid}"]`);
-                if (image) {
-                    image.src = imageLink.href;
-                }
-            } else {
-                const imageWrapper = document.createElement('div');
-                imageWrapper.className = 'btm-image-wrapper';
-                const image = document.createElement('img');
-                image.src = imageLink.href;
-                image.className = 'btm-image';
-                image.dataset.index = guid;
-                image.addEventListener('click', () => {
-                    if (stateStack.length > 2) {
-                        btmSaveZip().then(() => {
-                        });
-                    }
-                    const zipData = btmImageZipMap.get(guid);
-                    JSZip.loadAsync(zipData.zipBlob).then(function (zip) {
-                        loadZip(zip, guid);
-                    }).catch(function (error) {
-                        console.error("Error loading ZIP:", error);
-                    });
-                });
-
-                const closeBtn = document.createElement('button');
-                closeBtn.textContent = '✕';
-                closeBtn.className = 'btm-close-btn';
-                closeBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    btmImageZipMap.delete(guid);
-                    imageWrapper.remove();
-                    btmUpdateScrollButtons();
-                });
-
-                imageWrapper.appendChild(image);
-                imageWrapper.appendChild(closeBtn);
-                btmImageContainer.appendChild(imageWrapper);
-                btmImageZipMap.set(guid, { imageLink, zipBlob });
-            }
-
-            if (btmDrawer.classList.contains('btm-closed')) {
-                btmToggleDrawer();
-            } else {
-                btmUpdateScrollButtons();
-            }
-        }
-
-        function btmUpdateScrollButtons() {
-            const containerWidth = btmDrawer.querySelector('.btm-drawer-content').offsetWidth;
-            const scrollWidth = btmImageContainer.scrollWidth;
-            btmScrollLeftBtn.style.display = btmScrollPosition > 0 ? 'block' : 'none';
-            btmScrollRightBtn.style.display = scrollWidth > containerWidth && btmScrollPosition < scrollWidth - containerWidth ? 'block' : 'none';
-        }
-
-        function btmScroll(direction) {
-            const containerWidth = btmDrawer.querySelector('.btm-drawer-content').offsetWidth;
-            btmScrollPosition += direction * containerWidth;
-            btmScrollPosition = Math.max(0, Math.min(btmScrollPosition, btmImageContainer.scrollWidth - containerWidth));
-            btmImageContainer.style.transform = `translateX(-${btmScrollPosition}px)`;
-            btmUpdateScrollButtons();
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            btmDrawerHandle.addEventListener('click', btmToggleDrawer);
-            btmScrollLeftBtn.addEventListener('click', () => btmScroll(-1));
-            btmScrollRightBtn.addEventListener('click', () => btmScroll(1));
-
-            document.addEventListener('mousedown', function (event) {
-                if (!btmDrawer.contains(event.target) && !btmDrawer.classList.contains('btm-closed')) {
-                    btmIsDragging = false;
-                }
-            });
-
-            document.addEventListener('mouseup', function (event) {
-                if (!btmDrawer.contains(event.target) && !btmDrawer.classList.contains('btm-closed') && !btmIsDragging) {
-                    btmCloseDrawer();
-                }
-                btmIsDragging = false;
-            });
-
-            function btmStartDrag(e) {
-                e.preventDefault();
-                isDragging = true;
-                let startX = e.clientX;
-                let scrollLeft = btmScrollPosition;
-
-                function btmDrag(e) {
-                    const diff = startX - e.clientX;
-                    btmScrollPosition = scrollLeft + diff;
-                    btmImageContainer.style.transform = `translateX(-${btmScrollPosition}px)`;
-                }
-
-                function btmStopDrag() {
-                    document.removeEventListener('mousemove', btmDrag);
-                    document.removeEventListener('mouseup', btmStopDrag);
-                    const containerWidth = btmDrawer.querySelector('.btm-drawer-content').offsetWidth;
-                    btmScrollPosition = Math.max(0, Math.min(btmScrollPosition, btmImageContainer.scrollWidth - containerWidth));
-                    btmImageContainer.style.transform = `translateX(-${btmScrollPosition}px)`;
-                    btmUpdateScrollButtons();
-                }
-
-                document.addEventListener('mousemove', btmDrag);
-                document.addEventListener('mouseup', btmStopDrag);
-            }
-
-            btmImageContainer.addEventListener('mousedown', btmStartDrag);
-            window.addEventListener('resize', btmUpdateScrollButtons);
-        });
-
-    </script>
-
+    <script src="js/ui/bottomBar.js?v=5.4" defer></script>
 
 <script>
-    var controlsMini = document.querySelector('.controls-mini');
-    var textarea = controlsMini.querySelector('textarea');
-    if (textarea) {
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
+function autoResize(event) {
+    event.target.style.height = 'auto';
+    event.target.style.height = event.target.scrollHeight + 'px';
+}
+
+function setAutoSizeingControlMini() {
+    var controlsMinis = document.querySelectorAll('.controls-mini');
+    controlsMinis.forEach(function(controlsMini) {
+        var textareas = controlsMini.querySelectorAll('textarea');
+        textareas.forEach(function(textarea) {
+            textarea.removeEventListener('input', autoResize);
+            textarea.addEventListener('input', autoResize);
         });
+    });
+}
+setAutoSizeingControlMini();
+
+function changeHiddenById(elementId, openKey, closeKey) {
+  const element = document.getElementById(elementId);
+  const headerElement = element.previousElementSibling;
+
+  if (element && headerElement) {
+    if (element.style.display === 'none') {
+      var word = getText(openKey);
+      element.style.display = '';
+      headerElement.textContent = word;
+    } else {
+      var word = getText(closeKey);
+      element.style.display = 'none';
+      headerElement.textContent = word;
     }
+  }
+}
+
+function changeExternalAPI(selectedId) {
+  const buttons = document.querySelectorAll('#sdWebUIButton, #comfyUIButton');
+  buttons.forEach(button => {
+    button.classList.remove('selected');
+  });
+  const selectedButton = document.getElementById(selectedId);
+  if (selectedButton) {
+    selectedButton.classList.add('selected');
+  }
+
+  console.log('Selected API:', selectedId);
+  if ( selectedId === "sdWebUIButton" ) {
+    API_mode = apis.A1111;
+    createToast("API CHANGE!", "WebUI(A1111/Forge)");
+  } else if ( selectedId === "comfyUIButton" ) {
+    API_mode = apis.COMFYUI;
+    createToast("API CHANGE!", "COMFYUI");
+  }
+  apiHeartbeat();
+}
+
+
+
+
+
+
+
+
+
+        let tagifyAdetailer;
+        function initTagify(whitelist = []) {
+            const input = document.getElementById('AdetilerModels');
+            if (tagifyAdetailer) {
+                tagifyAdetailer.destroy();
+            }
+            tagifyAdetailer = new Tagify(input, {
+                enforceWhitelist: true,
+                whitelist: whitelist,
+                dropdown: {
+                    enabled: 0,
+                    maxItems: 100,
+                    position: "text",
+                    closeOnSelect: false,
+                    highlightFirst: true,
+                    showAllSuggestions: true
+                }
+            });
+            input.addEventListener('focus', () => {
+                tagifyAdetailer.dropdown.show();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initTagify();
+        });
+
+    function getAdetailerList() {
+        if (!tagifyAdetailer) {
+            return [];
+        }
+        return tagifyAdetailer.value.map(tag => tag.value);
+    }
+
 </script>
+
 
 </body>
 

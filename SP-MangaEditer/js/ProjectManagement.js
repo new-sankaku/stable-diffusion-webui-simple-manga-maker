@@ -318,7 +318,7 @@ function loadSettingsLocalStrage(  ) {
     svgPagging = localSettings.canvasMarginFromPanel || 20;
     $('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
     $('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
-    $('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox === "true";
+    $('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox;
 
 $('text2img_basePrompt_model').value                  = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
 $('text2img_basePrompt_samplingMethod').value         = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
@@ -374,7 +374,7 @@ function saveSettingsLocalStrage() {
     'Knife Space Size...',
     'Save Completed!!'
   ]);
-
+  
   localSettingsData = {
     view_layers_checkbox: $('view_layers_checkbox').checked,
     view_controles_checkbox: $('view_controles_checkbox').checked,
@@ -413,22 +413,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-function toggleAPI(event) {
-  event.stopPropagation();
-  event.preventDefault();
-
-  const toggleCheckbox = $('toggle-api');
-  if (toggleCheckbox.checked) {
-    API_mode = apis.COMFYUI;
-    console.log('API_mode is now set to:', API_mode);
-    createToast("API CHANGE!", "COMFYUI");
-  } else {
-    API_mode = apis.A1111;
-    console.log('API_mode is now set to:', API_mode);
-    createToast("API CHANGE!", "WebUI(A1111/Forge)");
-  }
-}
 
 
 

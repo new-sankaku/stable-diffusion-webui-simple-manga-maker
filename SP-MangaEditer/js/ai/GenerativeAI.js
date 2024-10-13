@@ -16,12 +16,15 @@ function I2I( layer, spinner ){
   }
 }
 
+  
+
 
 function getDiffusionInfomation() {
   if (API_mode == apis.A1111) {
     fetchSD_Models();
     fetchSD_Sampler();
     fetchSD_Upscaler();
+    fetchSD_ADModels();
   }else if( API_mode == apis.COMFYUI ){
     comufyModels();
     comufySampler();

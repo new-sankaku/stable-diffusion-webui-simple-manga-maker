@@ -50,6 +50,4 @@
  min-width: var(--min-width-layer-panel);
  max-width: var(--max-width-layer-panel);
  flex: var(--flex-layer-panel);
- max-width: var(--max-width-layer-panel-large);
- min-width: var(--min-width-layer-panel-small);
 }

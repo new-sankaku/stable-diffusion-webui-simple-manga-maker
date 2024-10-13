@@ -16,7 +16,7 @@ portInput.value = comfyuiPort;
 document.addEventListener('DOMContentLoaded', function() {
     hostInput = $('Comfyui_apiHost');
     portInput = $('Comfyui_apiPort');
-    workflowFileLoad = $('Workflow_path_load');
+    // workflowFileLoad = $('Workflow_path_load');
     
     hostInput.value = comfyuiHost;
     portInput.value = comfyuiPort;
@@ -27,47 +27,47 @@ document.addEventListener('DOMContentLoaded', function() {
 /* 
 * Loads a user workflow and stores it in json format in variable 'selected_workflow'
 */
-document.addEventListener('DOMContentLoaded', function() {
-    workflowFileLoad.addEventListener('change', (event) => {
-        //console.log('ワークフローファイルの選択が変更されました。');
-        // File Cancel.
-        if (event.target.files.length === 0) {
-            //console.log('ファイル選択がキャンセルされました。');
-            return;
-        }
+// document.addEventListener('DOMContentLoaded', function() {
+//     workflowFileLoad.addEventListener('change', (event) => {
+//         //console.log('ワークフローファイルの選択が変更されました。');
+//         // File Cancel.
+//         if (event.target.files.length === 0) {
+//             //console.log('ファイル選択がキャンセルされました。');
+//             return;
+//         }
 
-        try {
-            var workflowPath = event.target.files[0].name;
-            //console.log('選択されたファイル:', workflowPath);
-            reader.readAsText(event.target.files[0], 'utf8');
+//         try {
+//             var workflowPath = event.target.files[0].name;
+//             //console.log('選択されたファイル:', workflowPath);
+//             reader.readAsText(event.target.files[0], 'utf8');
 
-            reader.addEventListener('loadend', async () => {
-                try {
-                    const data = reader.result;
-                    //console.log('ファイルの内容が読み込まれました。データ:', data);
-                    selected_workflow = JSON.parse(data);
-                    //console.log('ワークフローが正常に読み込まれました:', selected_workflow);
-                    createToast("Workflow loaded successfully.", workflowPath);
-                } catch (e) {
-                    if (e.name === 'SyntaxError') {
-                        //console.log(`ファイル ${workflowPath} は無効なJSONです。`);
-                        createToastError("Workflow Error.", "The file " + workflowPath + " contains invalid JSON.");
-                    } else {
-                        //console.log(`予期しないエラーが発生しました: ${e.message}`);
-                        createToastError("Workflow Error.", "An unexpected error occurred: " + e.message);
-                    }
-                }
-            }, { once: true });
+//             reader.addEventListener('loadend', async () => {
+//                 try {
+//                     const data = reader.result;
+//                     //console.log('ファイルの内容が読み込まれました。データ:', data);
+//                     selected_workflow = JSON.parse(data);
+//                     //console.log('ワークフローが正常に読み込まれました:', selected_workflow);
+//                     createToast("Workflow loaded successfully.", workflowPath);
+//                 } catch (e) {
+//                     if (e.name === 'SyntaxError') {
+//                         //console.log(`ファイル ${workflowPath} は無効なJSONです。`);
+//                         createToastError("Workflow Error.", "The file " + workflowPath + " contains invalid JSON.");
+//                     } else {
+//                         //console.log(`予期しないエラーが発生しました: ${e.message}`);
+//                         createToastError("Workflow Error.", "An unexpected error occurred: " + e.message);
+//                     }
+//                 }
+//             }, { once: true });
 
-        } catch (e) {
-            if (e.code === 'ENOENT') {
-                //console.log(`ファイル ${workflowPath} が見つかりません。`);
-            } else {
-                //console.log(`予期しないエラーが発生しました: ${e.message}`);
-            }
-        }
-    });
-});
+//         } catch (e) {
+//             if (e.code === 'ENOENT') {
+//                 //console.log(`ファイル ${workflowPath} が見つかりません。`);
+//             } else {
+//                 //console.log(`予期しないエラーが発生しました: ${e.message}`);
+//             }
+//         }
+//     });
+// });
 
 
 function displayFileName() {
@@ -108,7 +108,7 @@ async function comufy_apiHeartbeat() {
 
     server_address = hostInput.value + ':' + portInput.value;
     console.log( "comufy_apiHeartbeat", "start" );
-    const ComufyUI_Heartbeat_Label = $('ComufyUI_Heartbeat_Label');
+    const label = $('ExternalService_Heartbeat_Label');
     try {
         const url = "http://" + server_address +  "/settings";
         const response = await fetch(url, {
@@ -121,24 +121,26 @@ async function comufy_apiHeartbeat() {
 
         if( response.ok ){
           console.log("apiHeartbeat", "comufy_isAlive");
-          ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI ON';
-          ComufyUI_Heartbeat_Label.style.color = 'green';
+          label.innerHTML = 'ComufyUI ON';
+          label.style.color = 'green';
           
           if(firstComfyConnection){
             getDiffusionInfomation();
             firstComfyConnection = false;
           }
+          return true;
         }else{
           console.log("apiHeartbeat", "comufy_notAlive");
-          ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI OFF';
-          ComufyUI_Heartbeat_Label.style.color = 'red';
+          label.innerHTML = 'ComufyUI OFF';
+          label.style.color = 'red';
         }
     } catch (error) {
         console.log("apiHeartbeat", error);
         console.log("apiHeartbeat", "error comufy_notAlive");
-        ComufyUI_Heartbeat_Label.innerHTML = 'ComufyUI OFF';
-        ComufyUI_Heartbeat_Label.style.color = 'red';
+        label.innerHTML = 'ComufyUI OFF';
+        label.style.color = 'red';
   }
+  return false;
 }
 
 /*

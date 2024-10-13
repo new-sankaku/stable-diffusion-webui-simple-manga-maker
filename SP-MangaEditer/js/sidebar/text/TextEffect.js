@@ -370,8 +370,8 @@ function isFontAvailableForLanguage(font, text) {
 }
 
 function reloadFont(fontId='fontSelector') {
-  var primaryFonts = ['KleeOne', 'Arial', 'Comic Sans MS', 'DotGothic16', 'Stick', 'DokiDokiFont2', 'OhisamaFont11', 'RampartOne-Regular', 'TrainOne-Regular', '851MkPOP_101', '851CHIKARA-DZUYOKU_kanaA'];
-  const additionalFonts = ['Arial Black', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Impact', 'Times New Roman', 'Courier', 'Helvetica', 'Courier New', 'Century Gothic', 'Arial Narrow', 'MS PGothic', 'Franklin Gothic Medium', 'Segoe UI', 'Yu Gothic', 'Yu Mincho', 'Meiryo', 'Malgun Gothic', 'MS UI Gothic'];
+  var primaryFonts = ['Comic Sans MS', 'Arial', 'Bangers', 'DotGothic16', 'DokiDokiFont2', 'Kalam', 'KleeOne', 'OhisamaFont11', 'RampartOne-Regular', 'Stick', 'TrainOne-Regular', '851MkPOP_101', '851CHIKARA-DZUYOKU_kanaA'];
+  const additionalFonts = ['Arial Black', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Impact', 'Times New Roman', 'Courier', 'Courier New', 'Century Gothic', 'Helvetica', 'Arial Narrow', 'MS PGothic', 'Franklin Gothic Medium', 'Segoe UI', 'Yu Gothic', 'Yu Mincho', 'Meiryo', 'Malgun Gothic', 'MS UI Gothic'];
 
   if( fontId == "fontT2Selector" ){
     primaryFonts = ['Arial', 'Comic Sans MS', 'OhisamaFont11'];
@@ -404,7 +404,7 @@ function reloadFont(fontId='fontSelector') {
     option.style.fontFamily = font;
     option.textContent = langText + " " + font;
     option.value = font;
-    option.style.fontSize = '20px';
+    option.style.fontSize = '16px';
     select.appendChild(option);
   }
   
@@ -413,6 +413,7 @@ function reloadFont(fontId='fontSelector') {
     option.style.fontFamily = font;
     option.textContent = langText + " " + font;
     option.value = font;
+    option.style.fontSize = '16px';
     select.appendChild(option);
   }
 }

@@ -1,4 +1,23 @@
 
+function fetchSD_ADModels() {
+  fetch(sdWebUI_API_adetilerModel, {
+      method: 'GET',
+      headers: {
+          'accept': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      initTagify(data.ad_model);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      alert('APIからデータを取得できませんでした。');
+  });
+}
+
+
+
 async function sendModelToServer() {
   const modelValue = text2img_basePrompt.text2img_model;
 
@@ -63,7 +82,7 @@ async function fetchSD_Models() {
 
 
 function sdwebui_apiHeartbeat() {
-  const SD_WebUI_Heartbeat_Label = $('SD_WebUI_Heartbeat_Label');
+  const label = $('ExternalService_Heartbeat_Label');
 
   fetch(sdWebUI_API_ping, {
     method: 'GET',
@@ -71,22 +90,24 @@ function sdwebui_apiHeartbeat() {
   })
     .then(response => {
       if (response.ok) {
-        SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge ON';
-        SD_WebUI_Heartbeat_Label.style.color = 'green';
+        label.innerHTML = 'SD WebUI or Forge ON';
+        label.style.color = 'green';
 
         if(firstSDConnection){
           getDiffusionInfomation();
           firstSDConnection = false;
         }
+        return true;
       } else {
-        SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge OFF';
-        SD_WebUI_Heartbeat_Label.style.color = 'red';
+        label.innerHTML = 'SD WebUI or Forge OFF';
+        label.style.color = 'red';
       }
     })
     .catch(error => {
-      SD_WebUI_Heartbeat_Label.innerHTML = 'SD WebUI or Forge OFF';
-      SD_WebUI_Heartbeat_Label.style.color = 'red';
+      label.innerHTML = 'SD WebUI or Forge OFF';
+      label.style.color = 'red';
     });
+    return false;
 }
 
 

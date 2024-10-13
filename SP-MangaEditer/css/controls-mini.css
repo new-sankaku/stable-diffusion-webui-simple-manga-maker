@@ -55,7 +55,7 @@
 .controls-mini textarea {
   width: 100%;
   min-height: 60px;
-  max-height: 250px;
+  max-height: 125px;
   resize: none;
   overflow-y: auto;
   padding: 2px 8px;

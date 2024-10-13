@@ -27,6 +27,7 @@ var sdWebUI_API_options = '';
 var sdWebUI_API_samplers = '';
 var sdWebUI_API_interrogate = '';
 var sdWebUI_API_rembg = '';
+var sdWebUI_API_adetilerModel = '';
 
 function sdWebUI_reBuild_URL() {
   sdWebUI_API_ping = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/internal/ping'
@@ -40,6 +41,7 @@ function sdWebUI_reBuild_URL() {
   sdWebUI_API_samplers = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
   sdWebUI_API_interrogate = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/interrogate'
   sdWebUI_API_rembg = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/rembg'
+  sdWebUI_API_adetilerModel = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/adetailer/v1/ad_model'
 }
 sdWebUI_reBuild_URL();
 
@@ -107,6 +109,29 @@ function baseRequestData(layer) {
     "save_images": true,
   };
 
+  if( $("AdetailerCheck").checked ){
+    const adModels = getAdetailerList();
+    console.log("adModels", JSON.stringify(adModels));
+    if (adModels.length > 0) {
+      const adPromptElement = document.getElementById('AdetilerModelsPrompt');
+      const adNegativePromptElement = document.getElementById('AdetilerModelsNegative');
+      
+      const adPrompt = adPromptElement && adPromptElement.value ? adPromptElement.value.trim() : "";
+      const adNegativePrompt = adNegativePromptElement && adNegativePromptElement.value ? adNegativePromptElement.value.trim() : "";
+      
+      requestData.alwayson_scripts = {
+        "ADetailer": {
+          "args": adModels.map(model => ({
+            "ad_model": model,
+            "ad_prompt": adPrompt,
+            "ad_negative_prompt": adNegativePrompt
+          }))
+        }
+      };
+    }  
+  }else{
+  }
+
   if (text2img_basePrompt.text2img_hr_upscaler && text2img_basePrompt.text2img_hr_upscaler != 'None') {
     Object.assign(requestData, {
       enable_hr: true,
@@ -116,5 +141,7 @@ function baseRequestData(layer) {
       denoising_strength: text2img_basePrompt.text2img_basePrompt_hr_denoising_strength,
     });
   }
+
+  console.log("requestData", JSON.stringify(requestData));
   return requestData;
 }
