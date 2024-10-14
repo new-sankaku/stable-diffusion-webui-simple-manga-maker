@@ -1,6 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', function() {
-  openButton = $("openWindow");
+  openButton = $("verticalText");
   openButton.addEventListener("click", function () {
     var selectedFont = $('fontSelector').value;
     var fontsize = $("fontSizeSlider").value
@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const cjkText = new VerticalTextbox("new", style);
     canvas.add(cjkText);
+    canvas.setActiveObject(cjkText);
+    canvas.renderAll();
   });
 });
 

@@ -234,7 +234,7 @@ function createTextbox() {
 
   canvas.add(textbox);
   canvas.setActiveObject(textbox);
-  updateLayerPanel();
+  // updateLayerPanel();
 }
 
 function toggleShadow() {
