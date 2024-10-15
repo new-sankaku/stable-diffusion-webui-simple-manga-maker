@@ -296,7 +296,7 @@ function loadSettingsLocalStrage(  ) {
     'Margin From Panel...',
     'Knife Space Size...',
     'Load Completed!!'
-  ]);
+  ], 1500);
 
   const localSettingsData = localStorage.getItem('localSettingsData');
 
@@ -308,58 +308,64 @@ function loadSettingsLocalStrage(  ) {
     var event = new Event('input', { 'bubbles': true, 'cancelable': true });
     bgColorInputElement.dispatchEvent(event);
 
-
-    $('view_layers_checkbox').checked = localSettings.view_layers_checkbox ?? true;
-    $('view_controles_checkbox').checked = localSettings.view_controles_checkbox ?? true;
-    $('knifePanelSpaceSize').value = localSettings.knifePanelSpaceSize || "20";
-    $('outputDpi').value = localSettings.canvasDpi || "300";
-    $('gridSizeInput').value = localSettings.canvasGridLineSize || "10";
-    $('marginFromPanel').value = localSettings.canvasMarginFromPanel || 20;
-    svgPagging = localSettings.canvasMarginFromPanel || 20;
+    $('view_layers_checkbox').checked         = localSettings.view_layers_checkbox ?? true;
+    $('view_controles_checkbox').checked      = localSettings.view_controles_checkbox ?? true;
+    $('knifePanelSpaceSize').value            = localSettings.knifePanelSpaceSize || "20";
+    $('outputDpi').value                      = localSettings.canvasDpi || "300";
+    $('gridSizeInput').value                  = localSettings.canvasGridLineSize || "10";
+    $('marginFromPanel').value                = localSettings.canvasMarginFromPanel || 20;
     $('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
     $('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
-    $('apiHeartbeatCheckbox').checked = localSettings.apiHeartbeatCheckbox;
+    $('apiHeartbeatCheckbox').checked         = localSettings.apiHeartbeatCheckbox;
+    svgPagging                                = localSettings.canvasMarginFromPanel || 20;
+    $('text2img_basePrompt_model').value                  = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
+    $('text2img_basePrompt_samplingMethod').value         = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
+    $('text2img_basePrompt_prompt').value                 = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
+    $('text2img_basePrompt_negativePrompt').value         = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
+    $('text2img_basePrompt_seed').value                   = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
+    $('text2img_basePrompt_cfg_scale').value              = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
+    $('text2img_basePrompt_width').value                  = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
+    $('text2img_basePrompt_height').value                 = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
+    $('text2img_basePrompt_samplingSteps').value          = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
+    $('text2img_basePrompt_hr_upscaler').value            = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
+    $('text2img_basePrompt_hr_scale').value               = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
+    $('text2img_basePrompt_hr_denoising_strength').value  = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
+    $('text2img_basePrompt_hr_step').value                = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
 
-$('text2img_basePrompt_model').value                  = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
-$('text2img_basePrompt_samplingMethod').value         = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
-$('text2img_basePrompt_prompt').value                 = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
-$('text2img_basePrompt_negativePrompt').value         = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
-$('text2img_basePrompt_seed').value                   = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
-$('text2img_basePrompt_cfg_scale').value              = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
-$('text2img_basePrompt_width').value                  = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
-$('text2img_basePrompt_height').value                 = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
-$('text2img_basePrompt_samplingSteps').value          = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
-$('text2img_basePrompt_hr_upscaler').value            = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
-$('text2img_basePrompt_hr_scale').value               = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
-$('text2img_basePrompt_hr_denoising_strength').value  = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
-$('text2img_basePrompt_hr_step').value                = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
+    $('text2img_basePrompt_height').addEventListener('blur', function() {
+      var value = parseInt(this.value);
+      if (value !== -1) {
+        this.value = Math.round(value / 8) * 8;
+      }
+    });
+    $('text2img_basePrompt_width').addEventListener('blur', function() {
+      var value = parseInt(this.value);
+      if (value !== -1) {
+        this.value = Math.round(value / 8) * 8;
+      }
+    });
 
-$('text2img_basePrompt_height').addEventListener('blur', function() {
-  var value = parseInt(this.value);
-  if (value !== -1) {
-    this.value = Math.round(value / 8) * 8;
-  }
-});
-$('text2img_basePrompt_width').addEventListener('blur', function() {
-  var value = parseInt(this.value);
-  if (value !== -1) {
-    this.value = Math.round(value / 8) * 8;
-  }
-});
+    var nowExternalMode = localSettings.externalAI || apis.A1111;
+    console.log("nowExternalMode, " + nowExternalMode);
+    if( nowExternalMode === apis.A1111 ){
+      changeExternalAPI( "sdWebUIButton" );
+    }else{
+      changeExternalAPI( "comfyUIButton" );
+    }
 
-text2img_basePrompt.text2img_prompt = $('text2img_basePrompt_prompt').value;
-text2img_basePrompt.text2img_negativePrompt = $('text2img_basePrompt_negativePrompt').value;
-text2img_basePrompt.text2img_model = $('text2img_basePrompt_model').value;
-text2img_basePrompt.text2img_samplingSteps = $('text2img_basePrompt_samplingSteps').value;
-text2img_basePrompt.text2img_samplingMethod = $('text2img_basePrompt_samplingMethod').value;
-text2img_basePrompt.text2img_width = $('text2img_basePrompt_width').value;
-text2img_basePrompt.text2img_height = $('text2img_basePrompt_height').value;
-text2img_basePrompt.text2img_seed = $('text2img_basePrompt_seed').value;
-text2img_basePrompt.text2img_cfg_scale = $('text2img_basePrompt_cfg_scale').value;
-text2img_basePrompt.text2img_hr_upscaler = $('text2img_basePrompt_hr_upscaler').value;
-text2img_basePrompt.text2img_basePrompt_hr_step = $('text2img_basePrompt_hr_step').value;
-text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = $('text2img_basePrompt_hr_denoising_strength').value;
-text2img_basePrompt.text2img_basePrompt_hr_scale = $('text2img_basePrompt_hr_scale').value;
+    text2img_basePrompt.text2img_prompt                           = $('text2img_basePrompt_prompt').value;
+    text2img_basePrompt.text2img_negativePrompt                   = $('text2img_basePrompt_negativePrompt').value;
+    text2img_basePrompt.text2img_model                            = $('text2img_basePrompt_model').value;
+    text2img_basePrompt.text2img_samplingSteps                    = $('text2img_basePrompt_samplingSteps').value;
+    text2img_basePrompt.text2img_samplingMethod                   = $('text2img_basePrompt_samplingMethod').value;
+    text2img_basePrompt.text2img_width                            = $('text2img_basePrompt_width').value;
+    text2img_basePrompt.text2img_height                           = $('text2img_basePrompt_height').value;
+    text2img_basePrompt.text2img_seed                             = $('text2img_basePrompt_seed').value;
+    text2img_basePrompt.text2img_cfg_scale                        = $('text2img_basePrompt_cfg_scale').value;
+    text2img_basePrompt.text2img_hr_upscaler                      = $('text2img_basePrompt_hr_upscaler').value;
+    text2img_basePrompt.text2img_basePrompt_hr_step               = $('text2img_basePrompt_hr_step').value;
+    text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = $('text2img_basePrompt_hr_denoising_strength').value;
+    text2img_basePrompt.text2img_basePrompt_hr_scale              = $('text2img_basePrompt_hr_scale').value;
   }
 }
 
@@ -373,7 +379,7 @@ function saveSettingsLocalStrage() {
     'Margin From Panel...',
     'Knife Space Size...',
     'Save Completed!!'
-  ]);
+  ], 1500);
   
   localSettingsData = {
     view_layers_checkbox: $('view_layers_checkbox').checked,

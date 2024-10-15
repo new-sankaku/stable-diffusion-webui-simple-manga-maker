@@ -29,8 +29,8 @@ async function handleSuccessfulGeneration(img, responseData, layer, imageName) {
   webpImg.tempNegativePrompt = infoObject.negative_prompt;
 }
 
-const sdWebUI_t2IProcessQueue = (layer, spinnerId) => processQueue(layer, spinnerId, sdwebui_fetchText2Image, "t2i");
-const sdWebUI_I2IProcessQueue = (layer, spinnerId) => processQueue(layer, spinnerId, sdwebui_fetchImage2Image, "i2i");
+const sdwebui_T2IProcessQueue = (layer, spinnerId) => processQueue(layer, spinnerId, sdwebui_fetchText2Image, "t2i");
+const sdwebui_I2IProcessQueue = (layer, spinnerId) => processQueue(layer, spinnerId, sdwebui_fetchImage2Image, "i2i");
 
 async function sdwebui_fetchText2Image(layer) {
   return post(sdWebUI_API_T2I, baseRequestData(layer));

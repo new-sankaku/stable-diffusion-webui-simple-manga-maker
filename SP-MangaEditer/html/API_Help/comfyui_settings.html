@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">Comfyui API Setup Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        p, li, code {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+        code {
+            display: block;
+            background-color: #eee;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        strong {
+            color: #333;
+        }
+        .btn-group {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .btn-group button {
+            margin: 0 5px;
+        }
+    </style>
+    <script src="../../third/i18next/i18next.min.js"></script>
+</head>
+<body>
+    <div>Translation is Chat GPT4. English 日本語 한국어 中文 Français</div>
+    <div class="btn-group" role="group" aria-label="Language switcher" style="display: none;"> <!--TODO hidden translation buttons until translations are implemented-->
+        <button type="button" class="btn btn-primary" onclick="changeLanguage('en')">English</button>
+        <button type="button" class="btn btn-secondary" onclick="changeLanguage('ja')">日本語</button>
+        <button type="button" class="btn btn-secondary" onclick="changeLanguage('ko')">한국어</button>
+        <button type="button" class="btn btn-secondary" onclick="changeLanguage('zh')">中文</button>
+        <button type="button" class="btn btn-secondary" onclick="changeLanguage('fr')">Français</button>
+    </div>
+
+    <div class="container">
+        <h1 data-i18n="header">How to Setup the Comfyui API</h1>
+        <p data-i18n="intro">This guide explains how to configure the Comfyui API using SP-MangaEditer.</p>
+
+        <h2 data-i18n="config_steps">API Setup Steps</h2>
+        <p data-i18n="config_file_edit">Edit the <code>run_nvidia_gpu.bat</code> file within the Comfyui folder to set environment variables.</p>
+        <p data-i18n="example_config">The configuration file is as follows</p>
+        <img src="Comfyui_API_settings.jpg" width="60%" alt="webui-user.bat settings example" border="2">
+        
+        <h2 data-i18n="env_variables">Environment Variable to Set</h2>
+
+        <h3 data-i18n="simple_setup">Simple Setup:</h3>
+        <code data-i18n="simple_code">--enable-cors-header</code>
+        <br>
+
+        <h2 data-i18n="workflow_usage">Comfyui workflow usage guide</h2>
+
+        <h3 data-i18n="preset_workflow">Preset workflow</h3>
+        <p data-i18n="detailed_preset_workflow">If you don't have a workflow of your own that you wanna use then there exists a preset default workflow that will automatically be used if you don't load another one. This workflow does not contain any hires-fix, adetailer or upscaling.</p>
+        <br>
+
+        <h3 data-i18n="custom_workflow">Custom workflow</h3>
+        <p data-i18n="detailed_custom_workflow_saving">If you wanna use a custom workflow you first need to make sure to export it from Comfyui in API format, this can be done by opening up the settings menu in Comfyui and then enabling the 'Enable Dev mode options' option. </p>
+        <img src="enable_dev_mode.jpg" width="60%" alt="enabling dev mode example" border="2">
+        <p data-i18n="detailed_custom_workflow_uploading">Once that option is enabled you will now find in your Comfyui menu the ability to save a workflow in API format. Now you can go to SP-MangaEditer and in the 'SD API' menu found in the top navigation bar you will find a button to upload your workflow file as long as Comfyui is selected as your API of choice. </p>
+        
+        <h3 data-i18n="custom_workflow_placeholders">Custom workflow placeholders</h3>
+        <p data-i18n="detailed_custom_workflow_placeholders">If you want the ability to change parameters on your image generations in SP-MangaEditer without chaning your workflow constantly, you need to add so called placeholders to your workflow json file. Once a placeholder for a parameter has been added, Comfyui will use the parameters selected in SP-MangaEditer over the ones that was initially in your workflow. The current supported placeholders are the following: </p>
+        <ul>
+            <li>"%prompt%"</li>
+            <li>"%negative_prompt%"</li>
+            <li>"%cfg%"</li>
+            <li>"%steps%"</li>
+            <li>"%sampler%"</li>
+            <li>"%scheduler%"</li>
+            <li>"%model%"</li>
+            <li>"%seed%"</li>
+            <li>"%vae%"</li>
+            <li>"%width%"</li>
+            <li>"%height%"</li>
+        </ul>
+        <p data-i18n="detailed_custom_workflow_placeholders_usage">To add your placeholders you will have to open your workflow .json file in the text editor of your choice. Then you have to identify where each placeholder is supposed to be located and replace the initial value with the correct placeholder. To get a good idea of how this is done you can take a look at the preset workflow file, './sample_t2i.json'.</p>
+        <br>
+        <img src="Comfyui_placeholders_example.jpg" width="60%" alt="Comfyui placeholders example" border="2">
+        <br>
+        <h2 data-i18n="comfyui_beta_warning" style="color: #f54e42;">Warning: Comfyui support is work in progress</h2>
+        <p data-i18n="comfyui_beta_warnings" style="color: #f54e42;">Support for Comfyui API is currently only a work in progress effort and perfect functionality should not be expected. Certain features are missing, bugs are to be expected and the user experience can be poor. If you encounter any issues, have any suggestions/ideas or just have any complaint about the user experience then please write an issue on GitHub or on Discord.</p>
+    </div>
+
+    <script>
+        const resources = {
+            en: {
+                translation: {
+                    "title": "Comfyui API Setup Guide",
+                    "header": "How to Setup the Comfyui API",
+                    "intro": "This guide explains how to configure the Comfyui API using SP-MangaEditer.",
+                    "config_steps": "API Setup Steps",
+                    "config_file_edit": "Edit the 'run_nvidia_gpu.bat' file within the Comfyui folder to set environment variables.",
+                    "example_config": "The configuration file is as follows",
+                    "env_variables": "Environment Variables to Set",
+                    "simple_setup": "Simple Setup",
+                    "simple_code": "--enable-cors-header",
+                    "workflow_usage": "Comfyui workflow usage guide",
+                    "preset_workflow": "Preset workflow",
+                    "detailed_preset_workflow": "If you don't have a workflow of your own that you wanna use then there exists a preset default workflow that will automatically be used if you don't load another one. This workflow does not contain any hires-fix, adetailer or upscaling.",
+                    "custom_workflow": "Custom workflow",
+                    "detailed_custom_workflow_saving": "If you wanna use a custom workflow you first need to make sure to export it from Comfyui in API format, this can be done by opening up the settings menu in Comfyui and then enabling the 'Enable Dev mode options' option.",
+                    "detailed_custom_workflow_uploading": "Once that option is enabled you will now find in your Comfyui menu the ability to save a workflow in API format. Now you can go to SP-MangaEditer and in the 'SD API' menu found in the top navigation bar you will find a button to upload your workflow file as long as Comfyui is selected as your API of choice.",
+                    "custom_workflow_placeholders": "Custom workflow placeholders",
+                    "detailed_custom_workflow_placeholders": "If you want the ability to change parameters on your image generations in SP-MangaEditer without chaning your workflow constantly, you need to add so called placeholders to your workflow json file. Once a placeholder for a parameter has been added, Comfyui will use the parameters selected in SP-MangaEditer over the ones that was initially in your workflow. The current supported placeholders are the following:",
+                    "detailed_custom_workflow_placeholders_usage": "To add your placeholders you will have to open your workflow .json file in the text editor of your choice. Then you have to identify where each placeholder is supposed to be located and replace the initial value with the correct placeholder. To get a good idea of how this is done you can take a look at the preset workflow file, './sample_t2i.json'.",
+                    "comfyui_beta_warning": "Warning: Comfyui support is work in progress",
+                    "comfyui_beta_warnings": "Support for Comfyui API is currently only a work in progress effort and perfect functionality should not be expected. Certain features are missing, bugs are to be expected and the user experience can be poor. If you encounter any issues, have any suggestions/ideas or just have any complaint about the user experience then please write an issue on GitHub or on Discord."
+                }
+            }, //TODO Japanese translation
+            ja: {
+                translation: {
+                    "title": "Stable Diffusion WebUI(or Forge) API設定ガイド",
+                    "header": "Stable Diffusion WebUI(or Forge) APIの設定方法",
+                    "intro": "このガイドでは、SP-MangaEditerを使用してStable Diffusion WebUI(or Forge)のAPIを使用するための設定を説明します。",
+                    "config_steps": "API設定手順",
+                    "config_file_edit": "Stable Diffusion WebUI(or Forge)フォルダ内の'webui-user.bat'ファイルを編集してCOMMANDLINE_ARGSに環境変数を設定します。",
+                    "example_config": "設定ファイルは以下のとおりです",
+                    "env_variables": "設定する環境変数",
+                    "simple_setup": "簡単な設定：細かいアクセス設定が面倒な方向け",
+                    "simple_code": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "detailed_setup_webui": "詳細な設定：WebUIタブでSP-MangaEditerを利用する場合",
+                    "usage_detail_webui": "Stable diffusion WebUIのタブでSP-MangaEditerを利用する場合、以下の設定のみで動作します。",
+                    "detailed_code": "COMMANDLINE_ARGS=--api",
+                    "access_same_option": "Stablity Matrixからの起動でも同じオプションでアクセスが可能です。",
+                    "detailed_setup_spmanga": "詳細な設定：SP-MangaEditer単体での利用",
+                    "usage_detail_spmanga": "SP-MangaEditerを単体で利用する場合（SP-MangaEditer/index.html）、以下の環境変数を設定してください。",
+                    "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "cors_note": "注意：Stablity Matrixからの起動ではExtra Launch Argumentsに設定してください。"
+                }
+            }, //TODO Korean translation
+            ko: {
+                translation: {
+                    "title": "Stable Diffusion WebUI(or Forge) API 설정 가이드",
+                    "header": "Stable Diffusion WebUI(or Forge) API 설정 방법",
+                    "intro": "이 가이드에서는 SP-MangaEditer를 사용하여 Stable Diffusion WebUI(or Forge)의 API를 설정하는 방법을 설명합니다.",
+                    "config_steps": "API 설정 절차",
+                    "config_file_edit": "Stable Diffusion WebUI(or Forge) 폴더 내의 'webui-user.bat' 파일을 편집하여 COMMANDLINE_ARGS에 환경 변수를 설정하십시오.",
+                    "example_config": "구성 파일은 다음과 같습니다",
+                    "env_variables": "설정할 환경 변수",
+                    "simple_setup": "간단한 설정: 세부 접근 설정이 번거로운 사용자를 위한",
+                    "simple_code": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "detailed_setup_webui": "자세한 설정: WebUI 탭에서 SP-MangaEditer 사용 시",
+                    "usage_detail_webui": "Stable diffusion WebUI의 탭에서 SP-MangaEditer를 사용하는 경우, 다음 설정만으로 충분합니다.",
+                    "detailed_code": "COMMANDLINE_ARGS=--api",
+                    "access_same_option": "Stability Matrix에서 시작할 때도 같은 옵션으로 접근할 수 있습니다.",
+                    "detailed_setup_spmanga": "자세한 설정: SP-MangaEditer 단독 사용 시",
+                    "usage_detail_spmanga": "SP-MangaEditer를 단독으로 사용하는 경우(SP-MangaEditer/index.html), 다음 환경 변수를 설정하십시오.",
+                    "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "cors_note": "주의: Stability Matrix에서 실행할 때 Extra Launch Arguments에 설정하세요."
+                }
+            }, //TODO Chinese translation
+            zh: {
+                translation: {
+                    "title": "Stable Diffusion WebUI(or Forge) API设置指南",
+                    "header": "如何设置Stable Diffusion WebUI(or Forge) API",
+                    "intro": "本指南说明了如何使用SP-MangaEditer配置Stable Diffusion WebUI(or Forge)的API。",
+                    "config_steps": "API设置步骤",
+                    "config_file_edit": "编辑Stable Diffusion WebUI(or Forge)文件夹中的'webui-user.bat'文件，以在COMMANDLINE_ARGS中设置环境变量。",
+                    "example_config": "配置文件如下",
+                    "env_variables": "要设置的环境变量",
+                    "simple_setup": "简易设置：适合不喜欢繁琐访问设置的用户",
+                    "simple_code": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "detailed_setup_webui": "详细设置：在WebUI标签页使用SP-MangaEditer",
+                    "usage_detail_webui": "在Stable diffusion WebUI的标签页中使用SP-MangaEditer时，只需以下设置。",
+                    "detailed_code": "COMMANDLINE_ARGS=--api",
+                    "access_same_option": "即使从Stability Matrix启动，也可以使用相同的选项进行访问。",
+                    "detailed_setup_spmanga": "详细设置：单独使用SP-MangaEditer",
+                    "usage_detail_spmanga": "如果您正在单独使用SP-MangaEditer（SP-MangaEditer/index.html），请设置以下环境变量。",
+                    "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "cors_note": "注意：从Stability Matrix启动时，请在额外启动参数中设置。"
+                }
+            }, //TODO French translation
+            fr: {
+                translation: {
+                    "title": "Guide de configuration de l'API Stable Diffusion WebUI(or Forge)",
+                    "header": "Comment configurer l'API Stable Diffusion WebUI(or Forge)",
+                    "intro": "Ce guide explique comment configurer l'API Stable Diffusion WebUI(or Forge) en utilisant SP-MangaEditer.",
+                    "config_steps": "Étapes de configuration de l'API",
+                    "config_file_edit": "Éditez le fichier 'webui-user.bat' dans le dossier Stable Diffusion WebUI(or Forge) pour définir les variables d'environnement dans COMMANDLINE_ARGS.",
+                    "example_config": "Le fichier de configuration est comme suit",
+                    "env_variables": "Variables d'environnement à définir",
+                    "simple_setup": "Configuration simple : Pour ceux qui trouvent les réglages d'accès détaillés fastidieux",
+                    "simple_code": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "detailed_setup_webui": "Configuration détaillée : Utilisation de SP-MangaEditer avec l'onglet WebUI",
+                    "usage_detail_webui": "Lors de l'utilisation de SP-MangaEditer sur l'onglet WebUI de Stable diffusion, les réglages suivants suffisent.",
+                    "detailed_code": "COMMANDLINE_ARGS=--api",
+                    "access_same_option": "Les mêmes options permettent également l'accès à partir d'un lancement de Stability Matrix.",
+                    "detailed_setup_spmanga": "Configuration détaillée : Utilisation indépendante de SP-MangaEditer",
+                    "usage_detail_spmanga": "Si vous utilisez SP-MangaEditer de manière indépendante (SP-MangaEditer/index.html), veuillez configurer les variables d'environnement suivantes.",
+                    "detailed_code_cors": "COMMANDLINE_ARGS=--cors-allow-origins \"*\" --api",
+                    "cors_note": "Remarque : Lors du lancement à partir de Stability Matrix, veuillez le définir dans les arguments de lancement supplémentaires."
+                }
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            i18next.init({
+                lng: 'en', // 初期言語設定
+                debug: true,
+                resources: resources
+            }, function(err, t) {
+                // 初期化完了後にコンテンツを更新
+                updateContent();
+            });
+
+            // 言語切り替え機能
+            window.changeLanguage = function(lng) {
+                i18next.changeLanguage(lng, function(err, t) {
+                    updateContent();
+                });
+            };
+
+            function updateContent() {
+                document.title = i18next.t('title');
+                document.querySelectorAll('[data-i18n]').forEach(function(elem) {
+                    elem.textContent = i18next.t(elem.getAttribute('data-i18n'));
+                });
+            }
+        });
+    </script>
+</body>
+</html>

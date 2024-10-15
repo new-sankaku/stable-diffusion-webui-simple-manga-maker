@@ -16,7 +16,7 @@ portInput.value = comfyuiPort;
 document.addEventListener('DOMContentLoaded', function() {
     hostInput = $('Comfyui_apiHost');
     portInput = $('Comfyui_apiPort');
-    // workflowFileLoad = $('Workflow_path_load');
+    workflowFileLoad = $('Workflow_path_load');
     
     hostInput.value = comfyuiHost;
     portInput.value = comfyuiPort;
@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function displayFileName() {
-    //console.log('displayFileName関数が呼び出されました。');
+    console.log('displayFileName関数が呼び出されました。');
     var input = $('Workflow_path_load');
     var fileName = input.files.length > 0 ? input.files[0].name : 'No file chosen';
-    //console.log('表示されるファイル名:', fileName);
+    console.log('表示されるファイル名:', fileName);
     $('file-name').textContent = fileName;
 }
 
@@ -86,7 +86,7 @@ function connectToComfyui() {
         server_address = hostInput.value + ':' + portInput.value;
         socket = new WebSocket('ws://' + server_address + '/ws?clientId=' + uuid);
         socket.addEventListener("open", (event) => {
-            //console.log("ComfyUIへの接続に成功しました。");
+            console.log("ComfyUIへの接続に成功しました。");
         });
         socket.addEventListener("close", (event) => {
             socket = null;
@@ -107,7 +107,7 @@ function connectToComfyui() {
 async function comufy_apiHeartbeat() {
 
     server_address = hostInput.value + ':' + portInput.value;
-    console.log( "comufy_apiHeartbeat", "start" );
+    // console.log( "comufy_apiHeartbeat", "start" );
     const label = $('ExternalService_Heartbeat_Label');
     try {
         const url = "http://" + server_address +  "/settings";
@@ -120,7 +120,7 @@ async function comufy_apiHeartbeat() {
         });
 
         if( response.ok ){
-          console.log("apiHeartbeat", "comufy_isAlive");
+        //   console.log("apiHeartbeat", "comufy_isAlive");
           label.innerHTML = 'ComufyUI ON';
           label.style.color = 'green';
           
@@ -130,13 +130,13 @@ async function comufy_apiHeartbeat() {
           }
           return true;
         }else{
-          console.log("apiHeartbeat", "comufy_notAlive");
+        //   console.log("apiHeartbeat", "comufy_notAlive");
           label.innerHTML = 'ComufyUI OFF';
           label.style.color = 'red';
         }
     } catch (error) {
-        console.log("apiHeartbeat", error);
-        console.log("apiHeartbeat", "error comufy_notAlive");
+        // console.log("apiHeartbeat", error);
+        // console.log("apiHeartbeat", "error comufy_notAlive");
         label.innerHTML = 'ComufyUI OFF';
         label.style.color = 'red';
   }
@@ -148,10 +148,10 @@ async function comufy_apiHeartbeat() {
 * returns prompt_id
 */
 async function Comfyui_queue_prompt(prompt) {
-    //console.log('Comfyui_queue_prompt関数が呼び出されました。');
+    console.log('Comfyui_queue_prompt関数が呼び出されました。');
     try {
         p = { "prompt": prompt, "client_id": uuid };
-        //console.log('送信するプロンプトデータ:', p);
+        console.log('送信するプロンプトデータ:', p);
         const response = await fetch("http://" + server_address + "/prompt", {
             method: 'POST',
             headers: {
@@ -160,12 +160,12 @@ async function Comfyui_queue_prompt(prompt) {
             },
             body: JSON.stringify(p)
         });
-        //console.log('サーバーにプロンプトを送信しました。');
+        console.log('サーバーにプロンプトを送信しました。');
         var response_data = await response.json();
-        //console.log('サーバーからのレスポンス:', response_data);
+        console.log('サーバーからのレスポンス:', response_data);
         return response_data;
     } catch (error) {
-        //console.log("Text2Imageエラー:", error);
+        console.log("Text2Imageエラー:", error);
         createToastError("Text2Image Error.", "check COMFYUI!");
         return null;
     }
@@ -176,7 +176,7 @@ async function Comfyui_queue_prompt(prompt) {
 * returns finished prompts data
 */
 async function Comfyui_get_history(prompt_id) {
-    //console.log('Comfyui_get_history関数が呼び出されました。プロンプトID:', prompt_id);
+    console.log('Comfyui_get_history関数が呼び出されました。プロンプトID:', prompt_id);
     try {
         const response = await fetch("http://" + server_address + "/history/" + prompt_id, {
             method: 'GET',
@@ -184,12 +184,12 @@ async function Comfyui_get_history(prompt_id) {
                 'accept': 'application/json'
             },
         });
-        //console.log('サーバーに履歴データをリクエストしました。');
+        console.log('サーバーに履歴データをリクエストしました。');
         const data = await response.json();
-        //console.log('履歴データ:', data);
+        console.log('履歴データ:', data);
         return data;
     } catch (error) {
-        //console.log("Text2Imageエラー:", error);
+        console.log("Text2Imageエラー:", error);
         createToastError("Text2Image Error.", "check COMFYUI!");
         return null;
     }
@@ -200,7 +200,7 @@ async function Comfyui_get_history(prompt_id) {
 * Takes comfyui image data object as a parameter and returns a fabric image object
 */
 async function Comfyui_get_image(image_data_to_recieve) {
-    //console.log('Comfyui_get_image関数が呼び出されました。画像データ:', image_data_to_recieve);
+    console.log('Comfyui_get_image関数が呼び出されました。画像データ:', image_data_to_recieve);
     try {
         const params = new URLSearchParams({
             filename: image_data_to_recieve.filename,
@@ -208,10 +208,10 @@ async function Comfyui_get_image(image_data_to_recieve) {
             type: image_data_to_recieve.type,
         });
 
-        //console.log('リクエストパラメータ:', params.toString());
+        console.log('リクエストパラメータ:', params.toString());
 
         const response = await fetch('http://' + server_address + '/view?' + params.toString());
-        //console.log('画像データをサーバーから取得しました。');
+        console.log('画像データをサーバーから取得しました。');
 
         if (!response.ok) {
             throw new Error(`HTTPエラー! ステータス: ${response.status}`);
@@ -219,14 +219,14 @@ async function Comfyui_get_image(image_data_to_recieve) {
 
         const blob = await response.blob();
         var image_src = URL.createObjectURL(blob);
-        //console.log('画像ソース:', image_src);
+        console.log('画像ソース:', image_src);
         return new Promise((resolve, reject) => {
             fabric.Image.fromURL(image_src, (img) => {
                 if (img) {
-                    //console.log('fabric.Imageオブジェクトの作成に成功しました。');
+                    console.log('fabric.Imageオブジェクトの作成に成功しました。');
                     resolve(img);
                 } else {
-                    //console.log('fabric.Imageオブジェクトの作成に失敗しました。');
+                    console.log('fabric.Imageオブジェクトの作成に失敗しました。');
                     reject(new Error('Failed to create a fabric.Image object'));
                 }
             });
@@ -244,21 +244,22 @@ async function Comfyui_get_image(image_data_to_recieve) {
 // TODO more accuractly track and display progress being made
 // console log message.data to get an idea of how this can be done by looking at progress messages and node states
 async function Comfyui_track_prompt_progress(prompt_id) {
-    //console.log('Comfyui_track_prompt_progress関数が呼び出されました。プロンプトID:', prompt_id);
     return new Promise((resolve, reject) => {
         socket.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            //console.log('WebSocketメッセージ:', message);
-            if (message.type === "executing" && message.data.node === null && message.data.prompt_id === prompt_id) {
-                resolve("Stop message received with matching prompt_id");
+            if (event.data instanceof Blob) {
+                //akip
+            }else{
+                const message = JSON.parse(event.data);
+                // console.log('WebSocketメッセージ:', message);
+                if (message.type === "executing" && message.data.node === null && message.data.prompt_id === prompt_id) {
+                    resolve("Stop message received with matching prompt_id");
+                }
             }
         };
         socket.onerror = (error) => {
-            //console.log('WebSocketエラー:', error);
             reject(`WebSocket error: ${error}`);
         };
         socket.onclose = () => {
-            //console.log('WebSocketがプロンプト完了前に閉じられました。');
             reject("WebSocket closed before receiving stop message");
         };
     });
@@ -267,33 +268,48 @@ async function Comfyui_track_prompt_progress(prompt_id) {
 /*
 * Starts generating the proper prompt from the workflow and sends it to the queue
 */
-async function Comfyui_handle_process_queue(layer, spinnerId) {
-    //console.log('Comfyui_handle_process_queue関数が呼び出されました。');
+async function comfyui_handle_process_queue(layer, spinnerId, isT2I=true) {
+    console.log('comfyui_handle_process_queue');
     if (!socket) connectToComfyui();
-
     var requestData = baseRequestData(layer);
-    //console.log('リクエストデータ:', requestData);
     if (text2img_basePrompt.text2img_model != "")
         requestData['model'] = text2img_basePrompt.text2img_model;
-        var workflow = Comfyui_replace_placeholders(selected_workflow, requestData);
-        //console.log('プレースホルダーが置換されたワークフロー:', workflow);
 
-    // Once constructed the prompt we add it to the queue
+    if( isT2I ){
+        selected_workflow = getComfyUI_T2I_BySDXL();
+    }else{
+        uploadComfyUIImage(layer);
+        selected_workflow = getComfyUI_I2I_BySDXL();
+    }
+    console.log('comfyui_handle_process_queue selected_workflow:', selected_workflow);
+
+    var workflow = Comfyui_replace_placeholders(selected_workflow, requestData);
+    console.log('プレースホルダーが置換されたワークフロー:', workflow);
+
     comfyuiQueue.add(async () => Comfyui_generate_image(workflow))
-        .then(async (img) => {
-            var center = calculateCenter(layer);
-            //console.log('画像の配置位置:', center);
-            putImageInFrame(img, center.centerX, center.centerY);
+        .then(async (result) => {
+            if (result && result.error) {
+                console.error('ComfyUI処理エラー:', result.message);
+                createToastError("Generation Error", result.message);
+                throw new Error(result.message);
+            } else if (result) {
+                var center = calculateCenter(layer);
+                console.log('画像の配置位置:', center);
+                putImageInFrame(result, center.centerX, center.centerY);
+            } else {
+                throw new Error("Unexpected error: No result returned from Comfyui_generate_image");
+            }
         })
         .catch(error => {
-            createToastError("Generation Error.", "check COMFYUI!");
-            //console.log("エラー:", error);
+            createToastError("Generation Error", error.message || "Check COMFYUI for details");
+            console.error("エラー:", error);
         })
         .finally(() => {
-            //console.log('スピナーを削除します。スピナーID:', spinnerId);
+            console.log('スピナーを削除します。スピナーID:', spinnerId);
             removeSpinner(spinnerId);
         });
 }
+
 
 
 /*
@@ -304,7 +320,7 @@ async function Comfyui_generate_image(workflow) {
     var response = await Comfyui_queue_prompt(workflow);
     if (!response) return null;
     processing_prompt = true;
-    //console.log('プロンプトがキューに追加されました。プロンプトID:', response.prompt_id);
+    console.log('プロンプトがキューに追加されました。プロンプトID:', response.prompt_id);
 
     var prompt_id = response.prompt_id;
 
@@ -312,17 +328,68 @@ async function Comfyui_generate_image(workflow) {
 
     response = await Comfyui_get_history(prompt_id);
     if (!response) return null;
-    //console.log('プロンプト履歴データ:', response);
+    console.log('プロンプト履歴データ:', JSON.stringify(response));
 
-    // TODO this looks scuffed
-    var image_data = response[prompt_id]['outputs'][Object.keys(response[prompt_id]['outputs'])[0]].images['0'];
-    //console.log('画像データ:', image_data);
+    if( isErrorByComfyUi(response) ){
+        const errorMessage = getErrorMessageByComfyUi(response);
+        console.error('ComfyUI処理エラー:', errorMessage);
+        return {
+            error: true,
+            message: errorMessage.exception_message || 'ComfyUIで不明なエラーが発生しました',
+            details: errorMessage
+        };
+    }else{
+        var image_data = response[prompt_id]['outputs'][Object.keys(response[prompt_id]['outputs'])[0]].images['0'];
+        console.log('画像データ:', image_data);
+    
+        var img = await Comfyui_get_image(image_data);
+    
+        return new Promise((resolve) => {
+            resolve(img);
+        });
+    }
+}
 
-    var img = await Comfyui_get_image(image_data);
+async function uploadComfyUIImage(layer, fileName = "i2i_temp.png", overwrite = true) {
+    const base64Image = imageObject2Base64ImageEffectKeep(layer);
 
-    return new Promise((resolve) => {
-        resolve(img);
-    });
+    // Base64データの検証
+    if (!base64Image || !base64Image.startsWith('data:image/')) {
+        throw new Error('Invalid base64 image data');
+    }
+
+    // Base64データからBlobを作成
+    const byteCharacters = atob(base64Image.split(',')[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], {type: 'application/octet-stream'});
+
+    // FormDataオブジェクトを作成
+    const formData = new FormData();
+    formData.append('image', blob, fileName);
+    formData.append('overwrite', overwrite.toString());
+
+    try {
+        const server_address = hostInput.value + ':' + portInput.value;
+        const response = await fetch(`http://${server_address}/upload/image`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Upload successful:', result);
+        return result;
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        throw error;
+    }
 }
 
 
@@ -339,12 +406,8 @@ function Comfyui_replace_placeholders(workflow, requestData) {
         workflow = replacePlaceholder(workflow, "%cfg%", requestData['cfg_scale']);
     if ("steps" in requestData && requestData['steps'] != "")
         workflow = replacePlaceholder(workflow, "%steps%", requestData['steps']);
-    if ("sampler_name" in requestData && requestData['sampler_name'] != "")
-        workflow = replacePlaceholder(workflow, "%sampler%", requestData['sampler_name']);
     if ("scheduler" in requestData && requestData['scheduler'] != "")
         workflow = replacePlaceholder(workflow, "%scheduler%", requestData['scheduler']);
-    if ("model" in requestData && requestData['model'] != "")
-        workflow = replacePlaceholder(workflow, "%model%", requestData['model']);
     if ("seed" in requestData && requestData['seed'] != "")
         workflow = replacePlaceholder(workflow, "%seed%", requestData['seed'], true);
     if ("vae" in requestData && requestData['vae'] != "")
@@ -353,7 +416,13 @@ function Comfyui_replace_placeholders(workflow, requestData) {
         workflow = replacePlaceholder(workflow, "%width%", requestData['width']);
     if ("height" in requestData && requestData['height'] != "")
         workflow = replacePlaceholder(workflow, "%height%", requestData['height']);
-    //console.log('プレースホルダーが置換されたワークフロー:', workflow);
+
+    workflow = replacePlaceholder(workflow, "%sampler%", $('text2img_basePrompt_samplingMethod').value);
+    workflow = replacePlaceholder(workflow, "%model%",   $('text2img_basePrompt_model').value);
+
+    console.log("置き換え Model   ", $('text2img_basePrompt_model').value);
+    console.log("置き換え Sampler ", $('text2img_basePrompt_samplingMethod').value);
+
     return workflow;
 }
 
@@ -404,7 +473,7 @@ async function comufySampler() {
         const data = await response.json();
         //console.log("comufySampler: Data fetched", data);
         const models = data.KSampler.input.required.sampler_name[0].map(name => ({ name: name }));
-        //console.log("comufySampler: Models processed", models);
+        console.log("comufySampler: Models processed", models);
         updateSamplerDropdown(models);
     } catch (error) {
         console.error("comufySampler: Fetch error", error);

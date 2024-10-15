@@ -3,16 +3,17 @@ var firstComfyConnection = true;
 
 function T2I( layer, spinner ){
   if (API_mode == apis.A1111) {
-    sdWebUI_t2IProcessQueue(layer, spinner.id);
+    sdwebui_T2IProcessQueue(layer, spinner.id);
   }else if (API_mode == apis.COMFYUI){
-    Comfyui_handle_process_queue(layer, spinner.id);
+    comfyui_handle_process_queue(layer, spinner.id);
   }
 }
 function I2I( layer, spinner ){
   if (API_mode == apis.A1111) {
-    sdWebUI_I2IProcessQueue(layer, spinner.id);
+    sdwebui_I2IProcessQueue(layer, spinner.id);
   }else if (API_mode == apis.COMFYUI){
-    //TODO
+    var isI2I = false;
+    comfyui_handle_process_queue(layer, spinner.id, isI2I);
   }
 }
 

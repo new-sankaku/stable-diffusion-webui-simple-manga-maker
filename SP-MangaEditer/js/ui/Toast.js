@@ -1,10 +1,14 @@
-function createToast(title, messages) {
-    return createToast(title, messages, false);
+function createToast(title, messages, time=4000) {
+    console.log("createToast", time);
+
+    return showToast(title, messages, false, time);
 }
-function createToastError(title, messages) {
-    return createToast(title, messages, true);
+function createToastError(title, messages, time=4000) {
+    console.log("createToastError", time);
+
+    return showToast(title, messages, true, time);
 }
-function createToast(title, messages, isError) {
+function showToast(title, messages, isError, time) {
     const container = $('sp-manga-toastContainer');
     if (!container) {
         console.error('Toast container not found');
@@ -57,7 +61,7 @@ function createToast(title, messages, isError) {
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
-        startProgressBar(toast, progressBarClass);
+        startProgressBar(toast, progressBarClass,time);
     } else if (Array.isArray(messages)) {
         let messageIndex = 0;
         const messageInterval = 50;
@@ -73,7 +77,7 @@ function createToast(title, messages, isError) {
                 toast.style.height = `auto`;
                 setTimeout(showNextMessage, messageInterval);
             } else {
-                startProgressBar(toast,progressBarClass);
+                startProgressBar(toast,progressBarClass,time);
             }
         };
 
@@ -84,7 +88,7 @@ function createToast(title, messages, isError) {
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
-        startProgressBar(toast,progressBarClass);
+        startProgressBar(toast,progressBarClass,time);
     }
 
     toast.addEventListener('hidden.bs.toast', function () {
@@ -93,10 +97,12 @@ function createToast(title, messages, isError) {
     });
 }
 
-function startProgressBar(toast, progressBarClass) {
+function startProgressBar(toast, progressBarClass,time=4000) {
     const progressBar = toast.querySelector("."+progressBarClass);
-    const interval = 100;
-    const totalDuration = 2000;
+    const interval = 10;
+    console.trace();
+    console.log("startProgressBar", time);
+    const totalDuration = time;
     let width = 100;
     const timer = setInterval(() => {
         width -= (interval / totalDuration * 100);
