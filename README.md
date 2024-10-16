@@ -18,7 +18,7 @@ For those who find updates bothersome, the Demo site is recommended.
 ## Image Prompt Helper
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="800">
 
-## Support Language
+## Supported Languages
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
 
 ## Grid Line / Knife Mode
@@ -44,10 +44,10 @@ For those who find updates bothersome, the Demo site is recommended.
 
 
 
-## Drag on Drop
+## Drag and Drop
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="800">
 
-## Effect(GLFX)
+## Effects (GLFX)
 <div style="display: flex; align-items: flex-start;">
     <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="400">
     <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="400">
@@ -92,7 +92,7 @@ For those who find updates bothersome, the Demo site is recommended.
 [SP-MangaEditer](https://new-sankaku.github.io/SP-MangaEditer/)  
 To use the Text2Image/Image2Image features you need to connect to the Stable Diffusion WebUI.
 
-# Install(git clone only)
+# Install (git clone only)
 >git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git
 >cd stable-diffusion-webui-simple-manga-maker\SP-MangaEditer
 >index.html
