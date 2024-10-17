@@ -5,7 +5,7 @@ function T2I( layer, spinner ){
   if (API_mode == apis.A1111) {
     sdwebui_T2IProcessQueue(layer, spinner.id);
   }else if (API_mode == apis.COMFYUI){
-    comfyui_handle_process_queue(layer, spinner.id);
+    Comfyui_handle_process_queue(layer, spinner.id);
   }
 }
 function I2I( layer, spinner ){
@@ -13,7 +13,7 @@ function I2I( layer, spinner ){
     sdwebui_I2IProcessQueue(layer, spinner.id);
   }else if (API_mode == apis.COMFYUI){
     var isI2I = false;
-    comfyui_handle_process_queue(layer, spinner.id, isI2I);
+    Comfyui_handle_process_queue(layer, spinner.id, isI2I);
   }
 }
 
@@ -27,9 +27,9 @@ function getDiffusionInfomation() {
     fetchSD_Upscaler();
     fetchSD_ADModels();
   }else if( API_mode == apis.COMFYUI ){
-    comufyModels();
-    comufySampler();
-    comufyUpscaler();
+    Comfyui_FetchModels();
+    Comfyui_FetchSampler();
+    Comfyui_FetchUpscaler();
   }
 }
 
@@ -44,7 +44,7 @@ function apiHeartbeat(){
   if (API_mode == apis.A1111) {
     sdwebui_apiHeartbeat();
   }else if( API_mode == apis.COMFYUI ){
-    comufy_apiHeartbeat();
+    Comfyui_apiHeartbeat();
   }
 }
 apiHeartbeat();

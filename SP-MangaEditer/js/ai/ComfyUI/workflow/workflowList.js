@@ -31,7 +31,7 @@ function getComfyUI_T2I_BySDXL(){
     },
     "4": {
       "inputs": {
-        "text": "%negative_prompt%",
+        "text": "%negative%",
         "clip": ["2", 1]
       },
       "class_type": "CLIPTextEncode",
@@ -74,7 +74,7 @@ return {
       "cfg": "%cfg%",
       "sampler_name": "%sampler%",
       "scheduler": "normal",
-      "denoise": 0.75,
+      "denoise": "%denoise%",
       "model": ["2", 0],
       "positive": ["3", 0],
       "negative": ["4", 0],
@@ -98,7 +98,7 @@ return {
   },
   "4": {
     "inputs": {
-      "text": "%negative_prompt%",
+      "text": "%negative%",
       "clip": ["2", 1]
     },
     "class_type": "CLIPTextEncode",
@@ -122,7 +122,7 @@ return {
   },
   "11": {
     "inputs": {
-      "image": "i2i_temp.png",
+      "image": "%uploadImage%",
       "upload": "image"
     },
     "class_type": "LoadImage",

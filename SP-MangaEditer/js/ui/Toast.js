@@ -100,7 +100,6 @@ function showToast(title, messages, isError, time) {
 function startProgressBar(toast, progressBarClass,time=4000) {
     const progressBar = toast.querySelector("."+progressBarClass);
     const interval = 10;
-    console.trace();
     console.log("startProgressBar", time);
     const totalDuration = time;
     let width = 100;

@@ -161,7 +161,7 @@ function switchText2Ui(type) {
 function clearT2Settings() {
   elementsT2.forEach(element => {
     if (element) {
-      element.removeEventListener("change", saveValueMap);
+      element.removeEventListener("input", saveValueMap);
       element = null;
     }
   });
@@ -173,12 +173,24 @@ function clearT2Settings() {
   });
 }
 
+function debounceCustomText(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+const debouncedUpdate = debounceCustomText(() => {
+  t2_shadow_updateAll();
+}, 50);
+
 function addT2EventListener(){
   elementsT2.forEach(element => {
     if (element) {
-      element.addEventListener('change', () => {
+      element.addEventListener('input', () => {
         saveValueMap(element);
-        t2_shadow_updateAll();
+        debouncedUpdate();
       });
     }
   });
@@ -191,6 +203,7 @@ function addT2EventListener(){
     }
   });
 }
+
 
 function clearActiveT2Button() {
   // $(MODE_T2_SHADOW + 'Button').classList.remove('active-button');

@@ -1,3 +1,5 @@
+let promptIndex = 100000;
+
 function showT2IPrompts(layer) { 
   var otherControlsMini = $("other-controls-mini");
   otherControlsMini.innerHTML = `
@@ -46,7 +48,28 @@ function showT2IPrompts(layer) {
         <span class="label">dummy</span>
     </div>
 </div>
+<hr>
+<div class="dual-number-control">
+    <div class="control">
+        <button id="promptRun"">Generate</button>
+    </div>
+    <div class="control" style="visibility: hidden;">
+        <input type="number" id="dummy2024100039">
+        <span class="label">dummy202410180039</span>
+    </div>
+</div>
     `;
+
+
+    $("promptRun").addEventListener("click", function () {
+      const activeObject = canvas.getActiveObject();
+      if (!activeObject) {
+        return;
+      }
+      var spinner = createSpinner(promptIndex);
+      T2I( activeObject, spinner );
+    });
+  
 
   $("text2img_prompt").addEventListener("input", function () {
     layer.text2img_prompt = this.value;
@@ -118,14 +141,34 @@ function showI2IPrompts(layer) {
         <input type="number" id="img2img_denoising_strength" name="number-input-1" placeholder=" " step="0.01"  max="1" min="0" value="${
           layer.img2img_denoising_strength || 0.7
         }">
-        <span class="label">Seed(-1=Rundom, -2=Use Base)</span>
+        <span class="label">Denoise</span>
     </div>
     <div class="control" style="visibility: hidden;">
         <input type="number" id="dummy202410130418">
         <span class="label">dummy202410130418</span>
     </div>
 </div>
+<hr>
+<div class="dual-number-control">
+    <div class="control">
+        <button id="promptRun"">Generate</button>
+    </div>
+    <div class="control" style="visibility: hidden;">
+        <input type="number" id="dummy2024100039">
+        <span class="label">dummy202410180039</span>
+    </div>
+</div>
   `;
+
+  $("promptRun").addEventListener("click", function () {
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject) {
+      return;
+    }
+    var spinner = createSpinner(promptIndex);
+    T2I( activeObject, spinner );
+  });
+
 
   $("text2img_prompt").addEventListener("input", function () {
     layer.text2img_prompt = this.value;

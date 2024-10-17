@@ -1,24 +1,20 @@
-function isErrorByComfyUi(response) {
-  console.log('isErrorByComfyUi response', JSON.stringify(response));
-  
-  // レスポンスの構造をチェック
+function Comfyui_isError(response) {
   if (response && typeof response === 'object') {
-      // プロンプトIDを取得（最初のキー）
       const promptId = Object.keys(response)[0];
       if (promptId && response[promptId] && response[promptId].status) {
           const status = response[promptId].status;
           const result = status.status_str === "error";
-          console.log('isErrorByComfyUi return', result);
+          console.log('Comfyui_isError return', result);
           return result;
       }
   }
-  console.log('isErrorByComfyUi return false');
+  console.log('Comfyui_isError return false');
   return false;
 }
-function getErrorMessageByComfyUi(response) {
-  console.log('getErrorMessageByComfyUi called with:', JSON.stringify(response));
+function Comfyui_getErrorMessage(response) {
+  console.log('Comfyui_getErrorMessage called with:', JSON.stringify(response));
 
-  if (isErrorByComfyUi(response)) {
+  if (Comfyui_isError(response)) {
       const promptId = Object.keys(response)[0];
       const status = response[promptId].status;
       const errorMessage = {
@@ -39,9 +35,88 @@ function getErrorMessageByComfyUi(response) {
           }
       }
 
-      console.log('getErrorMessageByComfyUi returning:', errorMessage);
+      console.log('Comfyui_getErrorMessage returning:', errorMessage);
       return errorMessage;
   }
-  console.log('getErrorMessageByComfyUi returning null');
+  console.log('Comfyui_getErrorMessage returning null');
   return null;
 }
+
+
+
+
+function Comfyui_replace_placeholders(workflow, requestData) {
+    workflow = Comfyui_replacePlaceholder(workflow, "%prompt%",     requestData["prompt"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%negative%",   requestData["negative_prompt"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%cfg%",        requestData["cfg_scale"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%steps%",      requestData["steps"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%scheduler%",  requestData["scheduler"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%seed%",       requestData["seed"], true);
+    workflow = Comfyui_replacePlaceholder(workflow, "%vae%",        requestData["vae"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%width%",      requestData["width"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%height%",     requestData["height"]);
+    workflow = Comfyui_replacePlaceholder(workflow, "%sampler%",    Comfyui_getValueByID("text2img_basePrompt_samplingMethod"));
+    workflow = Comfyui_replacePlaceholder(workflow, "%model%",      Comfyui_getValueByID("text2img_basePrompt_model"));
+    workflow = Comfyui_replacePlaceholder(workflow, "%denoise%",    Comfyui_getValueByID("img2img_denoising_strength"));
+    return workflow;
+}
+
+function Comfyui_getValueByID(id) {
+    const el = $(id);
+    if (!el) return "";
+    return el.type === "checkbox" ? el.checked : el.value;
+}
+
+function Comfyui_replacePlaceholder(workflow, placeholder, value) {
+    if (value === "") {
+        console.log("Comfyui_replacePlaceholder value is empty", value);
+        return workflow;
+    }
+
+    function checkPlaceholderExists(obj) {
+        for (let key in obj) {
+            if (typeof obj[key] === "string" && obj[key].includes(placeholder)) {
+                return true;
+            } else if (typeof obj[key] === "object" && obj[key] !== null) {
+                if (checkPlaceholderExists(obj[key])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    if (!checkPlaceholderExists(workflow)) {
+        console.log("Placeholder not found in workflow", placeholder);
+        return workflow;
+    }
+
+    function replaceInObject(obj) {
+        for (let key in obj) {
+            if (typeof obj[key] === "string") {
+                if (value == -1) value = Math.floor(Math.random() * 50000000);
+                obj[key] = obj[key].replace(placeholder, value);
+            } else if (typeof obj[key] === "object" && obj[key] !== null) {
+                replaceInObject(obj[key]);
+            }
+        }
+    }
+
+    const newWorkflow = JSON.parse(JSON.stringify(workflow));
+    replaceInObject(newWorkflow);
+
+    console.log("置き換えに成功した:placeholder:", placeholder);
+    return newWorkflow;
+}
+
+
+function Comfyui_getClassTypeList(workflow) {
+    const classTypeList = [];
+    for (const key in workflow) {
+      if (workflow.hasOwnProperty(key)) {
+        classTypeList.push(workflow[key].class_type);
+      }
+    }
+    return classTypeList;
+}
+  

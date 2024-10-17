@@ -382,6 +382,7 @@ function saveSettingsLocalStrage() {
   ], 1500);
   
   localSettingsData = {
+    externalAI: API_mode,
     view_layers_checkbox: $('view_layers_checkbox').checked,
     view_controles_checkbox: $('view_controles_checkbox').checked,
 
