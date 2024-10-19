@@ -563,6 +563,21 @@ function getImageObjectList(){
   }
 }
 
+function getPanelObjectList(){
+  var objescts = canvas.getObjects();
+  var resultList = [];
+  if( objescts ){
+    objescts.forEach(element => {
+      if( isPanel(element) ){
+        resultList.push(element);
+      }
+    });
+    return resultList;
+  }
+}
+
+
+
 function getImageObjectListByLayerChecked(){
   var resultList = getImageObjectList();
   return resultList.filter(layer => layer.layerCheck);

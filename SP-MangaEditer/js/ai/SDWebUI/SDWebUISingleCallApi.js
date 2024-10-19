@@ -49,7 +49,7 @@ async function sdwebui_fetchImage2Image(layer) {
 
 async function post(url, requestData) {
   try {
-    // console.log("requestData:", requestData);
+    console.log("requestData:", requestData);
     const response = await fetch(url, {
       method: 'POST',
       headers: {

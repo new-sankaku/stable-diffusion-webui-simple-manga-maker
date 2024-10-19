@@ -4,6 +4,7 @@
 const resources = {
   ja: {
     translation: {
+"T2I_AllRun":"T2I All Run",
 "gradientLayer":"グラデーションんレイヤー",
 "fillLayer":"塗りレイヤー",
 "addLayer":"レイヤー追加",

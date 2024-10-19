@@ -1466,8 +1466,12 @@ function getElementClasses(element) {
                 <div id="layer-buttons">
                     <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
                     <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
-                    <button onclick="View()"><i class="material-icons">document_scanner</i><span
-                            data-i18n="promptView">View</span></button>
+                    <button onclick="View()">
+                        <i class="material-icons">document_scanner</i>
+                        <span data-i18n="promptView">View</span>
+                    </button>
+                </div>
+                <div id="layer-all-buttons">
                 </div>
                 <div id="canvas-buttons">
                     <button id="undo" onclick="undo()">
@@ -1806,13 +1810,15 @@ function changeExternalAPI(selectedId) {
   console.log('Selected API:', selectedId);
   if ( selectedId === "sdWebUIButton" ) {
     API_mode = apis.A1111;
-    updateLayerPanel();
     createToast("API CHANGE!", "WebUI(A1111/Forge)", 2000 );
   } else if ( selectedId === "comfyUIButton" ) {
     API_mode = apis.COMFYUI;
-    updateLayerPanel();
     createToast("API CHANGE!", "COMFYUI", 2000);
   }
+
+  updateLayerPanel();
+  putAiAllButtons();
+
   apiHeartbeat();
 }
 
