@@ -105,14 +105,13 @@ function addToneNoiseEventListener() {
   toneNoise_gradientEndX   = $(MODE_TONE_NOISE + '-grad-end-x');
   toneNoise_gradientEndY   = $(MODE_TONE_NOISE + '-grad-end-y');
 
-  toneNoise_colorPicker.addEventListener("input", updateToneNoise);
-  toneNoise_noiseMinSlider.addEventListener("input", updateToneNoise);
-  toneNoise_noiseMaxSlider.addEventListener("input", updateToneNoise);
-  toneNoise_gradientStartX.addEventListener("input", updateToneNoise);
-  toneNoise_gradientStartY.addEventListener("input", updateToneNoise);
-  toneNoise_gradientEndX.addEventListener("input", updateToneNoise);
-  toneNoise_gradientEndY.addEventListener("input", updateToneNoise);
-
+  $on(toneNoise_colorPicker,"input",updateToneNoise);
+  $on(toneNoise_noiseMinSlider,"input",updateToneNoise);
+  $on(toneNoise_noiseMaxSlider,"input",updateToneNoise);
+  $on(toneNoise_gradientStartX,"input",updateToneNoise);
+  $on(toneNoise_gradientStartY,"input",updateToneNoise);
+  $on(toneNoise_gradientEndX,"input",updateToneNoise);
+  $on(toneNoise_gradientEndY,"input",updateToneNoise);
 }
 
 

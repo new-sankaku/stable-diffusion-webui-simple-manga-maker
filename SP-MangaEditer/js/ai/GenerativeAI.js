@@ -61,14 +61,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function updateUpscalerDropdown(models) {
-  const modelDropdown = $('text2img_basePrompt_hr_upscaler');
+  const modelDropdown = $('text2img_hr_upscaler');
   modelDropdown.innerHTML = '';
   models.forEach(model => {
     const option = document.createElement('option');
     option.value = model.name;
     option.textContent = model.name;
 
-    if (text2img_basePrompt.text2img_hr_upscaler === model.name) {
+    if (basePrompt.text2img_hr_upscaler === model.name) {
       option.selected = true;
     }
     modelDropdown.appendChild(option);
@@ -76,16 +76,16 @@ function updateUpscalerDropdown(models) {
 }
 
 function updateSamplerDropdown(models) {
-  const modelDropdown = $('text2img_basePrompt_samplingMethod');
+  const modelDropdown = $('basePrompt_samplingMethod');
   modelDropdown.innerHTML = '';
-  text2img_basePrompt.text2img_samplingMethod
+  basePrompt.text2img_samplingMethod
 
   models.forEach(model => {
     const option = document.createElement('option');
     option.value = model.name;
     option.textContent = model.name;
 
-    if (text2img_basePrompt.text2img_samplingMethod === model.name) {
+    if (basePrompt.text2img_samplingMethod === model.name) {
       option.selected = true;
     }
     modelDropdown.appendChild(option);
@@ -93,15 +93,14 @@ function updateSamplerDropdown(models) {
 }
 
 function updateModelDropdown(models) {
-  const modelDropdown = $('text2img_basePrompt_model');
+  const modelDropdown = $('basePrompt_model');
   modelDropdown.innerHTML = '';
   models.forEach(model => {
     const option = document.createElement('option');
     option.value = model.title;
     option.textContent = model.model_name;
 
-    // console.log("updateModelDropdown ", text2img_basePrompt.text2img_model, ":", removeHashStr(model.title))
-    if (text2img_basePrompt.text2img_model === removeHashStr(model.title)) {
+    if (basePrompt.text2img_model === removeHashStr(model.title)) {
       option.selected = true;
     }
     modelDropdown.appendChild(option);
@@ -114,7 +113,7 @@ function removeHashStr(str) {
   return str.replace(/\s*\[[^\]]+\]\s*$/, '');
 }
 
-$('text2img_basePrompt_model').addEventListener('change', function(event){
+$('basePrompt_model').addEventListener('change', function(event){
   if (API_mode == apis.A1111) {
     sendModelToServer();
   }else if( API_mode == apis.COMFYUI ){

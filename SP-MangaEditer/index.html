@@ -15,8 +15,9 @@
     <script>
         
 
-        const $ = (id) => document.getElementById(id);
-        function addEL(a, b, c, d = !1) { a.addEventListener(b, c, d) }
+const $ = (id) => document.getElementById(id);
+const $on = (element, event, callback) => element.addEventListener(event, callback);
+// function addEL(a, b, c, d = !1) { a.addEventListener(b, c, d) }
 
         const e = $("a"), f = [
 "Initializing core system...","Sun network connection: Failed","Moon network connection: Successful","Authentication process: All green","CO2 emission reduction system: Started",
@@ -1499,6 +1500,7 @@ function getElementClasses(element) {
                             <button id="comfyUIButton" onclick="changeExternalAPI('comfyUIButton')">
                                 ComfyUI(α ver)
                             </button>
+                            <label data-i18n="comfyUIdevelopment"></label>
                         </div>
                         <hr>
                     </div>
@@ -1521,28 +1523,28 @@ function getElementClasses(element) {
                             <div class="textarea-label-wrapper">
                                 <label class="textarea-label" for="textarea">Prompt</label>
                             </div>
-                            <textarea id="text2img_basePrompt_prompt" name="textarea" placeholder=" "></textarea>
+                            <textarea id="basePrompt_prompt" name="textarea" placeholder=" "></textarea>
                         </div>
                         <div class="control textarea-control">
                             <div class="textarea-label-wrapper">
                                 <label class="textarea-label" for="textarea">Negative</label>
                             </div>
-                            <textarea id="text2img_basePrompt_negativePrompt" name="textarea" placeholder=" "></textarea>
+                            <textarea id="basePrompt_negative" name="textarea" placeholder=" "></textarea>
                         </div>
                         <hr>
                         <div class="control">
-                            <select id="text2img_basePrompt_model" name="dropdown">
+                            <select id="basePrompt_model" name="dropdown">
                             </select>
                             <span class="label">Model</span>
                         </div>
                     
                         <div class="dual-number-control">
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_samplingSteps" name="number-input-1" placeholder=" ">
+                                <input type="number" id="basePrompt_samplingSteps" name="number-input-1" placeholder=" ">
                                 <span class="label">Steps</span>
                             </div>
                             <div class="control">
-                                <select id="text2img_basePrompt_samplingMethod" name="dropdown">
+                                <select id="basePrompt_samplingMethod" name="dropdown">
                                 </select>
                                 <span class="label">Method</span>
                             </div>
@@ -1550,44 +1552,44 @@ function getElementClasses(element) {
                     
                         <div class="dual-number-control">
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_width" name="number-input-1" placeholder=" " step="8">
+                                <input type="number" id="basePrompt_width" name="number-input-1" placeholder=" " step="8">
                                 <span class="label">Width</span>
                             </div>
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_height" name="number-input-1" placeholder=" " step="8">
+                                <input type="number" id="basePrompt_height" name="number-input-1" placeholder=" " step="8">
                                 <span class="label">Height</span>
                             </div>
                         </div>
                     
                         <div class="dual-number-control">
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_seed" name="number-input-1" placeholder=" ">
+                                <input type="number" id="basePrompt_seed" name="number-input-1" placeholder=" ">
                                 <span class="label">Seed</span>
                             </div>
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_cfg_scale" name="number-input-1" placeholder=" " min="1" max="30" step="0.1" >
+                                <input type="number" id="basePrompt_cfg_scale" name="number-input-1" placeholder=" " min="1" max="30" step="0.1" >
                                 <span class="label">CFG</span>
                             </div>
                         </div>
                         <hr>
                         <div class="dual-number-control">
                             <div class="control">
-                                <select id="text2img_basePrompt_hr_upscaler" name="dropdown">
+                                <select id="text2img_hr_upscaler" name="dropdown">
                                 </select>
                                 <span class="label">Upscaler</span>
                             </div>
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_hr_step" name="number-input-1" placeholder=" ">
+                                <input type="number" id="text2img_hr_step" name="number-input-1" placeholder=" ">
                                 <span class="label">Step</span>
                             </div>
                         </div>
                         <div class="dual-number-control">
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_hr_denoising_strength" name="number-input-1" placeholder=" ">
+                                <input type="number" id="text2img_hr_denoise" name="number-input-1" placeholder=" ">
                                 <span class="label">Denoising</span>
                             </div>
                             <div class="control">
-                                <input type="number" id="text2img_basePrompt_hr_scale" name="number-input-1" placeholder=" ">
+                                <input type="number" id="text2img_hr_scale" name="number-input-1" placeholder=" ">
                                 <span class="label">Scale</span>
                             </div>
                         </div>
@@ -1700,16 +1702,18 @@ function getElementClasses(element) {
     <script src="js/sidebar/panel/PanelManager.js?v=5.5" defer></script>
     <script src="js/sidebar/panel/PanelTemplate.js?v=5.5" defer></script>
     <script src="js/PromptManager.js?v=5.5" defer></script>
+    <script src="js/ai/Role/AIRoles.js?v=5.5" defer></script>
     <script src="js/ai/queue/Spinner.js?v=5.5" defer></script>
     <script src="js/ai/queue/TaskQueue.js?v=5.5" defer></script>
     <script src="js/ai/SDWebUI/SDWebUISettings.js?v=5.5" defer></script>
     <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=5.5" defer></script>
     <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=5.5" defer></script>
-    <script src="js/ai/ComfyUI/util/comfyUtil.js?v=5.5" defer></script>
+    <script src="js/ai/ComfyUI/util/ComfyUtil.js?v=5.5" defer></script>
     <script src="js/ai/ComfyUI/ComfyuiManagement.js?v=5.5" defer></script>
     <script src="js/ai/GenerativeAI.js?v=5.5" defer></script>
     <script src="js/ai/prompt/BaseEventListener.js?v=5.5" defer></script>
     <script src="js/layer/FloatingWindowManagement.js?v=5.5" defer></script>
+    <script src="js/layer/LayerButton.js?v=5.5" defer></script>
     <script src="js/layer/LayerManagement.js?v=5.5" defer></script>
     <script src="js/layer/ImageHistoryManagement.js?v=5.5" defer></script>
     <script src="js/layer/blend/Blend.js?v=5.5" defer></script>
@@ -1752,7 +1756,7 @@ function getElementClasses(element) {
     <script src="js/ui/bottomBar.js?v=5.5" defer></script>
 
 
-    <script src="js/ai/ComfyUI/workflow/workflowList.js?v=5.5" defer></script>
+    <script src="js/ai/ComfyUI/workflow/ComfyUIworkflowList.js?v=5.5" defer></script>
 
 <script>
 function autoResize(event) {
@@ -1802,9 +1806,11 @@ function changeExternalAPI(selectedId) {
   console.log('Selected API:', selectedId);
   if ( selectedId === "sdWebUIButton" ) {
     API_mode = apis.A1111;
+    updateLayerPanel();
     createToast("API CHANGE!", "WebUI(A1111/Forge)", 2000 );
   } else if ( selectedId === "comfyUIButton" ) {
     API_mode = apis.COMFYUI;
+    updateLayerPanel();
     createToast("API CHANGE!", "COMFYUI", 2000);
   }
   apiHeartbeat();

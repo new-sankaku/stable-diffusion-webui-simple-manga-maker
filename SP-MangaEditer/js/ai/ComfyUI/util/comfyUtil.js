@@ -55,9 +55,9 @@ function Comfyui_replace_placeholders(workflow, requestData) {
     workflow = Comfyui_replacePlaceholder(workflow, "%vae%",        requestData["vae"]);
     workflow = Comfyui_replacePlaceholder(workflow, "%width%",      requestData["width"]);
     workflow = Comfyui_replacePlaceholder(workflow, "%height%",     requestData["height"]);
-    workflow = Comfyui_replacePlaceholder(workflow, "%sampler%",    Comfyui_getValueByID("text2img_basePrompt_samplingMethod"));
-    workflow = Comfyui_replacePlaceholder(workflow, "%model%",      Comfyui_getValueByID("text2img_basePrompt_model"));
-    workflow = Comfyui_replacePlaceholder(workflow, "%denoise%",    Comfyui_getValueByID("img2img_denoising_strength"));
+    workflow = Comfyui_replacePlaceholder(workflow, "%sampler%",    Comfyui_getValueByID("basePrompt_samplingMethod"));
+    workflow = Comfyui_replacePlaceholder(workflow, "%model%",      Comfyui_getValueByID("basePrompt_model"));
+    workflow = Comfyui_replacePlaceholder(workflow, "%denoise%",    Comfyui_getValueByID("img2img_denoise"));
     return workflow;
 }
 
@@ -120,3 +120,26 @@ function Comfyui_getClassTypeList(workflow) {
     return classTypeList;
 }
   
+
+
+function Comfyui_getUrl(){
+    const server_address = hostInput.value + ":" + portInput.value;
+    return `http://${server_address}/`;
+}
+
+var generateFilenameIndex = 0;
+function generateFilename() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+
+    var filename = `temp_${year}${month}${day}${hours}${minutes}${seconds}_${milliseconds}_${generateFilenameIndex}.png`;
+    generateFilenameIndex++;
+    console.log("filename:", filename);
+    return filename;
+}

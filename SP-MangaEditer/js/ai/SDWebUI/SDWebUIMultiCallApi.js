@@ -19,7 +19,7 @@ function fetchSD_ADModels() {
 
 
 async function sendModelToServer() {
-  const modelValue = text2img_basePrompt.text2img_model;
+  const modelValue = basePrompt.text2img_model;
 
   const data = JSON.stringify({
     sd_model_checkpoint: modelValue
@@ -54,7 +54,7 @@ async function fetchOptions() {
     }
     const data = await response.json();
     if ('sd_model_checkpoint' in data) {
-      text2img_basePrompt.text2img_model = data.sd_model_checkpoint;
+      basePrompt.text2img_model = data.sd_model_checkpoint;
     }
   } catch (error) {
     console.error('Failed to fetch data:', error);

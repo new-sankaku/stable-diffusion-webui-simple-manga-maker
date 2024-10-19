@@ -15,8 +15,8 @@ function showT2IPrompts(layer) {
     <div class="textarea-label-wrapper">
         <label class="textarea-label" for="textarea">Negative</label>
     </div>
-    <textarea id="text2img_negativePrompt" name="textarea" placeholder=" ">${
-      layer.text2img_negativePrompt || ""
+    <textarea id="text2img_negative" name="textarea" placeholder=" ">${
+      layer.text2img_negative || ""
     }</textarea>
 </div>
                     
@@ -75,8 +75,8 @@ function showT2IPrompts(layer) {
     layer.text2img_prompt = this.value;
   });
 
-  $("text2img_negativePrompt").addEventListener("input", function () {
-    layer.text2img_negativePrompt = this.value;
+  $("text2img_negative").addEventListener("input", function () {
+    layer.text2img_negative = this.value;
   });
 
   $("text2img_seed").addEventListener("input", function () {
@@ -116,8 +116,8 @@ function showI2IPrompts(layer) {
     <div class="textarea-label-wrapper">
         <label class="textarea-label" for="textarea">Negative</label>
     </div>
-    <textarea id="text2img_negativePrompt" name="textarea" placeholder=" ">${
-      layer.text2img_negativePrompt || ""
+    <textarea id="text2img_negative" name="textarea" placeholder=" ">${
+      layer.text2img_negative || ""
     }</textarea>
 </div>
                     
@@ -138,8 +138,8 @@ function showI2IPrompts(layer) {
 
 <div class="dual-number-control">
     <div class="control">
-        <input type="number" id="img2img_denoising_strength" name="number-input-1" placeholder=" " step="0.01"  max="1" min="0" value="${
-          layer.img2img_denoising_strength || 0.7
+        <input type="number" id="img2img_denoise" name="number-input-1" placeholder=" " step="0.01"  max="1" min="0" value="${
+          layer.img2img_denoise || 0.7
         }">
         <span class="label">Denoise</span>
     </div>
@@ -175,8 +175,8 @@ function showI2IPrompts(layer) {
     console.log("layer.text2img_prompt:", layer.text2img_prompt);
   });
 
-  $("text2img_negativePrompt").addEventListener("input", function () {
-    layer.text2img_negativePrompt = this.value;
+  $("text2img_negative").addEventListener("input", function () {
+    layer.text2img_negative = this.value;
   });
 
   $("text2img_seed").addEventListener("input", function () {
@@ -185,8 +185,8 @@ function showI2IPrompts(layer) {
   $("img2imgScale").addEventListener("input", function () {
     layer.img2imgScale = this.value;
   });
-  $("img2img_denoising_strength").addEventListener("input", function () {
-    layer.img2img_denoising_strength = this.value;
+  $("img2img_denoise").addEventListener("input", function () {
+    layer.img2img_denoise = this.value;
   });
 
   setAutoSizeingControlMini();

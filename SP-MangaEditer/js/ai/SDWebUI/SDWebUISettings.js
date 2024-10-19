@@ -65,7 +65,7 @@ function baseRequestData(layer) {
   var height = -1;
 
   if (layer.text2img_seed == -2) {
-    seed = text2img_basePrompt.text2img_seed;
+    seed = basePrompt.text2img_seed;
   } else if (layer.text2img_seed > -1) {
     seed = layer.text2img_seed;
   }
@@ -83,12 +83,12 @@ function baseRequestData(layer) {
 
   }else{
     if (layer.text2img_width <= 0) {
-      width = text2img_basePrompt.text2img_width;
+      width = basePrompt.text2img_width;
     } else {
       width = layer.text2img_width;
     }
     if (layer.text2img_height <= 0) {
-      height = text2img_basePrompt.text2img_height;
+      height = basePrompt.text2img_height;
     } else {
       height = layer.text2img_height;
     }  
@@ -96,15 +96,15 @@ function baseRequestData(layer) {
 
 
   const requestData = {
-    "prompt": text2img_basePrompt.text2img_prompt + ", " + layer.text2img_prompt,
-    "negative_prompt": text2img_basePrompt.text2img_negativePrompt + ", " + layer.text2img_negativePrompt,
+    "prompt": basePrompt.text2img_prompt + ", " + layer.text2img_prompt,
+    "negative_prompt": basePrompt.text2img_negative + ", " + layer.text2img_negative,
     "seed": seed,
     "width": width,
     "height": height,
-    "sampler_name": text2img_basePrompt.text2img_samplingMethod,
-    "steps": text2img_basePrompt.text2img_samplingSteps,
-    "cfg_scale": text2img_basePrompt.text2img_cfg_scale,
-    "scheduler": text2img_basePrompt.text2img_scheduler,
+    "sampler_name": basePrompt.text2img_samplingMethod,
+    "steps": basePrompt.text2img_samplingSteps,
+    "cfg_scale": basePrompt.text2img_cfg_scale,
+    "scheduler": basePrompt.text2img_scheduler,
     "do_not_save_grid": true,
     "save_images": true,
   };
@@ -132,13 +132,13 @@ function baseRequestData(layer) {
   }else{
   }
 
-  if (text2img_basePrompt.text2img_hr_upscaler && text2img_basePrompt.text2img_hr_upscaler != 'None') {
+  if (basePrompt.text2img_hr_upscaler && basePrompt.text2img_hr_upscaler != 'None') {
     Object.assign(requestData, {
       enable_hr: true,
-      hr_upscaler: text2img_basePrompt.text2img_hr_upscaler,
-      hr_scale: text2img_basePrompt.text2img_basePrompt_hr_scale,
-      hr_second_pass_steps: text2img_basePrompt.text2img_basePrompt_hr_step,
-      denoising_strength: text2img_basePrompt.text2img_basePrompt_hr_denoising_strength,
+      hr_upscaler: basePrompt.text2img_hr_upscaler,
+      hr_scale: basePrompt.text2img_hr_scale,
+      hr_second_pass_steps: basePrompt.text2img_hr_step,
+      denoising_strength: basePrompt.text2img_hr_denoise,
     });
   }
 

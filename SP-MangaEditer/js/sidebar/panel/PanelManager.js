@@ -241,8 +241,10 @@ function loadSVGPlusReset(svgString, isLand=false) {
     var overallScaleX = canvasUsableWidth / options.width;
     var overallScaleY = canvasUsableHeight / options.height;
     var scaleToFit = Math.min(overallScaleX, overallScaleY);
-    var offsetY = (svgPagging / 2) + ((canvasUsableHeight - options.height * overallScaleY) / 2) + strokeWidth;
-    var offsetX = (svgPagging / 2) + ((canvasUsableWidth  - options.width  * overallScaleX) / 2);
+    var offsetVertical_Y   = (svgPagging / 1.5) + ((canvasUsableHeight - options.height * overallScaleY) / 2) + strokeWidth;
+    var offsetHorizontal_Y = (svgPagging / 2) + ((canvasUsableHeight - options.height * overallScaleY) / 2) + strokeWidth;
+    var offsetVertical_X = (svgPagging / 2) + ((canvasUsableWidth  - options.width  * overallScaleX) / 2);
+    var offsetHorizontal_X = (svgPagging / 1.5) + ((canvasUsableWidth  - options.width  * overallScaleX) / 2);
     var bgColorInput = $("bg-color");
     canvas.backgroundColor = bgColorInput.value;
 
@@ -317,11 +319,11 @@ function loadSVGPlusReset(svgString, isLand=false) {
         obj.scaleX = scaleToFit;
         obj.scaleY = scaleToFit;
         if(isLand){
-          obj.top  = obj.top  * scaleToFit + offsetY - (strokeWidth);
-          obj.left = obj.left * scaleToFit + offsetX + (strokeWidth/2);
+          obj.top  = obj.top  * scaleToFit + offsetHorizontal_Y - (strokeWidth);
+          obj.left = obj.left * scaleToFit + offsetHorizontal_X;
         }else{
-          obj.top  = obj.top  * scaleToFit + offsetY - (strokeWidth);
-          obj.left = obj.left * scaleToFit + offsetX;
+          obj.top  = obj.top  * scaleToFit + offsetVertical_Y - (strokeWidth);
+          obj.left = obj.left * scaleToFit + offsetVertical_X;
         }
         obj.setCoords();
         obj.strokeWidth = strokeWidth;

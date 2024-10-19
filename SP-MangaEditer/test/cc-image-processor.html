@@ -47,7 +47,7 @@ h1 { font-size: 1.2em; margin: 0 0 10px 0; }
 <div id="logContainer"></div>
 <script src="svg/cc.js"></script>
 <script>
-const $=(id) => $(id);
+const $=(id) => document.getElementById(id);
 const dropArea=$('dropArea');
 const fileInput=$('fileInput');
 const progressBar=$('progressBar');
@@ -179,10 +179,21 @@ link.download=fileName;
 link.click();
 }
 function bulkDownload() {
-processedImages.forEach(image => downloadImage(image.data, image.name));
+const zip = new JSZip();
+processedImages.forEach(image => {
+const imageData = image.data.split(',')[1]; // Base64データ部分を取得
+zip.file(image.name, imageData, {base64: true});
+});
+zip.generateAsync({type:"blob"}).then(function(content) {
+const link = document.createElement('a');
+link.href = URL.createObjectURL(content);
+link.download = "processed_images.zip";
+link.click();
+});
 }
 initializeApp();
 initializeEventListeners();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </body>
 </html>

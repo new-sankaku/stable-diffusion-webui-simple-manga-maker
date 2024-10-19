@@ -93,63 +93,21 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.renderAll();
     adjustCanvasSize();
   });
-
-  $("A4-H").addEventListener("click", function () {
-    loadBookSize(210, 297, true);
-  });
-  $("A4-V").addEventListener("click", function () {
-    loadBookSize(297, 210, true);
-  });
-  $("B4-H").addEventListener("click", function () {
-    loadBookSize(257, 364, true);
-  });
-  $("B4-V").addEventListener("click", function () {
-    loadBookSize(364, 257, true);
-  });
-
-  $("insta").addEventListener("click", function () {
-    loadBookSize(1080, 1080, true);
-  });
-
-  $("insta-story").addEventListener("click", function () {
-    loadBookSize(1080, 1920, true);
-  });
-
-  $("insta-portrait").addEventListener("click", function () {
-    loadBookSize(1080, 1350, true);
-  });
-
-  $("fb-page-cover").addEventListener("click", function () {
-    loadBookSize(1640, 664, true);
-  });
-
-  $("fb-event").addEventListener("click", function () {
-    loadBookSize(1920, 1080, true);
-  });
-
-  $("fb-group-header").addEventListener("click", function () {
-    loadBookSize(1640, 856, true);
-  });
-
-  $("youtube-thumbnail").addEventListener("click", function () {
-    loadBookSize(1280, 720, true);
-  });
-
-  $("youtube-profile").addEventListener("click", function () {
-    loadBookSize(800, 800, true);
-  });
-
-  $("youtube-cover").addEventListener("click", function () {
-    loadBookSize(2560, 1440, true);
-  });
-
-  $("twitter-profile").addEventListener("click", function () {
-    loadBookSize(400, 400, true);
-  });
-
-  $("twitter-header").addEventListener("click", function () {
-    loadBookSize(1500, 500, true);
-  });
+  $on($("A4-H"),"click",()=>loadBookSize(210,297,true));
+  $on($("A4-V"),"click",()=>loadBookSize(297,210,true));
+  $on($("B4-H"),"click",()=>loadBookSize(257,364,true));
+  $on($("B4-V"),"click",()=>loadBookSize(364,257,true));
+  $on($("insta"),"click",()=>loadBookSize(1080,1080,true));
+  $on($("insta-story"),"click",()=>loadBookSize(1080,1920,true));
+  $on($("insta-portrait"),"click",()=>loadBookSize(1080,1350,true));
+  $on($("fb-page-cover"),"click",()=>loadBookSize(1640,664,true));
+  $on($("fb-event"),"click",()=>loadBookSize(1920,1080,true));
+  $on($("fb-group-header"),"click",()=>loadBookSize(1640,856,true));
+  $on($("youtube-thumbnail"),"click",()=>loadBookSize(1280,720,true));
+  $on($("youtube-profile"),"click",()=>loadBookSize(800,800,true));
+  $on($("youtube-cover"),"click",()=>loadBookSize(2560,1440,true));
+  $on($("twitter-profile"),"click",()=>loadBookSize(400,400,true));
+  $on($("twitter-header"),"click",()=>loadBookSize(1500,500,true));
 });
 
 

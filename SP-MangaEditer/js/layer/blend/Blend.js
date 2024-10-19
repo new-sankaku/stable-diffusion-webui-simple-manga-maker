@@ -12,6 +12,7 @@ function createFloatingWindow() {
   header.id = "blendFloatingWindowHeader";
   header.textContent = getText("blendResult");
 
+  
   const controls = document.createElement("div");
   controls.id = "blendControls";
 
@@ -25,8 +26,18 @@ function createFloatingWindow() {
   closeButton.textContent = "Close";
   closeButton.onclick = handleClose;
 
+  const addFillButton = document.createElement("button");
+  addFillButton.textContent = getText("addFillLayer");
+  addFillButton.onclick = showFillLayerEditor;
+
+  const addGradientButton = document.createElement("button");
+  addGradientButton.textContent = getText("addGradientLayer");
+  addGradientButton.onclick = showGradientLayerEditor;
+
   controls.appendChild(reblendButton);
   controls.appendChild(closeButton);
+  controls.appendChild(addFillButton);
+  controls.appendChild(addGradientButton);
 
   const sourceImages = document.createElement("div");
   sourceImages.id = "sourceImages";
@@ -114,7 +125,7 @@ async function blendCanvasesWithPixi(canvases, blendMode) {
   await app.init({
     width: maxWidth,
     height: maxHeight,
-    antialias: true,
+    antialias: false,
     backgroundColor: "transparent",
     backgroundAlpha: 0,
     useBackBuffer: true,
@@ -141,8 +152,6 @@ async function blendCanvasesWithPixi(canvases, blendMode) {
 async function updateBlendModes(imageLayerList) {
   const blendModesContainer = $("blendModes");
   blendModesContainer.innerHTML = "";
-
-  // console.log("imageLayerList",imageLayerList);
   const checkedLayers = imageLayerList.filter((layer) => layer.layerCheck);
   if (checkedLayers.length < 2) return;
   const canvases = checkedLayers.map((layer) =>
@@ -189,6 +198,7 @@ function createScaledCanvas(sourceCanvas, maxWidth, maxHeight) {
   scaledCanvas.height = sourceCanvas.height * scale;
 
   const ctx = scaledCanvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
   ctx.drawImage(sourceCanvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
   return scaledCanvas;
 }
@@ -268,12 +278,14 @@ async function handleReblend() {
 
 function handleSubmit(blendedCanvas, quality = 0.98) {
   sendHtmlCanvas2FabricCanvas(blendedCanvas);
+  removeAdditionalLayers();
   document.getElementById("blendFloatingWindow").style.display = "none";
 }
 
 
 
 function handleClose() {
+  removeAdditionalLayers();
   $("blendFloatingWindow").style.display = "none";
 }
 
@@ -306,5 +318,156 @@ function hideEnlargedImage() {
     brendContainer.style.display = 'none';
 }
 
-// ページ読み込み時に一度だけ初期化
-document.addEventListener('DOMContentLoaded', initializeBrendImageViewer);
+function showFillLayerEditor() {
+  const editor = createLayerEditor('fill');
+  editor.innerHTML = `
+    <h3>${getText("fillLayer")}</h3>
+    <input type="color" id="fillColor" value="#000000">
+    <button onclick="addFillLayer()">${getText("addLayer")}</button>
+    <button onclick="closeLayerEditor('fill')">${getText("cancel")}</button>
+  `;
+  document.body.appendChild(editor);
+}
+
+function showGradientLayerEditor() {
+  const editor = createLayerEditor('gradient');
+  editor.innerHTML = `
+    <h3>${getText("gradientLayer")}</h3>
+    <input type="color" id="gradientStart" value="#000000">
+    <input type="color" id="gradientEnd" value="#ffffff">
+    <canvas id="gradientDirection" width="200" height="200" style="border: 1px solid black;">
+      ${getText("dragToSetDirection")}
+    </canvas>
+    <button onclick="addGradientLayer()">${getText("addLayer")}</button>
+    <button onclick="closeLayerEditor('gradient')">${getText("cancel")}</button>
+  `;
+  document.body.appendChild(editor);
+  setupGradientDirectionDrag();
+}
+
+
+function createLayerEditor(type) {
+  const editor = document.createElement('div');
+  editor.id = `${type}LayerEditor`;
+  editor.style.position = 'fixed';
+  editor.style.top = '50%';
+  editor.style.left = '50%';
+  editor.style.transform = 'translate(-50%, -50%)';
+  editor.style.background = 'white';
+  editor.style.padding = '20px';
+  editor.style.border = '1px solid black';
+  editor.style.zIndex = '1000';
+  return editor;
+}
+
+let startX, startY, endX, endY;
+
+function setupGradientDirectionDrag() {
+  const directionElement = document.getElementById('gradientDirection');
+  
+  directionElement.onmousedown = (e) => {
+    startX = e.offsetX;
+    startY = e.offsetY;
+    
+    document.onmousemove = (e) => {
+      const rect = directionElement.getBoundingClientRect();
+      endX = e.clientX - rect.left;
+      endY = e.clientY - rect.top;
+      drawGradientPreview();
+    };
+    
+    document.onmouseup = () => {
+      document.onmousemove = null;
+      document.onmouseup = null;
+    };
+  };
+  
+  endX = directionElement.width;
+  endY = directionElement.height;
+  drawGradientPreview();
+}
+
+function drawGradientPreview() {
+  const directionElement = document.getElementById('gradientDirection');
+  const ctx = directionElement.getContext('2d');
+  const gradient = ctx.createLinearGradient(startX, startY, endX, endY);
+  gradient.addColorStop(0, document.getElementById('gradientStart').value);
+  gradient.addColorStop(1, document.getElementById('gradientEnd').value);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, directionElement.width, directionElement.height);
+}
+
+
+
+
+let additionalLayers = [];
+function addFillLayer() {
+  const color = document.getElementById('fillColor').value;
+  const fillLayer = new fabric.Rect({
+    width: canvas.width,
+    height: canvas.height,
+    fill: color,
+    layerCheck: true,
+    selectable: false
+  });
+  canvas.add(fillLayer);
+  additionalLayers.push(fillLayer);
+  canvas.renderAll();
+  updateLayerList();
+  closeLayerEditor('fill');
+}
+
+function addGradientLayer() {
+  const startColor = document.getElementById('gradientStart').value;
+  const endColor = document.getElementById('gradientEnd').value;
+  const angle = Math.atan2(endY - startY, endX - startX);
+  
+  const gradientLayer = new fabric.Rect({
+    width: canvas.width,
+    height: canvas.height,
+    angle: angle * (180 / Math.PI),
+    fill: new fabric.Gradient({
+      type: 'linear',
+      coords: {
+        x1: 0,
+        y1: 0,
+        x2: canvas.width,
+        y2: 0
+      },
+      colorStops: [
+        { offset: 0, color: startColor },
+        { offset: 1, color: endColor }
+      ]
+    }),
+    layerCheck: true,
+    selectable: false
+  });
+  canvas.add(gradientLayer);
+  additionalLayers.push(gradientLayer);
+  canvas.renderAll();
+  updateLayerList();
+  closeLayerEditor('gradient');
+}
+
+
+
+function closeLayerEditor(type) {
+  const editor = document.getElementById(`${type}LayerEditor`);
+  editor.remove();
+}
+
+function updateLayerList() {
+  let imageLayers = getImageObjectListByLayerChecked();
+  let allLayers = [...imageLayers, ...additionalLayers.filter(layer => layer.layerCheck)];
+  imageLayerListTemp = allLayers;
+  addImagePreviewsToFloatingWindow(allLayers);
+  handleReblend();
+}
+
+function removeAdditionalLayers() {
+  additionalLayers.forEach(layer => {
+    canvas.remove(layer);
+  });
+  additionalLayers = [];
+  canvas.renderAll();
+}

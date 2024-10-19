@@ -55,14 +55,14 @@ function addSnowToneEventListener() {
   snowTone_backColor = $(MODE_TONE_SNOW + '-backColor');
   snowTone_snowAngle = $(MODE_TONE_SNOW + '-angle');
   
-  snowTone_snowDensity.addEventListener("input", generateSnowTone);
-  snowTone_frontSnowSize.addEventListener("input", generateSnowTone);
-  snowTone_backSnowSize.addEventListener("input", generateSnowTone);
-  snowTone_frontBlurLength.addEventListener("input", generateSnowTone);
-  snowTone_backBlurLength.addEventListener("input", generateSnowTone);
-  snowTone_frontColor.addEventListener("input", generateSnowTone);
-  snowTone_backColor.addEventListener("input", generateSnowTone);
-  snowTone_snowAngle.addEventListener("input", generateSnowTone);
+  $on(snowTone_snowDensity,"input",generateSnowTone);
+  $on(snowTone_frontSnowSize,"input",generateSnowTone);
+  $on(snowTone_backSnowSize,"input",generateSnowTone);
+  $on(snowTone_frontBlurLength,"input",generateSnowTone);
+  $on(snowTone_backBlurLength,"input",generateSnowTone);
+  $on(snowTone_frontColor,"input",generateSnowTone);
+  $on(snowTone_backColor,"input",generateSnowTone);
+  $on(snowTone_snowAngle,"input",generateSnowTone);
 }
 
 function drawSnowflake(x, y, size, blurLength, color, angle) {

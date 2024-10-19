@@ -26,7 +26,7 @@ async function handleSuccessfulGeneration(img, responseData, layer, imageName) {
   const infoObject = JSON.parse(responseData.info);
   layer.tempSeed = infoObject.seed;
   webpImg.tempPrompt = infoObject.prompt;
-  webpImg.tempNegativePrompt = infoObject.negative_prompt;
+  webpImg.tempNegative = infoObject.negative_prompt;
 }
 
 const sdwebui_T2IProcessQueue = (layer, spinnerId) => processQueue(layer, spinnerId, sdwebui_fetchText2Image, "t2i");
@@ -41,7 +41,7 @@ async function sdwebui_fetchImage2Image(layer) {
   const requestData = {
     ...baseRequestData(layer),
     init_images: [base64Image.split(',')[1]],
-    denoising_strength: layer.img2img_denoising_strength
+    denoising_strength: layer.img2img_denoise
   };
   console.log( "sdwebui_fetchImage2Image requestData", requestData );
   return post(sdWebUI_API_I2I, requestData);

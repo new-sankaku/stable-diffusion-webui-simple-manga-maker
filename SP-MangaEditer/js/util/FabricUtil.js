@@ -1,4 +1,3 @@
-
 function isPanel(activeObject) {
   return (activeObject && activeObject.isPanel);
 }
@@ -19,7 +18,7 @@ function haveClipPath(activeObject){
 function isText(activeObject) {
   return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || 
                            activeObject.type === "textbox" || activeObject.type === "vertical-textbox"));
-}
+}   
 
 function isVerticalText(activeObject) {
   return (activeObject && (activeObject.type === "vertical-textbox"));
@@ -91,23 +90,23 @@ function saveInitialState(obj) {
 }
 
 function setText2ImageInitPrompt(object) {
-  object.isPanel                  = t2i_init.isPanel;
-  object.text2img_prompt          = t2i_init.t2i_prompt;
-  object.text2img_negativePrompt  = t2i_init.t2i_negativePrompt;
-  object.text2img_seed            = t2i_init.t2i_seed;
-  object.text2img_width           = t2i_init.t2i_width;
-  object.text2img_height          = t2i_init.t2i_height;
-  object.text2img_samplingSteps   = t2i_init.t2i_samplingSteps;
+  object.isPanel                = t2i_init.isPanel;
+  object.text2img_prompt        = t2i_init.t2i_prompt;
+  object.text2img_negative      = t2i_init.t2i_negativePrompt;
+  object.text2img_seed          = t2i_init.t2i_seed;
+  object.text2img_width         = t2i_init.t2i_width;
+  object.text2img_height        = t2i_init.t2i_height;
+  object.text2img_samplingSteps = t2i_init.t2i_samplingSteps;
 }
 function setImage2ImageInitPrompt(object) {
-  object.text2img_prompt            = i2i_init.i2i_prompt;
-  object.text2img_negativePrompt    = i2i_init.i2i_negativePrompt;
-  object.text2img_seed              = i2i_init.i2i_seed;
-  object.text2img_width             = i2i_init.i2i_width;
-  object.text2img_height            = i2i_init.i2i_height;
-  object.text2img_samplingSteps     = i2i_init.i2i_samplingSteps;
-  object.img2img_denoising_strength = i2i_init.i2i_denoising_strength;
-  object.img2imgScale               = i2i_init.i2i_scale;
+  object.text2img_prompt        = i2i_init.i2i_prompt;
+  object.text2img_negative      = i2i_init.i2i_negativePrompt;
+  object.text2img_seed          = i2i_init.i2i_seed;
+  object.text2img_width         = i2i_init.i2i_width;
+  object.text2img_height        = i2i_init.i2i_height;
+  object.text2img_samplingSteps = i2i_init.i2i_samplingSteps;
+  object.img2img_denoise        = i2i_init.i2i_denoise;
+  object.img2imgScale           = i2i_init.i2i_scale;
 }
 
 function deepCopy(obj) {
@@ -133,23 +132,23 @@ function deepCopy(obj) {
 }
 
 function copy(srcObject, object) {
-  object.name                         = srcObject.name;
-  object.isPanel                      = srcObject.isPanel;
-  object.text2img_prompt              = srcObject.text2img_prompt;
-  object.text2img_negativePrompt      = srcObject.text2img_negativePrompt;
-  object.text2img_seed                = srcObject.text2img_seed;
-  object.text2img_width               = srcObject.text2img_width;
-  object.text2img_height              = srcObject.text2img_height;
-  object.text2img_samplingSteps       = srcObject.text2img_samplingSteps;
+  object.name                    = srcObject.name;
+  object.isPanel                 = srcObject.isPanel;
+  object.text2img_prompt         = srcObject.text2img_prompt;
+  object.text2img_negative       = srcObject.text2img_negative;
+  object.text2img_seed           = srcObject.text2img_seed;
+  object.text2img_width          = srcObject.text2img_width;
+  object.text2img_height         = srcObject.text2img_height;
+  object.text2img_samplingSteps  = srcObject.text2img_samplingSteps;
 
-  object.img2img_prompt               = srcObject.img2img_prompt;
-  object.img2img_negativePrompt       = srcObject.img2img_negativePrompt;
-  object.img2img_seed                 = srcObject.img2img_seed;
-  object.img2img_width                = srcObject.img2img_width;
-  object.img2img_height               = srcObject.img2img_height;
-  object.img2img_samplingSteps        = srcObject.img2img_samplingSteps;
-  object.img2img_denoising_strength   = srcObject.img2img_denoising_strength;
-  object.img2imgScale                 = srcObject.img2imgScale;
+  object.img2img_prompt         = srcObject.img2img_prompt;
+  object.img2img_negative       = srcObject.img2img_negative;
+  object.img2img_seed           = srcObject.img2img_seed;
+  object.img2img_width          = srcObject.img2img_width;
+  object.img2img_height         = srcObject.img2img_height;
+  object.img2img_samplingSteps  = srcObject.img2img_samplingSteps;
+  object.img2img_denoise        = srcObject.img2img_denoise;
+  object.img2imgScale           = srcObject.img2imgScale;
   
   object.top    = srcObject.top;
   object.left   = srcObject.left;
@@ -161,7 +160,7 @@ function copy(srcObject, object) {
   object.guid = srcObject.guid
   object.guids = srcObject.guids
   object.tempPrompt = srcObject.tempPrompt
-  object.tempNegativePrompt = srcObject.tempNegativePrompt
+  object.tempNegative = srcObject.tempNegative
   object.tempSeed = srcObject.tempSeed
 
   object.clipPath = srcObject.clipPath ? srcObject.clipPath : undefined;
@@ -592,26 +591,54 @@ function fitImageToCanvas(fabricImage) {
 }
 
 
-
 function createCanvasFromFabricImage(fabricImage) {
   const tempCanvas = document.createElement("canvas");
-  tempCanvas.width = canvas.width * blendScale;
-  tempCanvas.height = canvas.height * blendScale;
+  tempCanvas.width = canvas.width;
+  tempCanvas.height = canvas.height;
   const tempCtx = tempCanvas.getContext("2d");
-  tempCtx.save();
-  tempCtx.scale(blendScale, blendScale);
-  tempCtx.translate(
-    fabricImage.left + (fabricImage.width * fabricImage.scaleX) / 2,
-    fabricImage.top + (fabricImage.height * fabricImage.scaleY) / 2
-  );
-  tempCtx.rotate((fabricImage.angle * Math.PI) / 180);
-  tempCtx.scale(
-    fabricImage.scaleX * (fabricImage.flipX ? -1 : 1),
-    fabricImage.scaleY * (fabricImage.flipY ? -1 : 1)
-  );
 
-  tempCtx.translate(-fabricImage.width / 2, -fabricImage.height / 2);
-  tempCtx.drawImage(fabricImage.getElement(),0,0,fabricImage.width,fabricImage.height,0,0,fabricImage.width,fabricImage.height);
+  tempCtx.save();
+
+  tempCtx.translate(fabricImage.left, fabricImage.top);
+  tempCtx.rotate(fabricImage.angle * Math.PI / 180);
+  tempCtx.scale(fabricImage.scaleX, fabricImage.scaleY);
+
+  if (fabricImage.type === 'image') {
+    tempCtx.drawImage(
+      fabricImage._element,
+      0,
+      0,
+      fabricImage.width,
+      fabricImage.height
+    );
+  } else if (fabricImage.type === 'rect') {
+    if (typeof fabricImage.fill === 'string') {
+      tempCtx.fillStyle = fabricImage.fill;
+      tempCtx.fillRect(
+        0,
+        0,
+        fabricImage.width,
+        fabricImage.height
+      );
+    } else if (fabricImage.fill instanceof fabric.Gradient) {
+      const grad = tempCtx.createLinearGradient(
+        0,
+        0,
+        fabricImage.width,
+        0
+      );
+      fabricImage.fill.colorStops.forEach(stop => {
+        grad.addColorStop(stop.offset, stop.color);
+      });
+      tempCtx.fillStyle = grad;
+      tempCtx.fillRect(
+        0,
+        0,
+        fabricImage.width,
+        fabricImage.height
+      );
+    }
+  }
   tempCtx.restore();
 
   return tempCanvas;

@@ -9,7 +9,7 @@ function generateZip(){
   saveState();
 
   var zip = new JSZip();
-  zip.file("text2img_basePrompt.json", JSON.stringify(text2img_basePrompt));
+  zip.file("text2img_basePrompt.json", JSON.stringify(basePrompt));
 
   stateStack.forEach((json, index) => {
     const paddedIndex = String(index).padStart(6, '0');
@@ -44,7 +44,7 @@ function loadZip(zip, guid = null){
   var text2imgBasePromptFile = zip.file("text2img_basePrompt.json");
   if (text2imgBasePromptFile) {
     text2imgBasePromptFile.async("string").then(function (content) {
-      Object.assign(text2img_basePrompt, JSON.parse(content));
+      Object.assign(basePrompt, JSON.parse(content));
     });
   }
 
@@ -318,27 +318,27 @@ function loadSettingsLocalStrage(  ) {
     $('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
     $('apiHeartbeatCheckbox').checked         = localSettings.apiHeartbeatCheckbox;
     svgPagging                                = localSettings.canvasMarginFromPanel || 20;
-    $('text2img_basePrompt_model').value                  = localSettings.text2img_basePrompt_text2img_model || text2img_basePrompt.text2img_model;
-    $('text2img_basePrompt_samplingMethod').value         = localSettings.text2img_basePrompt_text2img_samplingMethod || text2img_basePrompt.text2img_samplingMethod;
-    $('text2img_basePrompt_prompt').value                 = localSettings.text2img_basePrompt_text2img_prompt || text2img_basePrompt.text2img_prompt;
-    $('text2img_basePrompt_negativePrompt').value         = localSettings.text2img_basePrompt_text2img_negativePrompt || text2img_basePrompt.text2img_negativePrompt;
-    $('text2img_basePrompt_seed').value                   = localSettings.text2img_basePrompt_text2img_seed || text2img_basePrompt.text2img_seed;
-    $('text2img_basePrompt_cfg_scale').value              = localSettings.text2img_basePrompt_text2img_cfg_scale || text2img_basePrompt.text2img_cfg_scale;
-    $('text2img_basePrompt_width').value                  = localSettings.text2img_basePrompt_text2img_width || text2img_basePrompt.text2img_width;
-    $('text2img_basePrompt_height').value                 = localSettings.text2img_basePrompt_text2img_height || text2img_basePrompt.text2img_height;
-    $('text2img_basePrompt_samplingSteps').value          = localSettings.text2img_basePrompt_text2img_samplingSteps || text2img_basePrompt.text2img_samplingSteps;
-    $('text2img_basePrompt_hr_upscaler').value            = localSettings.text2img_basePrompt_text2img_hr_upscaler || text2img_basePrompt.text2img_hr_upscaler;
-    $('text2img_basePrompt_hr_scale').value               = localSettings.text2img_basePrompt_text2img_basePrompt_hr_scale || text2img_basePrompt.text2img_basePrompt_hr_scale;
-    $('text2img_basePrompt_hr_denoising_strength').value  = localSettings.text2img_basePrompt_text2img_basePrompt_hr_denoising_strength || text2img_basePrompt.text2img_basePrompt_hr_denoising_strength;
-    $('text2img_basePrompt_hr_step').value                = localSettings.text2img_basePrompt_text2img_basePrompt_hr_step || text2img_basePrompt.text2img_basePrompt_hr_step;
+    $('basePrompt_model').value          = localSettings.basePrompt_text2img_model || basePrompt.text2img_model;
+    $('basePrompt_samplingMethod').value = localSettings.basePrompt_text2img_samplingMethod || basePrompt.text2img_samplingMethod;
+    $('basePrompt_prompt').value         = localSettings.basePrompt_text2img_prompt || basePrompt.text2img_prompt;
+    $('basePrompt_negative').value       = localSettings.basePrompt_text2img_negative || basePrompt.text2img_negative;
+    $('basePrompt_seed').value           = localSettings.basePrompt_text2img_seed || basePrompt.text2img_seed;
+    $('basePrompt_cfg_scale').value      = localSettings.basePrompt_text2img_cfg_scale || basePrompt.text2img_cfg_scale;
+    $('basePrompt_width').value          = localSettings.basePrompt_text2img_width || basePrompt.text2img_width;
+    $('basePrompt_height').value         = localSettings.basePrompt_text2img_height || basePrompt.text2img_height;
+    $('basePrompt_samplingSteps').value  = localSettings.basePrompt_text2img_samplingSteps || basePrompt.text2img_samplingSteps;
+    $('text2img_hr_upscaler').value    = localSettings.basePrompt_text2img_hr_upscaler || basePrompt.text2img_hr_upscaler;
+    $('text2img_hr_scale').value       = localSettings.basePrompt_text2img_hr_scale || basePrompt.text2img_hr_scale;
+    $('text2img_hr_denoise').value     = localSettings.basePrompt_text2img_hr_denoise || basePrompt.text2img_hr_denoise;
+    $('text2img_hr_step').value        = localSettings.basePrompt_text2img_hr_step || basePrompt.text2img_hr_step;
 
-    $('text2img_basePrompt_height').addEventListener('blur', function() {
+    $('basePrompt_height').addEventListener('blur', function() {
       var value = parseInt(this.value);
       if (value !== -1) {
         this.value = Math.round(value / 8) * 8;
       }
     });
-    $('text2img_basePrompt_width').addEventListener('blur', function() {
+    $('basePrompt_width').addEventListener('blur', function() {
       var value = parseInt(this.value);
       if (value !== -1) {
         this.value = Math.round(value / 8) * 8;
@@ -353,19 +353,19 @@ function loadSettingsLocalStrage(  ) {
       changeExternalAPI( "comfyUIButton" );
     }
 
-    text2img_basePrompt.text2img_prompt                           = $('text2img_basePrompt_prompt').value;
-    text2img_basePrompt.text2img_negativePrompt                   = $('text2img_basePrompt_negativePrompt').value;
-    text2img_basePrompt.text2img_model                            = $('text2img_basePrompt_model').value;
-    text2img_basePrompt.text2img_samplingSteps                    = $('text2img_basePrompt_samplingSteps').value;
-    text2img_basePrompt.text2img_samplingMethod                   = $('text2img_basePrompt_samplingMethod').value;
-    text2img_basePrompt.text2img_width                            = $('text2img_basePrompt_width').value;
-    text2img_basePrompt.text2img_height                           = $('text2img_basePrompt_height').value;
-    text2img_basePrompt.text2img_seed                             = $('text2img_basePrompt_seed').value;
-    text2img_basePrompt.text2img_cfg_scale                        = $('text2img_basePrompt_cfg_scale').value;
-    text2img_basePrompt.text2img_hr_upscaler                      = $('text2img_basePrompt_hr_upscaler').value;
-    text2img_basePrompt.text2img_basePrompt_hr_step               = $('text2img_basePrompt_hr_step').value;
-    text2img_basePrompt.text2img_basePrompt_hr_denoising_strength = $('text2img_basePrompt_hr_denoising_strength').value;
-    text2img_basePrompt.text2img_basePrompt_hr_scale              = $('text2img_basePrompt_hr_scale').value;
+    basePrompt.text2img_prompt          = $('basePrompt_prompt').value;
+    basePrompt.text2img_negative        = $('basePrompt_negative').value;
+    basePrompt.text2img_model           = $('basePrompt_model').value;
+    basePrompt.text2img_samplingSteps   = $('basePrompt_samplingSteps').value;
+    basePrompt.text2img_samplingMethod  = $('basePrompt_samplingMethod').value;
+    basePrompt.text2img_width           = $('basePrompt_width').value;
+    basePrompt.text2img_height          = $('basePrompt_height').value;
+    basePrompt.text2img_seed            = $('basePrompt_seed').value;
+    basePrompt.text2img_cfg_scale       = $('basePrompt_cfg_scale').value;
+    basePrompt.text2img_hr_upscaler     = $('text2img_hr_upscaler').value;
+    basePrompt.text2img_hr_step         = $('text2img_hr_step').value;
+    basePrompt.text2img_hr_denoise      = $('text2img_hr_denoise').value;
+    basePrompt.text2img_hr_scale        = $('text2img_hr_scale').value;
   }
 }
 
@@ -394,20 +394,20 @@ function saveSettingsLocalStrage() {
     Stable_Diffusion_WebUI_apiPort: $('Stable_Diffusion_WebUI_apiPort').value,
     Stable_Diffusion_WebUI_apiHost: $('Stable_Diffusion_WebUI_apiHost').value,
     apiHeartbeatCheckbox : $('apiHeartbeatCheckbox').checked ,
-    text2img_basePrompt_text2img_prompt: text2img_basePrompt.text2img_prompt,
-    text2img_basePrompt_text2img_negativePrompt: text2img_basePrompt.text2img_negativePrompt,
-    text2img_basePrompt_text2img_seed: text2img_basePrompt.text2img_seed,
-    text2img_basePrompt_text2img_cfg_scale: text2img_basePrompt.text2img_cfg_scale,
-    text2img_basePrompt_text2img_width: text2img_basePrompt.text2img_width,
-    text2img_basePrompt_text2img_height: text2img_basePrompt.text2img_height,
-    text2img_basePrompt_text2img_samplingMethod: text2img_basePrompt.text2img_samplingMethod,
-    text2img_basePrompt_text2img_samplingSteps: text2img_basePrompt.text2img_samplingSteps,
-    text2img_basePrompt_text2img_scheduler: text2img_basePrompt.text2img_scheduler,
-    text2img_basePrompt_text2img_model: text2img_basePrompt.text2img_model,
-    text2img_basePrompt_text2img_hr_upscaler: text2img_basePrompt.text2img_hr_upscaler,
-    text2img_basePrompt_text2img_basePrompt_hr_scale: text2img_basePrompt.text2img_basePrompt_hr_scale,
-    text2img_basePrompt_text2img_basePrompt_hr_step: text2img_basePrompt.text2img_basePrompt_hr_step,
-    text2img_basePrompt_text2img_basePrompt_hr_denoising_strength: text2img_basePrompt.text2img_basePrompt_hr_denoising_strength
+    basePrompt_text2img_prompt: basePrompt.text2img_prompt,
+    basePrompt_text2img_negative: basePrompt.text2img_negative,
+    basePrompt_text2img_seed: basePrompt.text2img_seed,
+    basePrompt_text2img_cfg_scale: basePrompt.text2img_cfg_scale,
+    basePrompt_text2img_width: basePrompt.text2img_width,
+    basePrompt_text2img_height: basePrompt.text2img_height,
+    basePrompt_text2img_samplingMethod: basePrompt.text2img_samplingMethod,
+    basePrompt_text2img_samplingSteps: basePrompt.text2img_samplingSteps,
+    basePrompt_text2img_scheduler: basePrompt.text2img_scheduler,
+    basePrompt_text2img_model: basePrompt.text2img_model,
+    basePrompt_text2img_hr_upscaler: basePrompt.text2img_hr_upscaler,
+    basePrompt_text2img_hr_scale: basePrompt.text2img_hr_scale,
+    basePrompt_text2img_hr_step: basePrompt.text2img_hr_step,
+    basePrompt_text2img_hr_denoise: basePrompt.text2img_hr_denoise
   };
   localStorage.setItem('localSettingsData', JSON.stringify(localSettingsData));
 }
@@ -418,19 +418,9 @@ document.addEventListener('DOMContentLoaded', function() {
   changeView("controls", $('view_controles_checkbox').checked);
 });
 
-
-
-
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
   $('svgDownload').onclick = function () {
     var svg = canvas.toSVG();
-    // console.log(svg);
     svgDownload('canvas.svg', svg);
   };
 });

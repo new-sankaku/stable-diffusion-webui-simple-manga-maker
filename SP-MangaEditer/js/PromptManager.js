@@ -47,8 +47,8 @@ function applyChanges() {
       if (layer.text2img_prompt && layer.text2img_prompt.includes(prompt.old)) {
         layer.text2img_prompt = layer.text2img_prompt.replace(new RegExp(prompt.old, 'g'), prompt.new);
       }
-      if (layer.text2img_negativePrompt && layer.text2img_negativePrompt.includes(prompt.old)) {
-        layer.text2img_negativePrompt = layer.text2img_negativePrompt.replace(new RegExp(prompt.old, 'g'), prompt.new);
+      if (layer.text2img_negative && layer.text2img_negative.includes(prompt.old)) {
+        layer.text2img_negative = layer.text2img_negative.replace(new RegExp(prompt.old, 'g'), prompt.new);
       }
     });
   });

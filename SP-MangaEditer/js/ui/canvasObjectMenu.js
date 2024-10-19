@@ -76,16 +76,21 @@ function showObjectMenu(clickType) {
   if (isPanel(activeObject)) {
     var edit  = activeObject.edit ? 'editOff'  : 'editOn';
     var knife = isKnifeMode       ? 'knifeOff' : 'knifeOn';
-    menuItems = clickType === 'left' ? [] : [visible, edit, knife, 'generate', 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, edit, knife];
+
+    if( hasRole( AI_ROLES.Text2Image )){ menuItems.push('generate') }
+    menuItems.push('delete');
+    menuItems.push('selectClear');
 
   } else if (isImage(activeObject)) {
-    menuItems = clickType === 'left' ? [] : [visible, 'generate', 'rembg', 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible];
+    if( hasRole( AI_ROLES.Image2Image )){ menuItems.push('generate') }
+    if( hasRole( AI_ROLES.RemoveBG )){ menuItems.push('rembg') }
+    menuItems.push('delete');
+    menuItems.push('selectClear');
+
     if( haveClipPath(activeObject) ){
       menuItems.push('clearAllClipPaths');
-      // menuItems.push('clearTopClipPath');
-      // menuItems.push('clearBottomClipPath');
-      // menuItems.push('clearRightClipPath');
-      // menuItems.push('clearLeftClipPath');
     }else{
       menuItems.push('panelIn');
       menuItems.push("canvasFit");
