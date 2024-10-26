@@ -75,23 +75,42 @@ async function Comfyui_apiHeartbeat() {
 
 async function Comfyui_queue_prompt(prompt) {
   try {
-    p = { prompt: prompt, client_id: uuid };
+    const p = { prompt: prompt, client_id: uuid };
     const response = await fetch("http://" + server_address + "/prompt", {
       method: "POST",
-      headers: { "Content-Type": "application/json",
-                 accept: "application/json",
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
       },
       body: JSON.stringify(p),
     });
 
-    var response_data = await response.json();
+    if (!response.ok) {
+      const errorText = await response.text();
+      createToastError(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      return null;
+    }
+
+    const response_data = await response.json();
     console.log("サーバーからのレスポンス:", response_data);
     return response_data;
+
   } catch (error) {
-    createToastError("Text2Image Error.", "check COMFYUI!");
+    let errorMessage = "Text2Image Error. ";
+    if (error.name === 'TypeError') {
+      errorMessage += "Network error or COMFYUI server is down.";
+    } else if (error.message.includes('HTTP error!')) {
+      errorMessage += error.message;
+    } else {
+      errorMessage += "check COMFYUI!";
+    }
+
+    console.error('Error details:', error);
+    createToastError(errorMessage);
     return null;
   }
 }
+
 
 async function Comfyui_get_history(prompt_id) {
   console.log(
@@ -201,13 +220,15 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
     selected_workflow = getComfyUI_I2I_BySDXL();
   }
 
-  var workflow = Comfyui_replace_placeholders(selected_workflow, requestData);
   if (!isT2I) {
     var uploadFilename = generateFilename();
     await Comfyui_uploadImage(layer, uploadFilename);
-    console.log("uploadFilename START:", uploadFilename);
-    workflow = Comfyui_replacePlaceholder(workflow, "%uploadImage%", uploadFilename);
+    requestData["uploadFileName"] = uploadFilename;
   }
+
+  var workflow = Comfyui_replace_placeholders(selected_workflow, requestData, isT2I);
+
+  console.log("comfyuiQueue Workflow", JSON.stringify(workflow));
 
   comfyuiQueue.add(async () => Comfyui_put_queue(workflow))
     .then(async (result) => {
@@ -247,7 +268,7 @@ async function Comfyui_put_queue(workflow) {
   response = await Comfyui_get_history(prompt_id);
   if (!response) return { error: true, message: "Unknown error", details: "Please check ComfyUI console.",};
 
-  console.error("Comfyui_put_queue response:", JSON.stringify(response));
+  // console.error("Comfyui_put_queue response:", JSON.stringify(response));
 
   if (Comfyui_isError(response)) {
     const errorMessage = Comfyui_getErrorMessage(response);

@@ -89,23 +89,27 @@ function sdwebui_apiHeartbeat() {
     headers: { 'Accept': 'application/json' }
   })
     .then(response => {
-      if (response.ok) {
-        label.innerHTML = 'SD WebUI or Forge ON';
-        label.style.color = 'green';
+      if (API_mode == apis.A1111) {
+        if (response.ok) {
+          label.innerHTML = 'SD WebUI or Forge ON';
+          label.style.color = 'green';
 
-        if(firstSDConnection){
-          getDiffusionInfomation();
-          firstSDConnection = false;
+          if(firstSDConnection){
+            getDiffusionInfomation();
+            firstSDConnection = false;
+          }
+          return true;
+        } else {
+          label.innerHTML = 'SD WebUI or Forge OFF';
+          label.style.color = 'red';
         }
-        return true;
-      } else {
-        label.innerHTML = 'SD WebUI or Forge OFF';
-        label.style.color = 'red';
       }
     })
     .catch(error => {
-      label.innerHTML = 'SD WebUI or Forge OFF';
-      label.style.color = 'red';
+      if (API_mode == apis.A1111){
+        label.innerHTML = 'SD WebUI or Forge OFF';
+        label.style.color = 'red';
+      }
     });
     return false;
 }

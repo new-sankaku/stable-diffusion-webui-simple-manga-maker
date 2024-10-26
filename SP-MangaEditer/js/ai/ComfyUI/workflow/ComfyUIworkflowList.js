@@ -27,7 +27,7 @@ function getComfyUI_T2I_BySDXL(){
         "clip": ["2", 1]
       },
       "class_type": "CLIPTextEncode",
-      "_meta": { "title": "CLIP Text Encode (Prompt)" }
+      "_meta": { "title": "CLIPTextEncode_Prompt" }
     },
     "4": {
       "inputs": {
@@ -35,7 +35,7 @@ function getComfyUI_T2I_BySDXL(){
         "clip": ["2", 1]
       },
       "class_type": "CLIPTextEncode",
-      "_meta": { "title": "CLIP Text Encode (Prompt)" }
+      "_meta": { "title": "CLIPTextEncode_Negative" }
     },
     "5": {
       "inputs": {
@@ -94,7 +94,7 @@ return {
       "clip": ["2", 1]
     },
     "class_type": "CLIPTextEncode",
-    "_meta": { "title": "CLIP Text Encode (Prompt)" }
+    "_meta": { "title": "CLIPTextEncode_Prompt" }
   },
   "4": {
     "inputs": {
@@ -102,7 +102,7 @@ return {
       "clip": ["2", 1]
     },
     "class_type": "CLIPTextEncode",
-    "_meta": { "title": "CLIP Text Encode (Prompt)" }
+    "_meta": { "title": "CLIPTextEncode_Negative" }
   },
   "6": {
     "inputs": {
