@@ -81,6 +81,10 @@ function addSquareBySize(width, height) {
   setText2ImageInitPrompt(square);
   setPanelValue(square);
   canvas.add(square);
+
+  square.lockMovementX = true;
+  square.lockMovementY = true;
+
   updateLayerPanel();
 }
 

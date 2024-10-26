@@ -161,6 +161,12 @@ function putCheckButton(buttonsDiv, layer, index) {
 }
 
 
+
+function visibleChange(obj){
+  obj.visible = !obj.visible;
+  updateLayerPanel();
+}
+
 function putViewButton(buttonsDiv, layer, index) {
   var viewButton = document.createElement("button");
   viewButton.id = "viewButton-" + index;
@@ -267,4 +273,29 @@ function AllRun(){
     T2I( layer, spinner );
     indexAllRunDummy++;
   });
+}
+
+
+
+
+function moveLockChange(obj){
+  obj.lockMovementX = !obj.lockMovementX;
+  obj.lockMovementY = !obj.lockMovementY;
+  updateLayerPanel();
+}
+
+function putMoveLockButton(buttonsDiv, layer, index) {
+  var button = document.createElement("button");
+  button.id = "moveLock-" + index;
+  if(layer.lockMovementX && layer.lockMovementY){
+    button.innerHTML = '<i class="material-icons">lock</i>';
+  }else{
+    button.innerHTML = '<i class="material-icons">control_camera</i>';
+  }
+
+  button.onclick = function (e) {
+    moveLockChange(layer);
+  };
+  addTooltipByElement(button, "moveLockButton");
+  buttonsDiv.appendChild(button);
 }

@@ -25,7 +25,7 @@ function changeMovement() {
     } else {
       obj.set({
         selectable: true
-      });
+      });  
     }
   });
   canvas.renderAll();
@@ -628,6 +628,8 @@ function splitPolygon(polygon) {
     var strokeWidthScale = canvas.width / 700;
     var strokeWidth = 2 * strokeWidthScale;
 
+    var tempLockMovementX = polygon.lockMovementX;
+    var tempLockMovementY = polygon.lockMovementY;
 
     var polygon1 = new fabric.Polygon(adjustedPolygon1Points, {
       left: polygon1MinX,
@@ -639,7 +641,9 @@ function splitPolygon(polygon) {
       isPanel: true,
       scaleX: 1,
       scaleY: 1,
-      selectable: false
+      lockMovementX: tempLockMovementX,
+      lockMovementY: tempLockMovementY,
+      selectable: true
     });
 
     var polygon2 = new fabric.Polygon(adjustedPolygon2Points2, {
@@ -652,7 +656,9 @@ function splitPolygon(polygon) {
       isPanel: true,
       scaleX: 1,
       scaleY: 1,
-      selectable: false
+      lockMovementX: tempLockMovementX,
+      lockMovementY: tempLockMovementY,
+      selectable: true
     });
 
     setText2ImageInitPrompt(polygon1);

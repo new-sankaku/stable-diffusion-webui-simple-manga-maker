@@ -105,10 +105,12 @@ function updateLayerPanel() {
 
       detailsDiv.appendChild(nameTextArea);
 
+      putViewButton(buttonsDiv, layer, index);
+      putMoveLockButton(buttonsDiv, layer, index);
       if (isImage(layer)) {
         putCheckButton(buttonsDiv, layer, index);
-      }      
-      putViewButton(buttonsDiv, layer, index);
+      }
+
 
       if (layer.isPanel) {
         putRunT2IButton(buttonsDiv, layer, index);
@@ -361,11 +363,6 @@ function LayersDown() {
     updateLayerPanel();
     saveState();
   }
-}
-
-function visibleChange(obj){
-  obj.visible = !obj.visible;
-  updateLayerPanel();
 }
 
 
