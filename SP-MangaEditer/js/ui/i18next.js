@@ -4,6 +4,7 @@
 const resources = {
   ja: {
     translation: {
+"moveLockButton":"移動のON/OFFができます。",
 "T2I_AllRun":"T2I All Run",
 "gradientLayer":"グラデーションんレイヤー",
 "fillLayer":"塗りレイヤー",
@@ -438,6 +439,7 @@ const resources = {
   },
 en: {
     translation: {
+      "moveLockButton": "You can turn movement ON/OFF.",
       "gradientLayer": "Gradient Layer",
       "fillLayer": "Fill Layer",
       "addLayer": "Add Layer",
@@ -959,6 +961,7 @@ en: {
 
   ko: {
 translation: {
+  "moveLockButton": "이동을 켜고 끌 수 있습니다.",
   "gradientLayer": "그라데이션 레이어",
   "fillLayer": "채우기 레이어",
   "addLayer": "레이어 추가",
@@ -1404,6 +1407,7 @@ translation: {
   },
   fr: {
     translation: {
+      "moveLockButton": "Vous pouvez activer/désactiver le mouvement.",
       "gradientLayer": "Calque de dégradé",
       "fillLayer": "Calque de remplissage",
       "addLayer": "Ajouter un calque",
@@ -1886,6 +1890,7 @@ translation: {
   },
   zh: {
     translation: {
+      "moveLockButton": "可以开启/关闭移动功能。",
       "gradientLayer": "渐变图层",
       "fillLayer": "填充图层",
       "addLayer": "添加图层",
@@ -2365,6 +2370,7 @@ translation: {
   },
   ru: {
     translation: {
+      "moveLockButton": "Вы можете включить/выключить перемещение.",
       "gradientLayer": "Градиентный слой",
       "fillLayer": "Слой заливки",
       "addLayer": "Добавить слой",
@@ -2796,6 +2802,7 @@ translation: {
   },
   es: {
     translation: {
+      "moveLockButton": "Puede activar/desactivar el movimiento.",
       "gradientLayer": "Capa de degradado",
       "fillLayer": "Capa de relleno",
       "addLayer": "Añadir capa",
@@ -3224,6 +3231,7 @@ translation: {
   },
   pt: {
     translation: {
+      "moveLockButton": "Você pode ativar/desativar o movimento.",
       "gradientLayer": "Camada de gradiente",
       "fillLayer": "Camada de preenchimento",
       "addLayer": "Adicionar camada",
@@ -3650,6 +3658,7 @@ translation: {
   },
 th: {
 translation: {
+  "moveLockButton": "คุณสามารถเปิด/ปิดการเคลื่อนไหวได้",
   "gradientLayer": "เลเยอร์ไล่ระดับสี",
   "fillLayer": "เลเยอร์เติมสี",
   "addLayer": "เพิ่มเลเยอร์",
@@ -4119,8 +4128,9 @@ translation: {
 "sdWebUIPing":"SD WebUI PING"
     }
   },
-    "de": {
+    de: {
       "translation": {
+        "moveLockButton": "Sie können die Bewegung EIN/AUS schalten.",
         "gradientLayer": "Verlaufsebene",
         "fillLayer": "Füllungsebene",
         "addLayer": "Ebene hinzufügen",
