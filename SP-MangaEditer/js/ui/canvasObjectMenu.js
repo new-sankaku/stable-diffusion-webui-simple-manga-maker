@@ -71,21 +71,25 @@ function showObjectMenu(clickType) {
   // 'removePoint', 'selectClear', 'knife'
   // 'rembg', 'panelIn'
 
-  var visible  = activeObject.visible ? 'visibleOff' : 'visibleOn';
+  var visible   = activeObject.visible ? 'visibleOff' : 'visibleOn';
+  var movement  = activeObject.lockMovementX ? 'movementOn' : 'movementOff';
 
   if (isPanel(activeObject)) {
     var edit  = activeObject.edit ? 'editOff'  : 'editOn';
     var knife = isKnifeMode       ? 'knifeOff' : 'knifeOn';
-    menuItems = clickType === 'left' ? [] : [visible, edit, knife];
+    menuItems = clickType === 'left' ? [] : [visible, movement, edit, knife];
 
     if( hasRole( AI_ROLES.Text2Image )){ menuItems.push('generate') }
+
     menuItems.push('delete');
     menuItems.push('selectClear');
 
   } else if (isImage(activeObject)) {
-    menuItems = clickType === 'left' ? [] : [visible];
+    menuItems = clickType === 'left' ? [] : [visible, movement];
+    
     if( hasRole( AI_ROLES.Image2Image )){ menuItems.push('generate') }
     if( hasRole( AI_ROLES.RemoveBG )){ menuItems.push('rembg') }
+    
     menuItems.push('delete');
     menuItems.push('selectClear');
 
@@ -96,9 +100,9 @@ function showObjectMenu(clickType) {
       menuItems.push("canvasFit");
     }
   } else if (isText(activeObject)) {
-    menuItems = clickType === 'left' ? [] : [visible, 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete', 'selectClear'];
   } else {
-    menuItems = clickType === 'left' ? [] : [visible, 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete', 'selectClear'];
   }
 
   if (menuItems.length === 0) {
@@ -139,6 +143,12 @@ function handleMenuClick(e) {
     case 'visibleOff':
       visibleChange(activeObject);
       break;
+
+    case 'movementOn':
+    case 'movementOff':
+      moveLockChange(activeObject);
+      break;
+
     case 'rembg':
       var spinner = createSpinner(canvasMenuIndex);
       sdWebUI_RembgProcessQueue(activeObject, spinner.id);

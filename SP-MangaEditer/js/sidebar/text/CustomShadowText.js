@@ -322,6 +322,7 @@ function t2_shadow_addSvg(left, top) {
       
       // console.log("t2_shadow_addSvg canvas.add");
       canvas.add(img);
+      canvas.setActiveObject(img);
       canvas.renderAll();
     }, { crossOrigin: 'anonymous' });
   };
