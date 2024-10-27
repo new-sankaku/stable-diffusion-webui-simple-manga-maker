@@ -15,100 +15,100 @@ function snsTweet(){
 }
 
 
-function createPopup() {
-  const popup = document.createElement('div');
-  popup.id = 'mangaEditorDesu_custom-popup';
-  popup.style.display = 'none';
+// function createPopup() {
+//   const popup = document.createElement('div');
+//   popup.id = 'mangaEditorDesu_custom-popup';
+//   popup.style.display = 'none';
 
-  const popupContent = document.createElement('div');
-  popupContent.id = 'mangaEditorDesu_popup-content';
+//   const popupContent = document.createElement('div');
+//   popupContent.id = 'mangaEditorDesu_popup-content';
 
-  const img = document.createElement('img');
-  img.id = 'mangaEditorDesu_popup-image';
-  img.src = '03_images/infomation/20240715.webp';
-  img.alt = 'Futuristic Thank You';
+//   const img = document.createElement('img');
+//   img.id = 'mangaEditorDesu_popup-image';
+//   img.src = '03_images/infomation/20240715.webp';
+//   img.alt = 'Futuristic Thank You';
 
-  const textContent = document.createElement('div');
-  textContent.id = 'mangaEditorDesu_text-content';
+//   const textContent = document.createElement('div');
+//   textContent.id = 'mangaEditorDesu_text-content';
 
-  const title = document.createElement('h2');
-  title.textContent = getText('help_message_title');
+//   const title = document.createElement('h2');
+//   title.textContent = getText('help_message_title');
 
-  const message = document.createElement('p');
-  message.textContent = getText('help_message_message');
+//   const message = document.createElement('p');
+//   message.textContent = getText('help_message_message');
 
-  const linkSection = document.createElement('div');
-  linkSection.className = 'mangaEditorDesu_link-section';
-  linkSection.innerHTML = getText('help_message_links');
-  // console.log( "help_message_links", getText('help_message_links') );
+//   const linkSection = document.createElement('div');
+//   linkSection.className = 'mangaEditorDesu_link-section';
+//   linkSection.innerHTML = getText('help_message_links');
+//   // console.log( "help_message_links", getText('help_message_links') );
 
-  const closeButton = document.createElement('button');
-  closeButton.id = 'mangaEditorDesu_close-popup';
-  closeButton.textContent = getText('help_message_close');
-  closeButton.addEventListener('click', mangaEditorDesu_closePopup);
+//   const closeButton = document.createElement('button');
+//   closeButton.id = 'mangaEditorDesu_close-popup';
+//   closeButton.textContent = getText('help_message_close');
+//   closeButton.addEventListener('click', mangaEditorDesu_closePopup);
 
-  textContent.appendChild(title);
-  textContent.appendChild(message);
-  textContent.appendChild(linkSection);
-  textContent.appendChild(closeButton);
+//   textContent.appendChild(title);
+//   textContent.appendChild(message);
+//   textContent.appendChild(linkSection);
+//   textContent.appendChild(closeButton);
 
-  popupContent.appendChild(img);
-  popupContent.appendChild(textContent);
+//   popupContent.appendChild(img);
+//   popupContent.appendChild(textContent);
 
-  const flames = document.createElement('div');
-  flames.className = 'mangaEditorDesu_flames';
+//   const flames = document.createElement('div');
+//   flames.className = 'mangaEditorDesu_flames';
 
-  const flamePositions = [10, 30, 50, 70, 90];
-  const flameDelays = [-0.3, -0.5, -0.2, -0.7, -0.1];
+//   const flamePositions = [10, 30, 50, 70, 90];
+//   const flameDelays = [-0.3, -0.5, -0.2, -0.7, -0.1];
 
-  for (let i = 0; i < 5; i++) {
-      const flame = document.createElement('div');
-      flame.className = 'mangaEditorDesu_flame';
-      flame.style.left = `${flamePositions[i]}%`;
-      flame.style.animationDelay = `${flameDelays[i]}s`;
-      flames.appendChild(flame);
-  }
+//   for (let i = 0; i < 5; i++) {
+//       const flame = document.createElement('div');
+//       flame.className = 'mangaEditorDesu_flame';
+//       flame.style.left = `${flamePositions[i]}%`;
+//       flame.style.animationDelay = `${flameDelays[i]}s`;
+//       flames.appendChild(flame);
+//   }
 
-  popup.appendChild(popupContent);
-  popup.appendChild(flames);
+//   popup.appendChild(popupContent);
+//   popup.appendChild(flames);
 
-  document.body.appendChild(popup);
-}
+//   document.body.appendChild(popup);
+// }
 
-function mangaEditorDesu_init() {
-  console.log("mangaEditorDesu_init", localStorage.getItem('mangaEditorDesu_popupShown'));
-  if (localStorage.getItem('mangaEditorDesu_popupShown') === 'true') {
-      mangaEditorDesu_popupShown = true;
-  }
+// function mangaEditorDesu_init() {
+//   console.log("mangaEditorDesu_init", localStorage.getItem('mangaEditorDesu_popupShown'));
+//   if (localStorage.getItem('mangaEditorDesu_popupShown') === 'true') {
+//       mangaEditorDesu_popupShown = true;
+//   }
   
-  createPopup();
+//   createPopup();
   
-  if (!mangaEditorDesu_popupShown) {
-      setTimeout(mangaEditorDesu_showPopup, 5 * 60 * 1000); // 5秒後に表示
-  }
+//   if (!mangaEditorDesu_popupShown) {
+//       setTimeout(mangaEditorDesu_showPopup, 5 * 60 * 1000); // 5秒後に表示
+//   }
 
-}
+// }
 
-function mangaEditorDesu_showPopup() {
-  if (!mangaEditorDesu_popupShown) {
-      const popup = $('mangaEditorDesu_custom-popup');
-      popup.style.display = 'block';
-      mangaEditorDesu_popupShown = true;
-      localStorage.setItem('mangaEditorDesu_popupShown', 'true');
-  }
-}
+// function mangaEditorDesu_showPopup() {
+//   if (!mangaEditorDesu_popupShown) {
+//       const popup = $('mangaEditorDesu_custom-popup');
+//       popup.style.display = 'block';
+//       mangaEditorDesu_popupShown = true;
+//       localStorage.setItem('mangaEditorDesu_popupShown', 'true');
+//   }
+// }
 
-function mangaEditorDesu_closePopup() {
-  const popup = $('mangaEditorDesu_custom-popup');
-  popup.style.display = 'none';
-}
+// function mangaEditorDesu_closePopup() {
+//   const popup = $('mangaEditorDesu_custom-popup');
+//   popup.style.display = 'none';
+// }
 
 
-let mangaEditorDesu_popupShown = false;
+// let mangaEditorDesu_popupShown = false;
 
-function mangaEditorDesu_resetPopup() {
-  localStorage.removeItem('mangaEditorDesu_popupShown');
-  mangaEditorDesu_popupShown = false;
-}
+// function mangaEditorDesu_resetPopup() {
+//   localStorage.removeItem('mangaEditorDesu_popupShown');
+//   mangaEditorDesu_popupShown = false;
+// }
 // mangaEditorDesu_resetPopup();
-mangaEditorDesu_init();
+// mangaEditorDesu_init();

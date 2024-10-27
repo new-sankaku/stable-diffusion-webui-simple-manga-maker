@@ -1,0 +1,223 @@
+<html>
+<head>
+<style>
+body{text-align:center;font-family:sans-serif}
+canvas{border:1px solid #ccc}
+.controls{display:flex;flex-direction:column;width:300px;margin:0 auto}
+.control{display:flex;justify-content:space-between;align-items:center}
+#textInput{width:300px;height:100px}
+.value{min-width:30px;display:inline-block;color:#666}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/opentype.js"></script>
+</head>
+<body>
+<div>
+<textarea id="textInput" placeholder="文字を入力">あ
+い
+う</textarea>
+<div>
+<label><input type="radio" name="direction" value="horizontal" checked>横書き</label>
+<label><input type="radio" name="direction" value="vertical">縦書き</label>
+</div>
+<div>
+<label><input type="radio" name="align" value="start" checked>左/上揃え</label>
+<label><input type="radio" name="align" value="center">中央揃え</label>
+<label><input type="radio" name="align" value="end">右/下揃え</label>
+</div>
+<button onclick="loadAndDrawText()">描画</button>
+<div id="timeInfo"></div>
+<div class="controls">
+<div class="control">
+<label>点の数</label>
+<input type="range" id="pointCount" min="5" max="30" value="15" oninput="updateValue(this)">
+<span class="value" id="pointCountValue">15</span>
+</div>
+<div class="control">
+<label>最大距離</label>
+<input type="range" id="maxDist" min="1" max="20" value="8" oninput="updateValue(this)">
+<span class="value" id="maxDistValue">8</span>
+</div>
+<div class="control">
+<label>最大サイズ</label>
+<input type="range" id="maxSize" min="1" max="10" value="4" oninput="updateValue(this)">
+<span class="value" id="maxSizeValue">4</span>
+</div>
+<div class="control">
+<label>透明度</label>
+<input type="range" id="opacity" min="1" max="100" value="80" oninput="updateValue(this)">
+<span class="value" id="opacityValue">80</span>
+</div>
+<div class="control">
+<label>間隔</label>
+<input type="range" id="spacing" min="1" max="10" value="2" oninput="updateValue(this)">
+<span class="value" id="spacingValue">2</span>
+</div>
+<div class="control">
+<label>行間</label>
+<input type="range" id="lineSpacing" min="0" max="200" value="20" oninput="updateValue(this)">
+<span class="value" id="lineSpacingValue">20</span>%
+</div>
+<div class="control">
+<label>文字間</label>
+<input type="range" id="charSpacing" min="-100" max="200" value="0" oninput="updateValue(this)">
+<span class="value" id="charSpacingValue">0</span>%
+</div>
+</div>
+</div>
+<canvas width="800" height="300"></canvas>
+<script>
+function updateValue(input){document.getElementById(input.id+"Value").textContent=input.value}
+var Brush;var BrushTip;var Tips={};
+(function(){"use strict";function checkObject(obj){return typeof obj!="object"?{}:obj}
+function checkNumber(number,defaultValue){return typeof number!="number"?defaultValue:number}
+Brush=function(options){options=checkObject(options);this.path=options.path||null;this.ctx=options.ctx||null;this.spacing=checkNumber(options.spacing,0);this.tip=options.tip||new Tips.Rough1();if(this.path!=null)this.pathLength=this.path.getTotalLength()}
+Brush.prototype={path:null,pathLength:0,v:0,lastV:0,ctx:null,spacing:0,tip:null,getPos:function(v){v=this._cleanV(v);return this.path.getPointAtLength(v*this.pathLength)},draw:function(){var v=this._getV();this._render(v);this.lastV=v},drawPath:function(){var spacing=this.spacing;var steps=Math.ceil(this.pathLength/spacing);for(var i=0;i<steps;i++){var v=i/(steps-1);this._render(v,{pressure:1})}},_vToLen:function(v){return v*this.pathLength},_lenToV:function(len){return len/this.pathLength},_getV:function(){return this._cleanV(this.v)},_cleanV:function(v){v=checkNumber(v,this.v);if(v>1)v=1;if(v<0)v=0;return v},_render:function(v,options){v=this._cleanV(v);options=checkObject(options);var rotation=checkNumber(options.rotation,0);var pressure=checkNumber(options.pressure,1);var ctx=this.ctx;var pos=this.getPos(v);ctx.save();ctx.translate(pos.x,pos.y);this.tip.draw(ctx,{pressure:pressure});ctx.restore()}}
+BrushTip=function(options){options=checkObject(options);this.size=checkNumber(options.size,1)};
+BrushTip.prototype={size:1,_currentCtx:null,_currentOptions:{},draw:function(ctx,options){options=checkObject(options);this._currentCtx=ctx;this._render(options)},_render:function(options){},_drawCircle:function(r,x,y,polar){x=checkNumber(x,0);y=checkNumber(y,0);if(polar){var a=x;var d=y;x=Math.cos(a)*d;y=Math.sin(a)*d}var ctx=this._currentCtx;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.closePath()}}
+Tips.Round=function(options){BrushTip.call(this,options)}
+Tips.Round.prototype=Object.create(BrushTip.prototype);
+Tips.Round.prototype.constructor=Tips.Round;
+Tips.Round.prototype._render=function(options){BrushTip.prototype._render.call(this,options);var pressure=checkNumber(options.pressure,1);var ctx=this._currentCtx;ctx.scale(1,0.4);this._drawCircle(6*this.size)}
+Tips.Rough1=function(options){
+BrushTip.call(this,options);
+options=checkObject(options);
+var pointCount=checkNumber(options.pointCount,15);
+var maxDist=checkNumber(options.maxDist,8);
+var maxSize=checkNumber(options.maxSize,4);
+var opacity=checkNumber(options.opacity,0.8);
+this.opacity=opacity;
+this._points=new Array();
+for(var i=0;i<pointCount;i++){
+var d=Math.pow(Math.random(),2);
+var a=Math.random()*Math.PI*2;
+var r=0.1+(Math.pow(1-d,2)*maxSize);
+d*=maxDist;
+this._points.push({d:d,a:a,r:r})
+}}
+Tips.Rough1.prototype=Object.create(BrushTip.prototype);
+Tips.Rough1.prototype.constructor=Tips.Rough1;
+Tips.Rough1.prototype._points=null;
+Tips.Rough1.prototype._render=function(options){
+BrushTip.prototype._render.call(this,options);
+var pressure=checkNumber(options.pressure,1);
+var size=this.size;
+var ctx=this._currentCtx;
+ctx.fillStyle=`rgba(0,0,0,${this.opacity})`;
+var that=this;
+this._points.forEach(function(point,i){
+that._drawCircle(point.r*pressure,point.a,point.d,true)
+})}
+}());
+const hiddenSvg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+hiddenSvg.style.position="absolute";
+hiddenSvg.style.visibility="hidden";
+hiddenSvg.style.pointerEvents="none";
+document.body.appendChild(hiddenSvg);
+function getRoughOptions(){
+return{
+pointCount:parseInt(document.getElementById('pointCount').value),
+maxDist:parseInt(document.getElementById('maxDist').value),
+maxSize:parseInt(document.getElementById('maxSize').value)/2,
+opacity:parseInt(document.getElementById('opacity').value)/100
+}}
+function getSpacing(){return parseInt(document.getElementById('spacing').value)}
+function getWritingMode(){return document.querySelector('input[name="direction"]:checked').value}
+function getAlignment(){return document.querySelector('input[name="align"]:checked').value}
+function getLineSpacing(){return parseInt(document.getElementById('lineSpacing').value)/100}
+function getCharSpacing(){return parseInt(document.getElementById('charSpacing').value)/100}
+function measureText(font,text,fontSize){
+const path=font.getPath(text,0,0,fontSize);
+const bbox=path.getBoundingBox();
+return{width:bbox.x2-bbox.x1,height:bbox.y2-bbox.y1}
+}
+function calculateLineMetrics(font,chars,fontSize,charSpacing){
+let width=0;
+let height=0;
+chars.forEach((char,i)=>{
+if(char.trim()==='')return;
+const metrics=measureText(font,char,fontSize);
+width+=metrics.width+(i<chars.length-1?charSpacing:0);
+height=Math.max(height,metrics.height);
+});
+return{width,height};
+}
+function loadAndDrawText(){
+const startTime=performance.now();
+opentype.load('https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-jp/files/noto-sans-jp-all-400-normal.woff',function(err,font){
+if(err){console.error('Font loading error:',err);return}
+const text=document.getElementById('textInput').value;
+const lines=text.split('\n');
+const fontSize=100;
+const lineSpacing=fontSize*getLineSpacing();
+const charSpacing=fontSize*getCharSpacing();
+const isVertical=getWritingMode()==='vertical';
+const alignment=getAlignment();
+const canvas=document.querySelector('canvas');
+const ctx=canvas.getContext('2d');
+ctx.clearRect(0,0,canvas.width,canvas.height);
+hiddenSvg.innerHTML='';
+const padding=50;
+const lineMetrics=lines.map(line=>calculateLineMetrics(font,Array.from(line),fontSize,charSpacing));
+const maxWidth=Math.max(...lineMetrics.map(m=>m.width));
+const maxHeight=Math.max(...lineMetrics.map(m=>m.height));
+const totalWidth=isVertical?
+(lines.length*(fontSize+lineSpacing)):
+maxWidth;
+const totalHeight=isVertical?
+maxHeight:
+(lines.length*(fontSize+lineSpacing));
+canvas.width=Math.max(800,totalWidth+padding*2);
+canvas.height=Math.max(300,totalHeight+padding*2);
+lines.forEach((line,lineIndex)=>{
+const chars=Array.from(line);
+const metrics=lineMetrics[lineIndex];
+let currentX=padding;
+let currentY=padding+fontSize+lineIndex*(fontSize+lineSpacing);
+if(isVertical){
+currentX=padding+lineIndex*(fontSize+lineSpacing);
+currentY=padding+fontSize;
+if(alignment==='center'){
+currentY=(canvas.height-metrics.height)/2;
+}else if(alignment==='end'){
+currentY=canvas.height-metrics.height-padding;
+}
+}else{
+if(alignment==='center'){
+currentX=(canvas.width-metrics.width)/2;
+}else if(alignment==='end'){
+currentX=canvas.width-metrics.width-padding;
+}
+}
+chars.forEach((char,charIndex)=>{
+if(char.trim()==='')return;
+const charMetrics=measureText(font,char,fontSize);
+const path=font.getPath(char,currentX,currentY,fontSize);
+const pathData=path.toPathData();
+const svgPath=document.createElementNS("http://www.w3.org/2000/svg","path");
+svgPath.setAttribute("d",pathData);
+hiddenSvg.appendChild(svgPath);
+const brush=new Brush({
+path:svgPath,
+ctx:ctx,
+spacing:getSpacing(),
+tip:new Tips.Rough1(getRoughOptions())
+});
+brush.drawPath();
+if(isVertical){
+currentY+=charMetrics.height+charSpacing;
+}else{
+currentX+=charMetrics.width+charSpacing;
+}
+});
+});
+const endTime=performance.now();
+const timeInfo=document.getElementById('timeInfo');
+timeInfo.textContent=`描画時間: ${(endTime-startTime).toFixed(1)}ms`;
+})}
+window.onload=function(){
+document.querySelectorAll('input[type="range"]').forEach(input=>updateValue(input));
+loadAndDrawText();
+}
+</script>
+</body>
+</html>
