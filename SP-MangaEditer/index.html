@@ -624,6 +624,27 @@ function getElementClasses(element) {
                     </div>
 
                     <hr>
+                    <div class="input-group">
+                        <button id="panelRandamCutButton">
+                            <span data-i18n="panelRandamCut">Randam Cut</span>
+                        </button>
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="verticalRandomPanelCount">
+                        <input type="range" id="verticalRandomPanelCount" name="verticalRandomPanelCount" min="0" max="5" step="1" value="2">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="horizontalRandamPanelCount">
+                        <input type="range" id="horizontalRandamPanelCount" name="horizontalRandamPanelCount" min="0" max="5" step="1" value="3">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="tiltRandam">
+                        <input type="range" id="tiltRandam" name="tiltRandam" min="0" max="50" step="1" value="10">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="cutChangeRate">
+                        <input type="range" id="cutChangeRate" name="cutChangeRate" min="0" max="45" step="1" value="25">
+                    </div>
+
+
+
+                    <hr>
                     <button id="A4-H">
                         <i class="material-icons">crop_portrait</i>
                         <span data-i18n="A4-H-Scale">A4 Scale Panel</span>
@@ -1693,7 +1714,7 @@ function getElementClasses(element) {
     <script src="js/ui/custom-html-component.js?v=5.6" defer></script>
     <!-- <script src="js/ui/cursor.js?v=5.6" defer></script> -->
     <script src="js/util/LoadUtil.js?v=5.6" defer></script>
-
+    <script src="js/util/JsUtil.js?v=5.6" defer></script>
     <script src="js/util/FabricUtil.js?v=5.6" defer></script>
     <script src="js/util/ImageUtil.js?v=5.6" defer></script>
     <script src="js/util/AnimeUtil.js?v=5.6" defer></script>
@@ -1703,6 +1724,7 @@ function getElementClasses(element) {
     <script src="js/ProjectManagement.js?v=5.6" defer></script>
     <script src="js/Shortcut.js?v=5.6" defer></script>
     <script src="js/panel/Grid.js?v=5.6" defer></script>
+    <script src="js/panel/RandamCut.js?v=5.6" defer></script>
     <script src="js/sidebar/panel/PanelManager.js?v=5.6" defer></script>
     <script src="js/sidebar/panel/PanelTemplate.js?v=5.6" defer></script>
     <script src="js/PromptManager.js?v=5.6" defer></script>

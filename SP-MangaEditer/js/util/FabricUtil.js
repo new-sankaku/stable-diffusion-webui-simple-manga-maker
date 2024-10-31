@@ -576,6 +576,50 @@ function getPanelObjectList(){
   }
 }
 
+function getRandomPanel(){
+  var panelList = getPanelObjectList();
+  if (!panelList || panelList.length === 0) {
+    return null;
+  }
+  var randomIndex = Math.floor(Math.random() * panelList.length);
+  return panelList[randomIndex];
+}
+
+function getPanelCoordinates(panel) {
+  const points = panel.points;
+  const coords = points.map(point => {
+    const scaledX = point.x * panel.scaleX;
+    const scaledY = point.y * panel.scaleY;
+    
+    let rotatedX = scaledX;
+    let rotatedY = scaledY;
+    if (panel.angle) {
+      const radian = panel.angle * Math.PI / 180;
+      rotatedX = scaledX * Math.cos(radian) - scaledY * Math.sin(radian);
+      rotatedY = scaledX * Math.sin(radian) + scaledY * Math.cos(radian);
+    }
+    
+    return {
+      x: rotatedX + panel.left,
+      y: rotatedY + panel.top
+    };
+  });
+ 
+//   console.log(`
+//  実際の座標情報:
+//   点1: x1=${coords[0].x.toFixed(2)}, y1=${coords[0].y.toFixed(2)}
+//   点2: x2=${coords[1].x.toFixed(2)}, y2=${coords[1].y.toFixed(2)}
+//   点3: x3=${coords[2].x.toFixed(2)}, y3=${coords[2].y.toFixed(2)}
+//   点4: x4=${coords[3].x.toFixed(2)}, y4=${coords[3].y.toFixed(2)}
+  
+//   left=${panel.left}, top=${panel.top}
+//   scaleX=${panel.scaleX}, scaleY=${panel.scaleY}
+//   angle=${panel.angle}度
+//  `);
+ 
+  return coords;
+ }
+
 
 
 function getImageObjectListByLayerChecked(){
@@ -658,3 +702,17 @@ function createCanvasFromFabricImage(fabricImage) {
 
   return tempCanvas;
 }
+
+function getCenterXByFabricObject(obj) {
+  return obj.left + (obj.width * obj.scaleX) / 2;
+}
+
+function getCenterYByFabricObject(obj) {
+  return obj.top + (obj.height * obj.scaleY) / 2;
+}
+
+function getPointAtDistance(startX, startY, angle, distance){
+  const x = startX + Math.cos(angle) * distance;
+  const y = startY + Math.sin(angle) * distance;
+  return { x, y };
+};

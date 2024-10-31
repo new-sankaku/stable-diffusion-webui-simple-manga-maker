@@ -4,6 +4,12 @@
 const resources = {
   ja: {
     translation: {
+"panelRandamCut":"ランダムカット",
+"verticalRandomPanelCount":"縦のカット数",
+"horizontalRandamPanelCount":"横のカット数",
+"tiltRandam":"カット傾斜％",
+"cutChangeRate":"カット線変化％",
+
 "moveLockButton":"移動のON/OFFができます。",
 "T2I_AllRun":"T2I All Run",
 "gradientLayer":"グラデーションんレイヤー",
@@ -439,6 +445,11 @@ const resources = {
   },
 en: {
     translation: {
+"panelRandamCut": "Random Cut",
+"verticalRandomPanelCount": "Vertical Cut Count",
+"horizontalRandamPanelCount": "Horizontal Cut Count",
+"tiltRandam": "Cut Tilt %",
+"cutChangeRate": "Cut Line Change %",
       "moveLockButton": "You can turn movement ON/OFF.",
       "gradientLayer": "Gradient Layer",
       "fillLayer": "Fill Layer",
@@ -961,6 +972,11 @@ en: {
 
   ko: {
 translation: {
+"panelRandamCut": "랜덤 컷",
+"verticalRandomPanelCount": "세로 컷 수",
+"horizontalRandamPanelCount": "가로 컷 수",
+"tiltRandam": "컷 기울기 %",
+"cutChangeRate": "컷 라인 변화 %",
   "moveLockButton": "이동을 켜고 끌 수 있습니다.",
   "gradientLayer": "그라데이션 레이어",
   "fillLayer": "채우기 레이어",
@@ -1407,6 +1423,11 @@ translation: {
   },
   fr: {
     translation: {
+"panelRandamCut": "Coupe Aléatoire",
+"verticalRandomPanelCount": "Nombre de Coupes Verticales",
+"horizontalRandamPanelCount": "Nombre de Coupes Horizontales",
+"tiltRandam": "Inclinaison de Coupe %",
+"cutChangeRate": "Variation de Ligne de Coupe %",
       "moveLockButton": "Vous pouvez activer/désactiver le mouvement.",
       "gradientLayer": "Calque de dégradé",
       "fillLayer": "Calque de remplissage",
@@ -1890,6 +1911,11 @@ translation: {
   },
   zh: {
     translation: {
+"panelRandamCut": "随机切割",
+"verticalRandomPanelCount": "垂直切割数量",
+"horizontalRandamPanelCount": "水平切割数量",
+"tiltRandam": "切割倾斜度 %",
+"cutChangeRate": "切割线变化 %",
       "moveLockButton": "可以开启/关闭移动功能。",
       "gradientLayer": "渐变图层",
       "fillLayer": "填充图层",
@@ -2370,6 +2396,11 @@ translation: {
   },
   ru: {
     translation: {
+"panelRandamCut": "Случайная Резка",
+"verticalRandomPanelCount": "Количество Вертикальных Разрезов",
+"horizontalRandamPanelCount": "Количество Горизонтальных Разрезов",
+"tiltRandam": "Наклон Разреза %",
+"cutChangeRate": "Изменение Линии Разреза %",
       "moveLockButton": "Вы можете включить/выключить перемещение.",
       "gradientLayer": "Градиентный слой",
       "fillLayer": "Слой заливки",
@@ -2802,6 +2833,11 @@ translation: {
   },
   es: {
     translation: {
+"panelRandamCut": "Corte Aleatorio",
+"verticalRandomPanelCount": "Número de Cortes Verticales",
+"horizontalRandamPanelCount": "Número de Cortes Horizontales",
+"tiltRandam": "Inclinación de Corte %",
+"cutChangeRate": "Cambio de Línea de Corte %",
       "moveLockButton": "Puede activar/desactivar el movimiento.",
       "gradientLayer": "Capa de degradado",
       "fillLayer": "Capa de relleno",
@@ -3231,6 +3267,11 @@ translation: {
   },
   pt: {
     translation: {
+"panelRandamCut": "Corte Aleatório",
+"verticalRandomPanelCount": "Número de Cortes Verticais",
+"horizontalRandamPanelCount": "Número de Cortes Horizontais",
+"tiltRandam": "Inclinação do Corte %",
+"cutChangeRate": "Mudança da Linha de Corte %",
       "moveLockButton": "Você pode ativar/desativar o movimento.",
       "gradientLayer": "Camada de gradiente",
       "fillLayer": "Camada de preenchimento",
@@ -3658,6 +3699,11 @@ translation: {
   },
 th: {
 translation: {
+"panelRandamCut": "การตัดแบบสุ่ม",
+"verticalRandomPanelCount": "จำนวนการตัดแนวตั้ง",
+"horizontalRandamPanelCount": "จำนวนการตัดแนวนอน",
+"tiltRandam": "ความเอียงการตัด %",
+"cutChangeRate": "การเปลี่ยนแปลงเส้นตัด %",
   "moveLockButton": "คุณสามารถเปิด/ปิดการเคลื่อนไหวได้",
   "gradientLayer": "เลเยอร์ไล่ระดับสี",
   "fillLayer": "เลเยอร์เติมสี",
@@ -4130,6 +4176,11 @@ translation: {
   },
     de: {
       "translation": {
+"panelRandamCut": "Zufälliger Schnitt",
+"verticalRandomPanelCount": "Anzahl Vertikaler Schnitte",
+"horizontalRandamPanelCount": "Anzahl Horizontaler Schnitte",
+"tiltRandam": "Schnittneigung %",
+"cutChangeRate": "Schnittlinienänderung %",
         "moveLockButton": "Sie können die Bewegung EIN/AUS schalten.",
         "gradientLayer": "Verlaufsebene",
         "fillLayer": "Füllungsebene",

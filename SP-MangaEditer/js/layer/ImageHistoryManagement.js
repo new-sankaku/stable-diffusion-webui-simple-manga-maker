@@ -97,7 +97,7 @@ function saveStateByListener(event, eventType) {
 }
 
 function saveStateByManual() {
-    console.log( "saveStateByManual" );
+    // console.log( "saveStateByManual" );
     saveState();
 }
 

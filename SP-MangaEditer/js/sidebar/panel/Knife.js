@@ -65,6 +65,7 @@ canvas.on('mouse:up', function (options) {
   currentKnifeObject = null;
   currentKnifeLine = null;
 });
+
 canvas.on('mouse:move', function (options) {
   if (!isKnifeMode || !isKnifeDrawing) return;
 
@@ -85,6 +86,64 @@ canvas.on('mouse:move', function (options) {
   drawLine(startKnifeX, startKnifeY, endX, endY);
 });
 
+
+function blindSplitPanel( panel, isVertical){
+  var centerX = getCenterXByFabricObject(panel);
+  var centerY = getCenterYByFabricObject(panel);
+
+  var angle;
+  var tiltRandom = $("tiltRandam").value;
+  tiltRandom = generateRandomInt(tiltRandom);
+  var halfTilt = tiltRandom == 0 ? 0 : tiltRandom/2;
+  var cutChangeRate = $("cutChangeRate").value;
+
+  var changeRate = 10;
+  if(isVertical){
+    var widthPanel = panel.width;
+    changeRate = widthPanel * (cutChangeRate/100);
+  }else{
+    var heightPanel = panel.height;
+    changeRate = heightPanel * (cutChangeRate/100);
+  }
+  // -changeRateからchangeRateまでの整数がランダムに取得できます
+  const randomInt = Math.floor(Math.random() * (changeRate*2+1)) - changeRate;
+  // console.log("randomInt", randomInt);
+
+
+  if(isVertical){
+    centerX = centerX + randomInt;
+    angle = ((Math.random() * tiltRandom - halfTilt) + 90) * (Math.PI / 180);
+  }else{
+    centerY = centerY + randomInt;
+    angle = (Math.random() * tiltRandom - halfTilt) * (Math.PI / 180);
+  }
+
+  // console.log("angle", angle);
+
+  const pointAtpx = getPointAtDistance(centerX, centerY, angle, 50);
+
+  console.log("getPointAtDistance centerX, centerY, x, y", Math.floor(centerX), Math.floor(centerY), Math.floor(pointAtpx.x), Math.floor(pointAtpx.y));
+
+  var blindLine = drawLine(centerX, centerY, pointAtpx.x , pointAtpx.y, panel);
+  
+  if(blindLine !== null){
+    // console.log("blindLine.x1 ", blindLine.x1);
+    // console.log("blindLine.x2 ", blindLine.x2);
+    // console.log("blindLine.y1 ", blindLine.y1);
+    // console.log("blindLine.y2 ", blindLine.y2);  
+    var isSplit = splitPolygon(panel);
+    if( isSplit ){
+      canvas.renderAll();
+      console.log("ラインが引けた スプリット成功");
+      return true;
+    }else{
+      console.log("ラインが引けた スプリット失敗");
+    }
+  }else{  
+    console.log("ラインが引けなかった");
+  }
+  return false;
+}
 
 var knifeAssistAngle = 3;
 var currentKnifeObject = null;
@@ -196,10 +255,16 @@ function pointsAdjusted(points){
   return pointsTemp
 }
 
-function drawLine(startKnifeX, startKnifeY, endX, endY) {
+function drawLine(startKnifeX, startKnifeY, endX, endY, panel=null) {
+
+  if( panel !== null ){
+    currentKnifeObject = panel;
+    // console.log("exists panel");
+  }
+
   if (!currentKnifeObject) {
     // console.log("nothing currentKnifeObject");
-    return;
+    return null;
   }
 
   var points = currentKnifeObject.points;
@@ -211,7 +276,7 @@ function drawLine(startKnifeX, startKnifeY, endX, endY) {
   var scaleX = getScaleX();
   var scaleY = getScaleY();
 
-  // console.log("drawLine startKnifeX, startKnifeY, scaleX, scaleY", startKnifeX, startKnifeY, scaleX, scaleY);
+  // console.log("drawLine startKnifeX, startKnifeY, scaleX, scaleY", Math.floor(startKnifeX), Math.floor(startKnifeY), Math.floor(scaleX), Math.floor(scaleY));
 
   var intersections = [];
 
@@ -219,25 +284,35 @@ function drawLine(startKnifeX, startKnifeY, endX, endY) {
     var p1 = points[i];
     var p2 = points[(i + 1) % points.length];
 
-    // console.log("p1.x, p1.y, p2.x, p2.y", p1.x, p1.y, p2.x, p2.y);
 
     var p1x = (p1.x * scaleX) + offsetX;
     var p1y = (p1.y * scaleY) + offsetY;
     var p2x = (p2.x * scaleX) + offsetX;
     var p2y = (p2.y * scaleY) + offsetY;
 
-    // console.log("p1x, p1y, p2x, p2y, startKnifeX, startKnifeY, endX, endY", p1x, p1y, p2x, p2y, startKnifeX, startKnifeY, endX, endY);
+    // console.log("p1x, p1y, p2x, p2y", Math.floor(p1x), Math.floor(p1y), Math.floor(p2x), Math.floor(p2y));
 
-    var intersection = calculateIntersection(
-      p1x, p1y, p2x, p2y,
-      startKnifeX, startKnifeY, endX, endY
-    );
+    var intersection;
 
-    if (intersection) {
+    if( panel !== null ){
+      intersection = calculateIntersection(
+        p1x, p1y, p2x, p2y,
+        startKnifeX, startKnifeY, endX, endY
+      );
+    }else{
+      intersection = calculateIntersection2(
+        p1x, p1y, p2x, p2y,
+        startKnifeX, startKnifeY, endX, endY
+      );
+    }
+
+
+    if (intersection !== null) {
+      // console.log("intersection", JSON.stringify(intersection));
       intersections.push(intersection);
     }
   }
-
+  // console.log("intersections.length", intersections.length);
   if (intersections.length === 2) {
     // console.log("intersections", intersections);
 
@@ -248,11 +323,19 @@ function drawLine(startKnifeX, startKnifeY, endX, endY) {
       
       // console.log("intersection1.x, intersection1.y, intersection2.x, intersection2.y", intersection1.x, intersection1.y, intersection2.x, intersection2.y);
 
+      // console.log( "分割ライン:", Math.floor(intersection1.x),Math.floor(intersection1.y),Math.floor(intersection2.x),Math.floor(intersection2.y) );
+      
       var nextLine = new fabric.Line([intersection1.x, intersection1.y, intersection2.x, intersection2.y], {
-        stroke: 'red',
-        strokeWidth: 2,
-        selectable: false
+          stroke: 'red',
+          strokeWidth: 2,
+          selectable: false
       });
+      
+      // 作成された Line オブジェクトの座標と型も確認
+      // console.log("2 nextLine.x1 type:", typeof nextLine.x1, "value:", nextLine.x1);
+      // console.log("2 nextLine.y1 type:", typeof nextLine.y1, "value:", nextLine.y1);
+      // console.log("2 nextLine.x2 type:", typeof nextLine.x2, "value:", nextLine.x2);
+      // console.log("2 nextLine.y2 type:", typeof nextLine.y2, "value:", nextLine.y2);
 
       
       setNotSave(nextLine);
@@ -261,13 +344,19 @@ function drawLine(startKnifeX, startKnifeY, endX, endY) {
       if (currentKnifeLine) {
         setNotSave(currentKnifeLine);
         canvas.remove(currentKnifeLine);
+        // console.log( "分割ライン 前:", currentKnifeLine.x1, currentKnifeLine.y1, currentKnifeLine.x2, currentKnifeLine.y2 );
       }
       currentKnifeLine = nextLine;
+      // console.log( "分割ライン 後:", nextLine.x1, nextLine.y1, nextLine.x2, nextLine.y2 );
+      return currentKnifeLine;
     }
   }
+
+  return null;
 }
 
-function calculateIntersection(x1, y1, x2, y2, startKnifeX, startKnifeY, endX, endY) {
+
+function calculateIntersection2(x1, y1, x2, y2, startKnifeX, startKnifeY, endX, endY) {
   var a1 = y2 - y1;
   var b1 = x1 - x2;
   var c1 = a1 * x1 + b1 * y1;
@@ -287,6 +376,47 @@ function calculateIntersection(x1, y1, x2, y2, startKnifeX, startKnifeY, endX, e
     if (x >= Math.min(x1, x2) && x <= Math.max(x1, x2) && y >= Math.min(y1, y2) && y <= Math.max(y1, y2)) {
       return { x: x, y: y };
     } else {
+      return null;
+    }
+  }
+}
+
+function calculateIntersection(x1, y1, x2, y2, startKnifeX, startKnifeY, endX, endY) {
+  var a1 = y2 - y1;
+  var b1 = x1 - x2;
+  var c1 = a1 * x1 + b1 * y1;
+
+  var a2 = endY - startKnifeY;
+  var b2 = startKnifeX - endX;
+  var c2 = a2 * startKnifeX + b2 * startKnifeY;
+
+  var det = a1 * b2 - a2 * b1;
+
+  if (det === 0) {
+    // console.log("calculateIntersection det is 0");
+    return null; // Parallel lines
+  } else {
+    var x = (b2 * c1 - b1 * c2) / det;
+    var y = (a1 * c2 - a2 * c1) / det;
+
+    x = x.toFixed(2);
+    y = y.toFixed(2);
+    x1 = x1.toFixed(2);
+    x2 = x2.toFixed(2);
+    y1 = y1.toFixed(2);
+    y2 = y2.toFixed(2);
+
+    // console.log("x:", x, "x1:", x1, "x2:", x2, "min:", Math.min(x1, x2), "max:", Math.max(x1, x2));
+    // console.log("y:", y, "y1:", y1, "y2:", y2, "min:", Math.min(y1, y2), "max:", Math.max(y1, y2));
+    // console.log("x >= Math.min(x1, x2):", x >= Math.min(x1, x2));
+    // console.log("x <= Math.max(x1, x2):", x <= Math.max(x1, x2));
+    // console.log("y >= Math.min(y1, y2):", y >= Math.min(y1, y2));
+    // console.log("y <= Math.max(y1, y2):", y <= Math.max(y1, y2));
+
+    if (x >= Math.min(x1, x2) && x <= Math.max(x1, x2) && y >= Math.min(y1, y2) && y <= Math.max(y1, y2)) {
+      return { x: x, y: y };
+    } else {
+      // console.log("calculateIntersection not exists");
       return null;
     }
   }
@@ -381,6 +511,7 @@ function isHorizontal(resultLine, splitLine) {
   }
 }
 
+
 function adjustShapesBySplitLineDirection(resultLine, splitLine) {
   const tolerance = 5;
   var adjustment = $('knifePanelSpaceSize').value;
@@ -389,68 +520,171 @@ function adjustShapesBySplitLineDirection(resultLine, splitLine) {
   var offsetX = getCurrentLeft();
   var offsetY = getCurrentTop();
 
+  function getBoundingBox(polygon) {
+    const minX = Math.min(...polygon.map(p => p.x));
+    const maxX = Math.max(...polygon.map(p => p.x));
+    const minY = Math.min(...polygon.map(p => p.y));
+    const maxY = Math.max(...polygon.map(p => p.y));
+    
+    return {
+      min: { x: minX, y: minY },
+      max: { x: maxX, y: maxY },
+      width: maxX - minX,
+      height: maxY - minY,
+      center: {
+        x: (minX + maxX) / 2,
+        y: (minY + maxY) / 2
+      }
+    };
+  }
+
   if (resultLine.length === 2) {
     let poly1 = resultLine[0];
     let poly2 = resultLine[1];
 
-    let dx = splitLine[1].x - splitLine[0].x;
-    let dy = splitLine[1].y - splitLine[0].y;
+    // 元のポリゴンのバウンディングボックスを計算
+    let originalBox = getBoundingBox([...poly1, ...poly2]);
+    
+    // 閾値を元のサイズの10%に設定
+    const THRESHOLD_DISTANCE_X = originalBox.width * 0.1;
+    const THRESHOLD_DISTANCE_Y = originalBox.height * 0.1;
 
-    // 角度を計算（度数法）
-    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-    // 角度に基づいて水平または垂直を判断
-    // let isHorizontal = (angle > -45 && angle < 45) || (angle > 135 || angle < -135);
-    // console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
-
-    // 分割線の中央点を計算
+    // 各ポリゴンの中心点を計算
     let center1 = calculatePolygonCentroid(poly1);
     let center2 = calculatePolygonCentroid(poly2);
 
-    console.log("ポリゴン1の中心点:", center1);
-    console.log("ポリゴン2の中心点:", center2);
+    // console.log("ポリゴン1の中心点:", center1);
+    // console.log("ポリゴン2の中心点:", center2);
+    // console.log("X方向の閾値:", THRESHOLD_DISTANCE_X);
+    // console.log("Y方向の閾値:", THRESHOLD_DISTANCE_Y);
 
-    let isHorizontal = Math.abs(center1.y - center2.y) > Math.abs(center1.x - center2.x);
-    console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
+    // 中心点の距離を計算
+    let centerDiffY = Math.abs(center1.y - center2.y);
+    let centerDiffX = Math.abs(center1.x - center2.x);
 
+    let isHorizontal;
 
-    if (isHorizontal) {
-      // 水平の場合、Y軸のみ調整（X座標も範囲内かチェック）
-      resultLine[0] = poly1.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
-          point.y -= adjustment;
-          return { x: point.x, y: point.y };
-        }
-        return { x: point.x, y: point.y };
-      });
-
-      resultLine[1] = poly2.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
-          point.y += adjustment;
-          return { x: point.x, y: point.y }; 
-        }
-        return { x: point.x, y: ((point.y - offsetY)) + offsetY };
-      });
+    // 閾値との比較による判定
+    if (centerDiffY > THRESHOLD_DISTANCE_Y || centerDiffX > THRESHOLD_DISTANCE_X) {
+      // 閾値を超えている場合は、大きい方の差で判断
+      isHorizontal = (centerDiffY / THRESHOLD_DISTANCE_Y) > (centerDiffX / THRESHOLD_DISTANCE_X);
+      // console.log("中心点の距離が閾値を超えているため、距離差で判断");
+      // console.log("Y方向の差率:", centerDiffY / THRESHOLD_DISTANCE_Y);
+      // console.log("X方向の差率:", centerDiffX / THRESHOLD_DISTANCE_X);
     } else {
-      // 垂直の場合、X軸のみ調整（Y座標も範囲内かチェック）
-      resultLine[0] = poly1.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
-          point.x -= adjustment;
-          return { x: point.x, y: point.y };
-        }
-        return { x: point.x, y: point.y };
-      });
+      // 閾値以下の場合は、より詳細な判定を行う
+      let dx = splitLine[1].x - splitLine[0].x;
+      let dy = splitLine[1].y - splitLine[0].y;
+      let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      let isLineMoreHorizontal = Math.abs(angle) < 45 || Math.abs(angle) > 135;
+      
+      // 個別のバウンディングボックスも計算
+      let box1 = getBoundingBox(poly1);
+      let box2 = getBoundingBox(poly2);
+      let boxDiffY = Math.abs(box1.center.y - box2.center.y);
+      let boxDiffX = Math.abs(box1.center.x - box2.center.x);
 
-      resultLine[1] = poly2.map(point => {
-        if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
-          point.x += adjustment;
-          return { x: point.x, y: point.y };
-        }
-        return { x: ((point.x - offsetX)) + offsetX, y: point.y };
-      });
+      isHorizontal = isLineMoreHorizontal && 
+                    (centerDiffY > centerDiffX) && 
+                    (boxDiffY > boxDiffX);
+      // console.log("中心点の距離が閾値以下のため、複合的な判断を使用");
+      // console.log("分割線の角度:", angle);
     }
+
+    // console.log("分割線の向き:", isHorizontal ? "水平なので上下に分割" : "垂直なので左右に分割");
+
+    if (resultLine.length === 2) {
+      let poly1 = resultLine[0];
+      let poly2 = resultLine[1];
+  
+      // 中心点を計算
+      let center1 = calculatePolygonCentroid(poly1);
+      let center2 = calculatePolygonCentroid(poly2);
+  
+      if (isHorizontal) {
+          // 水平分割の場合、Y座標で上下を判断
+          let isFirstPolygonTop = center1.y < center2.y;
+          
+          // 上のポリゴンを上に、下のポリゴンを下に移動
+          if (isFirstPolygonTop) {
+              resultLine[0] = poly1.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.y -= adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: point.x, y: point.y };
+              });
+  
+              resultLine[1] = poly2.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.y += adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: point.x, y: ((point.y - offsetY)) + offsetY };
+              });
+          } else {
+              // poly2が上の場合は逆の処理
+              resultLine[0] = poly1.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.y += adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: point.x, y: point.y };
+              });
+  
+              resultLine[1] = poly2.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.y -= adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: point.x, y: ((point.y - offsetY)) + offsetY };
+              });
+          }
+      } else {
+          // 垂直分割の場合、X座標で左右を判断
+          let isFirstPolygonLeft = center1.x < center2.x;
+          
+          // 左のポリゴンを左に、右のポリゴンを右に移動
+          if (isFirstPolygonLeft) {
+              resultLine[0] = poly1.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.x -= adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: point.x, y: point.y };
+              });
+  
+              resultLine[1] = poly2.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.x += adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: ((point.x - offsetX)) + offsetX, y: point.y };
+              });
+          } else {
+              // poly2が左の場合は逆の処理
+              resultLine[0] = poly1.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.x += adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: point.x, y: point.y };
+              });
+  
+              resultLine[1] = poly2.map(point => {
+                  if (isSplitPoint(splitLine[0], tolerance, point) || isSplitPoint(splitLine[1], tolerance, point)) {
+                      point.x -= adjustment;
+                      return { x: point.x, y: point.y };
+                  }
+                  return { x: ((point.x - offsetX)) + offsetX, y: point.y };
+              });
+          }
+      }
+  }
+  
   }
 }
+
 
 
 function calculatePolygonCentroid(polygon) {
@@ -481,7 +715,7 @@ function calculatePolygonCentroid(polygon) {
 
 function splitPolygon(polygon) {
   if (!polygon || !polygon.points) {
-    return;
+    return null;
   }
   var points = pointsAdjusted(polygon.points)
 
@@ -531,7 +765,42 @@ function splitPolygon(polygon) {
       var extendX = (dx / length) * extendLength;
       var extendY = (dy / length) * extendLength;
 
-      var extendedLine = reader.read('LINESTRING(' + (splitPoint1[0] - extendX) + ' ' + (splitPoint1[1] - extendY) + ', ' + (splitPoint2[0] + extendX) + ' ' + (splitPoint2[1] + extendY) + ')');
+      // console.log("LINESTRING splitPoint1[0] ", splitPoint1[0]);
+      // console.log("LINESTRING splitPoint1[1] ", splitPoint1[1]);
+      // console.log("LINESTRING splitPoint2[0] ", splitPoint2[0]);
+      // console.log("LINESTRING splitPoint2[1] ", splitPoint2[1]);
+      // console.log("LINESTRING extendX type:", typeof extendX, "value:", extendX);
+      // console.log("LINESTRING extendY type:", typeof extendY, "value:", extendY);
+
+      // console.log("LINESTRING currentKnifeLine.x1 ", currentKnifeLine.x1);
+      // console.log("LINESTRING currentKnifeLine.x2 ", currentKnifeLine.x2);
+      // console.log("LINESTRING currentKnifeLine.y1 ", currentKnifeLine.y1);
+      // console.log("LINESTRING currentKnifeLine.y2 ", currentKnifeLine.y2);
+
+
+      // console.log("LINESTRING dx ", dx);
+      // console.log("LINESTRING dy ", dy);
+      // console.log("LINESTRING length ", length);
+      // console.log("LINESTRING extendLength ", extendLength);
+
+      if ([...splitPoint1, ...splitPoint2, extendX, extendY].some(isNaN)) {
+        return null;
+      }
+
+      // var extendedLine = reader.read('LINESTRING(' + (splitPoint1[0] - extendX) + ' ' + (splitPoint1[1] - extendY) + ', ' + (splitPoint2[0] + extendX) + ' ' + (splitPoint2[1] + extendY) + ')');
+// デバッグ用のログを追加
+// console.log("Type of splitPoint2[1]: ", typeof splitPoint2[1]);
+// console.log("Value of splitPoint2[1]: ", splitPoint2[1]);
+// console.log("Type of extendY: ", typeof extendY);
+// console.log("Value of extendY: ", extendY);
+
+      var y2 = Number(splitPoint2[1]) + Number(extendY);
+      var extendedLine = reader.read('LINESTRING(' + 
+          (Number(splitPoint1[0]) - Number(extendX)) + ' ' + 
+          (Number(splitPoint1[1]) - Number(extendY)) + ', ' + 
+          (Number(splitPoint2[0]) + Number(extendX)) + ' ' + 
+          y2.toFixed(2) + ')');
+
       union = poly.getExteriorRing().union(extendedLine);
       polygonizer = new jsts.operation.polygonize.Polygonizer();
       polygonizer.add(union);
@@ -562,7 +831,7 @@ function splitPolygon(polygon) {
     } else {
       setNotSave(currentKnifeLine);
       canvas.remove(currentKnifeLine);
-      return;
+      return null;
     }
 
     newPolygon1Points = resultLine[0];
@@ -622,7 +891,7 @@ function splitPolygon(polygon) {
     } else {
       setNotSave(currentKnifeLine);
       canvas.remove(currentKnifeLine);
-      return;
+      return null;
     }
 
     var strokeWidthScale = canvas.width / 700;
@@ -672,5 +941,7 @@ function splitPolygon(polygon) {
 
     currentKnifeObject = null;
     currentKnifeLine = null;
+
+    return true;
   }
 }
