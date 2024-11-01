@@ -49,4 +49,35 @@ function rundomPanelCut() {
   }
 }
 
+var multiPageType = 'mA4H';
+function selectChangeMultiPageTypeext(type) {
+  $(multiPageType + 'Button').classList.remove('selected');
+  $(type + 'Button').classList.add('selected');
+  multiPageType = type;
+}
+
+async function generateMultipage(){
+  const pageCount = $("pageCount").value;
+  var newPage = false;
+  for (let page = 1; page <= pageCount; page++) {
+    if( multiPageType === 'mA4H' ){
+      await loadBookSize(210,297,true,newPage);
+      rundomPanelCut();
+    }
+    if( multiPageType === 'mA4V' ){
+      await loadBookSize(297,210,true,newPage);
+      rundomPanelCut();
+    }
+    if( multiPageType === 'mB4H' ){
+      await loadBookSize(257,364,true,newPage);
+      rundomPanelCut();
+    }
+    if( multiPageType === 'mB4H' ){
+      await loadBookSize(364,257,true,newPage);
+      rundomPanelCut();
+    }
+    newPage = true;
+  }
+}
 $on($("panelRandamCutButton"), "click", () => rundomPanelCut());
+$on($("multiPageGenerate"), "click", () => generateMultipage());

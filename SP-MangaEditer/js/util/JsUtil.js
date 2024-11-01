@@ -3,7 +3,11 @@ function generateRandomInt(maxValue) {
   if (isNaN(intMaxValue)) {
       return 0;
   }
-  return parseInt(Math.floor(Math.random() * (intMaxValue + 1)), 10);
+  var result = parseInt(Math.floor(Math.random() * (intMaxValue + 1)), 10);
+  if( result === 0  ){
+    return 1;
+  }
+  return result;
 }
 
 function getRandomNumber(min, max) {

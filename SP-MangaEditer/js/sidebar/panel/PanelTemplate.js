@@ -1,10 +1,10 @@
 
-function loadBookSize(width, height, addPanel) {
+async function loadBookSize(width, height, addPanel, newPage=false) {
   // console.log("loadBookSize addPanel", addPanel);
 
-  if (stateStack.length > 2) {
-    console.log("呼び出し箇所２－４");
-    btmSaveZip().then(() => {
+  if (stateStack.length > 2 || newPage) {
+    // console.log("呼び出し箇所２－４");
+    await btmSaveZip().then(() => {
       setCanvasGUID();
     });
 

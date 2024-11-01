@@ -636,15 +636,39 @@ function getElementClasses(element) {
                         <input type="range" id="horizontalRandamPanelCount" name="horizontalRandamPanelCount" min="0" max="5" step="1" value="3">
                     </div>
                     <div class="input-container-leftSpace" data-i18n-label="tiltRandam">
-                        <input type="range" id="tiltRandam" name="tiltRandam" min="0" max="50" step="1" value="10">
+                        <input type="range" id="tiltRandam" name="tiltRandam" min="0" max="50" step="1" value="6">
                     </div>
                     <div class="input-container-leftSpace" data-i18n-label="cutChangeRate">
-                        <input type="range" id="cutChangeRate" name="cutChangeRate" min="0" max="45" step="1" value="25">
+                        <input type="range" id="cutChangeRate" name="cutChangeRate" min="0" max="45" step="1" value="10">
                     </div>
 
-
-
                     <hr>
+                    <div class="input-group">
+                        <button id="multiPageGenerate">
+                            <span data-i18n="multiPageGenerate">Multi Page Generate</span>
+                        </button>
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="pageCount">
+                        <input type="range" id="pageCount" name="pageCount" min="2" max="50" step="1" value="18">
+                    </div>
+                    <div class="input-group-multi">
+                        <label>A4</label>
+                        <button id="mA4HButton" class="selected" onclick="selectChangeMultiPageTypeext('mA4H')">
+                            <i class="material-icons">crop_portrait</i>
+                        </button>
+                        <button id="mA4VButton" onclick="selectChangeMultiPageTypeext('mA4V')">
+                            <i class="material-icons">crop_landscape</i>
+                        </button>
+                        <label>B4</label>
+                        <button id="mB4HButton" onclick="selectChangeMultiPageTypeext('mB4H')">
+                            <i class="material-icons">crop_portrait</i>
+                        </button>
+                        <button id="mB4VButton" onclick="selectChangeMultiPageTypeext('mB4V')">
+                            <i class="material-icons">crop_landscape</i>
+                        </button>
+                    </div>
+                    <hr>
+
                     <button id="A4-H">
                         <i class="material-icons">crop_portrait</i>
                         <span data-i18n="A4-H-Scale">A4 Scale Panel</span>
@@ -1641,7 +1665,6 @@ function getElementClasses(element) {
                             </div>
                             <textarea id="AdetilerModelsNegative" name="textarea" placeholder=" "></textarea>
                         </div>
-                        <hr>
                         <label style="font-size: 10px;" data-i18n="checSD_WebUI_Announce"/>
                     </div>
                 </div>
