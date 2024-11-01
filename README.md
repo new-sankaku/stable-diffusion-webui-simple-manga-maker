@@ -8,6 +8,7 @@ However, all functions can be used on the demo site only, not the extension.
 
 Manga Editor Desu! is a lightweight browser application designed for intuitive operation. It supports a variety of features such as drag-and-drop image import, file selection, Text2Image functionality, and Image2Image functionality. For beginners, it offers pre-equipped panel layouts, making it easy to create manga. Additionally, it includes a knife tool that allows for professional panel layout customization, enabling you to freely cut panels. The features are continuously evolving, and regular updates are recommended.
 For those who find updates bothersome, the Demo site is recommended.
+![image](https://github.com/user-attachments/assets/ccd2af66-cb89-44db-8e57-8c2678a7bb97)
 
 ## Main Page
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
