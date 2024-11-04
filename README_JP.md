@@ -12,7 +12,7 @@ ComfyUI:SD1.5, SDXL, Pony, Flux1
 
 デモサイトのみでもすべての機能を利用できます。
 
-[Desu!](https://new-sankaku.github.io/SP-MangaEditer/)
+[Web Site:Desu!](https://new-sankaku.github.io/SP-MangaEditer/)
 
 
 拡張機能ではなくローカル上にファイルを落としたい場合はこちらです。こっちのが早い。
