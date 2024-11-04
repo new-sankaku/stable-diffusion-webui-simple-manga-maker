@@ -1,14 +1,14 @@
 [英語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
-
-# Manga Editor Desu! Pro Edition
-WebUI, Forge, ComfyUIに接続する漫画制作用のWebアプリケーションサイトです。
-デモサイトを使用するか、WebUIに拡張機能として追加できます。ブラウザで動きます。
-
-サポート状況
-WebUI:SD1.5, SDXL, Pony
-Forge:SD1.5, SDXL, Pony, Flux1
-ComfyUI:SD1.5, SDXL, Pony, Flux1
-*:画像生成自体はWebUI or Forgeか、ComfyUIのAPIで行います。
+  
+# Manga Editor Desu! Pro Edition  
+WebUI, Forge, ComfyUIに接続する漫画制作用のWebアプリケーションサイトです。  
+デモサイトを使用するか、WebUIに拡張機能として追加できます。ブラウザで動きます。  
+  
+サポート状況  
+WebUI:SD1.5, SDXL, Pony  
+Forge:SD1.5, SDXL, Pony, Flux1  
+ComfyUI:SD1.5, SDXL, Pony, Flux1  
+*:画像生成自体はWebUI or Forgeか、ComfyUIのAPIで行います。  
 
 デモサイトのみでもすべての機能を利用できます。
 
