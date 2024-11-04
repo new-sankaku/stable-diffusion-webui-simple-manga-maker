@@ -1,4 +1,4 @@
-[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) | [æ—¥æœ¬èªž](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
+[:uk: English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) | [:jp: “ú–{Œê](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) | [:cn: ’†•¶](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CN.md)
 
 # Manga Editor Desu! Pro Edition
 A web application for manga creation that connects with WebUI, Forge, and ComfyUI.
