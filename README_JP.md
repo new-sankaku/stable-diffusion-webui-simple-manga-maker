@@ -11,6 +11,7 @@ ComfyUI:SD1.5, SDXL, Pony, Flux1
 *:画像生成自体はWebUI or Forgeか、ComfyUIのAPIで行います。
 
 デモサイトのみでもすべての機能を利用できます。
+
 [Desu!](https://new-sankaku.github.io/SP-MangaEditer/)
 
 
