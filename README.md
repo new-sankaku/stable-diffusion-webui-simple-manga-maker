@@ -1,6 +1,3 @@
-申し訳ありません。コードブロックを使って、完全な形で1つのコードとして回答いたします：
-
-```
 [English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) | [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
 # Manga Editor Desu! Pro Edition
@@ -130,4 +127,3 @@ git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-mak
 - Join our [Discord](https://discord.gg/XCp7dyHj3N) server
 
 Thank you for your interest in Manga Editor Desu! Pro Edition!
-```
