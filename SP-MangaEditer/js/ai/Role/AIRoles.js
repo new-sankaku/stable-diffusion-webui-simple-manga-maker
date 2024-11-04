@@ -14,7 +14,6 @@ const AI_ROLES = {
   Upscaler: "Upscaler",
   PutPrompt: "PutPrompt",
   PutSeed: "PutSeed",
-
   Temp: "Temp",
 };
 

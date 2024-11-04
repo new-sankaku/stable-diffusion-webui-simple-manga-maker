@@ -152,7 +152,9 @@ function t2_shadow_updateText() {
   const t2_shadow_lineHeight = parseFloat(t2_lineHeight.value);
   let t2_shadow_totalHeight = 0;
   
-  if (nowT2Orientation === "vertical") {
+  const selectedValue = getSelectedValueByGroup("orientation_group");
+
+  if (selectedValue === "vertical") {
     t2_shadow_mainText.setAttribute("writing-mode", "vertical-rl");
     t2_shadow_mainText.setAttribute("dominant-baseline", "ideographic");
     t2_shadow_mainText.setAttribute("glyph-orientation-vertical", "0");
@@ -184,7 +186,8 @@ function t2_shadow_updateText() {
   } else {
     t2_shadow_mainText.removeAttribute("writing-mode");
     t2_shadow_mainText.setAttribute("dominant-baseline", "hanging");
-    t2_shadow_mainText.setAttribute("text-anchor", nowT2Aligin);
+    const selectedValue = getSelectedValueByGroup("t2Align");
+    t2_shadow_mainText.setAttribute("text-anchor", selectedValue);
     t2_shadow_mainText.setAttribute("style", `font-family: "${t2_fontT2Selector.value}", "Noto Sans JP", "Yu Gothic", sans-serif;`);
     t2_shadow_lines.forEach((t2_shadow_line, t2_shadow_index) => {
       const t2_shadow_tspan = document.createElementNS(
@@ -259,10 +262,6 @@ function t2_shadow_updateStyles() {
 }
 
 function t2_shadow_updateSvgSize() {
-
-  // const err = new Error();
-  // console.log("t2_shadow_updateSvgSize", err.stack);
-
   try {
     const t2_shadow_bbox = t2_shadow_mainText.getBBox();
     const t2_shadow_maxShadowSize = Math.max(
@@ -273,7 +272,8 @@ function t2_shadow_updateSvgSize() {
     const t2_shadow_fontSize = parseFloat(t2_fontSize.value) || 40;
     
     let t2_shadow_x, t2_shadow_y, t2_shadow_width, t2_shadow_height;
-    if (nowT2Orientation === "vertical") {
+    const selectedValue = getSelectedValueByGroup("orientation_group");
+    if (selectedValue === "vertical") {
       t2_shadow_x = t2_shadow_bbox.x - t2_shadow_maxShadowSize;
       t2_shadow_y = t2_shadow_bbox.y - t2_shadow_maxShadowSize;
       t2_shadow_width = t2_shadow_bbox.width + 2 * t2_shadow_maxShadowSize + t2_shadow_fontSize;

@@ -120,8 +120,6 @@ function switchText2Ui(type) {
       t2_align_r = $("T2-align-right");
       t2_orientation_v = $("T2-Orientation-vertical");
       t2_orientation_l = $("T2-Orientation-horizontal");
-
-      
       break;
   }
 
@@ -207,33 +205,4 @@ function addT2EventListener(){
 
 function clearActiveT2Button() {
   // $(MODE_T2_SHADOW + 'Button').classList.remove('active-button');
-}
-
-var nowT2Aligin = "start";
-function alignText2(aligin){
-  nowT2Aligin = aligin;
-  $("T2-align-left").classList.remove('selected');
-  $("T2-align-center").classList.remove('selected');
-  $("T2-align-right").classList.remove('selected');
-
-  if(aligin == "start"){
-    $("T2-align-left").classList.add('selected');
-  } else if(aligin == "middle"){
-    $("T2-align-center").classList.add('selected');
-  } else{
-    $("T2-align-right").classList.add('selected');
-  }
-}
-
-var nowT2Orientation = "horizontal";
-function orientationText2(vertical){
-  nowT2Orientation = vertical;
-  $("T2-Orientation-vertical").classList.remove('selected');
-  $("T2-Orientation-horizontal").classList.remove('selected');
-
-  if(vertical == "vertical"){
-    $("T2-Orientation-vertical").classList.add('selected');
-  } else{
-    $("T2-Orientation-horizontal").classList.add('selected');
-  }
 }

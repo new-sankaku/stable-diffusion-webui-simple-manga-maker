@@ -75,25 +75,25 @@ function addCheckBox(id, label, value) {
 
 function addAlignTypeButton(prefixId) {
   return `
-  <div class="input-group-multi">
-    <button id="T2-align-left" class="selected" onclick="alignText2('start')">
+  <div class="input-group-multi" data-group="t2Align">
+    <button id="T2-align-left" data-value="start" class="selected" onclick="changeSelected(this)">
         <i class="material-icons">format_align_left</i>
     </button>
-    <button id="T2-align-center" onclick="alignText2('middle')">
+    <button id="T2-align-center" data-value="middle" onclick="changeSelected(this)">
         <i class="material-icons">format_align_center</i>
     </button>
-    <button id="T2-align-right" onclick="alignText2('end')">
+    <button id="T2-align-right" data-value="end" onclick="changeSelected(this)">
         <i class="material-icons">format_align_right</i>
     </button>
   </div>`;
 }
 
 function addOrientationButton(prefixId) {
-return `<div class="input-group-multi">
-    <button id="T2-Orientation-horizontal" class="selected" onclick="orientationText2('horizontal')">
+return `<div class="input-group-multi" data-group="orientation_group">
+    <button id="T2-Orientation-horizontal" data-value="horizontal" class="selected" onclick="changeSelected(this)">
       <i class="material-icons">east</i>
     </button>
-    <button id="T2-Orientation-vertical" onclick="orientationText2('vertical')">
+    <button id="T2-Orientation-vertical" data-value="vertical" onclick="changeSelected(this)">
       <i class="material-icons">south</i>
     </button>
   </div>`;

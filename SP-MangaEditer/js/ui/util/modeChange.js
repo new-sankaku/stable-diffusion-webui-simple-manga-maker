@@ -17,15 +17,6 @@ var cropFrame;
 var cropActiveObject;
 let nowPencil = "";
 
-function activeClearButton(){
-  var button = $('clearMode');
-  button.classList.add('selected');
-}
-function nonActiveClearButton(){
-  var button = $('clearMode');
-  button.classList.remove('selected');
-}
-
 function operationModeClear(){
   console.log("operationModeClear start")
   cropModeClear();

@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var fontsize = $("fontSizeSlider").value
     var fontStrokeWidth = $("fontStrokeWidthSlider").value
 
+    
+    const selectedValue = getSelectedValueByGroup("align_group");
     let style = {
       top: 50,
       left: 50,
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
       fill: $("textColorPicker").value,
       stroke: $("textOutlineColorPicker").value,
       strokeWidth: parseInt(fontStrokeWidth),
-      textAlign: textAlignment,
+      textAlign: selectedValue,
     };
     
     const cjkText = new VerticalTextbox("new", style);

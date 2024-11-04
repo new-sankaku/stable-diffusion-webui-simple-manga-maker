@@ -3,7 +3,6 @@ let flowWindowCount = 0;
 function createImagePromptHelperFlotingWindow(){
   flowCreateFloatingWindow('Image Prompt Helper', iphHtmlContent, 'rgba(0, 38, 255, 0.7)');
   
-  // フローティングウィンドウが作成された後に実行する処理
   setTimeout(() => {
     const saveButton = $('iph-save-button');
     const nameInput = $('iph-name-input');

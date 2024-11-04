@@ -175,11 +175,8 @@ function applyNeonEffect() {
   }
 }
 
-var textAlignment = 'left';
-function alignText(alignment) {
-
-  console.log("call alignment");
-  textAlignment = alignment;
+function alignText(alignment, button) {
+  var textAlignment = getSelectedValueByButton(button);
   var activeObject = canvas.getActiveObject();
 
   if( isVerticalText(activeObject) ){
@@ -200,13 +197,8 @@ function alignText(alignment) {
     activeObject.set('textAlign', alignment);
   }
   canvas.renderAll();
-  updateTextSelectedButton(alignment);
-}
 
-function updateTextSelectedButton(alignment) {
-  const buttons = document.querySelectorAll('.input-group-multi button');
-  buttons.forEach(button => button.classList.remove('selected'));
-  $('align-' + alignment).classList.add('selected');
+  changeSelected(button);
 }
 
 function createTextbox() {
@@ -215,6 +207,7 @@ function createTextbox() {
   var fontStrokeWidth = $("fontStrokeWidthSlider").value
 
   console.log("selectedFont", "New Text")
+  const selectedValue = getSelectedValueByGroup("align_group");
   var textbox = new fabric.Textbox(selectedFont, {
     width: 150,
     top: 50,
@@ -224,7 +217,7 @@ function createTextbox() {
     fill: $("textColorPicker").value,
     stroke: $("textOutlineColorPicker").value,
     strokeWidth: parseInt(fontStrokeWidth),
-    textAlign: textAlignment,
+    textAlign: selectedValue,
   });
 
   textbox.on('text:changed', function () {

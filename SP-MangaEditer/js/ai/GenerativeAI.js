@@ -22,14 +22,21 @@ function I2I( layer, spinner ){
 
 function getDiffusionInfomation() {
   if (API_mode == apis.A1111) {
-    fetchSD_Models();
-    fetchSD_Sampler();
-    fetchSD_Upscaler();
-    fetchSD_ADModels();
+    fetchSDOptions().then(() => {
+      fetchSD_Models();
+      fetchSD_Sampler();
+      fetchSD_Upscaler();
+      fetchSD_ADModels();
+      fetchSD_Modules();  
+    });
+    
   }else if( API_mode == apis.COMFYUI ){
     Comfyui_FetchModels();
     Comfyui_FetchSampler();
     Comfyui_FetchUpscaler();
+    Comfyui_VaeLoader();
+    Comfyui_ClipModels();
+    Comfyui_FetchObjectInfoOnly();
   }
 }
 
@@ -107,6 +114,21 @@ function updateModelDropdown(models) {
   });
 }
 
+function updateVaeDropdown(models) {
+  // console.log("updateVaeDropdown", JSON.stringify(models))
+
+  const dropdown = $('vaeDropdownId');
+  dropdown.innerHTML = '';
+  models.forEach(model => {
+    console.log("updateVaeDropdown push ", model.name)
+    const option = document.createElement('option');
+    option.value = model.name;
+    option.textContent = model.name;
+    dropdown.appendChild(option);
+  });
+}
+
+
 //Before:ABC.safetensors [23e4fa2b6f]
 //After :ABC.safetensors
 function removeHashStr(str) {
@@ -119,5 +141,12 @@ $('basePrompt_model').addEventListener('change', function(event){
   }else if( API_mode == apis.COMFYUI ){
     //TODO
   }
+});
 
+$('clipDropdownId').addEventListener('change', function(event){
+  if (API_mode == apis.A1111) {
+    sendClipToServer();
+  }else if( API_mode == apis.COMFYUI ){
+    //TODO
+  }
 });

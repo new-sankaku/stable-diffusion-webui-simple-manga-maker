@@ -10,7 +10,7 @@ async function processQueue(layer, spinnerId, fetchFunction, imageName) {
       createToastError("Generation error", "");
     }
   } catch (error) {
-    handleGenerationError(error);
+    console.error("processQueue", error);
   } finally {
     removeSpinner(spinnerId);
   }
@@ -90,7 +90,7 @@ async function sdWebUI_RembgProcessQueue(layer, spinnerId) {
       createToastError("Invalid background removal response", "");
     }
   } catch (error) {
-    handleGenerationError(error);
+    console.error("sdWebUI_RembgProcessQueue", error);
   } finally {
     removeSpinner(spinnerId);
   }

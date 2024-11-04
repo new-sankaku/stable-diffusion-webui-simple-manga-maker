@@ -92,7 +92,7 @@ async function Comfyui_queue_prompt(prompt) {
     }
 
     const response_data = await response.json();
-    console.log("サーバーからのレスポンス:", response_data);
+    // console.log("サーバーからのレスポンス:", response_data);
     return response_data;
 
   } catch (error) {
@@ -188,7 +188,7 @@ async function Comfyui_track_prompt_progress(prompt_id) {
         //akip
       } else {
         const message = JSON.parse(event.data);
-        console.log('WebSocketメッセージ:', message);
+        // console.log('WebSocketメッセージ:', message);
         if (
           message.type === "executing" &&
           message.data.node === null &&
@@ -211,14 +211,23 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
   console.log("Comfyui_handle_process_queue");
   if (!socket) Comfyui_connect();
   var requestData = baseRequestData(layer);
-  if (basePrompt.text2img_model != "")
+  if (basePrompt.text2img_model != ""){
     requestData["model"] = basePrompt.text2img_model;
+  }
 
   if (isT2I) {
-    selected_workflow = getComfyUI_T2I_BySDXL();
+    selected_workflow = getComfyUI_T2I();
   } else {
-    selected_workflow = getComfyUI_I2I_BySDXL();
+    selected_workflow = getComfyUI_I2I();
   }
+  
+  var classTypeLists = getClassTypeOnlyByJson(selected_workflow);
+  if(checkWorkflowNodeVsComfyUI(classTypeLists)){
+  }else{
+    removeSpinner(spinnerId);
+    return;
+  }
+    
 
   if (!isT2I) {
     var uploadFilename = generateFilename();
@@ -268,7 +277,7 @@ async function Comfyui_put_queue(workflow) {
   response = await Comfyui_get_history(prompt_id);
   if (!response) return { error: true, message: "Unknown error", details: "Please check ComfyUI console.",};
 
-  // console.error("Comfyui_put_queue response:", JSON.stringify(response));
+  console.log("Comfyui_put_queue response:", JSON.stringify(response));
 
   if (Comfyui_isError(response)) {
     const errorMessage = Comfyui_getErrorMessage(response);
@@ -317,7 +326,7 @@ async function Comfyui_uploadImage(layer, fileName = "i2i_temp.png", overwrite =
     }
 
     const result = await response.json();
-    console.log("Upload successful:", result);
+    // console.log("Upload successful:", result);
     return result;
   } catch (error) {
     console.error("Error uploading image:", error);
@@ -354,15 +363,55 @@ async function Comfyui_FetchUpscaler() {
 async function Comfyui_FetchModels() {
   try {
     const data = await Comfyui_FetchObjectInfo("CheckpointLoaderSimple");
-    console.log("Comfyui_FetchModels:", data);
+    // console.log("Comfyui_FetchModels CheckpointLoaderSimple:", data);
     const models = data.CheckpointLoaderSimple.input.required.ckpt_name[0].map(
       (name) => ({ title: name, model_name: name })
     );
-    updateModelDropdown(models);
+
+    const dataUnet = await Comfyui_FetchObjectInfo("UNETLoader");
+    // console.log("Comfyui_FetchModels UNETLoader:", dataUnet);
+    const modelsUnet = dataUnet.UNETLoader.input.required.unet_name[0].map(
+      (name) => ({ title: name, model_name: name })
+    );
+
+    const allModels = [...models, ...modelsUnet].sort((a, b) => {
+      return a.title.localeCompare(b.title);
+    });
+
+    updateModelDropdown(allModels);
   } catch (error) {
     console.error("Comfyui_FetchModels: Fetch error", error);
   }
 }
+
+async function Comfyui_ClipModels() {
+  try {
+    const data = await Comfyui_FetchObjectInfo("DualCLIPLoader");
+    // console.log("Comfyui_FetchModels Comfyui_ClipModels:", JSON.stringify(data));
+    const results = data.DualCLIPLoader.input.required.clip_name1[0].map(
+      (name) => ({ n: name, p: 0 })
+    );
+
+    updateTagifyDropdown("clipDropdownId", results);
+  } catch (error) {
+    console.error("Comfyui_ClipModels: Fetch error", error);
+  }
+}
+async function Comfyui_VaeLoader() {
+  try {
+    const dataUnet = await Comfyui_FetchObjectInfo("VAELoader");
+    // console.log("Comfyui_FetchModels Comfyui_VaeLoader:", JSON.stringify(dataUnet) );
+    const results = dataUnet.VAELoader.input.required.vae_name[0].map(
+      (name) => ({ name: name })
+    );
+
+    updateVaeDropdown(results);
+  } catch (error) {
+    console.error("Comfyui_VaeLoader: Fetch error", error);
+  }
+}
+
+
 
 async function Comfyui_FetchObjectInfo(nodeName) {
     const url = Comfyui_getUrl() + `object_info/` + nodeName;
@@ -372,9 +421,29 @@ async function Comfyui_FetchObjectInfo(nodeName) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log("Comfyui_FetchObjectInfo:", data);
+      // console.log("Comfyui_FetchObjectInfo:", data);
       return data;
     } catch (error) {
       console.error("Comfyui_Fetch: Fetch error", nodeName);
     }
+}
+
+var comfyObjectInfoList;
+async function Comfyui_FetchObjectInfoOnly() {
+  const url = Comfyui_getUrl() + `object_info`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    const nodeNames = Object.keys(data);
+    // console.log("Node names:", nodeNames);
+    comfyObjectInfoList = nodeNames;
+    return nodeNames;
+  } catch (error) {
+    console.error("Comfyui_FetchObjectInfoOnly: Fetch error:", error);
+    return [];
+  }
 }

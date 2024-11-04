@@ -28,20 +28,21 @@ var sdWebUI_API_samplers = '';
 var sdWebUI_API_interrogate = '';
 var sdWebUI_API_rembg = '';
 var sdWebUI_API_adetilerModel = '';
-
+var sdWebUI_API_sdModules = '';
 function sdWebUI_reBuild_URL() {
-  sdWebUI_API_ping = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/internal/ping'
-  sdWebUI_API_sampler = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
-  sdWebUI_API_scheduler = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/schedulers'
-  sdWebUI_API_upscaler = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/upscalers'
-  sdWebUI_API_sdModel = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/sd-models'
-  sdWebUI_API_T2I = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/txt2img'
-  sdWebUI_API_I2I = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/img2img'
-  sdWebUI_API_options = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/options'
-  sdWebUI_API_samplers = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
-  sdWebUI_API_interrogate = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/interrogate'
-  sdWebUI_API_rembg = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/rembg'
-  sdWebUI_API_adetilerModel = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/adetailer/v1/ad_model'
+  sdWebUI_API_ping            = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/internal/ping'
+  sdWebUI_API_sampler         = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
+  sdWebUI_API_scheduler       = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/schedulers'
+  sdWebUI_API_upscaler        = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/upscalers'
+  sdWebUI_API_sdModel         = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/sd-models'
+  sdWebUI_API_T2I             = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/txt2img'
+  sdWebUI_API_I2I             = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/img2img'
+  sdWebUI_API_options         = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/options'
+  sdWebUI_API_samplers        = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
+  sdWebUI_API_interrogate     = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/interrogate'
+  sdWebUI_API_sdModules       = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/sd-modules'
+  sdWebUI_API_rembg           = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/rembg'
+  sdWebUI_API_adetilerModel   = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/adetailer/v1/ad_model'
 }
 sdWebUI_reBuild_URL();
 
@@ -106,6 +107,7 @@ function baseRequestData(layer) {
     "cfg_scale": basePrompt.text2img_cfg_scale,
     "scheduler": basePrompt.text2img_scheduler,
     "do_not_save_grid": true,
+    "scheduler": "simple",
     "save_images": true,
   };
 
@@ -142,6 +144,6 @@ function baseRequestData(layer) {
     });
   }
 
-  console.log("requestData", JSON.stringify(requestData));
+  // console.log("requestData", JSON.stringify(requestData));
   return requestData;
 }

@@ -1,0 +1,42 @@
+@import url('root.css');
+
+.tagify {
+  --tags-border-color: var(--color-dark-grey);
+  --tags-hover-border-color: var(--border-color-C);
+  --tags-focus-border-color: var(--border-color-C);
+  width: 100%;
+  max-width: none;
+  background-color: #2a2a2a;
+}
+.tagify__tag {
+  --tag-bg: var(--button-backgroun);
+  --tag-hover: var(--border-color-C);
+  --tag-text-color: #e0e0e0;
+  --tag-border-radius: 4px;
+  --tag-pad: 0.3em 0.5em;
+}
+.tagify__tag > div {
+  color: #e0e0e0 !important;
+}
+.tagify__tag__removeBtn {
+  color: #bb86fc;
+}
+.tagify__input {
+  color: #e0e0e0;
+}
+.tagify__input::placeholder {
+  color: #9e9e9e;
+  opacity: 1;
+}
+.tagify__dropdown {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  overflow-y: auto;
+}
+.tagify__dropdown__wrapper {
+  max-height: inherit;
+  overflow: auto;
+}
+.tagify__dropdown__item--active {
+  background-color: var(--color-dark-grey);
+}

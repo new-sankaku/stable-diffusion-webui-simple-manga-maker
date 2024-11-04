@@ -1,3 +1,29 @@
+function getComfyUI_T2I(){
+
+    const selectedValue = getSelectedValueByGroup("generateModelGroup");
+
+    if ( selectedValue === "SD" ) {
+        return getComfyUI_T2I_BySDXL();
+
+    } else if ( selectedValue === "Flux" ) {
+        var generateWorkflow = getSelectedValueByGroup("generateWorkflow");
+        if("Simple" === generateWorkflow)    return getComfyUI_T2I_ByFluxSimple();
+        if("Diffution" === generateWorkflow) return getComfyUI_T2I_ByFluxDiffusion();
+        if("NF4" === generateWorkflow)       return getComfyUI_T2I_ByFluxNF4();
+
+    }
+    console.error("getComfyUI_T2I workflow is unknow.");
+    return null;
+}
+function getComfyUI_I2I(){
+    var generateWorkflow = getSelectedValueByGroup("generateWorkflow");
+    if("Simple" === generateWorkflow)    return getComfyUI_I2I_BySDXL();
+    if("Diffution" === generateWorkflow) return getComfyUI_I2I_BySDXL();
+    if("NF4" === generateWorkflow)       return getComfyUI_I2I_BySDXL();
+    return null;
+    
+}
+
 function Comfyui_isError(response) {
     if (response && typeof response === 'object') {
         const promptId = Object.keys(response)[0];
@@ -46,29 +72,89 @@ function Comfyui_isError(response) {
   
   
   function Comfyui_replace_placeholders(workflow, requestData, isT2I=true) {
+
+    const dualClip = getSelectedTagifyValues("clipDropdownId");
+    console.log("dualClip,", JSON.stringify(dualClip));
+
     const builder = createWorkflowBuilder(workflow);
-    builder.updateNodesByType("KSampler", {
+    builder.updateNodesByType("KSampler", 
+        {
             seed: requestData["seed"]=="-1" ? Math.floor(Math.random() * 50000000) : requestData["seed"],
             steps: requestData["steps"],
             cfg: requestData["cfg_scale"],
             sampler_name: Comfyui_getValueByID("basePrompt_samplingMethod")
         })
-    .updateNodesByType("CheckpointLoaderSimple", {
+
+    .updateNodesByType("RandomNoise", 
+        {
+            noise_seed: requestData["seed"]=="-1" ? Math.floor(Math.random() * 537388471760656) : requestData["seed"]
+        })
+        
+    .updateNodesByType("KSamplerSelect", 
+        {
+            sampler_name: Comfyui_getValueByID("basePrompt_samplingMethod")
+        })
+    .updateNodesByType("BasicScheduler", 
+        {
+            steps: requestData["steps"],
+        })
+        
+    .updateNodesByType("CheckpointLoaderSimple", 
+        {
             ckpt_name: Comfyui_getValueByID("basePrompt_model")
         })
-    .updateNodesByType("CLIPTextEncode", {
+    .updateNodesByType("UNETLoader", 
+        {
+            unet_name: Comfyui_getValueByID("basePrompt_model")
+        })
+    .updateNodesByType("CheckpointLoaderNF4", 
+        {
+            ckpt_name: Comfyui_getValueByID("basePrompt_model")
+        })
+
+    .updateNodesByType("VAELoader", 
+        {
+            vae_name: Comfyui_getValueByID("vaeDropdownId")
+        })
+
+    .updateNodesByType("DualCLIPLoader", 
+        {
+            clip_name1: dualClip[0],
+            clip_name2: dualClip[1]
+        })
+
+    .updateNodesByType("CLIPTextEncode", 
+        {
             text: requestData["prompt"]
         }, "CLIPTextEncode_Prompt")
-    .updateNodesByType("CLIPTextEncode", {
+
+    .updateNodesByType("CLIPTextEncode", 
+        {
             text: requestData["negative_prompt"]
         }, "CLIPTextEncode_Negative")
-    .updateNodesByType("EmptyLatentImage", {
+    
+    .updateNodesByType("EmptyLatentImage", 
+        {
+            width: requestData["width"],
+            height: requestData["height"]
+        })
+
+    .updateNodesByType("EmptySD3LatentImage", 
+        {
+            width: requestData["width"],
+            height: requestData["height"]
+        })
+
+    .updateNodesByType("ModelSamplingFlux", 
+        {
             width: requestData["width"],
             height: requestData["height"]
         });
+                
 
     if( !isT2I ){
-        builder.updateNodesByType("KSampler", {
+        builder.updateNodesByType("KSampler", 
+        {
             denoise: Comfyui_getValueByID("img2img_denoise")
         }).updateNodesByType("LoadImage", {
             image: requestData["uploadFileName"]
@@ -106,3 +192,29 @@ function Comfyui_isError(response) {
       console.log("filename:", filename);
       return filename;
   }
+
+
+  function getClassTypeOnlyByJson(jsonData) {
+    const classTypes = Object.values(jsonData).map(item => item.class_type);
+    return classTypes;
+  }
+
+
+function checkWorkflowNodeVsComfyUI(workflowClassTypes) {
+    const setB = new Set(comfyObjectInfoList);
+    const result = [];
+    
+    for (const item of workflowClassTypes) {
+        if (!setB.has(item)) {
+            result.push(item);
+        }
+    }
+    if (result.length > 0) {
+        result.unshift("---");
+        result.push("---");
+        createToastError('Check ComfyUI Node! Not Exists!', result, 1000*10);
+        return false;
+    }else{
+        return true
+    }
+}

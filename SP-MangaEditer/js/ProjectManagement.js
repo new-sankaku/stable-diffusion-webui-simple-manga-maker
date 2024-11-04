@@ -286,17 +286,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 var localSettingsData = null;
   
-function loadSettingsLocalStrage(  ) {
-  createToast('Settings Load', [
-    'Canvas Background Color...',
-    'Api port/host/check...',
-    'Base Settings...',
-    'Dpi...',
-    'Grid, Layer, Controle...',
-    'Margin From Panel...',
-    'Knife Space Size...',
-    'Load Completed!!'
-  ], 1500);
+function loadSettingsLocalStrage() {
+    createToast('Settings Load', [
+      'Canvas Background Color...',
+      'Api port/host/check...',
+      'Base Settings...',
+      'Dpi...',
+      'Grid, Layer, Controle...',
+      'Margin From Panel...',
+      'Knife Space Size...',
+      'Load Completed!!'
+    ], 1500);
 
   const localSettingsData = localStorage.getItem('localSettingsData');
 
@@ -348,9 +348,9 @@ function loadSettingsLocalStrage(  ) {
     var nowExternalMode = localSettings.externalAI || apis.A1111;
     console.log("nowExternalMode, " + nowExternalMode);
     if( nowExternalMode === apis.A1111 ){
-      changeExternalAPI( "sdWebUIButton" );
+      changeExternalAPI( $("sdWebUIButton") );
     }else{
-      changeExternalAPI( "comfyUIButton" );
+      changeExternalAPI( $("comfyUIButton") );
     }
 
     basePrompt.text2img_prompt          = $('basePrompt_prompt').value;

@@ -10,8 +10,8 @@ body {
 }
 
 hr {
- border: 2px;
- height: 2px;
+ height: 3px;
+ margin: 4px !important;
  background: var(--text-border);
 }
 

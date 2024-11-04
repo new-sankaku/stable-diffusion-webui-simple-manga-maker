@@ -17,9 +17,33 @@ function fetchSD_ADModels() {
 }
 
 
+async function sendClipToServer() {
+  const dualClip = getSelectedTagifyValues("clipDropdownId");
+
+  console.log("sendClipToServer", dualClip);
+
+  const data = JSON.stringify({
+    forge_additional_modules: dualClip
+  });
+
+  fetch(sdWebUI_API_options, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: data
+  })
+    .then(response => response.json())
+    .then(data => {})
+    .catch((error) => {
+      alert('Failed to apply the model.');
+    });
+}
 
 async function sendModelToServer() {
   const modelValue = basePrompt.text2img_model;
+  console.log("sendModelToServer", $("basePrompt_model").value);
 
   const data = JSON.stringify({
     sd_model_checkpoint: modelValue
@@ -34,14 +58,13 @@ async function sendModelToServer() {
     body: data
   })
     .then(response => response.json())
-    .then(data => {
-    })
+    .then(data => {})
     .catch((error) => {
       alert('Failed to apply the model.');
     });
 }
 
-async function fetchOptions() {
+async function fetchSDOptions() {
   try {
     const response = await fetch(sdWebUI_API_options, {
       method: 'GET',
@@ -56,6 +79,13 @@ async function fetchOptions() {
     if ('sd_model_checkpoint' in data) {
       basePrompt.text2img_model = data.sd_model_checkpoint;
     }
+
+    if ('forge_additional_modules' in data) {
+      basePrompt.forge_additional_modules = data.forge_additional_modules.map(path => {
+        return path.replace(/\\/g, '/').split('/').pop();
+      });
+    }
+    
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }
@@ -74,12 +104,26 @@ async function fetchSD_Upscaler() {
 }
 
 async function fetchSD_Models() {
-  fetchOptions();
   const response = await fetch(sdWebUI_API_sdModel, { method: 'GET' });
   const models = await response.json();
   updateModelDropdown(models);
 }
 
+async function fetchSD_Modules() {
+  const response = await fetch(sdWebUI_API_sdModules, { method: 'GET' });
+  const rawModels = await response.json();
+  const results = rawModels.map(model => ({
+    n: model.model_name,
+    p: 0
+  }));
+
+  if(basePrompt.forge_additional_modules){
+    console.log("basePrompt.forge_additional_modules", basePrompt.forge_additional_modules);
+  }
+
+
+  updateTagifyDropdown("clipDropdownId", results, basePrompt.forge_additional_modules);
+}
 
 function sdwebui_apiHeartbeat() {
   const label = $('ExternalService_Heartbeat_Label');
