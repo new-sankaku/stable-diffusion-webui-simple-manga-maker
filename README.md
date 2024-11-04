@@ -7,7 +7,7 @@ You can either use the demo site or add it as an extension to WebUI. It runs in 
 ## Support Status
 - WebUI: SD1.5, SDXL, Pony
 - Forge: SD1.5, SDXL, Pony, Flux1
-- ComfyUI: SD1.5, SDXL, Pony, Flux1
+- ComfyUI: SD1.5, SDXL, Pony, Flux1  
 *Note: Image generation is performed through WebUI, Forge, or ComfyUI API.
 
 All features are available through the demo site alone.
