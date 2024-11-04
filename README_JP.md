@@ -1,15 +1,22 @@
 [英語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) : [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md)
 
 # Manga Editor Desu! Pro Edition
-これはStable diffusion WebUI (Forge)の拡張機能です。
+Stable diffusion WebUI (Forge)の拡張機能です。
 
-ただし、拡張機能ではなくデモサイトのみでもすべての機能を利用できます。
-[Desu!](https://new-sankaku.github.io/SP-MangaEditer/)  
+拡張機能ではなくデモサイトのみでもすべての機能を利用できます。
+[Desu!](https://new-sankaku.github.io/SP-MangaEditer/)
 
-Manga Editor Desu!は、直感的な操作を目指して設計された軽量なブラウザアプリケーションです。画像のドラッグアンドドロップ、ファイル選択によるインポート、Text2Image機能、Image2Image機能など、多彩な機能をサポートしています。初心者向けに標準装備されたコマ割りが用意されており、簡単にマンガを作成できます。また、プロ仕様のコマ割りが可能なナイフツールも備えており、自由にコマを切ることができます。機能は継続して発展し続けており、定期的なアップデートを推奨します。
+拡張機能ではなくローカル上にファイルを落としたい場合はこちらです。
+git clone https://github.com/new-sankaku/SP-MangaEditer.git
+cd SP-MangaEditer
+start index.html
 
-アップデートがめんどくさい方はDemoサイトを推奨しています。
+Manga Editor Desu!はWebアプリケーションです。
+ブラウザで動きます。
 
+画像のドラッグアンドドロップ、ファイル選択によるインポート、Text2Image機能、Image2Image機能など、多彩な機能をサポートしています。
+初心者向けに標準装備されたコマ割りが用意されており、簡単にマンガを作成できます。
+また、プロ仕様のコマ割りが可能なナイフツールも備えており、自由にコマを切ることができます。機能は継続して発展し続けており、定期的なアップデートを推奨します。
 
 ## Main Page
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
