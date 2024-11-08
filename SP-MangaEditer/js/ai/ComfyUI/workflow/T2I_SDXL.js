@@ -15,7 +15,7 @@ function getComfyUI_T2I_BySDXL(){
      "negative":["4",0],
      "latent_image":["5",0]
     },
-    "class_type":"KSamplerA",
+    "class_type":"KSampler",
     "_meta":{"title":"KSampler"}
    },
    "2":{
