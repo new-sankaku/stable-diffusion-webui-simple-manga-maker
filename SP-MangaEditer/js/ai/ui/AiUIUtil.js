@@ -11,7 +11,7 @@ function changeExternalAPI(button) {
   } else if ( selectedValue === "comfyUIButton" ) {
     API_mode = apis.COMFYUI;
     createToast("API CHANGE!", "COMFYUI", 2000);
-    updateAiModelType();
+    // updateAiModelType();
     $('apiSettingsUrlHelpe').innerHTML = `<a href="html/API_Help/comfyui_settings.html" target="_blank">${help}</a>`;
   }
 

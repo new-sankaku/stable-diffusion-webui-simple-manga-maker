@@ -1,57 +1,51 @@
 function rundomPanelCut() {
   var panel = getRandomPanel();
   var maxRetryCount = 1;
-  if (panel !== null) {
-    var vRandomCount = $("verticalRandomPanelCount").value;
-    var hRandomCount = $("horizontalRandamPanelCount").value;
-    vRandomCount = generateRandomInt(vRandomCount);
-    hRandomCount = generateRandomInt(hRandomCount);
-    
-    console.log("vRandomCount", vRandomCount);
-    console.log("hRandomCount", hRandomCount);
-
-    try {
-      changeDoNotSaveHistory();
-
-      var maxRetryCountSum = maxRetryCount * (vRandomCount + hRandomCount);
-      var retry = 0;
-      while (vRandomCount > 0 || hRandomCount > 0) {
-        if (retry > maxRetryCountSum) {
-          console.log("split retryCount over.");
-          return;
-        }
-
-        if (vRandomCount > 0) {
-          var isSplit = blindSplitPanel(panel, true);
-          if (isSplit) {
-            vRandomCount--;
-            panel = getRandomPanel();
-          } else {
-            retry++;
-          }
-        }
-        if (hRandomCount > 0) {
-          var isSplit = blindSplitPanel(panel, false);
-          if (isSplit) {
-            panel = getRandomPanel();
-            hRandomCount--;
-          } else {
-            retry++;
-          }
-        }
-      }
-    } finally {
-      changeDoSaveHistory();
-    }
-  } else {
+  
+  if (panel === null) {
     createToastError("Panel is ZERO.");
     console.log("panel is nothing.");
+    return;
+  }
+
+  var vRandomCount = generateRandomInt($("verticalRandomPanelCount").value);
+  var hRandomCount = generateRandomInt($("horizontalRandamPanelCount").value);
+  
+  console.log("vRandomCount", vRandomCount);
+  console.log("hRandomCount", hRandomCount);
+
+  try {
+    changeDoNotSaveHistory();
+
+    var cuts = [];
+    for (var i = 0; i < vRandomCount; i++) cuts.push('vertical');
+    for (var i = 0; i < hRandomCount; i++) cuts.push('horizontal');
+
+    cuts.sort(() => Math.random() - 0.5);
+    
+    var maxRetryCountSum = maxRetryCount * cuts.length;
+    var retry = 0;
+    
+    while (cuts.length > 0) {
+      if (retry > maxRetryCountSum) {
+        console.log("split retryCount over.");
+        return;
+      }
+
+      var currentCut = cuts[0];
+      var isSplit = blindSplitPanel(panel, currentCut === 'vertical');
+      
+      if (isSplit) {
+        cuts.shift();
+        panel = getRandomPanel();
+      } else {
+        retry++;
+      }
+    }
+  } finally {
+    changeDoSaveHistory();
   }
 }
-
-
-
-
 
 
 async function generateMultipage(){
