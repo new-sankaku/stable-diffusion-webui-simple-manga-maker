@@ -279,15 +279,16 @@ function AllRun(){
 
 
 function moveLockChange(obj){
-  obj.lockMovementX = !obj.lockMovementX;
-  obj.lockMovementY = !obj.lockMovementY;
+  obj.selectable = !obj.selectable;
+  canvas.discardActiveObject();
+  canvas.renderAll();
   updateLayerPanel();
 }
 
 function putMoveLockButton(buttonsDiv, layer, index) {
   var button = document.createElement("button");
   button.id = "moveLock-" + index;
-  if(layer.lockMovementX && layer.lockMovementY){
+  if(!layer.selectable){
     button.innerHTML = '<i class="material-icons">lock</i>';
   }else{
     button.innerHTML = '<i class="material-icons">control_camera</i>';

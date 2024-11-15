@@ -40,7 +40,7 @@ function clearSBLine(){
 
 function getNowLineStyle(){
   var sbopa = parseInt(sbFillOpacity.value) / 100;
-  var sbstw = parseInt(sbStrokeWidth.value);
+  var sbstw = parseFloat(sbStrokeWidth.value);
   switch (nowLine) {
     case "sb_b":
       return {fill: sbFillColor.value, stroke: sbStrokeColor.value, strokeWidth: sbstw, opacity: sbopa, strokeDashArray: [5, 5]}
