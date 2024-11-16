@@ -1,5 +1,3 @@
-
-
 class TaskQueue {
   constructor(concurrency) {
     this.concurrency = concurrency;
@@ -32,5 +30,24 @@ class TaskQueue {
       this.processQueue();
     }
   }
-}
 
+  getActiveCount() {
+    return this.activeCount;
+  }
+
+  getWaitingCount() {
+    return this.queue.length;
+  }
+
+  getTotalCount() {
+    return this.activeCount + this.queue.length;
+  }
+
+  getStatus() {
+    return {
+      active: this.getActiveCount(),
+      waiting: this.getWaitingCount(),
+      total: this.getTotalCount()
+    };
+  }
+}

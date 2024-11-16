@@ -37,26 +37,21 @@ function generateZip(){
 }
 
 
-function loadZip(zip, guid = null){
+async function loadZip(zip, guid = null){
   stateStack = [];
   imageMap.clear();
 
   var text2imgBasePromptFile = zip.file("text2img_basePrompt.json");
   if (text2imgBasePromptFile) {
-    text2imgBasePromptFile.async("string").then(function (content) {
-      Object.assign(basePrompt, JSON.parse(content));
-    });
+    const content = await text2imgBasePromptFile.async("string");
+    Object.assign(basePrompt, JSON.parse(content));
   }
 
-
   var canvasInfoFile = zip.file("canvas_info.json");
-  var canvasInfoPromise = canvasInfoFile
-    ? canvasInfoFile.async("string").then(function (content) {
-      return JSON.parse(content);
-    })
-    : Promise.resolve({ width: 750, height: 850 });
+  var canvasInfo = canvasInfoFile
+    ? JSON.parse(await canvasInfoFile.async("string"))
+    : { width: 750, height: 850 };
 
-  // var sortedFiles = Object.keys(zip.files).sort();
   var sortedFiles = Object.keys(zip.files).sort((a, b) => {
     const numA = a.match(/(\d+)/) ? parseInt(a.match(/(\d+)/)[0]) : -1;
     const numB = b.match(/(\d+)/) ? parseInt(b.match(/(\d+)/)[0]) : -1;
@@ -66,49 +61,43 @@ function loadZip(zip, guid = null){
     return numA - numB;
   });
 
-  //Image sort
-  sortedFiles.map(function (fileName) {
-    return zip.file(fileName).async("string").then(function (content) {
+  await Promise.all(sortedFiles.map(async (fileName) => {
+    try {
+      const content = await zip.file(fileName).async("string");
       if (fileName.endsWith(".img")) {
         let hash = fileName.split('.')[0];
         imageMap.set(hash, content);
       }
-    }).catch(function (error) {
+    } catch (error) {
       console.error("Failed to load file:", fileName, error);
-    });
-  });
+    }
+  }));
 
-  var promises = sortedFiles.map(function (fileName) {
-    return zip.file(fileName).async("string").then(function (content) {
-      if (fileName.endsWith(".json") && fileName !== "text2img_basePrompt.json" && fileName !== "canvas_info.json") {
-        try {
-          //console.log( "fileName JSON.parse(content)", fileName, " ", JSON.parse(content).length );
-          return JSON.parse(content);
-        } catch (e) {
-          console.error("JSON parse error in file:", fileName, e);
-        }
+  const jsonLoadPromises = sortedFiles.map(async (fileName) => {
+    try {
+      if (fileName.endsWith(".json") && 
+          fileName !== "text2img_basePrompt.json" && 
+          fileName !== "canvas_info.json") {
+        const content = await zip.file(fileName).async("string");
+        return JSON.parse(content);
       }
-    }).catch(function (error) {
+    } catch (error) {
       console.error("Failed to load file:", fileName, error);
-    });
-  });
-
-  Promise.all([canvasInfoPromise, ...promises]).then(function (allData) {
-    var canvasInfo = allData[0];
-    stateStack = allData.slice(1).filter((data, index) => {
-      const isDataDefined = data !== undefined;
-      return isDataDefined;
-    });
-
-    currentStateIndex = stateStack.length - 1;
-    resizeCanvasByNum(canvasInfo.width, canvasInfo.height)
-    lastRedo(guid);
-    // console.log("100 loadZip guid", guid);
-    if( guid ){
-      setCanvasGUID(guid);
     }
   });
+
+  const jsonResults = await Promise.all(jsonLoadPromises);
+  stateStack = jsonResults.filter(data => data !== undefined);
+
+  currentStateIndex = stateStack.length - 1;
+  resizeCanvasByNum(canvasInfo.width, canvasInfo.height);
+  lastRedo(guid);
+  
+  if(guid){
+    setCanvasGUID(guid);
+  }
 }
+
 
 // Variable to keep track of selected api model to use
 var API_mode = apis.A1111;

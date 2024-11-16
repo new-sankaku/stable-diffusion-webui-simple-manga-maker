@@ -11,8 +11,8 @@ function rundomPanelCut() {
   var vRandomCount = generateRandomInt($("verticalRandomPanelCount").value);
   var hRandomCount = generateRandomInt($("horizontalRandamPanelCount").value);
   
-  console.log("vRandomCount", vRandomCount);
-  console.log("hRandomCount", hRandomCount);
+  // console.log("vRandomCount", vRandomCount);
+  // console.log("hRandomCount", hRandomCount);
 
   try {
     changeDoNotSaveHistory();
@@ -71,6 +71,8 @@ async function generateMultipage(){
     }
     newPage = true;
   }
+  await btmSaveZip();
+
 }
 $on($("panelRandamCutButton"), "click", () => rundomPanelCut());
 $on($("multiPageGenerate"), "click", () => generateMultipage());

@@ -329,14 +329,14 @@ function loadSVGPlusReset(svgString, isLand=false) {
         obj.setCoords();
         obj.strokeWidth = strokeWidth;
         obj.hasControls = true;
-        obj.lockMovementX = true;
-        obj.lockMovementY = true;
+        obj.lockMovementX = false;
+        obj.lockMovementY = false;
         obj.lockRotation = false;
         obj.lockScalingX = false;
         obj.lockScalingY = false;
         obj.objectCaching = false;
-        obj.selectable = true;
         canvas.add(obj);
+        obj.selectable = false;
       }
     });
 

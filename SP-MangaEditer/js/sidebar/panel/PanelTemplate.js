@@ -51,8 +51,8 @@ function addSquareBySize(width, height) {
   var newHeight = height * heightScale - svgPaggingHeight - strokeWidth;
 
   // console.log("addSquareBySize height", height);
-  console.log("addSquareBySize svgPaggingWidth", svgPaggingWidth);
-  console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
+  // console.log("addSquareBySize svgPaggingWidth", svgPaggingWidth);
+  // console.log("addSquareBySize svgPaggingHeight", svgPaggingHeight);
   // console.log("addSquareBySize heightScale", heightScale);
   // console.log("addSquareBySize newHeight", newHeight);
 
@@ -74,7 +74,7 @@ function addSquareBySize(width, height) {
       objectCaching: false,
       transparentCorners: false,
       cornerColor: "Blue",
-      isPanel: true,
+      isPanel: true
     }
   );
 
@@ -82,9 +82,7 @@ function addSquareBySize(width, height) {
   setPanelValue(square);
   canvas.add(square);
 
-  square.lockMovementX = true;
-  square.lockMovementY = true;
-
+  square.selectable = false;
   updateLayerPanel();
 }
 

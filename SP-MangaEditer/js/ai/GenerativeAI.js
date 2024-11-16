@@ -1,5 +1,23 @@
+const sdQueue = new TaskQueue(1);
+const comfyuiQueue = new TaskQueue(1);
+
 var firstSDConnection = true;
 var firstComfyConnection = true;
+
+
+// 使用例
+function existsWaitQueue() {
+  const sdQueueStatus = sdQueue.getStatus();
+  if( sdQueueStatus.total > 0 ){
+    return true;
+  }
+
+  const comfyuiQueueStatus = sdQueue.getStatus();
+  if( comfyuiQueueStatus.total > 0 ){
+    return true;
+  }
+}
+
 
 function T2I( layer, spinner ){
   if (API_mode == apis.A1111) {

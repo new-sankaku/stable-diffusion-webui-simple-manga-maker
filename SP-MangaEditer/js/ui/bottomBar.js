@@ -1,3 +1,5 @@
+const btmImageZipMap = new Map();
+
 const btmDrawer = document.getElementById('btm-drawer');
 const btmDrawerHandle = document.getElementById('btm-drawer-handle');
 const btmImageContainer = document.getElementById('btm-image-container');
@@ -40,8 +42,8 @@ function btmSaveZip() {
     });
 }
 
-const btmImageZipMap = new Map();
 function btmAddImage(imageLink, zipBlob, guid) {
+    console.log("btmAddImage:", guid);
     const zipData = btmImageZipMap.get(guid);
 
     if (zipData) {
@@ -62,12 +64,7 @@ function btmAddImage(imageLink, zipBlob, guid) {
                 btmSaveZip().then(() => {
                 });
             }
-            const zipData = btmImageZipMap.get(guid);
-            JSZip.loadAsync(zipData.zipBlob).then(function (zip) {
-                loadZip(zip, guid);
-            }).catch(function (error) {
-                console.error("Error loading ZIP:", error);
-            });
+            chengeCanvasByGuid(guid);
         });
 
         const closeBtn = document.createElement('button');
@@ -154,3 +151,42 @@ document.addEventListener('DOMContentLoaded', function () {
     btmImageContainer.addEventListener('mousedown', btmStartDrag);
     window.addEventListener('resize', btmUpdateScrollButtons);
 });
+
+
+async function chengeCanvasByGuid(guid){
+    const zipData = btmImageZipMap.get(guid);
+    try {
+        const zip = await JSZip.loadAsync(zipData.zipBlob);
+        await loadZip(zip, guid);
+    } catch (error) {
+        console.error("Error loading ZIP:", error);
+        throw error;
+    }
+}
+
+
+//return [string, string]
+function btmGetGuids() {
+    return Array.from(btmImageZipMap.keys());
+}
+
+//return number
+function btmGetGuidIndex(targetGuid) {
+    const guids = Array.from(btmImageZipMap.keys());
+    return guids.indexOf(targetGuid);
+}
+
+//return number
+function btmGetGuidsSize() {
+    return btmImageZipMap.size;
+}
+
+//return guid
+function btmGetGuidByIndex(index) {
+    const guids = Array.from(btmImageZipMap.keys());
+    return guids[index];
+}
+
+function btmGetFirstGuidByIndex() {
+    return Array.from(btmImageZipMap.keys())[0];
+ }

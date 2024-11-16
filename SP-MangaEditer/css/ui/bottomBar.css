@@ -14,14 +14,14 @@ bottom:0;
 left:0;
 width:100%;
 background-color:rgba(0, 0, 0, 0.8);
-transition:transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+transition:transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 z-index:1000;
-box-shadow:0 0 20px rgba(0, 255, 255, 0.5);
+/* box-shadow:0 0 20px rgba(0, 255, 255, 0.5); */
 }
 
 .btm-drawer.btm-closed {
 transform:translateY(calc(100% - 20px));
-box-shadow:0 0 10px rgba(0, 255, 255, 0.3);
+/* box-shadow:0 0 10px rgba(0, 255, 255, 0.3); */
 }
 
 .btm-drawer-handle {
@@ -34,7 +34,7 @@ align-items:center;
 font-size:14px;
 text-transform:uppercase;
 letter-spacing:2px;
-transition:background-color 0.3s ease;
+/* transition:background-color 0.3s ease; */
 }
 
 .btm-drawer-handle:hover {
@@ -94,5 +94,5 @@ color:#e0e0e0;
 
 .neon-text {
 color:#00ffff;
-text-shadow:0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff;
+/* text-shadow:0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff; */
 }

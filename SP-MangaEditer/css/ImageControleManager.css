@@ -19,9 +19,8 @@
 }
 
 .panel {
- padding-left: var(--padding-sides-panel);
- padding-right: var(--padding-sides-panel);
- margin-bottom: var(--margin-bottom-panel);
+  padding-top: var(--padding-sides-panel);
+  margin-bottom: var(--margin-bottom-panel);
 }
 
 .control-item {

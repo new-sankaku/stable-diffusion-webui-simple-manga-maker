@@ -18,6 +18,7 @@ function toggleVisibility(id) {
     $("svg-container-landscape").style.display = "none";
     $("panel-manager-area").style.display = "none";
     $("custom-panel-manager-area").style.display = "none";
+    $("prompt-manager-area").style.display = "none";
     $("speech-bubble-area1").style.display = "none";
     $("speech-bubble-area2").style.display = "none";
     $("text-area").style.display = "none";

@@ -3,6 +3,12 @@
 const resources = {
   ja: {
     translation: {
+"normal_sex":"ノーマルなSex",
+"promptMultiAutoGenerate":"プロンプト自動設定",
+"promptManager":"Prompt Manager(α版)",
+"scenario":"シナリオ",
+"pageMultiAutoGenerate":"全ページ生成",
+
 "introBodySidePanelVertical":"簡易的な漫画画像を作るときはこれで十分です",
 "introTitleSidePanelVertical":"縦型テンプレートのパネル",
 "introBodySidePanelHorizontal":"簡易的な漫画画像を作るときはこれで十分です",
@@ -441,6 +447,11 @@ const resources = {
   },
 en: {
     translation: {
+"normal_sex": "Normal Sex",
+"promptMultiAutoGenerate": "Automatic Prompt Setup",
+"promptManager": "Prompt Manager (Alpha)",
+"scenario": "Scenario",
+"pageMultiAutoGenerate": "Generate All Pages",
 "introBodySidePanelVertical":"Sufficient for creating basic manga images",
 "introTitleSidePanelVertical":"Vertical Template Panels",
 "introBodySidePanelHorizontal":"Sufficient for creating basic manga images",
@@ -964,6 +975,11 @@ en: {
   },
   ko: {
 translation: {
+"normal_sex": "일반적인 섹스",
+"promptMultiAutoGenerate": "프롬프트 자동 설정",
+"promptManager": "프롬프트 관리자 (알파)",
+"scenario": "시나리오",
+"pageMultiAutoGenerate": "전체 페이지 생성",
 "introBodySidePanelVertical":"기본 만화 이미지 제작에 충분합니다",
 "introTitleSidePanelVertical":"세로형 템플릿 패널",
 "introBodySidePanelHorizontal":"기본 만화 이미지 제작에 충분합니다",
@@ -1409,6 +1425,11 @@ translation: {
   },
   fr: {
     translation: {
+"normal_sex": "Sexe Normal",
+"promptMultiAutoGenerate": "Configuration Automatique des Prompts",
+"promptManager": "Gestionnaire de Prompts (Alpha)",
+"scenario": "Scénario",
+"pageMultiAutoGenerate": "Générer Toutes les Pages",
 "introBodySidePanelVertical":"Suffisant pour créer des images manga basiques",
 "introTitleSidePanelVertical":"Panneaux Verticaux",
 "introBodySidePanelHorizontal":"Suffisant pour créer des images manga basiques",
@@ -1888,6 +1909,11 @@ translation: {
   },
   zh: {
     translation: {
+"normal_sex": "普通性行为",
+"promptMultiAutoGenerate": "提示词自动设置",
+"promptManager": "提示词管理器（α版）",
+"scenario": "场景",
+"pageMultiAutoGenerate": "生成所有页面",
 "introBodySidePanelVertical":"适用于创建基本漫画图像",
 "introTitleSidePanelVertical":"纵向模板面板",
 "introBodySidePanelHorizontal":"适用于创建基本漫画图像",
@@ -2367,6 +2393,11 @@ translation: {
   },
   ru: {
     translation: {
+"normal_sex": "Нормальный секс",
+"promptMultiAutoGenerate": "Автоматическая настройка промптов",
+"promptManager": "Менеджер промптов (альфа)",
+"scenario": "Сценарий",
+"pageMultiAutoGenerate": "Сгенерировать все страницы",
 "introBodySidePanelVertical":"Достаточно для создания базовых манга-изображений",
 "introTitleSidePanelVertical":"Вертикальные Шаблоны",
 "introBodySidePanelHorizontal":"Достаточно для создания базовых манга-изображений",
@@ -2795,6 +2826,11 @@ translation: {
   },
   es: {
     translation: {
+"normal_sex": "Sexo Normal",
+"promptMultiAutoGenerate": "Configuración Automática de Prompts",
+"promptManager": "Gestor de Prompts (Alpha)",
+"scenario": "Escenario",
+"pageMultiAutoGenerate": "Generar Todas las Páginas",
 "introBodySidePanelVertical":"Suficiente para crear imágenes manga básicas",
 "introTitleSidePanelVertical":"Paneles Verticales",
 "introBodySidePanelHorizontal":"Suficiente para crear imágenes manga básicas",
@@ -3221,6 +3257,11 @@ translation: {
   },
   pt: {
     translation: {
+"normal_sex": "Sexo Normal",
+"promptMultiAutoGenerate": "Configuração Automática de Prompts",
+"promptManager": "Gerenciador de Prompts (Alpha)",
+"scenario": "Cenário",
+"pageMultiAutoGenerate": "Gerar Todas as Páginas",
 "introBodySidePanelVertical":"Suficiente para criar imagens manga básicas",
 "introTitleSidePanelVertical":"Painéis Verticais",
 "introBodySidePanelHorizontal":"Suficiente para criar imagens manga básicas",
@@ -3648,6 +3689,11 @@ translation: {
   },
 th: {
 translation: {
+"normal_sex": "เพศสัมพันธ์ปกติ",
+"promptMultiAutoGenerate": "การตั้งค่าพรอมต์อัตโนมัติ",
+"promptManager": "ตัวจัดการพรอมต์ (อัลฟ่า)",
+"scenario": "สถานการณ์",
+"pageMultiAutoGenerate": "สร้างหน้าทั้งหมด",
 "introBodySidePanelVertical":"เพียงพอสำหรับการสร้างภาพมังงะพื้นฐาน",
 "introTitleSidePanelVertical":"แผงแนวตั้ง",
 "introBodySidePanelHorizontal":"เพียงพอสำหรับการสร้างภาพมังงะพื้นฐาน",
@@ -4126,6 +4172,11 @@ translation: {
   },
     de: {
 "translation": {
+"normal_sex": "Normaler Sex",
+"promptMultiAutoGenerate": "Automatische Prompt-Einstellung",
+"promptManager": "Prompt-Manager (Alpha)",
+"scenario": "Szenario",
+"pageMultiAutoGenerate": "Alle Seiten generieren",
 "introBodySidePanelVertical":"Ausreichend für einfache Manga-Bilder",
 "introTitleSidePanelVertical":"Vertikale Vorlagen",
 "introBodySidePanelHorizontal":"Ausreichend für einfache Manga-Bilder",

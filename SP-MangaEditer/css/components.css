@@ -262,15 +262,18 @@ button.selected {
  font-size: 16px;
  vertical-align: middle;
 }
+prompt-manager-area
 
 #text-preview-area input[type="text"],
 #shape-preview-area input[type="text"],
 #panel-manager-items input[type="text"],
+#prompt-manager-items input[type="text"],
 #custom-panel-manager-items input[type="text"],
 #speech-bubble-svg-preview-area1 input[type="text"],
 #text-preview-area button,
 #shape-preview-area button,
 #panel-manager-items button,
+#prompt-manager-items button,
 #custom-panel-manager-items button,
 #speech-bubble-svg-preview-area1 button {
  padding: var(--padding-button);

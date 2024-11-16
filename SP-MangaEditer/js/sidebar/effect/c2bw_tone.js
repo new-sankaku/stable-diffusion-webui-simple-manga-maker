@@ -8,21 +8,21 @@ async function C2BWStart() {
     await glfxApplyFilterToObject(activeObject, "glfxInk");
     if (glfxOriginalImage) {
       glfxCopiedImage = glfxOriginalImage.cloneNode();
-      glfxApply();
+      glfxApplyNoReset();
     }
 
     glfxOriginalImage = activeObject.getElement();
     await glfxApplyFilterToObject(activeObject, "glfxBrightnessContrast");
     if (glfxOriginalImage) {
       glfxCopiedImage = glfxOriginalImage.cloneNode();
-      glfxApply();
+      glfxApplyNoReset();
     }
 
     glfxOriginalImage = activeObject.getElement();
     await glfxApplyFilterToObject(activeObject, "glfxDotScreen");
     if (glfxOriginalImage) {
       glfxCopiedImage = glfxOriginalImage.cloneNode();
-      glfxApply();
+      glfxApplyNoReset();
     }
   }
 }

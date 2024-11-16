@@ -411,6 +411,14 @@ function glfxApply() {
     saveStateByManual();
   }
 }
+function glfxApplyNoReset() {
+  if (glfxCopiedImage) {
+    glfxOriginalImage = glfxCopiedImage.cloneNode();
+    glfxCopiedImage = null;
+    glfxOriginalImage = null;
+    saveStateByManual();
+  }
+}
 
 function glfxReset() {
   if (glfxOriginalImage) {

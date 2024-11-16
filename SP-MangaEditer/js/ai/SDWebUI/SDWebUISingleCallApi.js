@@ -1,4 +1,3 @@
-const sdQueue = new TaskQueue(1);
 
 async function processQueue(layer, spinnerId, fetchFunction, imageName) {
   console.log(`Processing queue for ${imageName}`);

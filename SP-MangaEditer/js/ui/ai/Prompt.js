@@ -1,6 +1,8 @@
 let promptIndex = 100000;
 
 function showT2IPrompts(layer) { 
+  console.log("showT2IPrompts layer.text2img_prompt:", layer.text2img_prompt);
+
   var otherControlsMini = $("other-controls-mini");
   otherControlsMini.innerHTML = `
 <div class="control textarea-control">
@@ -48,7 +50,6 @@ function showT2IPrompts(layer) {
         <span class="label">dummy</span>
     </div>
 </div>
-<hr>
 <div class="dual-number-control">
     <div class="control">
         <button id="promptRun"">Generate</button>
@@ -148,7 +149,6 @@ function showI2IPrompts(layer) {
         <span class="label">dummy202410130418</span>
     </div>
 </div>
-<hr>
 <div class="dual-number-control">
     <div class="control">
         <button id="promptRun"">Generate</button>

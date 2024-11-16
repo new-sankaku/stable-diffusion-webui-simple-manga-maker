@@ -122,7 +122,7 @@ function blindSplitPanel( panel, isVertical){
 
   const pointAtpx = getPointAtDistance(centerX, centerY, angle, 50);
 
-  console.log("getPointAtDistance centerX, centerY, x, y", Math.floor(centerX), Math.floor(centerY), Math.floor(pointAtpx.x), Math.floor(pointAtpx.y));
+  // console.log("getPointAtDistance centerX, centerY, x, y", Math.floor(centerX), Math.floor(centerY), Math.floor(pointAtpx.x), Math.floor(pointAtpx.y));
 
   var blindLine = drawLine(centerX, centerY, pointAtpx.x , pointAtpx.y, panel);
   
@@ -134,13 +134,13 @@ function blindSplitPanel( panel, isVertical){
     var isSplit = splitPolygon(panel);
     if( isSplit ){
       canvas.renderAll();
-      console.log("ラインが引けた スプリット成功");
+      // console.log("ラインが引けた スプリット成功");
       return true;
     }else{
-      console.log("ラインが引けた スプリット失敗");
+      // console.log("ラインが引けた スプリット失敗");
     }
   }else{  
-    console.log("ラインが引けなかった");
+    // console.log("ラインが引けなかった");
   }
   return false;
 }

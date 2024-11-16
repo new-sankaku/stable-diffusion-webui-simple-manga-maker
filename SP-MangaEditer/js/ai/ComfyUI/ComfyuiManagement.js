@@ -1,5 +1,4 @@
 let reader = new FileReader();
-const comfyuiQueue = new TaskQueue(1);
 
 var socket = null;
 const uuid = crypto.randomUUID();

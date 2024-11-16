@@ -152,31 +152,31 @@ function getElementClasses(element) {
         });
     </script>
 
-<link rel="stylesheet" href="css/css2.css?v=5.7">
-<link rel="stylesheet" href="css/icon.css?v=5.7">
-<link rel="stylesheet" href="css/form.css?v=5.7">
-<link rel="stylesheet" href="css/controls-mini.css?v=5.7">
-<link rel="stylesheet" href="css/common.css?v=5.7">
-<link rel="stylesheet" href="css/components.css?v=5.7">
-<link rel="stylesheet" href="css/layout.css?v=5.7">
-<link rel="stylesheet" href="css/ImageControleManager.css?v=5.7">
-<link rel="stylesheet" href="css/anime.css?v=5.7">
-<link rel="stylesheet" href="css/layoutLayer.css?v=5.7">
-<link rel="stylesheet" href="css/toast.css?v=5.7">
-<link rel="stylesheet" href="css/ui/modeChange.css?v=5.7">
-<link rel="stylesheet" href="css/ui/objectMenu.css?v=5.7">
-<link rel="stylesheet" href="css/ui/share.css?v=5.7">
-<link rel="stylesheet" href="css/ui/flowtingWindow.css?v=5.7">
-<link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=5.7">
-<link rel="stylesheet" href="css/tippy.css?v=5.7">
+<link rel="stylesheet" href="css/css2.css?v=5.8">
+<link rel="stylesheet" href="css/icon.css?v=5.8">
+<link rel="stylesheet" href="css/form.css?v=5.8">
+<link rel="stylesheet" href="css/controls-mini.css?v=5.8">
+<link rel="stylesheet" href="css/common.css?v=5.8">
+<link rel="stylesheet" href="css/components.css?v=5.8">
+<link rel="stylesheet" href="css/layout.css?v=5.8">
+<link rel="stylesheet" href="css/ImageControleManager.css?v=5.8">
+<link rel="stylesheet" href="css/anime.css?v=5.8">
+<link rel="stylesheet" href="css/layoutLayer.css?v=5.8">
+<link rel="stylesheet" href="css/toast.css?v=5.8">
+<link rel="stylesheet" href="css/ui/modeChange.css?v=5.8">
+<link rel="stylesheet" href="css/ui/objectMenu.css?v=5.8">
+<link rel="stylesheet" href="css/ui/share.css?v=5.8">
+<link rel="stylesheet" href="css/ui/flowtingWindow.css?v=5.8">
+<link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=5.8">
+<link rel="stylesheet" href="css/tippy.css?v=5.8">
 <link rel="stylesheet" href="third/tippy/tippy.css">
 <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css">
-<link rel="stylesheet" href="css/all.min.css?v=5.7">
+<link rel="stylesheet" href="css/all.min.css?v=5.8">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.3/css/flag-icons.min.css">
-<link rel="stylesheet" href="css/ui/blend.css?v=5.7">
-<link rel="stylesheet" href="css/ui/bottomBar.css?v=5.7">
-<link rel="stylesheet" href="css/ui/custom-html-components.css?v=5.7">
-<link rel="stylesheet" href="css/tagify.css?v=5.7">
+<link rel="stylesheet" href="css/ui/blend.css?v=5.8">
+<link rel="stylesheet" href="css/ui/bottomBar.css?v=5.8">
+<link rel="stylesheet" href="css/ui/custom-html-components.css?v=5.8">
+<link rel="stylesheet" href="css/tagify.css?v=5.8">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.css" rel="stylesheet" type="text/css" />
@@ -550,6 +550,7 @@ function getElementClasses(element) {
                 <i class="material-icons" id="intro_svg-container-landscape" onclick="toggleVisibility('svg-container-landscape');">crop_16_9</i>
                 <i class="material-icons" id="intro_page-manager-area" onclick="toggleVisibility('panel-manager-area');">dashboard</i>
                 <i class="material-icons" id="intro_custom-panel-manager-area" onclick="toggleVisibility('custom-panel-manager-area');">dashboard_customize</i>
+                <i class="material-icons" id="intro_prompt-manager-area" onclick="toggleVisibility('prompt-manager-area');">edit_note</i>
                 <i class="material-icons" id="intro_speech-bubble-area1" onclick="toggleVisibility('speech-bubble-area1');">chat_bubble</i>
                 <i class="material-icons" id="intro_speech-bubble-area2" onclick="toggleVisibility('speech-bubble-area2');">reviews</i>
                 <i class="material-icons" id="intro_text-area" onclick="toggleVisibility('text-area');">text_format</i>
@@ -575,7 +576,6 @@ function getElementClasses(element) {
             <div class="left_area" id="panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="pageManager">Page Manager</div>
                 <div id="panel-manager-items">
-                    <hr>
                     <div class="input-group">
                         <button id="knifeModeButton">
                             <span data-i18n="knifeMode">Knife Mode: OFF</span>
@@ -720,7 +720,6 @@ function getElementClasses(element) {
             <div class="left_area" id="custom-panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="custom-panel-manager-items">
-                    <hr>
                     <div class="input-group">
                         <label for="panelStrokeColor" data-i18n="line">Line:</label>
                         <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000"
@@ -832,6 +831,59 @@ function getElementClasses(element) {
                 </div>
             </div>
 
+
+
+
+
+
+
+
+
+
+
+
+            <div class="left_area" id="prompt-manager-area" style="display: none;">
+                <div class="area-header" data-i18n="promptManager">Prompt Manager</div>
+                <div id="prompt-manager-items">
+                    <div class="input-group">
+                        <label data-i18n="scenario"></label>
+                    </div>
+                    <div class="input-group">
+                        <select id="ScenarioPromptSelecter"></select>
+                    </div>
+
+                    <button id="" onclick="autoMultiPromptSet()">
+                        <i class="material-icons">generating_tokens</i>
+                        <span data-i18n="promptMultiAutoGenerate">Multi Prompt Generate</span>
+                    </button>
+                    <hr>
+                    <button id="" onclick="autoMultiGenerate()">
+                        <i class="material-icons">all_inbox</i>
+                        <span data-i18n="pageMultiAutoGenerate">Multi Page Generate</span>
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div class="left_area" id="speech-bubble-area1" style="display: none;">
                 <div class="area-header" data-i18n="bubble">Bubble</div>
                 <div id="speech-bubble-svg-preview-area1">
@@ -903,7 +955,7 @@ function getElementClasses(element) {
 
 
                     <div class="input-container-leftSpace" data-i18n-label="cornerRadius">
-                        <input type="range" id="sbSornerRadius" min="0" max="15" value="3">
+                        <input type="range" id="sbSornerRadius" min="0" max="15" value="1">
                     </div>
                     <div class="input-container-leftSpace" data-i18n-label="panelOpacity">
                         <input type="range" id="sbFillOpacity" min="0" max="100" value="100">
@@ -937,7 +989,6 @@ function getElementClasses(element) {
             <div class="left_area" id="text-area" style="display: none;">
                 <div class="area-header" data-i18n="text">Text</div>
                 <div id="text-preview-area">
-                    <hr>
                     <div class="input-group">
                         <label data-i18n="font">Font:</label>
                         <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
@@ -1155,7 +1206,6 @@ function getElementClasses(element) {
             <div class="left_area" id="controle-area" style="display: none;">
                 <div class="area-header" data-i18n="Controle">Controle</div>
                 <div id="controle-preview-area">
-                    <hr>
                     <div class="input-group">
                         <label>
                             <input type="checkbox" id="InfomationFPS" checked>
@@ -1216,7 +1266,6 @@ function getElementClasses(element) {
             <div class="left_area" id="shape-area" style="display: none;">
                 <div class="area-header" data-i18n="shape">Shape</div>
                 <div id="shape-preview-area">
-                    <hr>
                     <div class="input-group">
                         <input type="text" id="svg_icon_searchInput" placeholder="Enter icon name"
                             data-i18n="svg_icon_search_placeholder"
@@ -1712,111 +1761,116 @@ function getElementClasses(element) {
     <script src="third/intro/intro.min.js"></script>
     <script src="third/lodash/lodash.min.js" defer></script>
 
-    <script src="js/sidebar/pen/fabric/dist/fabric-brush.min.js?v=5.7"></script>
-    <script src="js/sidebar/pen/fabric/brushes/ink_brush.js?v=5.7"></script>
-    <!-- <script src="js/sidebar/pen/fabric/brushes/outlineBrush.js?v=5.7"></script> -->
+    <script src="js/sidebar/pen/fabric/dist/fabric-brush.min.js?v=5.8"></script>
+    <script src="js/sidebar/pen/fabric/brushes/ink_brush.js?v=5.8"></script>
+    <!-- <script src="js/sidebar/pen/fabric/brushes/outlineBrush.js?v=5.8"></script> -->
     <link rel="stylesheet" href="third/intro/introjs.min.css">
     <link rel="stylesheet" href="css/ui/intro.css?">
     <script src="third/tippy/popper.min.js"></script>
     <script src="third/tippy/tippy-bundle.umd.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script> -->
-    <link rel="stylesheet" href="css/styles-css.css?v=5.7">
-    <script src="js/core/Settings.js?v=5.7" defer></script>
+    <link rel="stylesheet" href="css/styles-css.css?v=5.8">
+    <script src="js/core/Settings.js?v=5.8" defer></script>
     <script src="third/jszip/jszip.min.js" defer></script>
     <script src="third/crypto-js/crypto-js.min.js"></script>
     <script src="third/Bootstrup/bootstrap.bundle.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     
-    <script src="js/ui/glfxUI.js?v=5.7" defer></script>
-    <script src="js/ui/canvasObjectMenu.js?v=5.7" defer></script>
-    <script src="js/ui/third/intro.js?v=5.7" defer></script>
-    <script src="js/ui/toast.js?v=5.7" defer></script>
-    <script src="js/ui/util/uiUtil.js?v=5.7" defer></script>
-    <script src="js/ui/third/tippy.js?v=5.7" defer></script>
-    <script src="js/ui/third/i18next.js?v=5.7" defer></script>
-    <script src="js/ui/util/modeChange.js?v=5.7" defer></script>
-    <script src="js/ui/util/tagifyUtil.js?v=5.7" defer></script>
-    <script src="js/ui/imagePromptHelper/promptHelper.js?v=5.7" defer></script>
-    <script src="js/ui/imagePromptHelper/hc-ImagePromptHelper.js?v=5.7" defer></script>
-    <script src="js/ui/imagePromptHelper/ImagePromptHelper.js?v=5.7" defer></script>
-    <script src="js/ui/ai/Prompt.js?v=5.7" defer></script>
+    <script src="js/ui/glfxUI.js?v=5.8" defer></script>
+    <script src="js/ui/canvasObjectMenu.js?v=5.8" defer></script>
+    <script src="js/ui/third/intro.js?v=5.8" defer></script>
+    <script src="js/ui/toast.js?v=5.8" defer></script>
+    <script src="js/ui/util/uiUtil.js?v=5.8" defer></script>
+    <script src="js/ui/third/tippy.js?v=5.8" defer></script>
+    <script src="js/ui/third/i18next.js?v=5.8" defer></script>
+    <script src="js/ui/util/modeChange.js?v=5.8" defer></script>
+    <script src="js/ui/util/tagifyUtil.js?v=5.8" defer></script>
+    <script src="js/ui/imagePromptHelper/promptHelper.js?v=5.8" defer></script>
+    <script src="js/ui/imagePromptHelper/hc-ImagePromptHelper.js?v=5.8" defer></script>
+    <script src="js/ui/imagePromptHelper/ImagePromptHelper.js?v=5.8" defer></script>
+    <script src="js/ui/ai/Prompt.js?v=5.8" defer></script>
 
-    <script src="js/ui/custom-html-component.js?v=5.7" defer></script>
-    <!-- <script src="js/ui/cursor.js?v=5.7" defer></script> -->
-    <script src="js/core/util/LoadUtil.js?v=5.7" defer></script>
-    <script src="js/core/util/JsUtil.js?v=5.7" defer></script>
-    <script src="js/core/util/FabricUtil.js?v=5.7" defer></script>
-    <script src="js/core/util/ImageUtil.js?v=5.7" defer></script>
-    <script src="js/core/util/AnimeUtil.js?v=5.7" defer></script>
-    <script src="js/core/util/ShareUtil.js?v=5.7" defer></script>
-    <script src="js/core/util/LogUtil.js?v=5.7" defer></script>
-    <script src="js/CanvasManager.js?v=5.7" defer></script>
-    <script src="js/ProjectManagement.js?v=5.7" defer></script>
-    <script src="js/Shortcut.js?v=5.7" defer></script>
-    <script src="js/panel/Grid.js?v=5.7" defer></script>
-    <script src="js/panel/RandamCut.js?v=5.7" defer></script>
-    <script src="js/sidebar/panel/PanelManager.js?v=5.7" defer></script>
-    <script src="js/sidebar/panel/PanelTemplate.js?v=5.7" defer></script>
-    <script src="js/ui/promptManager.js?v=5.7" defer></script>
-    <script src="js/ai/Role/AIRoles.js?v=5.7" defer></script>
-    <script src="js/ai/queue/Spinner.js?v=5.7" defer></script>
-    <script src="js/ai/queue/TaskQueue.js?v=5.7" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=5.7" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=5.7" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=5.7" defer></script>
-    <script src="js/ai/ComfyUI/util/ComfyUtil.js?v=5.7" defer></script>
-    <script src="js/ai/ComfyUI/util/ComfyUIWorkflowBuilder.js?v=5.7" defer></script>
-    <script src="js/ai/ComfyUI/ComfyuiManagement.js?v=5.7" defer></script>
-    <script src="js/ai/GenerativeAI.js?v=5.7" defer></script>
-    <script src="js/ai/ui/AiUIUtil.js?v=5.7" defer></script>
-    <script src="js/ai/prompt/BaseEventListener.js?v=5.7" defer></script>
-    <script src="js/layer/FloatingWindowManagement.js?v=5.7" defer></script>
-    <script src="js/layer/LayerButton.js?v=5.7" defer></script>
-    <script src="js/layer/LayerManagement.js?v=5.7" defer></script>
-    <script src="js/layer/ImageHistoryManagement.js?v=5.7" defer></script>
-    <script src="js/layer/blend/Blend.js?v=5.7" defer></script>
+    <script src="js/ui/custom-html-component.js?v=5.8" defer></script>
+    <!-- <script src="js/ui/cursor.js?v=5.8" defer></script> -->
+    <script src="js/core/util/LoadUtil.js?v=5.8" defer></script>
+    <script src="js/core/util/JsUtil.js?v=5.8" defer></script>
+    <script src="js/core/util/FabricUtil.js?v=5.8" defer></script>
+    <script src="js/core/util/ImageUtil.js?v=5.8" defer></script>
+    <script src="js/core/util/AnimeUtil.js?v=5.8" defer></script>
+    <script src="js/core/util/ShareUtil.js?v=5.8" defer></script>
+    <script src="js/core/util/LogUtil.js?v=5.8" defer></script>
+    <script src="js/CanvasManager.js?v=5.8" defer></script>
+    <script src="js/ProjectManagement.js?v=5.8" defer></script>
+    <script src="js/Shortcut.js?v=5.8" defer></script>
+    <script src="js/panel/Grid.js?v=5.8" defer></script>
+    <script src="js/panel/RandamCut.js?v=5.8" defer></script>
+    <script src="js/sidebar/panel/PanelManager.js?v=5.8" defer></script>
+    <script src="js/sidebar/panel/PanelTemplate.js?v=5.8" defer></script>
+    <script src="js/ui/promptManager.js?v=5.8" defer></script>
+    <script src="js/ai/Role/AIRoles.js?v=5.8" defer></script>
+    <script src="js/ai/queue/Spinner.js?v=5.8" defer></script>
+    <script src="js/ai/queue/TaskQueue.js?v=5.8" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=5.8" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=5.8" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=5.8" defer></script>
+    <script src="js/ai/ComfyUI/util/ComfyUtil.js?v=5.8" defer></script>
+    <script src="js/ai/ComfyUI/util/ComfyUIWorkflowBuilder.js?v=5.8" defer></script>
+    <script src="js/ai/ComfyUI/ComfyuiManagement.js?v=5.8" defer></script>
+    <script src="js/ai/GenerativeAI.js?v=5.8" defer></script>
+    <script src="js/ai/ui/AiUIUtil.js?v=5.8" defer></script>
+    <script src="js/ai/prompt/BaseEventListener.js?v=5.8" defer></script>
+    <script src="js/layer/FloatingWindowManagement.js?v=5.8" defer></script>
+    <script src="js/layer/LayerButton.js?v=5.8" defer></script>
+    <script src="js/layer/LayerManagement.js?v=5.8" defer></script>
+    <script src="js/layer/ImageHistoryManagement.js?v=5.8" defer></script>
+    <script src="js/layer/blend/Blend.js?v=5.8" defer></script>
     
-    <script src="js/sidebar/SidebarUi.js?v=5.7" defer></script>
-    <script src="js/sidebar/Sidebar.js?v=5.7" defer></script>
-    <script src="js/sidebar/text/TextEffect.js?v=5.7" defer></script>
-    <script src="js/sidebar/text/VerticalText.js?v=5.7" defer></script>
-    <script src="js/sidebar/text/VerticalTextbox.js?v=5.7"></script>
+    <script src="js/sidebar/SidebarUi.js?v=5.8" defer></script>
+    <script src="js/sidebar/Sidebar.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/TextEffect.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/VerticalText.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/VerticalTextbox.js?v=5.8"></script>
 
-    <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=5.7" defer></script>
-    <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=5.7" defer></script>
-    <script src="js/sidebar/pen/OriginalBrush.js?v=5.7" defer></script>
-    <script src="js/sidebar/pen/PenTools.js?v=5.7" defer></script>
-    <script src="js/sidebar/tone/ToneManager.js?v=5.7" defer></script>
-    <script src="js/sidebar/tone/speedline.js?v=5.7" defer></script>
-    <script src="js/sidebar/tone/focusline.js?v=5.7" defer></script>
-    <script src="js/sidebar/tone/tone.js?v=5.7" defer></script>
-    <script src="js/sidebar/tone/toneNoise.js?v=5.7" defer></script>
-    <script src="js/sidebar/tone/snowTone.js?v=5.7" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=5.8" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=5.8" defer></script>
+    <script src="js/sidebar/pen/OriginalBrush.js?v=5.8" defer></script>
+    <script src="js/sidebar/pen/PenTools.js?v=5.8" defer></script>
+    <script src="js/sidebar/tone/ToneManager.js?v=5.8" defer></script>
+    <script src="js/sidebar/tone/speedline.js?v=5.8" defer></script>
+    <script src="js/sidebar/tone/focusline.js?v=5.8" defer></script>
+    <script src="js/sidebar/tone/tone.js?v=5.8" defer></script>
+    <script src="js/sidebar/tone/toneNoise.js?v=5.8" defer></script>
+    <script src="js/sidebar/tone/snowTone.js?v=5.8" defer></script>
 
-    <script src="js/sidebar/text/Text2Manager.js?v=5.7" defer></script>
-    <script src="js/sidebar/text/CustomShadowText.js?v=5.7" defer></script>
+    <script src="js/sidebar/text/Text2Manager.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/CustomShadowText.js?v=5.8" defer></script>
 
-    <script src="js/sidebar/effect/EffectManager.js?v=5.7" defer></script>
-    <script src="js/sidebar/effect/c2bw_tone.js?v=5.7" defer></script>
+    <script src="js/sidebar/effect/EffectManager.js?v=5.8" defer></script>
+    <script src="js/sidebar/effect/c2bw_tone.js?v=5.8" defer></script>
 
-    <script src="js/sidebar/panel/Knife.js?v=5.7" defer></script>
-    <script src="js/ui/controle/CommonControleManagement.js?v=5.7" defer></script>
-    <script src="js/ui/controle/ImageControleManager.js?v=5.7" defer></script>
-    <script src="js/ui/controle/InfomationControle.js?v=5.7" defer></script>
-    <script src="js/ui/controle/glfxControle.js?v=5.7" defer></script>
-    <!-- <script src="js/effect/roughHelper.js?v=5.7" defer></script> -->
-    <script src="js/fabric/FabricManagement.js?v=5.7" defer></script>
-    <script src="js/core/svg/GoogleIconNames.js?v=5.7"></script>
-    <script src="js/core/svg/GoogleIconHelper.js?v=5.7"></script>
-    <script src="js/core/svg/MangaPanelsImage_Landscape.js?v=5.7" defer></script>
-    <script src="js/core/svg/MangaPanelsImage_Vertical.js?v=5.7" defer></script>
-    <script src="js/core/svg/SpeechBubble.js?v=5.7" defer></script>
-    <script src="js/ui/bottomBar.js?v=5.7" defer></script>
+    <script src="js/sidebar/panel/Knife.js?v=5.8" defer></script>
+    <script src="js/ui/controle/CommonControleManagement.js?v=5.8" defer></script>
+    <script src="js/ui/controle/ImageControleManager.js?v=5.8" defer></script>
+    <script src="js/ui/controle/InfomationControle.js?v=5.8" defer></script>
+    <script src="js/ui/controle/glfxControle.js?v=5.8" defer></script>
+    <!-- <script src="js/effect/roughHelper.js?v=5.8" defer></script> -->
+    <script src="js/fabric/FabricManagement.js?v=5.8" defer></script>
+    <script src="js/core/svg/GoogleIconNames.js?v=5.8"></script>
+    <script src="js/core/svg/GoogleIconHelper.js?v=5.8"></script>
+    <script src="js/core/svg/MangaPanelsImage_Landscape.js?v=5.8" defer></script>
+    <script src="js/core/svg/MangaPanelsImage_Vertical.js?v=5.8" defer></script>
+    <script src="js/core/svg/SpeechBubble.js?v=5.8" defer></script>
+    <script src="js/ui/bottomBar.js?v=5.8" defer></script>
 
-    <script src="js/ai/ComfyUI/workflow/T2I_Flux.js?v=5.7" defer></script>
-    <script src="js/ai/ComfyUI/workflow/T2I_SDXL.js?v=5.7" defer></script>
-    
+    <script src="js/ai/ComfyUI/workflow/T2I_Flux.js?v=5.8" defer></script>
+    <script src="js/ai/ComfyUI/workflow/T2I_SDXL.js?v=5.8" defer></script>
+
+    <script src="js/ai/prompt/auto/PromptMap.js?v=5.8" defer></script>
+    <script src="js/ai/prompt/auto/StoryPromptMap.js?v=5.8" defer></script>
+    <script src="js/ai/prompt/auto/AutoPromptUtil.js?v=5.8" defer></script>
+    <script src="js/ai/prompt/auto/AutoGeneration.js?v=5.8" defer></script>
+
 <script>
 function autoResize(event) {
     event.target.style.height = 'auto';
