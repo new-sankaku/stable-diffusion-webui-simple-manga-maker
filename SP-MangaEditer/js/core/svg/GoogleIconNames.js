@@ -1,7 +1,7 @@
 
 const initialIcons = [
   "mood", "mood_bad", "sentiment_dissatisfied",
-  "favorite_border", "favorite", "thumb_up", "hotel_class", "star_rate",
+  "favorite_border", "favorite", "repeat", "thumb_up", "hotel_class", "star_rate",
   "emoji_objects", "autorenew", "sync_problem", "hourglass_top",
   "accessible_forward", "warning", "error", "new_releases", "bolt",
   "wb_sunny", "directions_run", "directions_bike"

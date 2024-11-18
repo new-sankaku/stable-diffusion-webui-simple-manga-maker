@@ -1,6 +1,11 @@
 const effectMap = new Map();
 
-const MODE_EFFECT_C2BW = "Color2BlackWhite";
+const MODE_EFFECT_C2BW_LIGHT = "Color2BlackWhiteLight";
+const MODE_EFFECT_C2BW_DARK = "Color2BlackWhiteDark";
+const MODE_EFFECT_C2BW_ROUGHT = "Color2BlackWhiteRough";
+const MODE_EFFECT_C2BW_SIMPLE = "Color2BlackWhiteSimple";
+
+
 const MODE_EFFECT_GLOW = "EffectGlow";
 const MODE_EFFECT_BLEND = "EffectBlend";
 const MODE_EFFECT_GLFX = "EffectGLFX";
@@ -26,12 +31,20 @@ function switchMangaEffect(type) {
 
   nowEffect = type;
 
-  if (type === MODE_EFFECT_C2BW) {
-    C2BWStart();
+  if (type === MODE_EFFECT_C2BW_LIGHT) {
+    C2BWStartLight();
     clearActiveEffectButton();
     return;
-  } else if(type === MODE_EFFECT_BLEND){
-    handleBlend();
+  } else if(type === MODE_EFFECT_C2BW_DARK){
+    C2BWStartDark();
+    clearActiveEffectButton();
+    return;
+  }else if(type === MODE_EFFECT_C2BW_ROUGHT){
+    C2BWStartRough();
+    clearActiveEffectButton();
+    return;    
+  }else if(type === MODE_EFFECT_C2BW_SIMPLE){
+    C2BWStartSimple();
     clearActiveEffectButton();
     return;    
   }else if(type === MODE_EFFECT_GLOW){

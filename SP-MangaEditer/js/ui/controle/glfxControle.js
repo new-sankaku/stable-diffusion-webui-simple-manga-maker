@@ -80,7 +80,7 @@ function glfxApplyFilterToCanvas(filter=null) {
   img.src = fabricCanvas.toDataURL();
 }
 
-function glfxApplyFilterToObject(object, filter=null) {
+function glfxApplyFilterToObject(object, filter=null, filterValues=null) {
   return new Promise((resolve) => {
     if (!glfxOriginalImage) {
       // console.log("glfxApplyFilterToObject: glfxOriginalImage is null");
@@ -93,7 +93,7 @@ function glfxApplyFilterToObject(object, filter=null) {
       fxCanvas = fx.canvas();
       texture = fxCanvas.texture(img);
       fxCanvas.draw(texture);
-      applySelectedFilter(fxCanvas, filter);
+      applySelectedFilter(fxCanvas, filter, filterValues);
       fxCanvas.update();
       
       var filteredImage = new Image();
@@ -145,7 +145,7 @@ function glfxApplyFilterToObject(object, filter=null) {
 }
 
 
-function applySelectedFilter(fxCanvas, filter=null) {
+function applySelectedFilter(fxCanvas, filter=null, filterValues=null) {
   // console.log("applySelectedFilter start");
   var isNotAuto = true;
   if(filter){
@@ -164,6 +164,10 @@ function applySelectedFilter(fxCanvas, filter=null) {
       if( isNotAuto ){
         brightness = parseFloat( $("glfxBrightness").value );
         contrast   = parseFloat($("glfxContrast").value);
+      }else{
+        brightness = filterValues.brightness;
+        contrast   = filterValues.contrast;
+        
       }
       // console.log( "glfxBrightnessContrast brightness", brightness );
       // console.log( "glfxBrightnessContrast contrast", contrast );
@@ -283,6 +287,9 @@ function applySelectedFilter(fxCanvas, filter=null) {
       if( isNotAuto ){
         dotAngle = parseFloat($("glfxDotAngle").value);
         dotSize = parseFloat($("glfxDotSize").value);
+      }else{
+        dotAngle = filterValues.dotAngle;
+        dotSize = filterValues.dotSize;
       }
       // console.log("dotAngle", dotAngle)
       // console.log("dotSize", dotSize)
@@ -303,8 +310,11 @@ function applySelectedFilter(fxCanvas, filter=null) {
       break;
     case "glfxInk":
       var inkStrength = 0.26;
+      
       if( isNotAuto ){
         inkStrength = parseFloat( $("glfxInkStrength").value );
+      }else{
+        inkStrength = filterValues.inkStrength;
       }
       // console.log("applySelectedFilter: Ink strength is", inkStrength);
 

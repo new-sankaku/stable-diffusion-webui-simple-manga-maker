@@ -1,7 +1,9 @@
-
 // if( hasNotRole( AI_ROLES.XXXXX )){return;}
-
 // if( hasRole( AI_ROLES.XXXXX )){return;}
+
+//WebUI : SDXL
+//Forge : SDXL, Flux
+//ComfyUI : SDXL, Flux
 
 const AI_ROLES = {
   Text2Image: "Text2Image",
