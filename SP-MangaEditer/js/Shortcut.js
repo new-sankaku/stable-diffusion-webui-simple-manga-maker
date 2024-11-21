@@ -35,6 +35,27 @@ document.addEventListener("keydown", function (e) {
     zoomFit();
     e.preventDefault();
     return;
+  }else if (e.ctrlKey && e.key === 'c') {
+    if (canvas.getActiveObject()) {
+      canvas.getActiveObject().clone(function(cloned) {
+          window._clipboard = cloned;
+      });
+    }
+    return;
+  }else if (e.ctrlKey && e.key === 'v') {
+    if (!window._clipboard || !(window._clipboard instanceof fabric.Object)) {
+      return;
+    }
+    window._clipboard.clone(function(clonedObj) {
+            clonedObj.set({
+                left: clonedObj.left + 10,
+                top: clonedObj.top + 10
+            });
+            canvas.add(clonedObj);
+            canvas.setActiveObject(clonedObj);
+            canvas.requestRenderAll();
+        });
+    return;
   }
   
   if (activeObject) {
@@ -121,3 +142,9 @@ document.addEventListener("paste", function (event) {
   }
 });
 
+canvas.on('mouse:down', function(options) {
+  if (!options.target) {
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+  }
+});
