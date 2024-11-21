@@ -72,7 +72,7 @@ function applyVividGradientEffect() {
     });
 
     if (isVerticalText(activeObject)) {
-      activeObject.setGradientFill(gradient);
+      activeObject.set("fill", gradient);
       canvas.renderAll();
     } else {
       activeObject.set("fill", gradient);
