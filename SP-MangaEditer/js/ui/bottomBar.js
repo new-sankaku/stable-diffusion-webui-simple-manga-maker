@@ -25,27 +25,31 @@ function btmUpdateHandleText() {
     btmDrawerHandle.textContent = btmDrawer.classList.contains('btm-closed') ? 'OPEN' : 'CLOSE';
 }
 
-function btmSaveZip() {
-
+async function btmSaveZip() {
     return new Promise((resolve, reject) => {
-        var guid = getCanvasGUID();
-        var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
-        var zip = generateZip();
-        zip.generateAsync({ type: "blob" })
-            .then(function (content) {
-                btmAddImage(previewLink, content, guid);
-                resolve();
+        try {
+            const guid = getCanvasGUID();
+            const previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
+            const zip = generateZip();
+            
+            zip.generateAsync({ type: "blob", compression: "STORE", compressionOptions: {level: 1}
             })
-            .catch(function (error) {
-                reject(error);
-            });
+                .then(function (content) {
+                    btmAddImage(previewLink, content, guid);
+                    resolve();
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        } catch (error) {
+            reject(error);
+        }
     });
 }
 
 function btmAddImage(imageLink, zipBlob, guid) {
-    console.log("btmAddImage:", guid);
     const zipData = btmImageZipMap.get(guid);
-
+ 
     if (zipData) {
         btmImageZipMap.set(guid, { imageLink, zipBlob });
         const image = document.querySelector(`.btm-image[data-index="${guid}"]`);
@@ -66,7 +70,7 @@ function btmAddImage(imageLink, zipBlob, guid) {
             }
             chengeCanvasByGuid(guid);
         });
-
+ 
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
         closeBtn.className = 'btm-close-btn';
@@ -76,19 +80,19 @@ function btmAddImage(imageLink, zipBlob, guid) {
             imageWrapper.remove();
             btmUpdateScrollButtons();
         });
-
+ 
         imageWrapper.appendChild(image);
         imageWrapper.appendChild(closeBtn);
         btmImageContainer.appendChild(imageWrapper);
         btmImageZipMap.set(guid, { imageLink, zipBlob });
     }
-
+ 
     if (btmDrawer.classList.contains('btm-closed')) {
         btmToggleDrawer();
     } else {
         btmUpdateScrollButtons();
     }
-}
+ }
 
 function btmUpdateScrollButtons() {
     const containerWidth = btmDrawer.querySelector('.btm-drawer-content').offsetWidth;
