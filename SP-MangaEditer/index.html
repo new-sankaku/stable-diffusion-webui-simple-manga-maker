@@ -1080,13 +1080,76 @@ function getElementClasses(element) {
                     </a>
                 </div>
 
-                <div id="text-preview-area2">
-                    <button id="shadowButton" onclick="switchText2('shadow')">
-                        <span data-i18n="shadow">Shadow</span>
-                        <img src="03_images/preset/text/t2_shadow.webp" style="width: 100%;">
-                    </button>
+                <div id="tool-buttons">
+                    <div id="text-preview-area2">
+                        <button id="shadowButton" onclick="switchText2('shadow')">
+                            <span data-i18n="shadow">Shadow</span>
+                            <img src="03_images/preset/text/t2_shadow.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <div id="text-preview-area2">
+                        <button id="waterButton" onclick="switchText2('water')">
+                            <span data-i18n="water">water</span>
+                            <img src="03_images/preset/text/t2_water.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <div id="text-preview-area2">
+                        <button id="wildButton" onclick="switchText2('wild')">
+                            <span data-i18n="wild">wild</span>
+                            <img src="03_images/preset/text/t2_wild.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <div id="text-preview-area2">
+                        <button id="scratchButton" onclick="switchText2('scratch')">
+                            <span data-i18n="scratch">scratch</span>
+                            <img src="03_images/preset/text/t2_scratch.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <!-- <div id="text-preview-area2">
+                        <button id="auroraButton" onclick="switchText2('aurora')">
+                            <span data-i18n="aurora">aurora</span>
+                            <img src="03_images/preset/text/t2_aurora.webp" style="width: 100%;">
+                        </button>
+                    </div> -->
+                    <div id="text-preview-area2">
+                        <button id="brokenButton" onclick="switchText2('broken')">
+                            <span data-i18n="broken">broken</span>
+                            <img src="03_images/preset/text/t2_broken.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <div id="text-preview-area2">
+                        <button id="cloudButton" onclick="switchText2('cloud')">
+                            <span data-i18n="cloud">cloud</span>
+                            <img src="03_images/preset/text/t2_cloud.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <div id="text-preview-area2">
+                        <button id="layeredButton" onclick="switchText2('layered')">
+                            <span data-i18n="layered">layered</span>
+                            <img src="03_images/preset/text/t2_layered.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <div id="text-preview-area2">
+                        <button id="meshButton" onclick="switchText2('mesh')">
+                            <span data-i18n="mesh">mesh</span>
+                            <img src="03_images/preset/text/t2_mesh.webp" style="width: 100%;">
+                        </button>
+                    </div>
+
+                    <div id="text-preview-area2">
+                        <button id="thrillButton" onclick="switchText2('thrill')">
+                            <span data-i18n="thrill">thrill</span>
+                            <img src="03_images/preset/text/t2_thrill.webp" style="width: 100%;">
+                        </button>
+                    </div>
+                    <div id="text-preview-area2">
+                        <button id="zebraButton" onclick="switchText2('zebra')">
+                            <span data-i18n="zebra">zebra</span>
+                            <img src="03_images/preset/text/t2_zebra.webp" style="width: 100%;">
+                        </button>
+                    </div>
                 </div>
-                <hr>
+            <hr>
                 <div id="text-area2-settings"></div>
             </div>
 
@@ -1857,7 +1920,23 @@ function getElementClasses(element) {
     <script src="js/sidebar/tone/snowTone.js?v=5.8" defer></script>
 
     <script src="js/sidebar/text/Text2Manager.js?v=5.8" defer></script>
-    <script src="js/sidebar/text/CustomShadowText.js?v=5.8" defer></script>
+
+
+    <!-- <script src="js/sidebar/text/CustomShadowText.js?v=5.8" defer></script> -->
+    <script src="js/sidebar/text/custom/CustomTextUtil.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-aurora-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-broken-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-cloud-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-layered-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-mesh-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-nightlights-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-scratch-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-shadow-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-thrill-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-water-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-wild-text.js?v=5.8" defer></script>
+    <script src="js/sidebar/text/custom/optimized-zebra-text.js?v=5.8" defer></script>
+
 
     <script src="js/sidebar/effect/EffectManager.js?v=5.8" defer></script>
     <script src="js/sidebar/effect/c2bw_tone.js?v=5.8" defer></script>

@@ -1,14 +1,22 @@
 const t2Map = new Map();
-
 const MODE_T2_SHADOW = "shadow";
+const MODE_T2_aurora  = "aurora";
+const MODE_T2_broken  = "broken";
+const MODE_T2_cloud   = "cloud";
+const MODE_T2_layered = "layered";
+const MODE_T2_mesh    = "mesh";
+const MODE_T2_night   = "night";
+const MODE_T2_scratch = "scratch";
+const MODE_T2_thrill  = "thrill";
+const MODE_T2_water   = "water";
+const MODE_T2_wild    = "wild";
+const MODE_T2_zebra   = "zebra";
 
 var t2_fontT2Selector = null;
 var t2_text = null;
 var t2_fontSize = null;
 var t2_lineHeight = null;
 var t2_letterSpacing = null;
-var t2_textOrientation = null;
-var t2_textAlignment = null;
 var t2_shadow1Size = null;
 var t2_shadow1Opacity = null;
 var t2_shadow1Color = null;
@@ -32,22 +40,19 @@ function switchText2(type) {
   switchText2Ui(type);
 
   if (nowText2) {
-    t2_shadow_deleteSvg();
+    deleteText2();
+    clearT2Settings();
     nowText2 = null;
   }
 
-  if (type === MODE_T2_SHADOW) {
-    t2_shadow_createSvg();
+  createText2(type);
+
+  if(type){
     addT2EventListener();
-  } else {
-    console.error("unknown type", type);
+    nowText2 = type;
   }
-
-  // clearActiveT2Button();
-
-  // $(type + 'Button').classList.add('active-button');
-  nowText2 = type;
 }
+
 
 function switchText2Ui(type) {
   let settingsHTML = '';
@@ -58,70 +63,117 @@ function switchText2Ui(type) {
     }
   });
 
+  //Common settings.
   var cName = "";
+  cName = "fontT2Selector";
+  settingsHTML += addOneSelectBox(cName);
+  cName = "Text";
+  settingsHTML += addTextArea(type + '-' + cName, cName, t2Map.getOrDefault(type + '-' + cName, 'New Text'));
+  cName = "FontSize";
+  settingsHTML += addSlider(type + '-' + cName, cName, 1, 300, t2Map.getOrDefault(type + '-' + cName, 80));
+  cName = "LineHeight";
+  settingsHTML += addSlider(type + '-' + cName, cName, 0.1, 5, t2Map.getOrDefault(type + '-' + cName, 1.2), 0.1);
+  cName = "LetterSpacing";
+  settingsHTML += addSlider(type + '-' + cName, cName, -0.5, 2, t2Map.getOrDefault(type + '-' + cName, 0), 0.1);
+  settingsHTML += addAlignTypeButton(type);
+  settingsHTML += addOrientationButton(type);
+  cName = "TextColor";
+  settingsHTML += addColor( type + '-' + cName, cName,       t2Map.getOrDefault(type + '-' + cName, '#35322a'));
+  cName = "FillOpacity";
+  settingsHTML += addSlider(type + '-' + cName, cName, 0, 1, t2Map.getOrDefault(type + '-' + cName, 1), 0.1);
+
+
+
   switch (type) {
+    case MODE_T2_aurora:
+      break;
+    case MODE_T2_broken:
+      break;
+    case MODE_T2_cloud :
+      break;
+    case MODE_T2_layered:
+      break;
+    case MODE_T2_mesh  :
+      break;
+    case MODE_T2_night :
+      break;
+    case MODE_T2_scratch:
+      break;
+    case MODE_T2_thrill:
+      break;
+    case MODE_T2_water :
+      break;
+    case MODE_T2_wild  :
+      break;
+    case MODE_T2_zebra :
+      break;
+
     case MODE_T2_SHADOW:
-
-      cName = "fontT2Selector";
-      settingsHTML += addOneSelectBox(cName);
-
-      cName = "Text";
-      settingsHTML += addTextArea(type + '-' + cName, cName, t2Map.getOrDefault(type + '-' + cName, 'New Text'));
-
-      cName = "FontSize";
-      settingsHTML += addSlider(type + '-' + cName, cName, 1, 300, t2Map.getOrDefault(type + '-' + cName, 80));
-      cName = "LineHeight";
-      settingsHTML += addSlider(type + '-' + cName, cName, 0.1, 5, t2Map.getOrDefault(type + '-' + cName, 1.2), 0.1);
-      cName = "LetterSpacing";
-      settingsHTML += addSlider(type + '-' + cName, cName, -0.5, 2, t2Map.getOrDefault(type + '-' + cName, 0), 0.1);
-
-      settingsHTML += addAlignTypeButton(type);
-      settingsHTML += addOrientationButton(type);
-
       cName = "ShadowSize1";
       settingsHTML += addSlider(type + '-' + cName, cName, 0, 3, t2Map.getOrDefault(type + '-' + cName, 1));
       cName = "ShadowOpacity1";
       settingsHTML += addSlider(type + '-' + cName, cName, 0, 1, t2Map.getOrDefault(type + '-' + cName, 1), 0.1);
       cName = "ShadowColor1";
-      settingsHTML += addColor(type + '-' + cName, cName, t2Map.getOrDefault(type + '-' + cName, '#ebe7e0'));
+      settingsHTML += addColor( type + '-' + cName, cName,       t2Map.getOrDefault(type + '-' + cName, '#ebe7e0'));
 
       cName = "ShadowSize2";
       settingsHTML += addSlider(type + '-' + cName, cName, 0, 5, t2Map.getOrDefault(type + '-' + cName, 5));
       cName = "ShadowOpacity2";
       settingsHTML += addSlider(type + '-' + cName, cName, 0, 1, t2Map.getOrDefault(type + '-' + cName, 1), 0.1);
       cName = "ShadowColor2";
-      settingsHTML += addColor(type + '-' + cName, cName, t2Map.getOrDefault(type + '-' + cName, '#35322a'));
-
-      cName = "TextColor";
-      settingsHTML += addColor(type + '-' + cName, cName, t2Map.getOrDefault(type + '-' + cName, '#35322a'));
-      cName = "FillOpacity";
-      settingsHTML += addSlider(type + '-' + cName, cName, 0, 1, t2Map.getOrDefault(type + '-' + cName, 1), 0.1);
-
-      $('text-area2-settings').innerHTML = settingsHTML;
-
-      t2_fontT2Selector = $("fontT2Selector");
-      t2_text = $(type + '-' + "Text");
-      t2_fontSize = $(type + '-' + "FontSize");
-      t2_lineHeight = $(type + '-' + "LineHeight");
-      t2_letterSpacing = $(type + '-' + "LetterSpacing");
-      t2_textOrientation = $("t2_shadow_textOrientation");
-      t2_textAlignment = $("t2_shadow_textAlignment");
-      t2_shadow1Size = $(type + '-' + "ShadowSize1");
-      t2_shadow1Opacity = $(type + '-' + "ShadowOpacity1");
-      t2_shadow1Color = $(type + '-' + "ShadowColor1");
-      t2_shadow2Size = $(type + '-' + "ShadowSize2");
-      t2_shadow2Opacity = $(type + '-' + "ShadowOpacity2");
-      t2_shadow2Color = $(type + '-' + "ShadowColor2");
-      t2_fillColor = $(type + '-' + "TextColor");
-      t2_fillOpacity = $(type + '-' + "FillOpacity");
-
-      t2_align_l = $("T2-align-left");
-      t2_align_c = $("T2-align-center");
-      t2_align_r = $("T2-align-right");
-      t2_orientation_v = $("T2-Orientation-vertical");
-      t2_orientation_l = $("T2-Orientation-horizontal");
+      settingsHTML += addColor( type + '-' + cName, cName,       t2Map.getOrDefault(type + '-' + cName, '#35322a'));
       break;
   }
+
+  $('text-area2-settings').innerHTML = settingsHTML;
+
+  t2_fontT2Selector   = $("fontT2Selector");
+  t2_text             = $(type + '-' + "Text");
+  t2_fontSize         = $(type + '-' + "FontSize");
+  t2_fillColor        = $(type + '-' + "TextColor");
+  t2_fillOpacity      = $(type + '-' + "FillOpacity");
+  t2_lineHeight       = $(type + '-' + "LineHeight");
+  t2_letterSpacing    = $(type + '-' + "LetterSpacing");
+  t2_align_l          = $("T2-align-left");
+  t2_align_c          = $("T2-align-center");
+  t2_align_r          = $("T2-align-right");
+  t2_orientation_v    = $("T2-Orientation-vertical");
+  t2_orientation_l    = $("T2-Orientation-horizontal");
+
+
+  switch (type) {
+    case MODE_T2_aurora:
+      break;
+    case MODE_T2_broken:
+      break;
+    case MODE_T2_cloud :
+      break;
+    case MODE_T2_layered:
+      break;
+    case MODE_T2_mesh  :
+      break;
+    case MODE_T2_night :
+      break;
+    case MODE_T2_scratch:
+      break;
+    case MODE_T2_thrill:
+      break;
+    case MODE_T2_water :
+      break;
+    case MODE_T2_wild  :
+      break;
+    case MODE_T2_zebra :
+      break;
+    case MODE_T2_SHADOW:
+      t2_shadow1Size      = $(type + '-' + "ShadowSize1");
+      t2_shadow1Opacity   = $(type + '-' + "ShadowOpacity1");
+      t2_shadow1Color     = $(type + '-' + "ShadowColor1");
+      t2_shadow2Size      = $(type + '-' + "ShadowSize2");
+      t2_shadow2Opacity   = $(type + '-' + "ShadowOpacity2");
+      t2_shadow2Color     = $(type + '-' + "ShadowColor2");
+      break;
+  }
+
 
   reloadFont('fontT2Selector');
 
@@ -130,16 +182,16 @@ function switchText2Ui(type) {
     t2_fontSize,
     t2_lineHeight,
     t2_letterSpacing,
-    t2_textOrientation,
-    t2_textAlignment,
+    t2_fillColor,
+    t2_fillOpacity,
+
     t2_shadow1Size,
     t2_shadow1Opacity,
     t2_shadow1Color,
     t2_shadow2Size,
     t2_shadow2Opacity,
-    t2_shadow2Color,
-    t2_fillColor,
-    t2_fillOpacity  ];
+    t2_shadow2Color
+  ];
 
   buttonElementsT2 = [
     t2_fontT2Selector,
@@ -180,7 +232,7 @@ function debounceCustomText(func, delay) {
 }
 
 const debouncedUpdate = debounceCustomText(() => {
-  t2_shadow_updateAll();
+  updateText2();
 }, 50);
 
 function addT2EventListener(){
@@ -196,10 +248,146 @@ function addT2EventListener(){
     if (element) {
       element.addEventListener('click', () => {
         saveValueMap(element);
-        t2_shadow_updateAll();
+        updateText2();
+        
       });
     }
   });
+}
+
+
+
+function updateText2(){
+  switch (nowText2) {
+    case MODE_T2_aurora:
+      t2_aurora_updateAll();
+      break;
+    case MODE_T2_broken:
+      t2_broken_updateAll();
+      break;
+    case MODE_T2_cloud :
+      t2_cloud_updateAll();
+      break;
+    case MODE_T2_layered:
+      t2_layered_updateAll();
+      break;
+    case MODE_T2_mesh  :
+      t2_mesh_updateAll();
+      break;
+    case MODE_T2_night :
+      t2_nightlights_updateAll();
+      break;
+    case MODE_T2_scratch:
+      t2_scratch_updateAll();
+      break;
+    case MODE_T2_thrill:
+      t2_thrill_updateAll();
+      break;
+    case MODE_T2_water :
+      t2_water_updateAll();
+      break;
+    case MODE_T2_wild  :
+      t2_wild_updateAll();
+      break;
+    case MODE_T2_zebra :
+      t2_zebra_updateAll();
+      break;
+    case MODE_T2_SHADOW:
+      t2_shadow_updateAll();
+      break;
+    default:
+      console.error("unknown type", type);
+      break;
+  }
+}
+
+
+function createText2(type){
+  switch (type) {
+    case MODE_T2_aurora:
+      t2_aurora_createSvg();
+      break;
+    case MODE_T2_broken:
+      t2_broken_createSvg();
+      break;
+    case MODE_T2_cloud :
+      t2_cloud_createSvg();
+      break;
+    case MODE_T2_layered:
+      t2_layered_createSvg();
+      break;
+    case MODE_T2_mesh  :
+      t2_mesh_createSvg();
+      break;
+    case MODE_T2_night :
+      t2_nightlights_createSvg();
+      break;
+    case MODE_T2_scratch:
+      t2_scratch_createSvg();
+      break;
+    case MODE_T2_thrill:
+      t2_thrill_createSvg();
+      break;
+    case MODE_T2_water :
+      t2_water_createSvg();
+      break;
+    case MODE_T2_wild  :
+      t2_wild_createSvg();
+      break;
+    case MODE_T2_zebra :
+      t2_zebra_createSvg();
+      break;
+    case MODE_T2_SHADOW:
+      t2_shadow_createSvg();
+      break;
+    default:
+      console.error("unknown type", type);
+      break;
+  }
+}
+
+function deleteText2(){
+  switch (nowText2) {
+    case MODE_T2_aurora:
+      t2_aurora_deleteSvg();
+      break;
+    case MODE_T2_broken:
+      t2_broken_deleteSvg();
+      break;
+    case MODE_T2_cloud :
+      t2_cloud_deleteSvg();
+      break;
+    case MODE_T2_layered:
+      t2_layered_deleteSvg();
+      break;
+    case MODE_T2_mesh  :
+      t2_mesh_deleteSvg();
+      break;
+    case MODE_T2_night :
+      t2_nightlights_deleteSvg();
+      break;
+    case MODE_T2_scratch:
+      t2_scratch_deleteSvg();
+      break;
+    case MODE_T2_thrill:
+      t2_thrill_deleteSvg();
+      break;
+    case MODE_T2_water :
+      t2_water_deleteSvg();
+      break;
+    case MODE_T2_wild  :
+      t2_wild_deleteSvg();
+      break;
+    case MODE_T2_zebra :
+      t2_zebra_deleteSvg();
+      break;
+    case MODE_T2_SHADOW:
+      t2_shadow_deleteSvg();
+      break;
+    default:
+      console.error("unknown type", type);
+      break;
+  }
 }
 
 

@@ -3,16 +3,17 @@
 .left_area {
  font-size: var(--font-size-base);
  margin-right: var(--margin-right-base);
- /* margin-top: 2px;
- margin-bottom: 2px; */
  max-width: var(--max-width-base);
  min-width: var(--min-width-base);
- height: auto;
- max-height: auto;
  box-sizing: border-box;
  overflow: hidden;
+ height: calc(100vh - 8vh);
+ max-height: calc(100vh - 8vh);
+ overflow-y: auto;
+ overflow-x: hidden;
+ border: var(--boader-color-1px-solid-A);
 }
-
+ 
 
 #text-area2-settings {
  /* display: flex; */
@@ -109,9 +110,9 @@
 
 #tool-buttons,
 #text-preview-area2 {
- max-height: 50%;
+ max-height: 40%;
  overflow-y: auto;
-
+ width: 100%;
 }
 
 #dummy-area4 {
@@ -129,15 +130,6 @@
  padding: 2px;
 }
 
-.left_area {
- max-width: var(--max-width-base);
- min-width: var(--min-width-base);
- height: calc(100vh - 12vh);
- max-height: calc(100vh - 12vh);
- overflow-y: auto;
- overflow-x: hidden;
- border: var(--boader-color-1px-solid-A);
-}
 
 
 .input-group-multi {
