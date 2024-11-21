@@ -34,18 +34,27 @@ function switchMangaEffect(type) {
   if (type === MODE_EFFECT_C2BW_LIGHT) {
     C2BWStartLight();
     clearActiveEffectButton();
+    nowEffect = null;
     return;
   } else if(type === MODE_EFFECT_C2BW_DARK){
     C2BWStartDark();
     clearActiveEffectButton();
+    nowEffect = null;
     return;
   }else if(type === MODE_EFFECT_C2BW_ROUGHT){
     C2BWStartRough();
     clearActiveEffectButton();
+    nowEffect = null;
     return;    
   }else if(type === MODE_EFFECT_C2BW_SIMPLE){
     C2BWStartSimple();
     clearActiveEffectButton();
+    nowEffect = null;
+    return;    
+  }else if(type === MODE_EFFECT_BLEND){
+    handleBlend();
+    clearActiveEffectButton();
+    nowEffect = null;
     return;    
   }else if(type === MODE_EFFECT_GLOW){
     //skip
