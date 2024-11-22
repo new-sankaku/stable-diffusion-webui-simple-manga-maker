@@ -6,11 +6,25 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function changeKnifeMode(){
-  var knifeModeButton = $('knifeModeButton');
   isKnifeMode = !isKnifeMode;
+  updateKnifeMode();
+}
+
+function updateKnifeMode(){
+  var knifeModeButton = $('knifeModeButton');
   knifeModeButton.textContent = isKnifeMode ? getText('knifeOff') : getText('knifeOn') ;
-  isKnifeMode ? activeClearButton() : nonActiveClearButton();
-  isKnifeMode ? knifeModeButton.classList.add("selected") : knifeModeButton.classList.remove("selected") ;
+
+  if(isKnifeMode){
+    activeClearButton();
+    knifeModeButton.classList.add("selected") ;
+    changeCursor("knife");
+    knifeModeButton.textContent = getText('knifeOff')
+  }else{
+    nonActiveClearButton();
+    knifeModeButton.classList.remove("selected") ;
+    changeDefaultCursor();
+    knifeModeButton.textContent = getText('knifeOn');
+  }
   changeMovement();
 }
 
@@ -148,8 +162,6 @@ function blindSplitPanel( panel, isVertical){
 var knifeAssistAngle = 3;
 var currentKnifeObject = null;
 var currentKnifeLine = null;
-var isKnifeDrawing = false;
-var isKnifeMode = false;
 var startKnifeX, startKnifeY;
 var isHorizontalInt = 1;
 var isVerticalInt = 2;

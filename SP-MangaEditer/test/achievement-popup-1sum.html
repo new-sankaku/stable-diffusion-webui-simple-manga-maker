@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@300;400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500&display=swap');
+
+    :root {
+  --body-bg: #111;
+  --title-size: 10px;
+  --message-size: 12px;
+  --animation-duration: 1.2s;
+}
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--body-bg);
+      overflow-x: hidden
+    }
+
+    .popup-list {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      z-index: 100
+    }
+
+    .achievement {
+      position: relative;
+      pointer-events: none;
+      min-width: 180px;
+      max-width: 200px
+    }
+
+    .achievement.flying {
+      position: fixed;
+      animation: achievementOut 2.0s cubic-bezier(.2, .6, .3, 1);
+      animation-delay: var(--animation-duration);
+      animation-fill-mode: forwards;
+      z-index: 1000
+    }
+
+    @keyframes achievementOut {
+      to {
+        opacity: 0;
+        top: 0;
+        left: 100%
+      }
+    }
+
+    .nier {
+      background: rgba(238, 238, 238, .97);
+      color: #454545;
+      padding: 12px 16px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .nier::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      border: 1px solid #454545
+    }
+
+    .nier .title {
+      font-size: 9px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-weight: 500;
+      color: #666
+    }
+
+    .nier .message {
+      font-size: 13px;
+      position: relative;
+      padding-left: 18px
+    }
+
+    .nier .message::before {
+      content: '◈';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      opacity: .7
+    }
+
+    .p5 {
+      background: #e60012;
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Roboto Condensed', sans-serif;
+      text-transform: uppercase;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 97% 100%, 3% 100%);
+      text-shadow: 2px 2px #000;
+      border: 2px solid #000;
+      letter-spacing: .5px
+    }
+
+    .p5::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      right: 1px;
+      height: 30%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .2), transparent)
+    }
+
+    .zelda {
+      background: #1a1a1a;
+      color: #e6cc80;
+      padding: 14px 18px;
+      font-family: 'Crimson Text', serif;
+      text-align: center;
+      position: relative;
+      border: double 3px #e6cc80;
+      letter-spacing: 1px
+    }
+
+    .zelda::before,
+    .zelda::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 1px solid #e6cc80;
+      transform: rotate(45deg)
+    }
+
+    .zelda::before {
+      top: -5px;
+      left: -5px
+    }
+
+    .zelda::after {
+      bottom: -5px;
+      right: -5px
+    }
+
+    .mh {
+      background: rgba(0, 0, 0, .92);
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 2px solid #d4af37;
+      position: relative;
+      letter-spacing: .5px
+    }
+
+    .mh::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 48%, #d4af37 49%, #d4af37 51%, transparent 52%);
+      opacity: .1
+    }
+
+    .ff14 {
+      background: rgba(0, 0, 0, .85);
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, .3);
+      position: relative
+    }
+
+    .ff14::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 49%, rgba(255, 255, 255, .1) 50%, transparent 51%);
+      background-size: 10px 10px
+    }
+
+    .minecraft {
+      background: #000;
+      padding: 8px;
+      border: 2px solid #555;
+      font-family: 'Press Start 2P', monospace;
+      color: #fff;
+      text-shadow: 2px 2px #000;
+      position: relative;
+      image-rendering: pixelated
+    }
+
+    .minecraft::before {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      background: linear-gradient(rgba(255, 255, 255, .2), rgba(255, 255, 255, .1));
+      border: 1px solid rgba(255, 255, 255, .1)
+    }
+
+    .genshin {
+      background: rgba(255, 255, 255, .97);
+      color: #695138;
+      padding: 12px 16px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 1px solid #c3a992;
+      border-radius: 4px;
+      position: relative
+    }
+
+    .genshin::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid #c3a992
+    }
+
+    .pokemon {
+      background: linear-gradient(135deg, #f8f8f8, #e8e8e8);
+      color: #333;
+      padding: 12px 16px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 2px solid #4a90e2;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(74, 144, 226, .2), inset 0 1px 0 #fff;
+      position: relative
+    }
+
+    .pokemon .title {
+      color: #4a90e2
+    }
+
+    .darksouls {
+      background: rgba(20, 20, 20, .97);
+      color: #d8b88b;
+      padding: 12px 16px;
+      font-family: 'Crimson Text', serif;
+      border: 1px solid #8b7355;
+      text-align: center;
+      position: relative;
+      letter-spacing: 2px
+    }
+
+    .darksouls::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border: 1px solid rgba(139, 115, 85, .3)
+    }
+  </style>
+</head>
+
+<body>
+  <style>
+    .cyberpunk {
+      background: #fcee0a;
+      color: #000;
+      padding: 10px 14px;
+      font-family: 'Roboto Condensed', sans-serif;
+      text-transform: uppercase;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+      border: 2px solid #000;
+      letter-spacing: 1px
+    }
+
+    .cyberpunk::before {
+      content: 'ERR://';
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      font-size: 8px;
+      opacity: .5;
+      letter-spacing: 2px
+    }
+
+    .mgs {
+      background: rgba(0, 0, 0, .95);
+      color: #00ff00;
+      padding: 10px 14px;
+      font-family: monospace;
+      border: 1px solid #00ff00;
+      text-transform: uppercase;
+      position: relative;
+      box-shadow: 0 0 10px rgba(0, 255, 0, .2), inset 0 0 10px rgba(0, 255, 0, .2);
+      text-shadow: 0 0 5px rgba(0, 255, 0, .5)
+    }
+
+    .mgs::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(transparent, transparent 2px, rgba(0, 255, 0, .1) 3px, transparent 3px);
+      animation: scan 10s linear infinite
+    }
+
+    .splatoon {
+      background: #fe29a6;
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Roboto Condensed', sans-serif;
+      clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+      position: relative;
+      text-shadow: 2px 2px rgba(0, 0, 0, .5);
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, .3)
+    }
+
+    .splatoon::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, .2));
+      mix-blend-mode: overlay
+    }
+
+    .undertale {
+      background: #000;
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Press Start 2P', monospace;
+      border: 4px double #fff;
+      position: relative;
+      letter-spacing: -1px
+    }
+
+    .undertale::before {
+      content: '*';
+      position: absolute;
+      left: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #fff
+    }
+
+    .ace {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 12px 16px;
+      font-family: 'Roboto Condensed', sans-serif;
+      border: 2px solid #cc0000;
+      position: relative;
+      box-shadow: 0 0 0 1px #fff, inset 0 0 20px rgba(204, 0, 0, .2)
+    }
+
+    .ace::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: #cc0000
+    }
+
+    .kirby {
+      background: linear-gradient(135deg, #ffb7c5, #ff9eb7);
+      color: #ff4d6d;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border-radius: 25px;
+      border: 2px solid #ff4d6d;
+      box-shadow: 0 4px 15px rgba(255, 77, 109, .2), inset 0 -8px 12px rgba(255, 255, 255, .5);
+      position: relative
+    }
+
+    .kirby::after {
+      content: '★';
+      position: absolute;
+      top: 4px;
+      right: 10px;
+      font-size: 12px;
+      color: #ff4d6d;
+      text-shadow: 0 0 5px rgba(255, 77, 109, .5)
+    }
+
+    .dmc {
+      background: #1a1a1a;
+      color: #cc0000;
+      padding: 10px 14px;
+      font-family: 'Roboto Condensed', sans-serif;
+      text-transform: uppercase;
+      border: 1px solid #cc0000;
+      position: relative;
+      box-shadow: 0 0 15px rgba(204, 0, 0, .3), inset 0 0 15px rgba(204, 0, 0, .3);
+      overflow: hidden
+    }
+
+    .dmc::before {
+      content: 'SSS';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 20px;
+      font-weight: 700;
+      opacity: .1
+    }
+
+    .apex {
+      background: rgba(220, 20, 20, .95);
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Roboto Condensed', sans-serif;
+      clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+      text-transform: uppercase;
+      position: relative;
+      border: 2px solid #fff;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, .5)
+    }
+
+    .apex::after {
+      content: 'CHAMPION';
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      font-size: 8px;
+      opacity: .3
+    }
+
+    .fgo {
+      background: rgba(20, 20, 20, .98);
+      color: #d4af37;
+      padding: 12px 16px;
+      font-family: 'Crimson Text', serif;
+      border: 2px solid #d4af37;
+      position: relative;
+      text-transform: uppercase;
+      box-shadow: 0 0 15px rgba(212, 175, 55, .2), inset 0 0 15px rgba(212, 175, 55, .2)
+    }
+
+    .fgo::before {
+      content: '★★★★★';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 8px;
+      letter-spacing: 1px
+    }
+
+    .gbf {
+      background: rgba(41, 83, 154, .98);
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 1px solid #fff;
+      position: relative;
+      box-shadow: 0 0 15px rgba(255, 255, 255, .2)
+    }
+
+    .gbf::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #fff, transparent)
+    }
+
+    .pad {
+      background: linear-gradient(135deg, #000, #1a1a1a);
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 2px solid #d4af37;
+      position: relative;
+      box-shadow: 0 0 15px rgba(212, 175, 55, .2)
+    }
+
+    .pad::after {
+      content: '×99';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 10px;
+      color: #d4af37
+    }
+
+    .disgaea {
+      background: #000;
+      color: #ff00ff;
+      padding: 10px 14px;
+      font-family: 'Press Start 2P', monospace;
+      border: 2px solid #ff00ff;
+      position: relative;
+      text-shadow: 2px 2px #000, 0 0 5px rgba(255, 0, 255, .5);
+      box-shadow: 0 0 15px rgba(255, 0, 255, .3), inset 0 0 15px rgba(255, 0, 255, .3)
+    }
+
+    .disgaea::before {
+      content: 'Lv.9999';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 8px;
+      opacity: .5
+    }
+
+    .tales {
+      background: linear-gradient(135deg, #4a90e2, #357abd);
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 1px solid rgba(255, 255, 255, .3);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .tales::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, .2) 49%, rgba(255, 255, 255, .2) 51%, transparent 52%);
+      background-size: 10px 10px
+    }
+
+    .fe {
+      background: #000;
+      color: #d4af37;
+      padding: 12px 16px;
+      font-family: 'Crimson Text', serif;
+      border: 1px solid #d4af37;
+      position: relative;
+      text-align: center
+    }
+
+    .fe::before {
+      content: 'S';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 16px;
+      opacity: .3
+    }
+
+    .uma {
+      background: linear-gradient(135deg, #ff8eb7, #ff6b97);
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 2px solid rgba(255, 255, 255, .5);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .uma::before {
+      content: '1st';
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      font-size: 10px;
+      color: rgba(255, 255, 255, .7)
+    }
+
+    .monst {
+      background: #222;
+      color: #fff;
+      padding: 10px 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 2px solid #ffeb3b;
+      position: relative;
+      overflow: hidden
+    }
+
+    .monst::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 235, 59, .2) 0%, transparent 70%);
+      animation: shine 3s linear infinite
+    }
+
+    .nioh {
+      background: #000;
+      color: #ff0000;
+      padding: 10px 14px;
+      font-family: 'Crimson Text', serif;
+      border: 1px solid #ff0000;
+      position: relative;
+      text-transform: uppercase;
+      letter-spacing: 2px
+    }
+
+    .nioh::before {
+      content: '死';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 16px;
+      opacity: .3;
+      font-family: 'Noto Sans JP'
+    }
+
+    .elden {
+      background: rgba(20, 20, 20, .95);
+      color: #d4af37;
+      padding: 12px 16px;
+      font-family: 'Crimson Text', serif;
+      border: double 4px #d4af37;
+      position: relative;
+      text-align: center;
+      letter-spacing: 3px;
+      text-transform: uppercase
+    }
+
+    .elden::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(212, 175, 55, .3)
+    }
+
+    .dbd {
+    background: rgba(20, 0, 0, 0.95);
+    color: #ff3333;
+    padding: 10px 14px;
+    font-family: 'Roboto Condensed', sans-serif;
+    border: 1px solid #800;
+    position: relative;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.2), inset 0 0 15px rgba(255, 0, 0, 0.1);
+    letter-spacing: 1px;
+}
+
+.dbd::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 0, 0, 0.05) 10px,
+        rgba(255, 0, 0, 0.05) 20px
+    );
+}
+
+.dbd::after {
+    content: '☠';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+/* Super Smash Bros - 力強く明るい雰囲気を表現 */
+.smash {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 10px 14px;
+    font-family: 'Roboto Condensed', sans-serif;
+    border: 2px solid #d4af37;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.smash::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.2));
+    mix-blend-mode: overlay;
+}
+
+.smash .title {
+    color: #d4af37;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+/* Granblue Fantasy Versus - 格闘ゲームらしい力強さを表現 */
+.gbf2 {
+    background: linear-gradient(135deg, #2953af, #1a407c);
+    color: #fff;
+    padding: 10px 14px;
+    font-family: 'Roboto Condensed', sans-serif;
+    border: 1px solid #fff;
+    position: relative;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.gbf2::before {
+    content: 'VS';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 10px;
+    opacity: 0.5;
+}
+
+.gbf2::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.1) 49%, rgba(255, 255, 255, 0.1) 51%, transparent 52%);
+    background-size: 10px 10px;
+}
+
+    .container {
+      text-align: center;
+      color: #fff;
+      font-family: Arial;
+      padding: 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, .8);
+      z-index: 200
+    }
+  </style>
+  <div class="popup-list"></div>
+  <script>
+    const g = [
+      { c: 'nier', t: 'Pod Program', m: 'ニーアオートマタ' },
+      { c: 'p5', t: 'Phantom Notice', m: 'ペルソナ5' },
+      { c: 'zelda', t: 'Ancient Message', m: 'ゼルダの伝説' },
+      { c: 'mh', t: 'Hunter Guild', m: 'モンスターハンター' },
+      { c: 'ff14', t: 'Echo Message', m: 'FF14' },
+      { c: 'minecraft', t: 'Achievement Get!', m: 'マインクラフト' },
+      { c: 'genshin', t: 'Exploration Progress', m: '原神' },
+      { c: 'pokemon', t: 'Trainer Info', m: 'ポケットモンスター' },
+      { c: 'darksouls', t: 'Soul Memory', m: 'ダークソウル' },
+      { c: 'cyberpunk', t: 'Relic Update', m: 'サイバーパンク2077' },
+      { c: 'mgs', t: 'Codec Message', m: 'メタルギアソリッド' },
+      { c: 'splatoon', t: 'Fresh News', m: 'スプラトゥーン3' },
+      { c: 'undertale', t: '*', m: 'アンダーテール' },
+      { c: 'ace', t: 'Court Record', m: '逆転裁判' },
+      { c: 'kirby', t: 'Copy Ability', m: '星のカービィ' },
+      { c: 'dmc', t: 'Style Rank', m: 'デビルメイクライ5' },
+      { c: 'apex', t: 'Champion News', m: 'APEX LEGENDS' },
+      { c: 'fgo', t: 'Saint Graph', m: 'Fate/GO' },
+      { c: 'gbf', t: 'Battle Report', m: 'グランブルー' },
+      { c: 'pad', t: 'Dungeon Info', m: 'パズドラ' },
+      { c: 'disgaea', t: 'Level Up', m: 'ディスガイア' },
+      { c: 'tales', t: 'Skill Learned', m: 'テイルズオブ' },
+      { c: 'fe', t: 'Support Rank', m: 'ファイアーエムブレム' },
+      { c: 'uma', t: 'Race Result', m: 'ウマ娘' },
+      { c: 'monst', t: 'Mission Clear', m: 'モンスト' },
+      { c: 'nioh', t: 'Trophy Earned', m: '仁王2' },
+      { c: 'elden', t: 'Legend Felled', m: 'エルデンリング' },
+      { c: 'dbd', t: 'Trial Result', m: 'Dead by Daylight' },
+      { c: 'smash', t: 'Challenger', m: 'スマブラ' },
+      { c: 'gbf2', t: 'Versus Result', m: 'グラブル VS' }
+    ]
+    g.forEach(h => {
+      const a = document.createElement('div')
+      a.className = `achievement ${h.c}`
+      a.innerHTML = `<div class="title">${h.t}</div><div class="message">${h.m}</div>`
+      document.querySelector('.popup-list').appendChild(a)
+    })
+    let i = 0
+    const s = (o = {}) => {
+      const h = g[i]
+      i = (i + 1) % g.length
+      const a = document.createElement('div')
+      a.className = `achievement flying ${h.c}`
+      a.style.left = o.x + 'px'
+      a.style.top = o.y + 'px'
+      a.innerHTML = `<div class="title">${h.t}</div><div class="message">${h.m}</div>`
+      document.body.appendChild(a)
+      a.addEventListener('animationend', () => a.remove())
+    }
+    document.addEventListener('click', e => s({ x: e.pageX, y: e.pageY }))
+  </script>
+</body>
+
+</html>

@@ -60,7 +60,7 @@ function getNowLineStyle(){
   }
 }
 
-function setActiveButton(button) {
+function setSBActiveButton(button) {
   [sbPointButton, sbFreehandButton, sbSelectButton, sbMoveButton, sbDeleteButton].forEach(btn => btn.classList.remove("selected"));
   button.classList.add("selected");
 }
@@ -288,8 +288,8 @@ function updateObjectSelectability() {
   });
 }
 function createControlPoints(obj) {
-  controlPoints.forEach(p => removeByNotSave(p));
-  controlPoints = [];
+  sbClearControlePoints();
+
   if (!obj) return;
   const path = obj.path;
   for (let i = 1; i < path.length - 1; i++) {
@@ -352,26 +352,31 @@ function deletePoint(obj, index) {
 sbPointButton.addEventListener("click", () => {
   currentMode = "point";
   setDrawingMode(sbPointButton);
+  changeCursor("point");
 });
 
 sbFreehandButton.addEventListener("click", () => {
   currentMode = "freehand";
   setDrawingMode(sbFreehandButton);
+  changeCursor("freehand");
 });
 
 sbSelectButton.addEventListener("click", () => {
   currentMode = "select";
   setSelectionMode(sbSelectButton);
+  changeDefaultCursor();
 });
 
 sbMoveButton.addEventListener("click", () => {
   currentMode = "movePoint";
   setSelectionMode(sbMoveButton);
+  changeCursor("movePoint");
 });
 
 sbDeleteButton.addEventListener("click", () => {
   currentMode = "deletePoint";
   setSelectionMode(sbDeleteButton);
+  changeCursor("deletePoint");
 });
 
 canvas.on("mouse:down", event => {
@@ -463,17 +468,20 @@ function sbClear(){
   temporaryLine = null;
   temporaryShape = null;
 }
+function sbClearControlePoints(){
+  controlPoints.forEach(p => removeByNotSave(p));
+  controlPoints = [];
+  requestAnimationFrame(() => canvas.renderAll());
+}
 
 function setDrawingMode(button) {
   canvas.selection = false;
-  setActiveButton(button);
+  setSBActiveButton(button);
   sbClear();
   points = [];
   mousePosition = null;
   updateObjectSelectability();
-  controlPoints.forEach(p => removeByNotSave(p));
-  controlPoints = [];
-  requestAnimationFrame(() => canvas.renderAll());
+  sbClearControlePoints();
 
   canvas.selection = false;
   canvas.forEachObject(obj => {
@@ -487,7 +495,7 @@ function setDrawingMode(button) {
 }
 
 function setSelectionMode(button) {
-  setActiveButton(button);
+  setSBActiveButton(button);
   canvas.selection = currentMode === "select";
   if (editingGroup) canvas.remove(editingGroup);
   editingGroup = null;
@@ -507,9 +515,7 @@ function setSelectionMode(button) {
     });
     nonActiveClearButton();
   }
-  controlPoints.forEach(p => removeByNotSave(p));
-  controlPoints = [];
-  requestAnimationFrame(() => canvas.renderAll());
+  sbClearControlePoints();
 }
 
 setSelectionMode(sbSelectButton);

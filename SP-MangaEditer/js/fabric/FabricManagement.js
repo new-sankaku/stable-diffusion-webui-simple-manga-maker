@@ -18,7 +18,12 @@ canvas.on("object:added", (e) => {
   }
   forcedAdjustCanvasSize();
 
-  if (isKnifeMode) {
+  if( currentMode === 'freehand' ){
+    changeObjectCursor('freehand', obj)
+  }else if( currentMode === 'point' ){
+    changeObjectCursor('point', obj)
+  }else if (isKnifeMode) {
+    changeObjectCursor('knife', obj)
     obj.set({
       selectable: false
     });

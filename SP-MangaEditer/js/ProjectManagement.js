@@ -300,7 +300,7 @@ function loadSettingsLocalStrage() {
     $('view_layers_checkbox').checked         = localSettings.view_layers_checkbox ?? true;
     $('view_controles_checkbox').checked      = localSettings.view_controles_checkbox ?? true;
     $('knifePanelSpaceSize').value            = localSettings.knifePanelSpaceSize || "20";
-    $('outputDpi').value                      = localSettings.canvasDpi || "300";
+    $('outputDpi').value                      = localSettings.canvasDpi || "450";
     $('gridSizeInput').value                  = localSettings.canvasGridLineSize || "10";
     $('marginFromPanel').value                = localSettings.canvasMarginFromPanel || 20;
     $('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";

@@ -7,13 +7,20 @@ function switchPencilType(type) {
     if (type === nowPencil) {
         pencilModeClear(type);
         currentPaths = [];
-        clearActiveButton();
+        clearPenActiveButton();
+        nonActiveClearButton();
         return;
     } else {
         pencilModeClear(type);
         canvas.isDrawingMode = true;
         currentPaths = [];
         nowPencil = type;
+    }
+
+    
+    activeClearButton();
+    if (type !== MODE_PEN_MOSAIC) {
+        changeCursor("editPen");
     }
 
     if (type === MODE_PEN_MOSAIC) {
@@ -57,7 +64,7 @@ function switchPencilType(type) {
         canvas.freeDrawingBrush = new fabric[type + "Brush"](canvas);
 
     }
-    clearActiveButton();
+    clearPenActiveButton();
 
     $(type + 'Button').classList.add('active-button');
     applyBrushSettings();
@@ -346,8 +353,8 @@ function applyBrushSettings() {
 
 
 
-function clearActiveButton() {
-    console.log("clearActiveButton is call");
+function clearPenActiveButton() {
+    console.log("clearPenActiveButton is call");
     $(MODE_PEN_PENCIL  + 'Button').classList.remove('active-button');
     // $(MODE_PEN_OUTLINE + 'Button').classList.remove('active-button');
     $(MODE_PEN_CIRCLE  + 'Button').classList.remove('active-button');

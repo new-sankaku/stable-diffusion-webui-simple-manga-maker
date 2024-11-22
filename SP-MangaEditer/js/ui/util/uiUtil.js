@@ -65,10 +65,3 @@ function changeSelected(button) {
   unSelectedByButton(button);
   selectedByButton(button);
 }
-
-function activeClearButton(){
-  selectedById("clearMode");
-}
-function nonActiveClearButton(){
-  unSelectedById("clearMode");
-}

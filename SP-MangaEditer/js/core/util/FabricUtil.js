@@ -550,6 +550,18 @@ function getObjectCount() {
 }
 
 
+function getObjectList(){
+  var objescts = canvas.getObjects();
+  var resultList = [];
+  if( objescts ){
+    return objescts;
+  }else{
+    return resultList;
+  }
+}
+
+
+
 function getImageObjectList(){
   var objescts = canvas.getObjects();
   var resultList = [];
