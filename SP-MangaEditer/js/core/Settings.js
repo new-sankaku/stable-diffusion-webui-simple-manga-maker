@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.renderAll();
 });
 
-const mode = localStorage.getItem('mode') || 'light-mode';
+const mode = localStorage.getItem('mode') || 'dark-mode';
 if (mode === 'dark-mode') {
   canvas.backgroundColor = "gray";
 }else{

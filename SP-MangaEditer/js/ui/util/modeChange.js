@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function initializeMode() {
-  const mode = localStorage.getItem('mode') || 'light-mode';
+  const mode = localStorage.getItem('mode') || 'dark-mode';
   document.body.classList.add(mode);
   const logo = $('navbar-logo');
   if (mode === 'dark-mode') {
