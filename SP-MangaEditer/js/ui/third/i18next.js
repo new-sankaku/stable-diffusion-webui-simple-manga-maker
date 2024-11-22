@@ -3,6 +3,10 @@
 const resources = {
   ja: {
     translation: {
+"panelInNotFit":"パネル内に配置",
+"movementOn":"移動許可",
+"movementOff":"移動不可",
+
 "normal_sex":"ノーマルなSex",
 "promptMultiAutoGenerate":"プロンプト自動設定",
 "promptManager":"Prompt Manager(α版)",
@@ -447,6 +451,10 @@ const resources = {
   },
 en: {
     translation: {
+"panelInNotFit":"패널 내 배치",
+"movementOn":"이동 허용",
+"movementOff":"이동 불가",
+
 "normal_sex": "Normal Sex",
 "promptMultiAutoGenerate": "Automatic Prompt Setup",
 "promptManager": "Prompt Manager (Alpha)",
@@ -975,7 +983,11 @@ en: {
   },
   ko: {
 translation: {
-"normal_sex": "일반적인 섹스",
+"panelInNotFit":"패널 내 배치",
+"movementOn":"이동 허용",
+"movementOff":"이동 불가",
+  
+  "normal_sex": "일반적인 섹스",
 "promptMultiAutoGenerate": "프롬프트 자동 설정",
 "promptManager": "프롬프트 관리자 (알파)",
 "scenario": "시나리오",
@@ -1425,6 +1437,9 @@ translation: {
   },
   fr: {
     translation: {
+"panelInNotFit":"Placer dans le panneau",
+"movementOn":"Mouvement autorisé",
+"movementOff":"Mouvement non autorisé",
 "normal_sex": "Sexe Normal",
 "promptMultiAutoGenerate": "Configuration Automatique des Prompts",
 "promptManager": "Gestionnaire de Prompts (Alpha)",
@@ -1909,7 +1924,10 @@ translation: {
   },
   zh: {
     translation: {
-"normal_sex": "普通性行为",
+"panelInNotFit":"放置在面板中",
+"movementOn":"允许移动",
+"movementOff":"禁止移动",
+      "normal_sex": "普通性行为",
 "promptMultiAutoGenerate": "提示词自动设置",
 "promptManager": "提示词管理器（α版）",
 "scenario": "场景",
@@ -2393,7 +2411,10 @@ translation: {
   },
   ru: {
     translation: {
-"normal_sex": "Нормальный секс",
+"panelInNotFit":"Разместить в панели",
+"movementOn":"Движение разрешено",
+"movementOff":"Движение запрещено",
+      "normal_sex": "Нормальный секс",
 "promptMultiAutoGenerate": "Автоматическая настройка промптов",
 "promptManager": "Менеджер промптов (альфа)",
 "scenario": "Сценарий",
@@ -2826,6 +2847,10 @@ translation: {
   },
   es: {
     translation: {
+      "panelInNotFit":"Colocar en panel",
+"movementOn":"Movimiento permitido",
+"movementOff":"Movimiento no permitido",
+
 "normal_sex": "Sexo Normal",
 "promptMultiAutoGenerate": "Configuración Automática de Prompts",
 "promptManager": "Gestor de Prompts (Alpha)",
@@ -3257,7 +3282,11 @@ translation: {
   },
   pt: {
     translation: {
-"normal_sex": "Sexo Normal",
+"panelInNotFit":"Colocar no painel",
+"movementOn":"Movimento permitido",
+"movementOff":"Movimento não permitido",
+
+      "normal_sex": "Sexo Normal",
 "promptMultiAutoGenerate": "Configuração Automática de Prompts",
 "promptManager": "Gerenciador de Prompts (Alpha)",
 "scenario": "Cenário",
@@ -3689,7 +3718,10 @@ translation: {
   },
 th: {
 translation: {
-"normal_sex": "เพศสัมพันธ์ปกติ",
+"panelInNotFit":"วางในแผง",
+"movementOn":"อนุญาตการเคลื่อนย้าย",
+"movementOff":"ไม่อนุญาตการเคลื่อนย้าย",
+  "normal_sex": "เพศสัมพันธ์ปกติ",
 "promptMultiAutoGenerate": "การตั้งค่าพรอมต์อัตโนมัติ",
 "promptManager": "ตัวจัดการพรอมต์ (อัลฟ่า)",
 "scenario": "สถานการณ์",
@@ -4172,7 +4204,10 @@ translation: {
   },
     de: {
 "translation": {
-"normal_sex": "Normaler Sex",
+"panelInNotFit":"Im Panel platzieren",
+"movementOn":"Bewegung erlaubt",
+"movementOff":"Bewegung nicht erlaubt",
+  "normal_sex": "Normaler Sex",
 "promptMultiAutoGenerate": "Automatische Prompt-Einstellung",
 "promptManager": "Prompt-Manager (Alpha)",
 "scenario": "Szenario",

@@ -1,7 +1,7 @@
 let promptIndex = 100000;
 
 function showT2IPrompts(layer) { 
-  console.log("showT2IPrompts layer.text2img_prompt:", layer.text2img_prompt);
+  // console.log("showT2IPrompts layer.text2img_prompt:", layer.text2img_prompt);
 
   var otherControlsMini = $("other-controls-mini");
   otherControlsMini.innerHTML = `

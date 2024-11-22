@@ -98,21 +98,23 @@ function initialPutImage(img) {
   return img;
 }
 
-function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false) {
+function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false, isFit=true) {
   let obj;
   
   if (typeof imgOrSvg === 'string' && imgOrSvg.startsWith('<svg')) {
     fabric.loadSVGFromString(imgOrSvg, function(objects, options) {
       obj = fabric.util.groupSVGElements(objects, options);
-      placeObject(obj, x, y, isNotActive);
+      placeObject(obj, x, y, isNotActive, true, isFit);
     });
   } else {
     obj = imgOrSvg;
-    placeObject(obj, x, y, isNotActive, notReplace);
+    placeObject(obj, x, y, isNotActive, notReplace, isFit);
   }
 
-  function placeObject(obj, x, y, isNotActive, notReplace) {
-    obj.set({ left: x, top: y });
+  function placeObject(obj, x, y, isNotActive, notReplace, isFit) {
+    if(isFit){
+      obj.set({ left: x, top: y });
+    }
     setNotSave(obj);
 
     if( notReplace ){
@@ -132,13 +134,14 @@ function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false) {
 
       moveSettings(obj, targetFrame);
 
-      obj.set({
-        left: frameCenterX - (obj.width * scaleToFit) / 2,
-        top: frameCenterY - (obj.height * scaleToFit) / 2,
-        scaleX: scaleToFit * 1.05,
-        scaleY: scaleToFit * 1.05,
-      });
-
+      if(isFit){
+        obj.set({
+          left: frameCenterX - (obj.width * scaleToFit) / 2,
+          top: frameCenterY - (obj.height * scaleToFit) / 2,
+          scaleX: scaleToFit * 1.05,
+          scaleY: scaleToFit * 1.05,
+        });
+      }
       if (obj.name) {
         obj.name = targetFrame.name + "-" + obj.name;
       } else {
@@ -147,16 +150,18 @@ function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false) {
 
       setGUID(targetFrame, obj);
     } else {
-      var scaleToCanvasWidth = 300 / obj.width;
-      var scaleToCanvasHeight = 300 / obj.height;
-      var scaleToCanvas = Math.min(scaleToCanvasWidth, scaleToCanvasHeight);
+      if(isFit){
+        var scaleToCanvasWidth = 300 / obj.width;
+        var scaleToCanvasHeight = 300 / obj.height;
+        var scaleToCanvas = Math.min(scaleToCanvasWidth, scaleToCanvasHeight);
 
-      obj.set({
-        left: 50,
-        top: 50,
-        scaleX: scaleToCanvas,
-        scaleY: scaleToCanvas,
-      });
+        obj.set({
+          left: 50,
+          top: 50,
+          scaleX: scaleToCanvas,
+          scaleY: scaleToCanvas,
+        });
+      }
     }
 
     if (!isNotActive) {

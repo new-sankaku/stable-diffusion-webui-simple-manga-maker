@@ -72,7 +72,7 @@ function showObjectMenu(clickType) {
   // 'rembg', 'panelIn'
 
   var visible   = activeObject.visible ? 'visibleOff' : 'visibleOn';
-  var movement  = activeObject.lockMovementX ? 'movementOn' : 'movementOff';
+  var movement  = !activeObject.selectable ? 'movementOn' : 'movementOff';
 
   if (isPanel(activeObject)) {
     var edit  = activeObject.edit ? 'editOff'  : 'editOn';
@@ -101,8 +101,18 @@ function showObjectMenu(clickType) {
     }
   } else if (isText(activeObject)) {
     menuItems = clickType === 'left' ? [] : [visible, movement, 'delete', 'selectClear'];
+    if( haveClipPath(activeObject) ){
+      menuItems.push('clearAllClipPaths');
+    }else{
+      menuItems.push('panelInNotFit');
+    }
   } else {
     menuItems = clickType === 'left' ? [] : [visible, movement, 'delete', 'selectClear'];
+    if( haveClipPath(activeObject) ){
+      menuItems.push('clearAllClipPaths');
+    }else{
+      menuItems.push('panelInNotFit');
+    }
   }
 
   if (menuItems.length === 0) {
@@ -133,12 +143,18 @@ function handleMenuClick(e) {
     case 'canvasFit':
       fitImageToCanvas(activeObject);
       break;
-    case 'panelIn':
-      var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
-      var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
-      putImageInFrame(activeObject, canvasX, canvasY, true, true);
-      updateLayerPanel();
-      break;
+      case 'panelIn':
+        var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
+        var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
+        putImageInFrame(activeObject, canvasX, canvasY, true, true);
+        updateLayerPanel();
+        break;
+      case 'panelInNotFit':
+        var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
+        var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
+        putImageInFrame(activeObject, canvasX, canvasY, true, true, false);
+        updateLayerPanel();
+        break;
     case 'visibleOn':
     case 'visibleOff':
       visibleChange(activeObject);
