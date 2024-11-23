@@ -166,3 +166,18 @@ canvas.on("object:added", (e) => {
       obj.set('fill', 'rgba(255,255,255,0.25)');
   }
 });
+
+
+canvas.on('mouse:down', function(e) {
+  if (e.target) {
+      e.target.opacity = 0.5;
+      canvas.renderAll();
+  }
+});
+
+canvas.on('mouse:up', function(e) {
+  if (e.target) {
+      e.target.opacity = 1;
+      canvas.renderAll();
+  }
+});
