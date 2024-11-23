@@ -81,7 +81,7 @@ function updateLayerPanel() {
 
       if (isLayerPreview(layer)) {
         createPreviewImage(layer, previewDiv);
-      } else if (isHorizontalText(layer)) {
+      } else if (isText(layer)) {
         var fullText = layer.text;
         nameTextArea.value = fullText.substring(0, 20);
       } else if (isVerticalText(layer)) {
@@ -161,8 +161,8 @@ function updateLayerPanel() {
 }
 
 function setNameTextAreaProperties(layer, nameTextArea, index) {
-  nameTextArea.value =
-    layer.name || nameTextArea.value || layer.type + `${index + 1}`;
+  nameTextArea.value = layer.name || nameTextArea.value || layer.type + `${index + 1}`;
+
   layer.name = nameTextArea.value;
   nameTextArea.rows = 1;
   nameTextArea.style.resize = "none";
@@ -179,8 +179,13 @@ function setNameTextAreaProperties(layer, nameTextArea, index) {
   };
 
   if (isText(layer)) {
+    nameTextArea.value = layer.text;
     nameTextArea.style.flex = "1";
     nameTextArea.style.marginRight = "5px";
+  }
+  console.log("layer.text", layer.text);
+  if (isImage(layer) && layer.text) {
+    nameTextArea.value = layer.text;
   }
 }
 

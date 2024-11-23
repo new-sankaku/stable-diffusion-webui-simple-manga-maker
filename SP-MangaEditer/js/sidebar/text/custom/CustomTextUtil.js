@@ -35,3 +35,12 @@ function createMergeNode(inValue) {
   setAttributes(node, { in: inValue });
   return node;
 }
+
+function getFirstNCharsDefault(textarea) {
+  return getFirstNChars(textarea, 20);
+}
+
+function getFirstNChars(textarea, maxChars) {
+  if (!textarea.value) return '';
+  return textarea.value.replace(/\n/g, ' ').slice(0, maxChars);
+}

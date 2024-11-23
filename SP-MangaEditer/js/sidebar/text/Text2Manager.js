@@ -303,6 +303,7 @@ function updateText2(){
 
 
 function createText2(type){
+  let nowImageTextObject=null; 
   switch (type) {
     case MODE_T2_aurora:
       t2_aurora_createSvg();
@@ -339,6 +340,7 @@ function createText2(type){
       break;
     case MODE_T2_SHADOW:
       t2_shadow_createSvg();
+      nowImageTextObject = nowT2ShadowStr;
       break;
     default:
       console.error("unknown type", type);

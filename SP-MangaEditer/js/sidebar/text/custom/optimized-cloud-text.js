@@ -120,6 +120,7 @@ reader.onload=({target})=>{
 fabric.Image.fromURL(target.result,img=>{
 Object.assign(img,{left,top});
 nowT2CloudStr=img;
+img.text = getFirstNCharsDefault(t2_text);
 canvas.add(img).setActiveObject(img).renderAll();
 },{crossOrigin:'anonymous'});
 };

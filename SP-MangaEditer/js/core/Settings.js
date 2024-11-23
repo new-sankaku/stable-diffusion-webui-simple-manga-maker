@@ -91,6 +91,6 @@ const commonProperties = [
 'initial', 
 'clipPath.initial',
 'name',
-"guids", "guid", "tempPrompt", "tempNegative", "tempSeed", "img2imgScale", "img2img_denoise", "canvasGuid", "isSpeechBubble","jstsGeom"
+"guids", "guid", "tempPrompt", "tempNegative", "tempSeed", "img2imgScale", "img2img_denoise", "canvasGuid", "isSpeechBubble","jstsGeom","text"
 ];
 
