@@ -451,9 +451,9 @@ const resources = {
   },
 en: {
     translation: {
-"panelInNotFit":"패널 내 배치",
-"movementOn":"이동 허용",
-"movementOff":"이동 불가",
+"panelInNotFit": "Fit in Panel",
+"movementOn": "Enable Movement", 
+"movementOff": "Disable Movement",
 
 "normal_sex": "Normal Sex",
 "promptMultiAutoGenerate": "Automatic Prompt Setup",

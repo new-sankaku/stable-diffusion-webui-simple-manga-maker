@@ -263,7 +263,7 @@
   justify-content: flex-end;
   align-items: center;
   padding: 4px;
-  background-color: var(--nav-background-color);
+  background-color: var(--background-color-A);
   border-bottom: var(--boader-color-1px-solid-B);
 }
 

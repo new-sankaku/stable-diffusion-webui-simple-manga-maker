@@ -29,7 +29,7 @@
     content: attr(data-label);
   position: absolute;
   left: 3px;
-  color: #ffffff;
+  color: var(--component-text-color);
   pointer-events: none;
 }
 
@@ -52,14 +52,14 @@ input[type="range"] {
 .slider-value-button {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--component-text-color);
   font-size: 0.9em;
   cursor: pointer;
   padding: 0;
   line-height: 1;
 }
 .slider-value-button:hover {
-  color: #61dafb;
+  color: var(--component-text-color);
 }
 
 .input-container, .input-container-leftSpace {

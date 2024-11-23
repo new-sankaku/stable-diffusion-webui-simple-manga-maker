@@ -21,7 +21,7 @@ hr {
 
 .custom-navbar,
 .navbar {
- background-color: var(--nav-background-color);
+ background-color: var(--background-color-A);
  color: var(--text-color-B);
  height: 35px;
 }
@@ -33,7 +33,7 @@ hr {
 }
 
 .custom-navbar .dropdown-menu {
- background-color: var(--nav-background-color);
+ background-color: var(--background-color-A);
  border-color: var(--nav-border)
 }
 

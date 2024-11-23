@@ -94,7 +94,7 @@
 #sidebar i {
  margin-bottom: 10px;
  padding: 7px;
- color: var(--color-sidebar-icon);
+ color: var(--sidebar-icon-color);
  transition: color 0.3s, transform 0.3s;
 }
 

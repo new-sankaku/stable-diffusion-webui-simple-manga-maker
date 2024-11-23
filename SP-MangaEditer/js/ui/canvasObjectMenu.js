@@ -82,17 +82,12 @@ function showObjectMenu(clickType) {
     if( hasRole( AI_ROLES.Text2Image )){ menuItems.push('generate') }
 
     menuItems.push('delete');
-    menuItems.push('selectClear');
-
   } else if (isImage(activeObject)) {
     menuItems = clickType === 'left' ? [] : [visible, movement];
     
     if( hasRole( AI_ROLES.Image2Image )){ menuItems.push('generate') }
     if( hasRole( AI_ROLES.RemoveBG )){ menuItems.push('rembg') }
-    
     menuItems.push('delete');
-    menuItems.push('selectClear');
-
     if( haveClipPath(activeObject) ){
       menuItems.push('clearAllClipPaths');
     }else{
@@ -100,20 +95,21 @@ function showObjectMenu(clickType) {
       menuItems.push("canvasFit");
     }
   } else if (isText(activeObject)) {
-    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete'];
     if( haveClipPath(activeObject) ){
       menuItems.push('clearAllClipPaths');
     }else{
       menuItems.push('panelInNotFit');
     }
   } else {
-    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete', 'selectClear'];
+    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete'];
     if( haveClipPath(activeObject) ){
       menuItems.push('clearAllClipPaths');
     }else{
       menuItems.push('panelInNotFit');
     }
   }
+  menuItems.push('selectClear');
 
   if (menuItems.length === 0) {
     return;

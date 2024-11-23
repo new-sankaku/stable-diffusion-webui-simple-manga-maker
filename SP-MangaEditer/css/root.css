@@ -1,244 +1,294 @@
 .dark-mode {
- --fjm-background-color: #333333;
- --fjm-padding: 2px;
- --fjm-z-index: 1000;
- --fjm-border-radius: 2px;
- --fjm-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
- --fjm-font-size: 12px;
- --fjm-border-color: #444444;
- --fjm-button-margin: 2px 0;
- --fjm-button-cursor: pointer;
- --fjm-button-padding: 2px 3px;
- --fjm-button-bg-color: #555555;
- --fjm-button-border-color: #666666;
- --fjm-button-border-radius: 3px;
- --fjm-button-color: #cccccc;
- --fjm-button-hover-bg-color: #666666;
- --fjm-button-hover-color: #ffffff;
- --fjm-button-active-bg-color: #777777;
- --fjm-button-width: 100%;
- --fjm-button-text-align: left;
- --fjm-button-white-space: nowrap;
- --sidebar-gradient: linear-gradient(145deg, #262626, #363636);
- --text-color-B: #dedede;
- --text-color-C: #ff7c7c;
- --text-border: #ff9532;
- --nav-border: #212121;
- --nav-background-color: #212121;
- ;
- --nav-background-hover-color: #505050;
- --background-color-A: #212121;
- ;
- --background-color-B: #424242;
- --background-color-C: #505050;
- --background-color-D: #696969;
- --active-background-color-D: #490000;
- --color-sidebar-icon: #696969;
- --button-text-color: #ffffff;
- --button-background: #696969;
- --button-border: 1px solid #555;
- --button-hover-background: #444;
- --button-hover-color: #fff;
- --boader-color-1px-solid-A: 1px solid #ffffff;
- --boader-color-1px-solid-B: 1px solid #555;
- --boader-color-2px-solid-C: 2px dashed #555;
- --boader-color-1px-solid-D: 1px dashed #555;
- --border-color-2px-dashed-B: 2px dashed #aeaeae;
- --border-2px-solid: 2px solid var(--border-color-C);
- --layer-panel-boader-color-1px-solid-B: 1px dashed #9b9b9b;
- --border-color-C: #929292;
- --color-input-focus-border: #ffffff;
- --svg-preview-background: rgb(204, 204, 204);
- --dropdown-color: #e0e0e0;
- --dropdown-border: 1px solid #555;
- --color-dark-grey: #ccc;
- --color-scrollbar-track: #000000;
- --color-scrollbar-thumb: #584040;
- --select-button-color: #810000;
- --a-link: #ffffff;
- --a-link-hover: #ff7c7c;
+  /* Base Colors */
+  --color-base:              #212121;
+  --color-secondary:         #333333;
+  --color-tertiary:          #505050;
+  --color-accent:            #810000;
+  --color-accent-hover:      #8d8b8b;
+  --color-text-primary:      #ffffff;
+  --color-text-secondary:    #dedede;
+  --color-component-minitext:#ff7c7c;
+  --color-hr:                #ff9532;
+  --color-scllor:            #480000;
+  
+  --color-scrollbar-track:                var(--color-base);
+  --nav-border:                           var(--color-base);
+  --background-color-A:                   var(--color-base);
+  --active-background-color-D:            var(--color-scllor);
+  --select-button-color:                  var(--color-accent);
+  --button-hover-background:              var(--color-secondary);
+  --fjm-border-color:                     var(--color-secondary);
+  --boader-color-1px-solid-B:             1px solid  var(--color-tertiary);
+  --fjm-button-bg-color:                             var(--color-tertiary);
+  --dropdown-border:                      1px solid  var(--color-tertiary);
+  --boader-color-2px-solid-C:             2px dashed var(--color-tertiary);
+  --boader-color-1px-solid-D:             1px dashed var(--color-tertiary);
+  --fjm-button-border-color:              var(--color-tertiary);
+  --fjm-button-hover-bg-color:            var(--color-tertiary);
+  --background-color-D:                   var(--color-tertiary);
+  --sidebar-icon-color:                   var(--color-tertiary);
+  --button-background:                    var(--color-tertiary);
+  --fjm-button-active-bg-color:           var(--color-tertiary);
+  --text-color-C:                         var(--color-component-minitext);
+  --a-link-hover:                         var(--color-component-minitext);
+  --text-border:                          var(--color-hr);
+  --border-color-C:                       var(--color-tertiary);
+  --layer-panel-boader-color-1px-solid-B: 1px dashed var(--color-accent-hover:);
+  --color-dark-grey:                      var(--color-text-secondary);
+  --fjm-button-color:                     var(--color-text-secondary);
+  --text-color-B:                         var(--color-text-secondary);
+  --dropdown-color:                       var(--color-text-secondary);
+
+  --svg-preview-background:               var(--color-tertiary);
+
+  --component-text-color:                 var(--color-text-primary);
+  --button-text-color:                    var(--color-text-primary);
+  --button-hover-color:                   var(--color-text-primary);
+  --color-input-focus-border:             var(--color-text-primary);
+  --a-link:                               var(--color-text-primary);
+  --boader-color-1px-solid-A:             1px solid var(--color-text-primary);
+
+  --fjm-background-color:                 var(--color-secondary);
+  --background-color-B:                   var(--color-secondary);
+  --background-color-C:                   var(--color-secondary);
+  --nav-background-hover-color:           var(--color-secondary);
+  
+  --color-scrollbar-thumb:                var(--color-scllor);
+  --border-color-2px-dashed-B:            2px dashed var(--color-accent-hover:);
+  
+  --sidebar-gradient:                     linear-gradient(145deg,var(--color-base);, var(--color-secondary););
+  --border-2px-solid:                     2px solid var(--border-color-C);
+
 }
 
 .light-mode {
- --fjm-background-color: var(--background-color-A);
- --fjm-padding: 2px;
- --fjm-z-index: 1000;
- --fjm-border-radius: 2px;
- --fjm-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
- --fjm-font-size: 12px;
- --fjm-border-color: var(--nav-border);
- --fjm-button-margin: 2px 0;
- --fjm-button-cursor: pointer;
- --fjm-button-padding: 2px 3px;
- --fjm-button-bg-color: var(--button-background);
- --fjm-button-border-color: var(--dropdown-border);
- --fjm-button-border-radius: 3px;
- --fjm-button-color: var(--button-text-color);
- --fjm-button-hover-bg-color: var(--button-hover-background);
- --fjm-button-hover-color: var(--button-hover-color);
- --fjm-button-active-bg-color: var(--background-color-B);
- --fjm-button-width: 100%;
- --fjm-button-text-align: left;
- --fjm-button-white-space: nowrap;
+  --color-base:                           rgb(225, 216, 184);
+  --color-secondary:                      rgb(186, 179, 153);
+  --color-tertiary:                       rgb(151, 145, 122);
+  --color-accent:                         rgb(180, 107, 86);
+  --color-accent-hover:                   rgb(203, 124, 98);
+  --color-text-primary:                   rgb(0, 0, 0);
+  --color-text-secondary:                 rgb(48, 48, 48);
+  --color-component-minitext:             #ffffff;
+  --color-hr:                             #ff9532;
+  --color-scllor:                         rgb(107, 105, 90);
+  
+  --color-scrollbar-track:                var(--color-base);
+  --nav-border:                           var(--color-base);
+  --background-color-A:                   var(--color-base);
+  --active-background-color-D:            var(--color-scllor);
+  --select-button-color:                  var(--color-accent);
+  --button-hover-background:              var(--color-secondary);
+  --fjm-border-color:                     var(--color-secondary);
+  --boader-color-1px-solid-B:             1px solid  var(--color-tertiary);
+  --fjm-button-bg-color:                             var(--color-tertiary);
+  --dropdown-border:                      1px solid  var(--color-tertiary);
+  --boader-color-2px-solid-C:             2px dashed var(--color-tertiary);
+  --boader-color-1px-solid-D:             1px dashed var(--color-tertiary);
+  --fjm-button-border-color:              var(--color-tertiary);
+  --fjm-button-hover-bg-color:            var(--color-tertiary);
+  --background-color-D:                   var(--color-tertiary);
+  --sidebar-icon-color:                   var(--color-tertiary);
+  --button-background:                    var(--color-tertiary);
+  --fjm-button-active-bg-color:           var(--color-tertiary);
+  --text-color-C:                         var(--color-component-minitext);
+  --a-link-hover:                         var(--color-component-minitext);
+  --text-border:                          var(--color-hr);
+  --border-color-C:                       var(--color-tertiary);
+  --layer-panel-boader-color-1px-solid-B: 1px dashed var(--color-accent-hover:);
+  --color-dark-grey:                      var(--color-text-secondary);
+  --fjm-button-color:                     var(--color-text-secondary);
+  --text-color-B:                         var(--color-text-secondary);
+  --dropdown-color:                       var(--color-text-secondary);
+  
+  --svg-preview-background:               var(--color-base);
 
- --select-button-color: #e2842b;
- --sidebar-gradient: rgb(255, 217, 141);
- --text-color-B: #242424;
- --text-color-C: #c97500;
- --text-border: #ff9532;
- --nav-border: #dedede;
- --nav-background-color: rgb(255, 245, 226);
- --nav-background-hover-color: rgb(255, 217, 141);
- --background-color-A: rgb(255, 245, 226);
- --background-color-B: rgb(255, 227, 172);
- --background-color-C: rgb(255, 217, 141);
- --background-color-D: rgb(255, 212, 125);
- --active-background-color-D: rgb(255, 197, 82);
+  --component-text-color:                 var(--color-text-primary);
+  --button-text-color:                    var(--color-text-primary);
+  --button-hover-color:                   var(--color-text-primary);
+  --color-input-focus-border:             var(--color-text-primary);
+  --a-link:                               var(--color-text-primary);
+  --boader-color-1px-solid-A:             1px solid var(--color-text-primary);
 
- --color-sidebar-icon: rgb(0, 0, 0);
- --button-text-color: #000000;
- --button-background: #ffc993;
- --button-border: 1px solid #afafaf;
- --button-hover-background: #d25f00;
- --button-hover-color: #000000;
- --boader-color-1px-solid-A: 1px solid #000000;
- --boader-color-1px-solid-B: 1px solid #000000;
- --boader-color-2px-solid-C: 2px dashed #bdbdbd;
- --boader-color-1px-solid-D: 1px dashed #bdbdbd;
- --border-color-2px-dashed-B: 2px dashed #656565;
- --border-2px-solid: 2px solid var(--border-color-C);
- --layer-panel-boader-color-1px-solid-B: 1px dashed #404040;
- --border-color-C: #727272;
- --color-input-focus-border: #000000;
- --svg-preview-background: rgb(255, 239, 206);
- --dropdown-color: #4a4a4a;
- --dropdown-border: 1px solid #c0c0c0;
- --color-dark-grey: #5b5b5b;
- --color-scrollbar-track: rgb(255, 239, 206);
- --color-scrollbar-thumb: rgb(255, 210, 121);
- --a-link: #512f00;
- --a-link-hover: #c97500;
+  --fjm-background-color:                 var(--color-secondary);
+  --background-color-B:                   var(--color-secondary);
+  --background-color-C:                   var(--color-secondary);
+  --nav-background-hover-color:           var(--color-secondary);
+  
+  --color-scrollbar-thumb:                var(--color-scllor);
+  --border-color-2px-dashed-B:            2px dashed var(--color-accent-hover:);
+  
+  --sidebar-gradient:                     linear-gradient(145deg,var(--color-base);, var(--color-secondary););
+  --border-2px-solid:                     2px solid var(--border-color-C);
 }
 
-
 :root {
- --toggle-off-background: #4f9eff;
- --toggle-on-background: #ff5e57;
- --toggle-button-color: #fff;
- --toggle-button-shadow: rgba(0, 0, 0, 0.2);
- --color-window-border: 2px solid #007bff;
- --color-window-header-bg: #007bff;
- --color-button-hover-bg: #218838;
- --color-button-bg: #28a745;
- /* Crop Button */
- --box-shadow-color: #007bff;
- --box-shadow-window: 0 0 15px #007bff;
- --checkbox-background: #1c1c1c;
- --checkbox-border: 1px solid #555;
- --checkbox-checked-background: #82aaff;
- --radio-checked-background: #82aaff;
- --font-family-section: aglet-mono-variable, sans-serif;
- --font-family-window: Arial, sans-serif;
- --transition-bg-color: background-color 0.3s;
- --font-weight-bold: bold;
- --font-weight-header: bold;
- --bg-position-center: center;
- --align-items-center: center;
- --justify-content-center: center;
- --text-align-center: center;
- --text-align-center-bottom-bar-content: center;
- --bg-size-contain: contain;
- --display-flex: flex;
- --animation-timing: infinite alternate;
- --bg-repeat-no: no-repeat;
- --font-family-base: 'Open Sans', Arial, sans-serif;
- --transform-scale-hover: scale(1.1);
- --justify-content-space-between: space-between;
- --transition-collapse-icon: transform 0.3s;
- --flex-layer-panel: 0 0 20%;
- --navbar-padding: 0;
- --padding-button: 0px 3px;
- --padding-button: 0px 3px;
- --flex-1: 1;
- --min-width-layer-panel: 10%;
- --bottom-bar-height: 10%;
- --max-width-controls: 10%;
- --width-100: 100%;
- --min-height-article: 100vh;
- --padding-10-0: 10px 0;
- --margin-right-10: 10px;
- --margin-bottom-10: 10px;
- --margin-left-10: 10px;
- --margin-bottom-10: 10px;
- --padding-bottom-bar-content: 10px;
- --margin-top-group: 10px;
- --margin-bottom-panel: 10px;
- --margin-left-toggle: 10px;
- --margin-right-base: 10px;
- --font-size-12px: 12px;
- --font-size-controls: 12px;
- --font-size-small: 12px;
- --font-size-base: 12px;
- --min-width-layer-panel-small: 15%;
- --max-width-150: 150px;
- --max-width-base: 200px;
- --min-width-base: 200px;
- --font-size-button: 15px;
- --font-size-material-icons: 16px;
- --font-size-icon-material: 16px;
- --gap-section: 16px;
- --padding-block-article: 16px;
- --max-width-layer-panel: 18%;
- --min-width-controls: 300px;
- --flex-basis-section: 180px;
- --font-size-icon-material-outlined: 18px;
- --flex-2: 2;
- --animation-duration: 2000ms;
- --margin-right-20: 20px;
- --margin-top-base: 20px;
- --input-color-height: 20px;
- --input-height: 20px;
- --max-width-layer-panel-large: 25%;
- --input-color-width: 25%;
- --padding-2: 2px;
- --margin-left-2: 2px;
- --margin-right-2: 2px;
- --navbar-logo-max-height: 25px;
- --flex-span-width: 30px;
- --input-width: 38%;
- --gap-article: 32px;
- --input-margin-top: 3px;
- --min-height-400: 400px;
- --svg-preview-width: 45%;
- --layer-preview-width: 45px;
- --layer-preview-height: 45px;
- --margin-button: 4px;
- --textarea-border-radius: 4px;
- --max-width-50: 50px;
- --min-width-50: 50px;
- --width-50: 50px;
- --flex-label-width: 50px;
- --margin-bottom-5px: 5px;
- --padding-5px: 5px;
- --margin-right-5px: 5px;
- --margin-5px: 5px;
- --margin-top-5: 5px;
- --padding-5: 5px;
- --margin-bottom-5: 5px;
- --margin-left-5: 5px;
- --margin-sides-controls: 5px;
- --padding-sides-panel: 5px;
- --margin-top-item: 5px;
- --margin-bottom-header: 5px;
- --margin-sides-separator: 5px;
- --input-margin: 10px;
- --svg-preview-margin: 5px;
- --min-width-600: 600px;
- --dropdown-item-mini-text-width: 65px;
- --input-range-width: 80%;
- --height-85vh: 85vh;
- --margin-right-8: 8px;
- --textarea-height: 90%;
- --height-95: 95%;
- --max-height-95: 95%;
+  --fjm-padding:                          2px;
+  --fjm-z-index:                          1000;
+  --fjm-border-radius:                    0;
+  --fjm-font-family:                      "Helvetica Neue", Arial, sans-serif;
+  --fjm-font-size:                        12px;
+  --fjm-button-margin:                    2px 0;
+  --fjm-button-cursor:                    pointer;
+  --fjm-button-padding:                   2px 3px;
+  --fjm-button-border-radius:             0;
+  --fjm-button-width:                     100%;
+  --fjm-button-text-align:                left;
+  --fjm-button-white-space:               nowrap;
+
+  /* Color Variables */
+  --checkbox-background:                   #1c1c1c;
+  --color-button-hover-bg:                 #218838;
+  --color-button-bg:                       #28a745;
+  --color-window-border:                   2px solid #007bff;
+  --color-window-header-bg:                #007bff;
+  --box-shadow-color:                      #007bff;
+  --box-shadow-window:                     0 0 15px #007bff;
+  --toggle-off-background:                 #4f9eff;
+  --checkbox-checked-background:           #82aaff;
+  --radio-checked-background:              #82aaff;
+  --toggle-on-background:                  #ff5e57;
+  --toggle-button-color:                   #fff;
+  --toggle-button-shadow:                  rgba(0, 0, 0, 0.2);
+  --checkbox-border:                       1px solid #555;
+
+  /* Font Families */
+  --font-family-section:                   aglet-mono-variable, sans-serif;
+  --font-family-window:                    Arial, sans-serif;
+  --font-family-base:                      'Open Sans', Arial, sans-serif;
+
+  /* Font Sizes */
+  --font-size-12px:                       12px;
+  --font-size-controls:                   12px;
+  --font-size-small:                      12px;
+  --font-size-base:                       12px;
+  --font-size-button:                     15px;
+  --font-size-material-icons:             16px;
+  --font-size-icon-material:              16px;
+  --font-size-icon-material-outlined:     18px;
+
+  /* Spacing - 2px */
+  --padding-2:                            2px;
+  --margin-left-2:                        2px;
+  --margin-right-2:                       2px;
+
+  /* Spacing - 3px */
+  --input-margin-top:                     3px;
+  --padding-button:                       0px 3px;
+
+  /* Spacing - 4px */
+  --margin-button:                        4px;
+  --textarea-border-radius:               4px;
+
+  /* Spacing - 5px */
+  --margin-bottom-5px:                    5px;
+  --padding-5px:                          5px;
+  --margin-right-5px:                     5px;
+  --margin-5px:                           5px;
+  --margin-top-5:                         5px;
+  --padding-5:                            5px;
+  --margin-bottom-5:                      5px;
+  --margin-left-5:                        5px;
+  --margin-sides-controls:                5px;
+  --padding-sides-panel:                  5px;
+  --margin-top-item:                      5px;
+  --margin-bottom-header:                 5px;
+  --margin-sides-separator:               5px;
+  --svg-preview-margin:                   5px;
+
+  /* Spacing - 8px */
+  --margin-right-8:                       8px;
+
+  /* Spacing - 10px */
+  --padding-10-0:                         10px 0;
+  --margin-right-10:                      10px;
+  --margin-bottom-10:                     10px;
+  --margin-left-10:                       10px;
+  --padding-bottom-bar-content:           10px;
+  --margin-top-group:                     10px;
+  --margin-bottom-panel:                  10px;
+  --margin-left-toggle:                   10px;
+  --margin-right-base:                    10px;
+  --input-margin:                         10px;
+
+  /* Spacing - 16px */
+  --gap-section:                          16px;
+  --padding-block-article:                16px;
+
+  /* Spacing - 20px */
+  --margin-right-20:                      20px;
+  --margin-top-base:                      20px;
+  --input-color-height:                   20px;
+  --input-height:                         20px;
+
+  /* Spacing - 32px */
+  --gap-article:                          32px;
+
+  /* Widths & Heights - Fixed */
+  --navbar-logo-max-height:               25px;
+  --flex-span-width:                      30px;
+  --layer-preview-width:                  45px;
+  --layer-preview-height:                 45px;
+  --max-width-50:                         50px;
+  --min-width-50:                         50px;
+  --width-50:                             50px;
+  --flex-label-width:                     50px;
+  --dropdown-item-mini-text-width:        65px;
+  --max-width-150:                        150px;
+  --flex-basis-section:                   180px;
+  --max-width-base:                       200px;
+  --min-width-base:                       200px;
+  --min-width-controls:                   300px;
+  --min-height-400:                       400px;
+  --min-width-600:                        600px;
+
+  /* Widths & Heights - Percentage */
+  --min-width-layer-panel:                10%;
+  --bottom-bar-height:                    10%;
+  --max-width-controls:                   10%;
+  --min-width-layer-panel-small:          15%;
+  --max-width-layer-panel:                18%;
+  --flex-layer-panel:                     0 0 20%;
+  --max-width-layer-panel-large:          25%;
+  --input-color-width:                    25%;
+  --input-width:                          38%;
+  --svg-preview-width:                    45%;
+  --input-range-width:                    80%;
+  --height-85vh:                          85vh;
+  --textarea-height:                      90%;
+  --height-95:                            95%;
+  --max-height-95:                        95%;
+  --width-100:                            100%;
+  --min-height-article:                   100vh;
+
+  /* Flexbox & Display */
+  --display-flex:                         flex;
+  --flex-1:                              1;
+  --flex-2:                              2;
+  --justify-content-center:               center;
+  --justify-content-space-between:        space-between;
+  --align-items-center:                   center;
+
+  /* Text Alignment */
+  --text-align-center:                    center;
+  --text-align-center-bottom-bar-content: center;
+
+  /* Font Weights */
+  --font-weight-bold:                     bold;
+  --font-weight-header:                   bold;
+
+  /* Background Properties */
+  --bg-position-center:                   center;
+  --bg-size-contain:                      contain;
+  --bg-repeat-no:                         no-repeat;
+
+  /* Transitions & Animations */
+  --transition-bg-color:                  background-color 0.3s;
+  --transition-collapse-icon:             transform 0.3s;
+  --transform-scale-hover:                scale(1.1);
+  --animation-timing:                     infinite alternate;
+  --animation-duration:                   2000ms;
+
+  /* Navigation */
+  --navbar-padding:                       0;
 }

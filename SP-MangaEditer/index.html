@@ -40,7 +40,7 @@ const b = `<svg viewBox="0 0 100 100" width="100%" height="100%" style="position
             const c = document.createElement("div");
             c.style.cssText = "padding:20px;";
             const d = document.createElement("div");
-            d.textContent = "PIXELEDITOR PRO", d.style.cssText = "font-size:24px;font-weight:700;", c.appendChild(d), a.appendChild(c);
+            d.textContent = "MANGA EDITOR DESU!! PRO", d.style.cssText = "font-size:24px;font-weight:700;", c.appendChild(d), a.appendChild(c);
             const e = document.createElement("div");
             e.id = "h", e.style.cssText = "flex-grow:1;padding:20px;", f.forEach(() => { const a = document.createElement("div"); a.style.cssText = "margin:8px 0;height:1em;opacity:.9;", e.appendChild(a) }), a.appendChild(e);
             const g = `<svg width="100%" height="40" style="position:absolute;bottom:0;left:0;opacity:.5;"><defs><g id="i"><path d="M1 13L5 17L17 5L13 1L1 13Z M15 3L13 1L16 4M1 13L4 16" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="j"><path d="M3 17L7 13L15 5L13 3L5 11L1 15L3 17Z M14 4L12 2L16 6" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="k"><path d="M3 15C3 17 5 17 5 15C5 13 7 11 9 9C11 7 13 5 15 3M15 3L13 5M15 3L17 5" stroke="#aaa" stroke-width="1" fill="none"/></g></defs></svg>`, h = document.createElement("div");
@@ -50,8 +50,10 @@ const b = `<svg viewBox="0 0 100 100" width="100%" height="100%" style="position
             a.appendChild(h);
             const p = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             p.setAttribute("width", "100"), p.setAttribute("height", "100"), p.style.cssText = "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);";
+
             const q = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             q.setAttribute("points", "50,10 90,30 90,70 50,90 10,70 10,30"), q.setAttribute("stroke", "#fff"), q.setAttribute("stroke-width", "2"), q.setAttribute("fill", "none");
+
             const r = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             return r.setAttribute("points", "50,25 75,75 25,75"), r.setAttribute("stroke", "#fff"), r.setAttribute("stroke-width", "2"), r.setAttribute("fill", "none"), r.style.transformOrigin = "center", r.style.animation = "n 1s linear infinite", p.appendChild(q), p.appendChild(r), a.appendChild(p), document.body.appendChild(a), { page: a, hexagon: q, triangle: r }
         }

@@ -183,7 +183,7 @@ function setNameTextAreaProperties(layer, nameTextArea, index) {
     nameTextArea.style.flex = "1";
     nameTextArea.style.marginRight = "5px";
   }
-  console.log("layer.text", layer.text);
+  // console.log("layer.text", layer.text);
   if (isImage(layer) && layer.text) {
     nameTextArea.value = layer.text;
   }

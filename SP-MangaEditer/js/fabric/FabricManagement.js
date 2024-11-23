@@ -170,14 +170,16 @@ canvas.on("object:added", (e) => {
 
 canvas.on('mouse:down', function(e) {
   if (e.target) {
+      e.target.originalOpacity = e.target.opacity;
       e.target.opacity = 0.5;
       canvas.renderAll();
   }
 });
 
 canvas.on('mouse:up', function(e) {
-  if (e.target) {
-      e.target.opacity = 1;
+  if (e.target && e.target.originalOpacity !== undefined) {
+      e.target.opacity = e.target.originalOpacity;
+      delete e.target.originalOpacity;
       canvas.renderAll();
   }
 });
