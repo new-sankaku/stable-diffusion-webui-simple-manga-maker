@@ -256,7 +256,7 @@ var imageLayerListTemp = null;
 
 async function handleBlend() {
   var imageLayerList = getImageObjectListByLayerChecked();
-  if( imageLayerList.length < 2 ){
+  if( imageLayerList.length < 1 ){
     var blendLowImages = getText("blendLowImages");
     createToastError("Blend error", blendLowImages);
     return;

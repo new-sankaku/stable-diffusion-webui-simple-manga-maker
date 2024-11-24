@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f0f0f0
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+    }
+
+    .canvas-container {
+      margin: 20px 0;
+      text-align: center
+    }
+
+    .controls {
+      margin: 20px 0
+    }
+
+    .slider-container {
+      margin: 20px 0
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px
+    }
+
+    input[type="range"] {
+      width: 100%
+    }
+
+    .button-container {
+      display: flex;
+      gap: 10px
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      margin: 5px 0
+    }
+
+    button:hover {
+      background-color: #0056b3
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed
+    }
+
+    input[type="file"] {
+      margin: 10px 0
+    }
+
+    .intensity-value {
+      text-align: center;
+      margin: 5px 0
+    }
+
+    .error {
+      color: red;
+      margin: 10px 0
+    }
+
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      background: #e9ecef;
+      border-radius: 4px;
+      text-align: center
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>暗部強調処理</h1>
+    <div id="status" class="status"></div>
+    <div class="controls">
+      <input type="file" id="imageInput">
+    </div>
+    <div class="canvas-container">
+      <canvas id="fabricCanvas"></canvas>
+    </div>
+    <div class="slider-container">
+      <label for="intensity">強調度:</label>
+      <input type="range" id="intensity" min="1" max="20" step="0.1" value="1">
+      <div class="intensity-value">1.0</div>
+    </div>
+    <div class="button-container">
+      <button id="enhanceCPU" disabled>CPU処理</button>
+      <button id="enhanceGPU" disabled>GPU処理</button>
+    </div>
+    <div id="error" class="error"></div>
+  </div>
+  <script>
+    function main() {
+      const canvas = new fabric.Canvas('fabricCanvas', { width: 800, height: 600 });
+      function initializeApp() {
+        const isGPUSupported = checkGPUSupport();
+        document.getElementById('status').textContent = isGPUSupported ? 'GPUモードが利用可能です' : 'GPUモードは利用できません';
+        document.getElementById('enhanceGPU').style.display = isGPUSupported ? 'block' : 'none';
+        return isGPUSupported;
+      }
+      function setupEventListeners(canvas, isGPUSupported) {
+        document.getElementById('intensity').addEventListener('input', e => {
+          document.querySelector('.intensity-value').textContent = parseFloat(e.target.value).toFixed(1);
+        });
+        document.getElementById('imageInput').addEventListener('change', e => handleImageLoad(e, canvas));
+        document.getElementById('enhanceCPU').addEventListener('click', () => enhanceImage('cpu', canvas));
+        document.getElementById('enhanceGPU').addEventListener('click', () => enhanceImage('gpu', canvas));
+      }
+      const isGPUSupported = initializeApp();
+      setupEventListeners(canvas, isGPUSupported);
+    }
+    function checkGPUSupport() {
+      try {
+        const testCanvas = document.createElement('canvas');
+        const gl = testCanvas.getContext('webgl2');
+        if (!gl) return false;
+        const testShader = gl.createShader(gl.VERTEX_SHADER);
+        if (!testShader) { gl.deleteShader(testShader); return false; }
+        gl.deleteShader(testShader);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+    function handleImageLoad(event, canvas) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        fabric.Image.fromURL(e.target.result, img => {
+          canvas.clear();
+          canvas.setDimensions({ width: img.width, height: img.height });
+          img.scaleToWidth(canvas.width);
+          canvas.add(img);
+          canvas.centerObject(img);
+          canvas.renderAll();
+          document.getElementById('enhanceCPU').disabled = false;
+          document.getElementById('enhanceGPU').disabled = !checkGPUSupport();
+          document.getElementById('error').textContent = '';
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+
+    
+    async function extractImageData(fabricImage) {
+      const dataUrl = fabricImage.toDataURL();
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = fabricImage.width;
+          tempCanvas.height = fabricImage.height;
+          const tempCtx = tempCanvas.getContext('2d');
+          tempCtx.drawImage(img, 0, 0);
+          resolve(tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height));
+        };
+        img.src = dataUrl;
+      });
+    }
+    function enhanceDarkRegionsCPU(imageData, intensity) {
+      const data = imageData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const brightness = (r + g + b) / 3;
+        if (brightness < 200) {
+          const darkFactor = Math.max(0, 1 - Math.pow(intensity * 0.2, 1.5));
+          data[i] *= darkFactor;
+          data[i + 1] *= darkFactor;
+          data[i + 2] *= darkFactor;
+        }
+      }
+      return imageData;
+    }
+    async function enhanceDarkRegionsGPU(imageData, intensity) {
+      const offscreenCanvas = new OffscreenCanvas(imageData.width, imageData.height);
+      const offscreenCtx = offscreenCanvas.getContext('webgl2');
+      const vertexShader = `#version 300 es
+in vec4 position;
+in vec2 texcoord;
+out vec2 v_texcoord;
+void main(){
+gl_Position=position;
+v_texcoord=texcoord;
+}`;
+      const fragmentShader = `#version 300 es
+precision highp float;
+uniform sampler2D u_image;
+uniform float u_intensity;
+in vec2 v_texcoord;
+out vec4 outColor;
+void main(){
+vec4 color=texture(u_image,vec2(v_texcoord.x,1.0-v_texcoord.y));
+float brightness=(color.r+color.g+color.b)/3.0;
+if(brightness<0.8){
+float darkFactor=max(0.0,1.0-pow(u_intensity*0.2,1.5));
+outColor=vec4(color.rgb*darkFactor,color.a);
+}else{
+outColor=color;
+}
+}`;
+      const program = createShaderProgram(offscreenCtx, vertexShader, fragmentShader);
+      if (!program) throw new Error('シェーダープログラムの作成に失敗しました');
+      const positionBuffer = offscreenCtx.createBuffer();
+      const positions = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+      offscreenCtx.bindBuffer(offscreenCtx.ARRAY_BUFFER, positionBuffer);
+      offscreenCtx.bufferData(offscreenCtx.ARRAY_BUFFER, positions, offscreenCtx.STATIC_DRAW);
+      const texcoordBuffer = offscreenCtx.createBuffer();
+      const texcoords = new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]);
+      offscreenCtx.bindBuffer(offscreenCtx.ARRAY_BUFFER, texcoordBuffer);
+      offscreenCtx.bufferData(offscreenCtx.ARRAY_BUFFER, texcoords, offscreenCtx.STATIC_DRAW);
+      const texture = offscreenCtx.createTexture();
+      offscreenCtx.bindTexture(offscreenCtx.TEXTURE_2D, texture);
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = imageData.width;
+      tempCanvas.height = imageData.height;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.putImageData(imageData, 0, 0);
+      offscreenCtx.texImage2D(offscreenCtx.TEXTURE_2D, 0, offscreenCtx.RGBA, offscreenCtx.RGBA, offscreenCtx.UNSIGNED_BYTE, tempCanvas);
+      offscreenCtx.texParameteri(offscreenCtx.TEXTURE_2D, offscreenCtx.TEXTURE_MIN_FILTER, offscreenCtx.LINEAR);
+      offscreenCtx.texParameteri(offscreenCtx.TEXTURE_2D, offscreenCtx.TEXTURE_WRAP_S, offscreenCtx.CLAMP_TO_EDGE);
+      offscreenCtx.texParameteri(offscreenCtx.TEXTURE_2D, offscreenCtx.TEXTURE_WRAP_T, offscreenCtx.CLAMP_TO_EDGE);
+      const positionLocation = offscreenCtx.getAttribLocation(program, 'position');
+      const texcoordLocation = offscreenCtx.getAttribLocation(program, 'texcoord');
+      offscreenCtx.bindBuffer(offscreenCtx.ARRAY_BUFFER, positionBuffer);
+      offscreenCtx.enableVertexAttribArray(positionLocation);
+      offscreenCtx.vertexAttribPointer(positionLocation, 2, offscreenCtx.FLOAT, false, 0, 0);
+      offscreenCtx.bindBuffer(offscreenCtx.ARRAY_BUFFER, texcoordBuffer);
+      offscreenCtx.enableVertexAttribArray(texcoordLocation);
+      offscreenCtx.vertexAttribPointer(texcoordLocation, 2, offscreenCtx.FLOAT, false, 0, 0);
+      const intensityLocation = offscreenCtx.getUniformLocation(program, 'u_intensity');
+      offscreenCtx.uniform1f(intensityLocation, intensity);
+      offscreenCtx.viewport(0, 0, imageData.width, imageData.height);
+      offscreenCtx.drawArrays(offscreenCtx.TRIANGLE_STRIP, 0, 4);
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = imageData.width;
+      finalCanvas.height = imageData.height;
+      const finalCtx = finalCanvas.getContext('2d');
+      finalCtx.drawImage(offscreenCanvas, 0, 0);
+      return finalCtx.getImageData(0, 0, imageData.width, imageData.height);
+    }
+    async function enhanceImage(mode, canvas) {
+      try {
+        const activeObject = canvas.getActiveObject() || canvas.item(0);
+        if (!activeObject || !activeObject.isType('image')) throw new Error('画像が選択されていません');
+        const intensity = parseFloat(document.getElementById('intensity').value);
+        const startTime = performance.now();
+        const originalImageData = await extractImageData(activeObject);
+        const processedImageData = mode === 'gpu' && checkGPUSupport() ?
+          await enhanceDarkRegionsGPU(originalImageData, intensity) :
+          enhanceDarkRegionsCPU(originalImageData, intensity);
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = originalImageData.width;
+        tempCanvas.height = originalImageData.height;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.putImageData(processedImageData, 0, 0);
+        const processedDataUrl = tempCanvas.toDataURL();
+        const endTime = performance.now();
+        document.getElementById('status').textContent =
+          `処理時間: ${(endTime - startTime).toFixed(2)}ms (${mode.toUpperCase()}モード)`;
+        fabric.Image.fromURL(processedDataUrl, img => {
+          img.scaleToWidth(canvas.width);
+          canvas.remove(activeObject);
+          canvas.add(img);
+          canvas.centerObject(img);
+          canvas.renderAll();
+        });
+        document.getElementById('error').textContent = '';
+      } catch (err) {
+        document.getElementById('error').textContent = '処理エラー: ' + err.message;
+        console.error(err);
+      }
+    }
+    function createShaderProgram(gl, vertexSource, fragmentSource) {
+      const program = gl.createProgram();
+      const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vertexSource);
+      const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
+      if (!vertexShader || !fragmentShader) return null;
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error(gl.getProgramInfoLog(program));
+        return null;
+      }
+      gl.useProgram(program);
+      return program;
+    }
+    function compileShader(gl, type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error(gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+    main();
+  </script>
+</body>
+
+</html>

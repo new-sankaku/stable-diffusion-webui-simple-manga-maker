@@ -4,7 +4,7 @@ const MODE_EFFECT_C2BW_LIGHT = "Color2BlackWhiteLight";
 const MODE_EFFECT_C2BW_DARK = "Color2BlackWhiteDark";
 const MODE_EFFECT_C2BW_ROUGHT = "Color2BlackWhiteRough";
 const MODE_EFFECT_C2BW_SIMPLE = "Color2BlackWhiteSimple";
-
+const MODE_EFFECT_ENHANCE_DARK = "EnhanceDark";
 
 const MODE_EFFECT_GLOW = "EffectGlow";
 const MODE_EFFECT_BLEND = "EffectBlend";
@@ -13,6 +13,8 @@ const MODE_EFFECT_GLFX = "EffectGLFX";
 var effectCheck = null;
 var effectSize1 = null;
 var effectColor = null;
+var effectEnhanceDarkIntensity = null;
+var effectEnhanceDarkSubmit = null;
 
 let nowEffect = null;
 function switchMangaEffect(type) {
@@ -31,44 +33,46 @@ function switchMangaEffect(type) {
 
   nowEffect = type;
 
-  if (type === MODE_EFFECT_C2BW_LIGHT) {
+
+  if (type === MODE_EFFECT_ENHANCE_DARK) {
+    //skip
+  } else if (type === MODE_EFFECT_C2BW_LIGHT) {
     C2BWStartLight();
     clearActiveEffectButton();
     nowEffect = null;
     return;
-  } else if(type === MODE_EFFECT_C2BW_DARK){
+  } else if (type === MODE_EFFECT_C2BW_DARK) {
     C2BWStartDark();
     clearActiveEffectButton();
     nowEffect = null;
     return;
-  }else if(type === MODE_EFFECT_C2BW_ROUGHT){
+  } else if (type === MODE_EFFECT_C2BW_ROUGHT) {
     C2BWStartRough();
     clearActiveEffectButton();
     nowEffect = null;
-    return;    
-  }else if(type === MODE_EFFECT_C2BW_SIMPLE){
+    return;
+  } else if (type === MODE_EFFECT_C2BW_SIMPLE) {
     C2BWStartSimple();
     clearActiveEffectButton();
     nowEffect = null;
-    return;    
-  }else if(type === MODE_EFFECT_BLEND){
+    return;
+  } else if (type === MODE_EFFECT_BLEND) {
     handleBlend();
     clearActiveEffectButton();
     nowEffect = null;
-    return;    
-  }else if(type === MODE_EFFECT_GLOW){
+    return;
+  } else if (type === MODE_EFFECT_GLOW) {
     //skip
-  }else if(type === MODE_EFFECT_GLFX){
+  } else if (type === MODE_EFFECT_GLFX) {
     setGlfxI18NextLabel();
     glfxAddEvent();
-  }else {
+  } else {
     console.error("unknown type", type);
   }
 
   addEffectEventListener();
   clearActiveEffectButton();
   $(type + 'Button').classList.add('active-button');
-  
 }
 
 function switchMangaEffectUi(type) {
@@ -84,10 +88,17 @@ function switchMangaEffectUi(type) {
       $('manga-effect-settings').innerHTML = settingsHTML;
       effectCheck = $("addGlowEffectCheckBox");
       effectSize1 = $("glowOutLineSlider");
-      effectColor = $("glowOutLineColorPicker");    
+      effectColor = $("glowOutLineColorPicker");
       break;
     case MODE_EFFECT_GLFX:
       $('manga-effect-settings').innerHTML = gpifHTML;
+      break;
+    case MODE_EFFECT_ENHANCE_DARK:
+      settingsHTML += addSlider("effectEnhanceDarkIntensity", "effectEnhanceDarkIntensity", 0.1, 20.0, effectMap.getOrDefault("effectEnhanceDarkIntensity", 2.0), 0.1);
+      settingsHTML += addSimpleSubmitButton("effectEnhanceDarkSubmit");
+      $('manga-effect-settings').innerHTML = settingsHTML;
+      effectEnhanceDarkIntensity = $("effectEnhanceDarkIntensity");
+      effectEnhanceDarkSubmit = $("effectEnhanceDarkSubmit");
       break;
     default:
       $('manga-effect-settings').innerHTML = settingsHTML;
@@ -103,6 +114,7 @@ function clearEffectSettings() {
   const elements = [
     effectCheck,
     effectSize1,
+    effectEnhanceDarkIntensity,
     effectColor
   ];
   elements.forEach(element => {
@@ -114,6 +126,7 @@ function clearEffectSettings() {
   effectCheck = null;
   effectSize1 = null;
   effectColor = null;
+  effectEnhanceDarkIntensity = null;
 }
 
 
@@ -121,14 +134,29 @@ function addEffectEventListener() {
   const elements = [
     effectCheck,
     effectSize1,
+    effectEnhanceDarkIntensity,
     effectColor
   ];
+
+  if(effectEnhanceDarkSubmit){
+    effectEnhanceDarkSubmit.addEventListener('click', () => {
+      if (nowEffect == MODE_EFFECT_ENHANCE_DARK) {
+        const selectedObject = canvas.getActiveObject();
+        if (selectedObject) {
+          console.log("enhanceDarkImage", "start");
+          enhanceDarkImage();
+        } else {
+          createToast("Check image!")
+        }
+      }
+    });
+  }
 
   elements.forEach(element => {
     if (element) {
       element.addEventListener('change', () => { saveEffectValueMap(element); });
-      if (nowEffect == MODE_EFFECT_GLOW) {
-        element.addEventListener('change', () => {
+      element.addEventListener('change', () => {
+        if (nowEffect == MODE_EFFECT_GLOW) {
           const selectedObject = canvas.getActiveObject();
           if (selectedObject) {
             if (effectCheck.checked) {
@@ -146,12 +174,12 @@ function addEffectEventListener() {
               selectedObject.set({ shadow: null });
             }
             canvas.renderAll();
-          }else{
+          } else {
             createToast("Check image!")
           }
-        });
-      }
-    }else{
+        }
+      });
+    } else {
       console.log("element is null");
     }
   });
@@ -162,6 +190,7 @@ function addEffectEventListener() {
 function clearActiveEffectButton() {
   $(MODE_EFFECT_GLOW + 'Button').classList.remove('active-button');
   $(MODE_EFFECT_GLFX + 'Button').classList.remove('active-button');
+  $(MODE_EFFECT_ENHANCE_DARK + 'Button').classList.remove('active-button');
 }
 
 

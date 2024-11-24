@@ -3,6 +3,12 @@
 const resources = {
   ja: {
     translation: {
+"effectEnhanceDarkIntensity":"黒強度",
+"Color2BlackWhiteLight":"白黒-薄い",
+"Color2BlackWhiteDark":"白黒-濃い",
+"Color2BlackWhiteRough":"白黒-ラフ",
+"Color2BlackWhiteSimple":"白黒-シンプル",
+"EnhanceDark":"黒強調",
 "panelInNotFit":"パネル内に配置",
 "movementOn":"移動許可",
 "movementOff":"移動不可",
@@ -451,6 +457,13 @@ const resources = {
   },
 en: {
     translation: {
+"effectEnhanceDarkIntensity":"Dark Intensity",
+"Color2BlackWhiteLight":"Black & White-Light",
+"Color2BlackWhiteDark":"Black & White-Dark",
+"Color2BlackWhiteRough":"Black & White-Rough",
+"Color2BlackWhiteSimple":"Black & White-Simple",
+"EnhanceDark":"Enhance Dark",
+
 "panelInNotFit": "Fit in Panel",
 "movementOn": "Enable Movement", 
 "movementOff": "Disable Movement",
@@ -983,6 +996,12 @@ en: {
   },
   ko: {
 translation: {
+"effectEnhanceDarkIntensity":"검정 강도",
+"Color2BlackWhiteLight":"흑백-연한",
+"Color2BlackWhiteDark":"흑백-진한",
+"Color2BlackWhiteRough":"흑백-거친",
+"Color2BlackWhiteSimple":"흑백-심플",
+"EnhanceDark":"검정 강조",
 "panelInNotFit":"패널 내 배치",
 "movementOn":"이동 허용",
 "movementOff":"이동 불가",
@@ -1437,6 +1456,12 @@ translation: {
   },
   fr: {
     translation: {
+"effectEnhanceDarkIntensity":"Intensité du Noir",
+"Color2BlackWhiteLight":"Noir et Blanc-Léger",
+"Color2BlackWhiteDark":"Noir et Blanc-Foncé",
+"Color2BlackWhiteRough":"Noir et Blanc-Brut",
+"Color2BlackWhiteSimple":"Noir et Blanc-Simple",
+"EnhanceDark":"Renforcer le Noir",
 "panelInNotFit":"Placer dans le panneau",
 "movementOn":"Mouvement autorisé",
 "movementOff":"Mouvement non autorisé",
@@ -1924,6 +1949,12 @@ translation: {
   },
   zh: {
     translation: {
+"effectEnhanceDarkIntensity":"黑色强度",
+"Color2BlackWhiteLight":"黑白-淡色",
+"Color2BlackWhiteDark":"黑白-深色",
+"Color2BlackWhiteRough":"黑白-粗糙",
+"Color2BlackWhiteSimple":"黑白-简约",
+"EnhanceDark":"黑色增强",
 "panelInNotFit":"放置在面板中",
 "movementOn":"允许移动",
 "movementOff":"禁止移动",
@@ -2411,7 +2442,13 @@ translation: {
   },
   ru: {
     translation: {
-"panelInNotFit":"Разместить в панели",
+"effectEnhanceDarkIntensity":"Интенсивность темного",
+"Color2BlackWhiteLight":"Черно-белый-Светлый",
+"Color2BlackWhiteDark":"Черно-белый-Темный",
+"Color2BlackWhiteRough":"Черно-белый-Грубый",
+"Color2BlackWhiteSimple":"Черно-белый-Простой",
+"EnhanceDark":"Усиление темного",
+      "panelInNotFit":"Разместить в панели",
 "movementOn":"Движение разрешено",
 "movementOff":"Движение запрещено",
       "normal_sex": "Нормальный секс",
@@ -2847,6 +2884,12 @@ translation: {
   },
   es: {
     translation: {
+"effectEnhanceDarkIntensity":"Intensidad del Negro",
+"Color2BlackWhiteLight":"Blanco y Negro-Claro",
+"Color2BlackWhiteDark":"Blanco y Negro-Oscuro",
+"Color2BlackWhiteRough":"Blanco y Negro-Rugoso",
+"Color2BlackWhiteSimple":"Blanco y Negro-Simple",
+"EnhanceDark":"Realzar Oscuro",
       "panelInNotFit":"Colocar en panel",
 "movementOn":"Movimiento permitido",
 "movementOff":"Movimiento no permitido",
@@ -3282,7 +3325,13 @@ translation: {
   },
   pt: {
     translation: {
-"panelInNotFit":"Colocar no painel",
+"effectEnhanceDarkIntensity":"Intensidade do Escuro",
+"Color2BlackWhiteLight":"Preto e Branco-Claro",
+"Color2BlackWhiteDark":"Preto e Branco-Escuro",
+"Color2BlackWhiteRough":"Preto e Branco-Áspero",
+"Color2BlackWhiteSimple":"Preto e Branco-Simples",
+"EnhanceDark":"Realçar Escuro",
+      "panelInNotFit":"Colocar no painel",
 "movementOn":"Movimento permitido",
 "movementOff":"Movimento não permitido",
 
@@ -3718,6 +3767,12 @@ translation: {
   },
 th: {
 translation: {
+"effectEnhanceDarkIntensity":"ความเข้มของสีดำ",
+"Color2BlackWhiteLight":"ขาวดำ-จาง",
+"Color2BlackWhiteDark":"ขาวดำ-เข้ม",
+"Color2BlackWhiteRough":"ขาวดำ-หยาบ",
+"Color2BlackWhiteSimple":"ขาวดำ-เรียบง่าย",
+"EnhanceDark":"เน้นสีดำ",
 "panelInNotFit":"วางในแผง",
 "movementOn":"อนุญาตการเคลื่อนย้าย",
 "movementOff":"ไม่อนุญาตการเคลื่อนย้าย",
@@ -4204,6 +4259,12 @@ translation: {
   },
     de: {
 "translation": {
+"Color2BlackWhiteLight":"Schwarz-Weiß-Hell",
+"Color2BlackWhiteDark":"Schwarz-Weiß-Dunkel",
+"Color2BlackWhiteRough":"Schwarz-Weiß-Rau",
+"Color2BlackWhiteSimple":"Schwarz-Weiß-Einfach",
+"EnhanceDark":"Dunkel verstärken",
+"effectEnhanceDarkIntensity":"Dunkelintensität",
 "panelInNotFit":"Im Panel platzieren",
 "movementOn":"Bewegung erlaubt",
 "movementOff":"Bewegung nicht erlaubt",

@@ -27,6 +27,20 @@ function addNumber(id, label, min, max, value, step=1) {
   `;
 }
 
+function addSimpleSubmitButton(id) {
+  const transLavel = getText("submit");
+  return `
+    <div class="input-group-multi-mini">
+      <a style="visibility: hidden;"></a>
+      <a style="visibility: hidden;"></a>
+      <button id="${id}"">
+        <span>${transLavel}</span>
+      </button>
+    </div>
+  `;
+}
+
+
 
 function addSubmitButton(id) {
   const transLavel = getText("submit");
