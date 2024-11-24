@@ -20,7 +20,7 @@ function fetchSD_ADModels() {
 async function sendClipToServer() {
   const dualClip = getSelectedTagifyValues("clipDropdownId");
 
-  console.log("sendClipToServer", dualClip);
+  // console.log("sendClipToServer", dualClip);
 
   const data = JSON.stringify({
     forge_additional_modules: dualClip
@@ -118,7 +118,7 @@ async function fetchSD_Modules() {
   }));
 
   if(basePrompt.forge_additional_modules){
-    console.log("basePrompt.forge_additional_modules", basePrompt.forge_additional_modules);
+    // console.log("basePrompt.forge_additional_modules", basePrompt.forge_additional_modules);
   }
 
 

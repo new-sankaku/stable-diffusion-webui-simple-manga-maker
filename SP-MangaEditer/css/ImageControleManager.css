@@ -16,6 +16,8 @@
  max-width: var(--max-width-controls);
  margin-left: var(--margin-sides-controls);
  margin-right: var(--margin-sides-controls);
+ overflow-x: hidden;
+
 }
 
 .panel {

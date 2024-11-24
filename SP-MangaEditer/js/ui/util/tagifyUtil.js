@@ -93,7 +93,7 @@ function initializeTagify(id, listValues, initialSelectedValues = []) {
               n: tag.n,
               p: tag.p
             }));
-          console.log("initializeTagify selectedTags", selectedTags);
+          // console.log("initializeTagify selectedTags", selectedTags);
           tagifyInstance.addTags(selectedTags);
         }
 

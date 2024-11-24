@@ -1,10 +1,10 @@
 const btmImageZipMap = new Map();
 
-const btmDrawer = document.getElementById('btm-drawer');
-const btmDrawerHandle = document.getElementById('btm-drawer-handle');
-const btmImageContainer = document.getElementById('btm-image-container');
-const btmScrollLeftBtn = document.getElementById('btm-scroll-left');
-const btmScrollRightBtn = document.getElementById('btm-scroll-right');
+const btmDrawer = $('btm-drawer');
+const btmDrawerHandle = $('btm-drawer-handle');
+const btmImageContainer = $('btm-image-container');
+const btmScrollLeftBtn = $('btm-scroll-left');
+const btmScrollRightBtn = $('btm-scroll-right');
 
 let btmScrollPosition = 0;
 let btmIsDragging = false;
@@ -25,10 +25,14 @@ function btmUpdateHandleText() {
     btmDrawerHandle.textContent = btmDrawer.classList.contains('btm-closed') ? 'OPEN' : 'CLOSE';
 }
 
-async function btmSaveZip() {
+async function btmSaveZip(guid=null) {
     return new Promise((resolve, reject) => {
         try {
-            const guid = getCanvasGUID();
+            
+            if(guid===null){
+                guid = getCanvasGUID();
+            }
+            
             const previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
             const zip = generateZip();
             
@@ -55,10 +59,39 @@ function btmAddImage(imageLink, zipBlob, guid) {
         const image = document.querySelector(`.btm-image[data-index="${guid}"]`);
         if (image) {
             image.src = imageLink.href;
+            const pageNumber = image.parentElement.querySelector('.btm-page-number');
+            if (pageNumber) {
+                pageNumber.textContent = btmGetGuidIndex(guid) + 1;
+            }
         }
     } else {
         const imageWrapper = document.createElement('div');
         imageWrapper.className = 'btm-image-wrapper';
+ 
+        const pageNumber = document.createElement('div');
+        pageNumber.className = 'btm-page-number';
+
+        let index = btmGetGuidIndex(guid);
+        if( index === -1 ){
+            pageNumber.textContent = btmGetGuidsSize() + 1;
+        }else{
+            pageNumber.textContent = index + 1;
+        }
+
+ 
+        const moveLeftBtn = document.createElement('button');
+        moveLeftBtn.innerHTML = '←';
+        moveLeftBtn.className = 'btm-move-btn btm-move-left';
+        moveLeftBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const currentIndex = btmGetGuidIndex(guid);
+            if (currentIndex > 0) {
+                const previousGuid = btmGetGuidByIndex(currentIndex - 1);
+                swapImages(guid, previousGuid);
+                updateAllPageNumbers();
+            }
+        });
+ 
         const image = document.createElement('img');
         image.src = imageLink.href;
         image.className = 'btm-image';
@@ -71,18 +104,46 @@ function btmAddImage(imageLink, zipBlob, guid) {
             chengeCanvasByGuid(guid);
         });
  
-        const closeBtn = document.createElement('button');
-        closeBtn.textContent = '✕';
-        closeBtn.className = 'btm-close-btn';
-        closeBtn.addEventListener('click', (e) => {
+        const moveRightBtn = document.createElement('button');
+        moveRightBtn.innerHTML = '→';
+        moveRightBtn.className = 'btm-move-btn btm-move-right';
+        moveRightBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            btmImageZipMap.delete(guid);
-            imageWrapper.remove();
-            btmUpdateScrollButtons();
+            const currentIndex = btmGetGuidIndex(guid);
+            if (currentIndex < btmGetGuidsSize() - 1) {
+                const nextGuid = btmGetGuidByIndex(currentIndex + 1);
+                swapImages(guid, nextGuid);
+                updateAllPageNumbers();
+            }
         });
  
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '🗑';
+        deleteBtn.className = 'btm-delete-btn';
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (btmGetGuidsSize() > 1) {
+                btmImageZipMap.delete(guid);
+                imageWrapper.remove();
+                btmUpdateScrollButtons();
+                updateAllPageNumbers();
+            }
+        });
+ 
+        // const addPageBtn = document.createElement('button');
+        // addPageBtn.textContent = '+';
+        // addPageBtn.className = 'btm-add-btn';
+        // addPageBtn.addEventListener('click', (e) => {
+        //    e.stopPropagation();
+        //    btmShowAddPageDialog(guid);
+        // });
+ 
+        imageWrapper.appendChild(pageNumber);
+        imageWrapper.appendChild(moveLeftBtn);
         imageWrapper.appendChild(image);
-        imageWrapper.appendChild(closeBtn);
+        imageWrapper.appendChild(moveRightBtn);
+        imageWrapper.appendChild(deleteBtn);
+        // imageWrapper.appendChild(addPageBtn);
         btmImageContainer.appendChild(imageWrapper);
         btmImageZipMap.set(guid, { imageLink, zipBlob });
     }
@@ -92,6 +153,70 @@ function btmAddImage(imageLink, zipBlob, guid) {
     } else {
         btmUpdateScrollButtons();
     }
+ }
+ 
+ function updateAllPageNumbers() {
+    const pageNumbers = document.querySelectorAll('.btm-page-number');
+    pageNumbers.forEach((numberElement, index) => {
+        numberElement.textContent = index + 1;
+    });
+ }
+ 
+ function swapImages(guid1, guid2) {
+    const wrapper1 = document.querySelector(`.btm-image[data-index="${guid1}"]`).parentElement;
+    const wrapper2 = document.querySelector(`.btm-image[data-index="${guid2}"]`).parentElement;
+    
+    const tempElement = document.createElement('div');
+    btmImageContainer.insertBefore(tempElement, wrapper1);
+    btmImageContainer.insertBefore(wrapper1, wrapper2);
+    btmImageContainer.insertBefore(wrapper2, tempElement);
+    tempElement.remove();
+ 
+    const guids = btmGetGuids();
+    const newMap = new Map();
+    
+    guids.forEach(guid => {
+        if (guid === guid1) {
+            newMap.set(guid2, btmImageZipMap.get(guid2));
+        } else if (guid === guid2) {
+            newMap.set(guid1, btmImageZipMap.get(guid1));
+        } else {
+            newMap.set(guid, btmImageZipMap.get(guid));
+        }
+    });
+    
+    btmImageZipMap.clear();
+    newMap.forEach((value, key) => {
+        btmImageZipMap.set(key, value);
+    });
+ 
+    updateAllPageNumbers();
+ }
+ 
+ function reorderImages(targetIndex, newGuid) {
+    const newWrapper = document.querySelector(`.btm-image[data-index="${newGuid}"]`).parentElement;
+    const targetWrapper = document.querySelector(`.btm-image[data-index="${btmGetGuidByIndex(targetIndex)}"]`).parentElement;
+    btmImageContainer.insertBefore(newWrapper, targetWrapper);
+ 
+    const newMap = new Map();
+    const guids = btmGetGuids();
+    const newGuidData = btmImageZipMap.get(newGuid);
+    
+    guids.forEach((guid, index) => {
+        if (index === targetIndex) {
+            newMap.set(newGuid, newGuidData);
+        }
+        if (guid !== newGuid) {
+            newMap.set(guid, btmImageZipMap.get(guid));
+        }
+    });
+ 
+    btmImageZipMap.clear();
+    newMap.forEach((value, key) => {
+        btmImageZipMap.set(key, value);
+    });
+ 
+    updateAllPageNumbers();
  }
 
 function btmUpdateScrollButtons() {
@@ -194,3 +319,143 @@ function btmGetGuidByIndex(index) {
 function btmGetFirstGuidByIndex() {
     return Array.from(btmImageZipMap.keys())[0];
  }
+
+
+
+ function btmShowAddPageDialog(guid) {
+    const dialog = document.createElement('div');
+    dialog.className = 'btm-dialog-overlay';
+    dialog.innerHTML = `
+        <div class="btm-dialog">
+            <div class="btm-dialog-content">
+                <h3>ページサイズを選択</h3>
+                <div class="btm-radio-group">
+                    <label>
+                        <input type="radio" name="page-size" value="a4-portrait" checked>
+                        A4縦
+                    </label>
+                    <label>
+                        <input type="radio" name="page-size" value="a4-landscape">
+                        A4横
+                    </label>
+                    <label>
+                        <input type="radio" name="page-size" value="b5-portrait">
+                        B5縦
+                    </label>
+                    <label>
+                        <input type="radio" name="page-size" value="b5-landscape">
+                        B5横
+                    </label>
+                </div>
+                <div class="btm-dialog-buttons">
+                    <button class="btm-dialog-button" id="btm-dialog-cancel">キャンセル</button>
+                    <button class="btm-dialog-button btm-dialog-submit" id="btm-dialog-submit">作成</button>
+                </div>
+            </div>
+        </div>
+    `;
+ 
+    document.body.appendChild(dialog);
+ 
+    // スタイルを追加
+    const style = document.createElement('style');
+    style.textContent = `
+        .btm-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .btm-dialog {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            min-width: 300px;
+        }
+        
+        .btm-dialog h3 {
+            margin: 0 0 20px 0;
+            font-size: 18px;
+        }
+        
+        .btm-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .btm-radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .btm-dialog-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .btm-dialog-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btm-dialog-submit {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btm-dialog-submit:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+ 
+    // イベントリスナーを設定
+    const cancelButton = document.getElementById('btm-dialog-cancel');
+    const submitButton = document.getElementById('btm-dialog-submit');
+ 
+    cancelButton.addEventListener('click', () => {
+        document.body.removeChild(dialog);
+    });
+ 
+    submitButton.addEventListener('click', () => {
+        const selectedSize = document.querySelector('input[name="page-size"]:checked').value;
+        document.body.removeChild(dialog);
+            btmSaveZip().then(() => {
+                const currentIndex = btmGetGuidIndex(guid);
+                const newGuid = getCanvasGUID();
+
+                console.log("newGuid", newGuid);
+                if (selectedSize === 'a4-portrait') {
+                    loadBookSize(210,297,true)
+                } else if (selectedSize === 'a4-landscape') {
+                    loadBookSize(297,210,true)
+                } else if (selectedSize === 'b5-portrait') {
+                    loadBookSize(257,364,true)
+                } else if (selectedSize === 'b5-landscape') {
+                    loadBookSize(364,257,true)
+                }
+ 
+                btmSaveZip(newGuid).then(() => {               
+                    console.log("reorderImages前");
+                    reorderImages(currentIndex + 1, newGuid);
+                    updateAllPageNumbers();
+                });
+
+            });
+    });
+ }
+ 

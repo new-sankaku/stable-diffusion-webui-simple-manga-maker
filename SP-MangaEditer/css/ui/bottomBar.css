@@ -71,7 +71,7 @@ cursor:pointer;
 position:absolute;
 top:0.5vh;
 right:0.5vh;
-background-color:rgba(255, 255, 255, 0.7);
+background-color:rgba(0, 0, 0, 0.7);
 border:none;
 border-radius:50%;
 width:2em;
@@ -95,4 +95,99 @@ color:#e0e0e0;
 .neon-text {
 color:#00ffff;
 /* text-shadow:0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff; */
+}
+
+
+
+
+
+/* ----------------------------------------------------- */
+
+.btm-image-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 25px 0 0; /* 右側のマージンを＋ボタン用に確保 */
+}
+
+.btm-add-btn,
+.btm-move-btn {
+  position: absolute;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  transition: background-color 0.2s;
+}
+
+.btm-delete-btn {
+  position: absolute;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  top: 5px;     /* 元の位置に戻す */
+  right: 5px;   /* 元の位置に戻す */
+  font-size: 14px;
+}
+
+.btm-add-btn {
+  right: -25px; /* ページの右端に固定 */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.btm-move-btn {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btm-move-left {
+  left: 5px;
+}
+
+.btm-move-right {
+  right: 5px;
+}
+
+.btm-add-btn:hover,
+.btm-move-btn:hover,
+.btm-delete-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.btm-image-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 25px 0 0;
+}
+
+.btm-page-number {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1;
 }
