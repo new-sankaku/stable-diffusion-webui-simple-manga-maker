@@ -7,7 +7,7 @@ function changeExternalAPI(button) {
   if ( selectedValue === "sdWebUIButton" ) {
     API_mode = apis.A1111;
     createToast("API CHANGE!", "WebUI(A1111/Forge)", 2000 );
-    $('apiSettingsUrlHelpe').innerHTML = `<a href="html/API_Help/sdwebui_settings.html" target="_blank">${help}</a>`;
+    $('apiSettingsUrlHelpe').innerHTML = `<a href="html/API_Help/sd-api-guide.html" target="_blank">${help}</a>`;
   } else if ( selectedValue === "comfyUIButton" ) {
     API_mode = apis.COMFYUI;
     createToast("API CHANGE!", "COMFYUI", 2000);
