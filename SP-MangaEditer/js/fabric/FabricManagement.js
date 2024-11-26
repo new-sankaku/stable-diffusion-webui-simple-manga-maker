@@ -68,11 +68,16 @@ canvas.on('selection:updated', function() {
 canvas.on('selection:created',  highlightActiveLayerByCanvas);
 canvas.on('selection:updated',  highlightActiveLayerByCanvas);
 canvas.on('object:added',       highlightActiveLayerByCanvas);
-canvas.on('object:removed',     highlightActiveLayerByCanvas);
+// canvas.on('object:removed',     highlightActiveLayerByCanvas);
 canvas.on('object:modified',    highlightActiveLayerByCanvas);
-canvas.on('object:scaling',     highlightActiveLayerByCanvas);
-canvas.on('object:moving',      highlightActiveLayerByCanvas);
-canvas.on('object:rotating',    highlightActiveLayerByCanvas);
+// canvas.on('object:scaling',     highlightActiveLayerByCanvas);
+// canvas.on('object:moving',      highlightActiveLayerByCanvas);
+// canvas.on('object:rotating',    highlightActiveLayerByCanvas);
+canvas.on('mouse:down', function(event) {
+  if (event.target) {
+    highlightActiveLayerByCanvas(event.target);
+  }
+});
 
 //Object選択時にLeyerパネルをハイライトを終了する。
 canvas.on('selection:cleared', function() {

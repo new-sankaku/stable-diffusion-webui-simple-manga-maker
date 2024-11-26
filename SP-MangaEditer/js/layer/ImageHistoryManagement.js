@@ -138,9 +138,7 @@ function restoreImage(json) {
     return parsedJson;
 }
 
-
 function saveState() {
-    // console.log("saveState", stateStack.length);
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }
@@ -160,7 +158,15 @@ function undo() {
 
         let state = restoreImage(stateStack[currentStateIndex]);
         canvas.loadFromJSON(state, function () {
-            setCanvasGUID( state.canvasGuid );
+
+            state.objects.forEach((stateObj, index) => {
+                const canvasObj = canvas.getObjects()[index];
+                if (canvasObj) {
+                    canvasObj.selectable = stateObj.selectable;
+                }
+            });
+
+            setCanvasGUID(state.canvasGuid);
             canvas.renderAll();
             updateLayerPanel();
             resetEventHandlers(); 

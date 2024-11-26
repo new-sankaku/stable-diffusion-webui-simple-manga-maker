@@ -1,3 +1,5 @@
+let finalLayerOrder = [];
+
 function updateLayerPanel() {
   var layers = canvas.getObjects().slice().reverse();
   var layerContent = $("layer-content");
@@ -7,7 +9,7 @@ function updateLayerPanel() {
   var processedLayersSecond = new Set();
 
   // 最終的なレイヤー順序を保持する配列
-  var finalLayerOrder = [];
+  finalLayerOrder = [];
 
   layers.forEach((layer) => {
     if (layer.guids && layer.guids.length > 0) {
@@ -319,8 +321,14 @@ function highlightActiveLayer(activeIndex) {
   });
 }
 
-function highlightActiveLayerByCanvas() {
-  var activeObject = canvas.getActiveObject();
+function highlightActiveLayerByCanvas(object=null) {
+  let activeObject;
+  if(object){
+    activeObject = object;
+  }else{
+    activeObject = canvas.getActiveObject();
+  }
+  
   updateControls(activeObject);
 
   if( isPanel(activeObject) ){
@@ -329,7 +337,8 @@ function highlightActiveLayerByCanvas() {
     showI2IPrompts(activeObject);
   }
 
-  var activeIndex = getActiveObjectIndex(canvas);
+  var activeIndex = getLayerIndexByActiveObject(activeObject);
+  console.log("activeIndex", activeIndex);
   var layers = document.querySelectorAll(".layer-item");
 
   var reverseIndex = layers.length - 1 - activeIndex;
@@ -343,11 +352,14 @@ function highlightActiveLayerByCanvas() {
   });
 }
 
-function getActiveObjectIndex(canvas) {
-  var activeObject = canvas.getActiveObject();
-  var objects = canvas.getObjects();
-  var index = objects.indexOf(activeObject);
-  return index;
+
+function getLayerIndexByActiveObject(targetObject) {
+
+  console.log("finalLayerOrder.length", finalLayerOrder.length);
+
+  if (!targetObject || !finalLayerOrder || finalLayerOrder.length === 0) return -1;
+  const normalIndex = finalLayerOrder.indexOf(targetObject);
+  return finalLayerOrder.length - 1 - normalIndex;
 }
 
 function LayersUp() {
