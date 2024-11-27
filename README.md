@@ -28,7 +28,7 @@ The application supports various features including image drag-and-drop, file se
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
 
 ### Main Page With Txt2Img Window
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt2.webp" width="800">
 
 ### Image Prompt Helper
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="800">
