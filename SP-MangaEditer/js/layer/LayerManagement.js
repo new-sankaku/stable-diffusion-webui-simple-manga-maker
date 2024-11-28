@@ -338,7 +338,7 @@ function highlightActiveLayerByCanvas(object=null) {
   }
 
   var activeIndex = getLayerIndexByActiveObject(activeObject);
-  console.log("activeIndex", activeIndex);
+  // console.log("activeIndex", activeIndex);
   var layers = document.querySelectorAll(".layer-item");
 
   var reverseIndex = layers.length - 1 - activeIndex;
@@ -355,7 +355,7 @@ function highlightActiveLayerByCanvas(object=null) {
 
 function getLayerIndexByActiveObject(targetObject) {
 
-  console.log("finalLayerOrder.length", finalLayerOrder.length);
+  // console.log("finalLayerOrder.length", finalLayerOrder.length);
 
   if (!targetObject || !finalLayerOrder || finalLayerOrder.length === 0) return -1;
   const normalIndex = finalLayerOrder.indexOf(targetObject);

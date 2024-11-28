@@ -1,56 +1,53 @@
-
-function changeSpeechBubbleLineColor(value) {
-    var activeObject = canvas.getActiveObject();
-    if (activeObject) {
-        if (isGroup(activeObject)) {
-            activeObject.forEachObject((obj) => {
-                if (obj.type !== 'line') {
-                    obj.set({ stroke: value });
-                } else {
-                    obj.set({ stroke: value });
-                }
-            });
-        } else if (isShapes(activeObject)) {
-            activeObject.set({ stroke: value });
-        } else if (isLine(activeObject)) {
-            activeObject.set({ stroke: value });
-        }
-        canvas.requestRenderAll();
-    }
-}
-
-function changeSpeechBubbleBackgroundColor(value) {
-    var activeObject = canvas.getActiveObject();
-    if (activeObject) {
-        if (isGroup(activeObject)) {
-            activeObject.forEachObject((obj) => {
-                if (obj.type !== 'line') {
-                    obj.set({ fill: value });
-                }
-            });
-        } else if (isShapes(activeObject)) {
-            activeObject.set({ fill: value });
-        }
-        canvas.requestRenderAll();
-    }
-}
-
-function changeSpeechBubbleOpacity(value) {
-    const activeObject = canvas.getActiveObject();
-    if (activeObject) {
-        const opacity = value / 100;
-        activeObject.set('opacity', opacity);
-        canvas.renderAll();
-    }
-}
-
-/** Sppech bubble */
-function loadSVGReadOnly(svgString) {
-    var apply = $("applySpeechbubbleChange").checked;
-    var fillColor = $("bubbleFillColor").value;
+function changeSpeechBubble() {
+    console.log("-------------");
+    var bubbleStrokewidht = parseFloat($("bubbleStrokewidht").value);
+    var fillColor   = $("bubbleFillColor").value;
     var strokeColor = $("bubbleStrokeColor").value;
-    var speechBubbleOpacity = $("speechBubbleOpacity").value / 100;
+    var opacity     = $("speechBubbleOpacity").value;
+    opacity = opacity / 100;  
 
+    var fillColorRgba   = hexToRgba(fillColor,opacity);
+    var strokeColorRgba = hexToRgba(strokeColor,1.0);
+
+    var activeObject = canvas.getActiveObject();
+    if (activeObject) {
+        if (isGroup(activeObject)) {
+
+            let isExistsFillArea = false;
+            activeObject.forEachObject((obj) => {
+                if( obj.data?.originalId === "fillArea"){
+                    isExistsFillArea = true;
+                    return;
+                }
+            });
+
+            activeObject.forEachObject((obj) => {
+                if( isExistsFillArea ){
+                    if( obj.data?.originalId === "fillArea"){
+                        obj.set({ stroke: "rgba(0,0,0,0)", fill:fillColorRgba, strokeWidth:0});
+                    }else{
+                        obj.set({ stroke: strokeColorRgba , fill:"rgba(0,0,0,0)", strokeWidth:bubbleStrokewidht});
+                    }
+                }else{
+                    obj.set({ stroke: strokeColorRgba , fill:fillColorRgba, strokeWidth:bubbleStrokewidht});
+                }
+            });
+        } else{
+            obj.set({ stroke: strokeColorRgba , fill:fillColorRgba, strokeWidth:bubbleStrokewidht});
+        }
+        canvas.requestRenderAll();
+    }
+}
+
+function hexToRgba(hex, opacity = 1) {
+    hex = hex.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+function loadSVGReadOnly(svgString) {
     fabric.loadSVGFromString(svgString, function (objects, options) {
         var canvasUsableHeight = canvas.height * 0.3 - svgPagging;
         var overallScaleX = (canvas.width * 0.3) / options.width;
@@ -60,17 +57,17 @@ function loadSVGReadOnly(svgString) {
         var offsetY = svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
 
         var scaledObjects = objects.map(function (obj) {
+            if (obj.id) {
+                obj.data = { 
+                    originalId: obj.id,
+                    originalClass: obj.class || obj.className
+                };
+            }
+            
             obj.scaleX = scaleToFit;
             obj.scaleY = scaleToFit;
             obj.top = obj.top * scaleToFit + offsetY;
             obj.left = obj.left * scaleToFit + offsetX;
-            if (apply) {
-                obj.set({
-                    fill: fillColor,
-                    stroke: strokeColor,
-                    opacity: speechBubbleOpacity,
-                });
-            }
             return obj;
         });
 
@@ -84,10 +81,15 @@ function loadSVGReadOnly(svgString) {
             lockRotation: false,
             lockScalingX: false,
             lockScalingY: false,
+            data: { 
+                originalId: 'speech-bubble-group',
+                childrenIds: objects.map(obj => obj.id).filter(Boolean)
+            }
         });
 
         canvas.add(group);
         canvas.setActiveObject(group);
+        changeSpeechBubble();
         canvas.renderAll();
         updateLayerPanel();
     });
@@ -101,7 +103,7 @@ const previewAreaLandscape = $(
     "svg-preview-area-landscape"
 );
 const speechBubbleArea = $(
-    "speech-bubble-svg-preview-area1"
+    "speech-bubble-preview"
 );
 
 window.onload = function () {

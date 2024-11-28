@@ -909,28 +909,31 @@ function getElementClasses(element) {
                 <div class="area-header" data-i18n="bubble">Bubble</div>
                 <div id="speech-bubble-svg-preview-area1">
                     <div class="input-group">
-                        <input type="checkbox" id="applySpeechbubbleChange" data-i18n="enableSettings">
-                        <span data-i18n="enableSettings">Enable Settings</span>
-                    </div>
-                    <hr>
-                    <div class="input-group">
                         <label data-i18n="background">Background</label>
                         <input type="color" id="bubbleFillColor" value="#FFFFFF"
-                            oninput="changeSpeechBubbleBackgroundColor(this.value)">
+                            oninput="changeSpeechBubble()">
                     </div>
                     <div class="input-group">
                         <label data-i18n="line">Line</label>
                         <input type="color" id="bubbleStrokeColor" value="#000000"
-                            oninput="changeSpeechBubbleLineColor(this.value)">
+                            oninput="changeSpeechBubble()">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="opacity">
-                        <input type="range" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100" step="1" value="100" oninput="changeSpeechBubbleOpacity(this.value)">
+                        <input type="range" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100" step="1" value="100" oninput="changeSpeechBubble()">
+                    </div>
+
+                    
+                    <div class="input-container-leftSpace" data-i18n-label="svg_icon_line_width">
+                        <input type="range" id="bubbleStrokewidht" name="stroke" min="0" max="40" step="0.1" value="4.0" oninput="changeSpeechBubble()">
                     </div>
 
                     <label style="display: none;">Line Size</label>
                     <input style="display: none;" type="range" id="speechBubbleLineSizeSlider" min="1" max="10" value="3">
                     <hr>
+                </div>
+                <div id="speech-bubble-preview">
+
                 </div>
             </div>
 
@@ -1170,7 +1173,7 @@ function getElementClasses(element) {
                         </button>
                     </div>
                 </div>
-            <hr>
+                <hr>
                 <div id="text-area2-settings"></div>
             </div>
 

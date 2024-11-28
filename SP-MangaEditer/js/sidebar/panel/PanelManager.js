@@ -388,7 +388,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  var svgPreviewArea = $("speech-bubble-area1");
+  var svgPreviewArea = $("speech-bubble-preview");
   svgPreviewArea.addEventListener(
     "mousedown",
     function (event) {

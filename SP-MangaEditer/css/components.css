@@ -276,6 +276,14 @@ prompt-manager-area
  text-align: left;
 }
 
+#speech-bubble-svg-preview-area1{
+  max-height: 25%;
+}
+#speech-bubble-preview{
+  max-height: 80%;
+  overflow-y: auto;
+}
+
 .left_area button img {
  width: 90%;
  display: block;
