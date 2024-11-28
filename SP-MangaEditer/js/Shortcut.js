@@ -136,7 +136,7 @@ hotkeys(hotkeysMap.moveDown, 'all', function (e) {
  * @description Move the active object in the canvas
  * @param {*} direction 
  */
-function moveActiveObject(direction) {
+function moveActiveObject(direction, e) {
   var activeObject = canvas.getActiveObject();
   if (activeObject && isNotVisibleFloatingWindow()) {
     if (!isLongPressDirection) {
