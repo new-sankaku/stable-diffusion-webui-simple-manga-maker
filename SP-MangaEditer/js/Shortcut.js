@@ -1,98 +1,194 @@
-document.addEventListener("keydown", function (e) {
-  var activeObject = canvas.getActiveObject();
+// simple check if the user is using a mac os , not the best way to detect the OS
+var isMacOs = navigator.userAgent.indexOf('Mac OS') !== -1;;
 
-  if (e.key === "g" && e.ctrlKey) {
-    toggleGrid();
-    e.preventDefault();
-    return;
-  } else if (e.key === "z" && e.ctrlKey) {
+var hotkeysMap = {
+  toggleGrid: 'ctrl+g',
+  undo: !isMacOs ? 'ctrl+z' : 'command+z',
+  redo: !isMacOs ? 'ctrl+y' : 'command+y',
+  toggleLayer: 'ctrl+l',
+  toggleControls: 'ctrl+k',
+  zoomIn: 'ctrl+8',
+  zoomOut: 'ctrl+9',
+  zoomFit: 'ctrl+0',
+  copy: !isMacOs ? 'ctrl+c' : "command+c",
+  paste: !isMacOs ? 'ctrl+v' : "command+v",
+  delete: 'delete, backspace',
+  moveLeft: 'left',
+  moveRight: 'right',
+  moveUp: 'up',
+  moveDown: 'down',
+}
+
+var isLongPressDirection = false;
+var longPressTimer = 0;
+var activeObjectMoveStep = 0;
+
+
+// bind toggle grid shortcut
+hotkeys(hotkeysMap.toggleGrid, 'all' , function (e) {
+  toggleGrid();
+  e.preventDefault();
+});
+
+// bind undo shortcut
+hotkeys(hotkeysMap.undo, 'all' , function (e) {
+  if (!isEditableTagsActive()) {
     undo();
     e.preventDefault();
-    return;
-  } else if (e.key === "y" && e.ctrlKey) {
+  }
+});
+
+// bind redo shortcut
+hotkeys(hotkeysMap.redo, 'all' , function (e) {
     redo();
     e.preventDefault();
-    return;
-  } else if (e.ctrlKey && e.key === 'l') {
-    changeView('layer-panel', $('view_layers_checkbox').checked);
-    $('view_layers_checkbox').click();
-    e.preventDefault();
-    return;
-  } else if (e.ctrlKey && e.key === 'k') {
-    changeView('controls', $('view_controles_checkbox').checked);
-    $('view_controles_checkbox').click();
-    e.preventDefault();
-    return;
-  } else if (e.ctrlKey && e.key === '8') {
-    zoomIn();
-    e.preventDefault();
-    return;
-  } else if (e.ctrlKey && e.key === '9') {
-    zoomOut();
-    e.preventDefault();
-    return;
-  }else if (e.ctrlKey && e.key === '0') {
-    zoomFit();
-    e.preventDefault();
-    return;
-  }else if (e.ctrlKey && e.key === 'c') {
-    if (canvas.getActiveObject()) {
-      canvas.getActiveObject().clone(function(cloned) {
-          window._clipboard = cloned;
-      });
-    }
-    return;
-  }else if (e.ctrlKey && e.key === 'v') {
-    if (!window._clipboard || !(window._clipboard instanceof fabric.Object)) {
-      return;
-    }
-    window._clipboard.clone(function(clonedObj) {
-            clonedObj.set({
-                left: clonedObj.left + 10,
-                top: clonedObj.top + 10
-            });
-            canvas.add(clonedObj);
-            canvas.setActiveObject(clonedObj);
-            canvas.requestRenderAll();
-        });
-    return;
-  }
-  
-  if (activeObject) {
-    if (e.key === "Delete") {
-      removeLayer(activeObject);
-      canvas.renderAll();
-      e.preventDefault();
-      return;
-    }
-  }
+});
 
+// bind toggle layer panel shortcut
+hotkeys(hotkeysMap.toggleLayer, 'all', function (e) {
+  changeView('layer-panel', $('view_layers_checkbox').checked);
+  $('view_layers_checkbox').click();
+  e.preventDefault();
+});
+
+// bind toggle controls shortcut
+hotkeys(hotkeysMap.toggleControls, 'all', function (e) {
+  changeView('controls', $('view_controles_checkbox').checked);
+  $('view_controles_checkbox').click();
+  e.preventDefault();
+});
+
+// bind zoom in shortcut
+hotkeys(hotkeysMap.zoomIn, 'all', function (e) {
+  zoomIn();
+  e.preventDefault();
+});
+
+// bind zoom out shortcut
+hotkeys(hotkeysMap.zoomOut, 'all', function (e) {
+  zoomIn();
+  e.preventDefault();
+});
+
+// bind zoom fit shortcut
+hotkeys(hotkeysMap.zoomFit, 'all', function (e) {
+  zoomFit();
+  e.preventDefault();
+});
+
+// bind copy shortcut
+hotkeys(hotkeysMap.copy, 'all', function (e) {
+  if (canvas.getActiveObject()) {
+    canvas.getActiveObject().clone(function(cloned) {
+        window._clipboard = cloned;
+    });
+  }
+  e.preventDefault();
+});
+
+// bind paste shortcut
+hotkeys(hotkeysMap.paste, 'all', function (e) {
+  if (!window._clipboard || !(window._clipboard instanceof fabric.Object)) {
+    return;
+  }
+  window._clipboard.clone(function(clonedObj) {
+          clonedObj.set({
+              left: clonedObj.left + 10,
+              top: clonedObj.top + 10
+          });
+          canvas.add(clonedObj);
+          canvas.setActiveObject(clonedObj);
+          canvas.requestRenderAll();
+      });
+  e.preventDefault();
+});
+
+// bind delete shortcut
+hotkeys(hotkeysMap.delete, 'all', function (e) {
+  var activeObject = canvas.getActiveObject();
+  if (activeObject) {
+    removeLayer(activeObject);
+    canvas.renderAll();
+    e.preventDefault();
+  }
+});
+
+// bind move object shortcuts
+hotkeys(hotkeysMap.moveLeft, 'all', function (e) {
+  moveActiveObject('left', e);
+});
+
+hotkeys(hotkeysMap.moveRight, 'all', function (e) {
+  moveActiveObject('right', e);
+});
+
+hotkeys(hotkeysMap.moveUp, 'all', function (e) {
+  moveActiveObject('up', e);
+});
+
+hotkeys(hotkeysMap.moveDown, 'all', function (e) {
+  moveActiveObject('down' , e);
+});
+
+
+
+/**
+ * @description Move the active object in the canvas
+ * @param {*} direction 
+ */
+function moveActiveObject(direction, e) {
+  var activeObject = canvas.getActiveObject();
   if (activeObject && isNotVisibleFloatingWindow()) {
-    var moveDistance = isGridVisible ? gridSize : 1;
-    switch (e.key) {
-      case "ArrowLeft":
-        activeObject.left -= moveDistance;
+    if (!isLongPressDirection) {
+      activeObjectMoveStep = isGridVisible ? gridSize : 1;
+    } else {
+      // increase the step by 1 each time the long press is detected
+      activeObjectMoveStep = activeObjectMoveStep += 1;
+    }
+    if (!longPressTimer) {
+      longPressTimer = window.setTimeout(function () {
+        isLongPressDirection = true;
+      }, 500);
+    }
+    switch (direction) {
+      case 'left':
+        activeObject.left -= activeObjectMoveStep;
         break;
-      case "ArrowUp":
-        activeObject.top -= moveDistance;
+      case 'up':
+        activeObject.top -= activeObjectMoveStep;
         break;
-      case "ArrowRight":
-        activeObject.left += moveDistance;
+      case 'right':
+        activeObject.left += activeObjectMoveStep;
         break;
-      case "ArrowDown":
-        activeObject.top += moveDistance;
+      case 'down':
+        activeObject.top += activeObjectMoveStep;
         break;
-      default:
-        return;
     }
     activeObject.setCoords();
     canvas.renderAll();
     e.preventDefault();
-    return;
+  }
+}
+
+document.addEventListener('keyup', function (event) {
+  if (longPressTimer) {
+    window.clearTimeout(longPressTimer);
+    longPressTimer = 0;
+    activeObjectMoveStep = 0;
   }
 });
 
+function isEditableTagsActive() {
+   const activeElement = document.activeElement;
+  // the tags that should be excluded from the default behavior
+  const excludedTags = ['INPUT', 'TEXTAREA', 'DIV', 'SELECT'];
 
+  if (excludedTags.includes(activeElement.tagName) || 
+      (activeElement.isContentEditable && activeElement.tagName === 'DIV')) {
+      return true;
+  }
+  return false;
+}
 
 document.addEventListener("paste", function (event) {
   const items = event.clipboardData.items;
