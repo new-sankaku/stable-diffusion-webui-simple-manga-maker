@@ -3,6 +3,7 @@
 const resources = {
   ja: {
     translation: {
+"canvasInitMessage":"画像をドロップ/生成",
 "nothingImage":"画像が選択されていません",
 "nothingPanel":"コマが選択されていません",
 
@@ -460,6 +461,7 @@ const resources = {
   },
 en: {
     translation: {
+"canvasInitMessage":"Drop or generate image",
 "nothingImage":"No image selected",
 "nothingPanel":"No panel selected",
 "effectEnhanceDarkIntensity":"Dark Intensity",
@@ -1001,7 +1003,8 @@ en: {
   },
   ko: {
 translation: {
-"nothingImage":"이미지가 선택되지 않았습니다",
+"canvasInitMessage":"이미지 드롭/생성",
+  "nothingImage":"이미지가 선택되지 않았습니다",
 "nothingPanel":"패널이 선택되지 않았습니다",
 
   "effectEnhanceDarkIntensity":"검정 강도",
@@ -1464,6 +1467,7 @@ translation: {
   },
   fr: {
     translation: {
+"canvasInitMessage":"Déposer/générer image",
 "nothingImage":"Aucune image sélectionnée",
 "nothingPanel":"Aucun panneau sélectionné",
       "effectEnhanceDarkIntensity":"Intensité du Noir",
@@ -1959,7 +1963,8 @@ translation: {
   },
   zh: {
     translation: {
-"nothingImage":"未选择图片",
+"canvasInitMessage":"拖放或生成图片",
+      "nothingImage":"未选择图片",
 "nothingPanel":"未选择面板",
       "effectEnhanceDarkIntensity":"黑色强度",
 "Color2BlackWhiteLight":"黑白-淡色",
@@ -2454,7 +2459,8 @@ translation: {
   },
   ru: {
     translation: {
-"nothingImage":"Изображение не выбрано",
+"canvasInitMessage":"Добавить/создать изображение",
+      "nothingImage":"Изображение не выбрано",
 "nothingPanel":"Панель не выбрана",
       "effectEnhanceDarkIntensity":"Интенсивность темного",
 "Color2BlackWhiteLight":"Черно-белый-Светлый",
@@ -2898,6 +2904,7 @@ translation: {
   },
   es: {
     translation: {
+"canvasInitMessage":"Soltar o generar imagen",
 "nothingImage":"Ninguna imagen seleccionada",
 "nothingPanel":"Ningún panel seleccionado",
       "effectEnhanceDarkIntensity":"Intensidad del Negro",
@@ -3341,7 +3348,8 @@ translation: {
   },
   pt: {
     translation: {
-"nothingImage":"Nenhuma imagem selecionada",
+"canvasInitMessage":"Soltar ou gerar imagem",
+      "nothingImage":"Nenhuma imagem selecionada",
 "nothingPanel":"Nenhum painel selecionado",
       "effectEnhanceDarkIntensity":"Intensidade do Escuro",
 "Color2BlackWhiteLight":"Preto e Branco-Claro",
@@ -3785,7 +3793,8 @@ translation: {
   },
 th: {
 translation: {
-"nothingImage":"ไม่ได้เลือกรูปภาพ",
+"canvasInitMessage":"วางหรือสร้างรูปภาพ",
+  "nothingImage":"ไม่ได้เลือกรูปภาพ",
 "nothingPanel":"ไม่ได้เลือกพาเนล",
   "effectEnhanceDarkIntensity":"ความเข้มของสีดำ",
 "Color2BlackWhiteLight":"ขาวดำ-จาง",
@@ -4279,6 +4288,7 @@ translation: {
   },
     de: {
 "translation": {
+  "canvasInitMessage":"Bild ablegen/generieren",
 "nothingImage":"Kein Bild ausgewählt",
 "nothingPanel":"Kein Panel ausgewählt",
 "Color2BlackWhiteLight":"Schwarz-Weiß-Hell",

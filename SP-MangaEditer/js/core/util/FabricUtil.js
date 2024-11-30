@@ -561,3 +561,27 @@ function getLastObject(){
     return lastCheckObject;
   }
 }
+
+
+let initMessageText=null;
+function initMessage(){
+  // const message = "Drop or Generate";
+  const message = getText("canvasInitMessage");
+  const text = new fabric.IText(message, {
+      left: canvas.width / 2,
+      top: canvas.height / 2,
+      fontSize: 30,
+      opacity: 0.25,
+      fontFamily: 'Arial',
+      originX: 'center',
+      originY: 'center',
+      selectable: false,
+      hoverCursor: 'default'
+  });
+  
+  setNotSave(text);
+  canvas.add(text);
+  initMessageText = text;
+  canvas.renderAll();
+}
+

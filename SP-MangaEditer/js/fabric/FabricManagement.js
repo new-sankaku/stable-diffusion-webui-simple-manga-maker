@@ -162,6 +162,12 @@ function updateClipPath(imageObj, polygonObj) {
 }
 
 canvas.on("object:added", (e) => {
+  if(initMessageText){
+    canvas.remove(initMessageText);
+    updateLayerPanel();
+    initMessageText=null;
+  }
+
   const obj = e.target;
   if (isPanel(obj)) {
       obj.set('fill', 'rgba(255,255,255,0.25)');
