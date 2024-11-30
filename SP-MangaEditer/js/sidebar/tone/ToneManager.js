@@ -70,7 +70,7 @@ function switchMangaTone(type) {
   } else if (type === MODE_FOCUSING_LINE) {
     focusLineStart();
     addFCEventListener();
-    updateFocusLine();
+    // updateFocusLine();
   } else if (type === MODE_SPEED_LINE) {
     speedLineStart();
     addSppedLineEventListener();

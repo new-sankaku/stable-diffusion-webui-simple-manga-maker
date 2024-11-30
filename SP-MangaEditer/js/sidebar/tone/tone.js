@@ -176,7 +176,7 @@ function updatecanvas() {
     canvas.remove(nowTone);
   }
   fabric.Image.fromURL(tmpCanvasTone.toDataURL(), function (img) {
-    var activeObject = canvas.getActiveObject();
+    var activeObject = getLastObject();
 
     if( isPanel(activeObject) ){
       var canvasX = (activeObject.left + (activeObject.width * activeObject.scaleX / 2))  ;

@@ -18,6 +18,26 @@ var effectEnhanceDarkSubmit = null;
 
 let nowEffect = null;
 function switchMangaEffect(type) {
+
+  switch (type) {
+    case MODE_EFFECT_ENHANCE_DARK:
+    case MODE_EFFECT_C2BW_LIGHT:
+    case MODE_EFFECT_C2BW_DARK:
+    case MODE_EFFECT_C2BW_ROUGHT:
+    case MODE_EFFECT_C2BW_SIMPLE:
+    case MODE_EFFECT_GLOW:
+    case MODE_EFFECT_GLFX:
+      if (!checkActiveImage()) {
+        return;
+      }
+      break;
+    case MODE_EFFECT_BLEND:
+      break;
+    default:
+      break;
+  }
+
+
   switchMangaEffectUi(type);
 
   if (nowEffect) {

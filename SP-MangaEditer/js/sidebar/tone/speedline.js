@@ -6,7 +6,7 @@ var nowSpeedLine = null;
 function speedLineStart(){
   tempCanvasSpeedLine = document.createElement("canvas");
 
-  var activeObject = canvas.getActiveObject();
+  var activeObject = getLastObject();
   if (isPanel(activeObject)) {
     var canvasX = (activeObject.width * activeObject.scaleX);
     var canvasY = (activeObject.height * activeObject.scaleY);
@@ -174,7 +174,7 @@ function updateSpeedLineCanvas() {
   }
 
   fabric.Image.fromURL(tempCanvasSpeedLine.toDataURL(), function (img) {
-    var activeObject = canvas.getActiveObject();
+    var activeObject = getLastObject();
      if( isPanel(activeObject) ){
         var canvasX = (activeObject.left + (activeObject.width * activeObject.scaleX / 2))  ;
         var canvasY = (activeObject.top  + (activeObject.height * activeObject.scaleY/ 2)) ;

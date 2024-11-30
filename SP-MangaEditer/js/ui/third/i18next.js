@@ -3,6 +3,9 @@
 const resources = {
   ja: {
     translation: {
+"nothingImage":"画像が選択されていません",
+"nothingPanel":"コマが選択されていません",
+
 "effectEnhanceDarkIntensity":"黒強度",
 "Color2BlackWhiteLight":"白黒-薄い",
 "Color2BlackWhiteDark":"白黒-濃い",
@@ -457,6 +460,8 @@ const resources = {
   },
 en: {
     translation: {
+"nothingImage":"No image selected",
+"nothingPanel":"No panel selected",
 "effectEnhanceDarkIntensity":"Dark Intensity",
 "Color2BlackWhiteLight":"Black & White-Light",
 "Color2BlackWhiteDark":"Black & White-Dark",
@@ -996,7 +1001,10 @@ en: {
   },
   ko: {
 translation: {
-"effectEnhanceDarkIntensity":"검정 강도",
+"nothingImage":"이미지가 선택되지 않았습니다",
+"nothingPanel":"패널이 선택되지 않았습니다",
+
+  "effectEnhanceDarkIntensity":"검정 강도",
 "Color2BlackWhiteLight":"흑백-연한",
 "Color2BlackWhiteDark":"흑백-진한",
 "Color2BlackWhiteRough":"흑백-거친",
@@ -1456,7 +1464,9 @@ translation: {
   },
   fr: {
     translation: {
-"effectEnhanceDarkIntensity":"Intensité du Noir",
+"nothingImage":"Aucune image sélectionnée",
+"nothingPanel":"Aucun panneau sélectionné",
+      "effectEnhanceDarkIntensity":"Intensité du Noir",
 "Color2BlackWhiteLight":"Noir et Blanc-Léger",
 "Color2BlackWhiteDark":"Noir et Blanc-Foncé",
 "Color2BlackWhiteRough":"Noir et Blanc-Brut",
@@ -1949,7 +1959,9 @@ translation: {
   },
   zh: {
     translation: {
-"effectEnhanceDarkIntensity":"黑色强度",
+"nothingImage":"未选择图片",
+"nothingPanel":"未选择面板",
+      "effectEnhanceDarkIntensity":"黑色强度",
 "Color2BlackWhiteLight":"黑白-淡色",
 "Color2BlackWhiteDark":"黑白-深色",
 "Color2BlackWhiteRough":"黑白-粗糙",
@@ -2442,7 +2454,9 @@ translation: {
   },
   ru: {
     translation: {
-"effectEnhanceDarkIntensity":"Интенсивность темного",
+"nothingImage":"Изображение не выбрано",
+"nothingPanel":"Панель не выбрана",
+      "effectEnhanceDarkIntensity":"Интенсивность темного",
 "Color2BlackWhiteLight":"Черно-белый-Светлый",
 "Color2BlackWhiteDark":"Черно-белый-Темный",
 "Color2BlackWhiteRough":"Черно-белый-Грубый",
@@ -2884,7 +2898,9 @@ translation: {
   },
   es: {
     translation: {
-"effectEnhanceDarkIntensity":"Intensidad del Negro",
+"nothingImage":"Ninguna imagen seleccionada",
+"nothingPanel":"Ningún panel seleccionado",
+      "effectEnhanceDarkIntensity":"Intensidad del Negro",
 "Color2BlackWhiteLight":"Blanco y Negro-Claro",
 "Color2BlackWhiteDark":"Blanco y Negro-Oscuro",
 "Color2BlackWhiteRough":"Blanco y Negro-Rugoso",
@@ -3325,7 +3341,9 @@ translation: {
   },
   pt: {
     translation: {
-"effectEnhanceDarkIntensity":"Intensidade do Escuro",
+"nothingImage":"Nenhuma imagem selecionada",
+"nothingPanel":"Nenhum painel selecionado",
+      "effectEnhanceDarkIntensity":"Intensidade do Escuro",
 "Color2BlackWhiteLight":"Preto e Branco-Claro",
 "Color2BlackWhiteDark":"Preto e Branco-Escuro",
 "Color2BlackWhiteRough":"Preto e Branco-Áspero",
@@ -3767,7 +3785,9 @@ translation: {
   },
 th: {
 translation: {
-"effectEnhanceDarkIntensity":"ความเข้มของสีดำ",
+"nothingImage":"ไม่ได้เลือกรูปภาพ",
+"nothingPanel":"ไม่ได้เลือกพาเนล",
+  "effectEnhanceDarkIntensity":"ความเข้มของสีดำ",
 "Color2BlackWhiteLight":"ขาวดำ-จาง",
 "Color2BlackWhiteDark":"ขาวดำ-เข้ม",
 "Color2BlackWhiteRough":"ขาวดำ-หยาบ",
@@ -4259,6 +4279,8 @@ translation: {
   },
     de: {
 "translation": {
+"nothingImage":"Kein Bild ausgewählt",
+"nothingPanel":"Kein Panel ausgewählt",
 "Color2BlackWhiteLight":"Schwarz-Weiß-Hell",
 "Color2BlackWhiteDark":"Schwarz-Weiß-Dunkel",
 "Color2BlackWhiteRough":"Schwarz-Weiß-Rau",

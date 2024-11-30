@@ -551,3 +551,13 @@ function getPointAtDistance(startX, startY, angle, distance){
   const y = startY + Math.sin(angle) * distance;
   return { x, y };
 };
+
+
+function getLastObject(){
+  var activeObject = canvas.getActiveObject();
+  if(activeObject){
+    return activeObject;
+  }else{
+    return lastCheckObject;
+  }
+}

@@ -113,3 +113,31 @@ function startProgressBar(toast, progressBarClass,time=4000) {
         }
     }, interval);
 }
+
+
+
+
+function checkActiveImage() {
+    let activeObject = canvas.getActiveObject();
+    if (activeObject) {
+        if(isImage(activeObject)){
+            return true;
+        }
+    }
+    let text = getText("nothingImage");
+    createToast(text, "", 2000);
+    return false;
+}
+function checkPanelImage() {
+    let activeObject = canvas.getActiveObject();
+    if (activeObject) {
+        if(isImage(activeObject)){
+            return true;
+        }
+    }
+    let text = getText("nothingPanel");
+    createToast(text, "", 2000);
+    return false;
+}
+
+

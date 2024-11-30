@@ -27,10 +27,6 @@ canvas.on("object:added", (e) => {
     obj.set({
       selectable: false
     });
-  } else {
-    obj.set({
-      selectable: true
-    });
   }
 
 });
@@ -172,12 +168,13 @@ canvas.on("object:added", (e) => {
   }
 });
 
-
+let lastCheckObject = null;
 canvas.on('mouse:down', function(e) {
   if (e.target) {
       e.target.originalOpacity = e.target.opacity;
       e.target.opacity = 0.5;
       canvas.renderAll();
+      lastCheckObject = e.target;
   }
 });
 

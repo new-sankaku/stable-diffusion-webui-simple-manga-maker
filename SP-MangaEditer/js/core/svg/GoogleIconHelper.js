@@ -164,6 +164,7 @@ function addToCanvas(iconURL, iconName) {
                   name: iconName
               });
               obj.scaleToWidth(50);
+              canvas.setActiveObject(obj);
               canvas.add(obj).renderAll();
           });
       })

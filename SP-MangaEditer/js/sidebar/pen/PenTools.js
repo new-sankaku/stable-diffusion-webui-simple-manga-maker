@@ -387,32 +387,53 @@ function setupContextTopBrush(brush) {
     };
 }
 function finalizeGroup() {
-    
     if (currentPaths.length > 0) {
-        console.log("currentPaths.length1 ", currentPaths.length);
         const existingPaths = currentPaths.filter(path => canvas.contains(path));
+        
         if (existingPaths.length > 0) {
-            console.log("existingPaths.length2 ", existingPaths.length);
+            let minX = Infinity;
+            let minY = Infinity;
+            let maxX = -Infinity;
+            let maxY = -Infinity;
+
+            existingPaths.forEach(path => {
+                const bounds = path.getBoundingRect();
+                minX = Math.min(minX, bounds.left);
+                minY = Math.min(minY, bounds.top);
+                maxX = Math.max(maxX, bounds.left + bounds.width);
+                maxY = Math.max(maxY, bounds.top + bounds.height);
+            });
+
+            const offsetX = minX;
+            const offsetY = minY;
+
+            existingPaths.forEach(path => {
+                path.set({
+                    left: path.left - offsetX,
+                    top: path.top - offsetY
+                });
+            });
+
             let group = new fabric.Group(existingPaths, {
-                selectable: true,
+                left: offsetX,
+                top: offsetY,
+                selectable: false,
                 evented: true
             });
+
             changeDoNotSaveHistory();
             canvas.remove(...existingPaths);
             canvas.add(group);
             changeDoSaveHistory();
             canvas.renderAll();
             updateLayerPanel();
-        }else{
-            console.log("existingPaths.length3 ", existingPaths.length);
         }
         currentPaths = currentPaths.filter(path => !existingPaths.includes(path));
-    }else{
-        console.log("currentPaths.length4 ", currentPaths.length);
     }
 }
 
 canvas.on('path:created', function (opt) {
+    console.log("push");
     currentPaths.push(opt.path);
 });
 

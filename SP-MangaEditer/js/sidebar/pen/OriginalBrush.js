@@ -172,9 +172,9 @@ function enhanceBrush(brush, keepOriginalMethod) {
         
         tempCanvas.width = this.canvas.width;
         tempCanvas.height = this.canvas.height;
-
-        if( this.images.length == 0  ){
-            return ;
+    
+        if (this.images.length == 0) {
+            return;
         }
 
         this.images.forEach((img) => {
@@ -186,26 +186,57 @@ function enhanceBrush(brush, keepOriginalMethod) {
                 img.height * img.scaleY
             );
         });
-
-        var mergedImage = tempCanvas.toDataURL();
+    
+        var imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+        var data = imageData.data;
+        var minX = tempCanvas.width;
+        var minY = tempCanvas.height;
+        var maxX = 0;
+        var maxY = 0;
+    
+        for (var y = 0; y < tempCanvas.height; y++) {
+            for (var x = 0; x < tempCanvas.width; x++) {
+                var alpha = data[(y * tempCanvas.width + x) * 4 + 3];
+                if (alpha > 0) {
+                    minX = Math.min(minX, x);
+                    minY = Math.min(minY, y);
+                    maxX = Math.max(maxX, x);
+                    maxY = Math.max(maxY, y);
+                }
+            }
+        }
+    
+        var width = maxX - minX + 1;
+        var height = maxY - minY + 1;
+    
+        var croppedCanvas = document.createElement('canvas');
+        croppedCanvas.width = width;
+        croppedCanvas.height = height;
+    
+        var croppedCtx = croppedCanvas.getContext('2d');
+        croppedCtx.drawImage(tempCanvas, 
+            minX, minY, width, height,
+            0, 0, width, height
+        );
+    
+        var mergedImage = croppedCanvas.toDataURL();
         fabric.Image.fromURL(mergedImage, (img) => {
             img.set({
-                left: 0,
-                top: 0,
-                selectable: true,
-                scaleX: 1, 
-                scaleY: 1  
+                left: minX,
+                top: minY,
+                selectable: false,
+                scaleX: 1,
+                scaleY: 1
             });
             this.canvas.add(img);
             this.images.forEach((image) => {
                 this.canvas.remove(image);
             });
             this.images = [];
-
+    
             this.canvas.renderAll();
         });
     };
-
     if(keepOriginalMethod){
         var originalOnMouseUp = brush.onMouseUp;
         brush.onMouseUp = function() {

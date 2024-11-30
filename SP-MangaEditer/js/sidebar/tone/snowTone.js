@@ -4,7 +4,7 @@ var isDrawingSnowTone = false;
 var nowSnowTone = null;
 
 function snowToneStart() {
-  var activeObject = canvas.getActiveObject();
+  var activeObject = getLastObject();
   tmpCanvasSnowTone = document.createElement("canvas");
 
   if (isPanel(activeObject)) {
@@ -158,7 +158,7 @@ function updateSnowTone() {
 
   const dataURL = tmpCanvasSnowTone.toDataURL({ format: "png" });
   fabric.Image.fromURL(dataURL, function (img) {
-    var activeObject = canvas.getActiveObject();
+    var activeObject = getLastObject();
     if (isPanel(activeObject)) {
       var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
       var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;

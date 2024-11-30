@@ -24,7 +24,7 @@ function initResizeCanvas(event) {
     clearTimeout(resizeTimer);
   }
   resizeTimer = setTimeout(function () {
-    resizeCanvasByNum(containerWidth, containerHeight);
+    loadBookSize(210, 297, false);
   }, 15);
 }
 

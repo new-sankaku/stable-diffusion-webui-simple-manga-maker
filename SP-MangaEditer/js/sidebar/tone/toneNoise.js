@@ -4,7 +4,7 @@ var nowToneNoise = null;
 var isDrawingToneNoise = false;
 
 function toneNoiseStart() {
-  var activeObject = canvas.getActiveObject();
+  var activeObject = getLastObject();
   tmpCanvasToneNoise = document.createElement("canvas");
 
   if (isPanel(activeObject)) {
@@ -135,7 +135,7 @@ function updateToneNoise() {
 
 
   fabric.Image.fromURL(tmpCanvasToneNoise.toDataURL(), function (img) {
-    var activeObject = canvas.getActiveObject();
+    var activeObject = getLastObject();
     if (isPanel(activeObject)) {
       var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
       var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
