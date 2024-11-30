@@ -3,6 +3,7 @@
 const resources = {
   ja: {
     translation: {
+"Color2BlackLightColor":"トーンと薄いカラー化",
 "canvasInitMessage":"画像をドロップ/生成",
 "nothingImage":"画像が選択されていません",
 "nothingPanel":"コマが選択されていません",
@@ -461,6 +462,7 @@ const resources = {
   },
 en: {
     translation: {
+"Color2BlackLightColor":"Tone and light color",      
 "canvasInitMessage":"Drop or generate image",
 "nothingImage":"No image selected",
 "nothingPanel":"No panel selected",
@@ -1003,6 +1005,7 @@ en: {
   },
   ko: {
 translation: {
+"Color2BlackLightColor":"톤과 연한 색상",
 "canvasInitMessage":"이미지 드롭/생성",
   "nothingImage":"이미지가 선택되지 않았습니다",
 "nothingPanel":"패널이 선택되지 않았습니다",
@@ -1467,6 +1470,7 @@ translation: {
   },
   fr: {
     translation: {
+"Color2BlackLightColor":"Ton et couleur légère",
 "canvasInitMessage":"Déposer/générer image",
 "nothingImage":"Aucune image sélectionnée",
 "nothingPanel":"Aucun panneau sélectionné",
@@ -1963,6 +1967,7 @@ translation: {
   },
   zh: {
     translation: {
+"Color2BlackLightColor":"色调与浅色化",
 "canvasInitMessage":"拖放或生成图片",
       "nothingImage":"未选择图片",
 "nothingPanel":"未选择面板",
@@ -2459,7 +2464,8 @@ translation: {
   },
   ru: {
     translation: {
-"canvasInitMessage":"Добавить/создать изображение",
+"Color2BlackLightColor":"Тон и светлый цвет",
+      "canvasInitMessage":"Добавить/создать изображение",
       "nothingImage":"Изображение не выбрано",
 "nothingPanel":"Панель не выбрана",
       "effectEnhanceDarkIntensity":"Интенсивность темного",
@@ -2904,6 +2910,7 @@ translation: {
   },
   es: {
     translation: {
+"Color2BlackLightColor":"Tono y color claro",
 "canvasInitMessage":"Soltar o generar imagen",
 "nothingImage":"Ninguna imagen seleccionada",
 "nothingPanel":"Ningún panel seleccionado",
@@ -3348,6 +3355,7 @@ translation: {
   },
   pt: {
     translation: {
+"Color2BlackLightColor":"Tom e cor clara",
 "canvasInitMessage":"Soltar ou gerar imagem",
       "nothingImage":"Nenhuma imagem selecionada",
 "nothingPanel":"Nenhum painel selecionado",
@@ -3793,6 +3801,7 @@ translation: {
   },
 th: {
 translation: {
+  "Color2BlackLightColor":"โทนและสีอ่อน",
 "canvasInitMessage":"วางหรือสร้างรูปภาพ",
   "nothingImage":"ไม่ได้เลือกรูปภาพ",
 "nothingPanel":"ไม่ได้เลือกพาเนล",
@@ -4288,6 +4297,7 @@ translation: {
   },
     de: {
 "translation": {
+  "Color2BlackLightColor":"Ton und helle Farbe",
   "canvasInitMessage":"Bild ablegen/generieren",
 "nothingImage":"Kein Bild ausgewählt",
 "nothingPanel":"Kein Panel ausgewählt",

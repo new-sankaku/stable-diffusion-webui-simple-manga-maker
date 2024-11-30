@@ -1,10 +1,11 @@
 const effectMap = new Map();
 
-const MODE_EFFECT_C2BW_LIGHT = "Color2BlackWhiteLight";
-const MODE_EFFECT_C2BW_DARK = "Color2BlackWhiteDark";
-const MODE_EFFECT_C2BW_ROUGHT = "Color2BlackWhiteRough";
-const MODE_EFFECT_C2BW_SIMPLE = "Color2BlackWhiteSimple";
-const MODE_EFFECT_ENHANCE_DARK = "EnhanceDark";
+const MODE_EFFECT_C2BW_LIGHT    = "Color2BlackWhiteLight";
+const MODE_EFFECT_C2BW_DARK     = "Color2BlackWhiteDark";
+const MODE_EFFECT_C2BW_ROUGHT   = "Color2BlackWhiteRough";
+const MODE_EFFECT_C2BW_SIMPLE   = "Color2BlackWhiteSimple";
+const MODE_EFFECT_C2BC_LIGHT    = "Color2BlackLightColor";
+const MODE_EFFECT_ENHANCE_DARK  = "EnhanceDark";
 
 const MODE_EFFECT_GLOW = "EffectGlow";
 const MODE_EFFECT_BLEND = "EffectBlend";
@@ -25,6 +26,7 @@ function switchMangaEffect(type) {
     case MODE_EFFECT_C2BW_DARK:
     case MODE_EFFECT_C2BW_ROUGHT:
     case MODE_EFFECT_C2BW_SIMPLE:
+    case MODE_EFFECT_C2BC_LIGHT:
     case MODE_EFFECT_GLOW:
     case MODE_EFFECT_GLFX:
       if (!checkActiveImage()) {
@@ -73,6 +75,11 @@ function switchMangaEffect(type) {
     return;
   } else if (type === MODE_EFFECT_C2BW_SIMPLE) {
     C2BWStartSimple();
+    clearActiveEffectButton();
+    nowEffect = null;
+    return;
+  } else if (type === MODE_EFFECT_C2BC_LIGHT) {
+    C2CStart();
     clearActiveEffectButton();
     nowEffect = null;
     return;

@@ -162,12 +162,14 @@ function updateClipPath(imageObj, polygonObj) {
 }
 
 canvas.on("object:added", (e) => {
+  if(canvas.isDrawingMode){
+    return;
+  }
   if(initMessageText){
     canvas.remove(initMessageText);
     updateLayerPanel();
     initMessageText=null;
   }
-
   const obj = e.target;
   if (isPanel(obj)) {
       obj.set('fill', 'rgba(255,255,255,0.25)');
@@ -176,6 +178,9 @@ canvas.on("object:added", (e) => {
 
 let lastCheckObject = null;
 canvas.on('mouse:down', function(e) {
+  if(canvas.isDrawingMode){
+    return;
+  }
   if (e.target) {
       e.target.originalOpacity = e.target.opacity;
       e.target.opacity = 0.5;

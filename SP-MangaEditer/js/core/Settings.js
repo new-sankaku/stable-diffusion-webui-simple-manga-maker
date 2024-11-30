@@ -8,8 +8,10 @@ const minCanvasSizeWidth = 600;
 const minCanvasSizeHeight = 400;
 
 var canvas = new fabric.Canvas("mangaImageCanvas", {
+  enableRetinaScaling: true,
   renderOnAddRemove: false,
-  skipOffscreen: false,
+  imageSmoothingEnabled: true,
+  skipOffscreen: true,
   renderer: fabric.isWebglSupported ? "webgl" : "canvas",
 });
 document.addEventListener("DOMContentLoaded", function() {
