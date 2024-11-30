@@ -61,7 +61,7 @@ const b = `<svg viewBox="0 0 100 100" width="100%" height="100%" style="position
             const c = document.createElement("div");
             c.style.cssText = "padding:20px;";
             const d = document.createElement("div");
-            d.textContent = "MANGA EDITOR DESU!! PRO", d.style.cssText = "font-size:24px;font-weight:700;", c.appendChild(d), a.appendChild(c);
+            d.textContent = "DESU", d.style.cssText = "color:orange; font-size:220px;font-weight:700;", c.appendChild(d), a.appendChild(c);
             const e = document.createElement("div");
             e.id = "h", e.style.cssText = "flex-grow:1;padding:20px;", f.forEach(() => { const a = document.createElement("div"); a.style.cssText = "margin:8px 0;height:1em;opacity:.9;", e.appendChild(a) }), a.appendChild(e);
             const g = `<svg width="100%" height="40" style="position:absolute;bottom:0;left:0;opacity:.5;"><defs><g id="i"><path d="M1 13L5 17L17 5L13 1L1 13Z M15 3L13 1L16 4M1 13L4 16" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="j"><path d="M3 17L7 13L15 5L13 3L5 11L1 15L3 17Z M14 4L12 2L16 6" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="k"><path d="M3 15C3 17 5 17 5 15C5 13 7 11 9 9C11 7 13 5 15 3M15 3L13 5M15 3L17 5" stroke="#aaa" stroke-width="1" fill="none"/></g></defs></svg>`, h = document.createElement("div");
@@ -211,7 +211,7 @@ function getElementClasses(element) {
 <body>
 
     <div itemscope itemtype="http://schema.org/SoftwareApplication">
-        <meta itemprop="name" content="Manga Editor Desu! Pro Edition">
+        <meta itemprop="name" content="Manga Editor Desu">
         <meta itemprop="description"
             content="Discover Manga Editor Desu! Pro Edition, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects.">
         <meta itemprop="applicationCategory" content="Multimedia">
@@ -228,7 +228,6 @@ function getElementClasses(element) {
         </div>
 
         <nav id="desu-nav" class="navbar navbar-expand custom-navbar" style="display: none;">
-
             <a class="navbar-brand" href="#">
                 <img src="02_images_svg/Logo/black_mode_logo.webp" alt="Manga Editor Desu! Pro Edition Official Logo"
                     class="navbar-logo" id="navbar-logo">
@@ -612,50 +611,6 @@ function getElementClasses(element) {
                     </div>
 
                     <hr>
-                    <div class="input-group">
-                        <button id="panelRandamCutButton">
-                            <span data-i18n="panelRandamCut">Randam Cut</span>
-                        </button>
-                    </div>
-                    <div class="input-container-leftSpace" data-i18n-label="verticalRandomPanelCount">
-                        <input type="range" id="verticalRandomPanelCount" name="verticalRandomPanelCount" min="0" max="5" step="1" value="2">
-                    </div>
-                    <div class="input-container-leftSpace" data-i18n-label="horizontalRandamPanelCount">
-                        <input type="range" id="horizontalRandamPanelCount" name="horizontalRandamPanelCount" min="0" max="5" step="1" value="3">
-                    </div>
-                    <div class="input-container-leftSpace" data-i18n-label="tiltRandam">
-                        <input type="range" id="tiltRandam" name="tiltRandam" min="0" max="50" step="1" value="6">
-                    </div>
-                    <div class="input-container-leftSpace" data-i18n-label="cutChangeRate">
-                        <input type="range" id="cutChangeRate" name="cutChangeRate" min="0" max="45" step="1" value="10">
-                    </div>
-
-                    <hr>
-                    <div class="input-group">
-                        <button id="multiPageGenerate">
-                            <span data-i18n="multiPageGenerate">Multi Page Generate</span>
-                        </button>
-                    </div>
-                    <div class="input-container-leftSpace" data-i18n-label="pageCount">
-                        <input type="range" id="pageCount" name="pageCount" min="2" max="50" step="1" value="18">
-                    </div>
-                    <div class="input-group-multi" data-group="multiPageType">
-                        <label>A4</label>
-                        <button id="mA4HButton" data-value="mA4H" onclick="changeSelected(this)" class="selected" >
-                            <i class="material-icons">crop_portrait</i>
-                        </button>
-                        <button id="mA4VButton" data-value="mA4V" onclick="changeSelected(this)">
-                            <i class="material-icons">crop_landscape</i>
-                        </button>
-                        <label>B4</label>
-                        <button id="mB4HButton" data-value="mB4H" onclick="changeSelected(this)">
-                            <i class="material-icons">crop_portrait</i>
-                        </button>
-                        <button id="mB4VButton" data-value="mB4V" onclick="changeSelected(this)">
-                            <i class="material-icons">crop_landscape</i>
-                        </button>
-                    </div>
-                    <hr>
 
                     <button id="A4-H">
                         <i class="material-icons">crop_portrait</i>
@@ -882,6 +837,52 @@ function getElementClasses(element) {
                         <i class="material-icons">generating_tokens</i>
                         <span data-i18n="promptMultiAutoGenerate">Multi Prompt Generate</span>
                     </button>
+                    <hr>
+                    <div class="input-group">
+                        <button id="panelRandamCutButton">
+                            <span data-i18n="panelRandamCut">Randam Cut</span>
+                        </button>
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="verticalRandomPanelCount">
+                        <input type="range" id="verticalRandomPanelCount" name="verticalRandomPanelCount" min="0" max="5" step="1" value="2">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="horizontalRandamPanelCount">
+                        <input type="range" id="horizontalRandamPanelCount" name="horizontalRandamPanelCount" min="0" max="5" step="1" value="3">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="tiltRandam">
+                        <input type="range" id="tiltRandam" name="tiltRandam" min="0" max="50" step="1" value="6">
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="cutChangeRate">
+                        <input type="range" id="cutChangeRate" name="cutChangeRate" min="0" max="45" step="1" value="10">
+                    </div>
+
+                    <hr>
+                    <div class="input-group">
+                        <button id="multiPageGenerate">
+                            <span data-i18n="multiPageGenerate">Multi Page Generate</span>
+                        </button>
+                    </div>
+                    <div class="input-container-leftSpace" data-i18n-label="pageCount">
+                        <input type="range" id="pageCount" name="pageCount" min="2" max="50" step="1" value="18">
+                    </div>
+                    <div class="input-group-multi" data-group="multiPageType">
+                        <label>A4</label>
+                        <button id="mA4HButton" data-value="mA4H" onclick="changeSelected(this)" class="selected" >
+                            <i class="material-icons">crop_portrait</i>
+                        </button>
+                        <button id="mA4VButton" data-value="mA4V" onclick="changeSelected(this)">
+                            <i class="material-icons">crop_landscape</i>
+                        </button>
+                        <label>B4</label>
+                        <button id="mB4HButton" data-value="mB4H" onclick="changeSelected(this)">
+                            <i class="material-icons">crop_portrait</i>
+                        </button>
+                        <button id="mB4VButton" data-value="mB4V" onclick="changeSelected(this)">
+                            <i class="material-icons">crop_landscape</i>
+                        </button>
+                    </div>
+
+
                     <hr>
                     <button id="" onclick="autoMultiGenerate()">
                         <i class="material-icons">all_inbox</i>
@@ -1184,6 +1185,63 @@ function getElementClasses(element) {
 
 
 
+
+
+            <div class="left_area" id="manga-effect-area">
+                <div class="area-header">
+                    <a href="html/Minual/effect.html" target="_blank">
+                        Fast Effect (Help)
+                    </a>
+                </div>
+                <div id="manga-effect-buttons">
+
+                    <button id="Color2BlackWhiteLightButton" onclick="switchMangaEffect('Color2BlackWhiteLight')">
+                        <span data-i18n="Color2BlackWhiteLight">Color2BlackWhiteLight</span>
+                        <img src="03_images/preset/effect/color2monoLight.webp" style="width: 100%;">
+                    </button>
+                    <button id="Color2BlackWhiteDarkButton" onclick="switchMangaEffect('Color2BlackWhiteDark')">
+                        <span data-i18n="Color2BlackWhiteDark">Color2BlackWhiteDark</span>
+                        <img src="03_images/preset/effect/color2monoDark.webp" style="width: 100%;">
+                    </button>
+                    <button id="Color2BlackWhiteNoDotButton" onclick="switchMangaEffect('Color2BlackWhiteRough')">
+                        <span data-i18n="Color2BlackWhiteRough">Color2BlackWhiteRough</span>
+                        <img src="03_images/preset/effect/color2monoRough.webp" style="width: 100%;">
+                    </button>
+                    <button id="Color2BlackWhiteNoDotButton" onclick="switchMangaEffect('Color2BlackWhiteSimple')">
+                        <span data-i18n="Color2BlackWhiteSimple">Color2BlackWhiteSimple</span>
+                        <img src="03_images/preset/effect/color2monoSimple.webp" style="width: 100%;">
+                    </button>
+
+                    <button id="Color2BlackLightColorButton" onclick="switchMangaEffect('Color2BlackLightColor')">
+                        <span data-i18n="Color2BlackLightColor">Color2BlackLightColor</span>
+                        <img src="03_images/preset/effect/Color2BlackLightColor.webp" style="width: 100%;">
+                    </button>
+
+
+                    <button id="EnhanceDarkButton" onclick="switchMangaEffect('EnhanceDark')">
+                        <span data-i18n="EnhanceDark">EnhanceDark</span>
+                        <img src="03_images/preset/effect/enhanceDark.webp" style="width: 100%;">
+                    </button>
+
+
+                    <button id="blendButton" onclick="switchMangaEffect('EffectBlend')">
+                        <span data-i18n="25blends"></span>
+                        <img src="03_images/preset/effect/25_blend.webp" style="width: 100%;">
+                    </button>
+                    <button id="EffectGlowButton" onclick="switchMangaEffect('EffectGlow')">
+                        <span data-i18n="Glow"></span>
+                        <img src="03_images/preset/effect/glow.webp" style="width: 100%;">
+                    </button>
+                    <button id="EffectGLFXButton" onclick="switchMangaEffect('EffectGLFX')">
+                        <span data-i18n="GLFX"></span>
+                        <img src="03_images/preset/effect/glfx.webp" style="width: 100%;">
+                    </button>
+                </div>
+                <hr>
+                <div id="manga-effect-settings"></div>
+            </div>
+
+
             <div class="left_area" id="tool-area" style="display: none;">
                 <div class="area-header" data-i18n="tools">Tools</div>
                 <div id="tool-buttons">
@@ -1262,61 +1320,6 @@ function getElementClasses(element) {
                 <div id="manga-tone-settings"></div>
             </div>
 
-
-
-            <div class="left_area" id="manga-effect-area">
-                <div class="area-header">
-                    <a href="html/Minual/effect.html" target="_blank">
-                        Fast Effect (Help)
-                    </a>
-                </div>
-                <div id="manga-effect-buttons">
-
-                    <button id="Color2BlackWhiteLightButton" onclick="switchMangaEffect('Color2BlackWhiteLight')">
-                        <span data-i18n="Color2BlackWhiteLight">Color2BlackWhiteLight</span>
-                        <img src="03_images/preset/effect/color2monoLight.webp" style="width: 100%;">
-                    </button>
-                    <button id="Color2BlackWhiteDarkButton" onclick="switchMangaEffect('Color2BlackWhiteDark')">
-                        <span data-i18n="Color2BlackWhiteDark">Color2BlackWhiteDark</span>
-                        <img src="03_images/preset/effect/color2monoDark.webp" style="width: 100%;">
-                    </button>
-                    <button id="Color2BlackWhiteNoDotButton" onclick="switchMangaEffect('Color2BlackWhiteRough')">
-                        <span data-i18n="Color2BlackWhiteRough">Color2BlackWhiteRough</span>
-                        <img src="03_images/preset/effect/color2monoRough.webp" style="width: 100%;">
-                    </button>
-                    <button id="Color2BlackWhiteNoDotButton" onclick="switchMangaEffect('Color2BlackWhiteSimple')">
-                        <span data-i18n="Color2BlackWhiteSimple">Color2BlackWhiteSimple</span>
-                        <img src="03_images/preset/effect/color2monoSimple.webp" style="width: 100%;">
-                    </button>
-
-                    <button id="Color2BlackLightColorButton" onclick="switchMangaEffect('Color2BlackLightColor')">
-                        <span data-i18n="Color2BlackLightColor">Color2BlackLightColor</span>
-                        <img src="03_images/preset/effect/Color2BlackLightColor.webp" style="width: 100%;">
-                    </button>
-
-
-                    <button id="EnhanceDarkButton" onclick="switchMangaEffect('EnhanceDark')">
-                        <span data-i18n="EnhanceDark">EnhanceDark</span>
-                        <img src="03_images/preset/effect/enhanceDark.webp" style="width: 100%;">
-                    </button>
-
-
-                    <button id="blendButton" onclick="switchMangaEffect('EffectBlend')">
-                        <span data-i18n="25blends"></span>
-                        <img src="03_images/preset/effect/25_blend.webp" style="width: 100%;">
-                    </button>
-                    <button id="EffectGlowButton" onclick="switchMangaEffect('EffectGlow')">
-                        <span data-i18n="Glow"></span>
-                        <img src="03_images/preset/effect/glow.webp" style="width: 100%;">
-                    </button>
-                    <button id="EffectGLFXButton" onclick="switchMangaEffect('EffectGLFX')">
-                        <span data-i18n="GLFX"></span>
-                        <img src="03_images/preset/effect/glfx.webp" style="width: 100%;">
-                    </button>
-                </div>
-                <hr>
-                <div id="manga-effect-settings"></div>
-            </div>
 
 
 
