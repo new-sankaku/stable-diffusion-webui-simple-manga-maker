@@ -42,34 +42,52 @@ function C2BWStartSimple(){
 
 
 async function C2BWStart(filterValues) {
-  console.log(filterValues);
-  glfxReset();
-  
-  var activeObject = canvas.getActiveObject();
-  if (activeObject && activeObject.type === "image") {
 
-    if( filterValues.inkStrength ){
+  const loading = OP_showLoading({
+    icon: 'process',step: 'Step1',substep: 'Ink up',progress: 0
+  });
+
+  try {
+    console.log(filterValues);
+    glfxReset();
+    
+    var activeObject = canvas.getActiveObject();
+    if (activeObject && activeObject.type === "image") {
+
+      if( filterValues.inkStrength ){
+        glfxOriginalImage = activeObject.getElement();
+        await glfxApplyFilterToObject(activeObject, "glfxInk", filterValues);
+        if (glfxOriginalImage) {
+          glfxCopiedImage = glfxOriginalImage.cloneNode();
+          glfxApplyNoReset();
+        }
+      }
+
+      OP_updateLoadingState(loading, {
+        icon: 'process',step: 'Step2',substep: 'Brightness Contrast',progress: 50
+      });
+
       glfxOriginalImage = activeObject.getElement();
-      await glfxApplyFilterToObject(activeObject, "glfxInk", filterValues);
+      await glfxApplyFilterToObject(activeObject, "glfxBrightnessContrast", filterValues);
+      if (glfxOriginalImage) {
+        glfxCopiedImage = glfxOriginalImage.cloneNode();
+        glfxApplyNoReset();
+      }
+
+
+      OP_updateLoadingState(loading, {
+        icon: 'save',step: 'Step2',substep: 'Dot',progress: 100
+      });
+
+      glfxOriginalImage = activeObject.getElement();
+      await glfxApplyFilterToObject(activeObject, "glfxDotScreen", filterValues);
       if (glfxOriginalImage) {
         glfxCopiedImage = glfxOriginalImage.cloneNode();
         glfxApplyNoReset();
       }
     }
-
-    glfxOriginalImage = activeObject.getElement();
-    await glfxApplyFilterToObject(activeObject, "glfxBrightnessContrast", filterValues);
-    if (glfxOriginalImage) {
-      glfxCopiedImage = glfxOriginalImage.cloneNode();
-      glfxApplyNoReset();
-    }
-
-    glfxOriginalImage = activeObject.getElement();
-    await glfxApplyFilterToObject(activeObject, "glfxDotScreen", filterValues);
-    if (glfxOriginalImage) {
-      glfxCopiedImage = glfxOriginalImage.cloneNode();
-      glfxApplyNoReset();
-    }
+  } finally {
+    OP_hideLoading(loading);
   }
 }
 

@@ -636,33 +636,48 @@ async function fabricImage2ImageData(fabricImage) {
   return tempCtx.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
 }
 
+
+
 async function enhanceDarkImage() {
+  const loading = OP_showLoading({
+    icon: 'process',
+    step: 'Step1',
+    substep: 'Start up',
+    progress: 0
+  });
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+
   try {
     const activeObject = canvas.getActiveObject();
-    if (!activeObject || !activeObject.isType('image')) 
-      throw new Error('画像が選択されていません');
-
     const img = activeObject.getElement();
-    // console.log('Processing image with size:', {
-    //   naturalWidth: img.naturalWidth,
-    //   naturalHeight: img.naturalHeight
-    // });
-
     const originalScaleX = activeObject.scaleX || 1;
     const originalScaleY = activeObject.scaleY || 1;
-    
     const intensity = parseFloat($('effectEnhanceDarkIntensity').value);
-
     const originalImageData = await fabricImage2ImageData(activeObject);
+
+    OP_updateLoadingState(loading, {
+      icon: 'process',
+      step: 'Step2',
+      substep: 'Dark enhance',
+      progress: 25
+    });
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+
     const processedImageData = enhanceDarkRegionsCPU(originalImageData, intensity);
+    
+    OP_updateLoadingState(loading, {
+      icon: 'process',
+      step: 'Step3',
+      substep: 'Image marge',
+      progress: 90
+    });
+    await new Promise(resolve => setTimeout(resolve, 10));
 
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = img.naturalWidth;
     tempCanvas.height = img.naturalHeight;
-    // console.log('Processing canvas size:', {
-    //   width: tempCanvas.width,
-    //   height: tempCanvas.height
-    // });
 
     const tempCtx = tempCanvas.getContext('2d', {
       alpha: true,
@@ -674,22 +689,28 @@ async function enhanceDarkImage() {
     
     const webpDataUrl = tempCanvas.toDataURL('image/webp', 1.0);
     
-    fabric.Image.fromURL(webpDataUrl, img => {
-      img.set({
-        left: activeObject.left,
-        top: activeObject.top,
-        scaleX: originalScaleX,
-        scaleY: originalScaleY
+
+    await new Promise((resolve) => {
+      fabric.Image.fromURL(webpDataUrl, img => {
+        img.set({
+          left: activeObject.left,
+          top: activeObject.top,
+          scaleX: originalScaleX,
+          scaleY: originalScaleY
+        });
+        copy(activeObject, img);
+        canvas.remove(activeObject);
+        canvas.add(img);
+        canvas.setActiveObject(img);
+        canvas.renderAll();
+        updateLayerPanel();
+        resolve(); 
       });
-      copy(activeObject, img);
-      canvas.remove(activeObject);
-      canvas.add(img);
-      canvas.setActiveObject(img);
-      canvas.renderAll();
-      updateLayerPanel();
     });
 
   } catch(err) {
-    console.error(err);
+    console.error('Process error:', err);
+  } finally {
+    OP_hideLoading(loading);
   }
 }
