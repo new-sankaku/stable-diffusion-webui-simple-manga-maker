@@ -181,7 +181,7 @@ function svgToBase64(svg) {
 const CURSOR_SVGS = {
   movePoint: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M468-240q-96-5-162-74t-66-166q0-100 70-170t170-70q97 0 166 66t74 162l-84-25q-13-54-56-88.5T480-640q-66 0-113 47t-47 113q0 57 34.5 100t88.5 56l25 84ZM821-60 650-231 600-80 480-480l400 120-151 50 171 171-79 79Z"/></svg>',
   deletePoint: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M200-440v-80h560v80H200Z"/></svg>',
-  freehand: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="m272-104-38-38-42 42q-19 19-46.5 19.5T100-100q-19-19-19-46t19-46l42-42-38-40 554-554q12-12 29-12t29 12l112 112q12 12 12 29t-12 29L272-104Zm172-396L216-274l58 58 226-228-56-56Z"/></svg>',
+  freehand: '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="2" fill="#F19E39" /><line x1="12" y1="12" x2="24" y2="24" stroke="#F19E39" stroke-width="2" /></svg>',
 
   editPen: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 24 24"><path d="M3,3 L3,12 L12.2,6 Z" fill="#FFA500" stroke="black" stroke-width="0.5"/></svg>',
 

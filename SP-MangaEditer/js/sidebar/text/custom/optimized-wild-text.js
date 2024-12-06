@@ -58,7 +58,7 @@ const textAttrs=isVertical?{
 };
 setAttributes(t2_wild_mainText,textAttrs);
 const baseStyles={
-"font-family":`"${t2_fontT2Selector.value}","Noto Sans JP","Yu Gothic",sans-serif`
+"font-family":baseStylesDefault
 };
 const verticalStyles={
 "font-size":`${fontSize}px`,"fill":t2_fillColor.value,"fill-opacity":t2_fillOpacity.value,

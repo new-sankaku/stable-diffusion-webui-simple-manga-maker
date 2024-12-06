@@ -12,7 +12,6 @@ const MODE_T2_water   = "water";
 const MODE_T2_wild    = "wild";
 const MODE_T2_zebra   = "zebra";
 
-var t2_fontT2Selector = null;
 var t2_text = null;
 var t2_fontSize = null;
 var t2_lineHeight = null;
@@ -65,16 +64,16 @@ function switchText2Ui(type) {
 
   //Common settings.
   var cName = "";
-  cName = "fontT2Selector";
-  settingsHTML += addOneSelectBox(cName);
+  // cName = "fontT2Selector";
+  // settingsHTML += "<div id='fontT2Selector'></div>"
   cName = "Text";
   settingsHTML += addTextArea(type + '-' + cName, cName, t2Map.getOrDefault(type + '-' + cName, 'New Text'));
   cName = "FontSize";
-  settingsHTML += addSlider(type + '-' + cName, cName, 1, 300, t2Map.getOrDefault(type + '-' + cName, 80));
+  settingsHTML += addSlider(type + '-' + cName, cName, 1, 300, t2Map.getOrDefault(type + '-' + cName, 40));
   cName = "LineHeight";
   settingsHTML += addSlider(type + '-' + cName, cName, 0.1, 5, t2Map.getOrDefault(type + '-' + cName, 1.2), 0.1);
   cName = "LetterSpacing";
-  settingsHTML += addSlider(type + '-' + cName, cName, -0.5, 2, t2Map.getOrDefault(type + '-' + cName, 0), 0.1);
+  settingsHTML += addSlider(type + '-' + cName, cName, -0.5, 2, t2Map.getOrDefault(type + '-' + cName, 0.4), 0.1);
   settingsHTML += addAlignTypeButton(type);
   settingsHTML += addOrientationButton(type);
   cName = "TextColor";
@@ -127,7 +126,6 @@ function switchText2Ui(type) {
 
   $('text-area2-settings').innerHTML = settingsHTML;
 
-  t2_fontT2Selector   = $("fontT2Selector");
   t2_text             = $(type + '-' + "Text");
   t2_fontSize         = $(type + '-' + "FontSize");
   t2_fillColor        = $(type + '-' + "TextColor");
@@ -174,8 +172,7 @@ function switchText2Ui(type) {
       break;
   }
 
-
-  reloadFont('fontT2Selector');
+  // new FontSelector("fontT2Selector", "Font");
 
   elementsT2 = [
     t2_text,
@@ -194,7 +191,6 @@ function switchText2Ui(type) {
   ];
 
   buttonElementsT2 = [
-    t2_fontT2Selector,
     t2_align_l,
     t2_align_c,
     t2_align_r,
@@ -209,6 +205,8 @@ function switchText2Ui(type) {
 }
 
 function clearT2Settings() {
+  // document.removeEventListener("fontT2Selector", handleFont);
+
   elementsT2.forEach(element => {
     if (element) {
       element.removeEventListener("input", saveValueMap);
@@ -235,7 +233,15 @@ const debouncedUpdate = debounceCustomText(() => {
   updateText2();
 }, 50);
 
+const handleFont = (e) => {
+  updateText2();
+};
+
 function addT2EventListener(){
+  // document.addEventListener("fontT2Selector", handleFont);
+
+
+
   elementsT2.forEach(element => {
     if (element) {
       element.addEventListener('input', () => {

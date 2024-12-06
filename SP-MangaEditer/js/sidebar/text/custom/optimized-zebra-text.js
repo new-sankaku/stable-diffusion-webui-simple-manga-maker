@@ -61,7 +61,7 @@ const fontSize=parseFloat(t2_fontSize.value);
 const lineHeight=parseFloat(t2_lineHeight.value);
 const isVertical=getSelectedValueByGroup("orientation_group")==="vertical";
 const baseStyles={
-"font-family":`"${t2_fontT2Selector.value}","Noto Sans JP","Yu Gothic",sans-serif`,
+"font-family":baseStylesDefault,
 "font-size":`${fontSize}px`,
 "letter-spacing":`${t2_letterSpacing.value}em`
 };

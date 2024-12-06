@@ -128,7 +128,7 @@ const b = `<svg viewBox="0 0 100 100" width="100%" height="100%" style="position
             });
         }
 
-        document.addEventListener('click', function (event) {
+document.addEventListener('click', function (event) {
     var element = event.target;
     var elementId = element.id || 'no-id';
     var elementClasses = getElementClasses(element);
@@ -192,7 +192,7 @@ function getElementClasses(element) {
 <link rel="stylesheet" href="css/ui/flowtingWindow.css?v=5.9">
 <link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=5.9">
 <link rel="stylesheet" href="css/ui/overlayProgress.css?v=5.9">
-<link rel="stylesheet" href="css/tippy.css?v=5.9">
+
 <link rel="stylesheet" href="third/tippy/tippy.css">
 <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css">
 <link rel="stylesheet" href="css/all.min.css?v=5.9">
@@ -201,6 +201,8 @@ function getElementClasses(element) {
 <link rel="stylesheet" href="css/ui/bottomBar.css?v=5.9">
 <link rel="stylesheet" href="css/ui/custom-html-components.css?v=5.9">
 <link rel="stylesheet" href="css/tagify.css?v=5.9">
+
+<link rel="stylesheet" href="css/ui/fontManager.css?v=5.9">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.css" rel="stylesheet" type="text/css" />
@@ -1020,10 +1022,19 @@ function getElementClasses(element) {
             <div class="left_area" id="text-area" style="display: none;">
                 <div class="area-header" data-i18n="text">Text</div>
                 <div id="text-preview-area">
+
+
                     <div class="input-group">
-                        <label data-i18n="font">Font:</label>
+                        <button onclick="fontManager.openUserFontManager()" data-i18n="add_font">add font</button>
+                    </div>
+                    <hr>
+
+                    <div class="input-group">
+                        <!-- <label data-i18n="font">Font:</label>
                         <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
                         </select>
+ -->
+ <div id="fontSelector"></div>
                     </div>
                     <div class="input-group">
                         <label data-i18n="textColor">Text</label>
@@ -1039,7 +1050,7 @@ function getElementClasses(element) {
                         <input type="range" id="fontSizeSlider" min="7" max="150" value="30" oninput="changeFontSize(this.value)">
                     </div>
                     <div class="input-container-leftSpace" data-i18n-label="outlineSize">
-                        <input type="range" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="1" oninput="changeStrokeWidthSize(this.value)">
+                        <input type="range" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="0" oninput="changeStrokeWidthSize(this.value)">
                     </div>
 
                     <div class="input-group-multi" data-group="align_group">
@@ -1093,13 +1104,6 @@ function getElementClasses(element) {
                         <i class="material-icons">flare</i>
                         <span data-i18n="neon">Neon</span>
                     </button>
-                    <hr>
-                    <label>Sample123</label>
-                    <label>参考さんサン１２３</label>
-                    <label>샘플 / 样本</label>
-                    <label>échantillon</label>
-                    <label>образец</label>
-                    <label>عينة / ตัวอย่าง</label>
                 </div>
             </div>
 
@@ -1119,12 +1123,6 @@ function getElementClasses(element) {
                         </button>
                     </div>
                     <div id="text-preview-area2">
-                        <button id="waterButton" onclick="switchText2('water')">
-                            <span data-i18n="water">water</span>
-                            <img src="03_images/preset/text/t2_water.webp" style="width: 100%;">
-                        </button>
-                    </div>
-                    <div id="text-preview-area2">
                         <button id="wildButton" onclick="switchText2('wild')">
                             <span data-i18n="wild">wild</span>
                             <img src="03_images/preset/text/t2_wild.webp" style="width: 100%;">
@@ -1136,12 +1134,6 @@ function getElementClasses(element) {
                             <img src="03_images/preset/text/t2_scratch.webp" style="width: 100%;">
                         </button>
                     </div>
-                    <!-- <div id="text-preview-area2">
-                        <button id="auroraButton" onclick="switchText2('aurora')">
-                            <span data-i18n="aurora">aurora</span>
-                            <img src="03_images/preset/text/t2_aurora.webp" style="width: 100%;">
-                        </button>
-                    </div> -->
                     <div id="text-preview-area2">
                         <button id="brokenButton" onclick="switchText2('broken')">
                             <span data-i18n="broken">broken</span>
@@ -1989,7 +1981,6 @@ function getElementClasses(element) {
     <script src="js/sidebar/text/custom/optimized-scratch-text.js?v=5.9" defer></script>
     <script src="js/sidebar/text/custom/optimized-shadow-text.js?v=5.9" defer></script>
     <script src="js/sidebar/text/custom/optimized-thrill-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-water-text.js?v=5.9" defer></script>
     <script src="js/sidebar/text/custom/optimized-wild-text.js?v=5.9" defer></script>
     <script src="js/sidebar/text/custom/optimized-zebra-text.js?v=5.9" defer></script>
 
@@ -2019,6 +2010,14 @@ function getElementClasses(element) {
     <script src="js/ai/prompt/auto/StoryPromptMap.js?v=5.9" defer></script>
     <script src="js/ai/prompt/auto/AutoPromptUtil.js?v=5.9" defer></script>
     <script src="js/ai/prompt/auto/AutoGeneration.js?v=5.9" defer></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+
+    <script src="js/db/user-font-repository.js?v=5.9" defer></script>
+    <script src="js/ui/font/user-font-manager.js?v=5.9" defer></script>
+    <script src="js/core/font/font-manager-core.js?v=5.9" defer></script>
+    <script src="js/core/font/font-dropdown.js?v=5.9" defer></script>
+
 
 <script>
 function autoResize(event) {

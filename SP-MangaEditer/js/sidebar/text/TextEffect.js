@@ -202,13 +202,13 @@ function alignText(alignment, button) {
 }
 
 function createTextbox() {
-  var selectedFont = $('fontSelector').value;
+  var selectedFont = fontManager.getSelectedFont("fontSelector");
   var fontsize = $("fontSizeSlider").value
   var fontStrokeWidth = $("fontStrokeWidthSlider").value
 
-  console.log("selectedFont", "New Text")
+  console.log("selectedFont", selectedFont)
   const selectedValue = getSelectedValueByGroup("align_group");
-  var textbox = new fabric.Textbox(selectedFont, {
+  var textbox = new fabric.Textbox("New", {
     width: 150,
     top: 50,
     left: 50,
@@ -360,142 +360,4 @@ function isFontAvailableForLanguage(font, text) {
   context.font = `72px ${font}, monospace`;
   const newSize = context.measureText(text).width;
   return newSize !== baselineSize;
-}
-
-function reloadFont(fontId='fontSelector') {
-  var primaryFonts = ['Comic Sans MS', 'Arial', 'Bangers', 'DotGothic16', 'DokiDokiFont2', 'Kalam', 'KleeOne', 'OhisamaFont11', 'RampartOne-Regular', 'Stick', 'TrainOne-Regular', '851MkPOP_101', '851CHIKARA-DZUYOKU_kanaA'];
-  const additionalFonts = ['Arial Black', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Impact', 'Times New Roman', 'Courier', 'Courier New', 'Century Gothic', 'Helvetica', 'Arial Narrow', 'MS PGothic', 'Franklin Gothic Medium', 'Segoe UI', 'Yu Gothic', 'Yu Mincho', 'Meiryo', 'Malgun Gothic', 'MS UI Gothic'];
-
-  if( fontId == "fontT2Selector" ){
-    primaryFonts = ['Arial', 'Comic Sans MS', 'OhisamaFont11'];
-  }
-
-  const select = $(fontId);
-  
-  // Clear existing options
-  select.innerHTML = '';
-  
-  const langAvailableFonts = [];
-  const otherAvailableFonts = [];
-  var langText = getSampleTextByLanguageCode();
-  // console.log("langText", langText);
-  
-  for (const font of primaryFonts) {
-    langAvailableFonts.push(font);
-  }
-  
-  for (const font of additionalFonts) {
-    if (isFontAvailableForLanguage(font, langText)) {
-      langAvailableFonts.push(font);
-    } else if (isFontAvailableForLanguage(font, 'abcdefghijklmnopqrstuvwxyz')) {
-      otherAvailableFonts.push(font);
-    }
-  }
-  
-  for (const font of langAvailableFonts) {
-    const option = document.createElement('option');
-    option.style.fontFamily = font;
-    option.textContent = langText + " " + font;
-    option.value = font;
-    option.style.fontSize = '16px';
-    select.appendChild(option);
-  }
-  
-  for (const font of otherAvailableFonts) {
-    const option = document.createElement('option');
-    option.style.fontFamily = font;
-    option.textContent = langText + " " + font;
-    option.value = font;
-    option.style.fontSize = '16px';
-    select.appendChild(option);
-  }
-}
-document.addEventListener('DOMContentLoaded', function() {
-  reloadFont('fontSelector');
-  
-});
-
-
-function getSampleTextByLanguageCode() {
-  const currentLang = i18next.language;
-  switch (currentLang) {
-    case 'en':
-      return 'Sample';
-    case 'ja':
-      return 'サンプル';
-    case 'ko':
-      return '샘플';
-    case 'fr':
-      return 'Exemple';
-    case 'zh':
-      return '示例';
-    case 'ru':
-      return 'Пример';
-    case 'es':
-      return 'Ejemplo';
-    case 'pt':
-      return 'Exemplo';
-    case 'de':
-      return 'Beispiel';
-    case 'it':
-      return 'Esempio';
-    case 'nl':
-      return 'Voorbeeld';
-    case 'sv':
-      return 'Exempel';
-    case 'fi':
-      return 'Esimerkki';
-    case 'da':
-      return 'Eksempel';
-    case 'no':
-      return 'Eksempel';
-    case 'pl':
-      return 'Przykład';
-    case 'cs':
-      return 'Příklad';
-    case 'hu':
-      return 'Példa';
-    case 'ro':
-      return 'Exemplu';
-    case 'tr':
-      return 'Örnek';
-    case 'ar':
-      return 'عينة';
-    case 'th':
-      return 'ตัวอย่าง';
-    case 'he':
-      return 'דוגמה';
-    case 'hi':
-      return 'नमूना';
-    case 'id':
-      return 'Contoh';
-    case 'ms':
-      return 'Contoh';
-    case 'vi':
-      return 'Ví dụ';
-    case 'bn':
-      return 'নমুনা';
-    case 'my':
-      return 'ဥပမာ';
-    case 'km':
-      return 'គំរូរ';
-    case 'fil':
-      return 'Halimbawa';
-    case 'ta':
-      return 'மாதிரி';
-    case 'te':
-      return 'నమూనా';
-    case 'ml':
-      return 'ഉദാഹരണം';
-    case 'kn':
-      return 'ನಮೂನೆ';
-    case 'mr':
-      return 'उदाहरण';
-    case 'gu':
-      return 'નમૂનો';
-    case 'pa':
-      return 'ਨਮੂਨਾ';
-    default:
-      return 'Sample';
-  }
 }

@@ -1,0 +1,322 @@
+/* styles.css */
+.fm-fontManagerModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1a1a1a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  width: 85%;
+  max-width: 1000px;
+  height: 85vh;
+  max-height: 700px;
+  border-radius: 12px;
+  overflow: hidden;
+  color: #e0e0e0;
+}
+
+.fm-modalOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+}
+
+.fm-modalLayout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fm-fontInputSection {
+  flex: 1 1 66.666%;
+  padding: 12px;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+  height: 100%;
+  min-width: 0;
+}
+
+.fm-fontListSection {
+  flex: 0 0 33.333%;
+  padding: 12px;
+  height: 100%;
+  overflow-y: auto;
+  min-width: 280px;
+  background: #242424;
+}
+
+.fm-fontInputContainer {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+}
+
+.fm-fontInputContainer:last-child {
+  border-bottom: none;
+}
+
+.fm-fontInputContainer h3 {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.fm-fontInputContainer button {
+  background: #2c5cff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.fm-fontInputContainer button:hover {
+  background: #1e4aeb;
+}
+
+.fm-fontInputContainer textarea {
+  width: 100%;
+  height: 120px;
+  padding: 6px;
+  border: 1px solid #404040;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  resize: vertical;
+  font-family: monospace;
+  font-size: 13px;
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.fm-fontInputContainer textarea:focus {
+  outline: none;
+  border-color: #2c5cff;
+  box-shadow: 0 0 0 2px rgba(44, 92, 255, 0.2);
+}
+
+.fm-fontInputContainer textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+#fm-fontFileUpload {
+  display: block;
+  visibility: visible;
+  width: auto;
+  height: auto;
+  opacity: 1;
+}
+
+.fm-modalCloseButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #999;
+  line-height: 1;
+  z-index: 1001;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.fm-modalCloseButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.fm-sectionTitle {
+  font-size: 14px;
+  color: #e0e0e0;
+  margin: 0 0 12px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 1;
+  font-weight: 500;
+}
+
+.fm-fontTagContainer {
+  width: 100%;
+}
+
+.fm-fontTag {
+  margin: 2px;
+  background: #333;
+  color: #e0e0e0;
+}
+
+.fm-uploadInstructions {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.fm-textEditorContainer {
+  padding: 16px;
+  background: #1a1a1a;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .fm-modalLayout {
+    flex-direction: row;
+  }
+
+  .fm-fontInputSection {
+    flex: 1 1 60%;
+  }
+
+  .fm-fontListSection {
+    flex: 0 0 40%;
+    min-width: 200px;
+  }
+
+  .fm-fontManagerModal {
+    width: 92%;
+    height: 92vh;
+  }
+}
+
+/* 極小画面対応 */
+@media (max-width: 480px) {
+  .fm-fontInputSection {
+    flex: 1 1 50%;
+  }
+
+  .fm-fontListSection {
+    flex: 0 0 50%;
+    min-width: 140px;
+  }
+}
+
+
+
+
+
+
+
+
+/* フォントドロップダウン */
+.fm-font-dropdown {
+  position: relative;
+  width: 600px;
+  font-family: sans-serif;
+}
+
+.fm-dropdown-trigger {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #2a2a2a;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.fm-dropdown-trigger:hover {
+  border-color: #666;
+  background: #333;
+  color: #fff;
+}
+
+.fm-dropdown-content {
+  display: none;
+  position: fixed;
+  width: 1100px;
+  max-height: 800px;
+  margin-top: 4px;
+  background: #2a2a2a;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(255, 10, 10, 0.25);
+  overflow-y: auto;
+  z-index: 1000;
+  color: #fff;
+  font-size: 16px;
+}
+
+.fm-dropdown-content.fm-show {
+  display: block;
+}
+
+.fm-font-category {
+  margin: 0;
+  border-bottom: 1px solid #444;
+  color: #fff;
+}
+
+.fm-font-category:last-child {
+  border-bottom: none;
+}
+
+.fm-category-title {
+  font-weight: bold;
+  color: #fff;
+  padding: 6px 8px;
+  background: #383838;
+  font-size: 0.9em;
+  border-left: 3px solid #666;
+  color: #fff;
+}
+
+.fm-font-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  padding: 4px;
+  background: #333;
+  color: #fff;
+}
+
+.fm-font-option {
+  padding: 2px 4px;
+  cursor: pointer;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  font-size: 0.9em;
+  color: #fff;
+}
+
+.fm-font-option:hover {
+  background: #383838;
+  border-color: #666;
+  color: #fff;
+}
+
+.fm-dropdown-content::-webkit-scrollbar {
+  width: 8px;
+  color: #fff;
+}
+
+.fm-dropdown-content::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.fm-dropdown-content::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 4px;
+  color: #fff;
+}

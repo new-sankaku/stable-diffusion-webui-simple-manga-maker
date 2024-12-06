@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   openButton = $("verticalText");
   openButton.addEventListener("click", function () {
-    var selectedFont = $('fontSelector').value;
+    var selectedFont = fontManager.getSelectedFont("fontSelector");;
     var fontsize = $("fontSizeSlider").value
     var fontStrokeWidth = $("fontStrokeWidthSlider").value
 

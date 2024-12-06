@@ -32,7 +32,7 @@ const baseTextAttrs=isVertical?{
 "fill-opacity":t2_fillOpacity.value
 };
 const baseStyles={
-"font-family":`"${t2_fontT2Selector.value}","Noto Sans JP","Yu Gothic",sans-serif`,
+"font-family":baseStylesDefault,
 "font-size":`${fontSize}px`,
 "letter-spacing":`${t2_letterSpacing.value}em`
 };

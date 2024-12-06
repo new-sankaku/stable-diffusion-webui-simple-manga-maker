@@ -1,4 +1,6 @@
 let svgHttp = "http://www.w3.org/2000/svg";
+const baseStylesDefault = "";
+
 function createSvgElement(type) {
   return document.createElementNS(svgHttp, type);
 }

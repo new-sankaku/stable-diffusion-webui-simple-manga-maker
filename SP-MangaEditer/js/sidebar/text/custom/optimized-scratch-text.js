@@ -63,7 +63,7 @@ const textAttrs=isVertical?{
 };
 setAttributes(t2_scratch_mainText,textAttrs);
 const baseStyles={
-"font-family":`"${t2_fontT2Selector.value}","Noto Sans JP","Yu Gothic",sans-serif`,
+"font-family":baseStylesDefault,
 "font-size":`${fontSize}px`,
 "letter-spacing":`${t2_letterSpacing.value}em`
 };
