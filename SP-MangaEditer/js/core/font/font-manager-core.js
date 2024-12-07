@@ -138,25 +138,41 @@ const fontManager = {
 
   async registerLocalFont() {
     const fontNames = $("fm-localFontInput")
-      .value.trim()
-      .split("\n")
-      .filter((name) => name.trim());
+        .value.trim()
+        .split("\n")
+        .filter((name) => name.trim());
 
     for (const fontName of fontNames) {
-      if (this.existsFont(fontName)) {
-        createToast(getText("alreadyRegisteredFont"), fontName);
-        continue;
-      }
-      
-      try {
-        const fontFace = new FontFace(fontName, `local("${fontName}")`);
-        await fontFace.load();
-        document.fonts.add(fontFace);
-        await fmFontRepository.saveLocalFont(fontName);
-        this.addFontOption({ name: fontName, type: "local" });
-      } catch (error) {
-        console.error(i18next.t("error.loadFail") + fontName, error);
-      }
+        if (this.existsFont(fontName)) {
+            createToast(getText("alreadyRegisteredFont"), fontName);
+            continue;
+        }
+        
+        const fontVariants = [
+            fontName,
+            fontName.replace(/\s+/g, ''),
+            fontName.split(' ').join(''),
+            fontName.replace(/[^\x00-\x7F]/g, '').trim()
+        ];
+
+        let loaded = false;
+        for (const variant of fontVariants) {
+            if (loaded) break;
+            
+            try {
+                const fontFace = new FontFace(fontName, `local("${variant}")`);
+                await fontFace.load();
+                document.fonts.add(fontFace);
+                await fmFontRepository.saveLocalFont(fontName);
+                this.addFontOption({ name: fontName, type: "local" });
+                loaded = true;
+            } catch (error) {
+                console.error(`${i18next.t("error.loadFail")} ${variant}`, error);
+                if (variant === fontVariants[fontVariants.length - 1]) {
+                    createToast("Register font is error", error);
+                }
+            }
+        }
     }
 
     await this.setUserFontData();
@@ -164,6 +180,8 @@ const fontManager = {
     fmUserFontManager.updateFontList();
     $("fm-localFontInput").value = "";
 },
+
+
 
   async registerWebFont(url = null) {
     const urls = url

@@ -36,3 +36,16 @@
  opacity: 0;
  animation: fade-in-line 0.3s forwards;
 }
+
+#sp-manga-toastContainer {
+  position: fixed;  /* これは必須です */
+  z-index: 9999;   /* モーダルより大きな値を設定 */
+}
+
+#fm-modalOverlay {
+  z-index: 1000;
+}
+
+#fm-fontManagerModal {
+  z-index: 1001;
+}
