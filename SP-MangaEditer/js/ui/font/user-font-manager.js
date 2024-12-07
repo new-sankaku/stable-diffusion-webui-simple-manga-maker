@@ -5,12 +5,12 @@ const fmUserFontManager = {
     const modalHTML = `<div class="fm-modalOverlay" id="fm-modalOverlay">
 <div class="fm-fontManagerModal" id="fm-fontManagerModal">
 <span class="fm-modalCloseButton" onclick="fontManager.closeUserFontManager()">&times;</span>
-<!-- エラーメッセージ表示領域を追加 -->
 <div id="fm-errorMessage" class="fm-errorMessage">${getText("existsFontError")}</div>
 <div class="fm-modalLayout">
 <div class="fm-fontInputSection">
 <div class="fm-fontInputContainer">
 <h3 data-i18n="ft_addLocalFontTitle"></h3>
+<h4 data-i18n="ft_addLocalFontTitle_warning"></h4>
 <textarea id="fm-localFontInput" data-i18n-placeholder="ft_placeholderLocal" placeholder="Arial&#10;Helvetica&#10;Times New Roman"></textarea>
 <button onclick="fontManager.registerLocalFont()" data-i18n="ft_add">追加</button>
 </div>

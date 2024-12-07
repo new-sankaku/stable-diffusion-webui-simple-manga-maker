@@ -3,6 +3,8 @@
 const resources = {
   ja: {
     translation: {
+      ft_addLocalFontTitle_warning:"登録できない場合は英語名にしてください。",
+
 ft_addText: "テキストを追加",
 ft_editFonts: "フォントリスト編集",
 ft_add: "追加",
@@ -488,6 +490,7 @@ ft_placeholderWeb: "https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&fam
   },
 en: {
     translation: {
+      ft_addLocalFontTitle_warning: "If you cannot register, please use an English name.",
       ft_addText: "Add Text",
       ft_editFonts: "Edit Font List",
       ft_add: "Add",
@@ -1056,6 +1059,7 @@ en: {
   },
   ko: {
 translation: {
+  ft_addLocalFontTitle_warning: "등록할 수 없는 경우 영어 이름을 사용하세요.",
   ft_addText: "텍스트 추가",
   ft_editFonts: "글꼴 목록 편집",
   ft_add: "추가",
@@ -1545,6 +1549,7 @@ translation: {
   },
   fr: {
     translation: {
+      ft_addLocalFontTitle_warning: "Si vous ne pouvez pas enregistrer, utilisez un nom en anglais.",
       ft_addText: "Ajouter du texte",
       ft_editFonts: "Modifier la liste des polices",
       ft_add: "Ajouter",
@@ -2066,6 +2071,7 @@ translation: {
   },
   zh: {
     translation: {
+      ft_addLocalFontTitle_warning: "如果无法注册，请使用英文名称。",
       ft_addText: "添加文本",
       ft_editFonts: "编辑字体列表",
       ft_add: "添加",
@@ -2587,6 +2593,7 @@ translation: {
   },
   ru: {
     translation: {
+      ft_addLocalFontTitle_warning: "Если не удается зарегистрировать, используйте английское имя.",
       ft_addText: "Добавить текст",
       ft_editFonts: "Редактировать список шрифтов",
       ft_add: "Добавить",
@@ -3057,6 +3064,7 @@ translation: {
   },
   es: {
     translation: {
+      ft_addLocalFontTitle_warning: "Si no puedes registrar, usa un nombre en inglés.",
       ft_addText: "Agregar texto",
       ft_editFonts: "Editar lista de fuentes",
       ft_add: "Agregar",
@@ -3526,6 +3534,7 @@ translation: {
   },
   pt: {
     translation: {
+      ft_addLocalFontTitle_warning: "Se não for possível registrar, use um nome em inglês.",
       ft_addText: "Adicionar texto",
       ft_editFonts: "Editar lista de fontes",
       ft_add: "Adicionar",
@@ -3996,6 +4005,7 @@ translation: {
   },
 th: {
 translation: {
+  ft_addLocalFontTitle_warning: "หากไม่สามารถลงทะเบียนได้ โปรดใช้ชื่อภาษาอังกฤษ.",
   ft_addText: "เพิ่มข้อความ",
   ft_editFonts: "แก้ไขรายการแบบอักษร",
   ft_add: "เพิ่ม",
@@ -4516,6 +4526,7 @@ translation: {
   },
     de: {
 "translation": {
+  ft_addLocalFontTitle_warning: "Wenn Sie sich nicht registrieren können, verwenden Sie bitte einen englischen Namen.",
   ft_addText: "Text hinzufügen",
   ft_editFonts: "Schriftartenliste bearbeiten",
   ft_add: "Hinzufügen",

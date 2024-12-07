@@ -70,6 +70,14 @@
   font-weight: 500;
 }
 
+.fm-fontInputContainer h4 {
+  margin: 0 0 6px 0;
+  font-size: 11px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+
 .fm-fontInputContainer button {
   background: #2c5cff;
   color: #fff;
