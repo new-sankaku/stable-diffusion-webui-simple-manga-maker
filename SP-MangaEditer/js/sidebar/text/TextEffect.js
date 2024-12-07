@@ -209,7 +209,6 @@ function createTextbox() {
   console.log("selectedFont", selectedFont)
   const selectedValue = getSelectedValueByGroup("align_group");
   var textbox = new fabric.Textbox("New", {
-    width: 150,
     top: 50,
     left: 50,
     fontSize: parseInt(fontsize),
