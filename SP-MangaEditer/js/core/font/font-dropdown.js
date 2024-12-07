@@ -52,8 +52,6 @@ class FontSelector {
  
   createFontOption(font, color) {
     var langText = getSampleTextByLanguageCode();
-    // console.log("langText:", langText);
-
     const option = document.createElement("div");
     option.className = `fm-font-option fm-font-${font.name.replace(
       /[\s-]/g,
@@ -130,7 +128,6 @@ class FontSelector {
     const fmSelectedFont = $(`fm-selected-font-${this.targetId}`);
  
     Object.entries(fmFontData).forEach(([category, data]) => {
-      // console.log("category", category, JSON.stringify(data));
       const categoryDiv = document.createElement("div");
       categoryDiv.className = "fm-font-category";
  
@@ -200,17 +197,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   await fontManager.init();
   new FontSelector("fontSelector", "Font");
   
-  // document.addEventListener("fontSelector", (e) => {
-  //   console.log(`Selected font:`, e.detail.fontName);
-  // });
-  
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".fm-font-dropdown")) {
       FontSelectorManager.closeAllDropdowns();
     }
   });
 });
-
 
 
 function getSampleTextByLanguageCode() {
@@ -234,64 +226,6 @@ function getSampleTextByLanguageCode() {
       return '';
     case 'de':
       return 'Beispiel';
-    case 'it':
-      return 'Esempio';
-    case 'nl':
-      return 'Voorbeeld';
-    case 'sv':
-      return '';
-    case 'fi':
-      return 'Esimerkki';
-    case 'da':
-      return '';
-    case 'no':
-      return '';
-    case 'pl':
-      return 'Przykład';
-    case 'cs':
-      return 'Příklad';
-    case 'hu':
-      return 'Példa';
-    case 'ro':
-      return 'Exemplu';
-    case 'tr':
-      return 'Örnek';
-    case 'ar':
-      return 'عينة';
-    case 'th':
-      return 'ตัวอย่าง';
-    case 'he':
-      return 'דוגמה';
-    case 'hi':
-      return 'नमूना';
-    case 'id':
-      return 'Contoh';
-    case 'ms':
-      return 'Contoh';
-    case 'vi':
-      return 'Ví dụ';
-    case 'bn':
-      return 'নমুনা';
-    case 'my':
-      return 'ဥပမာ';
-    case 'km':
-      return 'គំរូរ';
-    case 'fil':
-      return 'Halimbawa';
-    case 'ta':
-      return 'மாதிரி';
-    case 'te':
-      return 'నమూనా';
-    case 'ml':
-      return 'ഉദാഹരണം';
-    case 'kn':
-      return 'ನಮೂನೆ';
-    case 'mr':
-      return 'उदाहरण';
-    case 'gu':
-      return 'નમૂનો';
-    case 'pa':
-      return 'ਨਮੂਨਾ';
     default:
       return 'Sample';
   }

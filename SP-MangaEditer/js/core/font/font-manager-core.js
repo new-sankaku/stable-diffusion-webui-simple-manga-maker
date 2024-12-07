@@ -141,6 +141,7 @@ const fontManager = {
       .value.trim()
       .split("\n")
       .filter((name) => name.trim());
+
     for (const fontName of fontNames) {
       if (this.existsFont(fontName)) {
         createToast(getText("alreadyRegisteredFont"), fontName);
@@ -157,11 +158,12 @@ const fontManager = {
         console.error(i18next.t("error.loadFail") + fontName, error);
       }
     }
+
+    await this.setUserFontData();
     FontSelectorManager.reloadAll();
     fmUserFontManager.updateFontList();
     $("fm-localFontInput").value = "";
-    await this.setUserFontData();
-  },
+},
 
   async registerWebFont(url = null) {
     const urls = url
@@ -188,10 +190,10 @@ const fontManager = {
         console.error(i18next.t("error.loadFail") + fontUrl, error);
       }
     }
+    await this.setUserFontData();
     FontSelectorManager.reloadAll();
     fmUserFontManager.updateFontList();
     if (!url) $("fm-webFontUrlInput").value = "";
-    await this.setUserFontData();
   },
 
   async loadWebFontStylesheet(url) {
