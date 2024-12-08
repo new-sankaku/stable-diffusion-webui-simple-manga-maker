@@ -222,7 +222,6 @@ function createSpeechBubbleMetrics(svgObj, svgData) {
       originX: "center",
       originY: "center",
       height: rectWidth * scaleWidth,
-      backgroundColor: "transparent",
       selectable: true,
       movable: false,
       hasControls: false,
@@ -257,7 +256,6 @@ function createSpeechBubbleMetrics(svgObj, svgData) {
         originX: "center",
         originY: "center",
         width: rectWidth * scaleWidth,
-        backgroundColor: "transparent",
         selectable: true,
         movable: false,
         hasControls: false,
@@ -292,13 +290,13 @@ function createSpeechBubbleMetrics(svgObj, svgData) {
   svgObj.lastTop = svgObj.top;
 
   changeDoNotSaveHistory();
-    canvas.sendToBack(svgObj);
+    // canvas.sendToBack(svgObj);
     canvas.add(newRect);
   changeDoSaveHistory();
 
   canvas.add(newTextbox);
   
-  canvas.bringToFront(newTextbox);
+  // canvas.bringToFront(newTextbox);
   canvas.renderAll();
 }
 
