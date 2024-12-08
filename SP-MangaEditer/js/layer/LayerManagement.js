@@ -20,7 +20,7 @@ function updateLayerPanel() {
 
   // guidsを持つレイヤーを処理
   layers.forEach((layer) => {
-    if (layer.isPanel) {
+    if (layer.isPanel || isSpeechBubbleSVG(layer)) {
       processedLayersFirst.add(layer);
       layer.guids.forEach((guid) => {
         var matchingLayer = guidMap.get(guid);
@@ -33,7 +33,7 @@ function updateLayerPanel() {
 
   // guidsを持つレイヤーを処理
   layers.forEach((layer) => {
-    if (layer.isPanel) {
+    if (layer.isPanel || isSpeechBubbleSVG(layer)) {
       finalLayerOrder.push(layer);
       processedLayersSecond.add(layer);
 

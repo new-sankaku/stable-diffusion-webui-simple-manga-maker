@@ -106,7 +106,7 @@ const fontManager = {
       }
       this.addFontOption(fontData);
     } catch (error) {
-      console.error(i18next.t("error.loadFail") + fontData.name, error);
+      console.error(fontData.name, error);
     }
   },
 
@@ -167,7 +167,7 @@ const fontManager = {
                 this.addFontOption({ name: fontName, type: "local" });
                 loaded = true;
             } catch (error) {
-                console.error(`${i18next.t("error.loadFail")} ${variant}`, error);
+                console.error(`${variant}`, error);
                 if (variant === fontVariants[fontVariants.length - 1]) {
                     createToast("Register font is error", error);
                 }
@@ -205,7 +205,7 @@ const fontManager = {
         await fmFontRepository.saveWebFont(fontName, fontUrl);
         this.addFontOption({ name: fontName, type: "web", url: fontUrl });
       } catch (error) {
-        console.error(i18next.t("error.loadFail") + fontUrl, error);
+        console.error(fontUrl, error);
       }
     }
     await this.setUserFontData();
@@ -241,7 +241,7 @@ const fontManager = {
       FontSelectorManager.reloadAll();
       fmUserFontManager.updateFontList();
     } catch (error) {
-      console.error(i18next.t("error.loadFail") + fontName, error);
+      console.error(fontName, error);
     }
   },
 

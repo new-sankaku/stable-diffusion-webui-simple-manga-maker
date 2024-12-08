@@ -42,8 +42,10 @@ function resizeCanvas(newWidth, newHeight) {
   canvas.setDimensions({ width: newWidth, height: newHeight });
   canvas.getObjects().forEach((obj) => {
 
-    var scaleX = newWidth / obj.initial.canvasWidth;
+    var scaleX = newWidth  / obj.initial.canvasWidth;
     var scaleY = newHeight / obj.initial.canvasHeight;
+                  
+    // console.log("resizeCanvas", obj.guid, Math.floor(obj.left), Math.floor(obj.initial.left), Math.floor(scaleX));
 
     obj.set({
       scaleX: obj.initial.scaleX * scaleX,
@@ -65,7 +67,6 @@ function resizeCanvas(newWidth, newHeight) {
       });
       clipPath.setCoords();
     }
-    // console.log("function resizeCanvas(newWidth, newHeight) { saveInitialState" );
     saveInitialState(obj);
     obj.setCoords();
   });
@@ -76,9 +77,9 @@ function forcedAdjustCanvasSize() {
   adjustCanvasSize(true);
 }
 
-function adjustCanvasSize() {
-  adjustCanvasSize(false);
-}
+// function adjustCanvasSize() {
+//   adjustCanvasSize(false);
+// }
 
 //forced = 強制
 function adjustCanvasSize(forced) {

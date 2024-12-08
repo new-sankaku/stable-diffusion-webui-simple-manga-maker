@@ -11,27 +11,37 @@ function changeSpeechBubble() {
 
     var activeObject = canvas.getActiveObject();
     if (activeObject) {
-        if (isGroup(activeObject)) {
+        if (isSpeechBubbleSVG(activeObject)) {
 
             let isExistsFillArea = false;
-            activeObject.forEachObject((obj) => {
-                if( obj.data?.originalId === "fillArea"){
-                    isExistsFillArea = true;
-                    return;
-                }
-            });
-
-            activeObject.forEachObject((obj) => {
-                if( isExistsFillArea ){
+            if(isPath(activeObject)){
+                activeObject.set({
+                    stroke: strokeColorRgba,
+                    strokeWidth: bubbleStrokewidht,
+                    fill: fillColorRgba
+                });
+                canvas.renderAll();
+            }else{
+                activeObject.forEachObject((obj) => {
                     if( obj.data?.originalId === "fillArea"){
-                        obj.set({ stroke: "rgba(0,0,0,0)", fill:fillColorRgba, strokeWidth:0});
-                    }else{
-                        obj.set({ stroke: strokeColorRgba , fill:"rgba(0,0,0,0)", strokeWidth:bubbleStrokewidht});
+                        isExistsFillArea = true;
+                        return;
                     }
-                }else{
-                    obj.set({ stroke: strokeColorRgba , fill:fillColorRgba, strokeWidth:bubbleStrokewidht});
-                }
-            });
+                });
+                activeObject.forEachObject((obj) => {
+                    if( isExistsFillArea ){
+                        if( obj.data?.originalId === "fillArea"){
+                            obj.set({ stroke: "rgba(0,0,0,0)", fill:fillColorRgba, strokeWidth:0});
+                        }else{
+                            obj.set({ stroke: strokeColorRgba , fill:"rgba(0,0,0,0)", strokeWidth:bubbleStrokewidht});
+                        }
+                    }else{
+                        obj.set({ stroke: strokeColorRgba , fill:fillColorRgba, strokeWidth:bubbleStrokewidht});
+                    }
+                });    
+            }
+
+
         } else{
             obj.set({ stroke: strokeColorRgba , fill:fillColorRgba, strokeWidth:bubbleStrokewidht});
         }
@@ -47,49 +57,45 @@ function hexToRgba(hex, opacity = 1) {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
-function loadSVGReadOnly(svgString) {
+function loadSpeechBubbleSVGReadOnly(svgString, name) {
     fabric.loadSVGFromString(svgString, function (objects, options) {
-        var canvasUsableHeight = canvas.height * 0.3 - svgPagging;
-        var overallScaleX = (canvas.width * 0.3) / options.width;
-        var overallScaleY = canvasUsableHeight / options.height;
-        var scaleToFit = Math.min(overallScaleX, overallScaleY);
-        var offsetX = (canvas.width - options.width * scaleToFit) / 2;
-        var offsetY = svgPagging / 2 + (canvasUsableHeight - options.height * scaleToFit) / 2;
+        
+        const svgObject = fabric.util.groupSVGElements(objects, options);
 
-        var scaledObjects = objects.map(function (obj) {
-            if (obj.id) {
-                obj.data = { 
-                    originalId: obj.id,
-                    originalClass: obj.class || obj.className
-                };
-            }
-            
-            obj.scaleX = scaleToFit;
-            obj.scaleY = scaleToFit;
-            obj.top = obj.top * scaleToFit + offsetY;
-            obj.left = obj.left * scaleToFit + offsetX;
-            return obj;
+        let svgData =null;
+        if (name.startsWith("90_focus_")) {
+            //skip
+        }else{
+            svgData = parseSvg(svgString);
+        }
+
+        
+        let initialWidth = canvas.width * 0.35
+        
+        svgObject.scaleToWidth(initialWidth);
+        svgObject.baseScaleX = svgObject.scaleX;
+        svgObject.baseScaleY = svgObject.scaleY;
+
+        svgObject.set({
+           left: 50,
+           selectable: true,
+           hasControls: true,
+           hasBorders: true
         });
 
-        var group = new fabric.Group(scaledObjects, {
-            left: offsetX,
-            top: offsetY,
-            selectable: true,
-            hasControls: true,
-            lockMovementX: false,
-            lockMovementY: false,
-            lockRotation: false,
-            lockScalingX: false,
-            lockScalingY: false,
-            data: { 
-                originalId: 'speech-bubble-group',
-                childrenIds: objects.map(obj => obj.id).filter(Boolean)
-            }
-        });
+        const selectedValue = getSelectedValueByGroup("sbTextGroup");
+        if (name.startsWith("90_focus_") || selectedValue === "Nothing") {
+            canvas.add(svgObject);
+        }else{
+            changeDoNotSaveHistory();
+                canvas.add(svgObject);
+            changeDoSaveHistory();
 
-        canvas.add(group);
-        canvas.setActiveObject(group);
+            createSpeechBubbleMetrics(svgObject, svgData);
+            canvas.setActiveObject(svgObject);
+        }
         changeSpeechBubble();
+        canvas.discardActiveObject();
         canvas.renderAll();
         updateLayerPanel();
     });
@@ -161,7 +167,7 @@ window.onload = function () {
         img.classList.add("svg-preview");
         img.alt = item.name;
         img.addEventListener("click", function () {
-            loadSVGReadOnly(item.svg);
+            loadSpeechBubbleSVGReadOnly(item.svg, item.name);
         });
         speechBubbleArea.appendChild(img);
     });

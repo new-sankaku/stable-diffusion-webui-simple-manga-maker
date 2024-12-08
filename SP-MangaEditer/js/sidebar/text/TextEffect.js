@@ -18,6 +18,9 @@ function rgbToHex(rgb) {
 }
 
 function updateTextControls(object) {
+  
+  // console.log("isVerticalText ", typeof window.isVerticalText); 
+
   if (isVerticalText(object)) {
     if (object.fill) {
       return;
@@ -261,10 +264,16 @@ function toggleBold() {
 
 function changeFontSize(size) {
   var activeObject = canvas.getActiveObject();
-  if (isText(activeObject)) {
+  if(isSpeechBubbleText(activeObject)){
     activeObject.set("fontSize", parseInt(size));
-    canvas.renderAll();
+    let newSettings = mainSpeechBubbleObjectResize(activeObject);
+    const svgObj = activeObject.targetObject;
+    svgObj.set(newSettings);
+    updateShapeMetrics(svgObj);
+  }else if (isText(activeObject)) {
+    activeObject.set("fontSize", parseInt(size));
   }
+  canvas.renderAll();
 }
 
 function changeStrokeWidthSize(size) {

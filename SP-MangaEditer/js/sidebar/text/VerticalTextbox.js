@@ -62,10 +62,10 @@ updateDimensions() {
   if (this.width !== newWidth || this.height !== newHeight) {
     const oldRight = this.left + oldWidth;
     this.set({
+      left: oldRight - newWidth,
       width: newWidth,
       height: newHeight * 1.35
     });
-    this.left = oldRight - newWidth;
     this.setCoords();
     this.updateDimensions2();
   }
@@ -258,7 +258,7 @@ onInput(e) {
   if (this.dynamicSizing) {
     this.updateDimensions();
   }
-  this.left = oldRight - this.width;
+  // this.left = oldRight - this.width;
   this.setCoords();
 }
 
@@ -471,12 +471,16 @@ endChar=null;
 actualStyle=nextStyle}}else{this._renderCJKChar(method,ctx,lineIndex,i,left,top)}};
 ctx.restore()};
 _isLatin(char){return BRACKETS_REGX.test(char)};
+
+
 calcTextWidth(){let maxLineWidth=0;
 for(let i=0,len=this.textLines.length;
 i<len;
 i++){const lineWidth=this.getHeightOfLine(i);
 if(lineWidth>maxLineWidth){maxLineWidth=lineWidth}};
 return Math.max(this.width,maxLineWidth)};
+
+
 calcTextHeight(){let longestLine=0,currentLineHeight=0,char,charBox,space=0;
 if(this.charSpacing!==0){space=this._getWidthOfCharSpacing()};
 for(var lineIndex=0,len=this._textLines.length;

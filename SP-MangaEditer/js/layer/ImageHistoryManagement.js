@@ -116,6 +116,21 @@ function customToJSON() {
             }
             obj.src = hash;
         }
+
+
+        if( obj.speechBubbleGrid && typeof obj.speechBubbleGrid === 'object'){
+            const hash = generateHash(obj.speechBubbleGrid);
+            if (!imageMap.has(hash)) {
+                imageMap.set(hash, obj.speechBubbleGrid);
+            }
+            obj.speechBubbleGrid = "GUID:"+hash;
+        }
+
+        if (obj.speechBubbleGrid) {
+            console.log('Type:', typeof obj.speechBubbleGrid);
+            console.log('Value:', obj.speechBubbleGrid);
+        }
+
         return obj;
     });
 
@@ -128,6 +143,10 @@ function restoreImage(json) {
         if (obj.type === 'image' && imageMap.has(obj.src)) {
             obj.src = imageMap.get(obj.src);
         }
+        if (obj.speechBubbleGrid) {
+            obj.speechBubbleGrid = obj.speechBubbleGrid.replace('GUID:', '');
+            obj.speechBubbleGrid = imageMap.get(obj.speechBubbleGrid);
+        }
         commonProperties.forEach(prop => {
             if (obj[prop] !== undefined) {
                 obj[prop] = obj[prop]; 
@@ -139,6 +158,7 @@ function restoreImage(json) {
 }
 
 function saveState() {
+    console.log("saveState call");
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }
@@ -165,7 +185,7 @@ function undo() {
                     canvasObj.selectable = stateObj.selectable;
                 }
             });
-
+            reSetSpeechBubbleText();
             setCanvasGUID(state.canvasGuid);
             canvas.renderAll();
             updateLayerPanel();
@@ -183,6 +203,7 @@ function redo() {
 
         let state = restoreImage(stateStack[currentStateIndex]);
         canvas.loadFromJSON(state, function () {
+            reSetSpeechBubbleText();
             setCanvasGUID( state.canvasGuid );
             canvas.renderAll();
             updateLayerPanel();
@@ -200,12 +221,12 @@ function lastRedo(guid = null) {
     let state = restoreImage(stateStack[stateStack.length - 1]);
     // console.log("state", JSON.stringify(state));
     canvas.loadFromJSON(state, function () {
+        reSetSpeechBubbleText();
         if( guid ){
             setCanvasGUID( guid );
         }else{
             setCanvasGUID( state.canvasGuid );
         }
-
         canvas.renderAll();
         updateLayerPanel();
         resetEventHandlers(); 
@@ -213,6 +234,18 @@ function lastRedo(guid = null) {
     });
     clearJSTSGeometry();
 }
+
+function reSetSpeechBubbleText(){
+    canvas.getObjects().forEach(obj =>{
+        if(isSpeechBubbleSVG(obj)){
+            const childObjects = canvas.getObjects().filter((childObj) => obj.guids.includes(childObj.guid));
+            childObjects.forEach(childObject => {
+                childObject.targetObject = obj;
+            });
+        }
+    });
+}
+
 
 function allRemove() {
     changeDoNotSaveHistory();
@@ -249,6 +282,9 @@ function resetEventHandlers() {
       }
     });
     canvas.getObjects().forEach(obj => {
+      if(isSpeechBubbleSVG(obj)){
+        return;
+      }
       if (obj.guids) {
         obj.guids.forEach(guid => {
           if (objectMap[guid]) {

@@ -24,8 +24,19 @@ function isVerticalText(activeObject) {
   return (activeObject && (activeObject.type === "vertical-textbox"));
 }
 
+function isSpeechBubbleText(activeObject) {
+  return (activeObject && (activeObject.customType === 'speechBubbleText'));
+}
+function isSpeechBubbleSVG(activeObject) {
+  return (activeObject && (activeObject.customType === 'speechBubbleSVG'));
+}
+
+
 function isHorizontalText(activeObject) {
   return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || activeObject.type === "textbox"));
+}
+function isPath(activeObject) {
+  return (activeObject && activeObject.type === 'path');
 }
 
 function isLine(activeObject) {
@@ -193,32 +204,32 @@ function getCanvasGUID() {
 
 
 // set targetFram.guids
-function setGUID(targetFrame, imageObject) {
-  if (!targetFrame.guids) {
-    targetFrame.guids = [];
+function setGUID(personObject, childObject) {
+  if (!personObject.guids) {
+    personObject.guids = [];
   }
-  guid = getGUID(imageObject);
-  // console.log(targetFrame.name + " : setGUID", guid);
-  targetFrame.guids.push(guid);
+  guid = getGUID(childObject);
+  // console.log(personObject.name + " : setGUID", guid);
+  personObject.guids.push(guid);
 }
 
-function removeGUID(targetFrame, imageObject) {
-  var guid = imageObject.guid;
+function removeGUID(personObject, childObject) {
+  var guid = childObject.guid;
 
-  if (!targetFrame.guids) {
-    targetFrame.guids = [];
-    imageObject.guid = null;
+  if (!personObject.guids) {
+    personObject.guids = [];
+    childObject.guid = null;
     return;
   }
 
   if (!guid) {
-    imageObject.guid = null;
+    childObject.guid = null;
     return;
   }
-  var index = targetFrame.guids.indexOf(guid);
+  var index = personObject.guids.indexOf(guid);
   
   if (index !== -1) {
-    targetFrame.guids.splice(index, 1);
+    personObject.guids.splice(index, 1);
   }
   updateLayerPanel();
 }
@@ -585,3 +596,27 @@ function initMessage(){
   canvas.renderAll();
 }
 
+function isSpeechBubbleSVG(obj){
+  if (obj && obj.customType && obj.customType==='speechBubbleSVG') {
+    return true;
+  }
+  return false;
+}
+function isSpeechBubbleText(obj){
+  if (obj && obj.customType && obj.customType==='speechBubbleText') {
+    return true;
+  }
+  return false;
+}
+function isSpeechBubbleRect(obj){
+  if (obj && obj.customType && obj.customType==='speechBubbleRect') {
+    return true;
+  }
+  return false;
+}
+
+function getRectTargetObject(obj){
+  const targetObj = obj.targetObject;
+  const rect = canvas.getObjects().find(obj => obj.type === 'rect' && obj.targetObject === targetObj);
+  return rect;
+}

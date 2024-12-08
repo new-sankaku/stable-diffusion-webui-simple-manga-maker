@@ -138,20 +138,29 @@
  align-items: center;
 }
 
+.input-group-multi input[type="color"],
+.input-group-multi input[type="number"] {
+ font-size: 12px;
+ width: var(--input-width);
+ height: var(--input-height);
+ align-items: right;
+ margin-right: var(--input-margin);
+ margin-left: var(--input-margin);
+ margin-top: var(--input-margin-top);
+}
+
 .input-group button i,
 .input-group-multi button i,
 .input-group-multi button .material-icons
 {
- display: flex;
- justify-content: center;
- align-items: center;
- font-size: 11px;
- vertical-align: middle;
+  display: inline-flex; /* flexをinline-flexに変更 */
+  margin: 0 2px; /* 必要に応じて横間隔を調整 */
 }
 
 
 .input-group button,
 .input-group-multi button {
+  flex-direction: row; 
  margin: 5px;
  padding: 5px;
  cursor: pointer;

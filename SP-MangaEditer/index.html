@@ -704,12 +704,11 @@ function getElementClasses(element) {
             <div class="left_area" id="custom-panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="custom-panel-manager-items">
-                    <div class="input-group">
+
+                    <div class="input-group-multi">
                         <label for="panelStrokeColor" data-i18n="line">Line:</label>
                         <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000"
                             oninput="changePanelStrokeColor(this.value)">
-                    </div>
-                    <div class="input-group">
                         <label for="panelFillColor" data-i18n="fill">Fill:</label>
                         <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF"
                             oninput="changePanelFillColor(this.value)">
@@ -917,24 +916,33 @@ function getElementClasses(element) {
             <div class="left_area" id="speech-bubble-area1" style="display: none;">
                 <div class="area-header" data-i18n="bubble">Bubble</div>
                 <div id="speech-bubble-svg-preview-area1">
-                    <div class="input-group">
+                    <div class="input-group-multi">
                         <label data-i18n="background">Background</label>
-                        <input type="color" id="bubbleFillColor" value="#FFFFFF"
-                            oninput="changeSpeechBubble()">
-                    </div>
-                    <div class="input-group">
+                        <input type="color" id="bubbleFillColor" value="#FFFFFF" oninput="changeSpeechBubble()">
                         <label data-i18n="line">Line</label>
-                        <input type="color" id="bubbleStrokeColor" value="#000000"
-                            oninput="changeSpeechBubble()">
+                        <input type="color" id="bubbleStrokeColor" value="#000000" oninput="changeSpeechBubble()">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="opacity">
                         <input type="range" id="speechBubbleOpacity" name="speechBubbleOpacity" min="0" max="100" step="1" value="100" oninput="changeSpeechBubble()">
                     </div>
-
-                    
                     <div class="input-container-leftSpace" data-i18n-label="svg_icon_line_width">
                         <input type="range" id="bubbleStrokewidht" name="stroke" min="0" max="40" step="0.1" value="4.0" oninput="changeSpeechBubble()">
+                    </div>
+
+                    <div class="input-group-multi" data-group="sbTextGroup">
+                        <button id="sbNothingText" onclick="sbTextChange('Nothing', this)" data-value="Nothing">
+                            <i class="material-icons">do_not_disturb</i>
+                            <i class="material-icons">text_fields</i>
+                        </button>
+                        <button id="sbHorizontalText" onclick="sbTextChange('Horizontal', this)" class="selected" data-value="Horizontal">
+                            <i class="material-icons">east</i>
+                            <i class="material-icons">text_fields</i>
+                        </button>
+                        <button id="sbVerticalText" onclick="sbTextChange('Vertical', this)" data-value="Vertical">
+                            <i class="material-icons">south</i>
+                            <i class="material-icons">text_fields</i>
+                        </button>
                     </div>
 
                     <label style="display: none;">Line Size</label>
@@ -961,11 +969,9 @@ function getElementClasses(element) {
                         <button id="sbDeleteButton" data-i18n="sbDeleteMode">Delete Point</button>
                     </div>
                     <hr>
-                    <div class="input-group">
+                    <div class="input-group-multi">
                         <label for="sbStrokeColor" data-i18n="line">Line</label>
                         <input type="color" id="sbStrokeColor" value="#000000">
-                    </div>
-                    <div class="input-group">
                         <label for="sbFillColor" data-i18n="fill">Fill</label>
                         <input type="color" id="sbFillColor" value="#FFFFFF">
                     </div>
@@ -1030,24 +1036,18 @@ function getElementClasses(element) {
                     <hr>
 
                     <div class="input-group">
-                        <!-- <label data-i18n="font">Font:</label>
-                        <select id="fontSelector" onchange="changeFont(this.value)" class="dynamic-font">
-                        </select>
- -->
- <div id="fontSelector"></div>
+                        <div id="fontSelector"></div>
                     </div>
-                    <div class="input-group">
+                    <div class="input-group-multi">
                         <label data-i18n="textColor">Text</label>
                         <input type="color" id="textColorPicker" value="#000000" oninput="changeTextColor(this.value)">
-                    </div>
-                    <div class="input-group">
                         <label data-i18n="outlineColor">Outline</label>
-                        <input type="color" id="textOutlineColorPicker" value="#000000"
+                        <input type="color" id="textOutlineColorPicker" value="#123123"
                             oninput="changeOutlineTextColor(this.value)">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="fontSize">
-                        <input type="range" id="fontSizeSlider" min="7" max="150" value="30" oninput="changeFontSize(this.value)">
+                        <input type="range" id="fontSizeSlider" min="7" max="150" value="14" oninput="changeFontSize(this.value)">
                     </div>
                     <div class="input-container-leftSpace" data-i18n-label="outlineSize">
                         <input type="range" id="fontStrokeWidthSlider" min="0" max="5" step="1" value="0" oninput="changeStrokeWidthSize(this.value)">
@@ -1397,11 +1397,9 @@ function getElementClasses(element) {
                     </div>
 
 
-                    <div class="input-group">
+                    <div class="input-group-multi">
                         <label for="svg_icon_lineColor" data-i18n="svg_icon_line_color">Line</label>
                         <input type="color" id="svg_icon_lineColor" value="#000000" onchange="updateSVGStyles()">
-                    </div>
-                    <div class="input-group">
                         <label for="svg_icon_fillColor" data-i18n="svg_icon_fill_color">Fill</label>
                         <input type="color" id="svg_icon_fillColor" value="#EEEEEE" onchange="updateSVGStyles()">
                     </div>
@@ -1924,6 +1922,7 @@ function getElementClasses(element) {
     <script src="js/core/util/AnimeUtil.js?v=5.9" defer></script>
     <script src="js/core/util/ShareUtil.js?v=5.9" defer></script>
     <script src="js/core/util/LogUtil.js?v=5.9" defer></script>
+    <script src="js/core/util/ImageAnalyzerUtil.js?v=5.9" defer></script>
     <script src="js/CanvasManager.js?v=5.9" defer></script>
     <script src="js/ProjectManagement.js?v=5.9" defer></script>
     <script src="js/Shortcut.js?v=5.9" defer></script>
@@ -1958,6 +1957,7 @@ function getElementClasses(element) {
 
     <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=5.9" defer></script>
     <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=5.9" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleText.js?v=5.9" defer></script>    
     <script src="js/sidebar/pen/OriginalBrush.js?v=5.9" defer></script>
     <script src="js/sidebar/pen/PenTools.js?v=5.9" defer></script>
     <script src="js/sidebar/tone/ToneManager.js?v=5.9" defer></script>
