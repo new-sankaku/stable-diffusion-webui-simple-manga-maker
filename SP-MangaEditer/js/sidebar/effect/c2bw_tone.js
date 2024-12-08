@@ -1,5 +1,4 @@
-function C2BWStartLight(){
-
+async function C2BWStartLight(){
   const filterValues = {
     brightness: 0.35,
     contrast: 0.35,
@@ -9,7 +8,7 @@ function C2BWStartLight(){
   };
   C2BWStart(filterValues);
 }
-function C2BWStartDark(){
+async function C2BWStartDark(){
   const filterValues = {
     brightness: 0.22,
     contrast: 0.22,
@@ -19,7 +18,7 @@ function C2BWStartDark(){
   };
   C2BWStart(filterValues);
 }
-function C2BWStartRough(){
+async function C2BWStartRough(){
   const filterValues = {
     brightness: 0.41,
     contrast: 0.41,
@@ -29,7 +28,7 @@ function C2BWStartRough(){
   };
   C2BWStart(filterValues);
 }
-function C2BWStartSimple(){
+async function C2BWStartSimple(){
   const filterValues = {
     brightness: 0.15,
     contrast: 0.15,
@@ -46,12 +45,10 @@ async function C2BWStart(filterValues) {
   const loading = OP_showLoading({
     icon: 'process',step: 'Step1',substep: 'Ink up',progress: 0
   });
-
+  var activeObject = canvas.getActiveObject();
   try {
-    console.log(filterValues);
+    // console.log(filterValues);
     glfxReset();
-    
-    var activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === "image") {
 
       if( filterValues.inkStrength ){
@@ -76,7 +73,7 @@ async function C2BWStart(filterValues) {
 
 
       OP_updateLoadingState(loading, {
-        icon: 'save',step: 'Step2',substep: 'Dot',progress: 100
+        icon: 'save',step: 'Step3',substep: 'Dot',progress: 100
       });
 
       glfxOriginalImage = activeObject.getElement();
@@ -88,6 +85,7 @@ async function C2BWStart(filterValues) {
     }
   } finally {
     OP_hideLoading(loading);
+    saveStateByManual();
   }
 }
 

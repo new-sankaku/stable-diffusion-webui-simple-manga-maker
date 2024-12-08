@@ -426,7 +426,7 @@ function glfxApplyNoReset() {
     glfxOriginalImage = glfxCopiedImage.cloneNode();
     glfxCopiedImage = null;
     glfxOriginalImage = null;
-    saveStateByManual();
+    // saveStateByManual();
   }
 }
 

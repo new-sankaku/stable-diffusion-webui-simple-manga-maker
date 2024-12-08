@@ -56,10 +56,12 @@ function isNotSaveObject(activeObject){
 }
 
 function changeDoNotSaveHistory(){
+    console.log("changeDoNotSaveHistory start");
     isSaveHistory = false;
 }
 
 function changeDoSaveHistory(){
+    console.log("changeDoSaveHistory start");
     isSaveHistory = true;
 }
 
@@ -158,7 +160,11 @@ function restoreImage(json) {
 }
 
 function saveState() {
-    console.log("saveState call");
+    if(notSave()){
+        return ;
+    }
+    // console.log("saveState start");
+    // console.trace();
     if (currentStateIndex < stateStack.length - 1) {
         stateStack.splice(currentStateIndex + 1);
     }

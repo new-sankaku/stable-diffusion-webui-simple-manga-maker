@@ -121,18 +121,28 @@ window.onload = function () {
         img.src = "data:image/svg+xml;utf8," + encodeURIComponent(item.svg);
         img.classList.add("svg-preview");
         img.alt = item.name;
-        img.addEventListener("click", function () {
+        img.addEventListener("click", async function () {
+            console.log("new panel");
 
+            const loading = OP_showLoading({
+                icon: 'process',step: 'Step1',substep: 'New Page',progress: 0
+              });
+            try{
+                if (stateStack.length > 2) {
+                    OP_updateLoadingState(loading, {
+                        icon: 'process',step: 'Step2',substep: 'Zip Start',progress: 20
+                      });
 
-
-            if (stateStack.length > 2) {
-                btmSaveZip().then(() => {
+                      await btmSaveZip().then(() => {
+                        setCanvasGUID();
+                        loadSVGPlusReset(item.svg);
+                    });
+                } else {
                     setCanvasGUID();
                     loadSVGPlusReset(item.svg);
-                });
-            } else {
-                setCanvasGUID();
-                loadSVGPlusReset(item.svg);
+                }    
+            }finally{
+                OP_hideLoading(loading);
             }
         });
         previewAreaVertical.appendChild(img);
@@ -145,17 +155,28 @@ window.onload = function () {
         img.src = "data:image/svg+xml;utf8," + encodeURIComponent(item.svg);
         img.classList.add("svg-preview");
         img.alt = item.name;
-        img.addEventListener("click", function () {
-
-            if (stateStack.length > 2) {
-                btmSaveZip().then(() => {
+        img.addEventListener("click", async function () {
+            console.log("new panel");
+            const loading = OP_showLoading({
+                icon: 'process',step: 'Step1',substep: 'New Page',progress: 0
+              });
+            try{
+                if (stateStack.length > 2) {
+                    OP_updateLoadingState(loading, {
+                        icon: 'process',step: 'Step2',substep: 'Zip Start',progress: 20
+                      });
+                      await btmSaveZip().then(() => {
+                        setCanvasGUID();
+                        loadSVGPlusReset(item.svg, true);
+                    });
+                } else {
                     setCanvasGUID();
                     loadSVGPlusReset(item.svg, true);
-                });
-            } else {
-                setCanvasGUID();
-                loadSVGPlusReset(item.svg, true);
+                }
+            }finally{
+                OP_hideLoading(loading);
             }
+
         });
         previewAreaLandscape.appendChild(img);
     });

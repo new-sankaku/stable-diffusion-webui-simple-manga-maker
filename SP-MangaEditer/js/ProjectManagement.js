@@ -125,8 +125,14 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
   
+    const loading = OP_showLoading({
+      icon: 'process',step: 'Step1',substep: 'Save Project',progress: 0
+    });
+
     btmSaveZip().then(() => {
-      createToast("Save Project Start!", "");
+      OP_updateLoadingState(loading, {
+        icon: 'process',step: 'Step2',substep: 'Zip Start1',progress: 20
+      });
       var zip = new JSZip();
       var zipPromises = [];
       btmImageZipMap.forEach((value, key) => {
@@ -137,9 +143,17 @@ document.addEventListener("DOMContentLoaded", function () {
       return Promise.all(zipPromises).then(() => zip);
     })
     .then((zip) => {
+      OP_updateLoadingState(loading, {
+        icon: 'process',step: 'Step2',substep: 'Zip Start2',progress: 40
+      });
+
       return zip.generateAsync({ type: "blob" });
     })
     .then((content) => {
+      OP_updateLoadingState(loading, {
+        icon: 'process',step: 'Step2',substep: 'Download Start',progress: 80
+      });
+
       var url = window.URL.createObjectURL(content);
       var a = document.createElement("a");
       a.href = url;
@@ -151,46 +165,66 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => {
       console.error("Error during save process:", error);
-    });
+    })
+    .finally(() => {
+      OP_hideLoading(loading);
+    });;
   });
 
   
 
-
   loadButton.addEventListener("click", function () {
+    console.log("loadButton.addEventListener");
     var fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.style.display = "none";
     document.body.appendChild(fileInput);
     fileInput.click();
   
-    fileInput.onchange = function () {
-      var file = this.files[0];
+    fileInput.onchange = async function () {
+      const loading = OP_showLoading({
+        icon: 'process',
+        step: 'Step1',
+        substep: 'Load Project',
+        progress: 0
+      });
+      
+      try {
+        var file = this.files[0];
+        if (file) {
+          OP_updateLoadingState(loading, {
+            icon: 'process',
+            step: 'Step2',
+            substep: 'UnZip',
+            progress: 20
+          });
   
-      if (file) {
-        JSZip.loadAsync(file).then(function(zip) {
+          const zip = await JSZip.loadAsync(file);
           var hasNestedZip = false;
           var fileCount = 0;
-  
+    
           zip.forEach(function (relativePath, zipEntry) {
             fileCount++;
             if (zipEntry.name.toLowerCase().endsWith('.zip')) {
               hasNestedZip = true;
             }
           });
-  
+    
           if (hasNestedZip) {
-            processZip(zip);
+            await processZip(zip);
             document.body.removeChild(fileInput);
           } else {
-            loadZip(zip);
+            await loadZip(zip);
           }
-        }).catch(function(error) {
-          console.error("Error loading ZIP:", error);
-        });
+        }
+      } catch (error) {
+        console.error("Error loading ZIP:", error);
+      } finally {
+        OP_hideLoading(loading);
       }
     };
   });
+  
   
   async function processZip(zip) {
     const zipFiles = Object.keys(zip.files).filter(filename => filename.endsWith('.zip'));

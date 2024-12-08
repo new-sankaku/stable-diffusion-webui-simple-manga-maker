@@ -4,7 +4,7 @@ async function C2CStart() {
   const loading = OP_showLoading({
     icon: 'process',step: 'Step1',substep: 'Clone',progress: 0
   });
-
+  
   try {
     const filterValues = {
       brightness: 0.35,
@@ -19,12 +19,14 @@ async function C2CStart() {
     let tempObject = null;
 
     if (isImage(activeObject)) {
+      activeObject.saveHistory = false;
       activeObject.clone(function(cloned) {
         cloned.set({
           left: cloned.left,
           top: cloned.top,
           evented: true
         });
+        cloned.saveHistory = false;
         canvas.add(cloned);
         tempObject = cloned;
       });
@@ -85,7 +87,7 @@ async function C2CStart() {
       ctx.drawImage(activeObject.getElement(), 0, 0, originalWidth, originalHeight);
       ctx.globalAlpha = 0.4;
       ctx.drawImage(tempObject.getElement(), 0, 0, originalWidth, originalHeight);
-      const dataURL = tempCanvas.toDataURL('image/png', 1.0);
+      const dataURL = tempCanvas.toDataURL('image/webp', 1.0);
 
       fabric.Image.fromURL(dataURL, function(newImage) {
         newImage.set({
@@ -101,6 +103,10 @@ async function C2CStart() {
           objectCaching: false,
           imageSmoothing: true
         });
+
+        
+        activeObject.saveHistory=false;
+        activeObject.saveHistory=false;
 
         canvas.remove(activeObject);
         canvas.remove(tempObject);

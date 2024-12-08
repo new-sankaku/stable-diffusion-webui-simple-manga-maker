@@ -1,34 +1,46 @@
 
 async function loadBookSize(width, height, addPanel, newPage=false) {
-  // console.log("loadBookSize addPanel", addPanel);
+  const loading = OP_showLoading({
+    icon: 'process',step: 'Step1',substep: 'Next Project',progress: 0
+  });
+  try{
+    if (stateStack.length > 2 || newPage) {
+      OP_updateLoadingState(loading, {
+        icon: 'process',step: 'Step2',substep: 'Zip Start',progress: 40
+      });
 
-  if (stateStack.length > 2 || newPage) {
-    // console.log("呼び出し箇所２－４");
-    await btmSaveZip().then(() => {
+      await btmSaveZip().then(() => {
+        setCanvasGUID();
+      });
+      OP_updateLoadingState(loading, {
+        icon: 'process',step: 'Step2',substep: 'Next Project End',progress: 90
+      });
+  
+      changeDoNotSaveHistory();
+      resizeCanvasToObject(width, height);
+      if (addPanel) {
+        addSquareBySize(width, height);
+      } else {
+        initImageHistory();
+        saveState();
+      }
+      changeDoSaveHistory();
+    } else {
+      changeDoNotSaveHistory();
+      resizeCanvasToObject(width, height);
+      if (addPanel) {
+        addSquareBySize(width, height);
+      } else {
+        initImageHistory();
+        saveState();
+      }
+      changeDoSaveHistory();
       setCanvasGUID();
-    });
-
-    changeDoNotSaveHistory();
-    resizeCanvasToObject(width, height);
-    if (addPanel) {
-      addSquareBySize(width, height);
-    } else {
-      initImageHistory();
-      saveState();
     }
-    changeDoSaveHistory();
-  } else {
-    changeDoNotSaveHistory();
-    resizeCanvasToObject(width, height);
-    if (addPanel) {
-      addSquareBySize(width, height);
-    } else {
-      initImageHistory();
-      saveState();
-    }
-    changeDoSaveHistory();
-    setCanvasGUID();
+  }finally{
+    OP_hideLoading(loading);
   }
+
 }
 
 function addSquareBySize(width, height) {
