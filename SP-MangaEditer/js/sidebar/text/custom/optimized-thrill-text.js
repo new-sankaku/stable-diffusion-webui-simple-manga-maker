@@ -98,12 +98,14 @@ t2_thrill_updateSvgSize();
 }
 function t2_thrill_updateSvgSize(){
 try{
-const{x,y,width,height}=t2_thrill_mainText.getBBox();
-const dims={
-viewBox:`${x} ${y} ${width} ${height}`,
-width:width*1.05,
-height:height*0.9
-};
+  const bbox=t2_thrill_mainText.getBBox();
+  const padding = Math.max(20, bbox.width * 0.1); 
+  const dims = {
+    viewBox: `${bbox.x - padding} ${bbox.y - padding} ${bbox.width + padding*2} ${bbox.height + padding*2}`,
+    width: bbox.width + padding*2,
+    height: bbox.height + padding*2
+  };  
+
 setAttributes(t2_thrill_textSvg,dims);
 }catch(error){}
 }
