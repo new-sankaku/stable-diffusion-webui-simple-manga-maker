@@ -115,10 +115,6 @@
  width: 100%;
 }
 
-#dummy-area4 {
- font-size: var(--font-size-small);
-}
-
 #svg_icon_results {
  display: flex;
  flex-wrap: wrap;

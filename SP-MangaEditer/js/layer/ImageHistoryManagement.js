@@ -56,12 +56,12 @@ function isNotSaveObject(activeObject){
 }
 
 function changeDoNotSaveHistory(){
-    console.log("changeDoNotSaveHistory start");
+    // console.log("changeDoNotSaveHistory start");
     isSaveHistory = false;
 }
 
 function changeDoSaveHistory(){
-    console.log("changeDoSaveHistory start");
+    // console.log("changeDoSaveHistory start");
     isSaveHistory = true;
 }
 

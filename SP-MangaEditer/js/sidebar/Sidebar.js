@@ -26,7 +26,6 @@ function toggleVisibility(id) {
     $("tool-area").style.display = "none";
     $("manga-tone-area").style.display = "none";
     $("manga-effect-area").style.display = "none";
-    $("dummy-area4").style.display = "none";
     $("shape-area").style.display = "none";
     $("controle-area").style.display = "none";
     element.style.display = "block";

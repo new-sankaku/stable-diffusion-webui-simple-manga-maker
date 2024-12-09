@@ -427,7 +427,7 @@ canvas.on("mouse:up", event => {
   isDrawing = false;
   activePoint = null;
   const pointer = canvas.getPointer(event.e);
-  if (currentMode === "point" && points.length >= 3) {
+  if (currentMode === "point" && points.length >= 4) {
     if (isNearStartPoint(pointer.x, pointer.y, points[0])) {
       points.pop();
       points.push({ x: points[0].x, y: points[0].y });
@@ -447,7 +447,7 @@ canvas.on("mouse:up", event => {
     } else {
       updateTemporaryShapes();
     }
-  } else if (currentMode === "freehand" && points.length >= 3) {
+  } else if (currentMode === "freehand" && points.length >= 4) {
     points.push({ x: points[0].x, y: points[0].y });
     points = processPoints(points);
     const geometry = createJSTSPolygon(points);

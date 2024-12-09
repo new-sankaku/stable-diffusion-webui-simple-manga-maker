@@ -1,5 +1,5 @@
 function changeSpeechBubble() {
-    console.log("-------------");
+    // console.log("-------------");
     var bubbleStrokewidht = parseFloat($("bubbleStrokewidht").value);
     var fillColor   = $("bubbleFillColor").value;
     var strokeColor = $("bubbleStrokeColor").value;
@@ -11,7 +11,6 @@ function changeSpeechBubble() {
 
     var activeObject = canvas.getActiveObject();
     if (activeObject) {
-        if (isSpeechBubbleSVG(activeObject)) {
 
             let isExistsFillArea = false;
             if(isPath(activeObject)){
@@ -20,7 +19,6 @@ function changeSpeechBubble() {
                     strokeWidth: bubbleStrokewidht,
                     fill: fillColorRgba
                 });
-                canvas.renderAll();
             }else{
                 activeObject.forEachObject((obj) => {
                     if( obj.data?.originalId === "fillArea"){
@@ -42,9 +40,6 @@ function changeSpeechBubble() {
             }
 
 
-        } else{
-            obj.set({ stroke: strokeColorRgba , fill:fillColorRgba, strokeWidth:bubbleStrokewidht});
-        }
         canvas.requestRenderAll();
     }
 }
@@ -90,10 +85,9 @@ function loadSpeechBubbleSVGReadOnly(svgString, name) {
             changeDoNotSaveHistory();
                 canvas.add(svgObject);
             changeDoSaveHistory();
-
             createSpeechBubbleMetrics(svgObject, svgData);
-            canvas.setActiveObject(svgObject);
         }
+        canvas.setActiveObject(svgObject);
         changeSpeechBubble();
         canvas.discardActiveObject();
         canvas.renderAll();

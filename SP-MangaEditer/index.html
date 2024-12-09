@@ -230,6 +230,7 @@ function getElementClasses(element) {
             </div>
         </div>
 
+<!-- Category:Menu -->
         <nav id="desu-nav" class="navbar navbar-expand custom-navbar" style="display: none;">
             <a class="navbar-brand" href="#">
                 <img src="02_images_svg/Logo/black_mode_logo.webp" alt="Manga Editor Desu! Pro Edition Official Logo"
@@ -588,19 +589,21 @@ function getElementClasses(element) {
                 <i class="material-icons" id="intro_manga-effect-area" onclick="toggleVisibility('manga-effect-area');">filter_b_and_w</i>
                 <i class="material-icons" id="intro_controle-area" onclick="toggleVisibility('controle-area');">videogame_asset</i>
                 <i class="material-icons" id="intro_shape-area" onclick="toggleVisibility('shape-area');">interests</i>
-                <i class="material-icons" id="intro_dummy-area4" onclick="toggleVisibility('dummy-area4');">info</i>
             </div>
 
+<!-- Category:Vertical -->
             <div class="left_area" id="svg-container-vertical" style="display: none;">
                 <div class="area-header" data-i18n="panelsVertical">Panels</div>
                 <div id="svg-preview-area-vertical"></div>
             </div>
 
+<!-- Category:Landscape -->
             <div class="left_area" id="svg-container-landscape" style="display: none;">
                 <div class="area-header" data-i18n="panelsLandscape">Panels</div>
                 <div id="svg-preview-area-landscape"></div>
             </div>
 
+<!-- Category:PageManager -->
             <div class="left_area" id="panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="pageManager">Page Manager</div>
                 <div id="panel-manager-items">
@@ -701,6 +704,7 @@ function getElementClasses(element) {
                 </div>
             </div>
 
+<!-- Category:PanelManager -->
             <div class="left_area" id="custom-panel-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="custom-panel-manager-items">
@@ -825,6 +829,7 @@ function getElementClasses(element) {
 
 
 
+<!-- Category:PromptManager -->
             <div class="left_area" id="prompt-manager-area" style="display: none;">
                 <div class="area-header" data-i18n="promptManager">Prompt Manager</div>
                 <div id="prompt-manager-items">
@@ -913,6 +918,7 @@ function getElementClasses(element) {
 
 
 
+<!-- Category:SpeechBubble -->
             <div class="left_area" id="speech-bubble-area1" style="display: none;">
                 <div class="area-header" data-i18n="bubble">Bubble</div>
                 <div id="speech-bubble-svg-preview-area1">
@@ -954,6 +960,7 @@ function getElementClasses(element) {
                 </div>
             </div>
 
+<!-- Category:CustomSpeechBubble -->
             <div class="left_area" id="speech-bubble-area2" style="display: none;">
                 <div class="area-header">
                     <a href="html/Minual/custom-speechBubble.html" target="_blank" data-i18n="custom_bubble">
@@ -994,7 +1001,7 @@ function getElementClasses(element) {
 
 
                     <div class="input-container-leftSpace" data-i18n-label="cornerRadius">
-                        <input type="range" id="sbSornerRadius" min="0" max="15" value="1">
+                        <input type="range" id="sbSornerRadius" min="0" max="15" value="0">
                     </div>
                     <div class="input-container-leftSpace" data-i18n-label="panelOpacity">
                         <input type="range" id="sbFillOpacity" min="0" max="100" value="100">
@@ -1448,138 +1455,6 @@ function getElementClasses(element) {
             </div>
 
 
-
-
-
-
-
-
-            <div class="left_area" id="dummy-area4" style="display: none;">
-                <div class="area-header" data-i18n="information">Information</div>
-                <div id="dummy-svg-preview-area4">
-                    <div id="license-info">
-                        <div class="info-section">
-                            <p data-i18n="developerLinks">Developer links:</p>
-                            <div class="info-item">
-                                <i class="fab fa-discord"></i>
-                                <a href="https://discord.gg/zuU96TqNUb" target="_blank">
-                                    <span data-i18n="discord">Discord</span>
-                                </a>
-                            </div>
-                            <div class="info-item">
-                                <i class="fab fa-twitter"></i>
-                                <a href="https://twitter.com/hypersankaku2" target="_blank">
-                                    <span data-i18n="twitter">Twitter</span>
-                                </a>
-                            </div>
-                            <div class="info-item">
-                                <i class="fab fa-github"></i>
-                                <a href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker"
-                                    target="_blank">
-                                    <span data-i18n="github">GitHub</span>
-                                </a>
-                            </div>
-                            <div class="info-item">
-                                <i class="fab fa-github"></i>
-                                <a href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues"
-                                    target="_blank">
-                                    <span data-i18n="bugReport">Bug report / Feature request</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="info-section">
-                            <p data-i18n="libraries">Libraries:</p>
-                            <div class="info-item"><i class="fab fa-js"></i>
-                                <a href="http://fabricjs.com/" target="_blank">Fabric.js</a>
-                            </div>
-                            <div class="info-item"><i class="fab fa-js"></i>
-                                <a href="https://github.com/brix/crypto-js" target="_blank">crypto-js</a>
-                            </div>
-                            <div class="info-item"><i class="fab fa-js"></i>
-                                <a href="https://github.com/Stuk/jszip" target="_blank">jsZip</a>
-                            </div>
-
-                            <div class="info-item"><i class="fab fa-js"></i>
-                                <a href="https://www.i18next.com/" target="_blank">i18next</a>
-                            </div>
-                            <div class="info-item"><i class="fab fa-js"></i>
-                                <a href="https://evanw.github.io/glfx.js/" target="_blank">glfx.js</a>
-                            </div>
-
-                            <div class="info-item"><i class="fab fa-js"></i>
-                                <a href="https://github.com/Donaldcwl/browser-image-compression"
-                                    target="_blank">browser-image-compression</a>
-                            </div>
-
-                            <div class="info-item"><i class="fab fa-google"></i>
-                                <a href="https://fonts.google.com/icons" target="_blank">Google Icons</a>
-                            </div>
-                            <div class="info-item"><i class="fab fa-google"></i>
-                                <a href="https://fonts.google.com" target="_blank">Google Font</a>
-                            </div>
-                            <div class="info-item"><i class="fab fa-bootstrap"></i>
-                                <a href="https://getbootstrap.jp" target="_blank">Bootstrup</a>
-                            </div>
-                        </div>
-                        <div class="info-section">
-                            <p data-i18n="materials">Materials:</p>
-                            <div class="info-item">
-                                <i class="material-icons">image</i>
-                                <a href="https://fukidesign.com" target="_blank" data-i18n="speechBubble">Speech
-                                    Bubble</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/specimen/M+PLUS+Rounded+1c"
-                                    target="_blank">M+PLUS+Rounded+1c</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/specimen/Stick?subset=japanese"
-                                    target="_blank">Stick</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/specimen/DotGothic16?subset=japanese"
-                                    target="_blank">DotGothic16</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/noto/specimen/Noto+Serif+JP?subset=japanese&noto.script=Hira"
-                                    target="_blank">Noto+Serif</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/specimen/Rampart+One" target="_blank">Rampart+One</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://booth.pm/ja/items/4106184" target="_blank">どきどきファンタジア</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://fonts.google.com/selection" target="_blank">selection</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://pm85122.onamae.jp/851ch-dz.html" target="_blank">851ch-dz</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://hp.vector.co.jp/authors/VA039499/#ohisama" target="_blank">ohisama</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://font.cutegirl.jp/chalk-font-free.html" target="_blank">chalk-font</a>
-                            </div>
-                            <div class="info-item">
-                                <i class="material-icons">text_fields</i>
-                                <a href="https://pm85122.onamae.jp/851mkpop.html" target="_blank">851mkpop</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div id="canvas-area">
                 <div class="area-header">
