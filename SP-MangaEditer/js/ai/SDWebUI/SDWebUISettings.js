@@ -1,50 +1,49 @@
+class SDWebUIEndpoints {
+  #getUrlParts() {
+    let apiUrl = $('sdWebUIPageUrl').value;
+    const url = new URL(apiUrl);
+    return {
+      protocol: url.protocol.replace(':', ''),
+      host: url.hostname,
+      port: url.port
+    };
+  }
+  
+  constructor() {
+    this.urls = this.setupUrlProxy();
+  }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const hostInput = $('Stable_Diffusion_WebUI_apiHost');
-  const portInput = $('Stable_Diffusion_WebUI_apiPort');
-  hostInput.value = sdWebUIHost;
-  portInput.value = sdWebUIPort;
+  setupUrlProxy() {
+    return new Proxy({}, {
+      get: (target, prop) => {
+        const urlParts = this.#getUrlParts();
+        const endpoint = this.getEndpoint(prop);
+        return `${urlParts.protocol}://${urlParts.host}${urlParts.port ? ':' + urlParts.port : ''}${endpoint}`;
+      }
+    });
+  }
 
-  hostInput.addEventListener('change', function () {
-    sdWebUIHost = this.value;
-    sdWebUI_reBuild_URL();
-  });
-
-  portInput.addEventListener('change', function () {
-    sdWebUIPort = this.value;;
-    sdWebUI_reBuild_URL();
-  });
-});
-
-var sdWebUI_API_ping = '';
-var sdWebUI_API_sampler = '';
-var sdWebUI_API_scheduler = '';
-var sdWebUI_API_upscaler = '';
-var sdWebUI_API_sdModel = '';
-var sdWebUI_API_T2I = '';
-var sdWebUI_API_I2I = '';
-var sdWebUI_API_options = '';
-var sdWebUI_API_samplers = '';
-var sdWebUI_API_interrogate = '';
-var sdWebUI_API_rembg = '';
-var sdWebUI_API_adetilerModel = '';
-var sdWebUI_API_sdModules = '';
-function sdWebUI_reBuild_URL() {
-  sdWebUI_API_ping            = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/internal/ping'
-  sdWebUI_API_sampler         = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
-  sdWebUI_API_scheduler       = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/schedulers'
-  sdWebUI_API_upscaler        = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/upscalers'
-  sdWebUI_API_sdModel         = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/sd-models'
-  sdWebUI_API_T2I             = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/txt2img'
-  sdWebUI_API_I2I             = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/img2img'
-  sdWebUI_API_options         = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/options'
-  sdWebUI_API_samplers        = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/samplers'
-  sdWebUI_API_interrogate     = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/interrogate'
-  sdWebUI_API_sdModules       = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/sdapi/v1/sd-modules'
-  sdWebUI_API_rembg           = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/rembg'
-  sdWebUI_API_adetilerModel   = 'http://' + sdWebUIHost + ':' + sdWebUIPort + '/adetailer/v1/ad_model'
+  getEndpoint(key) {
+    const endpoints = {
+      ping: '/internal/ping',
+      sampler: '/sdapi/v1/samplers',
+      scheduler: '/sdapi/v1/schedulers',
+      upscaler: '/sdapi/v1/upscalers',
+      sdModel: '/sdapi/v1/sd-models',
+      t2i: '/sdapi/v1/txt2img',
+      i2i: '/sdapi/v1/img2img',
+      options: '/sdapi/v1/options',
+      samplers: '/sdapi/v1/samplers',
+      interrogate: '/sdapi/v1/interrogate',
+      sdModules: '/sdapi/v1/sd-modules',
+      rembg: '/rembg',
+      adetilerModel: '/adetailer/v1/ad_model'
+    };
+    return endpoints[key] || '';
+  }
 }
-sdWebUI_reBuild_URL();
+
+
 
 
 function rembgRequestData(layer) {

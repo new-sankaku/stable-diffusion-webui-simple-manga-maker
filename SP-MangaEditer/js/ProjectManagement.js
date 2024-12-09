@@ -337,8 +337,10 @@ function loadSettingsLocalStrage() {
     $('outputDpi').value                      = localSettings.canvasDpi || "450";
     $('gridSizeInput').value                  = localSettings.canvasGridLineSize || "10";
     $('marginFromPanel').value                = localSettings.canvasMarginFromPanel || 20;
-    $('Stable_Diffusion_WebUI_apiPort').value = localSettings.Stable_Diffusion_WebUI_apiPort || "7860";
-    $('Stable_Diffusion_WebUI_apiHost').value = localSettings.Stable_Diffusion_WebUI_apiHost || "127.0.0.1";
+
+    $('sdWebUIPageUrl').value                = localSettings.sdWebUIPageUrl || 'http://127.0.0.1:7860';
+    $('comfyUIPageUrl').value                = localSettings.comfyUIPageUrl || 'http://127.0.0.1:8188';
+
     $('apiHeartbeatCheckbox').checked         = localSettings.apiHeartbeatCheckbox;
     svgPagging                                = localSettings.canvasMarginFromPanel || 20;
     $('basePrompt_model').value          = localSettings.basePrompt_text2img_model || basePrompt.text2img_model;
@@ -414,8 +416,10 @@ function saveSettingsLocalStrage() {
     canvasDpi: $('outputDpi').value,
     canvasGridLineSize: $('gridSizeInput').value,
     canvasMarginFromPanel: $('marginFromPanel').value,
-    Stable_Diffusion_WebUI_apiPort: $('Stable_Diffusion_WebUI_apiPort').value,
-    Stable_Diffusion_WebUI_apiHost: $('Stable_Diffusion_WebUI_apiHost').value,
+
+    sdWebUIPageUrl:$('sdWebUIPageUrl').value,
+    comfyUIPageUrl:$('comfyUIPageUrl').value,
+
     apiHeartbeatCheckbox : $('apiHeartbeatCheckbox').checked ,
     basePrompt_text2img_prompt: basePrompt.text2img_prompt,
     basePrompt_text2img_negative: basePrompt.text2img_negative,

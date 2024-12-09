@@ -34,7 +34,9 @@ hr {
 
 .custom-navbar .dropdown-menu {
  background-color: var(--background-color-A);
- border-color: var(--nav-border)
+ border-color: var(--nav-border);
+ border-width: 2px;
+ min-width: 350px;
 }
 
 .custom-navbar .dropdown-item:hover {

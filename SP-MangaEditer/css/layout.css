@@ -135,6 +135,10 @@
  vertical-align: middle;
 }
 
+#license-info p {
+ font-size: var(--font-size-12px);
+}
+
 .info-section {
  border-top: var(--boader-color-1px-solid-A);
  padding: var(--padding-5);
@@ -210,6 +214,46 @@
  max-width: var(--max-width-150);
  width: var(--width-50);
 }
+.A1111_api_content li a {
+  width: 280px;
+  display: block;
+  color: var(--a-link);
+  text-decoration: underline;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.A1111_api_content li a:hover {
+  background-color: var(--button-hover-background);
+  color: var(--a-link-hover);
+}
+
+.Comfyui_api_content li a {
+  width: 280px;
+  display: block;
+  color: var(--a-link);
+  text-decoration: underline;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.Comfyui_api_content li a:hover {
+  background-color: var(--button-hover-background);
+  color: var(--a-link-hover);
+}
+
+.A1111_api_content li a::after,
+.Comfyui_api_content li a::after {
+  content: ' 🔗';
+  font-size: 0.9em;
+  color: inherit;
+}
+
+
 
 .dropdown-menu .dropdown-item input {
  flex: var(--flex-2);

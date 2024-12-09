@@ -165,6 +165,7 @@ function putCheckButton(buttonsDiv, layer, index) {
 function visibleChange(obj){
   obj.visible = !obj.visible;
   updateLayerPanel();
+  canvas.requestRenderAll();
 }
 
 function putViewButton(buttonsDiv, layer, index) {

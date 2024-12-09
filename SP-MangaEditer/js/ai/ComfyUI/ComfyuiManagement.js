@@ -1,29 +1,61 @@
+class ComfyUIEndpoints {
+  #getUrlParts() {
+    const serverAddress = $('comfyUIPageUrl').value;
+    const url = new URL(serverAddress);
+    return {
+      protocol: url.protocol.replace(':', ''),
+      domain: url.hostname,
+      port: url.port || '',
+      wsProtocol: url.protocol === 'https:' ? 'wss' : 'ws'
+    };
+  }
+  
+  constructor() {
+    this.urls = this.setupUrlProxy();
+  }
+
+  setupUrlProxy() {
+    return new Proxy({}, {
+      get: (target, prop) => {
+        const { protocol, domain, port, wsProtocol } = this.#getUrlParts();
+        const baseUrl = `${protocol}://${domain}${port ? ':' + port : ''}`;
+        const wsUrl = `${wsProtocol}://${domain}${port ? ':' + port : ''}`;
+        const endpoint = this.getEndpoint(prop);
+
+        if (prop === 'ws') {
+          return `${wsUrl}/ws`;
+        }
+        return `${baseUrl}${endpoint}`;
+      }
+    });
+  }
+
+  getEndpoint(key) {
+    const endpoints = {
+      settings: '/settings',
+      prompt: '/prompt',
+      history: '/history/',
+      view: '/view',
+      uploadImage: '/upload/image',
+      objectInfo: '/object_info/',
+      objectInfoOnly: '/object_info'
+    };
+    return endpoints[key] || '';
+  }
+}
+
+
 let reader = new FileReader();
 
 var socket = null;
 const uuid = crypto.randomUUID();
 var selected_workflow = null;
 var processing_prompt = false;
-
-var hostInput = "";
-var portInput = "";
 var workflowFileLoad = "";
-
-hostInput.value = comfyuiHost;
-portInput.value = comfyuiPort;
-
-document.addEventListener("DOMContentLoaded", function () {
-  hostInput = $("Comfyui_apiHost");
-  portInput = $("Comfyui_apiPort");
-  workflowFileLoad = $("Workflow_path_load");
-  hostInput.value = comfyuiHost;
-  portInput.value = comfyuiPort;
-});
 
 function Comfyui_connect() {
   try {
-    server_address = hostInput.value + ":" + portInput.value;
-    socket = new WebSocket("ws://" + server_address + "/ws?clientId=" + uuid);
+    socket = new WebSocket(comfyUIUrls.ws + '?clientId=' + uuid);
     socket.addEventListener("open", (event) => {
       console.log("ComfyUIへの接続に成功しました。");
     });
@@ -40,11 +72,9 @@ function Comfyui_connect() {
 }
 
 async function Comfyui_apiHeartbeat() {
-  server_address = hostInput.value + ":" + portInput.value;
   const label = $("ExternalService_Heartbeat_Label");
   try {
-    const url = "http://" + server_address + "/settings";
-    const response = await fetch(url, {
+    const response = await fetch(comfyUIUrls.settings, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +105,7 @@ async function Comfyui_apiHeartbeat() {
 async function Comfyui_queue_prompt(prompt) {
   try {
     const p = { prompt: prompt, client_id: uuid };
-    const response = await fetch("http://" + server_address + "/prompt", {
+    const response = await fetch(comfyUIUrls.prompt, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +121,6 @@ async function Comfyui_queue_prompt(prompt) {
     }
 
     const response_data = await response.json();
-    // console.log("サーバーからのレスポンス:", response_data);
     return response_data;
 
   } catch (error) {
@@ -117,8 +146,7 @@ async function Comfyui_get_history(prompt_id) {
     prompt_id
   );
   try {
-    const response = await fetch(
-      "http://" + server_address + "/history/" + prompt_id,
+    const response = await fetch(comfyUIUrls.history + prompt_id,
       {
         method: "GET",
         headers: {
@@ -138,22 +166,18 @@ async function Comfyui_get_history(prompt_id) {
 }
 
 async function Comfyui_get_image(image_data_to_recieve) {
-  console.log(
-    "Comfyui_get_image関数が呼び出されました。画像データ:",
-    image_data_to_recieve
-  );
+  // console.log(
+  //   "Comfyui_get_image関数が呼び出されました。画像データ:",
+  //   image_data_to_recieve
+  // );
   try {
     const params = new URLSearchParams({
       filename: image_data_to_recieve.filename,
       subfolder: image_data_to_recieve.subfolder,
       type: image_data_to_recieve.type,
     });
-
-    console.log("リクエストパラメータ:", params.toString());
-
-    const response = await fetch(
-      "http://" + server_address + "/view?" + params.toString()
-    );
+    // console.log("リクエストパラメータ:", params.toString());
+    const response = await fetch(comfyUIUrls.view + '?' + params.toString());
     console.log("画像データをサーバーから取得しました。");
 
     if (!response.ok) {
@@ -314,8 +338,7 @@ async function Comfyui_uploadImage(layer, fileName = "i2i_temp.png", overwrite =
   formData.append("overwrite", overwrite.toString());
 
   try {
-    const server_address = hostInput.value + ":" + portInput.value;
-    const response = await fetch(`http://${server_address}/upload/image`, {
+    const response = await fetch(comfyUIUrls.uploadImage, {
       method: "POST",
       body: formData,
     });
@@ -413,9 +436,8 @@ async function Comfyui_VaeLoader() {
 
 
 async function Comfyui_FetchObjectInfo(nodeName) {
-    const url = Comfyui_getUrl() + `object_info/` + nodeName;
     try {
-      const response = await fetch(url);
+      const response = await fetch(comfyUIUrls.objectInfo + nodeName);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -429,9 +451,8 @@ async function Comfyui_FetchObjectInfo(nodeName) {
 
 var comfyObjectInfoList;
 async function Comfyui_FetchObjectInfoOnly() {
-  const url = Comfyui_getUrl() + `object_info`;
   try {
-    const response = await fetch(url);
+    const response = await fetch(comfyUIUrls.objectInfoOnly);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

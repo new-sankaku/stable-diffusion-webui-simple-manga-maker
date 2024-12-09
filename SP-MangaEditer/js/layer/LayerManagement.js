@@ -311,17 +311,20 @@ function removeLayer(layer) {
 }
 
 function highlightActiveLayer(activeIndex) {
-  var layerItems = document.querySelectorAll(".layer-item");
-  layerItems.forEach((layer, index) => {
-    if (index === activeIndex) {
-      layer.classList.add("active");
-    } else {
-      layer.classList.remove("active");
-    }
-  });
+  highlightActiveLayerByCanvas();
+
+  // var layerItems = document.querySelectorAll(".layer-item");
+  // layerItems.forEach((layer, index) => {
+  //   if (index === activeIndex) {
+  //     layer.classList.add("active");
+  //   } else {
+  //     layer.classList.remove("active");
+  //   }
+  // });
 }
 
 function highlightActiveLayerByCanvas(object=null) {
+  console.log("highlightActiveLayerByCanvas");
   let activeObject;
   if(object){
     activeObject = object;
@@ -330,15 +333,15 @@ function highlightActiveLayerByCanvas(object=null) {
   }
   
   updateControls(activeObject);
-
   if( isPanel(activeObject) ){
     showT2IPrompts(activeObject);
   }else if( isImage(activeObject)){
     showI2IPrompts(activeObject);
+  }else{
+    noShowPrompt();
   }
 
   var activeIndex = getLayerIndexByActiveObject(activeObject);
-  // console.log("activeIndex", activeIndex);
   var layers = document.querySelectorAll(".layer-item");
 
   var reverseIndex = layers.length - 1 - activeIndex;

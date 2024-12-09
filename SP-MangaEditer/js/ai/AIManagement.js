@@ -4,8 +4,21 @@ const comfyuiQueue = new TaskQueue(1);
 var firstSDConnection = true;
 var firstComfyConnection = true;
 
+$('sdWebUIPageUrlDefaultUrl').addEventListener('click', (event) => {
+  event.stopPropagation();
+  const defaultUrl = 'http://127.0.0.1:7860';
+  $('sdWebUIPageUrl').value = defaultUrl;
+});
 
-// 使用例
+$('comfyUIPageUrlDefaultUrl').addEventListener('click', (event) => {
+  event.stopPropagation();
+  const defaultUrl = 'http://127.0.0.1:8188';
+  $('comfyUIPageUrl').value = defaultUrl;
+});
+
+
+
+
 function existsWaitQueue() {
   const sdQueueStatus = sdQueue.getStatus();
   if( sdQueueStatus.total > 0 ){
@@ -72,17 +85,6 @@ function apiHeartbeat(){
     Comfyui_apiHeartbeat();
   }
 }
-apiHeartbeat();
-
-document.addEventListener('DOMContentLoaded', function () {
-  setInterval(apiHeartbeat, 1000 * 15);
-  $('apiHeartbeatCheckbox').addEventListener('change', function () {
-    apiHeartbeat();
-  });
-  apiHeartbeat();
-});
-
-
 
 
 function updateUpscalerDropdown(models) {

@@ -12,7 +12,7 @@
   --color-scllor:            #480000;
   
   --color-scrollbar-track:                var(--color-base);
-  --nav-border:                           var(--color-base);
+  --nav-border:                           var(--color-accent);
   --background-color-A:                   var(--color-base);
   --active-background-color-D:            var(--color-scllor);
   --select-button-color:                  var(--color-accent);

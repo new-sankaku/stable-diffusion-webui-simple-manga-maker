@@ -62,14 +62,13 @@ function showT2IPrompts(layer) {
     `;
 
 
-    $("promptRun").addEventListener("click", function () {
-      const activeObject = canvas.getActiveObject();
-      if (!activeObject) {
-        return;
-      }
-      var spinner = createSpinner(promptIndex);
-      T2I( activeObject, spinner );
-    });
+  $("promptRun").addEventListener("click", function () {
+    if (!layer) {
+      return;
+    }
+    var spinner = createSpinner(promptIndex);
+    T2I( layer, spinner );
+  });
   
 
   $("text2img_prompt").addEventListener("input", function () {
@@ -161,8 +160,7 @@ function showI2IPrompts(layer) {
   `;
 
   $("promptRun").addEventListener("click", function () {
-    const activeObject = canvas.getActiveObject();
-    if (!activeObject) {
+    if (layer) {
       return;
     }
     var spinner = createSpinner(promptIndex);
@@ -198,4 +196,10 @@ function adjustToMultipleOfEight(elementId) {
   if (value !== -1) {
     inputElement.value = Math.round(value / 8) * 8;
   }
+}
+
+function noShowPrompt() {
+  var otherControlsMini = $("other-controls-mini");
+  otherControlsMini.innerHTML = `<label>Text or Image Prpmpt…</label>`;
+  setAutoSizeingControlMini();
 }

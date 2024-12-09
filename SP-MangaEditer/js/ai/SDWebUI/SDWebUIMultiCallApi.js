@@ -1,6 +1,6 @@
 
 function fetchSD_ADModels() {
-  fetch(sdWebUI_API_adetilerModel, {
+  fetch(sdWebUIUrls.adetilerModel, {
       method: 'GET',
       headers: {
           'accept': 'application/json'
@@ -26,7 +26,7 @@ async function sendClipToServer() {
     forge_additional_modules: dualClip
   });
 
-  fetch(sdWebUI_API_options, {
+  fetch(sdWebUIUrls.options, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -49,7 +49,7 @@ async function sendModelToServer() {
     sd_model_checkpoint: modelValue
   });
 
-  fetch(sdWebUI_API_options, {
+  fetch(sdWebUIUrls.options, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -66,7 +66,7 @@ async function sendModelToServer() {
 
 async function fetchSDOptions() {
   try {
-    const response = await fetch(sdWebUI_API_options, {
+    const response = await fetch(sdWebUIUrls.options, {
       method: 'GET',
       headers: {
         'Accept': 'application/json'
@@ -92,25 +92,25 @@ async function fetchSDOptions() {
 }
 
 async function fetchSD_Sampler() {
-  const response = await fetch(sdWebUI_API_samplers, { method: 'GET' });
+  const response = await fetch(sdWebUIUrls.sampler, { method: 'GET' });
   const models = await response.json();
   updateSamplerDropdown(models);
 }
 
 async function fetchSD_Upscaler() {
-  const response = await fetch(sdWebUI_API_upscaler, { method: 'GET' });
+  const response = await fetch(sdWebUIUrls.upscaler, { method: 'GET' });
   const models = await response.json();
   updateUpscalerDropdown(models);
 }
 
 async function fetchSD_Models() {
-  const response = await fetch(sdWebUI_API_sdModel, { method: 'GET' });
+  const response = await fetch(sdWebUIUrls.sdModel, { method: 'GET' });
   const models = await response.json();
   updateModelDropdown(models);
 }
 
 async function fetchSD_Modules() {
-  const response = await fetch(sdWebUI_API_sdModules, { method: 'GET' });
+  const response = await fetch(sdWebUIUrls.sdModules, { method: 'GET' });
   const rawModels = await response.json();
   const results = rawModels.map(model => ({
     n: model.model_name,
@@ -127,8 +127,11 @@ async function fetchSD_Modules() {
 
 function sdwebui_apiHeartbeat() {
   const label = $('ExternalService_Heartbeat_Label');
+  if(!sdWebUIUrls || !sdWebUIUrls.ping){
+    return;
+  }
 
-  fetch(sdWebUI_API_ping, {
+  fetch(sdWebUIUrls.ping, {
     method: 'GET',
     headers: { 'Accept': 'application/json' }
   })
@@ -166,7 +169,7 @@ async function sdWebUI_Interrogate(layer, model, spinnerId) {
       image: base64Image,
       model: model
     };
-    const response = await fetch(sdWebUI_API_interrogate, {
+    const response = await fetch(sdWebUIUrls.interrogate, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

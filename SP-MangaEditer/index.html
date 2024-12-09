@@ -175,34 +175,34 @@ function getElementClasses(element) {
         });
     </script>
 
-<link rel="stylesheet" href="css/css2.css?v=5.9">
-<link rel="stylesheet" href="css/icon.css?v=5.9">
-<link rel="stylesheet" href="css/form.css?v=5.9">
-<link rel="stylesheet" href="css/controls-mini.css?v=5.9">
-<link rel="stylesheet" href="css/common.css?v=5.9">
-<link rel="stylesheet" href="css/components.css?v=5.9">
-<link rel="stylesheet" href="css/layout.css?v=5.9">
-<link rel="stylesheet" href="css/ImageControleManager.css?v=5.9">
-<link rel="stylesheet" href="css/anime.css?v=5.9">
-<link rel="stylesheet" href="css/layoutLayer.css?v=5.9">
-<link rel="stylesheet" href="css/toast.css?v=5.9">
-<link rel="stylesheet" href="css/ui/modeChange.css?v=5.9">
-<link rel="stylesheet" href="css/ui/objectMenu.css?v=5.9">
-<link rel="stylesheet" href="css/ui/share.css?v=5.9">
-<link rel="stylesheet" href="css/ui/flowtingWindow.css?v=5.9">
-<link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=5.9">
-<link rel="stylesheet" href="css/ui/overlayProgress.css?v=5.9">
+<link rel="stylesheet" href="css/css2.css?v=6.0">
+<link rel="stylesheet" href="css/icon.css?v=6.0">
+<link rel="stylesheet" href="css/form.css?v=6.0">
+<link rel="stylesheet" href="css/controls-mini.css?v=6.0">
+<link rel="stylesheet" href="css/common.css?v=6.0">
+<link rel="stylesheet" href="css/components.css?v=6.0">
+<link rel="stylesheet" href="css/layout.css?v=6.0">
+<link rel="stylesheet" href="css/ImageControleManager.css?v=6.0">
+<link rel="stylesheet" href="css/anime.css?v=6.0">
+<link rel="stylesheet" href="css/layoutLayer.css?v=6.0">
+<link rel="stylesheet" href="css/toast.css?v=6.0">
+<link rel="stylesheet" href="css/ui/modeChange.css?v=6.0">
+<link rel="stylesheet" href="css/ui/objectMenu.css?v=6.0">
+<link rel="stylesheet" href="css/ui/share.css?v=6.0">
+<link rel="stylesheet" href="css/ui/flowtingWindow.css?v=6.0">
+<link rel="stylesheet" href="css/ui/imagePromptHelper.css?v=6.0">
+<link rel="stylesheet" href="css/ui/overlayProgress.css?v=6.0">
 
 <link rel="stylesheet" href="third/tippy/tippy.css">
 <link rel="stylesheet" href="third/Bootstrup/bootstrap.min.css">
-<link rel="stylesheet" href="css/all.min.css?v=5.9">
+<link rel="stylesheet" href="css/all.min.css?v=6.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.3/css/flag-icons.min.css">
-<link rel="stylesheet" href="css/ui/blend.css?v=5.9">
-<link rel="stylesheet" href="css/ui/bottomBar.css?v=5.9">
-<link rel="stylesheet" href="css/ui/custom-html-components.css?v=5.9">
-<link rel="stylesheet" href="css/tagify.css?v=5.9">
+<link rel="stylesheet" href="css/ui/blend.css?v=6.0">
+<link rel="stylesheet" href="css/ui/bottomBar.css?v=6.0">
+<link rel="stylesheet" href="css/ui/custom-html-components.css?v=6.0">
+<link rel="stylesheet" href="css/tagify.css?v=6.0">
 
-<link rel="stylesheet" href="css/ui/fontManager.css?v=5.9">
+<link rel="stylesheet" href="css/ui/fontManager.css?v=6.0">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.css" rel="stylesheet" type="text/css" />
@@ -331,54 +331,57 @@ function getElementClasses(element) {
                             <div class="A1111_api_content">
                                 <li>
                                     <label>
-                                        <span data-i18n="">WebUI(A1111/Forge)</span>
+                                        <h5 data-i18n="">WebUI(A1111/Forge)</h5>
                                     </label>
-                                    <label for="Stable_Diffusion_WebUI_apiHost">
-                                        <span data-i18n="apiHost">API Host:</span>
-                                        <input type="text" id="Stable_Diffusion_WebUI_apiHost">
-                                    </label>
-                                </li>
-                                <li>
-                                    <label for="Stable_Diffusion_WebUI_apiPort">
-                                        <span data-i18n="apiPort">API Port:</span>
-                                        <input type="text" id="Stable_Diffusion_WebUI_apiPort">
+                                    <label for="sdWebUIPageUrl">
+                                        <span data-i18n="apiUrl">API Page URL:</span>
+                                        <input type="text" id="sdWebUIPageUrl">
                                     </label>
                                 </li>
                                 <li>
                                     <a href="html/API_Help/sd-api-guide.html" target="_blank">
                                         <i class="material-icons">help_outline</i>
                                         <span data-i18n="help_api_connect_settings">
-                                            Help:Connect Settings
                                         </span>
                                     </a>
+                                </li>
+                                <li>
+                                    <button id="sdWebUIPageUrlDefaultUrl">
+                                        <span data-i18n="DEFAULT">DEFAULT</span>
+                                    </button>
                                 </li>
                             </div>
                             <hr>
                             <div class="Comfyui_api_content">
                                 <li>
                                     <label>
-                                        <span data-i18n="comfyUI">ComfyUI</span>
+                                        <h5 data-i18n="comfyUI">ComfyUI</h5>
                                     </label>
                                 </li>
                                 <li>
-                                    <label for="Comfyui_apiHost">
-                                        <span data-i18n="apiHost">API Host:</span>
-                                        <input type="text" id="Comfyui_apiHost">
+                                    <label>
+                                        <span data-i18n="">WebUI(A1111/Forge)</span>
                                     </label>
+                                    <label for="comfyUIPageUrl">
+                                        <span data-i18n="apiUrl"></span>
+                                        <input type="text" id="comfyUIPageUrl">
+                                    </label>
+                                </li>
+
+                                <li>
+                                    <a href="html/API_Help/comfyui_settings.html" target="_blank">
+                                        <i class="material-icons">help_outline</i>
+                                        <span data-i18n="help_api_connect_settings">
+                                        </span>
+                                    </a>
                                 </li>
                                 <li>
-                                    <label for="Comfyui_apiPort">
-                                        <span data-i18n="apiPort">API Port:</span>
-                                        <input type="text" id="Comfyui_apiPort">
-                                    </label>
+                                    <button id="comfyUIPageUrlDefaultUrl">
+                                        <span data-i18n="DEFAULT">DEFAULT</span>
+                                    </button>
                                 </li>
-                                <a href="html/API_Help/comfyui_settings.html" target="_blank">
-                                    <i class="material-icons">help_outline</i>
-                                    <span data-i18n="help_api_connect_settings">
-                                        Help:Connect Settings
-                                    </span>
-                                </a>
-                            </div>
+
+                        </div>
                         </ul>
                     </li>
                 </ul>
@@ -1714,7 +1717,7 @@ function getElementClasses(element) {
                     <div class="area-header" data-i18n="otherControls" onclick='changeHiddenById("other-controls-mini", "otherControls", "otherControlsByClose")'>
                     </div>
                     <div id="other-controls-mini" class="controls-mini">
-                        <label>Text or Image Prpmpt…</label>
+                        <label>Panel or Image Prpmpt…</label>
                     </div>
                 </div>
             </div>
@@ -1748,150 +1751,153 @@ function getElementClasses(element) {
     <script src="third/lodash/lodash.min.js" defer></script>
     <script src="third/hotkeys/hotkeys.min.js" defer></script>
 
-    <script src="js/sidebar/pen/fabric/dist/fabric-brush.min.js?v=5.9"></script>
-    <!-- <script src="js/sidebar/pen/fabric/dist/fabric-brush.js?v=5.9"></script> -->
-    <script src="js/sidebar/pen/fabric/brushes/crayon_brush.js?v=5.9"></script>
-    <script src="js/sidebar/pen/fabric/brushes/ink_brush.js?v=5.9"></script>
-    <script src="js/sidebar/pen/fabric/brushes/marker_brush.js?v=5.9"></script>
-    <script src="js/sidebar/pen/fabric/brushes/spray_brush.js?v=5.9"></script>
-    <script src="js/sidebar/pen/fabric/brushes/drip.js?v=5.9"></script>
-    <script src="js/sidebar/pen/fabric/brushes/stroke.js?v=5.9"></script>
+    <script src="js/sidebar/pen/fabric/dist/fabric-brush.min.js?v=6.0"></script>
+    <!-- <script src="js/sidebar/pen/fabric/dist/fabric-brush.js?v=6.0"></script> -->
+    <script src="js/sidebar/pen/fabric/brushes/crayon_brush.js?v=6.0"></script>
+    <script src="js/sidebar/pen/fabric/brushes/ink_brush.js?v=6.0"></script>
+    <script src="js/sidebar/pen/fabric/brushes/marker_brush.js?v=6.0"></script>
+    <script src="js/sidebar/pen/fabric/brushes/spray_brush.js?v=6.0"></script>
+    <script src="js/sidebar/pen/fabric/brushes/drip.js?v=6.0"></script>
+    <script src="js/sidebar/pen/fabric/brushes/stroke.js?v=6.0"></script>
     <!-- <script src="js/sidebar/pen/fabric/brushes/sample_brash.js"></script> -->
 
-    <!-- <script src="js/sidebar/pen/fabric/brushes/outlineBrush.js?v=5.9"></script> -->
+    <!-- <script src="js/sidebar/pen/fabric/brushes/outlineBrush.js?v=6.0"></script> -->
     <link rel="stylesheet" href="third/intro/introjs.min.css">
     <link rel="stylesheet" href="css/ui/intro.css?">
     <script src="third/tippy/popper.min.js"></script>
     <script src="third/tippy/tippy-bundle.umd.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script> -->
-    <link rel="stylesheet" href="css/styles-css.css?v=5.9">
-    <script src="js/core/Settings.js?v=5.9" defer></script>
+    <link rel="stylesheet" href="css/styles-css.css?v=6.0">
+    <script src="js/core/Settings.js?v=6.0" defer></script>
     <script src="third/jszip/jszip.min.js" defer></script>
     <script src="third/crypto-js/crypto-js.min.js"></script>
     <script src="third/Bootstrup/bootstrap.bundle.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     
-    <script src="js/ui/glfxUI.js?v=5.9" defer></script>
-    <script src="js/ui/canvasObjectMenu.js?v=5.9" defer></script>
-    <script src="js/ui/third/intro.js?v=5.9" defer></script>
-    <script src="js/ui/toast.js?v=5.9" defer></script>
-    <script src="js/ui/util/uiUtil.js?v=5.9" defer></script>
-    <script src="js/ui/third/tippy.js?v=5.9" defer></script>
-    <script src="js/ui/third/i18next.js?v=5.9" defer></script>
-    <script src="js/ui/util/modeChange.js?v=5.9" defer></script>
-    <script src="js/ui/util/tagifyUtil.js?v=5.9" defer></script>
-    <script src="js/ui/imagePromptHelper/promptHelper.js?v=5.9" defer></script>
-    <script src="js/ui/imagePromptHelper/hc-ImagePromptHelper.js?v=5.9" defer></script>
-    <script src="js/ui/imagePromptHelper/ImagePromptHelper.js?v=5.9" defer></script>
-    <script src="js/ui/ai/Prompt.js?v=5.9" defer></script>
+    <script src="js/ui/glfxUI.js?v=6.0" defer></script>
+    <script src="js/ui/canvasObjectMenu.js?v=6.0" defer></script>
+    <script src="js/ui/third/intro.js?v=6.0" defer></script>
+    <script src="js/ui/toast.js?v=6.0" defer></script>
+    <script src="js/ui/util/uiUtil.js?v=6.0" defer></script>
+    <script src="js/ui/third/tippy.js?v=6.0" defer></script>
+    <script src="js/ui/third/i18next.js?v=6.0" defer></script>
+    <script src="js/ui/util/modeChange.js?v=6.0" defer></script>
+    <script src="js/ui/util/tagifyUtil.js?v=6.0" defer></script>
+    <script src="js/ui/imagePromptHelper/promptHelper.js?v=6.0" defer></script>
+    <script src="js/ui/imagePromptHelper/hc-ImagePromptHelper.js?v=6.0" defer></script>
+    <script src="js/ui/imagePromptHelper/ImagePromptHelper.js?v=6.0" defer></script>
+    <script src="js/ui/ai/Prompt.js?v=6.0" defer></script>
 
-    <script src="js/ui/overlayProgress.js?v=5.9" defer></script>
+    <script src="js/ui/overlayProgress.js?v=6.0" defer></script>
 
-    <script src="js/ui/custom-html-component.js?v=5.9" defer></script>
-    <!-- <script src="js/ui/cursor.js?v=5.9" defer></script> -->
-    <script src="js/core/util/LoadUtil.js?v=5.9" defer></script>
-    <script src="js/core/util/JsUtil.js?v=5.9" defer></script>
-    <script src="js/core/util/FabricUtil.js?v=5.9" defer></script>
-    <script src="js/core/util/ImageUtil.js?v=5.9" defer></script>
-    <script src="js/core/util/AnimeUtil.js?v=5.9" defer></script>
-    <script src="js/core/util/ShareUtil.js?v=5.9" defer></script>
-    <script src="js/core/util/LogUtil.js?v=5.9" defer></script>
-    <script src="js/core/util/ImageAnalyzerUtil.js?v=5.9" defer></script>
-    <script src="js/CanvasManager.js?v=5.9" defer></script>
-    <script src="js/ProjectManagement.js?v=5.9" defer></script>
-    <script src="js/Shortcut.js?v=5.9" defer></script>
-    <script src="js/panel/Grid.js?v=5.9" defer></script>
-    <script src="js/panel/RandamCut.js?v=5.9" defer></script>
-    <script src="js/sidebar/panel/PanelManager.js?v=5.9" defer></script>
-    <script src="js/sidebar/panel/PanelTemplate.js?v=5.9" defer></script>
-    <script src="js/ui/promptManager.js?v=5.9" defer></script>
-    <script src="js/ai/Role/AIRoles.js?v=5.9" defer></script>
-    <script src="js/ai/queue/Spinner.js?v=5.9" defer></script>
-    <script src="js/ai/queue/TaskQueue.js?v=5.9" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=5.9" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=5.9" defer></script>
-    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=5.9" defer></script>
-    <script src="js/ai/ComfyUI/util/ComfyUtil.js?v=5.9" defer></script>
-    <script src="js/ai/ComfyUI/util/ComfyUIWorkflowBuilder.js?v=5.9" defer></script>
-    <script src="js/ai/ComfyUI/ComfyuiManagement.js?v=5.9" defer></script>
-    <script src="js/ai/GenerativeAI.js?v=5.9" defer></script>
-    <script src="js/ai/ui/AiUIUtil.js?v=5.9" defer></script>
-    <script src="js/ai/prompt/BaseEventListener.js?v=5.9" defer></script>
-    <script src="js/layer/FloatingWindowManagement.js?v=5.9" defer></script>
-    <script src="js/layer/LayerButton.js?v=5.9" defer></script>
-    <script src="js/layer/LayerManagement.js?v=5.9" defer></script>
-    <script src="js/layer/ImageHistoryManagement.js?v=5.9" defer></script>
-    <script src="js/layer/blend/Blend.js?v=5.9" defer></script>
+    <script src="js/ui/custom-html-component.js?v=6.0" defer></script>
+    <!-- <script src="js/ui/cursor.js?v=6.0" defer></script> -->
+    <script src="js/core/util/LoadUtil.js?v=6.0" defer></script>
+    <script src="js/core/util/JsUtil.js?v=6.0" defer></script>
+    <script src="js/core/util/FabricUtil.js?v=6.0" defer></script>
+    <script src="js/core/util/ImageUtil.js?v=6.0" defer></script>
+    <script src="js/core/util/AnimeUtil.js?v=6.0" defer></script>
+    <script src="js/core/util/ShareUtil.js?v=6.0" defer></script>
+    <script src="js/core/util/LogUtil.js?v=6.0" defer></script>
+    <script src="js/core/util/ImageAnalyzerUtil.js?v=6.0" defer></script>
+    <script src="js/CanvasManager.js?v=6.0" defer></script>
+    <script src="js/ProjectManagement.js?v=6.0" defer></script>
+    <script src="js/Shortcut.js?v=6.0" defer></script>
+    <script src="js/panel/Grid.js?v=6.0" defer></script>
+    <script src="js/panel/RandamCut.js?v=6.0" defer></script>
+    <script src="js/sidebar/panel/PanelManager.js?v=6.0" defer></script>
+    <script src="js/sidebar/panel/PanelTemplate.js?v=6.0" defer></script>
+    <script src="js/ui/promptManager.js?v=6.0" defer></script>
+    <script src="js/ai/Role/AIRoles.js?v=6.0" defer></script>
+    <script src="js/ai/queue/Spinner.js?v=6.0" defer></script>
+    <script src="js/ai/queue/TaskQueue.js?v=6.0" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISettings.js?v=6.0" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUIMultiCallApi.js?v=6.0" defer></script>
+    <script src="js/ai/SDWebUI/SDWebUISingleCallApi.js?v=6.0" defer></script>
+    <script src="js/ai/ComfyUI/util/ComfyUtil.js?v=6.0" defer></script>
+    <script src="js/ai/ComfyUI/util/ComfyUIWorkflowBuilder.js?v=6.0" defer></script>
+    <script src="js/ai/ComfyUI/ComfyuiManagement.js?v=6.0" defer></script>
+
+    <script src="js/ai/AISettings.js?v=6.0" defer></script>
+    <script src="js/ai/AIManagement.js?v=6.0" defer></script>
+
+    <script src="js/ai/ui/AiUIUtil.js?v=6.0" defer></script>
+    <script src="js/ai/prompt/BaseEventListener.js?v=6.0" defer></script>
+    <script src="js/layer/FloatingWindowManagement.js?v=6.0" defer></script>
+    <script src="js/layer/LayerButton.js?v=6.0" defer></script>
+    <script src="js/layer/LayerManagement.js?v=6.0" defer></script>
+    <script src="js/layer/ImageHistoryManagement.js?v=6.0" defer></script>
+    <script src="js/layer/blend/Blend.js?v=6.0" defer></script>
     
-    <script src="js/sidebar/SidebarUi.js?v=5.9" defer></script>
-    <script src="js/sidebar/Sidebar.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/TextEffect.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/VerticalText.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/VerticalTextbox.js?v=5.9"></script>
+    <script src="js/sidebar/SidebarUi.js?v=6.0" defer></script>
+    <script src="js/sidebar/Sidebar.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/TextEffect.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/VerticalText.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/VerticalTextbox.js?v=6.0"></script>
 
-    <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=5.9" defer></script>
-    <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=5.9" defer></script>
-    <script src="js/sidebar/speechBubble/SpeechBubbleText.js?v=5.9" defer></script>    
-    <script src="js/sidebar/pen/OriginalBrush.js?v=5.9" defer></script>
-    <script src="js/sidebar/pen/PenTools.js?v=5.9" defer></script>
-    <script src="js/sidebar/tone/ToneManager.js?v=5.9" defer></script>
-    <script src="js/sidebar/tone/speedline.js?v=5.9" defer></script>
-    <script src="js/sidebar/tone/focusline.js?v=5.9" defer></script>
-    <script src="js/sidebar/tone/tone.js?v=5.9" defer></script>
-    <script src="js/sidebar/tone/toneNoise.js?v=5.9" defer></script>
-    <script src="js/sidebar/tone/snowTone.js?v=5.9" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleEffect.js?v=6.0" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleFreeHand.js?v=6.0" defer></script>
+    <script src="js/sidebar/speechBubble/SpeechBubbleText.js?v=6.0" defer></script>    
+    <script src="js/sidebar/pen/OriginalBrush.js?v=6.0" defer></script>
+    <script src="js/sidebar/pen/PenTools.js?v=6.0" defer></script>
+    <script src="js/sidebar/tone/ToneManager.js?v=6.0" defer></script>
+    <script src="js/sidebar/tone/speedline.js?v=6.0" defer></script>
+    <script src="js/sidebar/tone/focusline.js?v=6.0" defer></script>
+    <script src="js/sidebar/tone/tone.js?v=6.0" defer></script>
+    <script src="js/sidebar/tone/toneNoise.js?v=6.0" defer></script>
+    <script src="js/sidebar/tone/snowTone.js?v=6.0" defer></script>
 
-    <script src="js/sidebar/text/Text2Manager.js?v=5.9" defer></script>
-
-
-    <!-- <script src="js/sidebar/text/CustomShadowText.js?v=5.9" defer></script> -->
-    <script src="js/sidebar/text/custom/CustomTextUtil.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-aurora-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-broken-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-cloud-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-layered-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-mesh-text.js?v=5.9" defer></script>
-    <!-- <script src="js/sidebar/text/custom/optimized-nightlights-text.js?v=5.9" defer></script> -->
-    <script src="js/sidebar/text/custom/optimized-scratch-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-shadow-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-thrill-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-wild-text.js?v=5.9" defer></script>
-    <script src="js/sidebar/text/custom/optimized-zebra-text.js?v=5.9" defer></script>
+    <script src="js/sidebar/text/Text2Manager.js?v=6.0" defer></script>
 
 
-    <script src="js/sidebar/effect/EffectManager.js?v=5.9" defer></script>
-    <script src="js/sidebar/effect/c2bw_tone.js?v=5.9" defer></script>
-    <script src="js/sidebar/effect/c2c.js?v=5.9" defer></script>
+    <!-- <script src="js/sidebar/text/CustomShadowText.js?v=6.0" defer></script> -->
+    <script src="js/sidebar/text/custom/CustomTextUtil.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-aurora-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-broken-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-cloud-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-layered-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-mesh-text.js?v=6.0" defer></script>
+    <!-- <script src="js/sidebar/text/custom/optimized-nightlights-text.js?v=6.0" defer></script> -->
+    <script src="js/sidebar/text/custom/optimized-scratch-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-shadow-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-thrill-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-wild-text.js?v=6.0" defer></script>
+    <script src="js/sidebar/text/custom/optimized-zebra-text.js?v=6.0" defer></script>
 
-    <script src="js/sidebar/panel/Knife.js?v=5.9" defer></script>
-    <script src="js/ui/controle/CommonControleManagement.js?v=5.9" defer></script>
-    <script src="js/ui/controle/ImageControleManager.js?v=5.9" defer></script>
-    <script src="js/ui/controle/InfomationControle.js?v=5.9" defer></script>
-    <script src="js/ui/controle/glfxControle.js?v=5.9" defer></script>
-    <!-- <script src="js/effect/roughHelper.js?v=5.9" defer></script> -->
-    <script src="js/fabric/FabricManagement.js?v=5.9" defer></script>
-    <script src="js/core/svg/GoogleIconNames.js?v=5.9"></script>
-    <script src="js/core/svg/GoogleIconHelper.js?v=5.9"></script>
-    <script src="js/svg/MangaPanelsImage_Landscape.js?v=5.9" defer></script>
-    <script src="js/svg/MangaPanelsImage_Vertical.js?v=5.9" defer></script>
-    <script src="js/svg/SpeechBubble.js?v=5.9" defer></script>
-    <script src="js/ui/bottomBar.js?v=5.9" defer></script>
 
-    <script src="js/ai/ComfyUI/workflow/T2I_Flux.js?v=5.9" defer></script>
-    <script src="js/ai/ComfyUI/workflow/T2I_SDXL.js?v=5.9" defer></script>
+    <script src="js/sidebar/effect/EffectManager.js?v=6.0" defer></script>
+    <script src="js/sidebar/effect/c2bw_tone.js?v=6.0" defer></script>
+    <script src="js/sidebar/effect/c2c.js?v=6.0" defer></script>
 
-    <script src="js/ai/prompt/auto/PromptMap.js?v=5.9" defer></script>
-    <script src="js/ai/prompt/auto/StoryPromptMap.js?v=5.9" defer></script>
-    <script src="js/ai/prompt/auto/AutoPromptUtil.js?v=5.9" defer></script>
-    <script src="js/ai/prompt/auto/AutoGeneration.js?v=5.9" defer></script>
+    <script src="js/sidebar/panel/Knife.js?v=6.0" defer></script>
+    <script src="js/ui/controle/CommonControleManagement.js?v=6.0" defer></script>
+    <script src="js/ui/controle/ImageControleManager.js?v=6.0" defer></script>
+    <script src="js/ui/controle/InfomationControle.js?v=6.0" defer></script>
+    <script src="js/ui/controle/glfxControle.js?v=6.0" defer></script>
+    <!-- <script src="js/effect/roughHelper.js?v=6.0" defer></script> -->
+    <script src="js/fabric/FabricManagement.js?v=6.0" defer></script>
+    <script src="js/core/svg/GoogleIconNames.js?v=6.0"></script>
+    <script src="js/core/svg/GoogleIconHelper.js?v=6.0"></script>
+    <script src="js/svg/MangaPanelsImage_Landscape.js?v=6.0" defer></script>
+    <script src="js/svg/MangaPanelsImage_Vertical.js?v=6.0" defer></script>
+    <script src="js/svg/SpeechBubble.js?v=6.0" defer></script>
+    <script src="js/ui/bottomBar.js?v=6.0" defer></script>
+
+    <script src="js/ai/ComfyUI/workflow/T2I_Flux.js?v=6.0" defer></script>
+    <script src="js/ai/ComfyUI/workflow/T2I_SDXL.js?v=6.0" defer></script>
+
+    <script src="js/ai/prompt/auto/PromptMap.js?v=6.0" defer></script>
+    <script src="js/ai/prompt/auto/StoryPromptMap.js?v=6.0" defer></script>
+    <script src="js/ai/prompt/auto/AutoPromptUtil.js?v=6.0" defer></script>
+    <script src="js/ai/prompt/auto/AutoGeneration.js?v=6.0" defer></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 
-    <script src="js/db/user-font-repository.js?v=5.9" defer></script>
-    <script src="js/ui/font/user-font-manager.js?v=5.9" defer></script>
-    <script src="js/core/font/font-manager-core.js?v=5.9" defer></script>
-    <script src="js/core/font/font-dropdown.js?v=5.9" defer></script>
+    <script src="js/db/user-font-repository.js?v=6.0" defer></script>
+    <script src="js/ui/font/user-font-manager.js?v=6.0" defer></script>
+    <script src="js/core/font/font-manager-core.js?v=6.0" defer></script>
+    <script src="js/core/font/font-dropdown.js?v=6.0" defer></script>
 
 
 <script>

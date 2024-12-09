@@ -32,7 +32,7 @@ const sdwebui_T2IProcessQueue = (layer, spinnerId) => processQueue(layer, spinne
 const sdwebui_I2IProcessQueue = (layer, spinnerId) => processQueue(layer, spinnerId, sdwebui_fetchImage2Image, "i2i");
 
 async function sdwebui_fetchText2Image(layer) {
-  return post(sdWebUI_API_T2I, baseRequestData(layer));
+  return post(sdWebUIUrls.t2i, baseRequestData(layer));
 }
 
 async function sdwebui_fetchImage2Image(layer) {
@@ -43,7 +43,7 @@ async function sdwebui_fetchImage2Image(layer) {
     denoising_strength: layer.img2img_denoise
   };
   console.log( "sdwebui_fetchImage2Image requestData", requestData );
-  return post(sdWebUI_API_I2I, requestData);
+  return post(sdWebUIUrls.i2i, requestData);
 }
 
 async function post(url, requestData) {
@@ -100,7 +100,7 @@ async function sdwebui_removeBackground(layer) {
 
   const requestData = rembgRequestData(layer);
   requestData.input_image = base64Image.split(',')[1];
-  const response = await post(sdWebUI_API_rembg, requestData);
+  const response = await post(sdWebUIUrls.rembg, requestData);
 
   if (typeof response === 'object' && response.hasOwnProperty('image')) {
     return response.image;
@@ -122,6 +122,7 @@ async function handleSuccessfulRembg(responseData, layer) {
         const { centerX, centerY } = calculateCenter(layer);
         putImageInFrame(img, centerX, centerY);
         resolve(img);
+        visibleChange(layer);
       } else {
         reject(new Error('Failed to create a fabric.Image object from rembg result'));
       }
