@@ -262,7 +262,7 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
 
   console.log("comfyuiQueue Workflow", JSON.stringify(workflow));
 
-  comfyuiQueue.add(async () => Comfyui_put_queue(workflow))
+  return comfyuiQueue.add(async () => Comfyui_put_queue(workflow))
     .then(async (result) => {
       if (result && result.error) {
         createToastError("Generation Error", result.message);

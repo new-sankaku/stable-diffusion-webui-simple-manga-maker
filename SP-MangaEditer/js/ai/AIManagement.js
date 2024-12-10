@@ -32,11 +32,11 @@ function existsWaitQueue() {
 }
 
 
-function T2I( layer, spinner ){
+async function T2I( layer, spinner ){
   if (API_mode == apis.A1111) {
     sdwebui_T2IProcessQueue(layer, spinner.id);
   }else if (API_mode == apis.COMFYUI){
-    Comfyui_handle_process_queue(layer, spinner.id);
+    return Comfyui_handle_process_queue(layer, spinner.id);
   }
 }
 function I2I( layer, spinner ){
