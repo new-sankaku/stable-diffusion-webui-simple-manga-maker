@@ -324,7 +324,7 @@ function highlightActiveLayer(activeIndex) {
 }
 
 function highlightActiveLayerByCanvas(object=null) {
-  console.log("highlightActiveLayerByCanvas");
+  // console.log("highlightActiveLayerByCanvas");
   let activeObject;
   if(object){
     activeObject = object;

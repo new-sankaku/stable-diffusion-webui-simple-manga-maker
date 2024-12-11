@@ -102,6 +102,9 @@ canvas.on('mouse:move', function (options) {
 
 
 function blindSplitPanel( panel, isVertical){
+
+  const canvasArea = canvas.width * canvas.height;
+
   var centerX = getCenterXByFabricObject(panel);
   var centerY = getCenterYByFabricObject(panel);
 
@@ -123,7 +126,6 @@ function blindSplitPanel( panel, isVertical){
   const randomInt = Math.floor(Math.random() * (changeRate*2+1)) - changeRate;
   // console.log("randomInt", randomInt);
 
-
   if(isVertical){
     centerX = centerX + randomInt;
     angle = ((Math.random() * tiltRandom - halfTilt) + 90) * (Math.PI / 180);
@@ -139,16 +141,54 @@ function blindSplitPanel( panel, isVertical){
   // console.log("getPointAtDistance centerX, centerY, x, y", Math.floor(centerX), Math.floor(centerY), Math.floor(pointAtpx.x), Math.floor(pointAtpx.y));
 
   var blindLine = drawLine(centerX, centerY, pointAtpx.x , pointAtpx.y, panel);
-  
+
   if(blindLine !== null){
+
     // console.log("blindLine.x1 ", blindLine.x1);
     // console.log("blindLine.x2 ", blindLine.x2);
     // console.log("blindLine.y1 ", blindLine.y1);
     // console.log("blindLine.y2 ", blindLine.y2);  
-    var isSplit = splitPolygon(panel);
+    const {isSplit, polygon1, polygon2} = splitPolygon(panel);
     if( isSplit ){
-      canvas.renderAll();
-      // console.log("ラインが引けた スプリット成功");
+
+      const area1CanvasRatio = (polygon1.width * polygon1.height) / canvasArea
+      const area2CanvasRatio = (polygon2.width * polygon2.height) / canvasArea
+      const area1AspectRatio = polygon1.width / polygon1.height;
+      const area2AspectRatio = polygon2.width / polygon2.height;
+
+      // if( area1CanvasRatio <= 0.06 ){
+      //   //小さすぎる
+      //   canvas.add(setNotSave(panel));
+      //   canvas.remove(setNotSave(polygon1));
+      //   canvas.remove(setNotSave(polygon2));
+      //   canvas.requestRenderAll();
+      //   return false;
+      // }
+      // if( area2CanvasRatio <= 0.06 ){
+      //   //小さすぎる
+      //   canvas.add(setNotSave(panel));
+      //   canvas.remove(setNotSave(polygon1));
+      //   canvas.remove(setNotSave(polygon2));
+      //   canvas.requestRenderAll();
+      //   return false;
+      // }
+
+      if( area1AspectRatio <= 0.27 || area1AspectRatio >= 3.45){
+        //比率が不自然
+        // console.log("比率が不自然 Area1, " + area1AspectRatio, polygon1.width, polygon1.height, (isVertical?"vertical":"horizontal"));
+        canvas.add(setNotSave(panel));
+        canvas.remove(setNotSave(polygon1));
+        canvas.remove(setNotSave(polygon2));
+        return false;
+      }
+      if( area2AspectRatio <= 0.27 || area2AspectRatio >= 3.45 ){
+        //比率が不自然
+        // console.log("比率が不自然 Area2, " + area2AspectRatio, polygon2.width, polygon2.height, (isVertical?"vertical":"horizontal"));
+        canvas.add(setNotSave(panel));
+        canvas.remove(setNotSave(polygon1));
+        canvas.remove(setNotSave(polygon2));
+        return false;
+      }
       return true;
     }else{
       // console.log("ラインが引けた スプリット失敗");
@@ -158,6 +198,8 @@ function blindSplitPanel( panel, isVertical){
   }
   return false;
 }
+
+
 
 var knifeAssistAngle = 3;
 var currentKnifeObject = null;
@@ -727,7 +769,7 @@ function calculatePolygonCentroid(polygon) {
 
 function splitPolygon(polygon) {
   if (!polygon || !polygon.points) {
-    return null;
+    return {isSplit:false, polygon1:null, polygon2:null};
   }
   var points = pointsAdjusted(polygon.points)
 
@@ -796,7 +838,8 @@ function splitPolygon(polygon) {
       // console.log("LINESTRING extendLength ", extendLength);
 
       if ([...splitPoint1, ...splitPoint2, extendX, extendY].some(isNaN)) {
-        return null;
+        return {isSplit:false, polygon1:null, polygon2:null};
+
       }
 
       // var extendedLine = reader.read('LINESTRING(' + (splitPoint1[0] - extendX) + ' ' + (splitPoint1[1] - extendY) + ', ' + (splitPoint2[0] + extendX) + ' ' + (splitPoint2[1] + extendY) + ')');
@@ -843,7 +886,7 @@ function splitPolygon(polygon) {
     } else {
       setNotSave(currentKnifeLine);
       canvas.remove(currentKnifeLine);
-      return null;
+      return {isSplit:false, polygon1:null, polygon2:null};
     }
 
     newPolygon1Points = resultLine[0];
@@ -903,7 +946,7 @@ function splitPolygon(polygon) {
     } else {
       setNotSave(currentKnifeLine);
       canvas.remove(currentKnifeLine);
-      return null;
+      return {isSplit:false, polygon1:null, polygon2:null};
     }
 
     var strokeWidthScale = canvas.width / 700;
@@ -954,6 +997,6 @@ function splitPolygon(polygon) {
     currentKnifeObject = null;
     currentKnifeLine = null;
 
-    return true;
+    return {isSplit:true, polygon1:polygon1, polygon2:polygon2};
   }
 }

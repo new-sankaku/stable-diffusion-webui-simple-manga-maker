@@ -1,4 +1,8 @@
 function generateRandomInt(maxValue) {
+  if(maxValue == 0){
+    return 0;
+  }
+  
   const intMaxValue = parseInt(maxValue, 10);
   if (isNaN(intMaxValue)) {
       return 0;
