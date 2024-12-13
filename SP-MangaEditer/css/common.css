@@ -104,19 +104,7 @@ body {
  margin-right: 0;
 }
 
-.floating-window {
- position: fixed;
- width: 450px;
- height: 450px;
- bottom: 100px;
- left: 100px;
- background-color: var(--background-color-A);
- border: var(--color-window-border);
- box-shadow: var(--box-shadow-window);
- z-index: 1000;
- display: none;
- padding: 10px;
-}
+
 
 .header {
  cursor: move;
@@ -124,13 +112,6 @@ body {
  width: 100%;
  height: 100%;
  border-bottom: 1px solid var(--boader-color-A);
-}
-
-.close-btn {
- float: right;
- cursor: pointer;
- padding: 0 5px;
- line-height: 20px;
 }
 
 .dynamic-font {

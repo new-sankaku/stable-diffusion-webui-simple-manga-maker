@@ -319,14 +319,3 @@ prompt-manager-area
  background: var(--svg-preview-background);
 }
 
-#vertical_textInput {
- width: 100%;
- height: var(--textarea-height);
- border: var(--boader-color-1px-solid-A);
- border-radius: var(--textarea-border-radius);
- box-sizing: border-box;
- resize: vertical;
- font-size: var(--font-size-base);
- writing-mode: vertical-rl;
- text-orientation: upright;
-}

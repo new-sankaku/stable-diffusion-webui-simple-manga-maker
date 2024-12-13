@@ -1,6 +1,7 @@
 @import url('root.css');
 
 .controls-mini {
+  min-height: 100%;
   max-width: 100%;
 }
 .controls-mini .control {
