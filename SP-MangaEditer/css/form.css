@@ -5,10 +5,6 @@ body {
  color: var(--text-color-B);
 }
 
-#head-id {
- background-color: var(--background-color-A);
-}
-
 hr {
  height: 3px;
  margin: 4px !important;
@@ -18,45 +14,6 @@ hr {
 .ms-auto {
  margin-right: 10px;
 }
-
-.custom-navbar,
-.navbar {
- background-color: var(--background-color-A);
- color: var(--text-color-B);
- height: 35px;
-}
-
-.custom-navbar .navbar-brand,
-.custom-navbar .nav-link,
-.custom-navbar .dropdown-item {
- color: var(--text-color-B);
-}
-
-.custom-navbar .dropdown-menu {
- background-color: var(--background-color-A);
- border-color: var(--nav-border);
- border-width: 2px;
- min-width: 350px;
-}
-
-.custom-navbar .dropdown-item:hover {
- background-color: var(--nav-background-hover-color);
- color: var(--text-color-B);
-}
-
-.custom-navbar .navbar-toggler {
- border-color: var(--nav-border);
-}
-
-.custom-navbar .navbar-toggler-icon {
- background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath stroke="rgba%28255, 255, 255, 1%29" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
-}
-
-
-.custom-navbar label {
- color: var(--text-color-B);
-}
-
 
 .file-input-label {
  display: inline-block;

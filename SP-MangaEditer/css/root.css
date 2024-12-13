@@ -123,6 +123,10 @@
 }
 
 :root {
+  
+  --nav-height:                           calc(100vh - 96vh);
+  --main-height:                          calc(100vh - 4vh);
+
   --fjm-padding:                          2px;
   --fjm-z-index:                          1000;
   --fjm-border-radius:                    0;

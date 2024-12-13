@@ -45,9 +45,3 @@
 .layer-buttons {
  margin: var(--margin-5px);
 }
-
-#layer-panel {
- min-width: var(--min-width-layer-panel);
- max-width: var(--max-width-layer-panel);
- flex: var(--flex-layer-panel);
-}

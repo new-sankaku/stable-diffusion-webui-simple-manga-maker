@@ -10,16 +10,6 @@
  margin-top: var(--margin-top-group);
 }
 
-#controls {
- font-size: var(--font-size-controls);
- min-width: var(--min-width-controls);
- max-width: var(--max-width-controls);
- margin-left: var(--margin-sides-controls);
- margin-right: var(--margin-sides-controls);
- overflow-x: hidden;
-
-}
-
 .panel {
   padding-top: var(--padding-sides-panel);
   margin-bottom: var(--margin-bottom-panel);
