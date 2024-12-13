@@ -220,6 +220,12 @@ function createTextbox() {
     stroke: $("textOutlineColorPicker").value,
     strokeWidth: parseInt(fontStrokeWidth),
     textAlign: selectedValue,
+
+    cornerSize: 8,
+    transparentCorners: false,
+    cornerStyle: 'circle',
+    borderScaleFactor: 2,
+    padding: 10,
   });
 
   textbox.on('text:changed', function () {
@@ -229,6 +235,7 @@ function createTextbox() {
 
   canvas.add(textbox);
   canvas.setActiveObject(textbox);
+  canvas.requestRenderAll();
   // updateLayerPanel();
 }
 

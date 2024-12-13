@@ -17,6 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
       stroke: $("textOutlineColorPicker").value,
       strokeWidth: parseInt(fontStrokeWidth),
       textAlign: selectedValue,
+
+      cornerSize: 8,
+      transparentCorners: false,
+      cornerStyle: 'circle',
+      borderScaleFactor: 2,
+      padding: 10,
+  
     };
     
     const cjkText = new VerticalTextbox("new", style);
