@@ -3,8 +3,7 @@
 const resources = {
   ja: {
     translation: {
-      pwa_install:"Web appインストール",
-      pwa_uninstall:"Web appアンインストール",
+pwa_install:"Web appインストール",
 
 ft_addLocalFontTitle_warning:"登録できない場合は英語名にしてください。",
 ft_addText: "テキストを追加",
@@ -492,6 +491,7 @@ ft_placeholderWeb: "https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&fam
   },
 en: {
     translation: {
+      "pwa_install":"Install Web app",
       ft_addLocalFontTitle_warning: "If you cannot register, please use an English name.",
       ft_addText: "Add Text",
       ft_editFonts: "Edit Font List",
@@ -1061,6 +1061,7 @@ en: {
   },
   ko: {
 translation: {
+  "pwa_install":"웹 앱 설치",
   ft_addLocalFontTitle_warning: "등록할 수 없는 경우 영어 이름을 사용하세요.",
   ft_addText: "텍스트 추가",
   ft_editFonts: "글꼴 목록 편집",
@@ -1551,6 +1552,7 @@ translation: {
   },
   fr: {
     translation: {
+      "pwa_install":"Installer l'application Web",
       ft_addLocalFontTitle_warning: "Si vous ne pouvez pas enregistrer, utilisez un nom en anglais.",
       ft_addText: "Ajouter du texte",
       ft_editFonts: "Modifier la liste des polices",
@@ -2073,6 +2075,7 @@ translation: {
   },
   zh: {
     translation: {
+      "pwa_install":"安装网页应用",
       ft_addLocalFontTitle_warning: "如果无法注册，请使用英文名称。",
       ft_addText: "添加文本",
       ft_editFonts: "编辑字体列表",
@@ -2595,6 +2598,7 @@ translation: {
   },
   ru: {
     translation: {
+      "pwa_install":"Установить веб-приложение",
       ft_addLocalFontTitle_warning: "Если не удается зарегистрировать, используйте английское имя.",
       ft_addText: "Добавить текст",
       ft_editFonts: "Редактировать список шрифтов",
@@ -3066,6 +3070,7 @@ translation: {
   },
   es: {
     translation: {
+      "pwa_install":"Instalar aplicación web",
       ft_addLocalFontTitle_warning: "Si no puedes registrar, usa un nombre en inglés.",
       ft_addText: "Agregar texto",
       ft_editFonts: "Editar lista de fuentes",
@@ -3536,6 +3541,7 @@ translation: {
   },
   pt: {
     translation: {
+      "pwa_install":"Instalar aplicativo web",
       ft_addLocalFontTitle_warning: "Se não for possível registrar, use um nome em inglês.",
       ft_addText: "Adicionar texto",
       ft_editFonts: "Editar lista de fontes",
@@ -4007,6 +4013,7 @@ translation: {
   },
 th: {
 translation: {
+  "pwa_install":"ติดตั้งแอพเว็บ",
   ft_addLocalFontTitle_warning: "หากไม่สามารถลงทะเบียนได้ โปรดใช้ชื่อภาษาอังกฤษ.",
   ft_addText: "เพิ่มข้อความ",
   ft_editFonts: "แก้ไขรายการแบบอักษร",
@@ -4528,6 +4535,7 @@ translation: {
   },
     de: {
 "translation": {
+  "pwa_install":"Web-App installieren",
   ft_addLocalFontTitle_warning: "Wenn Sie sich nicht registrieren können, verwenden Sie bitte einen englischen Namen.",
   ft_addText: "Text hinzufügen",
   ft_editFonts: "Schriftartenliste bearbeiten",
