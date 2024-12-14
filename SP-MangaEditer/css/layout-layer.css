@@ -10,7 +10,7 @@
 .layer-item {
  display: flex;
  align-items: center;
- padding: var(--padding-5px);
+ padding: var(--layer-item-padding);
  border-bottom: var(--boader-color-1px-solid-A);
  transition: var(--transition-bg-color);
 }
@@ -40,8 +40,4 @@
  overflow: hidden;
  text-overflow: ellipsis;
  white-space: nowrap;
-}
-
-.layer-buttons {
- margin: var(--margin-5px);
 }

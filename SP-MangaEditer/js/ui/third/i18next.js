@@ -3,8 +3,10 @@
 const resources = {
   ja: {
     translation: {
-pwa_install:"Web appインストール",
 
+
+onePanelGenerateNumber:"1パネルの生成数",
+pwa_install:"Web appインストール",
 ft_addLocalFontTitle_warning:"登録できない場合は英語名にしてください。",
 ft_addText: "テキストを追加",
 ft_editFonts: "フォントリスト編集",

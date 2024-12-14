@@ -60,7 +60,7 @@ function updateLayerPanel() {
     }
   });
 
-
+  let isEven = true;
 
   // レイヤーパネルの更新
   finalLayerOrder.forEach((layer, index) => {
@@ -148,15 +148,20 @@ function updateLayerPanel() {
       var isMatchingLayer = layers.some(layerWithGUIDs => layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid));
       if (isMatchingLayer) {
         layerDiv.style.border = 'none';
-        layerDiv.style.borderLeft    = getCssValue('--boader-color-2px-solid-C');
-        layerDiv.style.borderBottom  = getCssValue('--boader-color-1px-solid-D');
-        layerDiv.style.marginLeft = "10px";
+        layerDiv.style.marginLeft = "18px";
         layerDiv.style.paddingLeft = "5px";
+        layerDiv.style.borderLeft = getCssValue('--boader-color-2px-solid-C');
       } else {
         layerDiv.style.border = 'none';
-        layerDiv.style.borderTop    = getCssValue('--layer-panel-boader-color-1px-solid-B');
-        layerDiv.style.borderBottom = getCssValue('--layer-panel-boader-color-1px-solid-B');
+        isEven = !isEven;
       }
+
+      if(isEven){
+        layerDiv.style.background=getCssValue('--odd-layer');
+      }else{
+        layerDiv.style.background=getCssValue('--even-layer');
+      }
+
       layerContent.appendChild(layerDiv);
     }
   });

@@ -81,8 +81,14 @@ function apiHeartbeat(){
 
   if (API_mode == apis.A1111) {
     sdwebui_apiHeartbeat();
-  }else if( API_mode == apis.COMFYUI ){
+  } else if(API_mode == apis.COMFYUI) {
     Comfyui_apiHeartbeat();
+  }
+
+  const label = $('ExternalService_Heartbeat_Label');
+  let announce = $('checSD_WebUI_Announce');
+  if(label.style.color === 'green') {
+    announce.style.display = 'none';
   }
 }
 

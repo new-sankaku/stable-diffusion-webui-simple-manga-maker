@@ -128,17 +128,23 @@ function updateClearButton(){
 function toggleMode() {
   const isDarkMode = document.body.classList.toggle('dark-mode');
   const logo = $('navbar-logo');
-  if (isDarkMode) {
-    document.body.classList.remove('light-mode');
-    document.body.classList.add('dark-mode');
-    localStorage.setItem('mode', 'dark-mode');
-    logo.src = '02_images_svg/Logo/black_mode_logo.webp';
-  } else {
-    document.body.classList.remove('dark-mode');
-    document.body.classList.add('light-mode');
-    localStorage.setItem('mode', 'light-mode');
-    logo.src = '02_images_svg/Logo/light_mode_logo.webp';
-  }
+
+  document.body.classList.remove('light-mode');
+  document.body.classList.add('dark-mode');
+  localStorage.setItem('mode', 'dark-mode');
+  logo.src = '02_images_svg/Logo/black_mode_logo.webp';
+
+  // if (isDarkMode) {
+  //   document.body.classList.remove('light-mode');
+  //   document.body.classList.add('dark-mode');
+  //   localStorage.setItem('mode', 'dark-mode');
+  //   logo.src = '02_images_svg/Logo/black_mode_logo.webp';
+  // } else {
+  //   document.body.classList.remove('dark-mode');
+  //   document.body.classList.add('light-mode');
+  //   localStorage.setItem('mode', 'light-mode');
+  //   logo.src = '02_images_svg/Logo/light_mode_logo.webp';
+  // }
   updateLayerPanel();
 }
 
@@ -148,7 +154,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function initializeMode() {
-  const mode = localStorage.getItem('mode') || 'dark-mode';
+  // const mode = localStorage.getItem('mode') || 'dark-mode';
+  const mode = 'dark-mode';
   document.body.classList.add(mode);
   const logo = $('navbar-logo');
   if (mode === 'dark-mode') {

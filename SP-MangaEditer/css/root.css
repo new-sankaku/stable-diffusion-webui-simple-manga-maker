@@ -11,6 +11,11 @@
   --color-hr:                #ff9532;
   --color-scllor:            #480000;
   
+
+  --odd-layer:            #0d0249;
+  --even-layer:          #450202;
+
+
   --color-scrollbar-track:                var(--color-base);
   --nav-border:                           var(--color-accent);
   --background-color-A:                   var(--color-base);
@@ -21,7 +26,7 @@
   --boader-color-1px-solid-B:             1px solid  var(--color-tertiary);
   --fjm-button-bg-color:                             var(--color-tertiary);
   --dropdown-border:                      1px solid  var(--color-tertiary);
-  --boader-color-2px-solid-C:             2px dashed var(--color-tertiary);
+  --boader-color-2px-solid-C:             2px dashed var(--color-accent-hover);
   --boader-color-1px-solid-D:             1px dashed var(--color-tertiary);
   --fjm-button-border-color:              var(--color-tertiary);
   --fjm-button-hover-bg-color:            var(--color-tertiary);
@@ -33,7 +38,7 @@
   --a-link-hover:                         var(--color-component-minitext);
   --text-border:                          var(--color-hr);
   --border-color-C:                       var(--color-tertiary);
-  --layer-panel-boader-color-1px-solid-B: 1px dashed var(--color-accent-hover:);
+  --layer-panel-boader-color-1px-solid-B: 2px dashed var(--color-accent-hover:);
   --color-dark-grey:                      var(--color-text-secondary);
   --fjm-button-color:                     var(--color-text-secondary);
   --text-color-B:                         var(--color-text-secondary);
@@ -72,7 +77,9 @@
   --color-component-minitext:             #ffffff;
   --color-hr:                             #ff9532;
   --color-scllor:                         rgb(107, 105, 90);
-  
+  --odd-layer:           rgb(210, 218, 226);
+  --even-layer:          rgb(228, 214, 224);
+
   --color-scrollbar-track:                var(--color-base);
   --nav-border:                           var(--color-base);
   --background-color-A:                   var(--color-base);
@@ -170,6 +177,20 @@
   --font-size-material-icons:             16px;
   --font-size-icon-material:              16px;
   --font-size-icon-material-outlined:     18px;
+
+
+  /* New Layer */
+  --layer-buttons-margin: 0px;
+  --layer-item-padding:2px;
+
+/* 
+
+  className: "layer-item",
+  className: "layer-preview",
+  className: "layer-details",
+  className: "layer-name",
+  className: "layer-buttons",
+ */
 
   /* Spacing - 2px */
   --padding-2:                            2px;

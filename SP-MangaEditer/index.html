@@ -560,7 +560,7 @@ function getElementClasses(element) {
                     <li class="nav-item d-flex" >
                      <button data-i18n="pwa_install" id="pwa-install-button" class="btn btn-outline-secondary me-2" style="margin-top: 5px; padding-top: 0px; padding-bottom: 0px; padding-left: 10px;padding-right: 10px;"></button>
                     </li>
-                    <li class="nav-item d-flex align-items-center my-2">
+                    <li class="nav-item d-flex align-items-center my-2 d-none">
                      <i class="fas fa-sun"></i>
                      <label class="toggle-switchTermaMode mx-2">
                       <input type="checkbox" id="mode-toggle">
@@ -571,7 +571,7 @@ function getElementClasses(element) {
                      </label>
                      <i class="fas fa-moon"></i>
                     </li>
-                   </ul>
+                </ul>
             </div>
         </nav>
 
@@ -837,18 +837,6 @@ function getElementClasses(element) {
                 <div class="area-header" data-i18n="promptManager">Prompt Manager</div>
                 <div id="prompt-manager-items">
                     <div class="input-group">
-                        <label data-i18n="scenario"></label>
-                    </div>
-                    <div class="input-group">
-                        <select id="ScenarioPromptSelecter"></select>
-                    </div>
-
-                    <button id="" onclick="autoMultiPromptSet()">
-                        <i class="material-icons">generating_tokens</i>
-                        <span data-i18n="promptMultiAutoGenerate">Multi Prompt Generate</span>
-                    </button>
-                    <hr>
-                    <div class="input-group">
                         <button id="panelRandamCutButton">
                             <span data-i18n="panelRandamCut">Randam Cut</span>
                         </button>
@@ -894,10 +882,28 @@ function getElementClasses(element) {
 
 
                     <hr>
+                    <div class="input-group">
+                        <label data-i18n="scenario"></label>
+                    </div>
+                    <div class="input-group">
+                        <select id="ScenarioPromptSelecter"></select>
+                    </div>
+
+                    <button id="" onclick="autoMultiPromptSet()">
+                        <i class="material-icons">generating_tokens</i>
+                        <span data-i18n="promptMultiAutoGenerate">Multi Prompt Generate</span>
+                    </button>
+                    <hr>
+
+                    <div class="input-container-leftSpace" data-i18n-label="onePanelGenerateNumber">
+                        <input type="range" id="onePanelGenerateNumber" name="onePanelGenerateNumber" min="1" max="10" step="1" value="1">
+                    </div>
+
                     <button id="" onclick="autoMultiGenerate()">
                         <i class="material-icons">all_inbox</i>
                         <span data-i18n="pageMultiAutoGenerate">Multi Page Generate</span>
                     </button>
+                    <hr>
                 </div>
             </div>
 
@@ -1709,7 +1715,7 @@ function getElementClasses(element) {
                             </div>
                             <textarea id="AdetilerModelsNegative" name="textarea" placeholder=" "></textarea>
                         </div>
-                        <label style="font-size: 10px;" data-i18n="checSD_WebUI_Announce"/>
+                        <label id="checSD_WebUI_Announce" style="font-size: 10px;" data-i18n="checSD_WebUI_Announce"/>
                     </div>
                 </div>
 
