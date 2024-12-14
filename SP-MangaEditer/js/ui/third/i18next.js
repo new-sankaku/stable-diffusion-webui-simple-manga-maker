@@ -3,8 +3,10 @@
 const resources = {
   ja: {
     translation: {
-      ft_addLocalFontTitle_warning:"登録できない場合は英語名にしてください。",
+      pwa_install:"Web appインストール",
+      pwa_uninstall:"Web appアンインストール",
 
+ft_addLocalFontTitle_warning:"登録できない場合は英語名にしてください。",
 ft_addText: "テキストを追加",
 ft_editFonts: "フォントリスト編集",
 ft_add: "追加",

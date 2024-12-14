@@ -1,0 +1,75 @@
+{
+  "name": "Manga Editor Desu! Pro Edition",
+  "short_name": "Manga Editor",
+  "description": "The Premier Standalone Manga Editing Platform for SD WebUI, Forge, ComfyUI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "id": "/",
+  "orientation": "any",
+  "categories": ["productivity", "utilities", "photo"],
+  "lang": "en",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "icons": [
+   {
+    "src": "/03_images/icon/icon_full_192_192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+   },
+   {
+    "src": "/03_images/icon/icon_full_512_512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "any"
+   },
+   {
+    "src": "/03_images/icon/icon_full_192_192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "maskable"
+   },
+   {
+    "src": "/03_images/icon/icon_full_512_512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "maskable"
+   }
+  ],
+  "screenshots": [
+   {
+    "src": "https://raw.githubusercontent.com/new-sankaku/SP-MangaEditer/main/03_images/PagePreview/Git/Preview.png",
+    "sizes": "1200x630",
+    "type": "image/png",
+    "platform": "wide",
+    "label": "Manga Editor Preview"
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "Start Editing",
+    "url": "/03_images/icon/",
+    "icons": [
+     {
+      "src": "/03_images/icon/icon_full_192_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+     }
+    ]
+   }
+  ],
+  "related_applications": [],
+  "share_target": {
+   "action": "/03_images/icon/",
+   "method": "GET",
+   "enctype": "application/x-www-form-urlencoded",
+   "params": {
+    "title": "title",
+    "text": "text",
+    "url": "url"
+   }
+  },
+  "handle_links": "preferred"
+  }

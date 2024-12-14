@@ -1,21 +1,48 @@
-import http.server
+from concurrent.futures import ThreadPoolExecutor
+from http.server import SimpleHTTPRequestHandler
 import socketserver
 import os
+import mimetypes
 
-class CORSRequestHandler(http.server.SimpleHTTPRequestHandler):
+mimetypes.add_type('application/javascript', '.js')
+
+class CORSRequestHandler(SimpleHTTPRequestHandler):
+    protocol_version = 'HTTP/1.1'
+    
     def end_headers(self):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET')
         self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate')
+        self.send_header('Connection', 'keep-alive')
+        self.send_header('Service-Worker-Allowed', '/')
         return super(CORSRequestHandler, self).end_headers()
-
+        
     def do_GET(self):
-        # サーバーのルートディレクトリを設定
         self.directory = os.getcwd()
-        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+        return SimpleHTTPRequestHandler.do_GET(self)
+        
+    def handle_one_request(self):
+        try:
+            super().handle_one_request()
+        except ConnectionAbortedError:
+            pass
 
-PORT = 8000
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+    request_queue_size = 500
+    timeout = 60
 
-with socketserver.TCPServer(("", PORT), CORSRequestHandler) as httpd:
-    print(f"Serving at port {PORT}")
-    httpd.serve_forever()
+if __name__ == '__main__':
+    PORT = 8000
+    ADDRESS = ""
+    socketserver.TCPServer.allow_reuse_address = True
+    
+    with ThreadedTCPServer((ADDRESS, PORT), CORSRequestHandler) as httpd:
+        with ThreadPoolExecutor(max_workers=500) as executor:
+            print(f"Server running at http://localhost:{PORT}")
+            try:
+                httpd.serve_forever()
+            except KeyboardInterrupt:
+                print("\nShutting down server...")
+                httpd.shutdown()

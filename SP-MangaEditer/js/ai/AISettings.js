@@ -7,11 +7,6 @@ let sdWebUIUrls = null;
 
 
 document.addEventListener('DOMContentLoaded', () => {
-});
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
   sdWebUI = new SDWebUIEndpoints();
   sdWebUIUrls = sdWebUI.urls;
 
