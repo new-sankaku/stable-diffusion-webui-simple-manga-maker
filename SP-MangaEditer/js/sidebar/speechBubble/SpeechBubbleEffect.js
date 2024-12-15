@@ -127,7 +127,7 @@ window.onload = function () {
                         icon: 'process',step: 'Step2',substep: 'Zip Start',progress: 20
                       });
 
-                      await btmSaveZip().then(() => {
+                      await btmSaveProjectFile().then(() => {
                         setCanvasGUID();
                         loadSVGPlusReset(item.svg);
                     });
@@ -159,7 +159,7 @@ window.onload = function () {
                     OP_updateLoadingState(loading, {
                         icon: 'process',step: 'Step2',substep: 'Zip Start',progress: 20
                       });
-                      await btmSaveZip().then(() => {
+                      await btmSaveProjectFile().then(() => {
                         setCanvasGUID();
                         loadSVGPlusReset(item.svg, true);
                     });

@@ -9,7 +9,7 @@ async function loadBookSize(width, height, addPanel, newPage=false) {
         icon: 'process',step: 'Step2',substep: 'Zip Start',progress: 40
       });
 
-      await btmSaveZip().then(() => {
+      await btmSaveProjectFile().then(() => {
         setCanvasGUID();
       });
       OP_updateLoadingState(loading, {

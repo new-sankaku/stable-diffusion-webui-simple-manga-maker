@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="compressionArea">
+ <div id="dropZone" class="zone">
+  <p>ファイルをドラッグ&ドロップまたはクリックして選択</p>
+  <p><small>複数選択可能</small></p>
+  <input type="file" id="fileInput" style="display:none" multiple>
+ </div>
+ <div id="selectedFiles" class="files"></div>
+ <button id="compressButton" class="btn" disabled>圧縮</button>
+</div>
+<script src="wasm.js"></script>
+<script src="lz4asm.js"></script>
+<script src="lz4wasm.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let files = [], lz4Module = null;
+
+function base64ToArrayBuffer(base64) {
+ const binaryString = atob(base64);
+ const bytes = new Uint8Array(binaryString.length);
+ for(let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+ return bytes.buffer;
+}
+
+async function initialize() {
+ try {
+  const wasmBuffer = base64ToArrayBuffer(wasmBase64);
+  const initResult = lz4init({wasmBinary:wasmBuffer});
+  lz4Module = await initResult;
+  if (lz4Module && lz4Module.lz4js) {
+   $('compressButton').disabled = !files.length;
+  } else {
+   console.log('lz4js初期化失敗');
+  }
+ } catch (e) {
+  console.log('初期化エラー:', JSON.stringify(e));
+ }
+}
+initialize();
+
+$('dropZone').addEventListener('click', () => $('fileInput').click());
+$('fileInput').addEventListener('change', e => handleFiles(e.target.files));
+
+['dragover','dragleave','drop'].forEach(e => {
+ $('dropZone').addEventListener(e, ev => {
+  ev.preventDefault();
+  if(e === 'dragover') ev.target.classList.add('over');
+  if(e === 'dragleave' || e === 'drop') ev.target.classList.remove('over');
+  if(e === 'drop') handleFiles(ev.dataTransfer.files);
+ });
+});
+
+function handleFiles(fileList) {
+ files = Array.from(fileList);
+ $('selectedFiles').innerHTML = files.map(file => 
+  `<div>${file.name} (${(file.size/1024).toFixed(1)}KB)</div>`
+ ).join('');
+ $('compressButton').disabled = !files.length || !lz4Module;
+}
+
+async function readFileAsArrayBuffer(file) {
+ return new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = e => resolve(e.target.result);
+  reader.onerror = reject;
+  reader.readAsArrayBuffer(file);
+ });
+}
+
+async function compressFiles() {
+ const fileDataList = [];
+ for(const file of files) {
+  const buffer = await readFileAsArrayBuffer(file);
+  fileDataList.push({
+   name: file.name,
+   size: file.size,
+   data: new Uint8Array(buffer)
+  });
+ }
+
+ const header = new TextEncoder().encode(JSON.stringify(
+  fileDataList.map(f => ({name: f.name, size: f.size}))
+ ));
+ const headerSize = new Uint32Array([header.length]);
+ 
+ const totalSize = fileDataList.reduce((sum, f) => sum + f.data.length, 0);
+ const combinedData = new Uint8Array(totalSize);
+ 
+ let offset = 0;
+ for(const file of fileDataList) {
+  combinedData.set(file.data, offset);
+  offset += file.data.length;
+ }
+ 
+ const compressed = lz4Module.lz4js.compress(combinedData);
+ const finalData = new Uint8Array(4 + header.length + compressed.length);
+ finalData.set(new Uint8Array(headerSize.buffer), 0);
+ finalData.set(header, 4);
+ finalData.set(compressed, 4 + header.length);
+ 
+ return finalData;
+}
+
+$('compressButton').addEventListener('click', async () => {
+ if (!files.length || !lz4Module) return;
+ 
+ try {
+  const compressed = await compressFiles();
+  const blob = new Blob([compressed]);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'compressed.lz4';
+  a.click();
+  URL.revokeObjectURL(url);
+ } catch (e) {
+  console.log('圧縮エラー:', JSON.stringify(e));
+ }
+});
+</script>
+</body>
+</html>

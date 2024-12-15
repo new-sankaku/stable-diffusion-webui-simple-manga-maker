@@ -176,7 +176,7 @@ async function autoMultiPromptSet(){
       }
     });
 
-    await btmSaveZip();
+    await btmSaveProjectFile();
   }
 }
 

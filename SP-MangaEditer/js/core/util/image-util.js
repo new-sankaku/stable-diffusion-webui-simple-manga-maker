@@ -314,7 +314,7 @@ function getCropAndDownloadLinkByMultiplier(multiplier, format) {
 	}
 
 	var link = document.createElement('a');
-	link.download = getFormattedDateTime() + '_SP-MangaEditor.png';
+	link.download = getFormattedDateTime() + '_Preview.' + format;
 	link.href = cropped;
 	return link;
 }

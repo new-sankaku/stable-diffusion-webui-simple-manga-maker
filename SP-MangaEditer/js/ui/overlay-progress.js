@@ -7,19 +7,21 @@ const OP_ICONS = {
 
 function OP_createLoadingOverlay() {
   const overlay = document.createElement('div');
-  overlay.className = 'op-loading-overlay';
   const content = document.createElement('div');
-  content.className = 'op-loading-content';
   const iconContainer = document.createElement('div');
-  iconContainer.className = 'op-icon-container';
   const stepText = document.createElement('p');
-  stepText.className = 'op-loading-step';
   const subStepText = document.createElement('p');
-  subStepText.className = 'op-loading-substep';
   const progressBar = document.createElement('div');
-  progressBar.className = 'op-progress-bar';
   const progressBarFill = document.createElement('div');
+
+  overlay.className = 'op-loading-overlay';
+  content.className = 'op-loading-content';
+  iconContainer.className = 'op-icon-container';
+  stepText.className = 'op-loading-step';
+  subStepText.className = 'op-loading-substep';
+  progressBar.className = 'op-progress-bar';
   progressBarFill.className = 'op-progress-bar-fill';
+
   progressBar.appendChild(progressBarFill);
   content.appendChild(iconContainer);
   content.appendChild(stepText);

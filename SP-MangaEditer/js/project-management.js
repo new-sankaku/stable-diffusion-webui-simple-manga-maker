@@ -4,99 +4,12 @@ const apis = {
   COMFYUI: "comfyui"
 };
 
-function generateZip(){
 
-  saveState();
+const getDataByName = (files, fileName) => {
+  const file = files.find(file => file.name === fileName);
+  return file ? file.data : null;
+ };
 
-  var zip = new JSZip();
-  zip.file("text2img_basePrompt.json", JSON.stringify(basePrompt));
-
-  stateStack.forEach((json, index) => {
-    const paddedIndex = String(index).padStart(6, '0');
-    zip.file(`state_${paddedIndex}.json`, JSON.stringify(json));
-  });
-
-  imageMap.forEach((value, key) => {
-    zip.file(`${key}.img`, value);
-  });
-
-  var canvasInfo = {
-    width: canvas.width,
-    height: canvas.height
-  };
-  zip.file("canvas_info.json", JSON.stringify(canvasInfo));
-
-  removeGrid();
-  var previewLink = getCropAndDownloadLinkByMultiplier(1, 'jpeg');
-  zip.file("preview-image.jpeg", previewLink.href.substring(previewLink.href.indexOf('base64,') + 7), { base64: true });
-  if (isGridVisible) {
-    drawGrid();
-    isGridVisible = true;
-  }
-  return zip;
-}
-
-
-async function loadZip(zip, guid = null){
-  stateStack = [];
-  imageMap.clear();
-
-  var text2imgBasePromptFile = zip.file("text2img_basePrompt.json");
-  if (text2imgBasePromptFile) {
-    const content = await text2imgBasePromptFile.async("string");
-    Object.assign(basePrompt, JSON.parse(content));
-  }
-
-  var canvasInfoFile = zip.file("canvas_info.json");
-  var canvasInfo = canvasInfoFile
-    ? JSON.parse(await canvasInfoFile.async("string"))
-    : { width: 750, height: 850 };
-
-  var sortedFiles = Object.keys(zip.files).sort((a, b) => {
-    const numA = a.match(/(\d+)/) ? parseInt(a.match(/(\d+)/)[0]) : -1;
-    const numB = b.match(/(\d+)/) ? parseInt(b.match(/(\d+)/)[0]) : -1;
-    if (numA === numB) {
-      return a.localeCompare(b);
-    }
-    return numA - numB;
-  });
-
-  await Promise.all(sortedFiles.map(async (fileName) => {
-    try {
-      const content = await zip.file(fileName).async("string");
-      if (fileName.endsWith(".img")) {
-        let hash = fileName.split('.')[0];
-        imageMap.set(hash, content);
-      }
-    } catch (error) {
-      console.error("Failed to load file:", fileName, error);
-    }
-  }));
-
-  const jsonLoadPromises = sortedFiles.map(async (fileName) => {
-    try {
-      if (fileName.endsWith(".json") && 
-          fileName !== "text2img_basePrompt.json" && 
-          fileName !== "canvas_info.json") {
-        const content = await zip.file(fileName).async("string");
-        return JSON.parse(content);
-      }
-    } catch (error) {
-      console.error("Failed to load file:", fileName, error);
-    }
-  });
-
-  const jsonResults = await Promise.all(jsonLoadPromises);
-  stateStack = jsonResults.filter(data => data !== undefined);
-
-  currentStateIndex = stateStack.length - 1;
-  resizeCanvasByNum(canvasInfo.width, canvasInfo.height);
-  lastRedo(guid);
-  
-  if(guid){
-    setCanvasGUID(guid);
-  }
-}
 
 
 // Variable to keep track of selected api model to use
@@ -105,207 +18,137 @@ var API_mode = apis.A1111;
 document.addEventListener("DOMContentLoaded", function () {
   var settingsSave = $("settingsSave");
   var settingsLoad = $("settingsLoad");
-  settingsSave.addEventListener("click", function () {
-    saveSettingsLocalStrage();
-  });
-  settingsLoad.addEventListener("click", function () {
-    loadSettingsLocalStrage();
-  });
-
+  settingsSave.addEventListener("click", function () {saveSettingsLocalStrage();});
+  settingsLoad.addEventListener("click", function () {loadSettingsLocalStrage();});
 
   var saveButton = $("projectSave");
   var loadButton = $("projectLoad");
 
-  saveButton.addEventListener("click", function () {
-
-    console.log("stateStack.length", stateStack.length);
-
+  saveButton.addEventListener("click", async function () {
     if (stateStack.length === 0) {
-      createToast("Save Error", "Not Found.");
-      return;
+     createToast("Save Error", "Not Found.");
+     return;
     }
-  
-    const loading = OP_showLoading({
-      icon: 'process',step: 'Step1',substep: 'Save Project',progress: 0
-    });
+   
+    const loading = OP_showLoading({icon: 'process',step: 'Step1',substep: 'Save Project',progress: 0});
+   
+    btmSaveProjectFile().then(async () => {
+     OP_updateLoadingState(loading, {icon: 'process',step: 'Step2',substep: 'Process 1',progress: 20});
+   
+     const lz4BlobList = Array.from(btmProjectsMap.values()).map(data => data.blob);
+     let mergeLz4Blob = await lz4Compressor.mergeLz4Blobs(lz4BlobList);
 
-    btmSaveZip().then(() => {
-      OP_updateLoadingState(loading, {
-        icon: 'process',step: 'Step2',substep: 'Zip Start1',progress: 20
-      });
-      var zip = new JSZip();
-      var zipPromises = [];
-      btmImageZipMap.forEach((value, key) => {
-        zipPromises.push(
-          zip.file(`project_${key}.zip`, value.zipBlob, {binary: true})
-        );
-      });
-      return Promise.all(zipPromises).then(() => zip);
-    })
-    .then((zip) => {
-      OP_updateLoadingState(loading, {
-        icon: 'process',step: 'Step2',substep: 'Zip Start2',progress: 40
-      });
+     OP_updateLoadingState(loading, {icon: 'process',step: 'Step3',substep: 'Process 2',progress: 20});
 
-      return zip.generateAsync({ type: "blob" });
-    })
-    .then((content) => {
-      OP_updateLoadingState(loading, {
-        icon: 'process',step: 'Step2',substep: 'Download Start',progress: 80
-      });
-
-      var url = window.URL.createObjectURL(content);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = "project.zip";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+     var url = window.URL.createObjectURL(mergeLz4Blob);
+     var a = document.createElement("a");
+     a.href = url;
+     a.download = "project.lz4";
+     
+     document.body.appendChild(a);
+     a.click();
+     document.body.removeChild(a);
+     window.URL.revokeObjectURL(url);
     })
     .catch((error) => {
-      console.error("Error during save process:", error);
+     console.log("error", error);
+     console.log("error json,", JSON.stringify(error));
     })
     .finally(() => {
-      OP_hideLoading(loading);
-    });;
-  });
+     OP_hideLoading(loading);
+    });
+   });
 
   
 
-  loadButton.addEventListener("click", function () {
-    console.log("loadButton.addEventListener");
+   loadButton.addEventListener("click", function () {
     var fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.style.display = "none";
     document.body.appendChild(fileInput);
     fileInput.click();
-  
+   
     fileInput.onchange = async function () {
-      const loading = OP_showLoading({
-        icon: 'process',
-        step: 'Step1',
-        substep: 'Load Project',
-        progress: 0
-      });
+     const loading = OP_showLoading({icon: 'process', step: 'Step1', substep: 'Load Project', progress: 0     });
+     
+     try {
+      var file = this.files[0];
+      if (file) {
+        const fileBuffer = await file.arrayBuffer();
+        const fileName = file.name.toLowerCase();
+        const isZip = fileName.endsWith('.zip');
+        const isLz4 = fileName.endsWith('.lz4');
+       
+       if (isZip) {
+        OP_updateLoadingState(loading, { icon: 'process',  step: 'Step2', substep: 'UnZip', progress: 20});
+   
+        const zip = await JSZip.loadAsync(file);
+        var hasNestedZip = false;
+        var fileCount = 0;
       
-      try {
-        var file = this.files[0];
-        if (file) {
-          OP_updateLoadingState(loading, {
-            icon: 'process',
-            step: 'Step2',
-            substep: 'UnZip',
-            progress: 20
-          });
-  
-          const zip = await JSZip.loadAsync(file);
-          var hasNestedZip = false;
-          var fileCount = 0;
-    
-          zip.forEach(function (relativePath, zipEntry) {
-            fileCount++;
-            if (zipEntry.name.toLowerCase().endsWith('.zip')) {
-              hasNestedZip = true;
-            }
-          });
-    
-          if (hasNestedZip) {
-            await processZip(zip);
-            document.body.removeChild(fileInput);
-          } else {
-            await loadZip(zip);
-          }
+        zip.forEach(function (relativePath, zipEntry) {
+         fileCount++;
+         OP_updateLoadingState(loading, { icon: 'process',  step: 'Step3', substep: 'UnZip file:'+fileCount, progress: 30});
+         if (zipEntry.name.toLowerCase().endsWith('.zip')) {
+          hasNestedZip = true;
+         }
+        });
+      
+        if (hasNestedZip) {
+          OP_updateLoadingState(loading, { icon: 'process',  step: 'Step4', substep: 'UnZip:', progress: 40});
+          await processZip(zip);
+         document.body.removeChild(fileInput);
+        } else {
+          OP_updateLoadingState(loading, { icon: 'process',  step: 'Step4', substep: 'UnZip:', progress: 40});
+         await multiLoadZip(zip);
         }
-      } catch (error) {
-        console.error("Error loading ZIP:", error);
-      } finally {
-        OP_hideLoading(loading);
+       } else if (isLz4) {
+        //fileList is {name, data}
+        OP_updateLoadingState(loading, { icon: 'process',  step: 'Step2', substep: 'UnLz4', progress: 20});
+        let bufferFileLz4List = await lz4Compressor.unLz4FilesByBuffer(fileBuffer);
+
+        OP_updateLoadingState(loading, { icon: 'process',  step: 'Step3', substep: 'UnLz4', progress: 25});
+        await multiLoadLz4(bufferFileLz4List);
+        
+        OP_updateLoadingState(loading, { icon: 'process',  step: 'Step4', substep: 'UnLz4', progress: 85});
+      } else {
+        console.log("unsupported file");
+       }
       }
+     } catch (error) {
+      console.error("error:", error);
+     } finally {
+      OP_hideLoading(loading);
+     }
     };
-  });
-  
-  
-  async function processZip(zip) {
-    const zipFiles = Object.keys(zip.files).filter(filename => filename.endsWith('.zip'));
-    
-    for (let i = 0; i < zipFiles.length; i++) {
-      const zipContent = await zip.file(zipFiles[i]).async('blob');
-      const innerZip = await JSZip.loadAsync(zipContent);
-      const previewImage = innerZip.file('preview-image.jpeg');
-      if (!previewImage) {
-        continue;
-      }
-      
-      const previewImageBlob = await previewImage.async('blob');
-      const previewImageUrl = URL.createObjectURL(previewImageBlob);
-  
-      const stateFiles = Object.keys(innerZip.files).filter(filename => filename.startsWith('state_') && filename.endsWith('.json'));
-
-      var canvasGuid = null;
-
-      for (const stateFile of stateFiles) {
-        const stateContent = await innerZip.file(stateFile).async('text');
-        try {
-          const state = JSON.parse(stateContent);
-          canvasGuid = findCanvasGuid(state);
-  
-          if (canvasGuid) {
-            btmAddImage({ href: previewImageUrl }, zipContent, canvasGuid);
-            break;
-          }
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-        }
-      }
-
-      if( canvasGuid ){
-        //skip
-      }else{
-        let guid = generateGUID();
-        btmAddImage({ href: previewImageUrl }, zipContent, guid);
-      }
-    }
-  }
-
-  
+   });
+});
 
 
-  function findCanvasGuid(obj) {
-    if (typeof obj === 'string') {
-      try {
-        obj = JSON.parse(obj);
-      } catch (error) {
-        return null;
-      }
-    }
-    if (typeof obj !== 'object' || obj === null) {
+function findCanvasGuid(obj) {
+  if (typeof obj === 'string') {
+    try {
+      obj = JSON.parse(obj);
+    } catch (error) {
       return null;
     }
-  
-    if (obj.canvasGuid) {
-      return obj.canvasGuid;
-    }
-  
-    for (let key in obj) {
-      if (typeof obj[key] === 'object') {
-        const result = findCanvasGuid(obj[key]);
-        if (result) return result;
-      }
-    }
+  }
+  if (typeof obj !== 'object' || obj === null) {
     return null;
   }
 
+  if (obj.canvasGuid) {
+    return obj.canvasGuid;
+  }
 
-  
-  
-  //TODO: Maybe moved this to another file
-  var selectA1111APIButton = $("Select_a1111_button");
-  var selectComfyuiAPIButton = $("Select_comfyui_button");
-
-
-});
-
+  for (let key in obj) {
+    if (typeof obj[key] === 'object') {
+      const result = findCanvasGuid(obj[key]);
+      if (result) return result;
+    }
+  }
+  return null;
+}
 
 var localSettingsData = null;
   

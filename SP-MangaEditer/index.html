@@ -1748,6 +1748,10 @@ function getElementClasses(element) {
     <link rel="stylesheet" href="css/ui/intro.css?">
     <link rel="stylesheet" href="css/styles-css.css?v=7.0">
 
+    <script src="third/lz4/wasm.js"></script>
+    <script src="third/lz4/lz4asm.js"></script>
+    <script src="third/lz4/lz4wasm.js"></script>
+
     <script src="third/pixi.min.js" defer></script>
     <script src="third/advanced-blend-modes.min.js" defer></script>
     <script src="third/interact.min.js" defer></script>
@@ -1802,7 +1806,7 @@ function getElementClasses(element) {
     <script src="js/core/util/log-util.js?v=7.0" defer></script>
     <script src="js/core/util/image-analyzer-util.js?v=7.0" defer></script>
     <script src="js/CanvasManager.js?v=7.0" defer></script>
-    <script src="js/ProjectManagement.js?v=7.0" defer></script>
+    <script src="js/project-management.js?v=7.0" defer></script>
     <script src="js/Shortcut.js?v=7.0" defer></script>
     <script src="js/panel/Grid.js?v=7.0" defer></script>
     <script src="js/panel/RandamCut.js?v=7.0" defer></script>
@@ -1875,10 +1879,10 @@ function getElementClasses(element) {
 
     <script src="js/ai/ComfyUI/workflow/T2I_Flux.js?v=7.0" defer></script>
     <script src="js/ai/ComfyUI/workflow/T2I_SDXL.js?v=7.0" defer></script>
-    <script src="js/ai/prompt/auto/PromptMap.js?v=7.0" defer></script>
-    <script src="js/ai/prompt/auto/StoryPromptMap.js?v=7.0" defer></script>
-    <script src="js/ai/prompt/auto/AutoPromptUtil.js?v=7.0" defer></script>
-    <script src="js/ai/prompt/auto/AutoGeneration.js?v=7.0" defer></script>
+    <script src="js/ai/prompt/auto/prompt-map.js?v=7.0" defer></script>
+    <script src="js/ai/prompt/auto/story-prompt-map.js?v=7.0" defer></script>
+    <script src="js/ai/prompt/auto/auto-prompt-util.js?v=7.0" defer></script>
+    <script src="js/ai/prompt/auto/auto-generation.js?v=7.0" defer></script>
 
     <script src="js/db/user-font-repository.js?v=7.0" defer></script>
     <script src="js/ui/font/user-font-manager.js?v=7.0" defer></script>
@@ -1887,6 +1891,11 @@ function getElementClasses(element) {
 
     <script src="service-worker.js?v=7.0" defer></script>
     <script src="js/core/service/worker-register.js?v=7.0" defer></script>
+
+    <script src="js/core/compression/lz4.js?v=7.0"></script>
+    <script src="js/core/util/array-buffer-utils.js?v=7.0"></script>
+    <script src="js/core/compression/project-compression.js?v=7.0"></script>
+    
 
 <script>
 function autoResize(event) {

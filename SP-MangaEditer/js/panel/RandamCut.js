@@ -91,7 +91,7 @@ async function generateMultipage(){
     }
     newPage = true;
   }
-  await btmSaveZip();
+  await btmSaveProjectFile();
 
 }
 $on($("panelRandamCutButton"), "click", () => rundomPanelCut());
