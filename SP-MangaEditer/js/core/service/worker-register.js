@@ -24,7 +24,7 @@ if (typeof window !== "undefined") {
   window.addEventListener("load", function () {
     if (isPWAEligible()) {
       navigator.serviceWorker
-        .register("/service-worker.js")
+        .register("/SP-MangaEditer/service-worker.js")  
         .then(function (reg) {
           registration = reg;
           console.log("Service Worker Register Success:", registration.scope);
