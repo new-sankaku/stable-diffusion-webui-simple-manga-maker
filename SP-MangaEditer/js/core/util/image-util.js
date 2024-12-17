@@ -714,3 +714,47 @@ async function enhanceDarkImage() {
     OP_hideLoading(loading);
   }
 }
+
+
+
+
+function rgbToHex(color) {
+  if (!color) {
+    return '#000000';
+  }
+
+  if (color.startsWith('#')) {
+    return color;
+  }
+
+  let match = color.match(/^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$/);
+  if (!match) {
+    return color;
+  }
+
+  function convert(color) {
+    let hex = parseInt(color).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  }
+
+  return '#' + convert(match[1]) + convert(match[2]) + convert(match[3]);
+}
+
+function rgbaToHex(color) {
+  if (!color) return '#000000';
+  if (color.startsWith('#')) return color;
+
+  const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\)/);
+  if (!match) return '#000000';
+
+  const r = parseInt(match[1]);
+  const g = parseInt(match[2]);
+  const b = parseInt(match[3]);
+
+  const toHex = (n) => {
+    const hex = n.toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  };
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}

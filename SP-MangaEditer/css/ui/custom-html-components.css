@@ -16,6 +16,8 @@
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
+
 .input-container-leftSpace {
   position: relative;
   min-width: 140px;
@@ -32,6 +34,13 @@
   color: var(--component-text-color);
   pointer-events: none;
 }
+.input-container, .input-container-leftSpace {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 
 input[type="range"] {
   padding: 7px 0;
@@ -62,12 +71,7 @@ input[type="range"] {
   color: var(--component-text-color);
 }
 
-.input-container, .input-container-leftSpace {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
+
 
 .slider-label {
   position: absolute;

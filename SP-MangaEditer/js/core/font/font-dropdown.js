@@ -145,11 +145,14 @@ class FontSelector {
       data.fonts.forEach((font) => {
         const option = this.createFontOption(font, data.color);
         option.addEventListener("click", () => {
+
+          const activeObject = canvas.getActiveObject();
+          if(activeObject){
+            activeObject.fontFamily=font.name;
+            canvas.requestRenderAll();
+          }
           fmSelectedFont.textContent = font.name;
-          fmSelectedFont.className = `fm-font-${font.name.replace(
-            /[\s-]/g,
-            "_"
-          )}`;
+          fmSelectedFont.className = `fm-font-${font.name.replace(/[\s-]/g,"_")}`;
           fmDropdown.classList.remove("fm-show");
           this.savedFont = font.name;
           const event = new CustomEvent(this.targetId, {

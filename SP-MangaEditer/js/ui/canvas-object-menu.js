@@ -12,7 +12,9 @@ function createObjectMenu() {
   objectMenu.style.display = 'none';
   document.body.appendChild(objectMenu);
   objectMenu.addEventListener('click', handleMenuClick);
+  objectMenu.addEventListener('input', handleSliderInput);
 }
+
 
 function updateObjectMenuPosition() {
   if (!objectMenu) {
@@ -31,10 +33,9 @@ function updateObjectMenuPosition() {
   const canvasWidth = canvasRect.width;
   const canvasHeight = canvasRect.height;
 
-  // キャンバスのスケールを考慮した計算
   let left = canvasOffsetLeft + boundingRect.left * canvasContinerScale + boundingRect.width * canvasContinerScale + menuPadding;
   let top = canvasOffsetTop + boundingRect.top * canvasContinerScale;
-  
+
   if (left + objectMenu.offsetWidth > canvasOffsetLeft + canvasWidth) {
     left = Math.min(
       canvasOffsetLeft + canvasWidth + 5,
@@ -56,6 +57,24 @@ function updateObjectMenuPosition() {
   objectMenu.style.top = `${top}px`;
 }
 
+function createObjectMenuDiv(itemValue){
+  return {type:'div', value:itemValue};
+}
+function createObjectMenuButton(itemValue){
+  return {type:'button', value:itemValue};
+}
+function createObjectMenuSlider(itemValue,min,max,step,value){
+  return {type: 'slider',label: itemValue,
+          options: {id:itemValue,min: min,max:max,step:step,value:value}};
+}
+function createObjectMenuColor(itemValue, defaultColor) {
+  return {
+    type: 'colorpicker', label: itemValue,
+    options: {id: itemValue,value: defaultColor || '#000000'}
+  };
+}
+
+
 function showObjectMenu(clickType) {
   const activeObject = canvas.getActiveObject();
   if (!activeObject) {
@@ -66,58 +85,107 @@ function showObjectMenu(clickType) {
   }
 
   let menuItems = [];
-  // 'visible',     'settings', 'generate', 'edit', 'delete', 
-  // 'copyAndPast', 'font', 'moveUp', 'moveDown', 'addPoint', 
-  // 'removePoint', 'selectClear', 'knife'
-  // 'rembg', 'panelIn'
+  var visible             = createObjectMenuButton( activeObject.visible    ? 'visibleOff' : 'visibleOn');
+  var movement            = createObjectMenuButton(!activeObject.selectable ? 'movementOn' : 'movementOff');
+  var edit                = createObjectMenuButton( activeObject.edit       ? 'editOff' : 'editOn');
+  var knife               = createObjectMenuButton( isKnifeMode             ? 'knifeOff' : 'knifeOn');
+  var deleteMenu          = createObjectMenuButton('delete');
+  var generate            = createObjectMenuButton('generate');
+  var panelIn             = createObjectMenuButton('panelIn');
+  var canvasFit           = createObjectMenuButton('canvasFit');
+  var selectClear         = createObjectMenuButton('selectClear');
+  var rembg               = createObjectMenuButton('rembg');
+  var clearAllClipPaths   = createObjectMenuButton('clearAllClipPaths');
 
-  var visible   = activeObject.visible ? 'visibleOff' : 'visibleOn';
-  var movement  = !activeObject.selectable ? 'movementOn' : 'movementOff';
+  var font                = createObjectMenuDiv('fontSelectorMenu');
+
+  let min=0, max=100, step=1, value=(activeObject.opacity*100), labelAndId='opacity';
+  let opacity = createObjectMenuSlider(labelAndId,min,max,step,value);
+
+  min=0, max=10, step=1, value=activeObject.strokeWidth, labelAndId='lineWidth';
+  let strokeWidth = createObjectMenuSlider(labelAndId,min,max,step,value);
+
+  min=7, max=150, step=1, value=activeObject.fontSize, labelAndId='fontSize';
+  let fontSize = createObjectMenuSlider(labelAndId,min,max,step,value);
+
+  let fillColor   = createObjectMenuColor("fill", rgbaToHex(activeObject.fill));
+  let strokeColor = createObjectMenuColor("strokeColor", rgbaToHex(activeObject.stroke));
 
   if (isPanel(activeObject)) {
-    var edit  = activeObject.edit ? 'editOff'  : 'editOn';
-    var knife = isKnifeMode       ? 'knifeOff' : 'knifeOn';
-    menuItems = clickType === 'left' ? [] : [visible, movement, edit, knife];
-
-    if( hasRole( AI_ROLES.Text2Image )){ menuItems.push('generate') }
-
-    menuItems.push('delete');
+    if (clickType !== 'left') {
+      menuItems = [visible, movement, edit, knife];
+      if (hasRole(AI_ROLES.Text2Image)) menuItems.push(generate);
+      menuItems.push(deleteMenu);
+    }
   } else if (isImage(activeObject)) {
-    menuItems = clickType === 'left' ? [] : [visible, movement];
-    
-    if( hasRole( AI_ROLES.Image2Image )){ menuItems.push('generate') }
-    if( hasRole( AI_ROLES.RemoveBG )){ menuItems.push('rembg') }
-    menuItems.push('delete');
-    if( haveClipPath(activeObject) ){
-      menuItems.push('clearAllClipPaths');
-    }else{
-      menuItems.push('panelIn');
-      menuItems.push("canvasFit");
+    if (clickType !== 'left') {
+      menuItems = [visible, movement];
+      if (hasRole(AI_ROLES.Image2Image)) menuItems.push(generate);
+      if (hasRole(AI_ROLES.RemoveBG))    menuItems.push(rembg);
+      menuItems.push(deleteMenu);
+      
+      if (haveClipPath(activeObject)) {
+        menuItems.push(clearAllClipPaths);
+      } else {
+        menuItems.push(panelIn);
+        menuItems.push(canvasFit);
+      }
     }
-  } else if (isText(activeObject)) {
-    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete'];
-    if( haveClipPath(activeObject) ){
-      menuItems.push('clearAllClipPaths');
-    }else{
-      menuItems.push('panelInNotFit');
-    }
-  } else {
-    menuItems = clickType === 'left' ? [] : [visible, movement, 'delete'];
-    if( haveClipPath(activeObject) ){
-      menuItems.push('clearAllClipPaths');
-    }else{
-      menuItems.push('panelInNotFit');
-    }
+  }else if (isSpeechBubbleSVG(activeObject) || isSpeechBubbleText(activeObject)) {
+    menuItems = [visible];
   }
-  menuItems.push('selectClear');
 
+  if (isPanel(activeObject) || isSpeechBubbleSVG(activeObject) || isSpeechBubbleText(activeObject) || isText(activeObject)) {
+    menuItems.push(opacity);
+    menuItems.push(strokeWidth);
+    menuItems.push(fillColor);
+    menuItems.push(strokeColor);
+  }
+
+  if(isSpeechBubbleText(activeObject) || isText(activeObject)){
+    menuItems.push(fontSize);
+    menuItems.push(font);
+  }
+
+  menuItems.push(selectClear);
   if (menuItems.length === 0) {
     return;
   }
 
   let menuContent = '';
   menuItems.forEach(item => {
-    menuContent += `<button id="fabricjs-${item}-btn">${getText(item)}</button>`;
+    switch (item.type) {
+      case 'div':
+        menuContent += `<div id="${item.value}"></div>`;
+        break;
+      case 'slider':
+        let label = getText(item.options.id);
+        menuContent += `
+          <div class="input-container-leftSpace" data-label="${label}">
+            <input type="range" 
+              id=   "${item.options.id}"
+              name= "${item.options.id}"
+              min=  "${item.options.min}"
+              max=  "${item.options.max}"
+              step= "${item.options.step}"
+              value="${item.options.value}">
+          </div>`;
+        break;
+      case 'colorpicker':
+        let labelColor = getText(item.options.id);
+        menuContent += `
+          <div class="input-group-multi" >
+            <label for="${item.options.id}">${labelColor}</label>
+            <input type="color"
+              id=   "${item.options.id}"
+              name= "${item.options.id}"
+              value="${item.options.value}">
+          </div>`;
+        break;
+      case 'button':
+        menuContent += `<button id="fabricjs-${item.value}-btn">${getText(item.value)}</button>`;
+        break;
+    }
   });
 
   objectMenu.innerHTML = menuContent;
@@ -125,7 +193,52 @@ function showObjectMenu(clickType) {
   objectMenu.style.display = 'flex';
   updateObjectMenuPosition();
   lastClickType = clickType;
+
+  const sliders2 = document.querySelectorAll('.input-container-leftSpace input[type="range"]');
+  sliders2.forEach(slider => {
+    setupSlider(slider, '.input-container-leftSpace', false);
+  });
+  new FontSelector("fontSelectorMenu", "Font");
 }
+
+function handleSliderInput(e) {
+  const activeObject = canvas.getActiveObject();
+  if (!activeObject) return;
+
+  // console.log("e.target.id:",e.target.id);
+  switch (e.target.id) {
+    case 'fontSize':
+      const fontSizeValue = parseInt(e.target.value);
+      activeObject.fontSize = fontSizeValue;
+
+      if(isSpeechBubbleText(activeObject)){
+        let newSettings = mainSpeechBubbleObjectResize(activeObject);
+        const svgObj = activeObject.targetObject;
+        svgObj.set(newSettings);
+        updateShapeMetrics(svgObj);
+      }
+      break
+    case 'opacity':
+      const opacityValue = parseInt(e.target.value);
+      activeObject.opacity = opacityValue/100;
+      break;
+    case 'lineWidth':
+      const strokeWidthValue = parseInt(e.target.value);
+      activeObject.set("strokeWidth", strokeWidthValue);
+      break;
+    case 'fill':
+      const fillColor = e.target.value;
+      activeObject.set("fill", fillColor);
+      break;
+    case 'strokeColor':
+      const strokeColor = e.target.value;
+      activeObject.set("stroke", strokeColor);
+      break;
+  }
+  canvas.requestRenderAll();
+  canvas.renderAll;
+}
+
 
 function handleMenuClick(e) {
   const activeObject = canvas.getActiveObject();
@@ -133,24 +246,52 @@ function handleMenuClick(e) {
     return;
   }
 
+  let clickedElement = e.target;
+  if (!clickedElement.matches('button')) {
+    return;
+  }
+
+  // console.log("handleMenuClick e.target.id:", e.target.id);
   const action = e.target.id.replace('fabricjs-', '').replace('-btn', '');
+  if (!action) {
+    return;
+  }
 
   switch (action) {
+    case 'fontSize':
+      const fontSizeValue = parseInt(e.target.value);
+      activeObject.fontSize = fontSizeValue;
+
+      if(isSpeechBubbleText(activeObject)){
+        let newSettings = mainSpeechBubbleObjectResize(activeObject);
+        const svgObj = activeObject.targetObject;
+        svgObj.set(newSettings);
+        updateShapeMetrics(svgObj);
+      }
+      break
+    case 'opacity':
+      const opacityValue = parseInt(e.target.value);
+      activeObject.opacity = opacityValue/100;
+      break;
+    case 'lineWidth':
+      const strokeWidthValue = parseInt(e.target.value);
+      activeObject.set("strokeWidth", strokeWidthValue);
+      break;
     case 'canvasFit':
       fitImageToCanvas(activeObject);
       break;
-      case 'panelIn':
-        var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
-        var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
-        putImageInFrame(activeObject, canvasX, canvasY, true, true);
-        updateLayerPanel();
-        break;
-      case 'panelInNotFit':
-        var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
-        var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
-        putImageInFrame(activeObject, canvasX, canvasY, true, true, false);
-        updateLayerPanel();
-        break;
+    case 'panelIn':
+      var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
+      var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
+      putImageInFrame(activeObject, canvasX, canvasY, true, true);
+      updateLayerPanel();
+      break;
+    case 'panelInNotFit':
+      var canvasX = activeObject.left + (activeObject.width * activeObject.scaleX) / 2;
+      var canvasY = activeObject.top + (activeObject.height * activeObject.scaleY) / 2;
+      putImageInFrame(activeObject, canvasX, canvasY, true, true, false);
+      updateLayerPanel();
+      break;
     case 'visibleOn':
     case 'visibleOff':
       visibleChange(activeObject);
@@ -168,10 +309,10 @@ function handleMenuClick(e) {
     case 'generate':
       if (isPanel(activeObject)) {
         var spinner = createSpinner(canvasMenuIndex);
-        T2I( activeObject, spinner );
+        T2I(activeObject, spinner);
       } else if (isImage(activeObject)) {
         var spinner = createSpinner(canvasMenuIndex);
-        I2I( activeObject, spinner );
+        I2I(activeObject, spinner);
       }
       break;
     case 'selectClear':
@@ -211,13 +352,6 @@ function handleMenuClick(e) {
         changeKnifeMode();
       }
       break;
-    
-    case 'font':
-      if (activeObject instanceof fabric.IText) {
-        const newFont = activeObject.fontFamily === 'Arial' ? 'Times New Roman' : 'Arial';
-        activeObject.set('fontFamily', newFont);
-      }
-      break;
     case 'addPoint':
       if (activeObject instanceof fabric.Polygon) {
         let points = activeObject.points;
@@ -243,9 +377,9 @@ function handleMenuClick(e) {
     case 'clearRightClipPath':
     case 'clearLeftClipPath':
       removeClipPath(activeObject, action);
-    break;
+      break;
   }
-  canvas.renderAll();
+  canvas.requestRenderAll();
   closeMenu();
 }
 
@@ -269,7 +403,7 @@ canvas.wrapperEl.addEventListener('contextmenu', function (e) {
   const clickedObject = canvas.findTarget(e, false);
   if (clickedObject) {
     canvas.setActiveObject(clickedObject);
-    canvas.renderAll(); 
+    canvas.renderAll();
     showObjectMenu('right');
   } else {
     canvas.discardActiveObject();
@@ -288,8 +422,8 @@ canvas.on('selection:cleared', function () {
   closeMenu();
 });
 
-canvas.on('object:moving', updateObjectMenuPosition);
-canvas.on('object:scaling', updateObjectMenuPosition);
-canvas.on('object:rotating', updateObjectMenuPosition);
-canvas.on('after:render', updateObjectMenuPosition);
+// canvas.on('object:moving', updateObjectMenuPosition);
+// canvas.on('object:scaling', updateObjectMenuPosition);
+// canvas.on('object:rotating', updateObjectMenuPosition);
+// canvas.on('after:render', updateObjectMenuPosition);
 createObjectMenu();

@@ -1,22 +1,6 @@
 var neonIntensity = 2;
 var isNeonEnabled = false;
 
-function rgbToHex(rgb) {
-  if (rgb) {
-    return;
-  }
-
-  let match = rgb.match(/^rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$/);
-  if (!match) {
-    return rgb;
-  }
-  function convert(color) {
-    let hex = parseInt(color).toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
-  }
-  return '#' + convert(match[1]) + convert(match[2]) + convert(match[3]);
-}
-
 function updateTextControls(object) {
   
   // console.log("isVerticalText ", typeof window.isVerticalText); 

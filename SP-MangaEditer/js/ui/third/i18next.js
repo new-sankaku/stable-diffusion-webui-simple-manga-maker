@@ -4,6 +4,7 @@ const resources = {
   ja: {
     translation: {
 
+"strokeColor":"線の色",
 
 onePanelGenerateNumber:"1パネルの生成数",
 pwa_install:"Web appインストール",
@@ -493,6 +494,7 @@ ft_placeholderWeb: "https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&fam
   },
 en: {
     translation: {
+"strokeColor":"Line color",
       "pwa_install":"Install Web app",
       ft_addLocalFontTitle_warning: "If you cannot register, please use an English name.",
       ft_addText: "Add Text",
@@ -1063,6 +1065,7 @@ en: {
   },
   ko: {
 translation: {
+"strokeColor":"선 색상",
   "pwa_install":"웹 앱 설치",
   ft_addLocalFontTitle_warning: "등록할 수 없는 경우 영어 이름을 사용하세요.",
   ft_addText: "텍스트 추가",
@@ -1554,6 +1557,7 @@ translation: {
   },
   fr: {
     translation: {
+"strokeColor":"Couleur du trait",
       "pwa_install":"Installer l'application Web",
       ft_addLocalFontTitle_warning: "Si vous ne pouvez pas enregistrer, utilisez un nom en anglais.",
       ft_addText: "Ajouter du texte",
@@ -2077,6 +2081,7 @@ translation: {
   },
   zh: {
     translation: {
+"strokeColor":"线条颜色",
       "pwa_install":"安装网页应用",
       ft_addLocalFontTitle_warning: "如果无法注册，请使用英文名称。",
       ft_addText: "添加文本",
@@ -2600,6 +2605,7 @@ translation: {
   },
   ru: {
     translation: {
+"strokeColor":"Цвет линии",
       "pwa_install":"Установить веб-приложение",
       ft_addLocalFontTitle_warning: "Если не удается зарегистрировать, используйте английское имя.",
       ft_addText: "Добавить текст",
@@ -3072,6 +3078,7 @@ translation: {
   },
   es: {
     translation: {
+"strokeColor":"Color de línea",
       "pwa_install":"Instalar aplicación web",
       ft_addLocalFontTitle_warning: "Si no puedes registrar, usa un nombre en inglés.",
       ft_addText: "Agregar texto",
@@ -3543,6 +3550,7 @@ translation: {
   },
   pt: {
     translation: {
+"strokeColor":"Cor da linha",
       "pwa_install":"Instalar aplicativo web",
       ft_addLocalFontTitle_warning: "Se não for possível registrar, use um nome em inglês.",
       ft_addText: "Adicionar texto",
@@ -4015,6 +4023,7 @@ translation: {
   },
 th: {
 translation: {
+"strokeColor":"สีเส้น",
   "pwa_install":"ติดตั้งแอพเว็บ",
   ft_addLocalFontTitle_warning: "หากไม่สามารถลงทะเบียนได้ โปรดใช้ชื่อภาษาอังกฤษ.",
   ft_addText: "เพิ่มข้อความ",
@@ -4537,6 +4546,7 @@ translation: {
   },
     de: {
 "translation": {
+"strokeColor":"Linienfarbe",
   "pwa_install":"Web-App installieren",
   ft_addLocalFontTitle_warning: "Wenn Sie sich nicht registrieren können, verwenden Sie bitte einen englischen Namen.",
   ft_addText: "Text hinzufügen",
