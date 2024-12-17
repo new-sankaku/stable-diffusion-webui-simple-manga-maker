@@ -4,7 +4,12 @@ const resources = {
   ja: {
     translation: {
 
-"strokeColor":"線の色",
+"com-opacity":"透明度",
+"com-lineWidth":"線の太さ",
+"com-fontSize":"フォントサイズ",
+"com-fill":"塗り色",
+"com-strokeColor":"線色",
+
 
 onePanelGenerateNumber:"1パネルの生成数",
 pwa_install:"Web appインストール",
@@ -494,7 +499,12 @@ ft_placeholderWeb: "https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&fam
   },
 en: {
     translation: {
-"strokeColor":"Line color",
+"com-opacity":"Opacity",
+"com-lineWidth":"Line width",
+"com-fontSize":"Font size",
+"com-fill":"Fill color",
+"com-strokeColor":"Line color",
+      "strokeColor":"Line color",
       "pwa_install":"Install Web app",
       ft_addLocalFontTitle_warning: "If you cannot register, please use an English name.",
       ft_addText: "Add Text",
@@ -1065,6 +1075,11 @@ en: {
   },
   ko: {
 translation: {
+"com-opacity":"투명도",
+"com-lineWidth":"선 굵기",
+"com-fontSize":"글자 크기",
+"com-fill":"채우기 색상",
+"com-strokeColor":"선 색상",
 "strokeColor":"선 색상",
   "pwa_install":"웹 앱 설치",
   ft_addLocalFontTitle_warning: "등록할 수 없는 경우 영어 이름을 사용하세요.",
@@ -1557,6 +1572,11 @@ translation: {
   },
   fr: {
     translation: {
+"com-opacity":"Opacité",
+"com-lineWidth":"Épaisseur de ligne",
+"com-fontSize":"Taille de police",
+"com-fill":"Couleur de remplissage",
+"com-strokeColor":"Couleur du trait",
 "strokeColor":"Couleur du trait",
       "pwa_install":"Installer l'application Web",
       ft_addLocalFontTitle_warning: "Si vous ne pouvez pas enregistrer, utilisez un nom en anglais.",
@@ -2081,6 +2101,11 @@ translation: {
   },
   zh: {
     translation: {
+"com-opacity":"透明度",
+"com-lineWidth":"线条粗细",
+"com-fontSize":"字体大小",
+"com-fill":"填充颜色",
+"com-strokeColor":"线条颜色",
 "strokeColor":"线条颜色",
       "pwa_install":"安装网页应用",
       ft_addLocalFontTitle_warning: "如果无法注册，请使用英文名称。",
@@ -2605,6 +2630,11 @@ translation: {
   },
   ru: {
     translation: {
+"com-opacity":"Прозрачность",
+"com-lineWidth":"Толщина линии",
+"com-fontSize":"Размер шрифта",
+"com-fill":"Цвет заливки",
+"com-strokeColor":"Цвет линии",
 "strokeColor":"Цвет линии",
       "pwa_install":"Установить веб-приложение",
       ft_addLocalFontTitle_warning: "Если не удается зарегистрировать, используйте английское имя.",
@@ -3078,6 +3108,11 @@ translation: {
   },
   es: {
     translation: {
+"com-opacity":"Opacidad",
+"com-lineWidth":"Grosor de línea",
+"com-fontSize":"Tamaño de fuente",
+"com-fill":"Color de relleno",
+"com-strokeColor":"Color de línea",
 "strokeColor":"Color de línea",
       "pwa_install":"Instalar aplicación web",
       ft_addLocalFontTitle_warning: "Si no puedes registrar, usa un nombre en inglés.",
@@ -3550,6 +3585,11 @@ translation: {
   },
   pt: {
     translation: {
+"com-opacity":"Opacidade",
+"com-lineWidth":"Largura da linha",
+"com-fontSize":"Tamanho da fonte",
+"com-fill":"Cor de preenchimento",
+"com-strokeColor":"Cor da linha",
 "strokeColor":"Cor da linha",
       "pwa_install":"Instalar aplicativo web",
       ft_addLocalFontTitle_warning: "Se não for possível registrar, use um nome em inglês.",
@@ -4023,6 +4063,11 @@ translation: {
   },
 th: {
 translation: {
+"com-opacity":"ความโปร่งใส",
+"com-lineWidth":"ความหนาของเส้น",
+"com-fontSize":"ขนาดตัวอักษร",
+"com-fill":"สีพื้น",
+"com-strokeColor":"สีเส้น",
 "strokeColor":"สีเส้น",
   "pwa_install":"ติดตั้งแอพเว็บ",
   ft_addLocalFontTitle_warning: "หากไม่สามารถลงทะเบียนได้ โปรดใช้ชื่อภาษาอังกฤษ.",
@@ -4546,6 +4591,11 @@ translation: {
   },
     de: {
 "translation": {
+"com-opacity":"Deckkraft",
+"com-lineWidth":"Linienstärke",
+"com-fontSize":"Schriftgröße",
+"com-fill":"Füllfarbe",
+"com-strokeColor":"Linienfarbe",
 "strokeColor":"Linienfarbe",
   "pwa_install":"Web-App installieren",
   ft_addLocalFontTitle_warning: "Wenn Sie sich nicht registrieren können, verwenden Sie bitte einen englischen Namen.",

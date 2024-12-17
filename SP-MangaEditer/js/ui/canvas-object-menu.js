@@ -99,17 +99,31 @@ function showObjectMenu(clickType) {
 
   var font                = createObjectMenuDiv('fontSelectorMenu');
 
-  let min=0, max=100, step=1, value=(activeObject.opacity*100), labelAndId='opacity';
+  let fillTemp = null;
+  let strokeWidthTemp = null;
+  let strokeTemp = null;
+  if(isSpeechBubbleSVG(activeObject)){
+    fillTemp        = getSpeechBubbleTextFill(activeObject, "fill");
+    strokeWidthTemp = getSpeechBubbleTextFill(activeObject, "strokeWidth");
+    strokeTemp      = getSpeechBubbleTextFill(activeObject, "stroke");
+  }else{
+    fillTemp        = activeObject.fill;
+    strokeWidthTemp = activeObject.strokeWidth;
+    strokeTemp      = activeObject.stroke;
+  }
+
+
+  let min=0, max=100, step=1, value=(activeObject.opacity*100), labelAndId='com-opacity';
   let opacity = createObjectMenuSlider(labelAndId,min,max,step,value);
 
-  min=0, max=10, step=1, value=activeObject.strokeWidth, labelAndId='lineWidth';
+  min=0, max=40, step=1, value=strokeWidthTemp, labelAndId='com-lineWidth';
   let strokeWidth = createObjectMenuSlider(labelAndId,min,max,step,value);
 
-  min=7, max=150, step=1, value=activeObject.fontSize, labelAndId='fontSize';
+  min=7, max=150, step=1, value=activeObject.fontSize, labelAndId='com-fontSize';
   let fontSize = createObjectMenuSlider(labelAndId,min,max,step,value);
 
-  let fillColor   = createObjectMenuColor("fill", rgbaToHex(activeObject.fill));
-  let strokeColor = createObjectMenuColor("strokeColor", rgbaToHex(activeObject.stroke));
+  let fillColor   = createObjectMenuColor("com-fill", rgbaToHex(fillTemp));
+  let strokeColor = createObjectMenuColor("com-strokeColor", rgbaToHex(strokeTemp));
 
   if (isPanel(activeObject)) {
     if (clickType !== 'left') {
@@ -207,7 +221,7 @@ function handleSliderInput(e) {
 
   // console.log("e.target.id:",e.target.id);
   switch (e.target.id) {
-    case 'fontSize':
+    case 'com-fontSize':
       const fontSizeValue = parseInt(e.target.value);
       activeObject.fontSize = fontSizeValue;
 
@@ -218,25 +232,33 @@ function handleSliderInput(e) {
         updateShapeMetrics(svgObj);
       }
       break
-    case 'opacity':
+    case 'com-opacity':
       const opacityValue = parseInt(e.target.value);
       activeObject.opacity = opacityValue/100;
       break;
-    case 'lineWidth':
+    case 'com-lineWidth':
       const strokeWidthValue = parseInt(e.target.value);
       activeObject.set("strokeWidth", strokeWidthValue);
       break;
-    case 'fill':
+    case 'com-fill':
       const fillColor = e.target.value;
       activeObject.set("fill", fillColor);
       break;
-    case 'strokeColor':
+    case 'com-strokeColor':
       const strokeColor = e.target.value;
       activeObject.set("stroke", strokeColor);
       break;
   }
+
+  if (isSpeechBubbleSVG(activeObject)) {
+    var bubbleStrokewidht = parseFloat($("com-lineWidth").value);
+    var fillColorsvg      = $("com-fill").value;
+    var strokeColorsvg    = $("com-strokeColor").value;
+    var opacity           = $("com-opacity").value;
+    changeSpeechBubbleSVG(bubbleStrokewidht, fillColorsvg, strokeColorsvg, opacity);
+  }
+  
   canvas.requestRenderAll();
-  canvas.renderAll;
 }
 
 

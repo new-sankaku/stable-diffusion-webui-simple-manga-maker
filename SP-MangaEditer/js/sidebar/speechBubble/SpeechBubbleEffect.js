@@ -4,10 +4,15 @@ function changeSpeechBubble() {
     var fillColor   = $("bubbleFillColor").value;
     var strokeColor = $("bubbleStrokeColor").value;
     var opacity     = $("speechBubbleOpacity").value;
-    opacity = opacity / 100;  
+    changeSpeechBubbleSVG(bubbleStrokewidht, fillColor, strokeColor, opacity);
 
+}
+function changeSpeechBubbleSVG(bubbleStrokewidht, fillColor, strokeColor, opacity){
+    opacity = opacity / 100;  
     var fillColorRgba   = hexToRgba(fillColor,opacity);
     var strokeColorRgba = hexToRgba(strokeColor,1.0);
+
+    console.log("changeSpeechBubbleSVG:", bubbleStrokewidht, fillColorRgba, strokeColorRgba, opacity);
 
     var activeObject = canvas.getActiveObject();
     if (activeObject) {
@@ -38,18 +43,77 @@ function changeSpeechBubble() {
                     }
                 });    
             }
-
-
         canvas.requestRenderAll();
     }
 }
 
-function hexToRgba(hex, opacity = 1) {
-    hex = hex.replace('#', '');
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+function getSpeechBubbleTextFill(activeObject, type){
+    let isExistsFillArea = false;
+    if(isPath(activeObject)){
+        if(type == 'fill'){
+            return activeObject.fill;
+        }
+        if(type == 'stroke'){
+            return activeObject.stroke;
+        }
+        if(type == 'strokeWidth'){
+            return activeObject.strokeWidth;
+        }
+    }else{
+        activeObject.forEachObject((obj) => {
+            if( obj.data?.originalId === "fillArea"){
+                isExistsFillArea = true;
+                return;
+            }
+        });
+        activeObject.forEachObject((obj) => {
+            if( isExistsFillArea ){
+                if( obj.data?.originalId === "fillArea"){
+
+                    if(type == 'fill'){
+                        return obj.fill;
+                    }
+                    if(type == 'stroke'){
+                        return obj.stroke;
+                    }
+                    if(type == 'strokeWidth'){
+                        return obj.strokeWidth;
+                    }
+                }else{
+                    if(type == 'fill'){
+                        return obj.fill;
+                    }
+                    if(type == 'stroke'){
+                        return obj.stroke;
+                    }
+                    if(type == 'strokeWidth'){
+                        return obj.strokeWidth;
+                    }
+                }
+            }else{
+                if(type == 'fill'){
+                    return obj.fill;
+                }
+                if(type == 'stroke'){
+                    return obj.stroke;
+                }
+                if(type == 'strokeWidth'){
+                    return obj.strokeWidth;
+                }
+            }
+        });    
+    }
+
+    if(type == 'fill'){
+        return "rgba(255, 255, 255, 0)";
+    }
+    if(type == 'stroke'){
+        return "rgba(0, 0, 0, 0)";
+    }
+    if(type == 'strokeWidth'){
+        return 10;
+    }
+    return null;
 }
 
 function loadSpeechBubbleSVGReadOnly(svgString, name) {
