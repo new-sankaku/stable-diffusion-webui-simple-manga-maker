@@ -3,7 +3,7 @@
 const resources = {
   ja: {
     translation: {
-
+"DevelopmentDonations":"▽開発への寄付▽",
 "com-opacity":"透明度",
 "com-lineWidth":"線の太さ",
 "com-fontSize":"フォントサイズ",
@@ -499,6 +499,7 @@ ft_placeholderWeb: "https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&fam
   },
 en: {
     translation: {
+"DevelopmentDonations":"▽Donations to Development▽",
 "com-opacity":"Opacity",
 "com-lineWidth":"Line width",
 "com-fontSize":"Font size",
@@ -1075,6 +1076,7 @@ en: {
   },
   ko: {
 translation: {
+"DevelopmentDonations":"▽개발에 대한 기부▽",
 "com-opacity":"투명도",
 "com-lineWidth":"선 굵기",
 "com-fontSize":"글자 크기",
@@ -1572,6 +1574,7 @@ translation: {
   },
   fr: {
     translation: {
+"DevelopmentDonations":"▽Dons pour le développement▽",
 "com-opacity":"Opacité",
 "com-lineWidth":"Épaisseur de ligne",
 "com-fontSize":"Taille de police",
@@ -2101,6 +2104,7 @@ translation: {
   },
   zh: {
     translation: {
+"DevelopmentDonations":"▽支持开发▽",
 "com-opacity":"透明度",
 "com-lineWidth":"线条粗细",
 "com-fontSize":"字体大小",
@@ -2630,6 +2634,7 @@ translation: {
   },
   ru: {
     translation: {
+"DevelopmentDonations":"▽Пожертвования на разработку▽",
 "com-opacity":"Прозрачность",
 "com-lineWidth":"Толщина линии",
 "com-fontSize":"Размер шрифта",
@@ -3108,7 +3113,8 @@ translation: {
   },
   es: {
     translation: {
-"com-opacity":"Opacidad",
+"DevelopmentDonations":"▽Donaciones para el desarrollo▽",
+      "com-opacity":"Opacidad",
 "com-lineWidth":"Grosor de línea",
 "com-fontSize":"Tamaño de fuente",
 "com-fill":"Color de relleno",
@@ -3585,7 +3591,8 @@ translation: {
   },
   pt: {
     translation: {
-"com-opacity":"Opacidade",
+"DevelopmentDonations":"▽Doações para o desenvolvimento▽",
+      "com-opacity":"Opacidade",
 "com-lineWidth":"Largura da linha",
 "com-fontSize":"Tamanho da fonte",
 "com-fill":"Cor de preenchimento",
@@ -4063,7 +4070,8 @@ translation: {
   },
 th: {
 translation: {
-"com-opacity":"ความโปร่งใส",
+"DevelopmentDonations":"▽บริจาคเพื่อการพัฒนา▽",
+  "com-opacity":"ความโปร่งใส",
 "com-lineWidth":"ความหนาของเส้น",
 "com-fontSize":"ขนาดตัวอักษร",
 "com-fill":"สีพื้น",
@@ -4591,6 +4599,7 @@ translation: {
   },
     de: {
 "translation": {
+  "DevelopmentDonations":"▽Spenden für die Entwicklung▽",
 "com-opacity":"Deckkraft",
 "com-lineWidth":"Linienstärke",
 "com-fontSize":"Schriftgröße",
