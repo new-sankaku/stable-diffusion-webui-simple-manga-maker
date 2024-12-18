@@ -10,9 +10,20 @@ const fmFontData = {
     color: "#4a9eff",
     fonts: [
       { name: "Arial Narrow" },
+      { name: "Klee One" },
+      
+      { name: "ZCOOL KuaiLe" },
+      { name: "ZCOOL XiaoWei" },
+
+      { name: "Do Hyeon" },
+      { name: "East Sea Dokdo" },
+
+      { name: "Architects Daughter" },
+      { name: "Comic Neue" },
+
+      { name: "Zen Maru Gothic" },
       { name: "Verdana" },
       { name: "Malgun Gothic" },
-      { name: "Comic Sans MS" },
       { name: "KleeOne" },
       { name: "Century Gothic" },
       { name: "Yu Gothic" },
@@ -30,8 +41,6 @@ const fmFontData = {
       { name: "Yu Mincho" },
       { name: "Helvetica" },
       { name: "Franklin Gothic Medium" },
-      { name: "MS PGothic" },
-      { name: "MS UI Gothic" },
       { name: "Courier" },
       { name: "Courier New" },
     ],
@@ -40,22 +49,23 @@ const fmFontData = {
     color: "#ff4a4a",
     fonts: [
       { name: "Bangers" },
-      { name: "RampartOne-Regular" },
-      { name: "TrainOne-Regular" },
       { name: "Impact" },
-      { name: "851CHIKARA-DZUYOKU_kanaA" },
+      { name: "851_DZUYOKU" },
+      { name: "851_YOWAKU" },
+      { name: "851_KAKUKAKU" },
+      { name: "851_MkPOP" },
       { name: "Arial Black" },
-      { name: "DokiDokiFont2" },
     ],
   },
   CustomFont: {
     color: "#ff9f4a",
     fonts: [
       { name: "DotGothic16" },
-      { name: "Kalam" },
-      { name: "OhisamaFont11" },
-      { name: "Stick" },
-      { name: "851MkPOP_101" },
+      { name: "Chalk" },
+      { name: "Bungee Shade" },
+      { name: "Rubik Mono One" },
+      { name: "Permanent Marker" },
+      { name: "Comic Sans MS" },
     ],
   }
 };

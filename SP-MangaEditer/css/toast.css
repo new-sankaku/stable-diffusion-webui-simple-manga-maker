@@ -38,8 +38,8 @@
 }
 
 #sp-manga-toastContainer {
-  position: fixed;  /* これは必須です */
-  z-index: 9999;   /* モーダルより大きな値を設定 */
+  position: fixed;
+  z-index: 9999;
 }
 
 #fm-modalOverlay {
