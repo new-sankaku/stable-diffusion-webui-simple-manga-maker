@@ -53,15 +53,27 @@ class FontSelector {
   createFontOption(font, color) {
     var langText = getSampleTextByLanguageCode();
     const option = document.createElement("div");
-    option.className = `fm-font-option fm-font-${font.name.replace(
-      /[\s-]/g,
-      "_"
-    )}`;
+    option.className = `fm-font-option fm-font-${font.name.replace(/[\s-]/g,"_")}`;
     option.dataset.font = font.name;
-    option.textContent = `${langText} ${font.name}`;
+    option.style.display = "flex";
+    option.style.justifyContent = "space-between";
+    option.style.alignItems = "center";
+    const fontNameSpan = document.createElement("span");
+    fontNameSpan.textContent = font.name;
+    fontNameSpan.style.fontSize = "1.0em";
+    const sampleTextSpan = document.createElement("span");
+    sampleTextSpan.textContent = langText;
+    sampleTextSpan.style.fontSize = "0.8em";
+    option.appendChild(fontNameSpan);
+    option.appendChild(sampleTextSpan);
     return option;
   }
- 
+  
+  
+
+
+
+
   reload() {
     this.savedFont = $(`fm-selected-font-${this.targetId}`).textContent;
     this.initialize();
@@ -212,24 +224,24 @@ function getSampleTextByLanguageCode() {
   const currentLang = i18next.language;
   switch (currentLang) {
     case 'en':
-      return '';
+      return 'ABC';
     case 'ja':
-      return 'サンプル';
+      return 'サンプル ABC';
     case 'ko':
-      return '샘플';
+      return '샘플 ABC';
     case 'fr':
-      return '';
+      return 'ABC';
     case 'zh':
-      return '示例';
+      return '示例 ABC';
     case 'ru':
-      return 'Пример';
+      return 'Пример ABC';
     case 'es':
-      return 'Ejemplo';
+      return 'Ejemplo ABC';
     case 'pt':
-      return '';
+      return 'ABC';
     case 'de':
-      return 'Beispiel';
+      return 'Beispiel ABC';
     default:
-      return 'Sample';
+      return 'Sample ABC';
   }
 }

@@ -203,7 +203,6 @@
   }
 }
 
-/* 極小画面対応 */
 @media (max-width: 480px) {
   .fm-fontInputSection {
     flex: 1 1 50%;
@@ -222,19 +221,18 @@
 
 
 
-/* フォントドロップダウン */
 .fm-font-dropdown {
+  background: var(--color-tertiary);
   position: relative;
   width: 180px;
-  font-family: sans-serif;
 }
 
 .fm-dropdown-trigger {
+  background: var(--color-tertiary);
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #444;
   border-radius: 4px;
-  background: #2a2a2a;
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -245,7 +243,7 @@
 
 .fm-dropdown-trigger:hover {
   border-color: #666;
-  background: #333;
+  background: var(--color-secondary);
   color: #fff;
 }
 
