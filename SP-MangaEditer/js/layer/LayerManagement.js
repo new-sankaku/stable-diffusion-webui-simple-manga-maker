@@ -1,6 +1,9 @@
 let finalLayerOrder = [];
 
 function updateLayerPanel() {
+  console.time('updateLayerPanel');
+
+
   var layers = canvas.getObjects().slice().reverse();
   var layerContent = $("layer-content");
   layerContent.innerHTML = "";
@@ -122,7 +125,7 @@ function updateLayerPanel() {
       }
       putDeleteButton(buttonsDiv, layer, index);
 
-      layerDiv.setAttribute("data-id", layer.id);
+      layerDiv.setAttribute("data-guid", layer.guid);
 
       if (isLayerPreview(layer)) {
         layerDiv.appendChild(previewDiv);
@@ -157,6 +160,8 @@ function updateLayerPanel() {
       layerContent.appendChild(layerDiv);
     }
   });
+
+  console.timeEnd('updateLayerPanel');
 }
 
 function setNameTextAreaProperties(layer, nameTextArea, index) {
@@ -321,7 +326,6 @@ function highlightActiveLayer(activeIndex) {
 }
 
 function highlightActiveLayerByCanvas(object=null) {
-  // console.log("highlightActiveLayerByCanvas");
   let activeObject;
   if(object){
     activeObject = object;
@@ -330,37 +334,28 @@ function highlightActiveLayerByCanvas(object=null) {
   }
   
   updateControls(activeObject);
-  if( isPanel(activeObject) ){
+  if(isPanel(activeObject)){
     showT2IPrompts(activeObject);
-  }else if( isImage(activeObject)){
+  }else if(isImage(activeObject)){
     showI2IPrompts(activeObject);
   }else{
     noShowPrompt();
   }
 
-  var activeIndex = getLayerIndexByActiveObject(activeObject);
-  var layers = document.querySelectorAll(".layer-item");
-
-  var reverseIndex = layers.length - 1 - activeIndex;
-
-  layers.forEach(function (layerDiv, index) {
-    if (index === reverseIndex) {
-      layerDiv.classList.add("active");
-    } else {
-      layerDiv.classList.remove("active");
-    }
-  });
+  const layerDiv = document.querySelector(`.layer-item[data-guid="${activeObject.guid}"]`);
+  if(layerDiv) {
+    layerDiv.style.background = "#9da600";
+  }
 }
 
 
 function getLayerIndexByActiveObject(targetObject) {
-
-  // console.log("finalLayerOrder.length", finalLayerOrder.length);
-
   if (!targetObject || !finalLayerOrder || finalLayerOrder.length === 0) return -1;
-  const normalIndex = finalLayerOrder.indexOf(targetObject);
-  return finalLayerOrder.length - 1 - normalIndex;
-}
+   
+  const normalIndex = finalLayerOrder.findIndex(item => item.layer === targetObject);
+  const result = finalLayerOrder.length - normalIndex;
+  return result;
+ }
 
 function LayersUp() {
   var activeObject = canvas.getActiveObject();

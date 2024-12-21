@@ -19,6 +19,7 @@
 .layer-item:hover,
 .layer-item.active {
  background-color: var(--active-background-color-D);
+ 
 }
 
 .layer-preview {

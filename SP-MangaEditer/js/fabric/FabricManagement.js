@@ -69,11 +69,6 @@ canvas.on('object:modified',    highlightActiveLayerByCanvas);
 // canvas.on('object:scaling',     highlightActiveLayerByCanvas);
 // canvas.on('object:moving',      highlightActiveLayerByCanvas);
 // canvas.on('object:rotating',    highlightActiveLayerByCanvas);
-canvas.on('mouse:down', function(event) {
-  if (event.target) {
-    highlightActiveLayerByCanvas(event.target);
-  }
-});
 
 //Object選択時にLeyerパネルをハイライトを終了する。
 canvas.on('selection:cleared', function() {
@@ -204,8 +199,10 @@ canvas.on('mouse:up', function(e) {
       canvas.renderAll();
       changeDoSaveHistory();
       saveStateByManual();
+      highlightActiveLayerByCanvas(e.target);
   }
 });
+
 
 // // Mouse events
 // canvas.on('mouse:down', e => console.log('mouse:down called'));
