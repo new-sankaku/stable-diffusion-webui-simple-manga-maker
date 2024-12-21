@@ -24,13 +24,6 @@ function isVerticalText(activeObject) {
   return (activeObject && (activeObject.type === "vertical-textbox"));
 }
 
-function isSpeechBubbleText(activeObject) {
-  return (activeObject && (activeObject.customType === 'speechBubbleText'));
-}
-function isSpeechBubbleSVG(activeObject) {
-  return (activeObject && (activeObject.customType === 'speechBubbleSVG'));
-}
-
 
 function isHorizontalText(activeObject) {
   return (activeObject && (activeObject.type === 'i-text' || activeObject.type === "text" || activeObject.type === "textbox"));
@@ -608,6 +601,7 @@ function isSpeechBubbleText(obj){
   }
   return false;
 }
+
 function isSpeechBubbleRect(obj){
   if (obj && obj.customType && obj.customType==='speechBubbleRect') {
     return true;

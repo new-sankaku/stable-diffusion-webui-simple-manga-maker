@@ -105,6 +105,8 @@ canvas.on('selection:updated', function(event) {
 });
 
 function moveSettings(img, poly) {
+
+  // console.log("moveSettings", img, poly);
   updateClipPath(img, poly);
 
   function updateOnModification() {
@@ -135,6 +137,11 @@ function moveSettings(img, poly) {
 
 function updateClipPath(imageObj, polygonObj) {
   const matrix = polygonObj.calcTransformMatrix();
+  if(!polygonObj.points){
+    console.log("ERROR ERROR ERROR polygonObj.points", JSON.stringify(polygonObj.points));
+    return;
+  }
+
   const transformedPoints = polygonObj.points.map(point => {
       return fabric.util.transformPoint({
           x: point.x - polygonObj.pathOffset.x,

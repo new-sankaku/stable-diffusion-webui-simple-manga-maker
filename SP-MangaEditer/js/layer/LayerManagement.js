@@ -5,65 +5,60 @@ function updateLayerPanel() {
   var layerContent = $("layer-content");
   layerContent.innerHTML = "";
   var guidMap = createGUIDMap(layers);
-  var processedLayersFirst = new Set();
-  var processedLayersSecond = new Set();
-
-  // 最終的なレイヤー順序を保持する配列
-  finalLayerOrder = [];
 
   layers.forEach((layer) => {
-    if (layer.guids && layer.guids.length > 0) {
-    } else {
+    if (!layer.guids || layer.guids.length === 0) {
       layer.guids = [];
     }
   });
 
-  // guidsを持つレイヤーを処理
-  layers.forEach((layer) => {
-    if (layer.isPanel || isSpeechBubbleSVG(layer)) {
-      processedLayersFirst.add(layer);
-      layer.guids.forEach((guid) => {
-        var matchingLayer = guidMap.get(guid);
-        if (matchingLayer) {
-          processedLayersFirst.add(matchingLayer);
-        }
-      });
-    }
-  });
-
-  // guidsを持つレイヤーを処理
-  layers.forEach((layer) => {
-    if (layer.isPanel || isSpeechBubbleSVG(layer)) {
-      finalLayerOrder.push(layer);
-      processedLayersSecond.add(layer);
-
-      var guidsNow = layer.guids;
-      var guidsTemp = [];
-      layers.forEach((layer) => {
-        var nowGuid = layer.guid;
-        if (guidsNow.includes(nowGuid)) {
-          guidsTemp.push(nowGuid);
-        }
-      });
-
-      guidsTemp.forEach((guid) => {
-        var matchingLayer = guidMap.get(guid);
-        if (matchingLayer) {
-          finalLayerOrder.push(matchingLayer);
-          processedLayersSecond.add(matchingLayer);
-        }
-      });
-    } else {
-      if (!processedLayersFirst.has(layer)) {
-        finalLayerOrder.push(layer);
-      }
-    }
-  });
-
   let isEven = true;
+  finalLayerOrder = [];
 
-  // レイヤーパネルの更新
-  finalLayerOrder.forEach((layer, index) => {
+  function processLayerHierarchy(layer, processedLayers = new Set(), level = 0) {
+    if (processedLayers.has(layer)) {
+      return;
+    }
+    
+    processedLayers.add(layer);
+    finalLayerOrder.push({layer: layer, level: level});
+
+    if (layer.guids && layer.guids.length > 0) {
+      const childLayers = layer.guids
+        .map(guid => guidMap.get(guid))
+        .filter(child => child !== undefined)
+        .sort((a, b) => {
+          const indexA = layers.indexOf(a);
+          const indexB = layers.indexOf(b);
+          return indexA - indexB;
+        });
+
+      childLayers.forEach(childLayer => {
+        processLayerHierarchy(childLayer, processedLayers, level + 1);
+      });
+    }
+  }
+
+  const topLevelLayers = layers.filter(layer => {
+    const isChildOfAnotherLayer = layers.some(parentLayer => 
+      parentLayer.guids && parentLayer.guids.includes(layer.guid)
+    );
+    return (layer.isPanel || isSpeechBubbleSVG(layer)) && !isChildOfAnotherLayer;
+  });
+
+  topLevelLayers.forEach(layer => {
+    processLayerHierarchy(layer);
+  });
+
+  const remainingLayers = layers.filter(layer => 
+    !finalLayerOrder.some(item => item.layer === layer)
+  );
+
+  remainingLayers.forEach(layer => {
+    finalLayerOrder.push({layer: layer, level: 0});
+  });
+
+  finalLayerOrder.forEach(({layer, level}, index) => {
     if (!layer.excludeFromLayerPanel) {
       var layerDiv = Object.assign(document.createElement("div"), {
         className: "layer-item",
@@ -88,14 +83,13 @@ function updateLayerPanel() {
         nameTextArea.value = fullText.substring(0, 20);
       } else if (isVerticalText(layer)) {
         var fullText = layer.name;
-        if( fullText ){
+        if (fullText) {
           nameTextArea.value = fullText.substring(0, 15);
-        }else{
+        } else {
           layer.name = "verticalText";
           fullText = layer.name;
           nameTextArea.value = fullText.substring(0, 15);
         }
-        
       }
 
       setNameTextAreaProperties(layer, nameTextArea, index);
@@ -112,7 +106,6 @@ function updateLayerPanel() {
       if (isImage(layer)) {
         putCheckButton(buttonsDiv, layer, index);
       }
-
 
       if (layer.isPanel) {
         putRunT2IButton(buttonsDiv, layer, index);
@@ -145,10 +138,9 @@ function updateLayerPanel() {
         updateControls(layer);
       };
 
-      var isMatchingLayer = layers.some(layerWithGUIDs => layerWithGUIDs.guids && layerWithGUIDs.guids.includes(layer.guid));
-      if (isMatchingLayer) {
+      if (level > 0) {
         layerDiv.style.border = 'none';
-        layerDiv.style.marginLeft = "18px";
+        layerDiv.style.marginLeft = `${level * 18}px`;
         layerDiv.style.paddingLeft = "5px";
         layerDiv.style.borderLeft = getCssValue('--boader-color-2px-solid-C');
       } else {
@@ -156,10 +148,10 @@ function updateLayerPanel() {
         isEven = !isEven;
       }
 
-      if(isEven){
-        layerDiv.style.background=getCssValue('--odd-layer');
-      }else{
-        layerDiv.style.background=getCssValue('--even-layer');
+      if(isEven) {
+        layerDiv.style.background = getCssValue('--odd-layer');
+      } else {
+        layerDiv.style.background = getCssValue('--even-layer');
       }
 
       layerContent.appendChild(layerDiv);

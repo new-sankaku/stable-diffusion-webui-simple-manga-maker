@@ -437,16 +437,27 @@ canvas.on("mouse:up", function (event) {
   }
 });
 
+function speechBubbleTextChaged(textObj){
+  if (isSpeechBubbleText(textObj)) {
+    let newSettings = mainSpeechBubbleObjectResize(textObj);
+    const svgObj = textObj.targetObject;
+
+    svgObj.set(newSettings);
+    updateShapeMetrics(svgObj);
+  }
+}
+
+
+
+function customSpeechBubbleAllRelocation(){
+  canvas.getObjects().forEach(obj =>{
+    speechBubbleTextChaged(obj);
+  });
+}
+
 canvas.on("text:changed", function (event) {
   requestAnimationFrame(() => {
-    if (isSpeechBubbleText(event.target)) {
-      let textObj = event.target;
-      let newSettings = mainSpeechBubbleObjectResize(textObj);
-      const svgObj = textObj.targetObject;
-
-      svgObj.set(newSettings);
-      updateShapeMetrics(svgObj);
-    }
+    speechBubbleTextChaged(event.target);
   });
 });
 

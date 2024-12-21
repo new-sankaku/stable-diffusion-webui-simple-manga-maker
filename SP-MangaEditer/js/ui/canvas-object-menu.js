@@ -92,6 +92,7 @@ function showObjectMenu(clickType) {
   var deleteMenu          = createObjectMenuButton('delete');
   var generate            = createObjectMenuButton('generate');
   var panelIn             = createObjectMenuButton('panelIn');
+  var panelInNotFit       = createObjectMenuButton('panelInNotFit');
   var canvasFit           = createObjectMenuButton('canvasFit');
   var selectClear         = createObjectMenuButton('selectClear');
   var rembg               = createObjectMenuButton('rembg');
@@ -147,6 +148,7 @@ function showObjectMenu(clickType) {
     }
   }else if (isSpeechBubbleSVG(activeObject) || isSpeechBubbleText(activeObject)) {
     menuItems = [visible];
+    menuItems.push(panelInNotFit);
   }
 
   if (isPanel(activeObject) || isSpeechBubbleSVG(activeObject) || isSpeechBubbleText(activeObject) || isText(activeObject)) {

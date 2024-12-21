@@ -128,10 +128,10 @@ function customToJSON() {
             obj.speechBubbleGrid = "GUID:"+hash;
         }
 
-        if (obj.speechBubbleGrid) {
-            console.log('Type:', typeof obj.speechBubbleGrid);
-            console.log('Value:', obj.speechBubbleGrid);
-        }
+        // if (obj.speechBubbleGrid) {
+        //     console.log('Type:', typeof obj.speechBubbleGrid);
+        //     console.log('Value:', obj.speechBubbleGrid);
+        // }
 
         return obj;
     });
@@ -195,7 +195,8 @@ function undo() {
             setCanvasGUID(state.canvasGuid);
             canvas.renderAll();
             updateLayerPanel();
-            resetEventHandlers(); 
+            resetEventHandlers();
+            customSpeechBubbleAllRelocation();
             changeDoSaveHistory();
         });
         clearJSTSGeometry();
@@ -213,7 +214,8 @@ function redo() {
             setCanvasGUID( state.canvasGuid );
             canvas.renderAll();
             updateLayerPanel();
-            resetEventHandlers(); 
+            resetEventHandlers();
+            customSpeechBubbleAllRelocation();
             changeDoSaveHistory();
         });
         clearJSTSGeometry();
@@ -236,6 +238,7 @@ function lastRedo(guid = null) {
         canvas.renderAll();
         updateLayerPanel();
         resetEventHandlers(); 
+        customSpeechBubbleAllRelocation();
         changeDoSaveHistory();
     });
     clearJSTSGeometry();

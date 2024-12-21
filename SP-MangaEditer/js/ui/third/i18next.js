@@ -5129,7 +5129,7 @@ showObjectMenu(lastClickType);
       console.error('Failed to change language:', err);
     }
   });
-  reloadFont('fontSelector');
+  // reloadFont('fontSelector');
   recreateFloatingWindow();
 }
 function getTranslation(key, defaultText) {
