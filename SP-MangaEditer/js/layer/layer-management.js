@@ -1,4 +1,5 @@
 let finalLayerOrder = [];
+let lastHighlightGuid = null;
 
 function updateLayerPanel() {
   console.time('updateLayerPanel');
@@ -127,6 +128,7 @@ function updateLayerPanel() {
 
       layerDiv.setAttribute("data-guid", layer.guid);
 
+
       if (isLayerPreview(layer)) {
         layerDiv.appendChild(previewDiv);
       }
@@ -151,7 +153,13 @@ function updateLayerPanel() {
         isEven = !isEven;
       }
 
-      if(isEven) {
+      const activeObject = canvas.getActiveObject();
+      if(lastHighlightGuid && activeObject && 
+         layer.guid == activeObject.guid && 
+         lastHighlightGuid == layer.guid){
+          
+        layerDiv.style.background = "#9da600";
+      }else if(isEven) {
         layerDiv.style.background = getCssValue('--odd-layer');
       } else {
         layerDiv.style.background = getCssValue('--even-layer');
@@ -314,18 +322,10 @@ function removeLayer(layer) {
 
 function highlightActiveLayer(activeIndex) {
   highlightActiveLayerByCanvas();
-
-  // var layerItems = document.querySelectorAll(".layer-item");
-  // layerItems.forEach((layer, index) => {
-  //   if (index === activeIndex) {
-  //     layer.classList.add("active");
-  //   } else {
-  //     layer.classList.remove("active");
-  //   }
-  // });
 }
 
 function highlightActiveLayerByCanvas(object=null) {
+  lastHighlightGuid = null;
   let activeObject;
   if(object){
     activeObject = object;
@@ -345,6 +345,7 @@ function highlightActiveLayerByCanvas(object=null) {
   const layerDiv = document.querySelector(`.layer-item[data-guid="${activeObject.guid}"]`);
   if(layerDiv) {
     layerDiv.style.background = "#9da600";
+    lastHighlightGuid = activeObject.guid;
   }
 }
 

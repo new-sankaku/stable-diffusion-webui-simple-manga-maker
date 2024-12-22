@@ -25,13 +25,13 @@ start index.html
 ## 界面预览
 
 ### 主页面
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="700">
 
 ### 文字生成图像窗口的主页面
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt.webp" width="700">
 
 ### 图像提示助手
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="700">
 
 ### 语言支持
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
@@ -57,7 +57,7 @@ start index.html
 </div>
 
 ### 拖放功能
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="700">
 
 ### 特效
 <div style="display: flex; align-items: flex-start;">
@@ -115,7 +115,7 @@ start index.html
 
 git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git
 
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="700">
 
 ## 如何贡献
 - **错误报告**: 创建新问题时在标题中加入 **[Bug]**

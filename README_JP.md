@@ -26,13 +26,13 @@ start index.html
 また、プロ仕様のコマ割りが可能なナイフツールも備えており、自由にコマを切ることができます。機能は継続して発展し続けており、定期的なアップデートを推奨します。
 
 ## Main Page
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="700">
 
 ## Main Page With Txt2Img Window
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt.webp" width="700">
 
 ## Image Prompt Helper
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="700">
 
 ## Support Language
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
@@ -59,7 +59,7 @@ start index.html
 </div>
 
 ## Drag on Drop
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="700">
 
 ## Effect
 <div style="display: flex; align-items: flex-start;">
@@ -107,7 +107,7 @@ start index.html
 
 # インストール
 https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="700">
 
 ## 貢献方法
 - **バグ報告**: バグを発見した場合は、[Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)に新しい問題を作成し、タイトルに**[Bug]**を含めてください。

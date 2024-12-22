@@ -25,13 +25,13 @@ The application supports various features including image drag-and-drop, file se
 ## Interface Previews
 
 ### Main Page
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="700">
 
 ### Main Page With Txt2Img Window
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt2.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/10_prompt2.webp" width="700">
 
 ### Image Prompt Helper
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="700">
 
 ### Language Support
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
@@ -57,7 +57,7 @@ The application supports various features including image drag-and-drop, file se
 </div>
 
 ### Drag and Drop
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="700">
 
 ### Effects
 <div style="display: flex; align-items: flex-start;">
@@ -115,7 +115,7 @@ The application supports various features including image drag-and-drop, file se
 
 git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git
 
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="800">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="700">
 
 ## How to Contribute
 - **Bug Reports**: Create a new issue with **[Bug]** in the title
