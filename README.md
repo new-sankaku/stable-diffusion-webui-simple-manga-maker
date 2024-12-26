@@ -30,7 +30,7 @@ The application supports various features including image drag-and-drop, file se
 ### Image Drop
 https://github.com/user-attachments/assets/7cf94e6c-fc39-4aed-a0a1-37ca70260fe4
 
-### Cpeech Bubble(Template)
+### Speech Bubble(Template)
 https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 
 ### Image Prompt Helper
