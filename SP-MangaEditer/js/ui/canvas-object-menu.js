@@ -98,6 +98,9 @@ function showObjectMenu(clickType) {
   var rembg               = createObjectMenuButton('rembg');
   var clearAllClipPaths   = createObjectMenuButton('clearAllClipPaths');
 
+  var flipHorizontal      = createObjectMenuButton('flipHorizontal');
+  var flipVertical        = createObjectMenuButton('flipVertical');
+
   var font                = createObjectMenuDiv('fontSelectorMenu');
 
   let fillTemp = null;
@@ -145,6 +148,10 @@ function showObjectMenu(clickType) {
         menuItems.push(panelIn);
         menuItems.push(canvasFit);
       }
+
+      menuItems.push(flipHorizontal);
+      menuItems.push(flipVertical);
+
     }
   }else if (isSpeechBubbleSVG(activeObject) || isSpeechBubbleText(activeObject)) {
     menuItems = [visible];
@@ -282,6 +289,12 @@ function handleMenuClick(e) {
   }
 
   switch (action) {
+    case 'flipHorizontal':
+      flipHorizontally();
+      break
+    case 'flipVertical':
+      flipVertically();
+      break
     case 'fontSize':
       const fontSizeValue = parseInt(e.target.value);
       activeObject.fontSize = fontSizeValue;

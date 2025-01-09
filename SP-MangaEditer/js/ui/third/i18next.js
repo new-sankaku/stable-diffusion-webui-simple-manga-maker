@@ -3,6 +3,9 @@
 const resources = {
   ja: {
     translation: {
+"flipHorizontal":"左右反転",
+"flipVertical":"上下反転",
+
 "DevelopmentDonations":"▽開発への寄付▽",
 "com-opacity":"透明度",
 "com-lineWidth":"線の太さ",
@@ -499,6 +502,8 @@ ft_placeholderWeb: "https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&fam
   },
 en: {
     translation: {
+"flipHorizontal":"Flip Horizontal",
+"flipVertical":"Flip Vertical",
 "DevelopmentDonations":"▽Donations to Development▽",
 "com-opacity":"Opacity",
 "com-lineWidth":"Line width",
@@ -1076,6 +1081,8 @@ en: {
   },
   ko: {
 translation: {
+"flipHorizontal":"좌우 반전",
+"flipVertical":"상하 반전",
 "DevelopmentDonations":"▽개발에 대한 기부▽",
 "com-opacity":"투명도",
 "com-lineWidth":"선 굵기",
@@ -1574,6 +1581,8 @@ translation: {
   },
   fr: {
     translation: {
+"flipHorizontal":"Inversion horizontale",
+"flipVertical":"Inversion verticale",
 "DevelopmentDonations":"▽Dons pour le développement▽",
 "com-opacity":"Opacité",
 "com-lineWidth":"Épaisseur de ligne",
@@ -2104,6 +2113,8 @@ translation: {
   },
   zh: {
     translation: {
+"flipHorizontal":"水平翻转",
+"flipVertical":"垂直翻转",
 "DevelopmentDonations":"▽支持开发▽",
 "com-opacity":"透明度",
 "com-lineWidth":"线条粗细",
@@ -2634,6 +2645,8 @@ translation: {
   },
   ru: {
     translation: {
+"flipHorizontal":"Горизонтальное отражение",
+"flipVertical":"Вертикальное отражение",
 "DevelopmentDonations":"▽Пожертвования на разработку▽",
 "com-opacity":"Прозрачность",
 "com-lineWidth":"Толщина линии",
@@ -3113,6 +3126,8 @@ translation: {
   },
   es: {
     translation: {
+"flipHorizontal":"Voltear horizontalmente",
+"flipVertical":"Voltear verticalmente",
 "DevelopmentDonations":"▽Donaciones para el desarrollo▽",
       "com-opacity":"Opacidad",
 "com-lineWidth":"Grosor de línea",
@@ -3591,6 +3606,8 @@ translation: {
   },
   pt: {
     translation: {
+"flipHorizontal":"Inverter horizontalmente",
+"flipVertical":"Inverter verticalmente",
 "DevelopmentDonations":"▽Doações para o desenvolvimento▽",
       "com-opacity":"Opacidade",
 "com-lineWidth":"Largura da linha",
@@ -4070,6 +4087,8 @@ translation: {
   },
 th: {
 translation: {
+"flipHorizontal":"พลิกแนวนอน",
+"flipVertical":"พลิกแนวตั้ง",
 "DevelopmentDonations":"▽บริจาคเพื่อการพัฒนา▽",
   "com-opacity":"ความโปร่งใส",
 "com-lineWidth":"ความหนาของเส้น",
@@ -4599,6 +4618,8 @@ translation: {
   },
     de: {
 "translation": {
+"flipHorizontal":"Horizontal spiegeln",
+"flipVertical":"Vertikal spiegeln",
   "DevelopmentDonations":"▽Spenden für die Entwicklung▽",
 "com-opacity":"Deckkraft",
 "com-lineWidth":"Linienstärke",

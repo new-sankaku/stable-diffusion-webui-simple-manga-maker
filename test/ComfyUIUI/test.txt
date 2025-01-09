@@ -1,0 +1,6 @@
+A - B - C からAをコピーしてAの後ろに追加
+A - B - C からAをコピーしてAの後ろに追加、ConnectionがA - A2 - B - Cになる
+A - B - C からBをコピーしてBの後ろに追加
+A - B - C からBをコピーしてBの後ろに追加、ConnectionがA - B - B2 - Cになる
+A - B - C からCをコピーしてCの後ろに追加
+A - B - C からCをコピーしてCの後ろに追加、ConnectionがA - B - C - C2になる

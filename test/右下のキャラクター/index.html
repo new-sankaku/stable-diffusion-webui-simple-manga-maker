@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8">
+ <title>ウェブページサンプル</title>
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize.css/8.0.1/normalize.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.17/interact.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy.umd.min.js"></script>
+ <script src="kawaii-it.js" defer></script>
+ <style>
+ body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+ }
+ header {
+  background: #333;
+  color: white;
+  padding: 1rem;
+ }
+ nav {
+  background: #f4f4f4;
+  padding: 1rem;
+ }
+ nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 2rem;
+ }
+ .main-content {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+ }
+ .card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+ }
+ .card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+ }
+ footer {
+  background: #333;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+ }
+ .input-form {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: #f8f8f8;
+  border-radius: 8px;
+ }
+ .input-form input[type="text"] {
+  padding: 0.5rem;
+  margin-right: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+ }
+ .input-form button {
+  padding: 0.5rem 1rem;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+ }
+ .input-form button:hover {
+  background: #444;
+ }
+ </style>
+</head>
+<body>
+ <header>
+  <h1>ウェブサイトのタイトル</h1>
+ </header>
+ <nav>
+  <ul>
+   <li><a href="#home">ホーム</a></li>
+   <li><a href="#about">概要</a></li>
+   <li><a href="#services">サービス</a></li>
+   <li><a href="#contact">お問い合わせ</a></li>
+  </ul>
+ </nav>
+ <div class="main-content">
+  <h2>メインコンテンツ</h2>
+  <div class="input-form">
+   <input type="text" id="testInput" placeholder="テキストを入力">
+   <button id="testButton">送信</button>
+  </div>
+  <div class="card-container">
+   <div class="card" data-event="event1">
+    <h3>カード1</h3>
+    <p>このカードをクリックすると会話が変わります。</p>
+   </div>
+   <div class="card" data-event="event2">
+    <h3>カード2</h3>
+    <p>別の会話トリガーです。</p>
+   </div>
+   <div class="card" data-event="event3">
+    <h3>カード3</h3>
+    <p>さらに別の会話があります。</p>
+   </div>
+   <div class="card" data-event="event4">
+    <h3>カード4</h3>
+    <p>最後の会話パターンです。</p>
+   </div>
+  </div>
+ </div>
+ <footer>
+  <p>© 2024 サンプルウェブサイト</p>
+ </footer>
+</body>
+</html>

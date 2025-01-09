@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<textarea id="jsonInput" style="width: 100%; height: 400px;"></textarea>
+<div>
+ <button onclick="copyLora()">LoraLoaderをコピー</button>
+ <button onclick="downloadJson()">JSONをダウンロード</button>
+</div>
+
+<script src="workflow-builder.js"></script>
+<script src="workflow-builder-validate.js"></script>
+<script>
+let builder = new WorkflowBuilder();
+const jsonInput = document.getElementById('jsonInput');
+
+async function copyLora() {
+ try {
+  const workflow = JSON.parse(jsonInput.value);
+  builder = new WorkflowBuilder();
+  await builder.fetchNodeTypes();
+  builder.loadWorkflow(workflow);
+
+  const lastLoraId = builder.getLastNodeIdByType("LoraLoader");
+  if (!lastLoraId) return;
+
+  const newNodeId = builder.currentNodeId;
+  const loraNode = builder.nodes.get(lastLoraId);
+  
+  console.log(JSON.stringify({
+   type: 'copy_start',
+   last_lora_id: lastLoraId,
+   new_node_id: newNodeId,
+   source_node: loraNode
+  }, null, 2));
+
+  const connections = builder.getNodeConnections(lastLoraId);
+  console.log(JSON.stringify({
+   type: 'connection_info',
+   connections: connections
+  }, null, 2));
+ 
+  builder.nodes.set(newNodeId, {
+   inputs: {...loraNode.inputs},
+   class_type: loraNode.class_type,
+   _meta: {...loraNode._meta}
+  });
+
+  builder.connections.push(
+    ...connections.incoming.map(conn => ({
+      fromNode: conn.fromNode,
+      fromPort: conn.fromPort,
+      toNode: newNodeId,
+      toParam: conn.toParam
+    }))
+  );
+
+  builder.currentNodeId++;
+  jsonInput.value = JSON.stringify(builder.build(), null, 2);
+ } catch (error) {
+  console.error(JSON.stringify({
+   type: 'error',
+   message: error.message,
+   stack: error.stack
+  }, null, 2));
+ }
+}
+
+function downloadJson() {
+ const content = jsonInput.value;
+ const blob = new Blob([content], { type: 'application/json' });
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url;
+ a.download = 'workflow.json';
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

@@ -1,18 +1,69 @@
 class Character {
-  constructor() {
-    this.wrapper = null;
-    this.img = null;
-    this.tippyInstance = null;
-    this.currentConversationIndex = 0;
-    this.currentEventType = 'default';
-    this.totalExp = 0;
-    this.lastClickTime = 0;
-    this.lastScrollTime = 0;
-    this.lastInputTime = 0;
-    this.CLICK_THRESHOLD = 200;
-    this.SCROLL_THRESHOLD = 100;
-    this.INPUT_THRESHOLD = 100;
-    this.conversations = {
+  static defaultBaseConfig = {
+    position: {
+      right: '20px',
+      bottom: '20px'
+    },
+    size: {
+      width: 150,
+      height: 200
+    },
+    zIndex: {
+      container: 1000,
+      popup: 1001
+    },
+    image: {
+      src: '00092--rebuild.png',
+      alt: 'キャラクター'
+    }
+  };
+
+  static defaultAnimationConfig = {
+    glow: {
+      duration: 500,
+      color: 'rgba(255, 255, 255, 0.5)',
+      shadowColor: 'rgba(0, 0, 0, 0.5)',
+      shadowSize: '25px'
+    },
+    exp: {
+      duration: 1000,
+      fontSize: '16px',
+      color: '#B8860B',
+      textShadowColor: '#444'
+    },
+    character: {
+      transitionDuration: '0.2s'
+    }
+  };
+
+  static defaultEventConfig = {
+    thresholds: {
+      click: 200,
+      scroll: 100,
+      input: 100,
+      moveThreshold: 5
+    },
+    expGain: {
+      click: 10,
+      scroll: 2,
+      input: 3
+    }
+  };
+
+  static defaultConversationConfig = {
+    tooltip: {
+      placement: 'left',
+      trigger: 'manual',
+      theme: 'custom',
+      arrow: true,
+      interactive: true,
+      maxWidth: 200,
+      backgroundColor: 'white',
+      textColor: 'black',
+      boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+      borderRadius: '10px'
+    },
+    messages: {
       default: [{
         text: 'こんにちは！お手伝いできることはありますか？',
         image: '00092--rebuild.png'
@@ -51,29 +102,65 @@ class Character {
       }, {
         text: 'デモをお見せしましょうか'
       }]
-    };
+    }
+  };
+
+  constructor(config = {}) {
+    this.config = this.mergeConfig(config);
+    this.wrapper = null;
+    this.img = null;
+    this.tippyInstance = null;
+    this.currentConversationIndex = 0;
+    this.currentEventType = 'default';
+    this.totalExp = 0;
+    this.lastClickTime = 0;
+    this.lastScrollTime = 0;
+    this.lastInputTime = 0;
     
     this.initialize();
     this.bindEvents();
   }
 
+  mergeConfig(userConfig) {
+    return {
+      base: {
+        ...Character.defaultBaseConfig,
+        ...userConfig.base
+      },
+      animation: {
+        ...Character.defaultAnimationConfig,
+        ...userConfig.animation
+      },
+      event: {
+        ...Character.defaultEventConfig,
+        ...userConfig.event
+      },
+      conversation: {
+        ...Character.defaultConversationConfig,
+        ...userConfig.conversation
+      }
+    };
+  }
+
   createStyles() {
     const styleSheet = document.createElement('style');
+    const { base, animation } = this.config;
+    
     styleSheet.textContent = `
-@keyframes glowEffect {
-  0% { 
-    filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.5));
-    transform: scale(1);
-  }
-  50% { 
-    filter: drop-shadow(0 8px 25px rgba(255, 255, 255, 0.5));
-    transform: scale(1);
-  }
-  100% { 
-    filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.5));
-    transform: scale(1);
-  }
-}
+      @keyframes glowEffect {
+        0% { 
+          filter: drop-shadow(0 8px ${animation.glow.shadowSize} ${animation.glow.shadowColor});
+          transform: scale(1);
+        }
+        50% { 
+          filter: drop-shadow(0 8px ${animation.glow.shadowSize} ${animation.glow.color});
+          transform: scale(1);
+        }
+        100% { 
+          filter: drop-shadow(0 8px ${animation.glow.shadowSize} ${animation.glow.shadowColor});
+          transform: scale(1);
+        }
+      }
       
       @keyframes expGain {
         0% { transform: translateY(0); opacity: 0; }
@@ -84,52 +171,55 @@ class Character {
       
       #character-container {
         position: fixed;
-        right: 20px;
-        bottom: 20px;
+        right: ${base.position.right};
+        bottom: ${base.position.bottom};
         touch-action: none;
         transform: translate(0px, 0px);
-        z-index: 1000;
+        z-index: ${base.zIndex.container};
       }
       
       #character-inner {
-        filter: drop-shadow(0 8px 10px rgba(255, 9, 9, 0.9));
+        filter: drop-shadow(0 8px ${animation.glow.shadowSize} ${animation.glow.shadowColor});
       }
       
       #character {
-        width: 150px;
-        height: 200px;
+        width: ${base.size.width}px;
+        height: ${base.size.height}px;
         cursor: grab;
         user-select: none;
         object-fit: contain;
-        transition: transform 0.2s ease;
+        transition: transform ${animation.character.transitionDuration} ease;
         will-change: transform;
       }
       
       .glow {
-        animation: glowEffect 0.5s ease-in-out;
+        animation: glowEffect ${animation.glow.duration}ms ease-in-out;
       }
       
       .exp-popup {
         position: absolute;
-        color: #B8860B;
-        text-shadow: -1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444, 1px 1px 0 #444;
+        color: ${animation.exp.color};
+        text-shadow: -1px -1px 0 ${animation.exp.textShadowColor},
+                     1px -1px 0 ${animation.exp.textShadowColor},
+                    -1px 1px 0 ${animation.exp.textShadowColor},
+                     1px 1px 0 ${animation.exp.textShadowColor};
         font-weight: bold;
-        font-size: 16px;
-        animation: expGain 1s ease-out forwards;
+        font-size: ${animation.exp.fontSize};
+        animation: expGain ${animation.exp.duration}ms ease-out forwards;
         pointer-events: none;
-        z-index: 1001;
+        z-index: ${base.zIndex.popup};
       }
       
       .tippy-box {
-        background-color: white;
-        color: black;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        border-radius: 10px;
-        max-width: 200px !important;
+        background-color: ${this.config.conversation.tooltip.backgroundColor};
+        color: ${this.config.conversation.tooltip.textColor};
+        box-shadow: ${this.config.conversation.tooltip.boxShadow};
+        border-radius: ${this.config.conversation.tooltip.borderRadius};
+        max-width: ${this.config.conversation.tooltip.maxWidth}px !important;
       }
       
       .tippy-arrow {
-        color: white;
+        color: ${this.config.conversation.tooltip.backgroundColor};
       }
     `;
     document.head.appendChild(styleSheet);
@@ -146,20 +236,21 @@ class Character {
     
     this.img = document.createElement('img');
     this.img.id = 'character';
-    this.img.alt = 'キャラクター';
-    this.img.src = '00092--rebuild.png';
+    this.img.alt = this.config.base.image.alt;
+    this.img.src = this.config.base.image.src;
   
     innerWrapper.appendChild(this.img);
     this.wrapper.appendChild(innerWrapper);
     document.body.appendChild(this.wrapper);
     
     this.tippyInstance = tippy(this.img, {
-      content: this.conversations.default[0].text,
-      placement: 'left',
-      trigger: 'manual',
-      theme: 'custom',
-      arrow: true,
-      interactive: true
+      content: this.config.conversation.messages.default[0].text,
+      placement: this.config.conversation.tooltip.placement,
+      trigger: this.config.conversation.tooltip.trigger,
+      theme: this.config.conversation.tooltip.theme,
+      arrow: this.config.conversation.tooltip.arrow,
+      interactive: this.config.conversation.tooltip.interactive,
+      maxWidth: this.config.conversation.tooltip.maxWidth
     });
   
     this.updateConversation('default');
@@ -169,17 +260,16 @@ class Character {
   bindEvents() {
     document.addEventListener('click', (e) => {
       if (e.target.matches('button, .card, a, input[type="submit"]')) {
-        this.addExp(10);
+        this.addExp(this.config.event.expGain.click);
       }
     });
 
-    // input要素のイベントハンドリングを修正
     const testInput = document.getElementById('testInput');
     if (testInput) {
       testInput.addEventListener('input', () => {
         const now = Date.now();
-        if (now - this.lastInputTime > this.INPUT_THRESHOLD) {
-          this.addExp(3);
+        if (now - this.lastInputTime > this.config.event.thresholds.input) {
+          this.addExp(this.config.event.expGain.input);
           this.lastInputTime = now;
         }
       });
@@ -187,8 +277,8 @@ class Character {
 
     document.addEventListener('scroll', () => {
       const now = Date.now();
-      if (now - this.lastScrollTime > this.SCROLL_THRESHOLD) {
-        this.addExp(2);
+      if (now - this.lastScrollTime > this.config.event.thresholds.scroll) {
+        this.addExp(this.config.event.expGain.scroll);
         this.lastScrollTime = now;
       }
     });
@@ -216,12 +306,15 @@ class Character {
           target.setAttribute('data-x', x);
           target.setAttribute('data-y', y);
           if (this.tippyInstance.state.isVisible) {
-            this.tippyInstance.setProps({ placement: 'left' });
+            this.tippyInstance.setProps({ placement: this.config.conversation.tooltip.placement });
           }
         },
         end: (event) => {
           const clickDuration = Date.now() - this.lastClickTime;
-          if (clickDuration < this.CLICK_THRESHOLD && Math.abs(event.dx) < 5 && Math.abs(event.dy) < 5) {
+          const moveThreshold = this.config.event.thresholds.moveThreshold;
+          if (clickDuration < this.config.event.thresholds.click && 
+              Math.abs(event.dx) < moveThreshold && 
+              Math.abs(event.dy) < moveThreshold) {
             this.toggleBubble();
           }
           this.img.style.cursor = 'grab';
@@ -248,7 +341,7 @@ class Character {
     
     setTimeout(() => {
       innerWrapper.classList.remove('glow');
-    }, 500);
+    }, this.config.animation.glow.duration);
   }
 
   toggleBubble() {
@@ -256,7 +349,7 @@ class Character {
   }
 
   showNextMessage() {
-    const conversationArray = this.conversations[this.currentEventType];
+    const conversationArray = this.config.conversation.messages[this.currentEventType];
     if (this.currentConversationIndex < conversationArray.length) {
       const conversation = conversationArray[this.currentConversationIndex];
       if (conversation.image) {
