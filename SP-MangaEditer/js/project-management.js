@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
      var url = window.URL.createObjectURL(mergeLz4Blob);
      var a = document.createElement("a");
      a.href = url;
-     a.download = "project.lz4";
+     a.download = "DESU-Project.lz4";
      
      document.body.appendChild(a);
      a.click();
