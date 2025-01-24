@@ -82,7 +82,28 @@ async function comfyui_apiHeartbeat() {
   return false;
 }
 
-comfyui_apiHeartbeat();
+let isOnline = false;
+async function monitorComfyUIConnection() {
+  while (true) {
+      const currentStatus = await comfyui_apiHeartbeat();
+      if (currentStatus !== isOnline) {
+          isOnline = currentStatus;
+          console.log(`接続状態が変更されました: ${isOnline ? 'ON' : 'OFF'}`);
+          if (isOnline) {
+              console.log("オンライン状態になりました。ワークフロー更新を試みます...");
+              workflowEditor.updateObjectInfoAndWorkflows();
+          }
+      } else {
+          console.log(`接続状態に変更なし: ${isOnline ? 'オンライン' : 'オフライン'}`);
+      }
+      const interval = isOnline ? 15000 : 5000;
+      await new Promise(resolve => setTimeout(resolve, interval));
+  }
+}
+
+
+monitorComfyUIConnection();
+
 
 
 function generateTimestampFileName(extension = 'png') {

@@ -1,4 +1,4 @@
- .sidebar-input {
+.sidebar-input {
   margin-bottom: 0px;
  }
  .sidebar-button {
@@ -23,6 +23,54 @@
   border-bottom: 1px solid #93c5fd;
  }
  
+ .tab-type-separator {
+    margin: 2px 0;
+    padding: 4px 8px;
+    font-weight: bold;
+    color: #1e40af;
+    border-bottom: 1px solid #93c5fd;
+  }
+  
+  .tab-enabled-radio {
+    width: 15px;
+    margin: 0;
+    padding: 0;
+    background-color: brown;
+    cursor: pointer;
+
+}
+  
+.custom-radio {
+    margin-right: 5px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .custom-radio input[type="radio"] {
+    display: none;
+  }
+  
+  .custom-radio .custom-radio-label {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #93c5fd;
+    border-radius: 50%;
+    background-color: white;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-radio input[type="radio"]:checked + .custom-radio-label {
+    background-color: #3b82f6;
+  }
+  
+  .custom-radio input[type="radio"]:hover + .custom-radio-label {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+  }
+  
+
  .file-input-button {
   width: 100%;
   padding: 6px 12px;
@@ -73,6 +121,24 @@
   border-color: #93c5fd;
  }
  
+ .tab-type-dropdown {
+    width: 20%;
+    padding: 4px 8px;
+    border: 1px solid #93c5fd;
+    border-radius: 4px;
+    background-color: #eff6ff;
+    color: #1e40af;
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  
+  .tab-type-dropdown:hover {
+    background-color: #dbeafe;
+    border-color: #3b82f6;
+  }
+  
+
  .tab-actions {
   display: flex;
   gap: 4px;
@@ -80,6 +146,7 @@
  }
  
  .tab-download,
+ .tab-save,
  .tab-close {
   width: 20px;
   height: 20px;
@@ -93,16 +160,19 @@
  }
  
  .tab-button:not(.active) .tab-download,
+ .tab-button:not(.active) .tab-save,
  .tab-button:not(.active) .tab-close {
   background: rgba(0, 0, 0, 0.05);
  }
  
  .tab-download:hover,
+ .tab-save:hover,
  .tab-close:hover {
   background: rgba(0, 0, 0, 0.1);
  }
  
  .tab-button.active .tab-download:hover,
+ .tab-button.active .tab-save:hover,
  .tab-button.active .tab-close:hover {
   background: rgba(255, 255, 255, 0.3);
  }
@@ -249,8 +319,8 @@
  }
  
  .sidebar {
-  width: 15%;
-  flex: 0 0 15%;
+  width: 25%;
+  flex: 0 0 25%;
   background: white;
   border-radius: 8px;
   border: 1px solid #93c5fd;
@@ -260,8 +330,8 @@
  }
  
  .main-content {
-  width: 60%;
-  flex: 0 0 60%;
+  width: 55%;
+  flex: 0 0 55%;
   overflow-y: auto;
   background: white;
   border-radius: 8px;
@@ -274,8 +344,8 @@
   padding: 0;
   box-sizing: border-box;
   
-  width: 23%;
-  flex: 0 0 23%;
+  width: 18%;
+  flex: 0 0 18%;
   background: white;
   border-radius: 8px;
   border: 1px solid #93c5fd;
@@ -324,4 +394,3 @@
   overflow: hidden;
   border: 1px solid #93c5fd;
  }
- 

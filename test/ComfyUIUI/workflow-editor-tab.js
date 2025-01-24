@@ -1,33 +1,80 @@
 class WorkflowTab {
   constructor(file, workflow, editor) {
-   this.file = file;
-   this.workflow = workflow;
-   this.editor = editor;
-   this.id = `tab-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-   this.contentElement = null;
-   this.hiddenNodeTypes = ['Note'];
-   this.isActive = false;
-   this.masonry = null;
-   this.resizeObserver = null;
-   this.buttonElement = null;
+    this.file = file;
+    this.workflow = workflow;
+    this.editor = editor;
+    this.id = `tab-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    this.contentElement = null;
+    this.hiddenNodeTypes = ['Note'];
+    this.isActive = false;
+    this.masonry = null;
+    this.resizeObserver = null;
+    this.buttonElement = null;
   }
- 
+
   createTabButton() {
-   const button = document.createElement('div');
-   button.className = 'tab-button';
-   button.dataset.tabId = this.id;
- 
-   button.innerHTML = `
-    <span class="tab-name" title="${this.file.name}">${this.file.name}</span>
-    <div class="tab-actions">
-     <span class="tab-download" title="Download">↓</span>
-     <span class="tab-close" title="Close">×</span>
-    </div>
-   `;
- 
-   this.buttonElement = button;
-   return button;
-  }
+    const button = document.createElement('div');
+    button.className = 'tab-button';
+    button.dataset.tabId = this.id;
+
+    const enabled = this.workflow.enabled || false;
+    const currentType = this.workflow.type || 'T2I';
+    button.innerHTML = `
+      <label class="custom-radio">
+        <input type="radio" name="enabled-${currentType}" class="tab-enabled-radio" ${enabled ? 'checked' : ''}>
+        <span class="custom-radio-label"></span>
+      </label>
+      <select class="tab-type-dropdown" title="Type">
+        ${['T2I', 'I2I', 'Upscaler'].map(option => `
+          <option value="${option}" ${option === currentType ? 'selected' : ''}>${option}</option>
+        `).join('')}
+      </select>
+      <span class="tab-name" title="${this.file.name}">${this.file.name}</span>
+      <div class="tab-actions">
+        <span class="tab-save" title="Save">⇔</span>
+        <span class="tab-download" title="Download">↓</span>
+        <span class="tab-close" title="Close">×</span>
+      </div>
+    `;
+
+    button.querySelector('.tab-enabled-radio').addEventListener('change', () => {
+        this.editor.onTabEnabledChanged(this.workflow.type, this.id);
+    });
+
+    button.querySelector('.tab-type-dropdown').addEventListener('change', (e) => {
+        this.workflow.type = e.target.value;
+        this.editor.tabs.set(this.id, this);
+        this.editor.renderTabs();
+    });
+
+    button.querySelector('.tab-save').addEventListener('click', () => {
+        this.saveWorkflow();
+    });
+
+    this.buttonElement = button;
+    return button;
+}
+
+
+  
+
+saveWorkflow() {
+  workflowRepository.saveWorkflow(
+      this.workflow.type || 'T2I',
+      this.workflow.id,
+      this.file.name,
+      this.workflow,
+      this.workflow.enabled
+  ).then(() => {
+      console.log('Workflow saved successfully');
+  }).catch((error) => {
+      console.error('Workflowの保存に失敗しました:', error);
+  });
+}
+
+
+
+  
  
   createContent() {
    const content = document.createElement('div');

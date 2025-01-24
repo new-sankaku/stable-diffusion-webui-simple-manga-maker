@@ -18,11 +18,11 @@
    </div>
    <div class="tab-list" id="tabList"></div>
   </div>
-  
+
   <div class="main-content">
    <div class="tab-content-container" id="tabContentContainer"></div>
   </div>
-  
+
   <div class="right-sidebar">
    <div id="apiSettingsUrlHelpe">
     <label id="ExternalService_Heartbeat_Label">接続状態：</label>
@@ -37,7 +37,7 @@
     <label class="input-label">生成枚数(1-9999)</label>
     <input id="batchCount" type="number" class="input-value" min="0" max="9999" value="1">
    </div>
-   
+
    <button id="generateButton" class="sidebar-button">生成</button>
 
    <div id="generatedImageContainer" class="generated-image-container">
@@ -46,15 +46,19 @@
   </div>
  </div>
 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+
+ <script src="workflow-repository.js"></script>
  <script src="comfy-util-v2.js"></script>
  <script src="workflow-editor-tab.js"></script>
  <script src="workflow-editor.js"></script>
+ <script src="default-object-info.js"></script>
 
  <script>
  document.getElementById('generateButton').addEventListener('click', async () => {
   const tabId = workflowEditor.activeTabId;
   if (!tabId) return;
-  
+
   const tab = workflowEditor.tabs.get(tabId);
   if (!tab) return;
 
