@@ -67,17 +67,14 @@ async function comfyui_apiHeartbeat() {
 
     console.log("response.ok", response.ok);
     if (response.ok) {
-      console.log("Comfy ON");
       label.innerHTML = "ComufyUI ON";
       label.style.color = "green";
       return true;
     } else {
-      console.log("Comfy OFF1");
       label.innerHTML = "ComufyUI OFF";
       label.style.color = "red";
     }
   } catch (error) {
-    console.log("Comfy OFF2");
     label.innerHTML = "ComufyUI OFF";
     label.style.color = "red";
   }
@@ -97,10 +94,6 @@ async function monitorComfyUIConnection() {
         );
         comfyUIWorkflowEditor.updateObjectInfoAndWorkflows();
       }
-    } else {
-      console.log(
-        `接続状態に変更なし: ${isOnline ? "オンライン" : "オフライン"}`
-      );
     }
     const interval = isOnline ? 15000 : 5000;
     await new Promise((resolve) => setTimeout(resolve, interval));

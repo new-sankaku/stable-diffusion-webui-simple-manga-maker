@@ -1,8 +1,24 @@
+const workflowInitStore = localforage.createInstance({
+  name: 'workflowInitStorage',
+  storeName: 'initStatus'
+});
+
 class ComfyUIWorkflowEditor {
   constructor() {
     this.tabs = new Map();
     this.nodeTypes = null;
     this.activeTabId = null;
+  }
+
+  async checkWorkflowInitialized(workflowName) {
+    const initializedWorkflows = await workflowInitStore.getItem('initialized_workflows') || {};
+    return initializedWorkflows[workflowName] === true;
+  }
+
+  async setWorkflowInitialized(workflowName) {
+    const initializedWorkflows = await workflowInitStore.getItem('initialized_workflows') || {};
+    initializedWorkflows[workflowName] = true;
+    await workflowInitStore.setItem('initialized_workflows', initializedWorkflows);
   }
 
   async updateObjectInfoAndWorkflows() {
@@ -24,30 +40,18 @@ class ComfyUIWorkflowEditor {
   }
 
   async initialize() {
-    try {
-      const response = await fetch(comfyUIUrls.objectInfoOnly);
-      if (response.ok) {
-        this.nodeTypes = await response.json();
-        await objectInfoRepository.saveObjectInfo(this.nodeTypes);
-      } else {
-        throw new Error("ComfyUI接続エラー");
-      }
-    } catch (error) {
-      console.info("ComfyUIへの接続に失敗。IndexedDBを確認します:", error);
-
-      this.nodeTypes = await objectInfoRepository.getObjectInfo();
-      if (!this.nodeTypes) {
-        console.info(
-          "IndexedDBにデータなし。デフォルトのObjectInfoを使用します"
-        );
-        this.nodeTypes = defaultObjectInfo;
-      }
+    this.nodeTypes = await objectInfoRepository.getObjectInfo();
+    if (!this.nodeTypes) {
+      console.info("set default ObjectInfo");
+      this.nodeTypes = defaultObjectInfo;
     }
 
     this.setupFileInput();
     this.setupTabEvents();
 
-    const workflows = await workflowRepository.getAllWorkflows();
+    await this.addDefaultWorkflows();
+    const workflows = await comfyUIWorkflowRepository.getAllWorkflows();
+
     for (const workflowData of workflows) {
       const { id, name, workflowJson, type, enabled } = workflowData;
       const file = new File([JSON.stringify(workflowJson)], name, {
@@ -59,12 +63,9 @@ class ComfyUIWorkflowEditor {
       }
 
       try {
-        await this.createTab(file);
+        await this.createTab(file, id, type, enabled);
       } catch (error) {
-        console.error(
-          `ワークフロー "${name}" の読み込みに失敗しました:`,
-          error
-        );
+        console.error(`ワークフロー "${name}" の読み込みに失敗しました:`, error);
       }
     }
 
@@ -77,13 +78,32 @@ class ComfyUIWorkflowEditor {
     });
   }
 
+  async addDefaultWorkflows() {
+    for (const workflow of comfyuiDefaultWorkflows) {
+      const isInitialized = await this.checkWorkflowInitialized(workflow.name);
+      if (!isInitialized) {
+        const id = `workflow-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
+        await comfyUIWorkflowRepository.saveWorkflow(
+          workflow.type,
+          id,
+          workflow.name,
+          workflow.workflow,
+          workflow.enabled
+        );
+        
+        await this.setWorkflowInitialized(workflow.name);
+      }
+    }
+  }
+
   setupFileInput() {
     document
       .getElementById("workflowFile")
       .addEventListener("change", async (e) => {
         const files = Array.from(e.target.files);
         for (const file of files) {
-          await this.createTab(file);
+          await this.createTab(file, null);
         }
         e.target.value = "";
         this.renderTabs();
@@ -96,7 +116,7 @@ class ComfyUIWorkflowEditor {
     const groupedTabs = this.groupTabsByType();
     Object.keys(groupedTabs).forEach((type) => {
       const typeSeparator = document.createElement("div");
-      typeSeparator.className = "tab-type-separator";
+      typeSeparator.className = "comfui-tab-type-separator";
       typeSeparator.innerText = type;
       tabList.appendChild(typeSeparator);
       groupedTabs[type].forEach((tab) => {
@@ -107,17 +127,12 @@ class ComfyUIWorkflowEditor {
     if (this.activeTabId) this.activateTab(this.activeTabId);
   }
 
-  async createTab(file) {
+  async createTab(file, id=null, type="T2I", enabled=false) {
     try {
       const text = await file.text();
       const workflow = JSON.parse(text);
-      if (!workflow.id) {
-        workflow.id = `workflow-${Date.now()}-${Math.random()
-          .toString(36)
-          .substr(2, 9)}`;
-      }
 
-      const tab = new ComfyUIWorkflowTab(file, workflow, this);
+      const tab = new ComfyUIWorkflowTab(file, workflow, this, id, type, enabled);
       const tabContent = document.getElementById("tabContentContainer");
       tabContent.appendChild(tab.createContent());
       this.tabs.set(tab.id, tab);
@@ -142,23 +157,25 @@ class ComfyUIWorkflowEditor {
     this.tabs.forEach((tab) => {
       if (tab.workflow.type === type) {
         tab.workflow.enabled = tab.id === tabId;
+        tab.enabled = tab.id === tabId;
       }
     });
+    
     this.renderTabs();
   }
 
   setupTabEvents() {
     document.getElementById("tabList").addEventListener("click", (e) => {
-      const tabButton = e.target.closest(".tab-button");
+      const tabButton = e.target.closest(".comfui-tab-button");
       if (!tabButton) return;
 
       const tabId = tabButton.dataset.tabId;
       const tab = this.tabs.get(tabId);
       if (!tab) return;
 
-      if (e.target.closest(".tab-close")) {
+      if (e.target.closest(".comfui-tab-close")) {
         this.closeTab(tabId);
-      } else if (e.target.closest(".tab-download")) {
+      } else if (e.target.closest(".comfui-tab-download")) {
         tab.downloadWorkflow();
       } else {
         this.activateTab(tabId);
@@ -181,13 +198,8 @@ class ComfyUIWorkflowEditor {
     if (!tab) return;
 
     if (tab.workflow.id) {
-      workflowRepository.deleteWorkflow(tab.workflow.id).then((result) => {
+      comfyUIWorkflowRepository.deleteWorkflow(tab.workflow.id).then((result) => {
         if (result) {
-          console.log(
-            `Workflow with ID ${tab.workflow.id} deleted from IndexedDB`
-          );
-        } else {
-          console.error(`Failed to delete workflow with ID ${tab.workflow.id}`);
         }
       });
     }

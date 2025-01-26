@@ -1,4 +1,4 @@
-class WorkflowWindow {
+class ComfyUIWorkflowWindow {
   constructor() {
     this.element = null;
     this.x = 0;
@@ -22,40 +22,40 @@ class WorkflowWindow {
 
     this.element.innerHTML = `
     <button id="closeButton" style="position: absolute; right: -30px; top: 0; padding: 5px 10px; background: #fff; border: 1px solid #ccc; cursor: pointer; z-index: 1001; font-size: 16px; border-radius: 4px;">✕</button>
-    <div class="container" style="width: 100%; height: 100%; background-color: white; margin: 0; padding: 8px; border-radius: 0;">
-     <div class="sidebar">
-      <div class="sidebar-header" style="cursor: move;">
-       <label class="file-input-button">
+    <div class="comfui-container" style="width: 100%; height: 100%; background-color: white; margin: 0; padding: 8px; border-radius: 0;">
+     <div class="comfui-sidebar">
+      <div class="comfui-sidebar-header" style="cursor: move;">
+       <label class="comfui-file-input-button">
         + Add Workflow
         <input type="file" id="workflowFile" accept=".json,.txt" multiple>
        </label>
       </div>
-      <div class="tab-list" id="tabList"></div>
+      <div class="comfui-tab-list" id="tabList"></div>
      </div>
  
-     <div class="main-content">
-      <div class="tab-content-container" id="tabContentContainer"></div>
+     <div class="comfui-main-content">
+      <div class="comfui-tab-content-container" id="tabContentContainer"></div>
      </div>
  
-     <div class="right-sidebar">
+     <div class="comfui-right-sidebar">
       <div id="apiSettingsUrlHelpe">
-       <label id="ExternalService_Heartbeat_Label">接続状態：</label>
+       <label id="ExternalService_Heartbeat_Label">Connection:</label>
       </div>
  
-      <div class="sidebar-input">
-       <label class="input-label">ComfyUI URL</label>
-       <input id="comfyUIPageUrl" type="text" class="input-value" placeholder="テキストを入力" value="http://127.0.0.1:8188">
+      <div class="comfui-sidebar-input">
+       <label class="comfui-input-label">ComfyUI URL</label>
+       <input id="comfyUIPageUrl" type="text" class="comfui-input-value" placeholder="テキストを入力" value="http://127.0.0.1:8188">
       </div>
  
-      <div class="sidebar-input">
-       <label class="input-label">生成枚数(1-9999)</label>
-       <input id="batchCount" type="number" class="input-value" min="0" max="9999" value="1">
+      <div class="comfui-sidebar-input">
+       <label class="comfui-input-label">generate(1-9999)</label>
+       <input id="batchCount" type="number" class="comfui-input-value" min="0" max="9999" value="1">
       </div>
  
-      <button id="generateButton" class="sidebar-button">生成</button>
+      <button id="generateButton" class="comfui-sidebar-button">generate</button>
  
-      <div id="generatedImageContainer" class="generated-image-container">
-       <img id="generatedImage" class="preview-image hidden">
+      <div id="generatedImageContainer" class="comfui-generated-image-container">
+       <img id="generatedImage" class="comfui-preview-image hidden">
       </div>
      </div>
     </div>`;
@@ -143,15 +143,15 @@ class WorkflowWindow {
     }
   }
 }
-let workflowWindow = null;
+let comfyUIWorkflowWindow = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const openButton = document.getElementById("openWorkflowButton");
   openButton.addEventListener("click", () => {
-    if (!workflowWindow) {
-      workflowWindow = new WorkflowWindow();
+    if (!comfyUIWorkflowWindow) {
+      comfyUIWorkflowWindow = new ComfyUIWorkflowWindow();
     }
-    workflowWindow.show();
+    comfyUIWorkflowWindow.show();
 
     comfyUIWorkflowEditor = new ComfyUIWorkflowEditor();
     comfyUIWorkflowEditor.initialize();

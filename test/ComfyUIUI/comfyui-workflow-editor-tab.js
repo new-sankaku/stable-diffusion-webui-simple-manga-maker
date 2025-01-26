@@ -1,9 +1,17 @@
 class ComfyUIWorkflowTab {
-  constructor(file, workflow, editor) {
+  constructor(file, workflow, editor, id, type, enabled) {
+    this.type = type;
+    this.enabled = enabled;
     this.file = file;
     this.workflow = workflow;
     this.editor = editor;
-    this.id = `tab-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    if (id) {
+      this.id = id;
+    } else {
+      this.id = `workflow-${Date.now()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+    }
     this.contentElement = null;
     this.hiddenNodeTypes = ["Note", undefined];
     this.isActive = false;
@@ -14,67 +22,100 @@ class ComfyUIWorkflowTab {
 
   createTabButton() {
     const button = document.createElement("div");
-    button.className = "tab-button";
+    button.className = "comfui-tab-button";
     button.dataset.tabId = this.id;
 
-    const enabled = this.workflow.enabled || false;
-    const currentType = this.workflow.type || "T2I";
+    const currentType = this.type || "T2I";
+    const enabled = this.enabled === true;
+
     button.innerHTML = `
-      <label class="custom-radio">
-        <input type="radio" name="enabled-${currentType}" class="tab-enabled-radio" ${
+      <label class="comfui-custom-radio">
+        <input type="radio" name="enabled-${currentType}" data-type="${currentType}" class="comfui-tab-enabled-radio" ${
       enabled ? "checked" : ""
     }>
-        <span class="custom-radio-label"></span>
+        <span class="comfui-custom-radio-label"></span>
       </label>
-      <select class="tab-type-dropdown" title="Type">
+      <select class="comfui-tab-type-dropdown" title="Type">
         ${["T2I", "I2I", "Upscaler"]
           .map(
-            (option) => `
-          <option value="${option}" ${
-              option === currentType ? "selected" : ""
-            }>${option}</option>
-        `
+            (option) =>
+              `<option value="${option}" ${
+                option === currentType ? "selected" : ""
+              }>${option}</option>`
           )
           .join("")}
       </select>
-      <span class="tab-name" title="${this.file.name}">${this.file.name}</span>
-      <div class="tab-actions">
-        <span class="tab-save" title="Save">⇔</span>
-        <span class="tab-download" title="Download">↓</span>
-        <span class="tab-close" title="Close">×</span>
+      <span class="comfui-tab-name" title="${this.file.name}">${
+      this.file.name
+    }</span>
+      <div class="comfui-tab-actions">
+        <span class="comfui-tab-save" title="Save">⇔</span>
+        <span class="comfui-tab-download" title="Download">↓</span>
+        <span class="comfui-tab-close" title="Close">×</span>
       </div>
     `;
 
-    button
-      .querySelector(".tab-enabled-radio")
-      .addEventListener("change", () => {
-        this.editor.onTabEnabledChanged(this.workflow.type, this.id);
-      });
+    const radioBtn = button.querySelector(".comfui-tab-enabled-radio");
+    radioBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();
 
-    button
-      .querySelector(".tab-type-dropdown")
-      .addEventListener("change", (e) => {
-        this.workflow.type = e.target.value;
-        this.editor.tabs.set(this.id, this);
-        this.editor.renderTabs();
-      });
+      document
+        .querySelectorAll(
+          `.comfui-tab-enabled-radio[data-type="${currentType}"]`
+        )
+        .forEach((radio) => {
+          if (radio !== e.target) {
+            radio.checked = false;
+            const tabId = radio.closest(".comfui-tab-button").dataset.tabId;
+            const tab = this.editor.tabs.get(tabId);
+            if (tab) {
+              tab.enabled = false;
+              tab.saveWorkflow();
+            }
+          }
+        });
 
-    button.querySelector(".tab-save").addEventListener("click", () => {
-      this.saveWorkflow();
+      this.enabled = e.target.checked;
+      await this.saveWorkflow();
+      this.editor.onTabEnabledChanged(this.type, this.enabled ? this.id : null);
     });
+
+    const typeDropdown = button.querySelector(".comfui-tab-type-dropdown");
+    typeDropdown.addEventListener("change", async (e) => {
+      e.stopPropagation();
+      const oldType = this.type;
+      this.type = e.target.value;
+
+      if (this.enabled) {
+        this.editor.onTabEnabledChanged(oldType, null);
+        this.editor.onTabEnabledChanged(this.type, this.id);
+      }
+      await this.saveWorkflow();
+      this.editor.renderTabs();
+    });
+
+    button
+      .querySelector(".comfui-tab-save")
+      .addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await this.saveWorkflow();
+      });
 
     this.buttonElement = button;
     return button;
   }
 
-  saveWorkflow() {
-    workflowRepository
+  async saveWorkflow() {
+    console.log("saveWorkflow() start");
+    const cleanWorkflow = { ...this.workflow };
+
+    await comfyUIWorkflowRepository
       .saveWorkflow(
-        this.workflow.type || "T2I",
-        this.workflow.id,
+        this.type || "T2I",
+        this.id,
         this.file.name,
-        this.workflow,
-        this.workflow.enabled
+        cleanWorkflow,
+        this.enabled
       )
       .then(() => {
         console.log("Workflow saved successfully");
@@ -86,9 +127,9 @@ class ComfyUIWorkflowTab {
 
   createContent() {
     const content = document.createElement("div");
-    content.className = "tab-content";
+    content.className = "comfui-tab-content";
     content.dataset.tabId = this.id;
-    content.innerHTML = `<div class="node-list" data-tab-id="${this.id}"></div>`;
+    content.innerHTML = `<div class="comfui-node-list" data-tab-id="${this.id}"></div>`;
     this.contentElement = content;
     return content;
   }
@@ -153,8 +194,8 @@ class ComfyUIWorkflowTab {
     const config = inputDef[1] || {};
 
     if (config.image_upload === true) {
-      return `<div class="input-container">
-      <label class="input-label" for="${id}">${inputName}</label>
+      return `<div class="comfui-input-container">
+      <label class="comfui-input-label" for="${id}">${inputName}</label>
       <select id="${id}" data-node-id="${nodeId}" data-input-name="${inputName}">
         ${inputDef[0]
           .map(
@@ -165,8 +206,8 @@ class ComfyUIWorkflowTab {
           )
           .join("")}
       </select>
-      <div class="image-upload-area">
-        <label class="upload-button" for="file-${id}">
+      <div class="comfui-image-upload-area">
+        <label class="comfui-upload-button" for="file-${id}">
           + Add Image
           <input type="file" 
             id="file-${id}"
@@ -175,16 +216,16 @@ class ComfyUIWorkflowTab {
             data-input-name="${inputName}"
             data-preview-target="${nodeId}-${inputName}-preview">
         </label>
-        <div class="image-preview hidden" data-preview-id="${nodeId}-${inputName}-preview">
-          <img src="" alt="プレビュー" class="preview-image">
+        <div class="comfui-image-preview hidden" data-preview-id="${nodeId}-${inputName}-preview">
+          <img src="" alt="プレビュー" class="comfui-preview-image">
         </div>
       </div>
     </div>`;
     }
 
     if (Array.isArray(inputDef[0])) {
-      return `<div class="input-container">
-      <label class="input-label" for="${id}">${inputName}</label>
+      return `<div class="comfui-input-container">
+      <label class="comfui-input-label" for="${id}">${inputName}</label>
       <select id="${id}" data-node-id="${nodeId}" data-input-name="${inputName}">
         ${inputDef[0]
           .map(
@@ -203,8 +244,8 @@ class ComfyUIWorkflowTab {
       inputDef[0] === "INT" || inputDef[0] === "FLOAT" ? "number" : "text";
 
     if (isMultiline) {
-      return `<div class="input-container">
-      <label class="input-label" for="${id}">${inputName}</label>
+      return `<div class="comfui-input-container">
+      <label class="comfui-input-label" for="${id}">${inputName}</label>
       <textarea id="${id}"
         data-node-id="${nodeId}"
         data-input-name="${inputName}"
@@ -214,8 +255,8 @@ class ComfyUIWorkflowTab {
     </div>`;
     }
 
-    return `<div class="input-container">
-    <label class="input-label" for="${id}">${inputName}</label>
+    return `<div class="comfui-input-container">
+    <label class="comfui-input-label" for="${id}">${inputName}</label>
     <input type="${type}" id="${id}" value="${value}"
       ${config.min !== undefined ? `min="${config.min}"` : ""}
       ${config.max !== undefined ? `max="${config.max}"` : ""}
@@ -226,7 +267,7 @@ class ComfyUIWorkflowTab {
   }
 
   initMasonry() {
-    const grid = this.contentElement?.querySelector(".node-list");
+    const grid = this.contentElement?.querySelector(".comfui-node-list");
     if (!grid) return;
 
     setTimeout(() => {
@@ -293,7 +334,7 @@ class ComfyUIWorkflowTab {
   }
 
   async renderNodes() {
-    const container = this.contentElement.querySelector(".node-list");
+    const container = this.contentElement.querySelector(".comfui-node-list");
     container.innerHTML = "";
 
     const nodes = Object.entries(this.workflow)
@@ -315,10 +356,10 @@ class ComfyUIWorkflowTab {
 
     nodes.forEach(({ id, node, apiNode }) => {
       const nodeElement = document.createElement("div");
-      nodeElement.className = "node-wrapper";
+      nodeElement.className = "comfui-node-wrapper";
 
       const nodeTitle = node._meta?.title || node.class_type;
-      const nodeTypeDisplay = `<div class="node-title">${id}: ${nodeTitle}</div>`;
+      const nodeTypeDisplay = `<div class="comfui-node-title">${id}: ${nodeTitle}</div>`;
 
       let inputsDisplay = "";
       if (apiNode?.input?.required) {
