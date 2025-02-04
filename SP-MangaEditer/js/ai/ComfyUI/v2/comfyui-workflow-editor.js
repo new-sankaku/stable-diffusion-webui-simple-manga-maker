@@ -10,6 +10,7 @@ class ComfyUIWorkflowEditor {
     this.activeTabId = null;
   }
 
+
   async checkWorkflowInitialized(workflowName) {
     const initializedWorkflows = await workflowInitStore.getItem('initialized_workflows') || {};
     return initializedWorkflows[workflowName] === true;
@@ -30,6 +31,7 @@ class ComfyUIWorkflowEditor {
 
       this.nodeTypes = await response.json();
       await objectInfoRepository.saveObjectInfo(this.nodeTypes);
+      console.log("updateObjectInfoAndWorkflows --------------", );
 
       this.tabs.forEach((tab) => {
         tab.renderNodes();
@@ -39,6 +41,7 @@ class ComfyUIWorkflowEditor {
     }
   }
 
+  
   async initialize() {
     this.nodeTypes = await objectInfoRepository.getObjectInfo();
     if (!this.nodeTypes) {
@@ -52,6 +55,9 @@ class ComfyUIWorkflowEditor {
     await this.addDefaultWorkflows();
     const workflows = await comfyUIWorkflowRepository.getAllWorkflows();
 
+    let enabledTabId = null;
+    let firstTabId = null;
+
     for (const workflowData of workflows) {
       const { id, name, workflowJson, type, enabled } = workflowData;
       const file = new File([JSON.stringify(workflowJson)], name, {
@@ -64,14 +70,50 @@ class ComfyUIWorkflowEditor {
 
       try {
         await this.createTab(file, id, type, enabled);
+        if (enabled) {
+          enabledTabId = id;
+        }
+        if (!firstTabId) {
+          firstTabId = id;
+        }
       } catch (error) {
         console.error(`ワークフロー "${name}" の読み込みに失敗しました:`, error);
       }
     }
 
+
+    if (enabledTabId) {
+      this.activeTabId = enabledTabId;
+      const enabledTab = this.tabs.get(enabledTabId);
+      if (enabledTab) {
+        this.tabs.forEach((tab) => {
+          if (tab.id !== enabledTabId) {
+            tab.deactivate();
+          }
+        });
+        enabledTab.activate();
+      }
+    }else if (firstTabId) {
+      this.activeTabId = firstTabId;
+      const firstTab = this.tabs.get(firstTabId);
+      if (firstTab) {
+        firstTab.enabled = true;
+        firstTab.saveWorkflow();
+        this.onTabEnabledChanged(firstTab.type, firstTabId);
+        
+        this.tabs.forEach((tab) => {
+          if (tab.id !== firstTabId) {
+            tab.deactivate();
+          }
+        });
+        firstTab.activate();
+      }
+    }
+    
+
     this.renderTabs();
 
-    monitorComfyUIConnection((isOnline) => {
+    comfyui_monitorConnection_v2((isOnline) => {
       if (isOnline) {
         this.updateObjectInfoAndWorkflows();
       }
@@ -146,7 +188,7 @@ class ComfyUIWorkflowEditor {
 
   groupTabsByType() {
     return Array.from(this.tabs.values()).reduce((groups, tab) => {
-      const type = tab.workflow.type || "T2I";
+      const type = tab.type || "T2I";  
       if (!groups[type]) groups[type] = [];
       groups[type].push(tab);
       return groups;
@@ -193,24 +235,35 @@ class ComfyUIWorkflowEditor {
     }
   }
 
-  closeTab(tabId) {
+  async closeTab(tabId) {
     const tab = this.tabs.get(tabId);
-    if (!tab) return;
-
-    if (tab.workflow.id) {
-      comfyUIWorkflowRepository.deleteWorkflow(tab.workflow.id).then((result) => {
-        if (result) {
+    if (!tab){
+      console.log("closeTab tab is null");
+      return;
+    } 
+  
+    try {
+      if (tabId) {
+        const result = await comfyUIWorkflowRepository.deleteWorkflow(tabId);
+        if (!result) {
+          console.error(`Workflow delete is fail. ${tabId}`);
+          return;
         }
-      });
-    }
-    tab.destroy();
-    this.tabs.delete(tabId);
-
-    if (this.activeTabId === tabId) {
-      const newActiveTab = this.tabs.keys().next().value;
-      if (newActiveTab) {
-        this.activateTab(newActiveTab);
       }
+  
+      tab.destroy();
+      this.tabs.delete(tabId);
+  
+      if (this.activeTabId === tabId) {
+        const nextTab = Array.from(this.tabs.keys())[0];
+        if (nextTab) {
+          this.activateTab(nextTab);
+        }
+      }
+  
+      this.renderTabs();
+    } catch (error) {
+      console.error('タブの削除中にエラーが発生しました:', error);
     }
   }
 
@@ -220,3 +273,10 @@ class ComfyUIWorkflowEditor {
 }
 
 let comfyUIWorkflowEditor;
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!comfyUIWorkflowEditor) {
+    comfyUIWorkflowEditor = new ComfyUIWorkflowEditor();
+    await comfyUIWorkflowEditor.addDefaultWorkflows();
+    comfyUIWorkflowEditor = null;
+  }
+});

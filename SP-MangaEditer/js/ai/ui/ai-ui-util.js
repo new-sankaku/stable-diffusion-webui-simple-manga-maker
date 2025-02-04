@@ -39,9 +39,48 @@ function changeWorkflowType(button) {
   updateWorkflowType();
 }
 function updateWorkflowType() {
-  const externalApiGroup = getSelectedValueByGroup("externalApiGroup");
+  const externalApiGroup   = getSelectedValueByGroup("externalApiGroup");
   const generateModelGroup = getSelectedValueByGroup("generateModelGroup");
-  const generateWorkflow = getSelectedValueByGroup("generateWorkflow");
+  const generateWorkflow   = getSelectedValueByGroup("generateWorkflow");
+
+  if (externalApiGroup === "comfyUIButton"){
+    showById("comfyUIWorkflowId");
+    hideById("manualSelectWorkflowId");
+    hideById("manualSelectModelId");
+    hideById("clipDropdownControle");
+    hideById("vaeDropdownControle");
+    showById("prompt-A");
+    showById("negativeAreaId");
+    hideById("prompt-B");
+    hideById("prompt-C");
+    hideById("prompt-D");
+    showById("prompt-E");
+    showById("prompt-F");
+    hideById("prompt-G");
+    hideById("prompt-H");
+    hideById("prompt-I");
+    hideById("prompt-J");
+    hideById("prompt-K");
+    hideById("checSD_WebUI_Announce");
+    return;
+  }else{
+    hideById("comfyUIWorkflowId");
+    showById("manualSelectWorkflowId");
+    showById("manualSelectModelId");
+    showById("prompt-A");
+    showById("negativeAreaId");
+    showById("prompt-B");
+    showById("prompt-C");
+    showById("prompt-D");
+    showById("prompt-E");
+    showById("prompt-F");
+    showById("prompt-G");
+    showById("prompt-H");
+    showById("prompt-I");
+    showById("prompt-J");
+    showById("prompt-K");
+    showById("checSD_WebUI_Announce");
+  }
 
   if ( generateModelGroup === "SD" ) {
     hideById("manualSelectWorkflowId");

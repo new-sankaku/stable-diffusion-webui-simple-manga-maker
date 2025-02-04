@@ -111,7 +111,7 @@ const ComfyUI_T2I_ByFluxDiffusion = {
     "17": {
       "inputs": {
         "scheduler": "simple",
-        "steps":"%steps%",
+        "steps":"25",
         "denoise": 1,
         "model": [
           "30",
@@ -141,7 +141,7 @@ const ComfyUI_T2I_ByFluxDiffusion = {
     },
     "25": {
       "inputs": {
-        "noise_seed": "%noise_seed%"
+        "noise_seed": "100"
       },
       "class_type": "RandomNoise",
       "_meta": {
@@ -163,8 +163,8 @@ const ComfyUI_T2I_ByFluxDiffusion = {
     },
     "27": {
       "inputs": {
-        "width":"%width%",
-        "height":"%height%",
+        "width":"1024",
+        "height":"1024",
         "batch_size": 1
       },
       "class_type": "EmptySD3LatentImage",
@@ -176,8 +176,8 @@ const ComfyUI_T2I_ByFluxDiffusion = {
       "inputs": {
         "max_shift": 1.15,
         "base_shift": 0.5,
-        "width":"%width%",
-        "height":"%height%",
+        "width":"1024",
+        "height":"1024",
         "model": [
           "12",
           0
@@ -235,8 +235,8 @@ const ComfyUI_T2I_ByFluxNF4 = {
     },
     "27": {
       "inputs": {
-        "width":"%width%",
-        "height":"%height%",
+        "width":"1024",
+        "height":"1024",
         "batch_size": 1
       },
       "class_type": "EmptySD3LatentImage",
@@ -246,9 +246,9 @@ const ComfyUI_T2I_ByFluxNF4 = {
     },
     "31": {
       "inputs": {
-        "seed":"%seed%",
-        "steps":"%steps%",
-        "cfg":"%cfg%",
+        "seed":"100",
+        "steps":"25",
+        "cfg":"5.0",
         "sampler_name":"%sampler%",
         "scheduler": "simple",
         "denoise": 1,
@@ -356,8 +356,8 @@ const ComfyUI_T2I_ByFluxSimple = {
     },
     "27": {
       "inputs": {
-        "width":"%width%",
-        "height":"%height%",
+        "width":"1024",
+        "height":"1024",
         "batch_size": 1
       },
       "class_type": "EmptySD3LatentImage",
@@ -374,9 +374,9 @@ const ComfyUI_T2I_ByFluxSimple = {
     },
     "31": {
       "inputs": {
-        "seed":"%seed%",
-        "steps":"%steps%",
-        "cfg":"%cfg%",
+        "seed":"100",
+        "steps":"25",
+        "cfg":"5.0",
         "sampler_name":"%sampler%",
         "scheduler": "simple",
         "denoise": 1,

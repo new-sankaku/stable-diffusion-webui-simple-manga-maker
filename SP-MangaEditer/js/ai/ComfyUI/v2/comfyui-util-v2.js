@@ -1,98 +1,65 @@
-const uuid = crypto.randomUUID();
-
-class ComfyUIEndpoints {
-  #getUrlParts() {
-    const serverAddress = $("comfyUIPageUrl").value;
-    const url = new URL(serverAddress);
-    return {
-      protocol: url.protocol.replace(":", ""),
-      domain: url.hostname,
-      port: url.port || "",
-      wsProtocol: url.protocol === "https:" ? "wss" : "ws",
-    };
-  }
-
-  constructor() {
-    this.urls = this.setupUrlProxy();
-  }
-
-  setupUrlProxy() {
-    return new Proxy(
-      {},
-      {
-        get: (target, prop) => {
-          const { protocol, domain, port, wsProtocol } = this.#getUrlParts();
-          const baseUrl = `${protocol}://${domain}${port ? ":" + port : ""}`;
-          const wsUrl = `${wsProtocol}://${domain}${port ? ":" + port : ""}`;
-          const endpoint = this.getEndpoint(prop);
-
-          if (prop === "ws") {
-            return `${wsUrl}/ws`;
-          }
-          return `${baseUrl}${endpoint}`;
-        },
-      }
-    );
-  }
-
-  getEndpoint(key) {
-    const endpoints = {
-      settings: "/settings",
-      prompt: "/prompt",
-      history: "/history/",
-      view: "/view",
-      uploadImage: "/upload/image",
-      objectInfo: "/object_info/",
-      objectInfoOnly: "/object_info",
-    };
-    return endpoints[key] || "";
-  }
-}
-
-let comfyUI = null;
-let comfyUIUrls = null;
-comfyUI = new ComfyUIEndpoints();
-comfyUIUrls = comfyUI.urls;
-
-async function comfyui_apiHeartbeat() {
+async function comfyui_apiHeartbeat_v2() {
   const label = $("ExternalService_Heartbeat_Label");
+  const labelfw = $("ExternalService_Heartbeat_Label_fw");
+
   try {
     const response = await fetch(comfyUIUrls.settings, {
-      method: "GET",
+      method: "GET", 
       headers: {
         "Content-Type": "application/json",
         accept: "application/json",
       },
     });
 
-    console.log("response.ok", response.ok);
     if (response.ok) {
-      label.innerHTML = "ComufyUI ON";
-      label.style.color = "green";
+      if (label) {
+        label.innerHTML = "ComufyUI ON";
+        label.style.color = "green";
+      }
+      if (labelfw) {
+        labelfw.innerHTML = "ComufyUI ON";
+        labelfw.style.color = "green";
+      }
+
+      if (firstComfyConnection) {
+        getDiffusionInfomation();
+        firstComfyConnection = false;
+      }
       return true;
     } else {
+      if (label) {
+        label.innerHTML = "ComufyUI OFF";
+        label.style.color = "red";
+      }
+      if (labelfw) {
+        labelfw.innerHTML = "ComufyUI OFF";
+        labelfw.style.color = "red";
+      }
+    }
+  } catch (error) {
+    if (label) {
       label.innerHTML = "ComufyUI OFF";
       label.style.color = "red";
     }
-  } catch (error) {
-    label.innerHTML = "ComufyUI OFF";
-    label.style.color = "red";
+    if (labelfw) {
+      labelfw.innerHTML = "ComufyUI OFF";
+      labelfw.style.color = "red";
+    }
   }
   return false;
 }
 
+
 let isOnline = false;
-async function monitorComfyUIConnection() {
+async function comfyui_monitorConnection_v2() {
   while (true) {
-    const currentStatus = await comfyui_apiHeartbeat();
+    const currentStatus = await comfyui_apiHeartbeat_v2();
     if (currentStatus !== isOnline) {
       isOnline = currentStatus;
-      console.log(`接続状態が変更されました: ${isOnline ? "ON" : "OFF"}`);
       if (isOnline) {
-        console.log(
-          "オンライン状態になりました。ワークフロー更新を試みます..."
-        );
         comfyUIWorkflowEditor.updateObjectInfoAndWorkflows();
+      }else{
+        
       }
     }
     const interval = isOnline ? 15000 : 5000;
@@ -100,7 +67,7 @@ async function monitorComfyUIConnection() {
   }
 }
 
-function generateTimestampFileName(extension = "png") {
+function generateTimestampFileName_v2(extension = "png") {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -113,13 +80,13 @@ function generateTimestampFileName(extension = "png") {
   return `${year}${month}${day}-${hours}${minutes}${seconds}-${milliseconds}.${extension}`;
 }
 
-async function comfyui_uploadImage(file, fileName = null, overwrite = true) {
+async function comfyui_uploadImage_v2(file, fileName = null, overwrite = true) {
   if (!file) {
     throw new Error("ファイルが指定されていません");
   }
 
   if (!fileName) {
-    fileName = generateTimestampFileName();
+    fileName = generateTimestampFileName_v2();
   }
 
   const formData = new FormData();
@@ -144,7 +111,7 @@ async function comfyui_uploadImage(file, fileName = null, overwrite = true) {
   };
 }
 
-async function comfyui_handleFileUpload(input) {
+async function comfyui_handleFileUpload_v2(input) {
   const file = input.files[0];
   const nodeId = input.dataset.nodeId;
   const inputName = input.dataset.inputName;
@@ -153,7 +120,7 @@ async function comfyui_handleFileUpload(input) {
   if (!file) return;
 
   try {
-    const uploadResult = await comfyui_uploadImage(file);
+    const uploadResult = await comfyui_uploadImage_v2(file);
 
     if (uploadResult.success) {
       const previewContainer = document.querySelector(
@@ -181,7 +148,7 @@ async function comfyui_handleFileUpload(input) {
 
 //type=input output temp
 //subfolder: <subfolder>
-async function comfyui_get_image(filename, type = "input") {
+async function comfyui_view_image_v2(filename, type = "input") {
   try {
     const baseUrl = document.getElementById("comfyUIPageUrl").value;
     const params = new URLSearchParams({
@@ -202,16 +169,17 @@ async function comfyui_get_image(filename, type = "input") {
   }
 }
 
-async function Comfyui_put_queue(workflow) {
-  console.log("Comfyui_put_queue workflow", workflow);
 
-  var response = await Comfyui_queue_prompt(workflow);
+async function comfyui_put_queue_v2(workflow) {
+  console.log("comfyui_put_queue_v2 workflow", workflow);
+
+  var response = await comfyui_queue_prompt_v2(workflow);
   if (!response) return null;
   processing_prompt = true;
   var prompt_id = response.prompt_id;
-  await Comfyui_track_prompt_progress(prompt_id);
+  await comfyui_track_prompt_progress_v2(prompt_id);
 
-  response = await Comfyui_get_history(prompt_id);
+  response = await comfyui_get_history_v2(prompt_id);
   if (!response)
     return {
       error: true,
@@ -219,8 +187,8 @@ async function Comfyui_put_queue(workflow) {
       details: "Please check ComfyUI console.",
     };
 
-  if (Comfyui_isError(response)) {
-    const errorMessage = Comfyui_getErrorMessage(response);
+  if (comfyui_isError_v2(response)) {
+    const errorMessage = comfyui_getErrorMessage_v2(response);
     return {
       error: true,
       message: errorMessage.exception_message || "Unknown error",
@@ -231,7 +199,7 @@ async function Comfyui_put_queue(workflow) {
       response[prompt_id]["outputs"][
         Object.keys(response[prompt_id]["outputs"])[0]
       ].images["0"];
-    var img = await Comfyui_get_image(image_data);
+    var img = await comfyui_get_image_v2(image_data);
 
     return new Promise((resolve) => {
       resolve(img);
@@ -239,7 +207,7 @@ async function Comfyui_put_queue(workflow) {
   }
 }
 
-async function Comfyui_get_image(image_data_to_recieve) {
+async function comfyui_get_image_v2(image_data_to_recieve) {
   try {
     const params = new URLSearchParams({
       filename: image_data_to_recieve.filename,
@@ -247,7 +215,10 @@ async function Comfyui_get_image(image_data_to_recieve) {
       type: image_data_to_recieve.type,
     });
     const response = await fetch(comfyUIUrls.view + "?" + params.toString());
-    console.log("画像データをサーバーから取得しました。");
+    console.log("画像データをサーバーから取得しました。",       
+      image_data_to_recieve.filename,
+      image_data_to_recieve.subfolder,
+      image_data_to_recieve.type,);
 
     if (!response.ok) {
       throw new Error(`HTTPエラー! ステータス: ${response.status}`);
@@ -264,10 +235,10 @@ async function Comfyui_get_image(image_data_to_recieve) {
   }
 }
 
-function Comfyui_getErrorMessage(response) {
-  // console.log('Comfyui_getErrorMessage called with:', JSON.stringify(response));
+function comfyui_getErrorMessage_v2(response) {
+  // console.log('comfyui_getErrorMessage_v2 called with:', JSON.stringify(response));
 
-  if (Comfyui_isError(response)) {
+  if (comfyui_isError_v2(response)) {
     const promptId = Object.keys(response)[0];
     const status = response[promptId].status;
     const errorMessage = {
@@ -296,16 +267,16 @@ function Comfyui_getErrorMessage(response) {
       }
     }
 
-    console.log("Comfyui_getErrorMessage returning:", errorMessage);
+    console.log("comfyui_getErrorMessage_v2 returning:", errorMessage);
     return errorMessage;
   }
-  console.log("Comfyui_getErrorMessage returning null");
+  console.log("comfyui_getErrorMessage_v2 returning null");
   return null;
 }
 
-async function Comfyui_queue_prompt(prompt) {
+async function comfyui_queue_prompt_v2(prompt) {
   try {
-    const p = { prompt: prompt, client_id: uuid };
+    const p = { prompt: prompt, client_id: comfyUIuuid };
     const response = await fetch(comfyUIUrls.prompt, {
       method: "POST",
       headers: {
@@ -341,9 +312,9 @@ async function Comfyui_queue_prompt(prompt) {
   }
 }
 
-async function Comfyui_get_history(prompt_id) {
+async function comfyui_get_history_v2(prompt_id) {
   console.log(
-    "Comfyui_get_history関数が呼び出されました。プロンプトID:",
+    "comfyui_get_history_v2関数が呼び出されました。プロンプトID:",
     prompt_id
   );
   try {
@@ -364,7 +335,7 @@ async function Comfyui_get_history(prompt_id) {
   }
 }
 
-async function Comfyui_track_prompt_progress(prompt_id) {
+async function comfyui_track_prompt_progress_v2(prompt_id) {
   if (!socket) Comfyui_connect();
 
   return new Promise((resolve, reject) => {
@@ -392,35 +363,18 @@ async function Comfyui_track_prompt_progress(prompt_id) {
   });
 }
 
-function Comfyui_isError(response) {
+function comfyui_isError_v2(response) {
   if (response && typeof response === "object") {
     const promptId = Object.keys(response)[0];
     if (promptId && response[promptId] && response[promptId].status) {
       const status = response[promptId].status;
       const result = status.status_str === "error";
-      console.log("Comfyui_isError return", result);
+      console.log("comfyui_isError_v2 return", result);
       return result;
     }
   }
-  console.log("Comfyui_isError return false");
+  console.log("comfyui_isError_v2 return false");
   return false;
 }
 
-var socket = null;
-function Comfyui_connect() {
-  try {
-    socket = new WebSocket(comfyUIUrls.ws + "?clientId=" + uuid);
-    socket.addEventListener("open", (event) => {
-      console.log("ComfyUIへの接続に成功しました。");
-    });
-    socket.addEventListener("close", (event) => {
-      socket = null;
-    });
-    socket.addEventListener("error", (event) => {
-      socket = null;
-    });
-    return;
-  } catch (error) {
-    socket = null;
-  }
-}
+

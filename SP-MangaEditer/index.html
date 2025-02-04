@@ -222,8 +222,9 @@ function getElementClasses(element) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.31.3/tagify.min.css" rel="stylesheet" type="text/css" />
+<script src="https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
 
-
+<link rel="stylesheet" href="css/comfyui-workflow-editor.css?v=7.0">
 
 </head>
 
@@ -1600,10 +1601,22 @@ function getElementClasses(element) {
                 <hr>
 
                 <div class="panel" id="baseControlsPanel">
+
+
                     <div class="area-header" data-i18n="baseControls" onclick='changeHiddenById("base-controls-mini", "baseControls", "baseControlsByClose")'>
                     </div>
                     <div id="base-controls-mini" class="controls-mini">
-                        <div class="control textarea-control">
+
+
+                        <div id="comfyUIWorkflowId" class="controls-mini">
+                            <div class="input-group" data-group="comfyUIWorkflowGroup">
+                                <button id="openWorkflowButton">Workflow's</button>
+                            </div>
+                        </div>
+
+                        
+
+                        <div  id="prompt-A" class="control textarea-control">
                             <div class="textarea-label-wrapper">
                                 <label class="textarea-label" for="textarea">Prompt</label>
                             </div>
@@ -1641,14 +1654,12 @@ function getElementClasses(element) {
                                 </button>
                             </div>
                         </div>
-                        <div class="control">
-                            <div class="control">
+                        <div id="prompt-B" class="control">
                             <select id="basePrompt_model" name="dropdown">
                             </select>
                             <span class="label">Model</span>
                         </div>
-
-                        <div class="dual-number-control">
+                        <div id="prompt-C" class="dual-number-control">
                             <div class="control" id="clipDropdownControle">
                                 <input id="clipDropdownId">
                                 <span class="label">Clip</span>
@@ -1660,9 +1671,9 @@ function getElementClasses(element) {
                         </div>
 
 
-                        <hr>
+                        <hr id="prompt-J">
 
-                        <div class="dual-number-control">
+                        <div id="prompt-D" class="dual-number-control">
                             <div class="control">
                                 <input type="number" id="basePrompt_samplingSteps" name="number-input-1" placeholder=" ">
                                 <span class="label">Steps</span>
@@ -1674,7 +1685,7 @@ function getElementClasses(element) {
                             </div>
                         </div>
                     
-                        <div class="dual-number-control">
+                        <div id="prompt-E" class="dual-number-control">
                             <div class="control">
                                 <input type="number" id="basePrompt_width" name="number-input-1" placeholder=" " step="8">
                                 <span class="label">Width</span>
@@ -1685,18 +1696,18 @@ function getElementClasses(element) {
                             </div>
                         </div>
                     
-                        <div class="dual-number-control">
+                        <div id="prompt-F" class="dual-number-control">
                             <div class="control">
                                 <input type="number" id="basePrompt_seed" name="number-input-1" placeholder=" ">
                                 <span class="label">Seed</span>
                             </div>
-                            <div class="control">
+                            <div id="prompt-I" class="control">
                                 <input type="number" id="basePrompt_cfg_scale" name="number-input-1" placeholder=" " min="1" max="30" step="0.1" >
                                 <span class="label">CFG</span>
                             </div>
                         </div>
-                        <hr>
-                        <div class="dual-number-control">
+                        <hr id="prompt-K">
+                        <div id="prompt-G"  class="dual-number-control">
                             <div class="control">
                                 <select id="text2img_hr_upscaler" name="dropdown">
                                 </select>
@@ -1707,7 +1718,7 @@ function getElementClasses(element) {
                                 <span class="label">Step</span>
                             </div>
                         </div>
-                        <div class="dual-number-control">
+                        <div id="prompt-H"  class="dual-number-control">
                             <div class="control">
                                 <input type="number" id="text2img_hr_denoise" name="number-input-1" placeholder=" ">
                                 <span class="label">Denoising</span>
@@ -1922,6 +1933,17 @@ function getElementClasses(element) {
     <script src="js/core/util/array-buffer-utils.js?v=7.0"></script>
     <script src="js/core/compression/project-compression.js?v=7.0"></script>
     
+
+    <script src="js/ai/ComfyUI/v2/comfyui-t2i-sd-default-workflows.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-t2i-flux-default-workflows.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-default-workflows.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-default-object-info.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-workflow-repository.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-object-info-repository.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-util-v2.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-workflow-editor-tab.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-workflow-editor.js"></script>
+    <script src="js/ai/ComfyUI/v2/comfyui-workflow-interact.js"></script>
 
 <script>
 function autoResize(event) {

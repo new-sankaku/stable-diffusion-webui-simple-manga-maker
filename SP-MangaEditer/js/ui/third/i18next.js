@@ -3,6 +3,11 @@
 const resources = {
   ja: {
     translation: {
+comfyUI_workflowErrorHelp:"Workflow'sから設定しているWorkflowが動作することを確認してください。初期設定ではModel, VAEなどを環境に合わせて選択する必要があります。",
+comfyUI_workflowHelp:"注意<br>・タイプごとに使うWorkflowを指定できます。自分で好きなWorkflowを使いたい場合はAPI用をComfyUIからExportして追加してください。</br>・ComfyUIがオンラインになると自動的にモデルリスト等が更新されます。一度でも更新するとComfyUIのモデルリストはブラウザに格納されます。</br>・seed, noise_seedに0を指定するとランダムになります。</br>・テキストに以下を指定すると置き換えます。</br>%prompt%</br>ポジティブプロンプト</br>%negative%</br>ネガティブプロンプト</br>",
+comfyUI_addWorkflow:"API Workflowの追加",
+comfyUI_testGenerate:"テスト生成",
+
 "flipHorizontal":"左右反転",
 "flipVertical":"上下反転",
 
@@ -502,7 +507,11 @@ ft_placeholderWeb: "https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&fam
   },
 en: {
     translation: {
-"flipHorizontal":"Flip Horizontal",
+      comfyUI_workflowErrorHelp:"Please verify that the Workflow configured in Workflow's is working properly. In the default settings, you need to select Model, VAE, etc. according to your environment.",
+      comfyUI_workflowHelp:"Notice<br>・You can specify which Workflow to use for each type. If you want to use your own preferred Workflow, please export it from ComfyUI for API use and add it.</br>・The model list and other items will be automatically updated when ComfyUI goes online. Once updated, ComfyUI's model list will be stored in the browser.</br>・Specifying 0 for seed and noise_seed will make them random.</br>・Specifying the following in the text will replace them:</br>%prompt%</br>Positive prompt</br>%negative%</br>Negative prompt</br>",
+      comfyUI_addWorkflow:"Add API Workflow",
+      comfyUI_testGenerate:"Test Generate",
+      "flipHorizontal":"Flip Horizontal",
 "flipVertical":"Flip Vertical",
 "DevelopmentDonations":"▽Donations to Development▽",
 "com-opacity":"Opacity",
@@ -1081,7 +1090,11 @@ en: {
   },
   ko: {
 translation: {
-"flipHorizontal":"좌우 반전",
+  comfyUI_workflowErrorHelp:"Workflow's에서 설정한 Workflow가 제대로 작동하는지 확인하세요. 기본 설정에서는 환경에 맞게 Model, VAE 등을 선택해야 합니다.",
+  comfyUI_workflowHelp:"주의<br>・유형별로 사용할 Workflow를 지정할 수 있습니다. 원하는 Workflow를 사용하려면 API용으로 ComfyUI에서 내보내기하여 추가하세요.</br>・ComfyUI가 온라인 상태가 되면 모델 목록 등이 자동으로 업데이트됩니다. 한 번이라도 업데이트하면 ComfyUI의 모델 목록이 브라우저에 저장됩니다.</br>・seed, noise_seed에 0을 지정하면 무작위가 됩니다.</br>・텍스트에 다음을 지정하면 대체됩니다:</br>%prompt%</br>긍정적 프롬프트</br>%negative%</br>부정적 프롬프트</br>",
+  comfyUI_addWorkflow:"API Workflow 추가",
+  comfyUI_testGenerate:"테스트 생성",
+  "flipHorizontal":"좌우 반전",
 "flipVertical":"상하 반전",
 "DevelopmentDonations":"▽개발에 대한 기부▽",
 "com-opacity":"투명도",
@@ -1581,7 +1594,11 @@ translation: {
   },
   fr: {
     translation: {
-"flipHorizontal":"Inversion horizontale",
+      comfyUI_workflowErrorHelp:"Veuillez vérifier que le Workflow configuré dans Workflow's fonctionne correctement. Dans les paramètres par défaut, vous devez sélectionner Model, VAE, etc. en fonction de votre environnement.",
+      comfyUI_workflowHelp:"Attention<br>・Vous pouvez spécifier quel Workflow utiliser pour chaque type. Si vous souhaitez utiliser votre propre Workflow, veuillez l'exporter depuis ComfyUI pour l'API et l'ajouter.</br>・La liste des modèles et autres éléments seront automatiquement mis à jour lorsque ComfyUI sera en ligne. Une fois mis à jour, la liste des modèles ComfyUI sera stockée dans le navigateur.</br>・Spécifier 0 pour seed et noise_seed les rendra aléatoires.</br>・Spécifier les éléments suivants dans le texte les remplacera:</br>%prompt%</br>Prompt positif</br>%negative%</br>Prompt négatif</br>",
+      comfyUI_addWorkflow:"Ajouter un Workflow API",
+      comfyUI_testGenerate:"Génération de test",
+      "flipHorizontal":"Inversion horizontale",
 "flipVertical":"Inversion verticale",
 "DevelopmentDonations":"▽Dons pour le développement▽",
 "com-opacity":"Opacité",
@@ -2113,7 +2130,11 @@ translation: {
   },
   zh: {
     translation: {
-"flipHorizontal":"水平翻转",
+      comfyUI_workflowErrorHelp:"请确认在Workflow's中设置的Workflow是否正常运行。在默认设置中，需要根据环境选择Model、VAE等。",
+      comfyUI_workflowHelp:"注意<br>・您可以为每种类型指定要使用的Workflow。如果想使用自己喜欢的Workflow，请从ComfyUI导出API用途并添加。</br>・当ComfyUI上线时，模型列表等将自动更新。一旦更新，ComfyUI的模型列表将存储在浏览器中。</br>・将seed和noise_seed设置为0时将随机化。</br>・在文本中指定以下内容将替换：</br>%prompt%</br>正面提示词</br>%negative%</br>负面提示词</br>",
+      comfyUI_addWorkflow:"添加API Workflow",
+      comfyUI_testGenerate:"测试生成",
+      "flipHorizontal":"水平翻转",
 "flipVertical":"垂直翻转",
 "DevelopmentDonations":"▽支持开发▽",
 "com-opacity":"透明度",
@@ -2645,7 +2666,11 @@ translation: {
   },
   ru: {
     translation: {
-"flipHorizontal":"Горизонтальное отражение",
+      comfyUI_workflowErrorHelp:"Пожалуйста, проверьте, что Workflow, настроенный в Workflow's, работает правильно. В настройках по умолчанию необходимо выбрать Model, VAE и т.д. в соответствии с вашей средой.",
+      comfyUI_workflowHelp:"Внимание<br>・Вы можете указать, какой Workflow использовать для каждого типа. Если вы хотите использовать свой собственный Workflow, экспортируйте его из ComfyUI для API и добавьте.</br>・Список моделей и другие элементы будут автоматически обновляться, когда ComfyUI станет онлайн. После обновления список моделей ComfyUI будет сохранен в браузере.</br>・Указание 0 для seed и noise_seed сделает их случайными.</br>・Указание следующего в тексте заменит их:</br>%prompt%</br>Положительный промпт</br>%negative%</br>Отрицательный промпт</br>",
+      comfyUI_addWorkflow:"Добавить API Workflow",
+      comfyUI_testGenerate:"Тестовая генерация",
+      "flipHorizontal":"Горизонтальное отражение",
 "flipVertical":"Вертикальное отражение",
 "DevelopmentDonations":"▽Пожертвования на разработку▽",
 "com-opacity":"Прозрачность",
@@ -3126,7 +3151,11 @@ translation: {
   },
   es: {
     translation: {
-"flipHorizontal":"Voltear horizontalmente",
+      comfyUI_workflowErrorHelp:"Por favor, verifique que el Workflow configurado en Workflow's esté funcionando correctamente. En la configuración predeterminada, necesita seleccionar Model, VAE, etc. según su entorno.",
+      comfyUI_workflowHelp:"Atención<br>・Puede especificar qué Workflow usar para cada tipo. Si desea utilizar su propio Workflow, expórtelo desde ComfyUI para API y agréguelo.</br>・La lista de modelos y otros elementos se actualizarán automáticamente cuando ComfyUI esté en línea. Una vez actualizado, la lista de modelos de ComfyUI se almacenará en el navegador.</br>・Especificar 0 para seed y noise_seed los hará aleatorios.</br>・Especificar lo siguiente en el texto los reemplazará:</br>%prompt%</br>Prompt positivo</br>%negative%</br>Prompt negativo</br>",
+      comfyUI_addWorkflow:"Agregar API Workflow",
+      comfyUI_testGenerate:"Generar prueba",
+      "flipHorizontal":"Voltear horizontalmente",
 "flipVertical":"Voltear verticalmente",
 "DevelopmentDonations":"▽Donaciones para el desarrollo▽",
       "com-opacity":"Opacidad",
@@ -3606,7 +3635,11 @@ translation: {
   },
   pt: {
     translation: {
-"flipHorizontal":"Inverter horizontalmente",
+      comfyUI_workflowErrorHelp:"Por favor, verifique se o Workflow configurado em Workflow's está funcionando corretamente. Nas configurações padrão, você precisa selecionar Model, VAE, etc. de acordo com seu ambiente.",
+      comfyUI_workflowHelp:"Atenção<br>・Você pode especificar qual Workflow usar para cada tipo. Se quiser usar seu próprio Workflow, exporte-o do ComfyUI para API e adicione.</br>・A lista de modelos e outros itens serão atualizados automaticamente quando o ComfyUI ficar online. Uma vez atualizada, a lista de modelos do ComfyUI será armazenada no navegador.</br>・Especificar 0 para seed e noise_seed os tornará aleatórios.</br>・Especificar o seguinte no texto irá substituí-los:</br>%prompt%</br>Prompt positivo</br>%negative%</br>Prompt negativo</br>",
+      comfyUI_addWorkflow:"Adicionar API Workflow",
+      comfyUI_testGenerate:"Gerar teste",
+      "flipHorizontal":"Inverter horizontalmente",
 "flipVertical":"Inverter verticalmente",
 "DevelopmentDonations":"▽Doações para o desenvolvimento▽",
       "com-opacity":"Opacidade",
@@ -4087,7 +4120,11 @@ translation: {
   },
 th: {
 translation: {
-"flipHorizontal":"พลิกแนวนอน",
+  comfyUI_workflowErrorHelp:"โปรดตรวจสอบว่า Workflow ที่กำหนดค่าใน Workflow's ทำงานอย่างถูกต้อง ในการตั้งค่าเริ่มต้น คุณต้องเลือก Model, VAE ฯลฯ ตามสภาพแวดล้อมของคุณ",
+  comfyUI_workflowHelp:"ข้อควรระวัง<br>・คุณสามารถระบุ Workflow ที่จะใช้สำหรับแต่ละประเภทได้ หากต้องการใช้ Workflow ที่คุณชอบ โปรดส่งออกจาก ComfyUI สำหรับ API และเพิ่มเข้ามา</br>・รายการโมเดลและรายการอื่นๆ จะอัปเดตโดยอัตโนมัติเมื่อ ComfyUI ออนไลน์ เมื่ออัปเดตแล้ว รายการโมเดล ComfyUI จะถูกเก็บไว้ในเบราว์เซอร์</br>・การระบุ 0 สำหรับ seed และ noise_seed จะทำให้เป็นแบบสุ่ม</br>・การระบุข้อความต่อไปนี้จะแทนที่:</br>%prompt%</br>พรอมต์เชิงบวก</br>%negative%</br>พรอมต์เชิงลบ</br>",
+  comfyUI_addWorkflow:"เพิ่ม API Workflow",
+  comfyUI_testGenerate:"ทดสอบการสร้าง",
+  "flipHorizontal":"พลิกแนวนอน",
 "flipVertical":"พลิกแนวตั้ง",
 "DevelopmentDonations":"▽บริจาคเพื่อการพัฒนา▽",
   "com-opacity":"ความโปร่งใส",
@@ -4618,7 +4655,11 @@ translation: {
   },
     de: {
 "translation": {
-"flipHorizontal":"Horizontal spiegeln",
+  comfyUI_workflowErrorHelp:"Bitte überprüfen Sie, ob der in Workflow's konfigurierte Workflow ordnungsgemäß funktioniert. In den Standardeinstellungen müssen Sie Model, VAE usw. entsprechend Ihrer Umgebung auswählen.",
+  comfyUI_workflowHelp:"Achtung<br>・Sie können für jeden Typ festlegen, welcher Workflow verwendet werden soll. Wenn Sie Ihren eigenen Workflow verwenden möchten, exportieren Sie ihn bitte von ComfyUI für API und fügen Sie ihn hinzu.</br>・Die Modellliste und andere Elemente werden automatisch aktualisiert, wenn ComfyUI online ist. Nach der Aktualisierung wird die ComfyUI-Modellliste im Browser gespeichert.</br>・Wenn Sie für seed und noise_seed 0 angeben, werden sie zufällig generiert.</br>・Die Angabe des Folgenden im Text wird ersetzt:</br>%prompt%</br>Positiver Prompt</br>%negative%</br>Negativer Prompt</br>",
+  comfyUI_addWorkflow:"API Workflow hinzufügen",
+  comfyUI_testGenerate:"Test generieren",
+  "flipHorizontal":"Horizontal spiegeln",
 "flipVertical":"Vertikal spiegeln",
   "DevelopmentDonations":"▽Spenden für die Entwicklung▽",
 "com-opacity":"Deckkraft",

@@ -48,14 +48,14 @@ class ComfyUIEndpoints {
 let reader = new FileReader();
 
 var socket = null;
-const uuid = crypto.randomUUID();
+const comfyUIuuid = crypto.randomUUID();
 var selected_workflow = null;
 var processing_prompt = false;
 var workflowFileLoad = "";
 
 function Comfyui_connect() {
   try {
-    socket = new WebSocket(comfyUIUrls.ws + '?clientId=' + uuid);
+    socket = new WebSocket(comfyUIUrls.ws + '?clientId=' + comfyUIuuid);
     socket.addEventListener("open", (event) => {
       console.log("ComfyUIへの接続に成功しました。");
     });
@@ -73,9 +73,11 @@ function Comfyui_connect() {
 
 async function Comfyui_apiHeartbeat() {
   const label = $("ExternalService_Heartbeat_Label");
+  const labelfw = $("ExternalService_Heartbeat_Label_fw");
+
   try {
     const response = await fetch(comfyUIUrls.settings, {
-      method: "GET",
+      method: "GET", 
       headers: {
         "Content-Type": "application/json",
         accept: "application/json",
@@ -83,8 +85,14 @@ async function Comfyui_apiHeartbeat() {
     });
 
     if (response.ok) {
-      label.innerHTML = "ComufyUI ON";
-      label.style.color = "green";
+      if (label) {
+        label.innerHTML = "ComufyUI ON";
+        label.style.color = "green";
+      }
+      if (labelfw) {
+        labelfw.innerHTML = "ComufyUI ON";
+        labelfw.style.color = "green";
+      }
 
       if (firstComfyConnection) {
         getDiffusionInfomation();
@@ -92,19 +100,31 @@ async function Comfyui_apiHeartbeat() {
       }
       return true;
     } else {
+      if (label) {
+        label.innerHTML = "ComufyUI OFF";
+        label.style.color = "red";
+      }
+      if (labelfw) {
+        labelfw.innerHTML = "ComufyUI OFF";
+        labelfw.style.color = "red";
+      }
+    }
+  } catch (error) {
+    if (label) {
       label.innerHTML = "ComufyUI OFF";
       label.style.color = "red";
     }
-  } catch (error) {
-    label.innerHTML = "ComufyUI OFF";
-    label.style.color = "red";
+    if (labelfw) {
+      labelfw.innerHTML = "ComufyUI OFF";
+      labelfw.style.color = "red";
+    }
   }
   return false;
 }
 
 async function Comfyui_queue_prompt(prompt) {
   try {
-    const p = { prompt: prompt, client_id: uuid };
+    const p = { prompt: prompt, client_id: comfyUIuuid };
     const response = await fetch(comfyUIUrls.prompt, {
       method: "POST",
       headers: {
@@ -124,7 +144,7 @@ async function Comfyui_queue_prompt(prompt) {
     return response_data;
 
   } catch (error) {
-    let errorMessage = "Text2Image Error. ";
+    let errorMessage = "Error. ";
     if (error.name === 'TypeError') {
       errorMessage += "Network error or COMFYUI server is down.";
     } else if (error.message.includes('HTTP error!')) {
@@ -205,6 +225,8 @@ async function Comfyui_get_image(image_data_to_recieve) {
 }
 
 async function Comfyui_track_prompt_progress(prompt_id) {
+  if (!socket) Comfyui_connect();
+
   return new Promise((resolve, reject) => {
     socket.onmessage = (event) => {
       if (event.data instanceof Blob) {
@@ -239,9 +261,9 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
   }
 
   if (isT2I) {
-    selected_workflow = getComfyUI_T2I();
+    selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("T2I");
   } else {
-    selected_workflow = getComfyUI_I2I();
+    selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("I2I");
   }
   
   var classTypeLists = getClassTypeOnlyByJson(selected_workflow);
@@ -271,16 +293,12 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
         var center = calculateCenter(layer);
         putImageInFrame(result, center.centerX, center.centerY);
       } else {
-        throw new Error(
-          "Unexpected error: No result returned from Comfyui_put_queue"
-        );
+        throw new Error("Unexpected error: No result returned from Comfyui_put_queue");
       }
     })
     .catch((error) => {
-      createToastError(
-        "Generation Error",
-        error.message || "Check COMFYUI for details"
-      );
+      let help = getText("comfyUI_workflowErrorHelp");
+      createToastError( "Generation Error", [error.message, help], 8000 );
       console.error("エラー:", error);
     })
     .finally(() => {

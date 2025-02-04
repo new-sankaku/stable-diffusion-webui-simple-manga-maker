@@ -41,6 +41,55 @@ class ComfyUIWorkflowBuilder {
         return this;
     }
 
+    updateNodesByInputName(inputs) {
+        this.initialize();
+        
+        const validInputs = {};
+        Object.entries(inputs).forEach(([key, value]) => {
+            if (value !== null && value !== undefined && value !== "") {
+                validInputs[key] = value;
+            }
+        });
+
+        if (Object.keys(validInputs).length > 0) {
+            Object.entries(this.workflowCopy).forEach(([id, node]) => {
+                if (node.inputs) {
+                    Object.keys(node.inputs).forEach(inputKey => {
+                        if (validInputs.hasOwnProperty(inputKey)) {
+                            node.inputs[inputKey] = validInputs[inputKey];
+                        }
+                    });
+                }
+            });
+        }
+        
+        return this;
+    }
+
+    updateValueByTargetValue(targetValue, replaceValue) {
+        this.initialize();
+
+        const replaceValueInObject = (obj) => {
+            for (let key in obj) {
+                if (obj[key] === null || obj[key] === undefined) continue;
+
+                if (typeof obj[key] === 'object') {
+                    replaceValueInObject(obj[key]);
+                } else if (typeof obj[key] === 'string') {
+                    if (obj[key].includes(targetValue)) {
+                        obj[key] = obj[key].replaceAll(targetValue, replaceValue);
+                    }
+                }
+            }
+        };
+
+        Object.entries(this.workflowCopy).forEach(([id, node]) => {
+            replaceValueInObject(node);
+        });
+
+        return this;
+    }
+
     build() {
         if (!this.hasInitialized) {
             return this.originalWorkflow;

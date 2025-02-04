@@ -1,3 +1,6 @@
+// "Upscaler"
+const comfyuiTypes = ["T2I", "I2I"];
+
 class ComfyUIWorkflowTab {
   constructor(file, workflow, editor, id, type, enabled) {
     this.type = type;
@@ -5,12 +8,11 @@ class ComfyUIWorkflowTab {
     this.file = file;
     this.workflow = workflow;
     this.editor = editor;
+    this.unsavedNodes = new Set();
     if (id) {
       this.id = id;
     } else {
-      this.id = `workflow-${Date.now()}-${Math.random()
-        .toString(36)
-        .substr(2, 9)}`;
+      this.id = `workflow-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     }
     this.contentElement = null;
     this.hiddenNodeTypes = ["Note", undefined];
@@ -18,6 +20,15 @@ class ComfyUIWorkflowTab {
     this.masonry = null;
     this.resizeObserver = null;
     this.buttonElement = null;
+  }
+ 
+
+  markNodeAsUnsaved(nodeId) {
+    this.unsavedNodes.add(nodeId);
+    const nodeElement = this.contentElement.querySelector(`[data-node-id="${nodeId}"]`).closest('.comfui-node-wrapper');
+    if (nodeElement) {
+      nodeElement.classList.add('unsaved');
+    }
   }
 
   createTabButton() {
@@ -36,7 +47,7 @@ class ComfyUIWorkflowTab {
         <span class="comfui-custom-radio-label"></span>
       </label>
       <select class="comfui-tab-type-dropdown" title="Type">
-        ${["T2I", "I2I", "Upscaler"]
+        ${comfyuiTypes
           .map(
             (option) =>
               `<option value="${option}" ${
@@ -49,7 +60,7 @@ class ComfyUIWorkflowTab {
       this.file.name
     }</span>
       <div class="comfui-tab-actions">
-        <span class="comfui-tab-save" title="Save">⇔</span>
+        <span class="comfui-tab-save" title="Save">Save</span>
         <span class="comfui-tab-download" title="Download">↓</span>
         <span class="comfui-tab-close" title="Close">×</span>
       </div>
@@ -119,11 +130,22 @@ class ComfyUIWorkflowTab {
       )
       .then(() => {
         console.log("Workflow saved successfully");
+        this.clearUnsavedState();
       })
       .catch((error) => {
         console.error("Workflowの保存に失敗しました:", error);
       });
   }
+  clearUnsavedState() {
+    this.unsavedNodes.forEach(nodeId => {
+      const nodeElement = this.contentElement.querySelector(`[data-node-id="${nodeId}"]`).closest('.comfui-node-wrapper');
+      if (nodeElement) {
+        nodeElement.classList.remove('unsaved');
+      }
+    });
+    this.unsavedNodes.clear();
+  }
+
 
   createContent() {
     const content = document.createElement("div");
@@ -270,27 +292,36 @@ class ComfyUIWorkflowTab {
     const grid = this.contentElement?.querySelector(".comfui-node-list");
     if (!grid) return;
 
-    setTimeout(() => {
-      this.masonry = new Masonry(grid, {
-        itemSelector: ".node-wrapper",
-        columnWidth: ".node-wrapper",
-        gutter: 16,
-        fitWidth: true,
-        transitionDuration: 0,
-      });
+    const masonryOptions = {
+      itemSelector: ".comfui-node-wrapper",
+      columnWidth: ".comfui-node-wrapper",
+      percentPosition: false,
+      gutter: 16,
+      fitWidth: true,
+      transitionDuration: 0,
+      initLayout: false,
+      resize: true
+    };
 
-      let resizeTimeout;
-      window.addEventListener("resize", () => {
-        if (resizeTimeout) {
-          clearTimeout(resizeTimeout);
+    setTimeout(() => {
+      this.masonry = new Masonry(grid, masonryOptions);
+      if (this.masonry) {
+        this.masonry.layout();
+      }
+    }, 100);
+
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = setTimeout(() => {
+        if (this.isActive && this.masonry) {
+          this.masonry.reloadItems();
+          this.masonry.layout();
         }
-        resizeTimeout = setTimeout(() => {
-          if (this.isActive && this.masonry) {
-            this.masonry.layout();
-          }
-        }, 5);
-      });
-    }, 5);
+      }, 150);
+    });
   }
 
   async initializeImagePreviews() {
@@ -312,7 +343,7 @@ class ComfyUIWorkflowTab {
           const previewImage = previewContainer.querySelector("img");
           if (previewImage) {
             try {
-              const imageUrl = await comfyui_get_image(selectedValue);
+              const imageUrl = await comfyui_view_image_v2(selectedValue);
               if (imageUrl) {
                 previewImage.src = imageUrl;
                 previewContainer.classList.remove("hidden");
@@ -335,8 +366,8 @@ class ComfyUIWorkflowTab {
 
   async renderNodes() {
     const container = this.contentElement.querySelector(".comfui-node-list");
-    container.innerHTML = "";
 
+    container.innerHTML = "";
     const nodes = Object.entries(this.workflow)
       .filter(([_, node]) => !this.hiddenNodeTypes.includes(node.class_type))
       .map(([id, node]) => {
@@ -354,10 +385,10 @@ class ComfyUIWorkflowTab {
       })
       .sort((a, b) => b.inputCount - a.inputCount);
 
+
     nodes.forEach(({ id, node, apiNode }) => {
       const nodeElement = document.createElement("div");
       nodeElement.className = "comfui-node-wrapper";
-
       const nodeTitle = node._meta?.title || node.class_type;
       const nodeTypeDisplay = `<div class="comfui-node-title">${id}: ${nodeTitle}</div>`;
 
@@ -370,7 +401,6 @@ class ComfyUIWorkflowTab {
           .filter((input) => input !== "")
           .join("");
       }
-
       nodeElement.innerHTML = nodeTypeDisplay + inputsDisplay;
       container.appendChild(nodeElement);
     });
@@ -387,151 +417,145 @@ class ComfyUIWorkflowTab {
   }
 
   setupInputListeners() {
-    this.contentElement
-      .querySelectorAll(
-        'input[type="text"], input[type="number"], select, textarea'
-      )
-      .forEach((input) => {
-        const nodeId = input.dataset.nodeId;
-        const inputName = input.dataset.inputName;
-
-        // 初期化時に値を強制的に更新
-        if (nodeId && inputName && this.workflow[nodeId]) {
-          this.workflow[nodeId].inputs[inputName] = input.value;
-        }
-
-        input.addEventListener("change", async (e) => {
-          const nodeId = e.target.dataset.nodeId;
-          const inputName = e.target.dataset.inputName;
-          if (this.workflow[nodeId] && inputName) {
-            this.workflow[nodeId].inputs[inputName] = e.target.value;
-
-            if (e.target.tagName.toLowerCase() === "select") {
-              const selectedValue = e.target.value;
-              const previewTargetId = `${nodeId}-${inputName}-preview`;
-              const previewContainer = this.contentElement.querySelector(
-                `[data-preview-id="${previewTargetId}"]`
-              );
-
-              if (previewContainer) {
-                const previewImage = previewContainer.querySelector("img");
-                if (previewImage) {
-                  const imageUrl = await comfyui_get_image(selectedValue);
-                  if (imageUrl) {
-                    previewImage.src = imageUrl;
-                    previewContainer.classList.remove("hidden");
-
-                    previewImage.onload = () => {
-                      if (this.masonry) {
-                        this.masonry.layout();
-                      }
-                      URL.revokeObjectURL(imageUrl);
-                    };
-                  }
+    this.contentElement.querySelectorAll('input[type="text"], input[type="number"], select, textarea').forEach((input) => {
+      const nodeId = input.dataset.nodeId;
+      const inputName = input.dataset.inputName;
+   
+      if (nodeId && inputName && this.workflow[nodeId]) {
+        this.workflow[nodeId].inputs[inputName] = input.value;
+      }
+   
+      input.addEventListener("change", async (e) => {
+        const nodeId = e.target.dataset.nodeId;
+        const inputName = e.target.dataset.inputName;
+        if (this.workflow[nodeId] && inputName) {
+          this.workflow[nodeId].inputs[inputName] = e.target.value;
+          this.markNodeAsUnsaved(nodeId);
+   
+          if (e.target.tagName.toLowerCase() === "select") {
+            const selectedValue = e.target.value;
+            const previewTargetId = `${nodeId}-${inputName}-preview`;
+            const previewContainer = this.contentElement.querySelector(`[data-preview-id="${previewTargetId}"]`);
+   
+            if (previewContainer) {
+              const previewImage = previewContainer.querySelector("img");
+              if (previewImage) {
+                console.log("selectedValue", selectedValue);
+                const imageUrl = await comfyui_view_image_v2(selectedValue);
+                if (imageUrl) {
+                  previewImage.src = imageUrl;
+                  previewContainer.classList.remove("hidden");
+   
+                  previewImage.onload = () => {
+                    if (this.masonry) {
+                      this.masonry.layout();
+                    }
+                    URL.revokeObjectURL(imageUrl);
+                  };
                 }
               }
             }
           }
-        });
-
-        if (input.tagName.toLowerCase() === "textarea") {
-          let timeoutId;
-          input.addEventListener("input", () => {
-            if (timeoutId) {
-              clearTimeout(timeoutId);
-            }
-            timeoutId = setTimeout(() => {
-              if (this.masonry && this.isActive) {
-                this.masonry.layout();
-              }
-            }, 5);
-
-            // テキストエリアの値も即時反映
-            const nodeId = input.dataset.nodeId;
-            const inputName = input.dataset.inputName;
-            if (nodeId && inputName && this.workflow[nodeId]) {
-              this.workflow[nodeId].inputs[inputName] = input.value;
-            }
-          });
-
-          if (this.resizeObserver) {
-            this.resizeObserver.disconnect();
+        }
+      });
+   
+      if (input.tagName.toLowerCase() === "textarea") {
+        let timeoutId;
+        input.addEventListener("input", () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
           }
-
-          this.resizeObserver = new ResizeObserver(() => {
-            if (this.masonry) {
-              window.dispatchEvent(new Event("resize"));
+          timeoutId = setTimeout(() => {
+            if (this.masonry && this.isActive) {
               this.masonry.layout();
             }
-          });
-
-          this.resizeObserver.observe(input);
-        }
-      });
-
-    this.contentElement
-      .querySelectorAll('input[type="file"]')
-      .forEach((input) => {
-        input.addEventListener("change", async (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-
-          const nodeId = e.target.dataset.nodeId;
-          const inputName = e.target.dataset.inputName;
-          const previewTargetId = e.target.dataset.previewTarget;
-
-          if (this.workflow[nodeId] && inputName) {
-            try {
-              const uploadResult = await comfyui_uploadImage(file);
-              if (uploadResult.success) {
-                this.workflow[nodeId].inputs[inputName] = uploadResult.name;
-
-                const select = this.contentElement.querySelector(
-                  `select[data-node-id="${nodeId}"][data-input-name="${inputName}"]`
-                );
-                if (select) {
-                  const exists = Array.from(select.options).some(
-                    (option) => option.value === uploadResult.name
-                  );
-                  if (!exists) {
-                    const option = new Option(
-                      uploadResult.name,
-                      uploadResult.name,
-                      true,
-                      true
-                    );
-                    select.add(option);
-                  }
-                  select.value = uploadResult.name;
-                }
-              }
-            } catch (error) {
-              console.error("アップロードエラー:", error);
-            }
-
-            const reader = new FileReader();
-            const previewContainer = this.contentElement.querySelector(
-              `[data-preview-id="${previewTargetId}"]`
-            );
-            const previewImage = previewContainer?.querySelector("img");
-
-            if (!previewContainer || !previewImage) return;
-
-            reader.onload = (e) => {
-              previewImage.src = e.target.result;
-              previewContainer.classList.remove("hidden");
-              previewImage.onload = () => {
-                if (this.masonry) {
-                  this.masonry.layout();
-                }
-              };
-            };
-
-            reader.readAsDataURL(file);
+          }, 5);
+   
+          const nodeId = input.dataset.nodeId;
+          const inputName = input.dataset.inputName;
+          if (nodeId && inputName && this.workflow[nodeId]) {
+            this.workflow[nodeId].inputs[inputName] = input.value;
+            this.markNodeAsUnsaved(nodeId);
           }
         });
+   
+        if (this.resizeObserver) {
+          this.resizeObserver.disconnect();
+        }
+   
+        this.resizeObserver = new ResizeObserver(() => {
+          if (this.masonry) {
+            window.dispatchEvent(new Event("resize"));
+            this.masonry.layout();
+          }
+        });
+   
+        this.resizeObserver.observe(input);
+      }
+    });
+   
+    this.contentElement.querySelectorAll('input[type="file"]').forEach((input) => {
+      input.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+   
+        const nodeId = e.target.dataset.nodeId;
+        const inputName = e.target.dataset.inputName;
+        const previewTargetId = e.target.dataset.previewTarget;
+   
+        if (this.workflow[nodeId] && inputName) {
+          try {
+            const uploadResult = await comfyui_uploadImage_v2(file);
+            if (uploadResult.success) {
+              this.workflow[nodeId].inputs[inputName] = uploadResult.name;
+              this.markNodeAsUnsaved(nodeId);
+   
+              const select = this.contentElement.querySelector(
+                `select[data-node-id="${nodeId}"][data-input-name="${inputName}"]`
+              );
+              if (select) {
+                const exists = Array.from(select.options).some(
+                  (option) => option.value === uploadResult.name
+                );
+                if (!exists) {
+                  const option = new Option(
+                    uploadResult.name,
+                    uploadResult.name,
+                    true,
+                    true
+                  );
+                  select.add(option);
+                }
+                select.value = uploadResult.name;
+              }
+            }
+          } catch (error) {
+            console.error("アップロードエラー:", error);
+          }
+   
+          const reader = new FileReader();
+          const previewContainer = this.contentElement.querySelector(
+            `[data-preview-id="${previewTargetId}"]`
+          );
+          const previewImage = previewContainer?.querySelector("img");
+   
+          if (!previewContainer || !previewImage) return;
+   
+          reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewContainer.classList.remove("hidden");
+            previewImage.onload = () => {
+              if (this.masonry) {
+                this.masonry.layout();
+              }
+            };
+          };
+   
+          reader.readAsDataURL(file);
+        }
       });
-  }
+    });
+   }
 
   downloadWorkflow() {
     const jsonStr = JSON.stringify(this.workflow, null, 2);
