@@ -9,9 +9,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
  
-  event.respondWith(
-    fetch(event.request).then(response => {
-      return response;
-    })
-  );
+  // event.respondWith(
+  //   fetch(event.request).then(response => {
+  //     return response;
+  //   })
+  // );
 });

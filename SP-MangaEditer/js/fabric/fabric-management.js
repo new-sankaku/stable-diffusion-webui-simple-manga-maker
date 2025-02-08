@@ -72,8 +72,7 @@ canvas.on('object:modified',    highlightActiveLayerByCanvas);
 
 //Object選択時にLeyerパネルをハイライトを終了する。
 canvas.on('selection:cleared', function() {
-  var layers = document.querySelectorAll(".layer-item");
-  layers.forEach(layer => layer.classList.remove("active"));
+  highlightClear();
 });
 
 //Object移動時にGrid線にスナップする。

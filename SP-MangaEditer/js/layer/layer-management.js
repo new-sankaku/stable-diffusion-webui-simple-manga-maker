@@ -320,11 +320,22 @@ function removeLayer(layer) {
   }
 }
 
+function highlightClear() {
+  var layers = document.querySelectorAll(".layer-item");
+  layers.forEach(layer => layer.classList.remove("active"));
+
+  updateLayerPanel();
+}
+
+
 function highlightActiveLayer(activeIndex) {
   highlightActiveLayerByCanvas();
 }
 
 function highlightActiveLayerByCanvas(object=null) {
+
+  highlightClear();
+
   lastHighlightGuid = null;
   let activeObject;
   if(object){
