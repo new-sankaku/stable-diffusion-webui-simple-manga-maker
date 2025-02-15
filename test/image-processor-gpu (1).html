@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>GPU Image Processor</title>
+ <style>
+  .container {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+   padding: 20px;
+   max-width: 1200px;
+   margin: 0 auto;
+  }
+  .base-image-container {
+   width: 300px;
+   height: 300px;
+   border: 2px dashed #ccc;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   position: relative;
+  }
+  .base-image {
+   max-width: 100%;
+   max-height: 100%;
+   object-fit: contain;
+  }
+  .base-image-text {
+   position: absolute;
+   pointer-events: none;
+  }
+  .thumbnails {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 10px;
+  }
+  .thumbnail-container {
+   position: relative;
+   width: 200px;
+   transition: border-color 0.3s;
+  }
+  .thumbnail {
+   width: 200px;
+   height: 200px;
+   object-fit: contain;
+   border: 2px solid #ccc;
+  }
+  .thumbnail-container.processed {
+   border: 2px solid #28a745;
+  }
+  .remove-button {
+   position: absolute;
+   top: 5px;
+   right: 5px;
+   background: rgba(255, 0, 0, 0.7);
+   color: white;
+   border: none;
+   border-radius: 50%;
+   width: 20px;
+   height: 20px;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  }
+  .controls {
+   margin: 10px 0;
+  }
+  .color-info {
+   margin: 10px 0;
+  }
+  .drop-zone {
+   border: 2px dashed #ccc;
+   padding: 20px;
+   text-align: center;
+   background: #f8f8f8;
+   cursor: pointer;
+  }
+  .drop-zone.drag-over, .base-image-container.drag-over {
+   background: #e8e8e8;
+   border-color: #999;
+  }
+  .button-container {
+   display: flex;
+   gap: 10px;
+  }
+  .status {
+   padding: 10px;
+   margin: 10px 0;
+   border-radius: 4px;
+   display: none;
+  }
+  .status.processing {
+   display: block;
+   background-color: #fff3cd;
+   color: #856404;
+  }
+  .status.complete {
+   display: block;
+   background-color: #d4edda;
+   color: #155724;
+  }
+  .gpu-status {
+   margin-top: 10px;
+   padding: 5px;
+   background-color: #e2e3e5;
+   border-radius: 4px;
+  }
+  .progress {
+   margin-top: 10px;
+   background-color: #f0f0f0;
+   border-radius: 4px;
+   height: 20px;
+   overflow: hidden;
+  }
+  .progress-bar {
+   height: 100%;
+   background-color: #007bff;
+   transition: width 0.3s;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: white;
+   font-size: 12px;
+  }
+ </style>
+</head>
+<body>
+ <div class="container">
+  <div class="controls">
+   <div>
+    <h3>ベース画像</h3>
+    <div id="baseImageContainer" class="base-image-container">
+     <span class="base-image-text">画像をドラッグ＆ドロップするか、クリックして選択</span>
+     <input type="file" id="baseImage" accept="image/*" style="display: none;">
+     <canvas id="baseCanvas" class="base-image"></canvas>
+    </div>
+   </div>
+   <div class="color-info">
+    検出された背景色: <span id="bgColor"></span>
+   </div>
+   <div>
+    <label>閾値: <input type="range" id="threshold" min="1" max="50" value="15"> <span id="thresholdValue">15</span></label>
+   </div>
+   <div class="gpu-status" id="gpuStatus"></div>
+  </div>
+
+  <div>
+   <h3>調整対象の画像</h3>
+   <div id="dropZone" class="drop-zone">
+    画像をドラッグ＆ドロップするか、クリックして選択
+    <input type="file" id="targetImages" accept="image/*" multiple style="display: none;">
+   </div>
+  </div>
+
+  <div class="button-container">
+   <button onclick="processImages()" id="processButton" disabled>背景色を統一</button>
+   <button onclick="downloadImages()" id="downloadButton" disabled>処理済み画像をダウンロード</button>
+  </div>
+
+  <div id="status" class="status"></div>
+  <div id="progress" class="progress" style="display: none;">
+   <div id="progressBar" class="progress-bar" style="width: 0%">0%</div>
+  </div>
+
+  <div id="thumbnails" class="thumbnails"></div>
+ </div>
+
+ <script id="vertexShader" type="x-shader/x-vertex">
+  attribute vec2 a_position;
+  attribute vec2 a_texCoord;
+  varying vec2 v_texCoord;
+  void main() {
+   gl_Position = vec4(a_position, 0, 1);
+   v_texCoord = a_texCoord;
+  }
+ </script>
+
+ <script id="fragmentShader" type="x-shader/x-fragment">
+  precision highp float;
+  uniform sampler2D u_image;
+  uniform vec3 u_backgroundColor;
+  uniform vec3 u_targetColor;
+  uniform float u_threshold;
+  varying vec2 v_texCoord;
+  
+  void main() {
+   vec4 color = texture2D(u_image, v_texCoord);
+   float dr = abs(color.r - u_backgroundColor.r);
+   float dg = abs(color.g - u_backgroundColor.g);
+   float db = abs(color.b - u_backgroundColor.b);
+   
+   if (dr < u_threshold && dg < u_threshold && db < u_threshold) {
+    gl_FragColor = vec4(u_targetColor, color.a);
+   } else {
+    gl_FragColor = color;
+   }
+  }
+ </script>
+
+ <script>
+  class GPUImageProcessor {
+   constructor(canvas) {
+    this.canvas = canvas;
+    this.gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!this.gl) {
+     throw new Error('WebGL not supported');
+    }
+    this.initWebGL();
+   }
+
+   initWebGL() {
+    const gl = this.gl;
+    
+    const vertexShader = this.createShader(gl.VERTEX_SHADER, document.getElementById('vertexShader').text);
+    const fragmentShader = this.createShader(gl.FRAGMENT_SHADER, document.getElementById('fragmentShader').text);
+    
+    this.program = gl.createProgram();
+    gl.attachShader(this.program, vertexShader);
+    gl.attachShader(this.program, fragmentShader);
+    gl.linkProgram(this.program);
+    
+    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+     throw new Error('Program failed to link: ' + gl.getProgramInfoLog(this.program));
+    }
+    
+    this.positionLocation = gl.getAttribLocation(this.program, 'a_position');
+    this.texCoordLocation = gl.getAttribLocation(this.program, 'a_texCoord');
+    
+    this.initBuffers();
+   }
+
+   createShader(type, source) {
+    const gl = this.gl;
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+     throw new Error('Shader failed to compile: ' + gl.getShaderInfoLog(shader));
+    }
+    return shader;
+   }
+
+   initBuffers() {
+    const gl = this.gl;
+    
+    this.positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     -1.0, -1.0,
+     1.0, -1.0,
+     -1.0, 1.0,
+     1.0, 1.0,
+    ]), gl.STATIC_DRAW);
+    
+    this.texCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     0.0, 0.0,
+     1.0, 0.0,
+     0.0, 1.0,
+     1.0, 1.0,
+    ]), gl.STATIC_DRAW);
+   }
+
+   createTexture(image) {
+    const gl = this.gl;
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    
+    return texture;
+   }
+
+   processImage(sourceCanvas, backgroundColor, targetColor, threshold) {
+    const gl = this.gl;
+    
+    this.canvas.width = sourceCanvas.width;
+    this.canvas.height = sourceCanvas.height;
+    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    
+    const texture = this.createTexture(sourceCanvas);
+    
+    gl.useProgram(this.program);
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
+    gl.enableVertexAttribArray(this.positionLocation);
+    gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0);
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
+    gl.enableVertexAttribArray(this.texCoordLocation);
+    gl.vertexAttribPointer(this.texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+    
+    gl.uniform3f(gl.getUniformLocation(this.program, 'u_backgroundColor'),
+     backgroundColor.r / 255, backgroundColor.g / 255, backgroundColor.b / 255);
+    gl.uniform3f(gl.getUniformLocation(this.program, 'u_targetColor'),
+     targetColor.r / 255, targetColor.g / 255, targetColor.b / 255);
+    gl.uniform1f(gl.getUniformLocation(this.program, 'u_threshold'),
+     threshold / 255);
+    
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+   }
+  }
+
+  const baseCanvas = document.getElementById('baseCanvas');
+  const baseImageContainer = document.getElementById('baseImageContainer');
+  const thumbnailsContainer = document.getElementById('thumbnails');
+  const thresholdInput = document.getElementById('threshold');
+  const thresholdValue = document.getElementById('thresholdValue');
+  const bgColorDisplay = document.getElementById('bgColor');
+  const processButton = document.getElementById('processButton');
+  const downloadButton = document.getElementById('downloadButton');
+  const dropZone = document.getElementById('dropZone');
+  const targetImagesInput = document.getElementById('targetImages');
+  const statusDisplay = document.getElementById('status');
+  const gpuStatusDisplay = document.getElementById('gpuStatus');
+  const progressBar = document.getElementById('progressBar');
+  const progress = document.getElementById('progress');
+  
+  let targetCanvases = [];
+  let originalFileNames = [];
+  let isGPUAvailable = false;
+
+  baseImageContainer.addEventListener('click', () => {
+   document.getElementById('baseImage').click();
+  });
+
+  baseImageContainer.addEventListener('dragover', (e) => {
+   e.preventDefault();
+   baseImageContainer.classList.add('drag-over');
+  });
+
+  baseImageContainer.addEventListener('dragleave', () => {
+   baseImageContainer.classList.remove('drag-over');
+  });
+
+  baseImageContainer.addEventListener('drop', (e) => {
+   e.preventDefault();
+   baseImageContainer.classList.remove('drag-over');
+   const file = e.dataTransfer.files[0];
+   if (file && file.type.startsWith('image/')) {
+    loadBaseImage(file);
+   }
+  });
+
+  document.getElementById('baseImage').addEventListener('change', function(e) {
+   loadBaseImage(e.target.files[0]);
+  });
+
+  dropZone.addEventListener('click', () => {
+   targetImagesInput.click();
+  });
+
+  dropZone.addEventListener('dragover', (e) => {
+   e.preventDefault();
+   dropZone.classList.add('drag-over');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+   dropZone.classList.remove('drag-over');
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+   e.preventDefault();
+   dropZone.classList.remove('drag-over');
+   handleTargetFiles(e.dataTransfer.files);
+  });
+
+  targetImagesInput.addEventListener('change', (e) => {
+   handleTargetFiles(e.target.files);
+  });
+
+  thresholdInput.addEventListener('input', function() {
+   thresholdValue.textContent = this.value;
+  });
+
+  try {
+   const testCanvas = document.createElement('canvas');
+   const gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+   isGPUAvailable = !!gl;
+   gpuStatusDisplay.textContent = isGPUAvailable ? 'GPU処理: 有効' : 'GPU処理: 利用不可 (CPU処理を使用)';
+  } catch (e) {
+   isGPUAvailable = false;
+   gpuStatusDisplay.textContent = 'GPU処理: 利用不可 (CPU処理を使用)';
+  }
+
+  function updateProgress(current, total) {
+   const percent = Math.round((current / total) * 100);
+   progressBar.style.width = `${percent}%`;
+   progressBar.textContent = `${current}/${total} (${percent}%)`;
+  }
+
+  function showProgress(show) {
+   progress.style.display = show ? 'block' : 'none';
+   if (show) {
+    progressBar.style.width = '0%';
+    progressBar.textContent = '0%';
+   }
+  }
+
+  function showStatus(message, type) {
+   statusDisplay.textContent = message;
+   statusDisplay.className = 'status ' + type;
+  }
+
+  function loadBaseImage(file) {
+   if (!file) return;
+   
+   const reader = new FileReader();
+   reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+     baseCanvas.width = img.width;
+     baseCanvas.height = img.height;
+     const ctx = baseCanvas.getContext('2d');
+     ctx.drawImage(img, 0, 0);
+     updateButtons();
+    };
+    img.src = e.target.result;
+   };
+   reader.readAsDataURL(file);
+  }
+
+  function createThumbnail(file) {
+   const container = document.createElement('div');
+   container.className = 'thumbnail-container';
+   
+   const canvas = document.createElement('canvas');
+   canvas.className = 'thumbnail';
+   
+   const removeBtn = document.createElement('button');
+   removeBtn.className = 'remove-button';
+   removeBtn.textContent = '×';
+   removeBtn.onclick = () => {
+    container.remove();
+    const index = targetCanvases.indexOf(canvas);
+    if (index > -1) {
+     targetCanvases.splice(index, 1);
+     originalFileNames.splice(index, 1);
+    }
+    updateButtons();
+   };
+
+   const reader = new FileReader();
+   reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+     canvas.width = img.width;
+     canvas.height = img.height;
+     const ctx = canvas.getContext('2d');
+     ctx.drawImage(img, 0, 0);
+     targetCanvases.push(canvas);
+     originalFileNames.push(file.name);
+     if (isGPUAvailable) {
+      try {
+       canvas.gpuProcessor = new GPUImageProcessor(canvas);
+      } catch (error) {
+       console.warn('GPU processing not available for this canvas:', error);
+      }
+     }
+     updateButtons();
+    };
+    img.src = e.target.result;
+   };
+   reader.readAsDataURL(file);
+
+   container.appendChild(canvas);
+   container.appendChild(removeBtn);
+   thumbnailsContainer.appendChild(container);
+   container.classList.remove('processed');
+  }
+
+  function handleTargetFiles(files) {
+   for (const file of files) {
+    if (file.type.startsWith('image/')) {
+     createThumbnail(file);
+    }
+   }
+  }
+
+  function updateButtons() {
+   const hasImages = targetCanvases.length > 0 && baseCanvas.width > 0;
+   processButton.disabled = !hasImages;
+   downloadButton.disabled = !hasImages;
+  }
+
+  function quantizeColor(r, g, b, levels = 32) {
+   const factor = 256 / levels;
+   return {
+    r: Math.floor(r / factor) * factor,
+    g: Math.floor(g / factor) * factor,
+    b: Math.floor(b / factor) * factor
+   };
+  }
+
+  function getBackgroundColor(canvas) {
+   const ctx = canvas.getContext('2d');
+   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+   const data = imageData.data;
+   const colorCounts = new Map();
+   
+   for (let i = 0; i < data.length; i += 4) {
+    const color = quantizeColor(data[i], data[i + 1], data[i + 2]);
+    const key = `${color.r},${color.g},${color.b}`;
+    colorCounts.set(key, (colorCounts.get(key) || 0) + 1);
+   }
+   
+   let maxCount = 0;
+   let dominantColor = null;
+   
+   for (const [key, count] of colorCounts.entries()) {
+    if (count > maxCount) {
+     maxCount = count;
+     const [r, g, b] = key.split(',').map(Number);
+     dominantColor = {r, g, b};
+    }
+   }
+   
+   bgColorDisplay.textContent = `RGB(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b})`;
+   return dominantColor;
+  }
+
+  function adjustBackground(canvas, targetColor) {
+   const ctx = canvas.getContext('2d');
+   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+   const data = imageData.data;
+   const threshold = parseInt(thresholdInput.value);
+   const originalColor = getBackgroundColor(canvas);
+   
+   for (let i = 0; i < data.length; i += 4) {
+    const currentColor = quantizeColor(data[i], data[i + 1], data[i + 2]);
+    if (Math.abs(currentColor.r - originalColor.r) < threshold &&
+        Math.abs(currentColor.g - originalColor.g) < threshold &&
+        Math.abs(currentColor.b - originalColor.b) < threshold) {
+     data[i] = targetColor.r;
+     data[i + 1] = targetColor.g;
+     data[i + 2] = targetColor.b;
+    }
+   }
+   
+   ctx.putImageData(imageData, 0, 0);
+  }
+
+  async function processImages() {
+   showStatus('処理を開始します...', 'processing');
+   showProgress(true);
+   processButton.disabled = true;
+   downloadButton.disabled = true;
+
+   const backgroundColor = getBackgroundColor(baseCanvas);
+   
+   for (let i = 0; i < targetCanvases.length; i++) {
+    const canvas = targetCanvases[i];
+    await new Promise(resolve => setTimeout(resolve, 0));
+    
+    if (canvas.gpuProcessor) {
+     canvas.gpuProcessor.processImage(canvas, backgroundColor, backgroundColor, parseInt(thresholdInput.value));
+    } else {
+     adjustBackground(canvas, backgroundColor);
+    }
+    
+    canvas.parentElement.classList.add('processed');
+    updateProgress(i + 1, targetCanvases.length);
+   }
+   
+   showStatus('処理が完了しました', 'complete');
+   processButton.disabled = false;
+   downloadButton.disabled = false;
+   await new Promise(resolve => setTimeout(resolve, 2000));
+   showProgress(false);
+  }
+
+  function getFileExtension(filename) {
+   const ext = filename.split('.').pop().toLowerCase();
+   switch (ext) {
+    case 'jpg':
+    case 'jpeg':
+     return 'image/jpeg';
+    case 'png':
+     return 'image/png';
+    case 'gif':
+     return 'image/gif';
+    case 'webp':
+     return 'image/webp';
+    default:
+     return 'image/png';
+   }
+  }
+
+  async function downloadImages() {
+   showStatus('ダウンロード中...', 'processing');
+   downloadButton.disabled = true;
+   
+   for (let i = 0; i < targetCanvases.length; i++) {
+    const canvas = targetCanvases[i];
+    const fileName = originalFileNames[i];
+    const mimeType = getFileExtension(fileName);
+    
+    const blob = await new Promise(resolve => {
+     canvas.toBlob(resolve, mimeType);
+    });
+    
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = `processed_${fileName}`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(downloadLink.href);
+    
+    await new Promise(resolve => setTimeout(resolve, 100));
+   }
+   
+   showStatus('ダウンロードが完了しました', 'complete');
+   downloadButton.disabled = false;
+  }
+ </script>
+</body>
+</html>
