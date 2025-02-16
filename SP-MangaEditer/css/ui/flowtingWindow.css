@@ -1,0 +1,31 @@
+.flow-floating-window {
+  position: absolute;
+  background-color: var(--background-color-A);
+  border: var(--boader-color-1px-solid-B);
+  border-radius: var(--fjm-border-radius);
+  z-index: var(--fjm-z-index);
+  min-width: 300px;
+  min-height: 200px;
+  color: var(--text-color-B);
+  font-family: var(--fjm-font-family);
+  resize: both;
+  overflow: auto;
+}
+
+.flow-window-header {
+  cursor: move;
+  padding: 10px;
+  background-color: var(--background-color-B);
+  color: var(--text-color-B);
+  display: var(--display-flex);
+  justify-content: var(--justify-content-space-between);
+  align-items: var(--align-items-center);
+}
+
+.flow-close-button {
+  cursor: var(--fjm-button-cursor);
+}
+
+.flow-window-content {
+  padding: 10px;
+}

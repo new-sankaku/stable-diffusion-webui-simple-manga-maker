@@ -1,0 +1,193 @@
+@keyframes n {
+from {
+transform:rotate(0deg)
+}
+
+to {
+transform:rotate(360deg)
+}
+}
+
+.btm-drawer {
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background-color:rgba(0, 0, 0, 0.8);
+transition:transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+z-index:1000;
+/* box-shadow:0 0 20px rgba(0, 255, 255, 0.5); */
+}
+
+.btm-drawer.btm-closed {
+transform:translateY(calc(100% - 20px));
+/* box-shadow:0 0 10px rgba(0, 255, 255, 0.3); */
+}
+
+.btm-drawer-handle {
+height:20px;
+background-color:rgba(0, 255, 255, 0.1);
+cursor:pointer;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:14px;
+text-transform:uppercase;
+letter-spacing:2px;
+/* transition:background-color 0.3s ease; */
+}
+
+.btm-drawer-handle:hover {
+background-color:rgba(0, 255, 255, 0.2);
+}
+
+.btm-drawer-content {
+padding:5px;
+height:200px;
+overflow-x:auto;
+overflow-y:hidden;
+white-space:nowrap;
+}
+
+.btm-image-container {
+display:inline-flex;
+height:100%;
+}
+
+.btm-image-wrapper {
+position:relative;
+margin-right:1vw;
+height:100%;
+}
+
+.btm-image {
+height:100%;
+width:auto;
+object-fit:contain;
+cursor:pointer;
+}
+
+.btm-close-btn {
+position:absolute;
+top:0.5vh;
+right:0.5vh;
+background-color:rgba(0, 0, 0, 0.7);
+border:none;
+border-radius:50%;
+width:2em;
+height:2em;
+font-size:0.8em;
+cursor:pointer;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.btm-drawer-content h2 {
+color:#00ffff;
+text-shadow:0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+.btm-drawer-content p {
+color:#e0e0e0;
+}
+
+.neon-text {
+color:#00ffff;
+/* text-shadow:0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff; */
+}
+
+
+
+
+
+/* ----------------------------------------------------- */
+
+.btm-image-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 25px 0 0; /* 右側のマージンを＋ボタン用に確保 */
+}
+
+.btm-add-btn,
+.btm-move-btn {
+  position: absolute;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  transition: background-color 0.2s;
+}
+
+.btm-delete-btn {
+  position: absolute;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  top: 5px;     /* 元の位置に戻す */
+  right: 5px;   /* 元の位置に戻す */
+  font-size: 14px;
+}
+
+.btm-add-btn {
+  right: -25px; /* ページの右端に固定 */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.btm-move-btn {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btm-move-left {
+  left: 5px;
+}
+
+.btm-move-right {
+  right: 5px;
+}
+
+.btm-add-btn:hover,
+.btm-move-btn:hover,
+.btm-delete-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.btm-image-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 25px 0 0;
+}
+
+.btm-page-number {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1;
+}
