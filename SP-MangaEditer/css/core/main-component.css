@@ -22,10 +22,10 @@
 
 #sidebar {
   justify-content: flex-start;
-  gap: 15px;
+  gap: 0px;
   margin-right: var(--margin-right-10);
-  width: 50px;
-  min-width: 50px;
+  width: 70px;
+  min-width: 70px;
   height: var(--main-height);
   max-height: var(--main-height);
   background: var(--sidebar-gradient);
@@ -34,9 +34,16 @@
   align-items: var(--align-items-center);
   padding: var(--padding-10-0);
   justify-content: flex-start;
-  gap: 5px;
 }
 
+#sidebar hr {
+  gap: 0px;
+  margin: -8px 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 35, 35, 0.5);
+  height: 1px;
+  width: 70%;
+ }
 
 .left_area {
   font-size: var(--font-size-base);
