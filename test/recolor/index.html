@@ -1,0 +1,69 @@
+<html lang="ja">
+<script>
+const $ = (i) => document.getElementById(i);
+const on = (e, t, f) => e.addEventListener(t, f);
+</script>
+<link rel="stylesheet" href="css.css">
+<div class="container">
+<div style="display: flex; gap: 15px;">
+<div class="file-input" id="dropZone" style="flex: 1;">
+<input type="file" id="i" accept="image/*" multiple>
+<div class="drop-text">画像ファイルをドロップまたはクリックして選択</div>
+</div>
+<div class="control-group control-group-left" style="width: 500px;">
+<div class="control-group-title">変更対象の範囲</div>
+<div class="color-samples" id="samples">
+<div class="color-sample" style="background-color:#2ecc71" data-hue="120"></div>
+<div class="color-sample" style="background-color:#3498db" data-hue="210"></div>
+<div class="color-sample" style="background-color:#e74c3c" data-hue="0"></div>
+<div class="color-sample" style="background-color:#f1c40f" data-hue="60"></div>
+<div class="color-sample" style="background-color:#9b59b6" data-hue="270"></div>
+<div class="color-sample" style="background-color:#e67e22" data-hue="30"></div>
+</div>
+<div class="slider-group">
+<label class="slider-label">色相Min</label>
+<input type="range" id="h1" value="60" min="0" max="360">
+<span class="slider-value" id="h1v">60</span>
+</div>
+<div class="slider-group">
+<label class="slider-label">色相Max</label>
+<input type="range" id="h2" value="180" min="0" max="360">
+<span class="slider-value" id="h2v">180</span>
+</div>
+<div class="slider-group">
+<label class="slider-label">彩度Min</label>
+<input type="range" id="s1" value="0" min="0" max="100">
+<span class="slider-value" id="s1v">0</span>
+</div>
+<div class="slider-group">
+<label class="slider-label">彩度Max</label>
+<input type="range" id="s2" value="100" min="0" max="100">
+<span class="slider-value" id="s2v">100</span>
+</div>
+<div class="slider-group">
+<label class="slider-label">明度Min</label>
+<input type="range" id="l1" value="0" min="0" max="100">
+<span class="slider-value" id="l1v">0</span>
+</div>
+<div class="slider-group">
+<label class="slider-label">明度Max</label>
+<input type="range" id="l2" value="90" min="0" max="100">
+<span class="slider-value" id="l2v">90</span>
+</div>
+<div class="slider-group">
+<label class="slider-label">孤立閾値</label>
+<input type="range" id="blend" value="30" min="0" max="200">
+<span class="slider-value" id="blendv">30</span>
+</div>
+</div>
+<div class="control-group control-group-right" style="width: 200px;">
+<div class="control-group-title">変更後の色</div>
+<input type="color" id="c" value="#ffcccc">
+</div>
+</div>
+<div id="preview-container"></div>
+</div>
+<script src="script-worker.js"></script>
+<script src="script-image-process.js"></script>
+<script src="script-event.js"></script>
+</html>
