@@ -1,5 +1,5 @@
 // ja en ko fr zh ru es pt th de
-// "20250301": {
+// "2025xxxx": {
 //   ja: {},
 //   en: {},
 //   ko: {},
@@ -15,6 +15,18 @@
 
 //マージされるので日付単位で分けて入れたらOK
 const resources = {
+"20250301_v2": {
+  ja: {view_Layer:"レイヤー",view_AI:"AI"},
+  en: {view_Layer:"Layer",view_AI:"AI"},
+  ko: {view_Layer:"레이어",view_AI:"AI"},
+  fr: {view_Layer:"Calque",view_AI:"IA"},
+  zh: {view_Layer:"图层",view_AI:"AI"},
+  ru: {view_Layer:"Слой",view_AI:"ИИ"},
+  es: {view_Layer:"Capa",view_AI:"IA"},
+  pt: {view_Layer:"Camada",view_AI:"IA"},
+  th: {view_Layer:"เลเยอร์",view_AI:"เอไอ"},
+  de: {view_Layer:"Ebene",view_AI:"KI"}
+},
 "20250301": {
   ja: {terms_of_service:"利用規約"},
   en: {terms_of_service:"Terms of Service"},
