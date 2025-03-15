@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" href="styles-css.css">
+</head>
+<body>
+ <div style="display:flex;gap:5px;margin-bottom:10px;align-items:center;">
+  <button id="toggle-rough">ラフ化ON/OFF</button>
+  <button id="reset">リセット</button>
+
+ </div>
+ 
+ <div style="display:flex;gap:15px;">
+  <div style="width:350px;">
+   <div id="parameters" style="margin:0 0 10px 0;padding:10px;border:1px solid #ddd;background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+     <div class="param-group" style="border-left:3px solid #FF9800;">
+      <div style="font-weight:bold;margin-bottom:5px;color:#FF9800;font-size:12px;">塗りスタイル</div>
+      <div style="margin-bottom:5px;">
+       <label for="fillStyle" style="display:block;margin-bottom:2px;font-size:12px;">fillStyle:</label>
+       <select id="fillStyle" style="width:100%;padding:3px;">
+        <option value="hachure">hachure</option>
+        <option value="solid">solid</option>
+        <option value="zigzag">zigzag</option>
+        <option value="cross-hatch">cross-hatch</option>
+        <option value="dots">dots</option>
+        <option value="dashed">dashed</option>
+        <option value="zigzag-line">zigzag-line</option>
+       </select>
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="fillColor" style="display:block;margin-bottom:2px;font-size:12px;">fillColor:</label>
+       <input type="color" id="fillColor" value="#e6e6e6" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="fillWeight" style="display:block;margin-bottom:2px;font-size:12px;">fillWeight: <span id="fillWeight-value">1</span></label>
+       <input type="range" id="fillWeight" min="0" max="5" step="0.1" value="1" style="width:100%;">
+      </div>
+     </div>
+     
+     <div class="param-group" style="border-left:3px solid #2196F3;">
+      <div style="font-weight:bold;margin-bottom:5px;color:#2196F3;font-size:12px;">基本スタイル</div>
+      <div style="margin-bottom:5px;">
+       <label for="roughness" style="display:block;margin-bottom:2px;font-size:12px;">roughness: <span id="roughness-value">2</span></label>
+       <input type="range" id="roughness" min="0" max="5" step="0.1" value="2" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="bowing" style="display:block;margin-bottom:2px;font-size:12px;">bowing: <span id="bowing-value">1</span></label>
+       <input type="range" id="bowing" min="0" max="10" step="0.1" value="1" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="strokeWidth" style="display:block;margin-bottom:2px;font-size:12px;">strokeWidth: <span id="strokeWidth-value">2</span></label>
+       <input type="range" id="strokeWidth" min="0.5" max="5" step="0.5" value="2" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="strokeColor" style="display:block;margin-bottom:2px;font-size:12px;">strokeColor:</label>
+       <input type="color" id="strokeColor" value="#000000" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="seed" style="display:block;margin-bottom:2px;font-size:12px;">seed:</label>
+       <input type="number" id="seed" min="1" max="10000" value="1" style="width:100%;padding:2px;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label><input type="checkbox" id="disableMultiStroke"> disableMultiStroke</label>
+      </div>
+     </div>
+     
+     <div id="hachureParams" class="param-group" style="border-left:3px solid #9C27B0;">
+      <div style="font-weight:bold;margin-bottom:5px;color:#9C27B0;font-size:12px;">ハッチング設定</div>
+      <div style="margin-bottom:5px;">
+       <label for="hachureAngle" style="display:block;margin-bottom:2px;font-size:12px;">hachureAngle: <span id="hachureAngle-value">-41</span></label>
+       <input type="range" id="hachureAngle" min="-180" max="180" step="1" value="-41" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="hachureGap" style="display:block;margin-bottom:2px;font-size:12px;">hachureGap: <span id="hachureGap-value">4</span></label>
+       <input type="range" id="hachureGap" min="1" max="20" step="0.5" value="4" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label><input type="checkbox" id="disableMultiStrokeFill"> disableMultiStrokeFill</label>
+      </div>
+     </div>
+     
+     <div class="param-group" style="border-left:3px solid #795548;">
+      <div style="font-weight:bold;margin-bottom:5px;color:#795548;font-size:12px;">曲線設定</div>
+      <div style="margin-bottom:5px;">
+       <label for="curveStepCount" style="display:block;margin-bottom:2px;font-size:12px;">curveStepCount: <span id="curveStepCount-value">9</span></label>
+       <input type="range" id="curveStepCount" min="1" max="20" value="9" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="curveFitting" style="display:block;margin-bottom:2px;font-size:12px;">curveFitting: <span id="curveFitting-value">0.95</span></label>
+       <input type="range" id="curveFitting" min="0" max="1" step="0.01" value="0.95" style="width:100%;">
+      </div>
+      <div style="margin-bottom:5px;">
+       <label for="simplification" style="display:block;margin-bottom:2px;font-size:12px;">simplification: <span id="simplification-value">0</span></label>
+       <input type="range" id="simplification" min="0" max="1" step="0.01" value="0" style="width:100%;">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  
+  <div style="flex:1;">
+   <canvas id="canvas" width="600" height="600"></canvas>
+  </div>
+ </div>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/roughjs@4.5.2/bundled/rough.js"></script>
+ <script src="rough-manager-js.js"></script>
+ <script src="app-js.js"></script>
+</body>
+</html>

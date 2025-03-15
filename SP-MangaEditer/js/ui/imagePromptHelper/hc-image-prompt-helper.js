@@ -7,7 +7,7 @@ const iphHtmlContent = `
         <option value="en" data-i18n="english" data-flag="gb">English</option>
         <option value="ja" data-i18n="japanese" data-flag="jp">日本語</option>
       </select>
-      <select id="iph-model-dropdown" class="iph-dropdown">
+      <select id="iph-model-dropdown" class="iph-dropdown" hidden>
         <option value="SDXL">SDXL</option>
         <option value="Pony">Pony</option>
       </select>

@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@300;400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+  :root {
+ --body-bg: #111;
+ --title-size: 10px;
+ --message-size: 12px;
+ --animation-duration: 1.2s;
+}
+
+  body {
+   margin: 0;
+   min-height: 100vh;
+   background: var(--body-bg);
+   overflow-x: hidden
+  }
+
+  .popup-list {
+   position: fixed;
+   bottom: 20px;
+   left: 20px;
+   right: 20px;
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+   gap: 10px;
+   z-index: 100
+  }
+
+  .achievement {
+   position: relative;
+   pointer-events: none;
+   min-width: 180px;
+   max-width: 200px
+  }
+
+  .achievement.flying {
+   position: fixed;
+   animation: achievementOut 2.0s cubic-bezier(.2, .6, .3, 1);
+   animation-delay: var(--animation-duration);
+   animation-fill-mode: forwards;
+   z-index: 1000
+  }
+
+  @keyframes achievementOut {
+   to {
+    opacity: 0;
+    top: 0;
+    left: 100%
+   }
+  }
+
+  .nier {
+   background: rgba(238, 238, 238, .97);
+   color: #454545;
+   padding: 12px 16px;
+   font-family: 'Noto Sans JP', sans-serif;
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden
+  }
+
+  .nier::before {
+   content: '';
+   position: absolute;
+   top: 3px;
+   left: 3px;
+   right: 3px;
+   bottom: 3px;
+   border: 1px solid #454545
+  }
+
+  .nier .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #666
+  }
+
+  .nier .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px
+  }
+
+  .nier .message::before {
+   content: '◈';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 10px;
+   opacity: .7
+  }
+
+  .p5 {
+   background: #e60012;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   text-transform: uppercase;
+   position: relative;
+   clip-path: polygon(0 0, 100% 0, 97% 100%, 3% 100%);
+   text-shadow: 2px 2px #000;
+   border: 2px solid #000;
+   letter-spacing: .5px
+  }
+
+  .p5::before {
+   content: '';
+   position: absolute;
+   top: 1px;
+   left: 1px;
+   right: 1px;
+   height: 30%;
+   background: linear-gradient(180deg, rgba(255, 255, 255, .2), transparent)
+  }
+
+  .zelda {
+   background: #1a1a1a;
+   color: #e6cc80;
+   padding: 14px 18px;
+   font-family: 'Crimson Text', serif;
+   text-align: center;
+   position: relative;
+   border: double 3px #e6cc80;
+   letter-spacing: 1px
+  }
+
+  .zelda::before,
+  .zelda::after {
+   content: '';
+   position: absolute;
+   width: 10px;
+   height: 10px;
+   border: 1px solid #e6cc80;
+   transform: rotate(45deg)
+  }
+
+  .zelda::before {
+   top: -5px;
+   left: -5px
+  }
+
+  .zelda::after {
+   bottom: -5px;
+   right: -5px
+  }
+
+  .mh {
+   background: rgba(0, 0, 0, .92);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 2px solid #d4af37;
+   position: relative;
+   letter-spacing: .5px
+  }
+
+  .mh::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: linear-gradient(45deg, transparent 48%, #d4af37 49%, #d4af37 51%, transparent 52%);
+   opacity: .1
+  }
+
+  .ff14 {
+   background: rgba(0, 0, 0, .85);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   backdrop-filter: blur(4px);
+   border: 1px solid rgba(255, 255, 255, .3);
+   position: relative
+  }
+
+  .ff14::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: linear-gradient(135deg, transparent 49%, rgba(255, 255, 255, .1) 50%, transparent 51%);
+   background-size: 10px 10px
+  }
+
+  .minecraft {
+   background: #000;
+   padding: 8px;
+   border: 2px solid #555;
+   font-family: 'Press Start 2P', monospace;
+   color: #fff;
+   text-shadow: 2px 2px #000;
+   position: relative;
+   image-rendering: pixelated
+  }
+
+  .minecraft::before {
+   content: '';
+   position: absolute;
+   inset: 1px;
+   background: linear-gradient(rgba(255, 255, 255, .2), rgba(255, 255, 255, .1));
+   border: 1px solid rgba(255, 255, 255, .1)
+  }
+
+  .genshin {
+   background: rgba(255, 255, 255, .97);
+   color: #695138;
+   padding: 12px 16px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 1px solid #c3a992;
+   border-radius: 4px;
+   position: relative
+  }
+
+  .genshin::before {
+   content: '';
+   position: absolute;
+   inset: 4px;
+   border: 1px solid #c3a992
+  }
+
+  .pokemon {
+   background: linear-gradient(135deg, #f8f8f8, #e8e8e8);
+   color: #333;
+   padding: 12px 16px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 2px solid #4a90e2;
+   border-radius: 20px;
+   box-shadow: 0 2px 10px rgba(74, 144, 226, .2), inset 0 1px 0 #fff;
+   position: relative
+  }
+
+  .pokemon .title {
+   color: #4a90e2
+  }
+
+  .darksouls {
+   background: rgba(20, 20, 20, .97);
+   color: #d8b88b;
+   padding: 12px 16px;
+   font-family: 'Crimson Text', serif;
+   border: 1px solid #8b7355;
+   text-align: center;
+   position: relative;
+   letter-spacing: 2px
+  }
+
+  .darksouls::before {
+   content: '';
+   position: absolute;
+   inset: 2px;
+   border: 1px solid rgba(139, 115, 85, .3)
+  }
+
+  .cyberpunk {
+   background: #fcee0a;
+   color: #000;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   text-transform: uppercase;
+   position: relative;
+   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+   border: 2px solid #000;
+   letter-spacing: 1px
+  }
+
+  .cyberpunk::before {
+   content: 'ERR://';
+   position: absolute;
+   top: 2px;
+   right: 2px;
+   font-size: 8px;
+   opacity: .5;
+   letter-spacing: 2px
+  }
+
+  .mgs {
+   background: rgba(0, 0, 0, .95);
+   color: #00ff00;
+   padding: 10px 14px;
+   font-family: monospace;
+   border: 1px solid #00ff00;
+   text-transform: uppercase;
+   position: relative;
+   box-shadow: 0 0 10px rgba(0, 255, 0, .2), inset 0 0 10px rgba(0, 255, 0, .2);
+   text-shadow: 0 0 5px rgba(0, 255, 0, .5)
+  }
+
+  .mgs::after {
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: repeating-linear-gradient(transparent, transparent 2px, rgba(0, 255, 0, .1) 3px, transparent 3px);
+   animation: scan 10s linear infinite
+  }
+
+  .splatoon {
+   background: #fe29a6;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+   position: relative;
+   text-shadow: 2px 2px rgba(0, 0, 0, .5);
+   overflow: hidden;
+   border: 2px solid rgba(255, 255, 255, .3)
+  }
+
+  .splatoon::before {
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(45deg, transparent, rgba(255, 255, 255, .2));
+   mix-blend-mode: overlay
+  }
+
+  .undertale {
+   background: #000;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Press Start 2P', monospace;
+   border: 4px double #fff;
+   position: relative;
+   letter-spacing: -1px
+  }
+
+  .undertale::before {
+   content: '*';
+   position: absolute;
+   left: 4px;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 16px;
+   color: #fff
+  }
+
+  .ace {
+   background: #1a1a1a;
+   color: #fff;
+   padding: 12px 16px;
+   font-family: 'Roboto Condensed', sans-serif;
+   border: 2px solid #cc0000;
+   position: relative;
+   box-shadow: 0 0 0 1px #fff, inset 0 0 20px rgba(204, 0, 0, .2)
+  }
+
+  .ace::before {
+   content: '';
+   position: absolute;
+   top: -2px;
+   left: 10%;
+   right: 10%;
+   height: 2px;
+   background: #cc0000
+  }
+
+  .kirby {
+   background: linear-gradient(135deg, #ffb7c5, #ff9eb7);
+   color: #ff4d6d;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border-radius: 25px;
+   border: 2px solid #ff4d6d;
+   box-shadow: 0 4px 15px rgba(255, 77, 109, .2), inset 0 -8px 12px rgba(255, 255, 255, .5);
+   position: relative
+  }
+
+  .kirby::after {
+   content: '★';
+   position: absolute;
+   top: 4px;
+   right: 10px;
+   font-size: 12px;
+   color: #ff4d6d;
+   text-shadow: 0 0 5px rgba(255, 77, 109, .5)
+  }
+
+  .dmc {
+   background: #1a1a1a;
+   color: #cc0000;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   text-transform: uppercase;
+   border: 1px solid #cc0000;
+   position: relative;
+   box-shadow: 0 0 15px rgba(204, 0, 0, .3), inset 0 0 15px rgba(204, 0, 0, .3);
+   overflow: hidden
+  }
+
+  .dmc::before {
+   content: 'SSS';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 20px;
+   font-weight: 700;
+   opacity: .1
+  }
+
+  .apex {
+   background: rgba(220, 20, 20, .95);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+   text-transform: uppercase;
+   position: relative;
+   border: 2px solid #fff;
+   box-shadow: inset 0 0 20px rgba(0, 0, 0, .5)
+  }
+
+  .apex::after {
+   content: 'CHAMPION';
+   position: absolute;
+   bottom: 2px;
+   right: 4px;
+   font-size: 8px;
+   opacity: .3
+  }
+
+  .fgo {
+   background: rgba(20, 20, 20, .98);
+   color: #d4af37;
+   padding: 12px 16px;
+   font-family: 'Crimson Text', serif;
+   border: 2px solid #d4af37;
+   position: relative;
+   text-transform: uppercase;
+   box-shadow: 0 0 15px rgba(212, 175, 55, .2), inset 0 0 15px rgba(212, 175, 55, .2)
+  }
+
+  .fgo::before {
+   content: '★★★★★';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 8px;
+   letter-spacing: 1px
+  }
+
+  .gbf {
+   background: rgba(41, 83, 154, .98);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 1px solid #fff;
+   position: relative;
+   box-shadow: 0 0 15px rgba(255, 255, 255, .2)
+  }
+
+  .gbf::before {
+   content: '';
+   position: absolute;
+   top: -1px;
+   left: 10%;
+   right: 10%;
+   height: 1px;
+   background: linear-gradient(90deg, transparent, #fff, transparent)
+  }
+
+  .pad {
+   background: linear-gradient(135deg, #000, #1a1a1a);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 2px solid #d4af37;
+   position: relative;
+   box-shadow: 0 0 15px rgba(212, 175, 55, .2)
+  }
+
+  .pad::after {
+   content: '×99';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 10px;
+   color: #d4af37
+  }
+
+  .disgaea {
+   background: #000;
+   color: #ff00ff;
+   padding: 10px 14px;
+   font-family: 'Press Start 2P', monospace;
+   border: 2px solid #ff00ff;
+   position: relative;
+   text-shadow: 2px 2px #000, 0 0 5px rgba(255, 0, 255, .5);
+   box-shadow: 0 0 15px rgba(255, 0, 255, .3), inset 0 0 15px rgba(255, 0, 255, .3)
+  }
+
+  .disgaea::before {
+   content: 'Lv.9999';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 8px;
+   opacity: .5
+  }
+
+  .tales {
+   background: linear-gradient(135deg, #4a90e2, #357abd);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 1px solid rgba(255, 255, 255, .3);
+   border-radius: 4px;
+   position: relative;
+   overflow: hidden
+  }
+
+  .tales::before {
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, .2) 49%, rgba(255, 255, 255, .2) 51%, transparent 52%);
+   background-size: 10px 10px
+  }
+
+  .fe {
+   background: #000;
+   color: #d4af37;
+   padding: 12px 16px;
+   font-family: 'Crimson Text', serif;
+   border: 1px solid #d4af37;
+   position: relative;
+   text-align: center
+  }
+
+  .fe::before {
+   content: 'S';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 16px;
+   opacity: .3
+  }
+
+  .uma {
+   background: linear-gradient(135deg, #ff8eb7, #ff6b97);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 2px solid rgba(255, 255, 255, .5);
+   border-radius: 4px;
+   position: relative;
+   overflow: hidden
+  }
+
+  .uma::before {
+   content: '1st';
+   position: absolute;
+   top: 2px;
+   right: 4px;
+   font-size: 10px;
+   color: rgba(255, 255, 255, .7)
+  }
+
+  .monst {
+   background: #222;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 2px solid #ffeb3b;
+   position: relative;
+   overflow: hidden
+  }
+
+  .monst::before {
+   content: '';
+   position: absolute;
+   top: -50%;
+   left: -50%;
+   width: 200%;
+   height: 200%;
+   background: radial-gradient(circle, rgba(255, 235, 59, .2) 0%, transparent 70%);
+   animation: shine 3s linear infinite
+  }
+
+  .nioh {
+   background: #000;
+   color: #ff0000;
+   padding: 10px 14px;
+   font-family: 'Crimson Text', serif;
+   border: 1px solid #ff0000;
+   position: relative;
+   text-transform: uppercase;
+   letter-spacing: 2px
+  }
+
+  .nioh::before {
+   content: '死';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 16px;
+   opacity: .3;
+   font-family: 'Noto Sans JP'
+  }
+
+  .elden {
+   background: rgba(20, 20, 20, .95);
+   color: #d4af37;
+   padding: 12px 16px;
+   font-family: 'Crimson Text', serif;
+   border: double 4px #d4af37;
+   position: relative;
+   text-align: center;
+   letter-spacing: 3px;
+   text-transform: uppercase
+  }
+
+  .elden::before {
+   content: '';
+   position: absolute;
+   inset: 4px;
+   border: 1px solid rgba(212, 175, 55, .3)
+  }
+
+  .dbd {
+   background: rgba(20, 0, 0, 0.95);
+   color: #ff3333;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   border: 1px solid #800;
+   position: relative;
+   text-transform: uppercase;
+   box-shadow: 0 0 15px rgba(255, 0, 0, 0.2), inset 0 0 15px rgba(255, 0, 0, 0.1);
+   letter-spacing: 1px;
+  }
+
+  .dbd::before {
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: repeating-linear-gradient(
+       45deg,
+       transparent,
+       transparent 10px,
+       rgba(255, 0, 0, 0.05) 10px,
+       rgba(255, 0, 0, 0.05) 20px
+   );
+  }
+
+  .dbd::after {
+   content: '☠';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 12px;
+   opacity: 0.5;
+  }
+
+  .smash {
+   background: #1a1a1a;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   border: 2px solid #d4af37;
+   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+   position: relative;
+   overflow: hidden;
+   box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3);
+  }
+
+  .smash::before {
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.2));
+   mix-blend-mode: overlay;
+  }
+
+  .smash .title {
+   color: #d4af37;
+   text-transform: uppercase;
+   letter-spacing: 1px;
+   font-weight: bold;
+  }
+
+  .gbf2 {
+   background: linear-gradient(135deg, #2953af, #1a407c);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   border: 1px solid #fff;
+   position: relative;
+   text-transform: uppercase;
+   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .gbf2::before {
+   content: 'VS';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 10px;
+   opacity: 0.5;
+  }
+
+  .gbf2::after {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.1) 49%, rgba(255, 255, 255, 0.1) 51%, transparent 52%);
+   background-size: 10px 10px;
+  }
+
+  @keyframes shine {
+   0%, 100% {
+    transform: rotate(0deg)
+   }
+   25% {
+    transform: rotate(90deg)
+   }
+   50% {
+    transform: rotate(180deg)
+   }
+   75% {
+    transform: rotate(270deg)
+   }
+  }
+
+  @keyframes scan {
+   0% {
+    transform: translateY(-100%)
+   }
+   100% {
+    transform: translateY(100%)
+   }
+  }
+
+  .container {
+   text-align: center;
+   color: #fff;
+   font-family: Arial;
+   padding: 16px;
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   background: rgba(0, 0, 0, .8);
+   z-index: 200
+  }
+
+  .twitter {
+   background: #1da1f2;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border-radius: 8px;
+   box-shadow: 0 2px 10px rgba(29, 161, 242, 0.2);
+   position: relative;
+  }
+
+  .twitter::before {
+   content: '';
+   position: absolute;
+   top: 5px;
+   right: 5px;
+   width: 12px;
+   height: 12px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .instagram {
+   background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border-radius: 8px;
+   position: relative;
+   overflow: hidden;
+  }
+
+  .instagram::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 14px;
+   height: 14px;
+   border-radius: 4px;
+   background: rgba(255, 255, 255, 0.2);
+   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  }
+
+  .instagram::after {
+   content: '';
+   position: absolute;
+   top: 6px;
+   right: 6px;
+   width: 10px;
+   height: 10px;
+   border-radius: 50%;
+   border: 2px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .netflix {
+   background: #000;
+   color: #e50914;
+   padding: 12px 16px;
+   font-family: 'Nunito', sans-serif;
+   font-weight: 700;
+   border: 1px solid #333;
+   position: relative;
+   box-shadow: 0 4px 15px rgba(229, 9, 20, 0.2);
+  }
+
+  .netflix::before {
+   content: 'N';
+   position: absolute;
+   top: 4px;
+   right: 8px;
+   font-size: 14px;
+   font-weight: 900;
+   opacity: 0.5;
+  }
+
+  .spotify {
+   background: #1DB954;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border-radius: 8px;
+   position: relative;
+   box-shadow: 0 4px 15px rgba(29, 185, 84, 0.2);
+  }
+
+  .spotify::before {
+   content: '';
+   position: absolute;
+   top: 5px;
+   right: 5px;
+   width: 12px;
+   height: 12px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.48.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .line {
+   background: #00c300;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border-radius: 8px;
+   box-shadow: 0 2px 10px rgba(0, 195, 0, 0.2);
+   position: relative;
+  }
+
+  .line::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 14px;
+   height: 14px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.37-12 9.738 0 4.809 4.269 8.843 10.035 9.608.391.084.922.258 1.058.59.121.301.079.766.039 1.07l-.172 1.029c-.05.303-.24 1.187 1.04.647s6.91-4.07 9.43-6.968c1.737-1.905 2.57-3.851 2.57-5.976z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .youtube {
+   background: #fff;
+   color: #ff0000;
+   padding: 10px 14px;
+   font-family: 'Roboto Condensed', sans-serif;
+   border-radius: 4px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+   position: relative;
+  }
+
+  .youtube::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 14px;
+   height: 14px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff0000' d='M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.7;
+  }
+
+  .youtube .title {
+   font-weight: bold;
+   color: #333;
+  }
+
+  .discord {
+   background: #7289da;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border-radius: 4px;
+   box-shadow: 0 2px 10px rgba(114, 137, 218, 0.2);
+   position: relative;
+  }
+
+  .discord::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 14px;
+   height: 14px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .tiktok {
+   background: #000;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   position: relative;
+   overflow: hidden;
+   border: 1px solid #333;
+  }
+
+  .tiktok::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   right: 0;
+   width: 20px;
+   height: 100%;
+   background: linear-gradient(90deg, #00f2ea, #ff0050);
+  }
+
+  .tiktok::after {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 14px;
+   height: 14px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.7;
+  }
+
+  .dbz {
+   background: linear-gradient(135deg, #ff8c00, #ff4500);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Bungee', sans-serif;
+   position: relative;
+   box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+   border: 2px solid #fff;
+  }
+
+  .dbz::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='28' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='4'/%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='4'/%3E%3Cpath d='M30,10 L35,25 L50,30 L35,35 L30,50 L25,35 L10,30 L25,25 Z' fill='rgba(255,255,255,0.2)'/%3E%3C/svg%3E") no-repeat center/30px;
+   opacity: 0.2;
+  }
+
+  .naruto {
+   background: #ff8c00;
+   color: #000;
+   padding: 10px 14px;
+   font-family: 'Bungee', sans-serif;
+   border: 2px solid #000;
+   position: relative;
+   box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+  }
+
+  .naruto::before {
+   content: '';
+   position: absolute;
+   top: 50%;
+   right: 10px;
+   width: 20px;
+   height: 20px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23000000'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff8c00'/%3E%3Cpath d='M50,20 L55,40 L75,50 L55,60 L50,80 L45,60 L25,50 L45,40 Z' fill='%23000000'/%3E%3C/svg%3E") no-repeat center/contain;
+   transform: translateY(-50%);
+   opacity: 0.2;
+  }
+
+  .aot {
+   background: #2a2a2a;
+   color: #ffa07a;
+   padding: 10px 14px;
+   font-family: 'Oswald', sans-serif;
+   border: 1px solid #ffa07a;
+   position: relative;
+   text-transform: uppercase;
+   letter-spacing: 1px;
+  }
+
+  .aot::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 16px;
+   height: 16px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffa07a' d='M50,10 L90,90 L50,70 L10,90 Z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .starwars {
+   background: #000;
+   color: #ffe81f;
+   padding: 12px 16px;
+   font-family: 'Oswald', sans-serif;
+   border: 1px solid #ffe81f;
+   position: relative;
+   text-transform: uppercase;
+   letter-spacing: 2px;
+  }
+
+  .starwars::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 16px;
+   height: 16px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffe81f' d='M40,20 L60,20 L60,40 L80,40 L80,60 L60,60 L60,80 L40,80 L40,60 L20,60 L20,40 L40,40 Z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .marvel {
+   background: #ed1d24;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Bungee', sans-serif;
+   border: 2px solid #fff;
+   position: relative;
+   text-transform: uppercase;
+   box-shadow: 0 4px 15px rgba(237, 29, 36, 0.3);
+  }
+
+  .marvel::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='rgba(255,255,255,0.2)' d='M20,20 L80,20 L80,80 L20,80 Z'/%3E%3C/svg%3E") no-repeat center/40px;
+   opacity: 0.1;
+  }
+
+  .onepiece {
+   background: #1a75ff;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Bungee', sans-serif;
+   border: 2px solid #fff;
+   border-radius: 4px;
+   position: relative;
+   box-shadow: 0 4px 15px rgba(26, 117, 255, 0.3);
+  }
+
+  .onepiece::before {
+   content: '☠';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 16px;
+   opacity: 0.5;
+  }
+
+  .hololive {
+   background: linear-gradient(135deg, #00c3ff, #0099ff);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border-radius: 8px;
+   position: relative;
+   box-shadow: 0 4px 15px rgba(0, 195, 255, 0.3);
+  }
+
+  .hololive::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='5'/%3E%3Cpath d='M50,20 L60,40 L85,45 L65,60 L70,85 L50,70 L30,85 L35,60 L15,45 L40,40 Z' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/%3E%3C/svg%3E") no-repeat center/35px;
+   opacity: 0.2;
+  }
+
+  .demon {
+   background: linear-gradient(135deg, #ff4f4f, #b90000);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Noto Sans JP', sans-serif;
+   border: 1px solid #fff;
+   position: relative;
+   box-shadow: 0 4px 15px rgba(185, 0, 0, 0.3);
+  }
+
+  .demon::before {
+   content: '鬼';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   font-size: 14px;
+   opacity: 0.3;
+  }
+
+  .valorant {
+   background: #fd4656;
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Orbitron', sans-serif;
+   position: relative;
+   clip-path: polygon(0 0, 100% 0, 100% 80%, 85% 100%, 0 100%);
+   text-transform: uppercase;
+   letter-spacing: 1px;
+  }
+
+  .valorant::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 8px;
+   width: 12px;
+   height: 12px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' d='M20,50 L50,20 L80,50 L50,80 Z'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .pokemon-go {
+   background: linear-gradient(135deg, #3b4cca, #2a3b9e);
+   color: #fff;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border-radius: 20px;
+   position: relative;
+   box-shadow: 0 4px 15px rgba(59, 76, 202, 0.3);
+  }
+
+  .pokemon-go::before {
+   content: '';
+   position: absolute;
+   top: 4px;
+   right: 4px;
+   width: 16px;
+   height: 16px;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23fff' stroke='%23000' stroke-width='2'/%3E%3Ccircle cx='50' cy='50' r='12' fill='%23fff' stroke='%23000' stroke-width='8'/%3E%3Cpath d='M50,3 L50,38 M50,62 L50,97 M3,50 L38,50 M62,50 L97,50' stroke='%23000' stroke-width='6'/%3E%3C/svg%3E") no-repeat center/contain;
+   opacity: 0.5;
+  }
+
+  .ghibli {
+   background: #87cefa;
+   color: #2a517e;
+   padding: 10px 14px;
+   font-family: 'Nunito', sans-serif;
+   border: 1px dashed #2a517e;
+   border-radius: 4px;
+   position: relative;
+   box-shadow: 0 4px 15px rgba(135, 206, 250, 0.3);
+  }
+
+  .ghibli::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='rgba(42,81,126,0.1)' d='M30,40 C30,20 70,20 70,40 C90,40 90,70 70,70 C70,90 30,90 30,70 C10,70 10,40 30,40 Z'/%3E%3C/svg%3E") no-repeat center/40px;
+  }
+ </style>
+</head>
+
+<body>
+ <style>
+  @keyframes floatIn {
+   0% {
+    transform: translateY(20px);
+    opacity: 0;
+   }
+   100% {
+    transform: translateY(0);
+    opacity: 1;
+   }
+  }
+  
+  .achievement.flying {
+   animation-name: achievementInOut;
+   animation-duration: 4s;
+   animation-timing-function: cubic-bezier(.2, .6, .3, 1);
+   animation-fill-mode: forwards;
+  }
+  
+  @keyframes achievementInOut {
+   0% {
+    transform: translateX(-300px);
+    opacity: 0;
+   }
+   15% {
+    transform: translateX(0);
+    opacity: 1;
+   }
+   85% {
+    transform: translateX(0);
+    opacity: 1;
+   }
+   100% {
+    transform: translateX(300px);
+    opacity: 0;
+   }
+  }
+  
+  .popup-list .achievement {
+   animation: floatIn 0.5s ease-out forwards;
+   opacity: 0;
+   transform: translateY(20px);
+  }
+  
+  .popup-list .achievement:nth-child(1) { animation-delay: 0.1s; }
+  .popup-list .achievement:nth-child(2) { animation-delay: 0.2s; }
+  .popup-list .achievement:nth-child(3) { animation-delay: 0.3s; }
+  .popup-list .achievement:nth-child(4) { animation-delay: 0.4s; }
+  .popup-list .achievement:nth-child(5) { animation-delay: 0.5s; }
+  .popup-list .achievement:nth-child(6) { animation-delay: 0.6s; }
+  .popup-list .achievement:nth-child(7) { animation-delay: 0.7s; }
+  .popup-list .achievement:nth-child(8) { animation-delay: 0.8s; }
+  .popup-list .achievement:nth-child(9) { animation-delay: 0.9s; }
+  .popup-list .achievement:nth-child(10) { animation-delay: 1.0s; }
+ </style>
+ <div class="popup-list"></div>
+ <script>
+  const g = [
+   { c: 'nier', t: 'Pod Program', m: 'ニーアオートマタ' },
+   { c: 'p5', t: 'Phantom Notice', m: 'ペルソナ5' },
+   { c: 'zelda', t: 'Ancient Message', m: 'ゼルダの伝説' },
+   { c: 'mh', t: 'Hunter Guild', m: 'モンスターハンター' },
+   { c: 'ff14', t: 'Echo Message', m: 'FF14' },
+   { c: 'minecraft', t: 'Achievement Get!', m: 'マインクラフト' },
+   { c: 'genshin', t: 'Exploration Progress', m: '原神' },
+   { c: 'pokemon', t: 'Trainer Info', m: 'ポケットモンスター' },
+   { c: 'darksouls', t: 'Soul Memory', m: 'ダークソウル' },
+   { c: 'cyberpunk', t: 'Relic Update', m: 'サイバーパンク2077' },
+   { c: 'mgs', t: 'Codec Message', m: 'メタルギアソリッド' },
+   { c: 'splatoon', t: 'Fresh News', m: 'スプラトゥーン3' },
+   { c: 'undertale', t: '*', m: 'アンダーテール' },
+   { c: 'ace', t: 'Court Record', m: '逆転裁判' },
+   { c: 'kirby', t: 'Copy Ability', m: '星のカービィ' },
+   { c: 'dmc', t: 'Style Rank', m: 'デビルメイクライ5' },
+   { c: 'apex', t: 'Champion News', m: 'APEX LEGENDS' },
+   { c: 'fgo', t: 'Saint Graph', m: 'Fate/GO' },
+   { c: 'gbf', t: 'Battle Report', m: 'グランブルー' },
+   { c: 'pad', t: 'Dungeon Info', m: 'パズドラ' },
+   { c: 'disgaea', t: 'Level Up', m: 'ディスガイア' },
+   { c: 'tales', t: 'Skill Learned', m: 'テイルズオブ' },
+   { c: 'fe', t: 'Support Rank', m: 'ファイアーエムブレム' },
+   { c: 'uma', t: 'Race Result', m: 'ウマ娘' },
+   { c: 'monst', t: 'Mission Clear', m: 'モンスト' },
+   { c: 'nioh', t: 'Trophy Earned', m: '仁王2' },
+   { c: 'elden', t: 'Legend Felled', m: 'エルデンリング' },
+   { c: 'dbd', t: 'Trial Result', m: 'Dead by Daylight' },
+   { c: 'smash', t: 'Challenger', m: 'スマブラ' },
+   { c: 'gbf2', t: 'Versus Result', m: 'グラブル VS' },
+   { c: 'twitter', t: 'Notification', m: 'Twitter/X' },
+   { c: 'instagram', t: 'New Post', m: 'Instagram' },
+   { c: 'netflix', t: 'New Release', m: 'Netflix' },
+   { c: 'spotify', t: 'Now Playing', m: 'Spotify' },
+   { c: 'line', t: 'New Message', m: 'LINE' },
+   { c: 'youtube', t: 'Milestone', m: 'YouTube' },
+   { c: 'discord', t: 'Server Alert', m: 'Discord' },
+   { c: 'tiktok', t: 'Trending', m: 'TikTok' },
+   { c: 'dbz', t: 'Power Level', m: 'ドラゴンボール' },
+   { c: 'naruto', t: 'Ninja Way', m: 'NARUTO' },
+   { c: 'aot', t: 'Scout Regiment', m: '進撃の巨人' },
+   { c: 'starwars', t: 'Force Alert', m: 'スターウォーズ' },
+   { c: 'marvel', t: 'Avengers', m: 'マーベル' },
+   { c: 'onepiece', t: 'Pirate Alert', m: 'ワンピース' },
+   { c: 'hololive', t: 'Super Chat', m: 'ホロライブ' },
+   { c: 'demon', t: 'Breathing Form', m: '鬼滅の刃' },
+   { c: 'valorant', t: 'Spike Alert', m: 'Valorant' },
+   { c: 'pokemon-go', t: 'Nearby', m: 'Pokémon GO' },
+   { c: 'ghibli', t: 'Spirit Alert', m: 'ジブリ' }
+  ]
+  
+  g.forEach(h => {
+   const a = document.createElement('div')
+   a.className = `achievement ${h.c}`
+   a.innerHTML = `<div class="title">${h.t}</div><div class="message">${h.m}</div>`
+   document.querySelector('.popup-list').appendChild(a)
+  })
+  
+  let i = 0
+  const s = (o = {}) => {
+   const h = g[i]
+   i = (i + 1) % g.length
+   const a = document.createElement('div')
+   a.className = `achievement flying ${h.c}`
+   a.style.left = o.x + 'px'
+   a.style.top = o.y + 'px'
+   a.innerHTML = `<div class="title">${h.t}</div><div class="message">${h.m}</div>`
+   document.body.appendChild(a)
+   a.addEventListener('animationend', () => a.remove())
+  }
+  
+  document.addEventListener('click', e => s({ x: e.pageX, y: e.pageY }))
+  
+  // デモのために自動的にポップアップを表示
+  let autoIndex = 0
+  const autoPopup = () => {
+   const x = Math.random() * (window.innerWidth - 200) + 100
+   const y = Math.random() * (window.innerHeight - 200) + 100
+   s({ x, y })
+   setTimeout(autoPopup, 3000)
+  }
+  
+  // ページ読み込み時に自動ポップアップを開始
+  setTimeout(autoPopup, 1500)
+ </script>
+</body>
+
+</html>

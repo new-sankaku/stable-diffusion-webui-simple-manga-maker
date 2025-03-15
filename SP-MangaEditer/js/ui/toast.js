@@ -18,27 +18,20 @@ function showToast(title, messages, isError, time) {
     const toastId = `sp-manga-toast-${Date.now()}`;
     const toast = document.createElement('div');
 
-    var className = 'sp-manga-toast';
-    var progressBarClass = 'sp-manga-progress-bar';
-    var header = 'sp-manga-toast-header';
+    var styleClass = 'toast-nier';
+    var progressBarClass = 'toast-progress-bar';
 
-    if( isError ){
-        className = 'sp-manga-toast-error';
-        progressBarClass = 'sp-manga-progress-bar-error';
-        header = 'sp-manga-toast-header-error';
+    if(isError){
+        styleClass = 'toast-dbd';
+        progressBarClass = 'toast-progress-bar-error';
     }
 
-    toast.className = className;
-        toast.innerHTML = `
-        <div class="${header}">
-            <strong class="me-auto">${title}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="sp-manga-toast-body">
-            <div id="sp-manga-toastMessageContainer"></div>
-            <div class="progress" style="height: 5px;">
-                <div class="${progressBarClass}" role="progressbar" style="width: 100%;"></div>
-            </div>
+    toast.className = `toast-achievement ${styleClass}`;
+    toast.innerHTML = `
+        <div class="toast-title">${title}</div>
+        <div class="toast-message" id="sp-manga-toastMessageContainer"></div>
+        <div class="progress" style="height: 5px; margin-top: 5px;">
+            <div class="${progressBarClass}" role="progressbar" style="width: 100%;"></div>
         </div>
     `;
 
@@ -61,7 +54,7 @@ function showToast(title, messages, isError, time) {
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
-        startProgressBar(toast, progressBarClass,time);
+        startProgressBar(toast, progressBarClass, time);
     } else if (Array.isArray(messages)) {
         let messageIndex = 0;
         const messageInterval = 50;
@@ -77,7 +70,7 @@ function showToast(title, messages, isError, time) {
                 toast.style.height = `auto`;
                 setTimeout(showNextMessage, messageInterval);
             } else {
-                startProgressBar(toast,progressBarClass,time);
+                startProgressBar(toast, progressBarClass, time);
             }
         };
 
@@ -88,7 +81,7 @@ function showToast(title, messages, isError, time) {
         messageLine.textContent = messages;
         messageContainer.appendChild(messageLine);
         toast.style.height = `${80 + lineHeight}px`;
-        startProgressBar(toast,progressBarClass,time);
+        startProgressBar(toast, progressBarClass, time);
     }
 
     toast.addEventListener('hidden.bs.toast', function () {
@@ -97,8 +90,8 @@ function showToast(title, messages, isError, time) {
     });
 }
 
-function startProgressBar(toast, progressBarClass,time=4000) {
-    const progressBar = toast.querySelector("."+progressBarClass);
+function startProgressBar(toast, progressBarClass, time=4000) {
+    const progressBar = toast.querySelector("." + progressBarClass);
     const interval = 10;
     // console.log("startProgressBar", time);
     const totalDuration = time;
@@ -113,9 +106,6 @@ function startProgressBar(toast, progressBarClass,time=4000) {
         }
     }, interval);
 }
-
-
-
 
 function checkActiveImage() {
     let activeObject = canvas.getActiveObject();
@@ -140,4 +130,9 @@ function checkPanelImage() {
     return false;
 }
 
-
+function checkRoughTarget() {
+    let text = getText("rough_target");
+    let rough_target_message = getText("rough_target_message");
+    createToast(text, rough_target_message, 2000);
+    return false;
+}

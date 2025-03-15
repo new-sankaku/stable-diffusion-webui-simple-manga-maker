@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>高度画像エッジ検出アプリケーション</title>
+<style>
+body{font-family:sans-serif;max-width:1200px;margin:0 auto;padding:10px;background:#f5f5f5}
+.container{display:flex;flex-direction:column;gap:10px}
+.upload-section{border:2px dashed #3498db;padding:15px;text-align:center;cursor:pointer;background:#e3f2fd;border-radius:5px}
+.image-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}
+.image-box{background:white;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);padding:10px}
+.tabs{display:flex;margin-bottom:10px}
+.tab{padding:8px 15px;background:#e3f2fd;margin-right:5px;border-radius:5px 5px 0 0;cursor:pointer}
+.tab.active{background:#3498db;color:white}
+canvas{width:100%;height:auto;border:1px solid #ddd;background:#fff}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;background:white;padding:10px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+.settings-group{flex:1;min-width:200px;border:1px solid #eee;padding:8px;border-radius:5px}
+.settings-group h3{margin-top:0;margin-bottom:10px;font-size:14px;color:#333;border-bottom:1px solid #eee;padding-bottom:5px}
+.slider-container{display:flex;flex-direction:column;margin-bottom:8px}
+label{margin-bottom:3px;font-size:12px;color:#555}
+.checkbox-container{display:flex;align-items:center;margin-bottom:8px}
+.checkbox-container label{margin-bottom:0;margin-left:5px}
+.btn{padding:6px 12px;background:#3498db;color:white;border:none;border-radius:4px;cursor:pointer;font-size:12px}
+.btn:hover{background:#2980b9}
+.btn-group{display:flex;gap:5px;margin-top:10px}
+h1{margin:0;padding:10px 0;font-size:20px;color:#2c3e50}
+h3{margin:5px 0;font-size:14px}
+.status{font-size:12px;color:#777;text-align:center;margin:5px 0}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>高度なエッジ検出アプリケーション</h1>
+<div class="upload-section" id="upload-area">
+<p>ここに画像をドラッグ＆ドロップまたはクリックしてファイルを選択</p>
+<input type="file" id="file-input" accept="image/*" style="display:none;">
+</div>
+<div class="controls">
+<div class="settings-group">
+<h3>エッジ検出設定</h3>
+<div class="slider-container">
+<label for="threshold1">Cannyしきい値1: <span id="threshold1-value">50</span></label>
+<input type="range" id="threshold1" min="0" max="500" value="50">
+</div>
+<div class="slider-container">
+<label for="threshold2">Cannyしきい値2: <span id="threshold2-value">150</span></label>
+<input type="range" id="threshold2" min="0" max="500" value="150">
+</div>
+</div>
+<div class="settings-group">
+<h3>輪郭検出設定</h3>
+<div class="slider-container">
+<label for="contour-threshold">二値化閾値: <span id="contour-threshold-value">128</span></label>
+<input type="range" id="contour-threshold" min="0" max="255" value="128">
+</div>
+<div class="slider-container">
+<label for="contour-mode">輪郭モード: <span id="contour-mode-value">外側</span></label>
+<input type="range" id="contour-mode" min="0" max="3" value="0">
+</div>
+</div>
+<div class="settings-group">
+<h3>前処理（ノイズ除去）</h3>
+<div class="slider-container">
+<label for="bilateral-d">バイラテラルD: <span id="bilateral-d-value">9</span></label>
+<input type="range" id="bilateral-d" min="5" max="15" step="2" value="9">
+</div>
+<div class="slider-container">
+<label for="bilateral-sigma">バイラテラルσ: <span id="bilateral-sigma-value">75</span></label>
+<input type="range" id="bilateral-sigma" min="10" max="150" value="75">
+</div>
+<div class="checkbox-container">
+<input type="checkbox" id="use-bilateral" checked>
+<label for="use-bilateral">バイラテラルフィルタを使用</label>
+</div>
+</div>
+<div class="settings-group">
+<h3>後処理（滑らか化）</h3>
+<div class="slider-container">
+<label for="morph-size">モルフォロジーサイズ: <span id="morph-size-value">1</span></label>
+<input type="range" id="morph-size" min="0" max="5" value="1">
+</div>
+<div class="slider-container">
+<label for="gaussian-size">ガウスぼかしサイズ: <span id="gaussian-size-value">3</span></label>
+<input type="range" id="gaussian-size" min="1" max="7" step="2" value="3">
+</div>
+<div class="checkbox-container">
+<input type="checkbox" id="use-post-process" checked>
+<label for="use-post-process">後処理を適用</label>
+</div>
+</div>
+</div>
+<div class="controls">
+<div class="settings-group">
+<h3>複数解像度処理</h3>
+<div class="slider-container">
+<label for="scale-factor">縮小率: <span id="scale-factor-value">0.5</span></label>
+<input type="range" id="scale-factor" min="0.2" max="0.8" step="0.1" value="0.5">
+</div>
+<div class="checkbox-container">
+<input type="checkbox" id="use-multi-scale">
+<label for="use-multi-scale">複数解像度処理を使用</label>
+</div>
+</div>
+<div class="settings-group">
+<h3>高度なエッジ検出</h3>
+<div class="slider-container">
+<label for="advanced-threshold">高度なエッジ閾値: <span id="advanced-threshold-value">20</span></label>
+<input type="range" id="advanced-threshold" min="10" max="100" value="20">
+</div>
+<div class="checkbox-container">
+<input type="checkbox" id="use-advanced-edge">
+<label for="use-advanced-edge">DoGエッジ検出を使用</label>
+</div>
+</div>
+<div class="settings-group">
+<h3>表示設定</h3>
+<div class="slider-container">
+<label for="opacity">不透明度: <span id="opacity-value">0.7</span></label>
+<input type="range" id="opacity" min="0" max="1" step="0.1" value="0.7">
+</div>
+<div class="btn-group">
+<button class="btn" id="process-btn">処理実行</button>
+<button class="btn" id="reset-btn">リセット</button>
+</div>
+</div>
+</div>
+<div class="image-container" id="image-container">
+<div class="image-box">
+<h3>元の画像</h3>
+<canvas id="original-canvas"></canvas>
+<p class="status">画像をアップロードしてください</p>
+</div>
+</div>
+</div>
+<script src="https://docs.opencv.org/4.5.5/opencv.js" onload="onOpenCVReady();" async></script>
+<script>
+let originalImage=null;
+let inputElement=document.getElementById('file-input');
+let uploadArea=document.getElementById('upload-area');
+let originalCanvas=document.getElementById('original-canvas');
+let imageContainer=document.getElementById('image-container');
+let threshold1Slider=document.getElementById('threshold1');
+let threshold2Slider=document.getElementById('threshold2');
+let contourThresholdSlider=document.getElementById('contour-threshold');
+let contourModeSlider=document.getElementById('contour-mode');
+let bilateralDSlider=document.getElementById('bilateral-d');
+let bilateralSigmaSlider=document.getElementById('bilateral-sigma');
+let morphSizeSlider=document.getElementById('morph-size');
+let gaussianSizeSlider=document.getElementById('gaussian-size');
+let scaleFactorSlider=document.getElementById('scale-factor');
+let advancedThresholdSlider=document.getElementById('advanced-threshold');
+let opacitySlider=document.getElementById('opacity');
+let useBilateralCheckbox=document.getElementById('use-bilateral');
+let usePostProcessCheckbox=document.getElementById('use-post-process');
+let useMultiScaleCheckbox=document.getElementById('use-multi-scale');
+let useAdvancedEdgeCheckbox=document.getElementById('use-advanced-edge');
+let processBtn=document.getElementById('process-btn');
+let resetBtn=document.getElementById('reset-btn');
+let threshold1Value=document.getElementById('threshold1-value');
+let threshold2Value=document.getElementById('threshold2-value');
+let contourThresholdValue=document.getElementById('contour-threshold-value');
+let contourModeValue=document.getElementById('contour-mode-value');
+let bilateralDValue=document.getElementById('bilateral-d-value');
+let bilateralSigmaValue=document.getElementById('bilateral-sigma-value');
+let morphSizeValue=document.getElementById('morph-size-value');
+let gaussianSizeValue=document.getElementById('gaussian-size-value');
+let scaleFactorValue=document.getElementById('scale-factor-value');
+let advancedThresholdValue=document.getElementById('advanced-threshold-value');
+let opacityValue=document.getElementById('opacity-value');
+let cvReady=false;
+let processingMethods=[
+{id:'canny',name:'Cannyエッジ検出',color:'0,255,0'},
+{id:'sobel',name:'Sobelフィルタ',color:'255,0,255'},
+{id:'scharr',name:'Scharrフィルタ',color:'255,255,0'},
+{id:'laplacian',name:'Laplacianフィルタ',color:'0,255,255'},
+{id:'contour',name:'輪郭検出',color:'255,0,0'},
+{id:'dog',name:'DoGエッジ検出',color:'255,128,0'}
+];
+let contourModes=['外側','リスト','2レベル階層','すべて'];
+
+function onOpenCVReady(){
+cvReady=true;
+document.querySelector('.status').textContent='OpenCV読み込み完了 - 画像をアップロードしてください';
+if(originalImage){
+processImage();
+}
+}
+
+uploadArea.addEventListener('click',function(){
+inputElement.click();
+});
+
+uploadArea.addEventListener('dragover',function(e){
+e.preventDefault();
+e.stopPropagation();
+this.style.backgroundColor='#d4e9f7';
+});
+
+uploadArea.addEventListener('dragleave',function(e){
+e.preventDefault();
+e.stopPropagation();
+this.style.backgroundColor='';
+});
+
+uploadArea.addEventListener('drop',function(e){
+e.preventDefault();
+e.stopPropagation();
+this.style.backgroundColor='';
+if(e.dataTransfer.files.length>0){
+inputElement.files=e.dataTransfer.files;
+handleFiles();
+}
+});
+
+inputElement.addEventListener('change',handleFiles);
+processBtn.addEventListener('click',processImage);
+resetBtn.addEventListener('click',resetParameters);
+
+threshold1Slider.addEventListener('input',updateSliderValue);
+threshold2Slider.addEventListener('input',updateSliderValue);
+contourThresholdSlider.addEventListener('input',updateSliderValue);
+contourModeSlider.addEventListener('input',updateSliderValue);
+bilateralDSlider.addEventListener('input',updateSliderValue);
+bilateralSigmaSlider.addEventListener('input',updateSliderValue);
+morphSizeSlider.addEventListener('input',updateSliderValue);
+gaussianSizeSlider.addEventListener('input',updateSliderValue);
+scaleFactorSlider.addEventListener('input',updateSliderValue);
+advancedThresholdSlider.addEventListener('input',updateSliderValue);
+opacitySlider.addEventListener('input',updateSliderValue);
+
+function updateSliderValue(){
+threshold1Value.textContent=threshold1Slider.value;
+threshold2Value.textContent=threshold2Slider.value;
+contourThresholdValue.textContent=contourThresholdSlider.value;
+contourModeValue.textContent=contourModes[parseInt(contourModeSlider.value)];
+bilateralDValue.textContent=bilateralDSlider.value;
+bilateralSigmaValue.textContent=bilateralSigmaSlider.value;
+morphSizeValue.textContent=morphSizeSlider.value;
+gaussianSizeValue.textContent=gaussianSizeSlider.value;
+scaleFactorValue.textContent=scaleFactorSlider.value;
+advancedThresholdValue.textContent=advancedThresholdSlider.value;
+opacityValue.textContent=opacitySlider.value;
+}
+
+function resetParameters(){
+threshold1Slider.value=50;
+threshold2Slider.value=150;
+contourThresholdSlider.value=128;
+contourModeSlider.value=0;
+bilateralDSlider.value=9;
+bilateralSigmaSlider.value=75;
+morphSizeSlider.value=1;
+gaussianSizeSlider.value=3;
+scaleFactorSlider.value=0.5;
+advancedThresholdSlider.value=20;
+opacitySlider.value=0.7;
+useBilateralCheckbox.checked=true;
+usePostProcessCheckbox.checked=true;
+useMultiScaleCheckbox.checked=false;
+useAdvancedEdgeCheckbox.checked=false;
+updateSliderValue();
+if(originalImage){
+processImage();
+}
+}
+
+function clearImageContainer(){
+const firstChild=imageContainer.firstElementChild;
+while(imageContainer.childElementCount>1){
+imageContainer.removeChild(imageContainer.lastElementChild);
+}
+}
+
+function handleFiles(){
+const file=inputElement.files[0];
+if(file){
+const reader=new FileReader();
+reader.onload=function(e){
+const img=new Image();
+img.onload=function(){
+originalImage=img;
+clearImageContainer();
+document.querySelector('.status').textContent='画像読み込み完了';
+processImage();
+};
+img.src=e.target.result;
+};
+reader.readAsDataURL(file);
+}
+}
+
+function processImage(){
+if(!originalImage||!cvReady)return;
+clearImageContainer();
+
+const threshold1=parseInt(threshold1Slider.value);
+const threshold2=parseInt(threshold2Slider.value);
+const contourThreshold=parseInt(contourThresholdSlider.value);
+const contourMode=parseInt(contourModeSlider.value);
+const bilateralD=parseInt(bilateralDSlider.value);
+const bilateralSigma=parseInt(bilateralSigmaSlider.value);
+const morphSize=parseInt(morphSizeSlider.value);
+const gaussianSize=parseInt(gaussianSizeSlider.value);
+const scaleFactor=parseFloat(scaleFactorSlider.value);
+const advancedThreshold=parseInt(advancedThresholdSlider.value);
+const opacity=parseFloat(opacitySlider.value);
+const useBilateral=useBilateralCheckbox.checked;
+const usePostProcess=usePostProcessCheckbox.checked;
+const useMultiScale=useMultiScaleCheckbox.checked;
+const useAdvancedEdge=useAdvancedEdgeCheckbox.checked;
+
+try{
+const width=originalImage.width;
+const height=originalImage.height;
+originalCanvas.width=width;
+originalCanvas.height=height;
+let originalCtx=originalCanvas.getContext('2d');
+originalCtx.drawImage(originalImage,0,0,width,height);
+let src=cv.imread(originalCanvas);
+document.querySelector('.status').textContent='画像サイズ: '+width+'×'+height+'px';
+
+processingMethods.forEach(method=>{
+if(method.id==='dog'&&!useAdvancedEdge)return;
+createProcessedImage(src,method,{
+threshold1,
+threshold2,
+contourThreshold,
+contourMode,
+bilateralD,
+bilateralSigma,
+morphSize,
+gaussianSize,
+scaleFactor,
+advancedThreshold,
+opacity,
+useBilateral,
+usePostProcess,
+useMultiScale
+});
+});
+
+processingMethods.forEach(method=>{
+if(method.id==='dog'&&!useAdvancedEdge)return;
+createOverlayImage(src,method,{
+threshold1,
+threshold2,
+contourThreshold,
+contourMode,
+bilateralD,
+bilateralSigma,
+morphSize,
+gaussianSize,
+scaleFactor,
+advancedThreshold,
+opacity,
+useBilateral,
+usePostProcess,
+useMultiScale
+});
+});
+
+src.delete();
+}catch(err){
+console.error(err);
+document.querySelector('.status').textContent='エラーが発生しました: '+err.message;
+}
+}
+
+function applyPreprocessing(src,params){
+let gray=new cv.Mat();
+let processed=new cv.Mat();
+cv.cvtColor(src,gray,cv.COLOR_RGBA2GRAY);
+
+if(params.useBilateral){
+cv.bilateralFilter(gray,processed,params.bilateralD,params.bilateralSigma,params.bilateralSigma);
+}else{
+gray.copyTo(processed);
+}
+
+if(params.useMultiScale){
+let downscaled=new cv.Mat();
+let upscaled=new cv.Mat();
+let newSize=new cv.Size(Math.round(src.cols*params.scaleFactor),Math.round(src.rows*params.scaleFactor));
+let originalSize=new cv.Size(src.cols,src.rows);
+cv.resize(processed,downscaled,newSize,0,0,cv.INTER_AREA);
+cv.resize(downscaled,upscaled,originalSize,0,0,cv.INTER_CUBIC);
+upscaled.copyTo(processed);
+downscaled.delete();
+upscaled.delete();
+}
+
+return {gray:gray,processed:processed};
+}
+
+function applyPostprocessing(edges,params){
+if(!params.usePostProcess)return edges.clone();
+
+let result=edges.clone();
+
+if(params.morphSize>0){
+let morphKernel=cv.Mat.ones(params.morphSize,params.morphSize,cv.CV_8U);
+let morphed=new cv.Mat();
+cv.morphologyEx(result,morphed,cv.MORPH_CLOSE,morphKernel);
+morphed.copyTo(result);
+cv.morphologyEx(result,morphed,cv.MORPH_OPEN,morphKernel);
+morphed.copyTo(result);
+morphKernel.delete();
+morphed.delete();
+}
+
+if(params.gaussianSize>1){
+let gaussKernel=new cv.Size(params.gaussianSize,params.gaussianSize);
+let blurred=new cv.Mat();
+cv.GaussianBlur(result,blurred,gaussKernel,0,0,cv.BORDER_DEFAULT);
+blurred.copyTo(result);
+blurred.delete();
+}
+
+return result;
+}
+
+function createProcessedImage(src,method,params){
+const width=src.cols;
+const height=src.rows;
+
+const imageBox=document.createElement('div');
+imageBox.className='image-box';
+const title=document.createElement('h3');
+title.textContent=method.name+' 処理結果';
+imageBox.appendChild(title);
+const canvas=document.createElement('canvas');
+canvas.width=width;
+canvas.height=height;
+canvas.id=method.id+'-canvas';
+imageBox.appendChild(canvas);
+const status=document.createElement('p');
+status.className='status';
+imageBox.appendChild(status);
+imageContainer.appendChild(imageBox);
+
+let preprocessed=applyPreprocessing(src,params);
+let gray=preprocessed.gray;
+let processed=preprocessed.processed;
+let edges=new cv.Mat();
+let result=new cv.Mat();
+
+switch(method.id){
+case 'canny':
+cv.Canny(processed,edges,params.threshold1,params.threshold2,3,false);
+let smoothedCanny=applyPostprocessing(edges,params);
+cv.cvtColor(smoothedCanny,result,cv.COLOR_GRAY2RGBA);
+smoothedCanny.delete();
+break;
+
+case 'sobel':
+let sobelX=new cv.Mat();
+let sobelY=new cv.Mat();
+cv.Sobel(processed,sobelX,cv.CV_8U,1,0,3,1,0,cv.BORDER_DEFAULT);
+cv.Sobel(processed,sobelY,cv.CV_8U,0,1,3,1,0,cv.BORDER_DEFAULT);
+cv.addWeighted(sobelX,0.5,sobelY,0.5,0,edges);
+let smoothedSobel=applyPostprocessing(edges,params);
+cv.cvtColor(smoothedSobel,result,cv.COLOR_GRAY2RGBA);
+sobelX.delete();
+sobelY.delete();
+smoothedSobel.delete();
+break;
+
+case 'scharr':
+let scharrX=new cv.Mat();
+let scharrY=new cv.Mat();
+cv.Scharr(processed,scharrX,cv.CV_8U,1,0,1,0,cv.BORDER_DEFAULT);
+cv.Scharr(processed,scharrY,cv.CV_8U,0,1,1,0,cv.BORDER_DEFAULT);
+cv.addWeighted(scharrX,0.5,scharrY,0.5,0,edges);
+let smoothedScharr=applyPostprocessing(edges,params);
+cv.cvtColor(smoothedScharr,result,cv.COLOR_GRAY2RGBA);
+scharrX.delete();
+scharrY.delete();
+smoothedScharr.delete();
+break;
+
+case 'laplacian':
+cv.Laplacian(processed,edges,cv.CV_8U,3,1,0,cv.BORDER_DEFAULT);
+let smoothedLaplacian=applyPostprocessing(edges,params);
+cv.cvtColor(smoothedLaplacian,result,cv.COLOR_GRAY2RGBA);
+smoothedLaplacian.delete();
+break;
+
+case 'contour':
+let thresholded=new cv.Mat();
+cv.threshold(processed,thresholded,params.contourThreshold,255,cv.THRESH_BINARY);
+let contours=new cv.MatVector();
+let hierarchy=new cv.Mat();
+cv.findContours(thresholded,contours,hierarchy,cv.RETR_LIST+params.contourMode,cv.CHAIN_APPROX_SIMPLE);
+
+let contoursImg=cv.Mat.zeros(processed.rows,processed.cols,cv.CV_8UC1);
+for(let i=0;i<contours.size();++i){
+cv.drawContours(contoursImg,contours,i,new cv.Scalar(255),1,cv.LINE_AA,hierarchy,0);
+}
+
+let smoothedContours=applyPostprocessing(contoursImg,params);
+cv.cvtColor(smoothedContours,result,cv.COLOR_GRAY2RGBA);
+
+thresholded.delete();
+contours.delete();
+hierarchy.delete();
+contoursImg.delete();
+smoothedContours.delete();
+break;
+
+case 'dog':
+let gaussSmall=new cv.Mat();
+let gaussLarge=new cv.Mat();
+let dogResult=new cv.Mat();
+cv.GaussianBlur(processed,gaussSmall,new cv.Size(3,3),0,0,cv.BORDER_DEFAULT);
+cv.GaussianBlur(processed,gaussLarge,new cv.Size(9,9),0,0,cv.BORDER_DEFAULT);
+cv.subtract(gaussSmall,gaussLarge,dogResult);
+cv.threshold(dogResult,edges,params.advancedThreshold,255,cv.THRESH_BINARY);
+let smoothedDoG=applyPostprocessing(edges,params);
+cv.cvtColor(smoothedDoG,result,cv.COLOR_GRAY2RGBA);
+gaussSmall.delete();
+gaussLarge.delete();
+dogResult.delete();
+smoothedDoG.delete();
+break;
+}
+
+cv.imshow(canvas,result);
+status.textContent=method.name+'を適用しました';
+
+gray.delete();
+processed.delete();
+edges.delete();
+result.delete();
+}
+
+function createOverlayImage(src,method,params){
+const imageBox=document.createElement('div');
+imageBox.className='image-box';
+const title=document.createElement('h3');
+title.textContent='元画像+'+method.name;
+imageBox.appendChild(title);
+const canvas=document.createElement('canvas');
+canvas.width=src.cols;
+canvas.height=src.rows;
+canvas.id=method.id+'-overlay-canvas';
+imageBox.appendChild(canvas);
+const status=document.createElement('p');
+status.className='status';
+imageBox.appendChild(status);
+imageContainer.appendChild(imageBox);
+
+let ctx=canvas.getContext('2d');
+ctx.drawImage(originalImage,0,0,src.cols,src.rows);
+let processedCanvas=document.getElementById(method.id+'-canvas');
+
+if(processedCanvas){
+let processedData=processedCanvas.getContext('2d').getImageData(0,0,src.cols,src.rows);
+let processedPixels=processedData.data;
+let overlayImageData=ctx.getImageData(0,0,src.cols,src.rows);
+let overlayPixels=overlayImageData.data;
+const rgb=method.color.split(',');
+const r=parseInt(rgb[0]);
+const g=parseInt(rgb[1]);
+const b=parseInt(rgb[2]);
+
+for(let i=0;i<processedPixels.length;i+=4){
+if(processedPixels[i]>100||processedPixels[i+1]>100||processedPixels[i+2]>100){
+overlayPixels[i]=r;
+overlayPixels[i+1]=g;
+overlayPixels[i+2]=b;
+overlayPixels[i+3]=255*params.opacity;
+}
+}
+
+ctx.putImageData(overlayImageData,0,0);
+status.textContent='元画像に'+method.name+'を重ねて表示';
+}
+}
+</script>
+</body>
+</html>

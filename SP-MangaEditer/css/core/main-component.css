@@ -11,6 +11,7 @@
   background-color: var(--background-color-A);
   color: var(--text-color-B);
   height: var(--nav-height);
+  font-size: var(--font-size-base);
 }
 
 

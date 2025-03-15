@@ -153,7 +153,8 @@ function findCanvasGuid(obj) {
 var localSettingsData = null;
   
 function loadSettingsLocalStrage() {
-    createToast('Settings Load', [
+    createToast(
+    'Settings Load', [
       'Canvas Background Color...',
       'Api port/host/check...',
       'Base Settings...',

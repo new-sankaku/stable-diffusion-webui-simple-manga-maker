@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{margin:0;padding:0;font-family:'Arial',sans-serif;background-color:#f0f0f0;}
+.container{display:flex;height:100vh;}
+.sidebar{width:220px;background-color:#333;color:white;padding:8px;box-sizing:border-box;}
+.main-content{flex:1;padding:10px;box-sizing:border-box;display:flex;flex-direction:column;}
+.canvas-container{flex:1;background-color:white;border:1px solid #ccc;position:relative;overflow:hidden;}
+canvas{position:absolute;top:0;left:0;}
+.button{background-color:#4CAF50;color:white;padding:6px 12px;border:none;border-radius:4px;cursor:pointer;margin:3px 0;font-size:13px;}
+.button:hover{background-color:#45a049;}
+input[type="file"]{margin:5px 0;font-size:12px;}
+.toolbar{display:flex;align-items:center;margin-bottom:8px;background-color:#eee;padding:6px;border-radius:3px;}
+.tool{margin-right:8px;padding:4px 8px;background-color:#ddd;border-radius:3px;cursor:pointer;font-size:12px;}
+.tool.active{background-color:#4CAF50;color:white;}
+.slider-container{margin:5px 0;}
+.slider-container label{display:block;margin-bottom:3px;font-size:12px;}
+input[type="range"]{width:100%;}
+.status{margin-top:5px;padding:3px;background-color:#eee;border-radius:3px;font-size:11px;}
+.hint{font-size:11px;color:#999;margin-top:3px;}
+h2{font-size:16px;margin:5px 0 10px 0;}
+.checkbox-container{margin:5px 0;font-size:12px;display:flex;align-items:center;}
+.checkbox-container input{margin-right:5px;}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="sidebar">
+<h2>パペット変形ツール</h2>
+<div>
+<label for="imageUpload">画像をアップロード:</label>
+<input type="file" id="imageUpload" accept="image/png">
+</div>
+<div class="slider-container">
+<label for="meshDensity">メッシュ密度:</label>
+<input type="range" id="meshDensity" min="5" max="100" value="10">
+</div>
+<div class="slider-container">
+<label for="gapThreshold">メッシュ接続閾値 (px):</label>
+<input type="range" id="gapThreshold" min="1" max="20" value="5">
+</div>
+<div class="checkbox-container">
+<input type="checkbox" id="scaleEnabled">
+<label for="scaleEnabled">拡大・縮小を有効にする</label>
+</div>
+<div class="checkbox-container">
+<input type="checkbox" id="showMesh" checked>
+<label for="showMesh">メッシュを表示</label>
+</div>
+<button class="button" id="generateMesh">メッシュ生成</button>
+<button class="button" id="resetAll">リセット</button>
+<div class="status" id="status">準備完了</div>
+<div class="hint">ヒント: Shiftキー+クリックでピンを削除</div>
+</div>
+<div class="main-content">
+<div class="toolbar">
+<div class="tool active" id="moveTool">移動</div>
+<div class="tool" id="pinTool">ピン設置</div>
+<div class="tool" id="dragTool">変形</div>
+</div>
+<div class="canvas-container">
+<canvas id="imageCanvas"></canvas>
+<canvas id="meshCanvas"></canvas>
+<canvas id="controlCanvas"></canvas>
+</div>
+</div>
+</div>
+<script>
+class PuppetWarp{
+constructor(){
+this.imageCanvas=document.getElementById('imageCanvas');
+this.meshCanvas=document.getElementById('meshCanvas');
+this.controlCanvas=document.getElementById('controlCanvas');
+this.imageCtx=this.imageCanvas.getContext('2d');
+this.meshCtx=this.meshCanvas.getContext('2d');
+this.controlCtx=this.controlCanvas.getContext('2d');
+this.image=null;
+this.imageData=null;
+this.originalImageData=null;
+this.transformedImage=null; // 変形後の画像を保存
+this.isTransformed=false; // 変形済みかどうかのフラグ
+this.mesh=[];
+this.pins=[];
+this.activePin=null;
+this.activeTool='move';
+this.meshDensity=10;
+this.gapThreshold=5;
+this.isDragging=false;
+this.lastX=0;
+this.lastY=0;
+this.activeTriangles=new Set();
+this.dragPin=null;
+this.initialDragVector={x:0,y:0};
+this.nonTransparentPixels=[];
+this.scaleEnabled=false;
+this.showMesh=true;
+this.leftBottomMeshes=[];
+this.invertedTriangles=[];
+this.smallAreaTriangles=[];
+this.setupEventListeners();
+}
+setupEventListeners(){
+const imageUpload=document.getElementById('imageUpload');
+const generateMeshBtn=document.getElementById('generateMesh');
+const resetAllBtn=document.getElementById('resetAll');
+const meshDensitySlider=document.getElementById('meshDensity');
+const gapThresholdSlider=document.getElementById('gapThreshold');
+const scaleEnabledCheckbox=document.getElementById('scaleEnabled');
+const showMeshCheckbox=document.getElementById('showMesh');
+const moveTool=document.getElementById('moveTool');
+const pinTool=document.getElementById('pinTool');
+const dragTool=document.getElementById('dragTool');
+imageUpload.addEventListener('change',(e)=>{
+this.loadImage(e);
+});
+generateMeshBtn.addEventListener('click',()=>this.generateMesh());
+resetAllBtn.addEventListener('click',()=>this.resetAll());
+meshDensitySlider.addEventListener('input',(e)=>{
+this.meshDensity=parseInt(e.target.value);
+});
+gapThresholdSlider.addEventListener('input',(e)=>{
+this.gapThreshold=parseInt(e.target.value);
+});
+scaleEnabledCheckbox.addEventListener('change',(e)=>{
+this.scaleEnabled=e.target.checked;
+});
+showMeshCheckbox.addEventListener('change',(e)=>{
+this.showMesh=e.target.checked;
+this.drawMesh();
+});
+moveTool.addEventListener('click',()=>this.setTool('move'));
+pinTool.addEventListener('click',()=>this.setTool('pin'));
+dragTool.addEventListener('click',()=>this.setTool('drag'));
+this.controlCanvas.addEventListener('mousedown',(e)=>this.handleMouseDown(e));
+this.controlCanvas.addEventListener('mousemove',(e)=>this.handleMouseMove(e));
+this.controlCanvas.addEventListener('mouseup',()=>this.handleMouseUp());
+this.controlCanvas.addEventListener('mouseleave',()=>this.handleMouseUp());
+this.controlCanvas.addEventListener('click',(e)=>{
+if(e.shiftKey){
+const rect=this.controlCanvas.getBoundingClientRect();
+const x=e.clientX-rect.left;
+const y=e.clientY-rect.top;
+this.removeNearestPin(x,y);
+}
+});
+window.addEventListener('resize',()=>{
+if(this.image){
+this.resizeCanvases();
+if(this.isTransformed && this.transformedImage){
+this.drawTransformedImage();
+}else{
+this.drawImage();
+}
+this.drawMesh();
+this.drawControlLayer();
+}
+});
+}
+removeNearestPin(x,y){
+const threshold=10;
+let nearestIdx=-1;
+let minDist=threshold;
+for(let i=0;i<this.pins.length;i++){
+const pin=this.pins[i];
+const dist=Math.sqrt((pin.x-x)**2+(pin.y-y)**2);
+if(dist<minDist){
+minDist=dist;
+nearestIdx=i;
+}
+}
+if(nearestIdx>=0){
+this.pins.splice(nearestIdx,1);
+this.drawControlLayer();
+}
+}
+setTool(tool){
+this.activeTool=tool;
+document.getElementById('moveTool').classList.remove('active');
+document.getElementById('pinTool').classList.remove('active');
+document.getElementById('dragTool').classList.remove('active');
+document.getElementById(`${tool}Tool`).classList.add('active');
+document.getElementById('status').textContent=`ツール: ${tool}`;
+}
+updateStatus(message){
+document.getElementById('status').textContent=message;
+}
+loadImage(e){
+const file=e.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=(event)=>{
+const img=new Image();
+img.onload=()=>{
+this.image=img;
+this.resizeCanvases();
+this.drawImage();
+this.generateMesh();
+};
+img.src=event.target.result;
+};
+reader.readAsDataURL(file);
+}
+resizeCanvases(){
+const container=document.querySelector('.canvas-container');
+const containerWidth=container.clientWidth;
+const containerHeight=container.clientHeight;
+const scale=Math.min(containerWidth/this.image.width,containerHeight/this.image.height);
+const canvasWidth=this.image.width*scale;
+const canvasHeight=this.image.height*scale;
+this.imageCanvas.width=canvasWidth;
+this.imageCanvas.height=canvasHeight;
+this.meshCanvas.width=canvasWidth;
+this.meshCanvas.height=canvasHeight;
+this.controlCanvas.width=canvasWidth;
+this.controlCanvas.height=canvasHeight;
+this.scale=scale;
+}
+drawImage(){
+this.imageCtx.clearRect(0,0,this.imageCanvas.width,this.imageCanvas.height);
+this.imageCtx.drawImage(this.image,0,0,this.imageCanvas.width,this.imageCanvas.height);
+this.imageData=this.imageCtx.getImageData(0,0,this.imageCanvas.width,this.imageCanvas.height);
+this.originalImageData=this.imageCtx.getImageData(0,0,this.imageCanvas.width,this.imageCanvas.height);
+}
+generateMesh(){
+if(!this.image)return;
+this.mesh=[];
+this.pins=[];
+this.activePin=null;
+this.dragPin=null;
+this.initialDragVector={x:0,y:0};
+this.drawControlLayer();
+if(this.isTransformed && this.transformedImage){
+this.updateImageDataFromTransformed();
+}
+this.detectEdgesAndGenerateMesh();
+this.drawMesh();
+}
+
+updateImageDataFromTransformed(){
+const tempCanvas=document.createElement('canvas');
+tempCanvas.width=this.imageCanvas.width;
+tempCanvas.height=this.imageCanvas.height;
+const tempCtx=tempCanvas.getContext('2d');
+tempCtx.drawImage(this.transformedImage,0,0);
+this.imageData=tempCtx.getImageData(0,0,this.imageCanvas.width,this.imageCanvas.height);
+this.originalImageData=tempCtx.getImageData(0,0,this.imageCanvas.width,this.imageCanvas.height);
+}
+detectEdgesAndGenerateMesh(){
+const{width,height,data}=this.imageData;
+this.nonTransparentPixels=[];
+for(let y=0;y<height;y++){
+for(let x=0;x<width;x++){
+const idx=(y*width+x)*4;
+const alpha=data[idx+3];
+if(alpha>0){
+this.nonTransparentPixels.push({x,y});
+}
+}
+}
+const edgePoints=this.detectEdges(this.nonTransparentPixels,width,height);
+this.generateTriangulation(edgePoints,this.nonTransparentPixels);
+}
+detectEdges(pixels,width,height){
+const edgePoints=[];
+const pixelMap=new Map();
+for(const pixel of pixels){
+const key=`${pixel.x},${pixel.y}`;
+pixelMap.set(key,true);
+}
+const visitedEdges=new Set();
+for(const pixel of pixels){
+const{x,y}=pixel;
+const directions=[
+{dx:-1,dy:-1},{dx:0,dy:-1},{dx:1,dy:-1},
+{dx:-1,dy:0},{dx:1,dy:0},
+{dx:-1,dy:1},{dx:0,dy:1},{dx:1,dy:1}
+];
+for(const dir of directions){
+const nx=x+dir.dx;
+const ny=y+dir.dy;
+if(nx<0||nx>=width||ny<0||ny>=height){
+const key=`${x},${y}`;
+if(!visitedEdges.has(key)){
+edgePoints.push(pixel);
+visitedEdges.add(key);
+}
+break;
+}
+const key=`${nx},${ny}`;
+if(!pixelMap.has(key)){
+const edgeKey=`${x},${y}`;
+if(!visitedEdges.has(edgeKey)){
+edgePoints.push(pixel);
+visitedEdges.add(edgeKey);
+}
+break;
+}
+}
+}
+return this.reducePoints(edgePoints);
+}
+reducePoints(points){
+const result=[];
+const step=Math.max(1,Math.floor(100/this.meshDensity));
+for(let i=0;i<points.length;i+=step){
+result.push(points[i]);
+}
+return result;
+}
+generateTriangulation(edgePoints,allPoints){
+const gridSize=this.meshDensity;
+const{width,height}=this.imageData;
+const pixelMap=new Map();
+for(const point of allPoints){
+pixelMap.set(`${Math.floor(point.x/gridSize)},${Math.floor(point.y/gridSize)}`,true);
+}
+for(let y=0;y<height;y+=gridSize){
+for(let x=0;x<width;x+=gridSize){
+if(pixelMap.has(`${Math.floor(x/gridSize)},${Math.floor(y/gridSize)}`)){
+const triangle1={
+points:[
+{x:x,y:y},
+{x:x+gridSize,y:y},
+{x:x,y:y+gridSize}
+],
+originalPoints:[
+{x:x,y:y},
+{x:x+gridSize,y:y},
+{x:x,y:y+gridSize}
+],
+id: `T1_${x}_${y}`,
+originalArea: this.calculateTriangleArea({x:x,y:y}, {x:x+gridSize,y:y}, {x:x,y:y+gridSize})
+};
+const triangle2={
+points:[
+{x:x+gridSize,y:y},
+{x:x+gridSize,y:y+gridSize},
+{x:x,y:y+gridSize}
+],
+originalPoints:[
+{x:x+gridSize,y:y},
+{x:x+gridSize,y:y+gridSize},
+{x:x,y:y+gridSize}
+],
+id: `T2_${x}_${y}`,
+originalArea: this.calculateTriangleArea({x:x+gridSize,y:y}, {x:x+gridSize,y:y+gridSize}, {x:x,y:y+gridSize})
+};
+this.mesh.push(triangle1);
+this.mesh.push(triangle2);
+}
+}
+}
+}
+calculateTriangleArea(a, b, c) {
+return Math.abs((a.x*(b.y-c.y) + b.x*(c.y-a.y) + c.x*(a.y-b.y))/2);
+}
+isTriangleInverted(triangle) {
+const p1 = triangle.points[0];
+const p2 = triangle.points[1];
+const p3 = triangle.points[2];
+const area = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
+return area < 0;
+}
+isTriangleTooSmall(triangle) {
+const currentArea = this.calculateTriangleArea(
+triangle.points[0], 
+triangle.points[1], 
+triangle.points[2]
+);
+const originalArea = triangle.originalArea;
+const areaRatio = currentArea / originalArea;
+return areaRatio < 0.05; // 元の面積の5%未満なら小さすぎると判断
+}
+trianglesAreEqual(t1,t2){
+return this.pointsAreEqual(t1.points[0],t2.points[0])&&
+this.pointsAreEqual(t1.points[1],t2.points[1])&&
+this.pointsAreEqual(t1.points[2],t2.points[2]);
+}
+pointsAreEqual(p1,p2){
+return Math.abs(p1.x-p2.x)<1&&Math.abs(p1.y-p2.y)<1;
+}
+drawMesh(){
+this.meshCtx.clearRect(0,0,this.meshCanvas.width,this.meshCanvas.height);
+if(!this.showMesh)return;
+for(const triangle of this.mesh){
+this.meshCtx.beginPath();
+this.meshCtx.moveTo(triangle.points[0].x,triangle.points[0].y);
+this.meshCtx.lineTo(triangle.points[1].x,triangle.points[1].y);
+this.meshCtx.lineTo(triangle.points[2].x,triangle.points[2].y);
+this.meshCtx.closePath();
+if(triangle.isActive){
+this.meshCtx.strokeStyle='rgba(255,0,0,0.8)';
+this.meshCtx.lineWidth=1.5;
+this.meshCtx.fillStyle='rgba(255,0,0,0.2)';
+this.meshCtx.fill();
+}else{
+this.meshCtx.strokeStyle='rgba(0,255,255,0.5)';
+this.meshCtx.lineWidth=0.5;
+}
+this.meshCtx.stroke();
+}
+}
+drawControlLayer(){
+this.controlCtx.clearRect(0,0,this.controlCanvas.width,this.controlCanvas.height);
+if(this.dragPin&&this.initialDragVector&&(this.activeTool==='drag'&&this.isDragging||this.activePin)){
+const maxLen=Math.max(this.controlCanvas.width,this.controlCanvas.height)*2;
+const vecX=this.initialDragVector.x;
+const vecY=this.initialDragVector.y;
+const len=Math.sqrt(vecX*vecX+vecY*vecY);
+const nx=vecX/len;
+const ny=vecY/len;
+const endX=this.dragPin.x+nx*maxLen;
+const endY=this.dragPin.y+ny*maxLen;
+this.controlCtx.beginPath();
+this.controlCtx.moveTo(this.dragPin.x,this.dragPin.y);
+this.controlCtx.lineTo(endX,endY);
+this.controlCtx.strokeStyle='rgba(255,255,0,0.7)';
+this.controlCtx.lineWidth=2;
+this.controlCtx.stroke();
+}
+this.controlCtx.fillStyle='red';
+for(const pin of this.pins){
+this.controlCtx.beginPath();
+this.controlCtx.arc(pin.x,pin.y,5,0,Math.PI*2);
+this.controlCtx.fill();
+this.controlCtx.strokeStyle='white';
+this.controlCtx.lineWidth=1;
+this.controlCtx.stroke();
+}
+}
+resetAll(){
+this.mesh=[];
+this.pins=[];
+this.meshCtx.clearRect(0,0,this.meshCanvas.width,this.meshCanvas.height);
+this.controlCtx.clearRect(0,0,this.controlCanvas.width,this.controlCanvas.height);
+// 変形状態もリセット
+this.isTransformed = false;
+this.transformedImage = null;
+if(this.image){
+this.drawImage();
+}
+}
+renderWarpedImage(){
+this.imageCtx.clearRect(0,0,this.imageCanvas.width,this.imageCanvas.height);
+if(!this.originalImageData)return;
+const outputData=new ImageData(
+new Uint8ClampedArray(this.originalImageData.data.length),
+this.originalImageData.width,
+this.originalImageData.height
+);
+const width=this.imageCanvas.width;
+const height=this.imageCanvas.height;
+for(let i=0;i<outputData.data.length;i+=4){
+outputData.data[i+3]=0;
+}
+const trianglesToProcess=[...this.mesh];
+trianglesToProcess.sort((a,b)=>{
+const depthA=a.isActive?1:0;
+const depthB=b.isActive?1:0;
+return depthB-depthA;
+});
+
+// リセット
+this.invertedTriangles = [];
+this.smallAreaTriangles = [];
+
+for(const triangle of trianglesToProcess){
+// 三角形が裏返っているかチェック
+if(this.isTriangleInverted(triangle)) {
+this.invertedTriangles.push(triangle.id);
+console.error(`裏返った三角形検出: ${triangle.id} - 頂点: (${Math.round(triangle.points[0].x)},${Math.round(triangle.points[0].y)}), (${Math.round(triangle.points[1].x)},${Math.round(triangle.points[1].y)}), (${Math.round(triangle.points[2].x)},${Math.round(triangle.points[2].y)})`);
+}
+
+// 面積が極端に小さくなっていないかチェック
+if(this.isTriangleTooSmall(triangle)) {
+this.smallAreaTriangles.push(triangle.id);
+console.error(`面積が小さすぎる三角形: ${triangle.id} - 元の面積比: ${(this.calculateTriangleArea(triangle.points[0], triangle.points[1], triangle.points[2]) / triangle.originalArea).toFixed(4)}`);
+}
+
+const origPoints=triangle.originalPoints;
+const deformedPoints=triangle.points;
+const minX=Math.max(0,Math.floor(Math.min(deformedPoints[0].x,deformedPoints[1].x,deformedPoints[2].x)));
+const maxX=Math.min(width-1,Math.ceil(Math.max(deformedPoints[0].x,deformedPoints[1].x,deformedPoints[2].x)));
+const minY=Math.max(0,Math.floor(Math.min(deformedPoints[0].y,deformedPoints[1].y,deformedPoints[2].y)));
+const maxY=Math.min(height-1,Math.ceil(Math.max(deformedPoints[0].y,deformedPoints[1].y,deformedPoints[2].y)));
+const sampleRate=triangle.isActive?1:1;
+for(let y=minY;y<=maxY;y+=sampleRate){
+for(let x=minX;x<=maxX;x+=sampleRate){
+if(this.pointInTriangle(x,y,deformedPoints[0],deformedPoints[1],deformedPoints[2])){
+const{u,v,w}=this.getBarycentricCoordinates(
+x,y,
+deformedPoints[0].x,deformedPoints[0].y,
+deformedPoints[1].x,deformedPoints[1].y,
+deformedPoints[2].x,deformedPoints[2].y
+);
+const srcX=u*origPoints[0].x+v*origPoints[1].x+w*origPoints[2].x;
+const srcY=u*origPoints[0].y+v*origPoints[1].y+w*origPoints[2].y;
+if(srcX>=0&&srcX<width&&srcY>=0&&srcY<height){
+const color=this.bilinearInterpolation(srcX,srcY,this.originalImageData);
+const dstIdx=(y*width+x)*4;
+outputData.data[dstIdx]=color[0];
+outputData.data[dstIdx+1]=color[1];
+outputData.data[dstIdx+2]=color[2];
+outputData.data[dstIdx+3]=color[3];
+}
+}
+}
+}
+}
+
+// 異常が検出された場合
+if(this.invertedTriangles.length > 0 || this.smallAreaTriangles.length > 0) {
+console.error(`変形後の異常: 裏返り=${this.invertedTriangles.length}個, 面積小=${this.smallAreaTriangles.length}個`);
+}
+
+this.applyAntiAliasing(outputData,width,height);
+this.imageCtx.putImageData(outputData,0,0);
+
+// 変形後の画像を保存
+this.saveTransformedImage();
+}
+
+// 変形後の画像を保存するメソッド
+saveTransformedImage() {
+this.transformedImage = document.createElement('canvas');
+this.transformedImage.width = this.imageCanvas.width;
+this.transformedImage.height = this.imageCanvas.height;
+const ctx = this.transformedImage.getContext('2d');
+ctx.drawImage(this.imageCanvas, 0, 0);
+this.isTransformed = true;
+}
+
+// 保存済みの変形画像を描画するメソッド
+drawTransformedImage() {
+if(this.transformedImage) {
+this.imageCtx.clearRect(0, 0, this.imageCanvas.width, this.imageCanvas.height);
+this.imageCtx.drawImage(this.transformedImage, 0, 0, this.imageCanvas.width, this.imageCanvas.height);
+}
+}
+bilinearInterpolation(x,y,imageData){
+const width=imageData.width;
+const height=imageData.height;
+const x0=Math.floor(x);
+const y0=Math.floor(y);
+const x1=Math.min(x0+1,width-1);
+const y1=Math.min(y0+1,height-1);
+const sx=x-x0;
+const sy=y-y0;
+const idx00=(y0*width+x0)*4;
+const idx01=(y0*width+x1)*4;
+const idx10=(y1*width+x0)*4;
+const idx11=(y1*width+x1)*4;
+const result=[0,0,0,0];
+const data=imageData.data;
+for(let c=0;c<4;c++){
+const top=(1-sx)*data[idx00+c]+sx*data[idx01+c];
+const bottom=(1-sx)*data[idx10+c]+sx*data[idx11+c];
+result[c]=Math.round((1-sy)*top+sy*bottom);
+}
+return result;
+}
+applyAntiAliasing(imageData,width,height){
+const data=imageData.data;
+const tempData=new Uint8ClampedArray(data.length);
+for(let i=0;i<data.length;i++){
+tempData[i]=data[i];
+}
+for(let y=1;y<height-1;y++){
+for(let x=1;x<width-1;x++){
+const idx=(y*width+x)*4;
+const alpha=data[idx+3];
+if(alpha>0&&alpha<255){
+const neighbors=[
+(y*width+(x-1))*4,
+(y*width+(x+1))*4,
+((y-1)*width+x)*4,
+((y+1)*width+x)*4
+];
+let isEdge=false;
+for(const nIdx of neighbors){
+const nAlpha=data[nIdx+3];
+if(Math.abs(alpha-nAlpha)>30){
+isEdge=true;
+break;
+}
+}
+if(isEdge){
+let sumR=0,sumG=0,sumB=0,sumA=0,count=0;
+for(let ny=-1;ny<=1;ny++){
+for(let nx=-1;nx<=1;nx++){
+const nIdx=((y+ny)*width+(x+nx))*4;
+if(nIdx>=0&&nIdx<data.length){
+sumR+=data[nIdx];
+sumG+=data[nIdx+1];
+sumB+=data[nIdx+2];
+sumA+=data[nIdx+3];
+count++;
+}
+}
+}
+const blendFactor=0.5;
+tempData[idx]=Math.round(blendFactor*(sumR/count)+(1-blendFactor)*data[idx]);
+tempData[idx+1]=Math.round(blendFactor*(sumG/count)+(1-blendFactor)*data[idx+1]);
+tempData[idx+2]=Math.round(blendFactor*(sumB/count)+(1-blendFactor)*data[idx+2]);
+tempData[idx+3]=Math.round(blendFactor*(sumA/count)+(1-blendFactor)*data[idx+3]);
+}
+}
+}
+}
+for(let i=0;i<data.length;i++){
+data[i]=tempData[i];
+}
+}
+pointInTriangle(px,py,a,b,c){
+const area=0.5*(-b.y*c.x+a.y*(-b.x+c.x)+a.x*(b.y-c.y)+b.x*c.y);
+const s=1/(2*area)*(a.y*c.x-a.x*c.y+(c.y-a.y)*px+(a.x-c.x)*py);
+const t=1/(2*area)*(a.x*b.y-a.y*b.x+(a.y-b.y)*px+(b.x-a.x)*py);
+return s>=0&&t>=0&&1-s-t>=0;
+}
+getBarycentricCoordinates(px,py,x1,y1,x2,y2,x3,y3){
+const det=((y2-y3)*(x1-x3)+(x3-x2)*(y1-y3));
+const u=((y2-y3)*(px-x3)+(x3-x2)*(py-y3))/det;
+const v=((y3-y1)*(px-x3)+(x1-x3)*(py-y3))/det;
+const w=1-u-v;
+return{u,v,w};
+}
+handleMouseDown(e){
+const rect=this.controlCanvas.getBoundingClientRect();
+const x=e.clientX-rect.left;
+const y=e.clientY-rect.top;
+this.isDragging=true;
+this.lastX=x;
+this.lastY=y;
+if(this.activeTool==='pin'){
+this.pins=[];
+this.pins.push({x,y});
+this.drawControlLayer();
+}else if(this.activeTool==='drag'){
+this.findNearestPoint(x,y);
+}else if(this.activeTool==='move'){
+this.findNearestPin(x,y);
+}
+}
+handleMouseMove(e){
+if(!this.isDragging)return;
+const rect=this.controlCanvas.getBoundingClientRect();
+const x=e.clientX-rect.left;
+const y=e.clientY-rect.top;
+const dx=x-this.lastX;
+const dy=y-this.lastY;
+if(this.activeTool==='drag'&&this.activePin){
+this.deformMesh(this.activePin,dx,dy);
+}else if(this.activeTool==='move'&&this.activePin){
+this.activePin.x+=dx;
+this.activePin.y+=dy;
+this.drawControlLayer();
+}
+this.lastX=x;
+this.lastY=y;
+}
+handleMouseUp(){
+if(this.isDragging&&this.activeTool==='drag'){
+this.recalculateMeshAfterDeformation();
+}
+this.isDragging=false;
+this.activePin=null;
+this.dragPin=null;
+for(const triangle of this.mesh){
+triangle.isActive=false;
+}
+this.drawMesh();
+this.leftBottomMeshes = [];
+}
+recalculateMeshAfterDeformation(){
+for(const triangle of this.mesh){
+triangle.originalPoints=[];
+for(const point of triangle.points){
+triangle.originalPoints.push({x:point.x,y:point.y});
+}
+}
+// 変形状態を確定したので、isTransformedをtrueに設定
+this.isTransformed = true;
+}
+findNearestPin(x,y){
+const threshold=10;
+let nearest=null;
+let minDist=threshold;
+for(const pin of this.pins){
+const dist=Math.sqrt((pin.x-x)**2+(pin.y-y)**2);
+if(dist<minDist){
+minDist=dist;
+nearest=pin;
+}
+}
+this.activePin=nearest;
+}
+findNearestPoint(x,y){
+let nearestPoint=null;
+let minDist=30;
+for(const triangle of this.mesh){
+triangle.isActive=false;
+for(const point of triangle.points){
+let isPinned=false;
+for(const pin of this.pins){
+if(Math.abs(point.x-pin.x)<5&&Math.abs(point.y-pin.y)<5){
+isPinned=true;
+break;
+}
+}
+if(isPinned)continue;
+const mouseDist=Math.sqrt((point.x-x)**2+(point.y-y)**2);
+if(mouseDist<minDist){
+minDist=mouseDist;
+nearestPoint=point;
+}
+}
+}
+this.activePin=nearestPoint;
+if(this.activePin){
+this.dragPin=this.findNearestDragPin(x,y);
+if(this.dragPin){
+this.initialDragVector={
+x:this.activePin.x-this.dragPin.x,
+y:this.activePin.y-this.dragPin.y
+};
+this.findLeftBottomMeshes(this.activePin);
+this.markActiveTriangles();
+this.drawControlLayer();
+this.drawMesh();
+}
+}
+}
+findLeftBottomMeshes(clickPoint){
+this.leftBottomMeshes = [];
+const range = 5 * this.meshDensity;
+const clickCenter = {x: clickPoint.x, y: clickPoint.y};
+
+// 左下方向のメッシュを特定（問題が発生しやすい領域）
+for(const triangle of this.mesh) {
+const center = this.getTriangleCenter(triangle);
+const dist = Math.sqrt((center.x - clickCenter.x)**2 + (center.y - clickCenter.y)**2);
+if(dist <= range && center.x < clickCenter.x && center.y > clickCenter.y) {
+this.leftBottomMeshes.push(triangle);
+}
+}
+}
+findNearestDragPin(x,y){
+let nearestPin=null;
+let minDist=Infinity;
+for(const pin of this.pins){
+const dist=Math.sqrt((x-pin.x)**2+(y-pin.y)**2);
+if(dist<minDist){
+minDist=dist;
+nearestPin=pin;
+}
+}
+return nearestPin;
+}
+markActiveTriangles(){
+if(!this.activePin||!this.dragPin)return;
+const dragPin=this.dragPin;
+const dragVectorX=this.initialDragVector.x;
+const dragVectorY=this.initialDragVector.y;
+const dragVectorLength=Math.sqrt(dragVectorX**2+dragVectorY**2);
+const normalizedDragVectorX=dragVectorX/dragVectorLength;
+const normalizedDragVectorY=dragVectorY/dragVectorLength;
+for(const triangle of this.mesh){
+triangle.isActive=false;
+}
+const initialTriangles=[];
+for(const triangle of this.mesh){
+for(const p of triangle.points){
+if(p===this.activePin){
+triangle.isActive=true;
+initialTriangles.push(triangle);
+break;
+}
+}
+}
+if(initialTriangles.length===0)return;
+const triangleGraph=new Map();
+const triangleVisited=new Set();
+const triangleAdjacentMap=new Map();
+for(let i=0;i<this.mesh.length;i++){
+triangleGraph.set(i,[]);
+triangleAdjacentMap.set(i,[]);
+}
+for(let i=0;i<this.mesh.length;i++){
+const t1=this.mesh[i];
+let hasPinnedVertex=false;
+for(const p of t1.points){
+for(const pin of this.pins){
+if(pin!==dragPin&&Math.abs(p.x-pin.x)<5&&Math.abs(p.y-pin.y)<5){
+hasPinnedVertex=true;
+break;
+}
+}
+if(hasPinnedVertex)break;
+}
+if(hasPinnedVertex)continue;
+for(let j=i+1;j<this.mesh.length;j++){
+const t2=this.mesh[j];
+let hasPinnedVertex2=false;
+for(const p of t2.points){
+for(const pin of this.pins){
+if(pin!==dragPin&&Math.abs(p.x-pin.x)<5&&Math.abs(p.y-pin.y)<5){
+hasPinnedVertex2=true;
+break;
+}
+}
+if(hasPinnedVertex2)break;
+}
+if(hasPinnedVertex2)continue;
+const sharedVertices=this.getSharedVertices(t1,t2);
+if(sharedVertices>=2){
+triangleAdjacentMap.get(i).push(j);
+triangleAdjacentMap.get(j).push(i);
+if(this.isTriangleFullyTransparent(t1)&&this.isTriangleFullyTransparent(t2)){
+continue;
+}
+triangleGraph.get(i).push(j);
+triangleGraph.get(j).push(i);
+}
+}
+}
+const queue=[];
+for(const triangle of initialTriangles){
+const idx=this.mesh.indexOf(triangle);
+if(idx!==-1){
+queue.push(idx);
+triangleVisited.add(idx);
+}
+}
+while(queue.length>0){
+const currentIdx=queue.shift();
+const neighbors=triangleGraph.get(currentIdx)||[];
+for(const neighborIdx of neighbors){
+if(!triangleVisited.has(neighborIdx)){
+const neighborTriangle=this.mesh[neighborIdx];
+const centerNeighbor=this.getTriangleCenter(neighborTriangle);
+const vectorX=centerNeighbor.x-dragPin.x;
+const vectorY=centerNeighbor.y-dragPin.y;
+const dot=vectorX*normalizedDragVectorX+vectorY*normalizedDragVectorY;
+const hasVisibleContent=!this.isTriangleFullyTransparent(neighborTriangle);
+if(dot>0&&hasVisibleContent){
+this.mesh[neighborIdx].isActive=true;
+triangleVisited.add(neighborIdx);
+queue.push(neighborIdx);
+}
+}
+}
+}
+const additionalTriangles=new Set();
+for(const visitedIdx of triangleVisited){
+const adjacentTriangles=triangleAdjacentMap.get(visitedIdx)||[];
+for(const adjIdx of adjacentTriangles){
+if(!triangleVisited.has(adjIdx)){
+const adjTriangle=this.mesh[adjIdx];
+const centerAdj=this.getTriangleCenter(adjTriangle);
+const vectorX=centerAdj.x-dragPin.x;
+const vectorY=centerAdj.y-dragPin.y;
+const dot=vectorX*normalizedDragVectorX+vectorY*normalizedDragVectorY;
+if(dot>0){
+additionalTriangles.add(adjIdx);
+}
+}
+}
+}
+for(const adjIdx of additionalTriangles){
+this.mesh[adjIdx].isActive=true;
+triangleVisited.add(adjIdx);
+}
+
+// 左下メッシュのアクティブ状態を確認
+const activeLeftBottomCount = this.leftBottomMeshes.filter(m => m.isActive).length;
+if(activeLeftBottomCount < this.leftBottomMeshes.length) {
+  console.error(`左下メッシュの問題: ${this.leftBottomMeshes.length}個中${activeLeftBottomCount}個しかアクティブでない`);
+  
+  // 未アクティブ左下メッシュを特定
+  const inactiveLeftBottom = this.leftBottomMeshes.filter(m => !m.isActive);
+  if(inactiveLeftBottom.length > 0) {
+    console.error(`未アクティブ左下メッシュID: ${inactiveLeftBottom.map(m => m.id).join(', ')}`);
+  }
+}
+}
+isTriangleFullyTransparent(triangle){
+if(!this.imageData)return true;
+const width=this.imageData.width;
+const height=this.imageData.height;
+const data=this.imageData.data;
+const minX=Math.max(0,Math.floor(Math.min(triangle.points[0].x,triangle.points[1].x,triangle.points[2].x)));
+const maxX=Math.min(width-1,Math.ceil(Math.max(triangle.points[0].x,triangle.points[1].x,triangle.points[2].x)));
+const minY=Math.max(0,Math.floor(Math.min(triangle.points[0].y,triangle.points[1].y,triangle.points[2].y)));
+const maxY=Math.min(height-1,Math.ceil(Math.max(triangle.points[0].y,triangle.points[1].y,triangle.points[2].y)));
+const samplePoints=[];
+samplePoints.push(this.getTriangleCenter(triangle));
+for(const point of triangle.points){
+samplePoints.push({x:point.x,y:point.y});
+}
+samplePoints.push({
+x:(triangle.points[0].x+triangle.points[1].x)/2,
+y:(triangle.points[0].y+triangle.points[1].y)/2
+});
+samplePoints.push({
+x:(triangle.points[1].x+triangle.points[2].x)/2,
+y:(triangle.points[1].y+triangle.points[2].y)/2
+});
+samplePoints.push({
+x:(triangle.points[2].x+triangle.points[0].x)/2,
+y:(triangle.points[2].y+triangle.points[0].y)/2
+});
+for(const point of samplePoints){
+const x=Math.round(point.x);
+const y=Math.round(point.y);
+if(x>=0&&x<width&&y>=0&&y<height){
+if(this.pointInTriangle(x,y,triangle.points[0],triangle.points[1],triangle.points[2])){
+const idx=(y*width+x)*4;
+const alpha=data[idx+3];
+if(alpha>10){
+return false;
+}
+}
+}
+}
+for(let y=minY;y<=maxY;y+=Math.max(1,Math.floor((maxY-minY)/5))){
+for(let x=minX;x<=maxX;x+=Math.max(1,Math.floor((maxX-minX)/5))){
+if(this.pointInTriangle(x,y,triangle.points[0],triangle.points[1],triangle.points[2])){
+const idx=(y*width+x)*4;
+const alpha=data[idx+3];
+if(alpha>10){
+return false;
+}
+}
+}
+}
+return true;
+}
+getSharedVertices(t1,t2){
+let count=0;
+for(const p1 of t1.points){
+for(const p2 of t2.points){
+if(Math.abs(p1.x-p2.x)<1&&Math.abs(p1.y-p2.y)<1){
+count++;
+break;
+}
+}
+}
+return count;
+}
+getTriangleCenter(triangle){
+const x=(triangle.points[0].x+triangle.points[1].x+triangle.points[2].x)/3;
+const y=(triangle.points[0].y+triangle.points[1].y+triangle.points[2].y)/3;
+return{x,y};
+}
+hasTransparentPixelsBetween(x1,y1,x2,y2){
+if(!this.imageData)return false;
+const width=this.imageData.width;
+const height=this.imageData.height;
+const data=this.imageData.data;
+const distance=Math.sqrt((x2-x1)**2+(y2-y1)**2);
+const steps=Math.ceil(distance);
+for(let i=0;i<=steps;i++){
+const t=i/steps;
+const x=Math.round(x1+(x2-x1)*t);
+const y=Math.round(y1+(y2-y1)*t);
+if(x>=0&&x<width&&y>=0&&y<height){
+const idx=(y*width+x)*4;
+const alpha=data[idx+3];
+if(alpha<10){
+return true;
+}
+}
+}
+return false;
+}
+isPointOnNonTransparentPixel(x,y){
+for(const pixel of this.nonTransparentPixels){
+const dist=Math.sqrt((x-pixel.x)**2+(y-pixel.y)**2);
+if(dist<1.5){
+return true;
+}
+}
+return false;
+}
+deformMesh(point,dx,dy){
+if(!point)return;
+const originalX=point.x;
+const originalY=point.y;
+point.x+=dx;
+point.y+=dy;
+if(this.pins.length===0){
+for(const triangle of this.mesh){
+for(const p of triangle.points){
+if(p!==point){
+p.x+=dx;
+p.y+=dy;
+}
+}
+}
+this.renderWarpedImage();
+return;
+}
+const origAngle=Math.atan2(originalY-this.dragPin.y,originalX-this.dragPin.x);
+const newAngle=Math.atan2(point.y-this.dragPin.y,point.x-this.dragPin.x);
+const angleDiff=newAngle-origAngle;
+const origDist=Math.sqrt((originalX-this.dragPin.x)**2+(originalY-this.dragPin.y)**2);
+const newDist=Math.sqrt((point.x-this.dragPin.x)**2+(point.y-this.dragPin.y)**2);
+const scaleFactor=this.scaleEnabled?newDist/origDist:1.0;
+
+// 大きな角度変化が発生していないかチェック
+if(Math.abs(angleDiff * 180 / Math.PI) > 20) {
+  console.error(`警告: 大きな角度変化を検出: ${(angleDiff * 180 / Math.PI).toFixed(1)}度`);
+}
+
+const movingPoints=new Set();
+const targetMeshes=new Set();
+const pointToTriangles=new Map();
+const vertexConnections=new Map();
+movingPoints.add(point);
+for(let i=0;i<this.mesh.length;i++){
+const triangle=this.mesh[i];
+for(let j=0;j<3;j++){
+const p=triangle.points[j];
+if(!pointToTriangles.has(p)){
+pointToTriangles.set(p,[]);
+}
+pointToTriangles.get(p).push(i);
+}
+}
+for(let i=0;i<this.mesh.length;i++){
+const triangle=this.mesh[i];
+if(triangle.isActive){
+targetMeshes.add(i);
+for(let j=0;j<3;j++){
+const p=triangle.points[j];
+let isPinned=false;
+for(const pin of this.pins){
+if(Math.abs(p.x-pin.x)<5&&Math.abs(p.y-pin.y)<5){
+isPinned=true;
+break;
+}
+}
+if(!isPinned&&p!==point){
+const dist=Math.sqrt((p.x-this.dragPin.x)**2+(p.y-this.dragPin.y)**2);
+const angle=Math.atan2(p.y-this.dragPin.y,p.x-this.dragPin.x);
+const newPointAngle=angle+angleDiff;
+const newDist2=dist*scaleFactor;
+const oldX = p.x;
+const oldY = p.y;
+const newX = this.dragPin.x+Math.cos(newPointAngle)*newDist2;
+const newY = this.dragPin.y+Math.sin(newPointAngle)*newDist2;
+
+// 特に左下方向の頂点の変形問題検出
+const isLeftBottom = p.x < point.x && p.y > point.y;
+if(isLeftBottom) {
+  // 左下頂点の移動距離が極端に大きい場合（10px以上）
+  const moveDistance = Math.sqrt((newX-oldX)**2 + (newY-oldY)**2);
+  if(moveDistance > 20) {
+    console.error(`警告: 左下頂点の大きな移動: (${Math.round(oldX)},${Math.round(oldY)}) → (${Math.round(newX)},${Math.round(newY)}) 距離=${moveDistance.toFixed(1)}px`);
+    
+    // 変形強度を調整（移動を70%に制限）
+    // p.x = oldX + (newX - oldX) * 0.7;
+    // p.y = oldY + (newY - oldY) * 0.7;
+  } else {
+    p.x = newX;
+    p.y = newY;
+  }
+} else {
+  p.x = newX;
+  p.y = newY;
+}
+
+movingPoints.add(p);
+}
+}
+}
+}
+for(let i=0;i<this.mesh.length;i++){
+if(!targetMeshes.has(i))continue;
+const t1=this.mesh[i];
+for(const v1 of t1.points){
+if(!vertexConnections.has(v1)){
+vertexConnections.set(v1,new Set());
+}
+for(const v2 of t1.points){
+if(v1!==v2){
+vertexConnections.get(v1).add(v2);
+}
+}
+}
+}
+let gapMeshCounter = 0;
+for(let i=0;i<this.mesh.length;i++){
+if(targetMeshes.has(i))continue;
+const t2=this.mesh[i];
+let hasSharedVertex=false;
+let sharedVertices=[];
+let otherVertices=[];
+let activeNeighbors=[];
+for(const v of t2.points){
+let isShared=false;
+let closestMovingPoint = null;
+let minDist = this.gapThreshold;
+for(const movingPoint of movingPoints){
+const dist = Math.sqrt((v.x-movingPoint.x)**2+(v.y-movingPoint.y)**2);
+if(dist < minDist){
+isShared=true;
+minDist = dist;
+closestMovingPoint = movingPoint;
+}
+}
+if(isShared){
+hasSharedVertex=true;
+sharedVertices.push(v);
+activeNeighbors.push(closestMovingPoint);
+}else{
+otherVertices.push(v);
+}
+}
+if(hasSharedVertex&&sharedVertices.length<=2&&sharedVertices.length>0){
+targetMeshes.add(i);
+for(let j=0;j<sharedVertices.length;j++){
+const shared=sharedVertices[j];
+const active=activeNeighbors[j];
+if(this.leftBottomMeshes.includes(t2)) {
+  gapMeshCounter++;
+}
+shared.x=active.x;
+shared.y=active.y;
+movingPoints.add(shared);
+}
+}
+}
+
+// 左下メッシュのギャップ修正状況をログ
+if(this.leftBottomMeshes.length > 0) {
+  let leftBottomFixed = 0;
+  for(const mesh of this.leftBottomMeshes) {
+    if(targetMeshes.has(this.mesh.indexOf(mesh))) {
+      leftBottomFixed++;
+    }
+  }
+  if(leftBottomFixed < this.leftBottomMeshes.length) {
+    console.error(`左下メッシュ: ${this.leftBottomMeshes.length}個中${leftBottomFixed}個しか変形対象になっていない`);
+  }
+}
+
+const MAX_ITERATIONS=5;
+for(let iter=0;iter<MAX_ITERATIONS;iter++){
+let changed=false;
+let fixCount = 0;
+const edgesToFix=[];
+for(let i=0;i<this.mesh.length;i++){
+if(!targetMeshes.has(i))continue;
+const t1=this.mesh[i];
+for(let j=0;j<this.mesh.length;j++){
+if(i===j||targetMeshes.has(j))continue;
+const t2=this.mesh[j];
+let sharedEdge=null;
+let sharedCount=0;
+let fixPoint=null;
+let targetPoint=null;
+for(let a=0;a<3;a++){
+for(let b=0;b<3;b++){
+const p1=t1.points[a];
+const p2=t2.points[b];
+const dist = Math.sqrt((p1.x-p2.x)**2+(p1.y-p2.y)**2);
+if(dist < this.gapThreshold*1.5){
+sharedCount++;
+if(movingPoints.has(p1)&&!movingPoints.has(p2)){
+sharedEdge=[p1,p2];
+fixPoint=p2;
+targetPoint=p1;
+}
+}
+}
+}
+if(sharedCount>=1&&sharedEdge){
+let isPinned=false;
+for(const pin of this.pins){
+if(Math.abs(fixPoint.x-pin.x)<5&&Math.abs(fixPoint.y-pin.y)<5){
+isPinned=true;
+break;
+}
+}
+if(!isPinned){
+edgesToFix.push({source:targetPoint,target:fixPoint,triangleIdx:j});
+}
+}
+}
+}
+for(const{source,target,triangleIdx}of edgesToFix){
+const isLeftBottom = this.leftBottomMeshes.includes(this.mesh[triangleIdx]);
+if(isLeftBottom) {
+  fixCount++;
+}
+target.x=source.x;
+target.y=source.y;
+movingPoints.add(target);
+targetMeshes.add(triangleIdx);
+changed=true;
+}
+if(!changed)break;
+}
+this.drawControlLayer();
+this.drawMesh();
+this.renderWarpedImage();
+}
+}
+window.addEventListener('DOMContentLoaded',()=>{
+new PuppetWarp();
+});
+</script>
+</body>
+</html>

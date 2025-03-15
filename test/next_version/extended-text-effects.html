@@ -1,0 +1,435 @@
+<style>
+body{margin:0;padding:10px;background:#000}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px, 1fr));gap:10px}
+.item{background:#111;padding:5px;border-radius:4px}
+svg{width:100%;height:150px}
+</style>
+<div class="grid">
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="void-effect">
+<feTurbulence type="turbulence" baseFrequency="0.07" numOctaves="3"/>
+<feDisplacementMap in="SourceGraphic" scale="3"/>
+<feColorMatrix type="saturate" values="0"/>
+<feComponentTransfer>
+<feFuncR type="table" tableValues="1 0 1"/>
+<feFuncG type="table" tableValues="0 1 0"/>
+<feFuncB type="table" tableValues="1 0 1"/>
+</feComponentTransfer>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ff00ff" filter="url(#void-effect)">VOID</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="quantum">
+<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="5"/>
+<feColorMatrix values="0 1 0 0 0, 1 0 0 0 0, 0 0 1 0 0, 0 0 0 1 0"/>
+<feBlend mode="screen" in2="SourceGraphic"/>
+<feDisplacementMap in="SourceGraphic" scale="2"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#0fdfff" filter="url(#quantum)">QUANTUM</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="destroy">
+<feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2"/>
+<feDisplacementMap in="SourceGraphic" scale="5"/>
+<feGaussianBlur stdDeviation="0.5"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ff0000" filter="url(#destroy)">DESTROY</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<pattern id="ice" patternUnits="userSpaceOnUse" width="10" height="10">
+<path d="M0,5 L10,5 M5,0 L5,10" stroke="#aaf" stroke-width="0.5" opacity="0.5"/>
+</pattern>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="url(#ice)" stroke="#fff" stroke-width="0.5">FROZEN</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="rough">
+<feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"/>
+<feDisplacementMap in2="turbulence" in="SourceGraphic" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#fff" filter="url(#rough)">ROUGH</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<pattern id="stripe" patternUnits="userSpaceOnUse" width="4" height="4">
+<path d="M0,0 L4,4" stroke="#000" stroke-width="1"/>
+</pattern>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="url(#stripe)" stroke="#fff" stroke-width="0.5">STRIPE</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<pattern id="circuit" patternUnits="userSpaceOnUse" width="4" height="4">
+<path d="M0,2 L4,2 M2,0 L2,4" stroke="#00ff00" stroke-width="0.5"/>
+</pattern>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="url(#circuit)" stroke="#00ff00" stroke-width="0.5">CIRCUIT</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<linearGradient id="chrome" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" style="stop-color:#4285f4"/>
+<stop offset="25%" style="stop-color:#34a853"/>
+<stop offset="50%" style="stop-color:#fbbc05"/>
+<stop offset="75%" style="stop-color:#ea4335"/>
+<stop offset="100%" style="stop-color:#4285f4"/>
+</linearGradient>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="900" fill="url(#chrome)" stroke="white" stroke-width="0.3">CHROME</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="beast">
+<feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2"/>
+<feColorMatrix values="1 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 1 0"/>
+<feComposite operator="in" in2="SourceGraphic"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#cc0000" filter="url(#beast)">BEAST</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="crack">
+<feTurbulence type="turbulence" baseFrequency="0.1" numOctaves="7"/>
+<feDisplacementMap in="SourceGraphic" scale="10"/>
+<feColorMatrix values="2 -1 0 0 0, -1 2 -1 0 0, 0 -1 2 0 0, 0 0 0 0.5 0"/>
+<feMorphology operator="dilate" radius="0.5"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ff6600" filter="url(#crack)">CRACK</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="drain">
+<feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="8"/>
+<feColorMatrix values="0.3 0.3 0.3 0 0, 0.3 0.3 0.3 0 0, 0.3 0.3 0.3 0 0, 0 0 0 1 0"/>
+<feDisplacementMap in="SourceGraphic" scale="8"/>
+<feMorphology operator="erode" radius="0.3"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#cccccc" filter="url(#drain)">DRAIN</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="virus-corrupt">
+<feTurbulence type="turbulence" baseFrequency="0.4" numOctaves="3"/>
+<feDisplacementMap in="SourceGraphic" scale="5"/>
+<feColorMatrix values="1 0 0 1 0, 0 0 1 0 0, 0 1 0 0 0, 0 0 0 1 0"/>
+<feMorphology operator="erode" radius="0.5"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#00ff33" filter="url(#virus-corrupt)">VIRUS</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="warp">
+<feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="10"/>
+<feDisplacementMap in="SourceGraphic" scale="15"/>
+<feColorMatrix values="2 -1 0 0 0, -1 2 -1 0 0, 0 -1 2 0 0, 0 0 0 1 0"/>
+<feBlend mode="multiply" in2="SourceGraphic"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ff00aa" filter="url(#warp)">WARP</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="toxic">
+<feTurbulence type="fractalNoise" baseFrequency="0.03" seed="5" numOctaves="8"/>
+<feColorMatrix values="3 -1 0 0 0, 0 0 2 -0.5 0, -1 0 0 3 0, 0 0 0 1 0"/>
+<feComposite operator="arithmetic" k1="1.5" k2="-0.5" k3="0.5" k4="0"/>
+<feDisplacementMap in="SourceGraphic" scale="10"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ff00ff" filter="url(#toxic)">TOXIC</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="neon">
+<feGaussianBlur stdDeviation="0.8" result="blur"/>
+<feComposite in="SourceGraphic" in2="blur" operator="over"/>
+<feFlood flood-color="#00ffff" flood-opacity="0.7" result="glow"/>
+<feComposite in="glow" in2="blur" operator="in" result="softGlow"/>
+<feComposite in="softGlow" in2="SourceGraphic" operator="over"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff" filter="url(#neon)">NEON</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="fire">
+<feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="3" result="noise"/>
+<feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+<feComposite in="displaced" in2="noise" operator="arithmetic" k1="0.4" k2="0.4" k3="0.7" k4="0"/>
+<feFlood flood-color="#ff4500" result="flood1"/>
+<feFlood flood-color="#ffcc00" result="flood2"/>
+<feComposite in="flood1" in2="noise" operator="in" result="comp1"/>
+<feComposite in="flood2" in2="noise" operator="in" result="comp2"/>
+<feMerge>
+<feMergeNode in="comp1"/>
+<feMergeNode in="comp2"/>
+<feMergeNode in="displaced"/>
+</feMerge>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ff6600" filter="url(#fire)">FIRE</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="glitch">
+<feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise"/>
+<feColorMatrix in="noise" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="red"/>
+<feOffset in="red" dx="-2" dy="0" result="redOffset"/>
+<feColorMatrix in="noise" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="green"/>
+<feOffset in="green" dx="2" dy="0" result="greenOffset"/>
+<feColorMatrix in="noise" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="blue"/>
+<feOffset in="blue" dx="0" dy="0" result="blueOffset"/>
+<feBlend in="redOffset" in2="greenOffset" mode="screen" result="blend1"/>
+<feBlend in="blend1" in2="blueOffset" mode="screen"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff" filter="url(#glitch)">GLITCH</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="matrix">
+<feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="1" seed="1" result="noise"/>
+<feColorMatrix in="noise" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="greenNoise"/>
+<feComponentTransfer in="SourceGraphic" result="text">
+<feFuncR type="discrete" tableValues="0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1"/>
+<feFuncG type="discrete" tableValues="0 0.5 1"/>
+<feFuncB type="discrete" tableValues="0 0.1"/>
+</feComponentTransfer>
+<feComposite in="greenNoise" in2="text" operator="arithmetic" k1="1" k2="0" k3="0" k4="0"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#00ff00" filter="url(#matrix)">MATRIX</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="wave">
+<feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="1" seed="3" result="turbulence"/>
+<feDisplacementMap in="SourceGraphic" in2="turbulence" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#33ccff" filter="url(#wave)">WAVE</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="emboss">
+<feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"/>
+<feOffset in="blur" dx="1" dy="1" result="offsetBlur"/>
+<feSpecularLighting in="blur" surfaceScale="5" specularConstant="1" specularExponent="20" lighting-color="#ffffff" result="specLight">
+<fePointLight x="50" y="10" z="100"/>
+</feSpecularLighting>
+<feComposite in="specLight" in2="SourceGraphic" operator="in" result="specLightComp"/>
+<feComposite in="SourceGraphic" in2="specLightComp" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#888888" filter="url(#emboss)">EMBOSS</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#cccccc"/>
+<stop offset="20%" style="stop-color:#ffffff"/>
+<stop offset="40%" style="stop-color:#888888"/>
+<stop offset="60%" style="stop-color:#dddddd"/>
+<stop offset="80%" style="stop-color:#999999"/>
+<stop offset="100%" style="stop-color:#eeeeee"/>
+</linearGradient>
+<filter id="metallic">
+<feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+<feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.8" specularExponent="20" lighting-color="#white" result="specOut">
+<fePointLight x="50" y="0" z="200"/>
+</feSpecularLighting>
+<feComposite in="specOut" in2="SourceGraphic" operator="in" result="specOut2"/>
+<feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="url(#metal)" filter="url(#metallic)">METAL</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="glass">
+<feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blur"/>
+<feSpecularLighting in="blur" surfaceScale="5" specularConstant="1" specularExponent="10" lighting-color="#ffffff" result="specLight">
+<fePointLight x="50" y="10" z="100"/>
+</feSpecularLighting>
+<feComposite in="specLight" in2="SourceGraphic" operator="in" result="composite1"/>
+<feComposite in="composite1" in2="SourceGraphic" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="composite2"/>
+<feFlood flood-color="#88ccff" flood-opacity="0.3"/>
+<feComposite in2="composite2" operator="in"/>
+<feBlend in2="SourceGraphic" mode="normal"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#aaddff" filter="url(#glass)">GLASS</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="pixel">
+<feComponentTransfer>
+<feFuncR type="discrete" tableValues="0 0.25 0.5 0.75 1"/>
+<feFuncG type="discrete" tableValues="0 0.25 0.5 0.75 1"/>
+<feFuncB type="discrete" tableValues="0 0.25 0.5 0.75 1"/>
+</feComponentTransfer>
+<feMorphology operator="dilate" radius="0.5"/>
+<feDisplacementMap in="SourceGraphic" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#dd55ff" filter="url(#pixel)">PIXEL</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="cyber">
+<feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="10" result="noise"/>
+<feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displace"/>
+<feFlood flood-color="#00ffff" result="cyan"/>
+<feComposite in="cyan" in2="displace" operator="in" result="comp1"/>
+<feFlood flood-color="#ff00ff" result="magenta"/>
+<feOffset in="displace" dx="1" result="offset"/>
+<feComposite in="magenta" in2="offset" operator="in" result="comp2"/>
+<feBlend in="comp1" in2="comp2" mode="screen"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff" filter="url(#cyber)">CYBER</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="space">
+<feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="3" seed="5" result="noise"/>
+<feColorMatrix in="noise" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.1" result="cloudAlpha"/>
+<feFlood flood-color="#000033" result="flood"/>
+<feComposite in="flood" in2="cloudAlpha" operator="out" result="clouds"/>
+<feFlood flood-color="#ffffff" result="stars"/>
+<feComposite in="stars" in2="noise" operator="in" result="starField"/>
+<feBlend in="clouds" in2="starField" mode="lighten"/>
+<feComposite in2="SourceGraphic" operator="in"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff" filter="url(#space)">SPACE</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" style="stop-color:#ff0000"/>
+<stop offset="14%" style="stop-color:#ff7f00"/>
+<stop offset="28%" style="stop-color:#ffff00"/>
+<stop offset="42%" style="stop-color:#00ff00"/>
+<stop offset="57%" style="stop-color:#0000ff"/>
+<stop offset="71%" style="stop-color:#4b0082"/>
+<stop offset="85%" style="stop-color:#8f00ff"/>
+<stop offset="100%" style="stop-color:#ff0000"/>
+</linearGradient>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="url(#rainbow)">RAINBOW</text>
+</svg>
+</div>
+
+<div class="item">
+<svg viewBox="0 0 100 40">
+<defs>
+<filter id="electric">
+<feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" seed="5" result="noise"/>
+<feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" result="displace"/>
+<feGaussianBlur in="displace" stdDeviation="0.5" result="blur"/>
+<feFlood flood-color="#00ffff" flood-opacity="0.5" result="floodBlue"/>
+<feFlood flood-color="#ff00ff" flood-opacity="0.5" result="floodMagenta"/>
+<feComposite in="floodBlue" in2="blur" operator="in" result="compBlue"/>
+<feOffset in="compBlue" dx="-0.5" dy="0" result="offsetBlue"/>
+<feComposite in="floodMagenta" in2="blur" operator="in" result="compMagenta"/>
+<feOffset in="compMagenta" dx="0.5" dy="0" result="offsetMagenta"/>
+<feBlend in="offsetBlue" in2="offsetMagenta" mode="screen" result="blend"/>
+<feComposite in="blend" in2="displace" operator="over"/>
+</filter>
+</defs>
+<text x="50" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff" filter="url(#electric)">ELECTRIC</text>
+</svg>
+</div>
+
+</div>

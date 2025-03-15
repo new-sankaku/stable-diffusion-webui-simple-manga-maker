@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>パステルカラー画像変換</title>
+ <style>
+  body {
+   font-family: Arial, sans-serif;
+   text-align: center;
+   margin: 20px;
+  }
+  #canvasContainer {
+   margin-top: 20px;
+   border: 2px dashed #ccc;
+   padding: 20px;
+   display: inline-block;
+  }
+  #controlContainer {
+   margin-top: 10px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 20px;
+  }
+  #sliderContainer {
+   display: inline-block;
+  }
+  #rangeValue {
+   font-weight: bold;
+  }
+  .instructions {
+   margin-top: 10px;
+   color: #666;
+   font-size: 14px;
+  }
+  #applyButton {
+   background-color: #4CAF50;
+   border: none;
+   color: white;
+   padding: 10px 20px;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+   font-size: 16px;
+   margin: 4px 2px;
+   cursor: pointer;
+   border-radius: 4px;
+  }
+  #applyButton:hover {
+   background-color: #45a049;
+  }
+  #applyButton:disabled {
+   background-color: #cccccc;
+   cursor: not-allowed;
+  }
+ </style>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+<body>
+ <h1>画像をパステルカラーに変換</h1>
+ <input type="file" id="uploadImage" accept="image/*" multiple>
+ <div id="controlContainer">
+  <div id="sliderContainer">
+   減色の幅: <span id="rangeValue">30%</span><br>
+   <input type="range" id="saturationRange" min="0" max="100" value="30">
+  </div>
+  <button id="applyButton" disabled>適用する</button>
+ </div>
+ <div id="canvasContainer">
+  <canvas id="canvas"></canvas>
+ </div>
+ <div class="instructions">
+  <p>複数の画像をアップロードまたはドラッグ&ドロップできます。</p>
+  <p>画像を選択してスライダーで減色の強さを調整し、「適用する」ボタンを押すと処理が適用されます。</p>
+ </div>
+
+ <script>
+  const uploadImage = document.getElementById('uploadImage');
+  const canvasContainer = document.getElementById('canvasContainer');
+  const saturationRange = document.getElementById('saturationRange');
+  const rangeValue = document.getElementById('rangeValue');
+  const applyButton = document.getElementById('applyButton');
+  
+  let canvas = new fabric.Canvas('canvas', {
+   width: 800,
+   height: 600
+  });
+  
+  let imageObjects = new Map(); // 画像オブジェクトを保存するマップ
+  let activeObject = null; // 現在選択されているオブジェクト
+  let sliderTimer = null; // スライダー変更用タイマー
+  
+  uploadImage.addEventListener('change', function(event) {
+   const files = event.target.files;
+   if (files && files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+     loadImageFromFile(files[i]);
+    }
+   }
+  });
+  
+  canvasContainer.addEventListener('dragover', function(e) {
+   e.preventDefault();
+   e.stopPropagation();
+   this.style.border = '2px dashed #66f';
+  });
+  
+  canvasContainer.addEventListener('dragleave', function(e) {
+   e.preventDefault();
+   e.stopPropagation();
+   this.style.border = '2px dashed #ccc';
+  });
+  
+  canvasContainer.addEventListener('drop', function(e) {
+   e.preventDefault();
+   e.stopPropagation();
+   this.style.border = '2px dashed #ccc';
+   
+   const files = e.dataTransfer.files;
+   if (files && files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+     if (files[i].type.match('image.*')) {
+      loadImageFromFile(files[i]);
+     }
+    }
+   }
+  });
+  
+  saturationRange.addEventListener('input', function() {
+   rangeValue.textContent = `${saturationRange.value}%`;
+   
+   // 既存のタイマーをクリア
+   if (sliderTimer) {
+    clearTimeout(sliderTimer);
+   }
+   
+   // 100msec後に実行するタイマーを設定
+   sliderTimer = setTimeout(function() {
+    if (activeObject) {
+     // プレビュー用のオブジェクトを作成または更新
+     previewPastelEffect(activeObject);
+    }
+   }, 100);
+  });
+  
+  applyButton.addEventListener('click', function() {
+   if (activeObject) {
+    applyPastelEffect(activeObject);
+   }
+  });
+  
+  // キャンバスの選択イベントを監視
+  canvas.on('selection:created', function(e) {
+   handleSelectionChange(e);
+  });
+  
+  canvas.on('selection:updated', function(e) {
+   handleSelectionChange(e);
+  });
+  
+  canvas.on('selection:cleared', function() {
+   activeObject = null;
+   applyButton.disabled = true;
+  });
+  
+  function handleSelectionChange(e) {
+   activeObject = e.selected[0];
+   applyButton.disabled = !activeObject;
+   
+   // 選択した時に現在のスライダー値でプレビューを表示
+   if (activeObject) {
+    previewPastelEffect(activeObject);
+   }
+  }
+  
+  function loadImageFromFile(file) {
+   if (!file || !file.type.match('image.*')) return;
+   
+   const reader = new FileReader();
+   
+   reader.onload = function(e) {
+    fabric.Image.fromURL(e.target.result, function(img) {
+     const imageId = 'img_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+     
+     // 画像が大きすぎる場合はリサイズ
+     const maxSize = 400;
+     if (img.width > maxSize || img.height > maxSize) {
+      const scaleFactor = Math.min(maxSize / img.width, maxSize / img.height);
+      img.scale(scaleFactor);
+     }
+     
+     // 画像の元データを保存
+     const originalImgElement = img._element.cloneNode(true);
+     
+     img.set({
+      left: Math.random() * (canvas.width - img.width * img.scaleX),
+      top: Math.random() * (canvas.height - img.height * img.scaleY),
+      id: imageId,
+      hasControls: true,
+      hasBorders: true
+     });
+     
+     // マップに画像情報を保存
+     imageObjects.set(imageId, {
+      fabricObject: img,
+      originalElement: originalImgElement,
+      previewElement: null,
+      currentSaturation: saturationRange.value
+     });
+     
+     canvas.add(img);
+     canvas.setActiveObject(img);
+     activeObject = img;
+     applyButton.disabled = false;
+     
+     canvas.renderAll();
+     
+     // 初回のプレビューを表示
+     previewPastelEffect(img);
+    });
+   };
+   
+   reader.readAsDataURL(file);
+  }
+  
+  function previewPastelEffect(targetObject) {
+   if (!targetObject || !targetObject.id || !imageObjects.has(targetObject.id)) return;
+   
+   const imageInfo = imageObjects.get(targetObject.id);
+   const originalImg = imageInfo.originalElement;
+   
+   // 現在のスライダー値を保存
+   imageInfo.currentSaturation = saturationRange.value;
+   
+   let saturationReduction = saturationRange.value / 100;
+   
+   const tempCanvas = document.createElement('canvas');
+   const tempCtx = tempCanvas.getContext('2d');
+   tempCanvas.width = originalImg.naturalWidth;
+   tempCanvas.height = originalImg.naturalHeight;
+   tempCtx.drawImage(originalImg, 0, 0);
+   
+   const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+   const data = imageData.data;
+   
+   for (let i = 0; i < data.length; i += 4) {
+    let r = data[i];
+    let g = data[i + 1];
+    let b = data[i + 2];
+    
+    let hsl = rgbToHsl(r, g, b);
+    
+    hsl[1] *= saturationReduction;
+    hsl[2] = Math.min(1, hsl[2] + 0.2);
+    
+    let rgb = hslToRgb(hsl[0], hsl[1], hsl[2]);
+    data[i] = rgb[0];
+    data[i + 1] = rgb[1];
+    data[i + 2] = rgb[2];
+   }
+   
+   tempCtx.putImageData(imageData, 0, 0);
+   
+   // プレビュー画像を保存
+   const previewImg = new Image();
+   previewImg.src = tempCanvas.toDataURL();
+   imageInfo.previewElement = previewImg;
+   
+   // オブジェクトのソース画像を一時的に変更してプレビュー表示
+   targetObject.setSrc(tempCanvas.toDataURL(), function() {
+    canvas.renderAll();
+   });
+  }
+  
+  function applyPastelEffect(targetObject) {
+   if (!targetObject || !targetObject.id || !imageObjects.has(targetObject.id)) return;
+   
+   const imageInfo = imageObjects.get(targetObject.id);
+   
+   // プレビュー画像がない場合は処理をスキップ
+   if (!imageInfo.previewElement) {
+    return;
+   }
+   
+   // 現在の選択オブジェクトの位置、スケールなどの属性を保存
+   const left = targetObject.left;
+   const top = targetObject.top;
+   const scaleX = targetObject.scaleX;
+   const scaleY = targetObject.scaleY;
+   const angle = targetObject.angle;
+   const flipX = targetObject.flipX;
+   const flipY = targetObject.flipY;
+   
+   fabric.Image.fromURL(imageInfo.previewElement.src, function(processedImg) {
+    // 元の画像の属性を設定
+    processedImg.set({
+     left: left,
+     top: top,
+     scaleX: scaleX,
+     scaleY: scaleY,
+     angle: angle,
+     flipX: flipX,
+     flipY: flipY,
+     id: targetObject.id,
+     hasControls: true,
+     hasBorders: true
+    });
+    
+    // 元の画像を削除して新しい画像を追加
+    canvas.remove(targetObject);
+    canvas.add(processedImg);
+    canvas.setActiveObject(processedImg);
+    activeObject = processedImg;
+    
+    // マップの参照を更新
+    imageObjects.get(targetObject.id).fabricObject = processedImg;
+    imageObjects.get(targetObject.id).originalElement = imageInfo.previewElement;
+    imageObjects.get(targetObject.id).previewElement = null;
+    
+    canvas.renderAll();
+   });
+  }
+  
+  function rgbToHsl(r, g, b) {
+   r /= 255;
+   g /= 255;
+   b /= 255;
+   let max = Math.max(r, g, b);
+   let min = Math.min(r, g, b);
+   let h, s, l = (max + min) / 2;
+   
+   if (max == min) {
+    h = s = 0;
+   } else {
+    let d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+     case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+     case g: h = (b - r) / d + 2; break;
+     case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+   }
+   return [h, s, l];
+  }
+  
+  function hslToRgb(h, s, l) {
+   let r, g, b;
+   
+   if (s == 0) {
+    r = g = b = l;
+   } else {
+    function hue2rgb(p, q, t) {
+     if (t < 0) t += 1;
+     if (t > 1) t -= 1;
+     if (t < 1/6) return p + (q - p) * 6 * t;
+     if (t < 1/3) return q;
+     if (t < 1/2) return p + (q - p) * (2/3 - t) * 6;
+     return p;
+    }
+    
+    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    let p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+   }
+   
+   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+  }
+ </script>
+</body>
+</html>

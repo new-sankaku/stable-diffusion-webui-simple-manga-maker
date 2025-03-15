@@ -3,15 +3,14 @@
 .iph-container {
   display: flex;
   flex-direction: column;
-  height: 75vh;
+  height: 100%; 
   overflow: hidden;
   background-color: var(--background-color-A);
 }
 
 .iph-upper-section {
-  height: 55vh;
+  flex: 1 1 auto;
   display: flex;
-  flex: 1;
   border-bottom: 1px solid var(--fjm-border-color);
   overflow: hidden;
   min-height: 0;
@@ -100,20 +99,24 @@
 }
 
 #iph-image-container {
-  height: 140px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: var(--fjm-padding);
-  overflow-y: auto;
-  background-color: var(--background-color-A);
-  flex-shrink: 0;
+ height: auto;
+ max-height: 150px;
+ min-height: 150px;
+ flex: 0 0 auto;
+ display: flex;
+ flex-wrap: wrap;
+ align-items: flex-start;
+ justify-content: flex-start;
+ padding: var(--fjm-padding);
+ overflow-y: auto;
+ background-color: var(--background-color-A);
+ flex-shrink: 0;
 }
 
+
 #iph-image-container img {
-  width: 140px;
-  height: 140px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
   margin: 2px;
   border: var(--boader-color-1px-solid-B);
@@ -197,7 +200,6 @@
   margin: 0 5px;
 }
 
-/* Scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -234,19 +236,6 @@
   cursor: not-allowed;
 }
 
-.iph-image-container {
-  position: relative;
-  display: inline-block;
-  margin: 2px;
-}
-
-.iph-image-container img {
-  width: 140px;
-  height: 140px;
-  object-fit: contain;
-  border: var(--boader-color-1px-solid-B);
-  border-radius: 5px;
-}
 
 .iph-remove-tag {
   position: absolute;
@@ -364,4 +353,44 @@
 
 #iph-language-dropdown option {
   padding: 10px;
+}
+
+.flow-floating-window {
+ position: absolute;
+ background-color: var(--background-color-A);
+ border: 1px solid var(--fjm-border-color);
+ border-radius: 5px;
+ overflow: hidden;
+ z-index: 1000;
+ min-width: 300px;
+ min-height: 200px;
+ resize: both;
+}
+
+.flow-window-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ background-color: var(--background-color-B);
+ color: var(--text-color-A);
+ padding: 5px 10px;
+ cursor: move;
+ user-select: none;
+ height: 30px;
+}
+
+.flow-close-button {
+ cursor: var(--fjm-button-cursor);
+ font-size: 20px;
+ line-height: 20px;
+}
+
+.flow-resize-handle {
+ position: absolute;
+ width: 15px;
+ height: 15px;
+ right: 0;
+ bottom: 0;
+ cursor: nwse-resize;
+ background: linear-gradient(135deg, transparent 70%, var(--fjm-border-color) 70%);
 }

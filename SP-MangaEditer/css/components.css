@@ -241,8 +241,8 @@ button.selected {
 }
 
 
-
 #prompt-manager-area input[type="text"],
+#auto-generate-area input[type="text"],
 #text-preview-area input[type="text"],
 #shape-preview-area input[type="text"],
 #panel-manager-items input[type="text"],

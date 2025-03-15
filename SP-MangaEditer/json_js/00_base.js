@@ -1,108 +1,17 @@
 var base ={
 	"horizontalLine@100":{},
-	"Quality Prompt": {
-		"Resolution": {
-			"4k": 				{"url": "03_images/imgPromptHelper/4k.webp" },
-			"8k": 				{"url": "03_images/imgPromptHelper/8k.webp" },
-			"ultra highres": 	{"url": "03_images/imgPromptHelper/ultra-highres.webp" }
-		},
-		"Visual": {
-			"beautiful": 		{"url": "03_images/imgPromptHelper/beautiful.webp" },
-			"exquisite": 		{"url": "03_images/imgPromptHelper/exquisite.webp" },
-			"masterpiece": 		{"url": "03_images/imgPromptHelper/masterpiece.webp" }
-		},
-		"Quality": {
-			"best quality": 		{"url": "03_images/imgPromptHelper/best-quality.webp" },
-			"ultra quality": 		{"url": "03_images/imgPromptHelper/ultra-quality.webp" }
-		},
-		"Detail": {
-			"detailed": 			{"url": "03_images/imgPromptHelper/detailed.webp" },
-			"extremely detailed": 	{"url": "03_images/imgPromptHelper/extremely-detailed.webp" },
-			"finely detailed": 		{"url": "03_images/imgPromptHelper/finely-detailed.webp" },
-			"insanely detailed": 	{"url": "03_images/imgPromptHelper/insanely-detailed.webp" },
-			"ultra detailed": 		{"url": "03_images/imgPromptHelper/ultra-detailed.webp" }
-		}
-	},
-	"Negative Prompt": {
-		"Quality": {
-			"low quality": 	 {"url": "03_images/imgPromptHelper/low-quality.webp" },
-			"worst quality": {"url": "03_images/imgPromptHelper/worst-quality.webp" }
-		},
-		"Focus": {
-			"out of focus": {"url": "03_images/imgPromptHelper/out-of-focus.webp" }
-		},
-		"Visual": {
-			"ugly": 		{"url": "03_images/imgPromptHelper/ugly.webp" },
-			"bokeh": 		{"url": "03_images/imgPromptHelper/bokeh.webp" },
-			"ugly face": 	{"url": "03_images/imgPromptHelper/ugly-face.webp" },
-			"partial face": {"url": "03_images/imgPromptHelper/partial-face.webp" },
-			"partial head": {"url": "03_images/imgPromptHelper/partial-head.webp" },
-			"bad face": 	{"url": "03_images/imgPromptHelper/bad-face.webp" },
-			"cropped": 		{"url": "03_images/imgPromptHelper/cropped.webp" }
-		},
-		"Error": {
-			"error": 		{"url": "03_images/imgPromptHelper/error.webp" }
-		},
-		"Artifacts": {
-			"JPEG artifacts": 		{"url": "03_images/imgPromptHelper/JPEG-artifacts.webp" }
-		},
-		"Resolution": {
-			"low resolution": 		{"url": "03_images/imgPromptHelper/low-resolution.webp" }
-		},
-		"Anatomy": {
-			"bad anatomy": 			{"url": "03_images/imgPromptHelper/bad-anatomy.webp" },
-			"long neck": 			{"url": "03_images/imgPromptHelper/long-neck.webp" },
-			"deformed mutated disfigured": 		{"url": "03_images/imgPromptHelper/deformed-mutated-disfigured.webp" },
-			"missing arms": 		{"url": "03_images/imgPromptHelper/missing-arms.webp" },
-			"extra arms": 			{"url": "03_images/imgPromptHelper/extra-arms.webp" },
-			"mutated hands": 		{"url": "03_images/imgPromptHelper/mutated-hands.webp" },
-			"extra legs": 			{"url": "03_images/imgPromptHelper/extra-legs.webp" },
-			"bad hands": 			{"url": "03_images/imgPromptHelper/bad-hands.webp" },
-			"poorly drawn hands": 	{"url": "03_images/imgPromptHelper/poorly-drawn-hands.webp" },
-			"malformed hands": 		{"url": "03_images/imgPromptHelper/malformed-hands.webp" },
-			"missing limb": 		{"url": "03_images/imgPromptHelper/missing-limb.webp" },
-			"disconnected limbs": 	{"url": "03_images/imgPromptHelper/disconnected-limbs.webp" },
-			"extra fingers": 		{"url": "03_images/imgPromptHelper/extra-fingers.webp" },
-			"bad fingers": 			{"url": "03_images/imgPromptHelper/bad-fingers.webp" },
-			"liquid fingers": 		{"url": "03_images/imgPromptHelper/liquid-fingers.webp" },
-			"poorly drawn fingers": {"url": "03_images/imgPromptHelper/poorly-drawn-fingers.webp" },
-			"missing fingers": 		{"url": "03_images/imgPromptHelper/missing-fingers.webp" },
-			"extra digit": 			{"url": "03_images/imgPromptHelper/extra-digit.webp" },
-			"fewer digits": 		{"url": "03_images/imgPromptHelper/fewer-digits.webp" },
-			"deformed eyes": 		{"url": "03_images/imgPromptHelper/deformed-eyes.webp" }
-		},
-		"Content": {
-			"nsfw": 		{"url": "03_images/imgPromptHelper/nsfw.webp" }
-		},
-		"Text": {
-			"text": 			{"url": "03_images/imgPromptHelper/text.webp" },
-			"signature": 		{"url": "03_images/imgPromptHelper/signature.webp" },
-			"watermark": 		{"url": "03_images/imgPromptHelper/watermark.webp" },
-			"username": 		{"url": "03_images/imgPromptHelper/username.webp" },
-			"artist name": 		{"url": "03_images/imgPromptHelper/artist-name.webp" },
-			"stamp": 			{"url": "03_images/imgPromptHelper/stamp.webp" },
-			"title, subtitle": 	{"url": "03_images/imgPromptHelper/title-subtitle.webp" },
-			"date": 			{"url": "03_images/imgPromptHelper/date.webp" }
-		},
-		"Facial Expression": {
-			"blush": 			{"url": "03_images/imgPromptHelper/blush.webp" },
-			"open mouth": 		{"url": "03_images/imgPromptHelper/open-mouth.webp" },
-			"make-up": 			{"url": "03_images/imgPromptHelper/make-up.webp" },
-			"mascara": 			{"url": "03_images/imgPromptHelper/mascara.webp" },
-			"rouge": 			{"url": "03_images/imgPromptHelper/rouge.webp" },
-			"half-open eyes": 	{"url": "03_images/imgPromptHelper/half-open-eyes.webp" },
-			"closed mouth": 	{"url": "03_images/imgPromptHelper/closed-mouth.webp" }
-		},
-		"View": {
-			"multiple angle": 	{"url": "03_images/imgPromptHelper/multiple-angle.webp" },
-			"two shot": 		{"url": "03_images/imgPromptHelper/two-shot.webp" },
-			"split view": 		{"url": "03_images/imgPromptHelper/split-view.webp" },
-			"grid view": 		{"url": "03_images/imgPromptHelper/grid-view.webp" }
-		}
+	"Quality": {
+			"(masterpiece), best quality, high resolution,4K, 8K, HDR, artstyle, detailed eyes, ultra high res, highly detailed,  depth of field, exquisite details and textures, absurdes, ray tracing, immersive atmosphere, perspective, ":
+			{"url": "03_images/imgPromptHelper/low-quality.webp","alias": "SDXL Positive" },
+			"worst quality, bad quality, low quality, lowres,  bad anatomy, artistic error, extra digits, bad fingers, melting fingers,  jpeg artifacts, scan artifacts, light particles,  talking, english text, korean text, chinese text,  muscular, ":
+			{"url": "03_images/imgPromptHelper/low-quality.webp","alias": "SDXL Negative" },
+			"score_9, score_8_up, score_7_up, high res image, source_anime, ":
+			{"url": "03_images/imgPromptHelper/low-quality.webp","alias": "PONY Positive" },
+			"score_6, score_5, score_4, ugly face, low res, interlocked fingers, anatomically incorrect hands, bad anatomy, source_pony, source_cartoon, furry, censored,realistic, 3d, chibi,":
+			{"url": "03_images/imgPromptHelper/low-quality.webp","alias": "PONY Negative" }
 	},
 
 	"horizontalLine@99":{},
-	
 	"Hair": {
 		"Hair Style": {
 			"blunt bangs": 			{"url": "03_images/imgPromptHelper/hair_style/blunt-bangs.webp" },
@@ -697,8 +606,7 @@ var base ={
 	"Set Style": {
 		"Style": {
 			"manga, manga tone, cartoon tone, monochrome, comic, (rough, sketch:0.2),  lineart, line, (simple background:1.1), (white background:1.1), ": 
-			{"url": "03_images/imgPromptHelper/set/commic.webp",
-			 "alias": "commic" }
+			{"url": "03_images/imgPromptHelper/set/commic.webp","alias": "commic"}
 		}
 	}
 }

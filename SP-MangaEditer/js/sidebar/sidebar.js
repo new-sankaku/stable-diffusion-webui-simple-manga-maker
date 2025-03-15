@@ -18,6 +18,7 @@ function toggleVisibility(id) {
     $("svg-container-landscape").style.display = "none";
     $("panel-manager-area").style.display = "none";
     $("custom-panel-manager-area").style.display = "none";
+    $("auto-generate-area").style.display = "none";
     $("prompt-manager-area").style.display = "none";
     $("speech-bubble-area1").style.display = "none";
     $("speech-bubble-area2").style.display = "none";
@@ -25,6 +26,7 @@ function toggleVisibility(id) {
     $("text-area2").style.display = "none";
     $("tool-area").style.display = "none";
     $("manga-tone-area").style.display = "none";
+    $("rough-manager-area").style.display = "none";
     $("manga-effect-area").style.display = "none";
     $("shape-area").style.display = "none";
     $("controle-area").style.display = "none";

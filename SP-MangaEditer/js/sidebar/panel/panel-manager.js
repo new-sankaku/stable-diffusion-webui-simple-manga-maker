@@ -124,6 +124,7 @@ function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false, is
     }
 
     var targetFrameIndex = findTargetFrame(x, y);
+    console.log("targetFrameIndex", targetFrameIndex);
     if (targetFrameIndex !== -1) {
       var targetFrame = canvas.item(targetFrameIndex);
       var frameCenterX = targetFrame.left + (targetFrame.width * targetFrame.scaleX) / 2;
@@ -341,7 +342,7 @@ function loadSVGPlusReset(svgString, isLand=false) {
         obj.lockScalingY = false;
         obj.objectCaching = false;
         canvas.add(obj);
-        obj.selectable = false;
+        obj.selectable = true;
       }
     });
 

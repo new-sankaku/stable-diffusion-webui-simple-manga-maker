@@ -129,17 +129,22 @@ function moveSettings(img, poly) {
   };
 }
 
-function updateClipPath(imageObj, polygonObj) {
-  const matrix = polygonObj.calcTransformMatrix();
-  if(!polygonObj.points){
-    console.log("ERROR ERROR ERROR polygonObj.points", JSON.stringify(polygonObj.points));
+function updateClipPath(imageObj, fabricObj) {
+  if (fabricObj.type === 'path') {
+    updatePathClipPath(imageObj, fabricObj);
     return;
   }
 
-  const transformedPoints = polygonObj.points.map(point => {
+  const matrix = fabricObj.calcTransformMatrix();
+  if(!fabricObj.points){
+    console.log("ERROR ERROR ERROR polygonObj.points", JSON.stringify(fabricObj.points));
+    return;
+  }
+
+  const transformedPoints = fabricObj.points.map(point => {
       return fabric.util.transformPoint({
-          x: point.x - polygonObj.pathOffset.x,
-          y: point.y - polygonObj.pathOffset.y
+          x: point.x - fabricObj.pathOffset.x,
+          y: point.y - fabricObj.pathOffset.y
       }, matrix);
   });
 
@@ -148,10 +153,10 @@ function updateClipPath(imageObj, polygonObj) {
   });
 
   clipPath.set({
-    left:   clipPath.left + polygonObj.strokeWidth - (polygonObj.strokeWidth*0.5),
-    top:    clipPath.top  + polygonObj.strokeWidth - (polygonObj.strokeWidth*0.5),
-    scaleX: 1 - (polygonObj.strokeWidth) / (clipPath.width),
-    scaleY: 1 - (polygonObj.strokeWidth) / (clipPath.height),
+    left:   clipPath.left + fabricObj.strokeWidth - (fabricObj.strokeWidth*0.5),
+    top:    clipPath.top  + fabricObj.strokeWidth - (fabricObj.strokeWidth*0.5),
+    scaleX: 1 - (fabricObj.strokeWidth) / (clipPath.width),
+    scaleY: 1 - (fabricObj.strokeWidth) / (clipPath.height),
     absolutePositioned: true,
   });
 
@@ -161,6 +166,39 @@ function updateClipPath(imageObj, polygonObj) {
 
   imageObj.clipPath = clipPath;
 }
+
+function updatePathClipPath(imageObj, pathObj) {
+  const matrix = pathObj.calcTransformMatrix();
+  
+  const transformedPath = fabric.util.transformPath(
+    pathObj.path, 
+    fabric.util.multiplyTransformMatrices(
+      matrix,
+      [1, 0, 0, 1, -pathObj.pathOffset.x, -pathObj.pathOffset.y]
+    )
+  );
+  
+  const clipPath = new fabric.Path(transformedPath, {
+    absolutePositioned: true,
+    fill: true,
+    strokeWidth: 0
+  });
+
+  clipPath.set({
+    left:   clipPath.left + pathObj.strokeWidth - (pathObj.strokeWidth*0.5),
+    top:    clipPath.top  + pathObj.strokeWidth - (pathObj.strokeWidth*0.5),
+    scaleX: 1 - (pathObj.strokeWidth) / (clipPath.width),
+    scaleY: 1 - (pathObj.strokeWidth) / (clipPath.height),
+    absolutePositioned: true,
+  });
+
+  if (!clipPath.initial) {
+    saveInitialState(clipPath);
+  }
+
+  imageObj.clipPath = clipPath;
+}
+
 
 canvas.on("object:added", (e) => {
   if(canvas.isDrawingMode){

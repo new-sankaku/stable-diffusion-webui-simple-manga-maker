@@ -1,0 +1,36 @@
+body {
+ font-family: sans-serif;
+}
+
+canvas {
+ border: 1px solid #ddd;
+ border-radius: 4px;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+button {
+ margin: 5px;
+ cursor: pointer;
+}
+
+#toggle-rough {
+ background: #4CAF50;
+ color: white;
+ border: none;
+ padding: 6px 12px;
+ border-radius: 4px;
+}
+
+#reset {
+ background: #f44336;
+ color: white;
+ border: none;
+ padding: 6px 12px;
+ border-radius: 4px;
+}
+
+.param-group {
+ background: #f9f9f9;
+ padding: 8px;
+ border-radius: 4px;
+}

@@ -41,7 +41,7 @@ function isGroup(activeObject) {
 }
 
 function isShapes(activeObject) {
-  return (activeObject && ['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type));
+  return (activeObject && ['path', 'rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type));
 }
 
 function isPutImage(activeObject) {
@@ -81,6 +81,7 @@ function saveInitialState(obj) {
     canvasHeight: canvas.getHeight(),
   };
 
+  console.log("saveInitialState start");
   if (obj.clipPath) {
     obj.clipPath.initial = {
       left: obj.clipPath.left,

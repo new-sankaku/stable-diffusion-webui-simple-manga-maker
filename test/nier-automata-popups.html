@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+  :root {
+   --nier-bg: rgba(238, 238, 238, .97);
+   --nier-text: #454545;
+   --nier-border: #454545;
+   --nier-font: 'Noto Sans JP', sans-serif;
+   --animation-duration: 1.2s;
+  }
+
+  body {
+   margin: 0;
+   min-height: 100vh;
+   background: #111;
+   overflow-x: hidden;
+   font-family: var(--nier-font);
+  }
+
+  .popup-list {
+   position: fixed;
+   bottom: 20px;
+   left: 20px;
+   right: 20px;
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+   gap: 10px;
+   z-index: 100;
+  }
+
+  .achievement {
+   position: relative;
+   pointer-events: none;
+   min-width: 180px;
+   max-width: 200px;
+  }
+
+  .achievement.flying {
+   position: fixed;
+   animation: achievementOut 2.0s cubic-bezier(.2, .6, .3, 1);
+   animation-delay: var(--animation-duration);
+   animation-fill-mode: forwards;
+   z-index: 1000;
+  }
+
+  @keyframes achievementOut {
+   to {
+    opacity: 0;
+    top: 0;
+    left: 100%;
+   }
+  }
+
+  @keyframes floatIn {
+   0% {
+    transform: translateY(20px);
+    opacity: 0;
+   }
+   100% {
+    transform: translateY(0);
+    opacity: 1;
+   }
+  }
+  
+  .achievement.flying {
+   animation-name: achievementInOut;
+   animation-duration: 4s;
+   animation-timing-function: cubic-bezier(.2, .6, .3, 1);
+   animation-fill-mode: forwards;
+  }
+  
+  @keyframes achievementInOut {
+   0% {
+    transform: translateX(-300px);
+    opacity: 0;
+   }
+   15% {
+    transform: translateX(0);
+    opacity: 1;
+   }
+   85% {
+    transform: translateX(0);
+    opacity: 1;
+   }
+   100% {
+    transform: translateX(300px);
+    opacity: 0;
+   }
+  }
+  
+  .popup-list .achievement {
+   animation: floatIn 0.5s ease-out forwards;
+   opacity: 0;
+   transform: translateY(20px);
+  }
+  
+  .popup-list .achievement:nth-child(1) { animation-delay: 0.1s; }
+  .popup-list .achievement:nth-child(2) { animation-delay: 0.2s; }
+  .popup-list .achievement:nth-child(3) { animation-delay: 0.3s; }
+  .popup-list .achievement:nth-child(4) { animation-delay: 0.4s; }
+  .popup-list .achievement:nth-child(5) { animation-delay: 0.5s; }
+  .popup-list .achievement:nth-child(6) { animation-delay: 0.6s; }
+
+  /* 共通のニーアオートマタ基本スタイル */
+  .nier-base {
+   background: rgba(238, 238, 238, .97);
+   color: #454545;
+   padding: 12px 16px;
+   font-family: var(--nier-font);
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden;
+  }
+
+  .nier-base .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #666;
+  }
+
+  .nier-base .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px;
+  }
+
+  .nier-base .message::before {
+   content: '◈';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 10px;
+   opacity: .7;
+  }
+
+  /* ニーアオートマタ スタンダード */
+  .nier-standard {
+   background: rgba(238, 238, 238, .97);
+   color: #454545;
+   padding: 12px 16px;
+   font-family: var(--nier-font);
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden;
+  }
+
+  .nier-standard::before {
+   content: '';
+   position: absolute;
+   top: 3px;
+   left: 3px;
+   right: 3px;
+   bottom: 3px;
+   border: 1px solid #454545;
+  }
+
+  .nier-standard .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #666;
+  }
+
+  .nier-standard .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px;
+  }
+
+  .nier-standard .message::before {
+   content: '◈';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 10px;
+   opacity: .7;
+  }
+
+  /* ニーアオートマタ ポッドプログラム */
+  .nier-pod {
+   background: rgba(20, 20, 20, .9);
+   color: #e1e1e1;
+   padding: 12px 16px;
+   font-family: 'Share Tech Mono', monospace;
+   border: 1px solid rgba(255, 255, 255, .3);
+   position: relative;
+   overflow: hidden;
+  }
+
+  .nier-pod::before {
+   content: '';
+   position: absolute;
+   top: 3px;
+   left: 3px;
+   right: 3px;
+   bottom: 3px;
+   border: 1px dashed rgba(255, 255, 255, .2);
+  }
+
+  .nier-pod .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 400;
+   color: #aaa;
+  }
+
+  .nier-pod .message {
+   font-size: 12px;
+   position: relative;
+   padding-left: 18px;
+   font-family: 'Roboto Mono', monospace;
+  }
+
+  .nier-pod .message::before {
+   content: '>';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 12px;
+   opacity: .7;
+   color: #8fbc8f;
+  }
+
+  /* ニーアオートマタ ハッキング */
+  .nier-hacking {
+   background: rgba(0, 0, 0, .95);
+   color: #00ff00;
+   padding: 12px 16px;
+   font-family: 'Share Tech Mono', monospace;
+   border: 1px solid rgba(0, 255, 0, .4);
+   position: relative;
+   overflow: hidden;
+   box-shadow: 0 0 10px rgba(0, 255, 0, .2), inset 0 0 10px rgba(0, 255, 0, .1);
+  }
+
+  .nier-hacking::after {
+   content: '';
+   position: absolute;
+   inset: 0;
+   background: repeating-linear-gradient(transparent, transparent 2px, rgba(0, 255, 0, .05) 3px, transparent 3px);
+   animation: scan 10s linear infinite;
+   pointer-events: none;
+  }
+
+  @keyframes scan {
+   0% {
+    transform: translateY(-100%);
+   }
+   100% {
+    transform: translateY(100%);
+   }
+  }
+
+  .nier-hacking .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 400;
+   color: rgba(0, 255, 0, .7);
+  }
+
+  .nier-hacking .message {
+   font-size: 12px;
+   position: relative;
+   padding-left: 18px;
+  }
+
+  .nier-hacking .message::before {
+   content: '>';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 12px;
+   opacity: .7;
+  }
+
+  /* ニーアオートマタ 損傷 */
+  .nier-damaged {
+   background: rgba(238, 238, 238, .97);
+   color: #454545;
+   padding: 12px 16px;
+   font-family: var(--nier-font);
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden;
+   animation: glitch 0.3s infinite;
+  }
+
+  @keyframes glitch {
+   0% {
+    transform: translate(0);
+   }
+   20% {
+    transform: translate(-2px, 2px);
+   }
+   40% {
+    transform: translate(-2px, -2px);
+   }
+   60% {
+    transform: translate(2px, 2px);
+   }
+   80% {
+    transform: translate(2px, -2px);
+   }
+   100% {
+    transform: translate(0);
+   }
+  }
+
+  .nier-damaged::before {
+   content: '';
+   position: absolute;
+   top: 3px;
+   left: 3px;
+   right: 3px;
+   bottom: 3px;
+   border: 1px dashed #454545;
+  }
+
+  .nier-damaged::after {
+   content: 'ERROR';
+   position: absolute;
+   top: 5px;
+   right: 5px;
+   font-size: 8px;
+   color: #ff0000;
+   opacity: 0.8;
+  }
+
+  .nier-damaged .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #666;
+  }
+
+  .nier-damaged .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px;
+  }
+
+  .nier-damaged .message::before {
+   content: '!';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 10px;
+   color: #ff0000;
+  }
+
+  /* ニーアオートマタ 2B */
+  .nier-2b {
+   background: rgba(230, 230, 230, .97);
+   color: #333;
+   padding: 12px 16px;
+   font-family: var(--nier-font);
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden;
+   border-left: 3px solid #222;
+  }
+
+  .nier-2b::before {
+   content: '';
+   position: absolute;
+   top: 3px;
+   left: 3px;
+   right: 3px;
+   bottom: 3px;
+   border: 1px solid rgba(0, 0, 0, .2);
+  }
+
+  .nier-2b::after {
+   content: 'YoRHa No.2 Type B';
+   position: absolute;
+   bottom: 3px;
+   right: 5px;
+   font-size: 6px;
+   color: #888;
+  }
+
+  .nier-2b .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #666;
+  }
+
+  .nier-2b .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px;
+  }
+
+  .nier-2b .message::before {
+   content: '⚔';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 10px;
+   opacity: .7;
+  }
+
+  /* ニーアオートマタ 9S */
+  .nier-9s {
+   background: rgba(230, 230, 230, .97);
+   color: #333;
+   padding: 12px 16px;
+   font-family: var(--nier-font);
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden;
+   border-left: 3px solid #4169e1;
+  }
+
+  .nier-9s::before {
+   content: '';
+   position: absolute;
+   top: 3px;
+   left: 3px;
+   right: 3px;
+   bottom: 3px;
+   border: 1px solid rgba(65, 105, 225, .2);
+  }
+
+  .nier-9s::after {
+   content: 'YoRHa No.9 Type S';
+   position: absolute;
+   bottom: 3px;
+   right: 5px;
+   font-size: 6px;
+   color: #4169e1;
+   opacity: 0.7;
+  }
+
+  .nier-9s .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #4169e1;
+  }
+
+  .nier-9s .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px;
+  }
+
+  .nier-9s .message::before {
+   content: '✧';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 10px;
+   color: #4169e1;
+   opacity: .7;
+  }
+
+  /* ニーアオートマタ A2 */
+  .nier-a2 {
+   background: rgba(220, 220, 220, .9);
+   color: #333;
+   padding: 12px 16px;
+   font-family: var(--nier-font);
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden;
+   border-left: 3px solid #8b0000;
+  }
+
+  .nier-a2::before {
+   content: '';
+   position: absolute;
+   top: 3px;
+   left: 3px;
+   right: 3px;
+   bottom: 3px;
+   border: 1px dashed rgba(139, 0, 0, .3);
+  }
+
+  .nier-a2::after {
+   content: 'YoRHa Type A No.2';
+   position: absolute;
+   bottom: 3px;
+   right: 5px;
+   font-size: 6px;
+   color: #8b0000;
+   opacity: 0.7;
+  }
+
+  .nier-a2 .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #8b0000;
+  }
+
+  .nier-a2 .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px;
+   font-style: italic;
+  }
+
+  .nier-a2 .message::before {
+   content: '†';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 12px;
+   color: #8b0000;
+   opacity: .7;
+  }
+
+  /* ニーアオートマタ エミール */
+  .nier-emil {
+   background: #000;
+   color: #fff;
+   padding: 12px 16px;
+   font-family: var(--nier-font);
+   font-weight: 300;
+   letter-spacing: 1px;
+   position: relative;
+   overflow: hidden;
+   border: 2px solid #ffd700;
+  }
+
+  .nier-emil::before {
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+  }
+
+  .nier-emil .title {
+   font-size: 9px;
+   text-transform: uppercase;
+   margin-bottom: 4px;
+   font-weight: 500;
+   color: #ffd700;
+  }
+
+  .nier-emil .message {
+   font-size: 13px;
+   position: relative;
+   padding-left: 18px;
+  }
+
+  .nier-emil .message::before {
+   content: '☺';
+   position: absolute;
+   left: 0;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 12px;
+   color: #ffd700;
+  }
+ </style>
+</head>
+
+<body>
+ <div class="popup-list"></div>
+ <script>
+  // ニーアオートマタのさまざまなポップアップデザイン
+  const nierPopups = [
+   { c: 'nier-standard', t: 'System Message', m: '標準ユニットインターフェース' },
+   { c: 'nier-pod', t: 'Pod Program', m: 'ポッドプログラム実行中' },
+   { c: 'nier-hacking', t: 'Hacking Mode', m: 'ハッキングモード起動中' },
+   { c: 'nier-damaged', t: 'System Damaged', m: 'ユニット損傷 - 修復推奨' },
+   { c: 'nier-2b', t: 'Combat Data', m: '2B - 戦闘データログ' },
+   { c: 'nier-9s', t: 'Scanner Alert', m: '9S - 異常データ検出' },
+   { c: 'nier-a2', t: 'Rogue Signal', m: 'A2 - バンカー通信拒否' },
+   { c: 'nier-emil', t: 'Shop Update', m: 'エミール商店アイテム追加' }
+  ]
+  
+  // ポップアップを表示領域に追加
+  nierPopups.forEach(popup => {
+   const achievement = document.createElement('div')
+   achievement.className = `achievement ${popup.c}`
+   achievement.innerHTML = `<div class="title">${popup.t}</div><div class="message">${popup.m}</div>`
+   document.querySelector('.popup-list').appendChild(achievement)
+  })
+  
+  // クリック時のポップアップ表示処理
+  let index = 0
+  const showPopup = (options = {}) => {
+   const popup = nierPopups[index]
+   index = (index + 1) % nierPopups.length
+   
+   const achievement = document.createElement('div')
+   achievement.className = `achievement flying ${popup.c}`
+   achievement.style.left = options.x + 'px'
+   achievement.style.top = options.y + 'px'
+   achievement.innerHTML = `<div class="title">${popup.t}</div><div class="message">${popup.m}</div>`
+   document.body.appendChild(achievement)
+   
+   achievement.addEventListener('animationend', () => achievement.remove())
+  }
+  
+  // クリックイベント
+  document.addEventListener('click', e => showPopup({ x: e.pageX, y: e.pageY }))
+  
+  // デモのための自動ポップアップ
+  const autoPopup = () => {
+   const x = Math.random() * (window.innerWidth - 200) + 100
+   const y = Math.random() * (window.innerHeight - 200) + 100
+   showPopup({ x, y })
+   setTimeout(autoPopup, 3000)
+  }
+  
+  // 自動ポップアップの開始
+  setTimeout(autoPopup, 1500)
+ </script>
+</body>
+
+</html>

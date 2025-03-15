@@ -147,6 +147,7 @@ function addToCanvas(iconURL, iconName) {
 
           const serializer = new XMLSerializer();
           const newSvgContent = serializer.serializeToString(svgElement);
+          console.log("newSvgContent", newSvgContent);
 
           // Add to Fabric.js canvas
           fabric.loadSVGFromString(newSvgContent, function (objects, options) {
@@ -161,7 +162,8 @@ function addToCanvas(iconURL, iconName) {
                       offsetY: shadowOffsetY
                   }),
                   isIcon: true,
-                  name: iconName
+                  name: iconName,
+                  originalSvg: newSvgContent
               });
               obj.scaleToWidth(50);
               canvas.setActiveObject(obj);

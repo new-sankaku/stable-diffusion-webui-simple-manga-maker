@@ -2,126 +2,296 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Fabric.js and Rough.js on Same Canvas</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script>
-    <script src="roughHelper.js"></script>
-    <style>
-        .control-panel {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-        }
+ <meta charset="UTF-8">
+ <title>Fabric.js and Rough.js on Same Canvas</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/3.1.0/rough.js"></script>
+ <style>
+  .control-panel {
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 10px;
+  }
 
-        .control-panel label {
-            margin-bottom: 5px;
-        }
+  .control-panel label {
+   margin-bottom: 5px;
+  }
 
-        .control-panel span {
-            margin-left: 10px;
-        }
+  .control-panel span {
+   margin-left: 10px;
+  }
 
-        .control-panel .parameter-group {
-            display: none;
-        }
-    </style>
+  .control-panel .parameter-group {
+   display: none;
+  }
+ </style>
 </head>
 
 <body>
-    <div class="control-panel">
-        <label>Roughness: <input type="range" id="roughness" min="0" max="1.0" step="0.01" value="0.5"><span
-                id="roughnessValue">1</span></label>
-        <label>Bowing: <input type="range" id="bowing" min="0" max="10" step="0.1" value="1"><span
-                id="bowingValue">1</span></label>
-        <label>Stroke Color: <input type="color" id="stroke" value="#000000"></label>
-        <label>Stroke Width: <input type="range" id="strokeWidth" min="0" max="2" step="0.1" value="0.1"><span
-                id="strokeWidthValue">1</span></label>
-        <label>Fill Color: <input type="color" id="fill" value="#ffffff"></label>
-        <label>Fill Style:
-            <select id="fillStyle">
-                <option value="hachure">Hachure</option>
-                <option value="solid">Solid</option>
-                <option value="zigzag">Zigzag</option>
-                <option value="cross-hatch">Cross-hatch</option>
-                <option value="dots">Dots</option>
-                <option value="dashed">Dashed</option>
-                <option value="zigzag-line">Zigzag-line</option>
-            </select>
-        </label>
-        <label>Fill Weight: <input type="range" id="fillWeight" min="0" max="10" step="0.1" value="1"><span
-                id="fillWeightValue">1</span></label>
-        <label>Hachure Angle: <input type="range" id="hachureAngle" min="-180" max="180" step="1" value="-41"><span
-                id="hachureAngleValue">-41</span></label>
-        <label>Hachure Gap: <input type="range" id="hachureGap" min="0" max="20" step="0.01" value="2"><span
-                id="hachureGapValue">4</span></label>
-        <label>Curve Step Count: <input type="range" id="curveStepCount" min="1" max="20" step="1" value="9"><span
-                id="curveStepCountValue">9</span></label>
-        <label>Simplification: <input type="range" id="simplification" min="0" max="1" step="0.01" value="0"><span
-                id="simplificationValue">0</span></label>
-        <label>Dash Offset: <input type="range" id="dashOffset" min="0.1" max="10" step="0.1" value="0.1"><span
-                id="dashOffsetValue">0</span></label>
-        <label>Dash Gap: <input type="range" id="dashGap" min="0.1" max="10" step="0.1" value="0.1"><span
-                id="dashGapValue">0</span></label>
-        <label>Zigzag Offset: <input type="range" id="zigzagOffset" min="0.1" max="10" step="0.1" value="0.1"><span
-                id="zigzagOffsetValue">0</span></label>
-    </div>
-    <canvas id="myCanvas" width="800" height="600"></canvas>
-    <script>
-        const fabricCanvas = new fabric.Canvas('myCanvas');
-        const roughCanvas = rough.canvas(document.createElement('canvas'));
+ <div class="control-panel">
+  <label>Roughness: <input type="range" id="roughness" min="0" max="1.0" step="0.01" value="0.5"><span
+    id="roughnessValue">1</span></label>
+  <label>Bowing: <input type="range" id="bowing" min="0" max="10" step="0.1" value="1"><span
+    id="bowingValue">1</span></label>
+  <label>Stroke Color: <input type="color" id="stroke" value="#000000"></label>
+  <label>Stroke Width: <input type="range" id="strokeWidth" min="0" max="2" step="0.1" value="0.1"><span
+    id="strokeWidthValue">1</span></label>
+  <label>Fill Color: <input type="color" id="fill" value="#ffffff"></label>
+  <label>Fill Style:
+   <select id="fillStyle">
+    <option value="hachure">Hachure</option>
+    <option value="solid">Solid</option>
+    <option value="zigzag">Zigzag</option>
+    <option value="cross-hatch">Cross-hatch</option>
+    <option value="dots">Dots</option>
+    <option value="dashed">Dashed</option>
+    <option value="zigzag-line">Zigzag-line</option>
+   </select>
+  </label>
+  <label>Fill Weight: <input type="range" id="fillWeight" min="0" max="10" step="0.1" value="1"><span
+    id="fillWeightValue">1</span></label>
+  <label>Hachure Angle: <input type="range" id="hachureAngle" min="-180" max="180" step="1" value="-41"><span
+    id="hachureAngleValue">-41</span></label>
+  <label>Hachure Gap: <input type="range" id="hachureGap" min="0" max="20" step="0.01" value="2"><span
+    id="hachureGapValue">4</span></label>
+  <label>Curve Step Count: <input type="range" id="curveStepCount" min="1" max="20" step="1" value="9"><span
+    id="curveStepCountValue">9</span></label>
+  <label>Simplification: <input type="range" id="simplification" min="0" max="1" step="0.01" value="0"><span
+    id="simplificationValue">0</span></label>
+  <label>Dash Offset: <input type="range" id="dashOffset" min="0.1" max="10" step="0.1" value="0.1"><span
+    id="dashOffsetValue">0</span></label>
+  <label>Dash Gap: <input type="range" id="dashGap" min="0.1" max="10" step="0.1" value="0.1"><span
+    id="dashGapValue">0</span></label>
+  <label>Zigzag Offset: <input type="range" id="zigzagOffset" min="0.1" max="10" step="0.1" value="0.1"><span
+    id="zigzagOffsetValue">0</span></label>
+ </div>
+ <canvas id="myCanvas" width="800" height="600"></canvas>
+ <script>
+  function getRoughValue() {
+   const roughOptions = {
+    roughness: parseFloat(document.getElementById('roughness').value),
+    bowing: parseFloat(document.getElementById('bowing').value),
+    stroke: document.getElementById('stroke').value,
+    strokeWidth: parseFloat(document.getElementById('strokeWidth').value),
+    fill: document.getElementById('fill').value === '#ffffff' ? 'none' : document.getElementById('fill').value,
+    fillStyle: document.getElementById('fillStyle').value,
+    fillWeight: parseFloat(document.getElementById('fillWeight').value),
+    hachureAngle: parseFloat(document.getElementById('hachureAngle').value),
+    hachureGap: parseFloat(document.getElementById('hachureGap').value),
+    curveStepCount: parseFloat(document.getElementById('curveStepCount').value),
+    simplification: parseFloat(document.getElementById('simplification').value),
+    dashOffset: parseFloat(document.getElementById('dashOffset').value),
+    dashGap: parseFloat(document.getElementById('dashGap').value),
+    zigzagOffset: parseFloat(document.getElementById('zigzagOffset').value),
+   };
 
-        const svgData = `
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#5f6368">
-                <path d="M0 0h24v24H0V0z" fill="none"/>
-                <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/>
-            </svg>
-        `;
+   return roughOptions;
+  }
 
-        let currentRoughSvgFabricPath;
+  function setRoughValueText(roughOptions) {
+   document.getElementById('roughnessValue').textContent = roughOptions.roughness;
+   document.getElementById('bowingValue').textContent = roughOptions.bowing;
+   document.getElementById('strokeWidthValue').textContent = roughOptions.strokeWidth;
+   document.getElementById('fillWeightValue').textContent = roughOptions.fillWeight;
+   document.getElementById('hachureAngleValue').textContent = roughOptions.hachureAngle;
+   document.getElementById('hachureGapValue').textContent = roughOptions.hachureGap;
+   document.getElementById('curveStepCountValue').textContent = roughOptions.curveStepCount;
+   document.getElementById('simplificationValue').textContent = roughOptions.simplification;
+   document.getElementById('dashOffsetValue').textContent = roughOptions.dashOffset;
+   document.getElementById('dashGapValue').textContent = roughOptions.dashGap;
+   document.getElementById('zigzagOffsetValue').textContent = roughOptions.zigzagOffset;
+  }
 
-        function drawRoughIconSvg() {
-            if (currentRoughSvgFabricPath) {
-                fabricCanvas.remove(currentRoughSvgFabricPath);
-            }
+  function roughPath2FabrcPath(roughPath) {
+   let strokePath = '';
+   let fillPath = '';
 
-            const roughOptions = getRoughValue();
-            setRoughValueText(roughOptions);
+   roughPath.sets.forEach((set, setIndex) => {
+    const isStrokeSet = setIndex === 0;
+    let currentPath = '';
 
-            fabric.loadSVGFromString(svgData, (objects, options) => {
-                const paths = objects.filter(obj => {
-                    const isTransparent = (obj.fill === 'none' || obj.fill === '') && !obj.stroke;
-                    return !isTransparent;
-                });
+    set.ops.forEach(op => {
+     switch (op.op) {
+      case 'move':
+       currentPath += `M ${op.data[0]} ${op.data[1]} `;
+       break;
+      case 'lineTo':
+       currentPath += `L ${op.data[0]} ${op.data[1]} `;
+       break;
+      case 'bcurveTo':
+       currentPath += `C ${op.data[0]} ${op.data[1]}, ${op.data[2]} ${op.data[3]}, ${op.data[4]} ${op.data[5]} `;
+       break;
+      case 'qcurveTo':
+       currentPath += `Q ${op.data[0]} ${op.data[1]}, ${op.data[2]} ${op.data[3]} `;
+       break;
+      case 'arcTo':
+       currentPath += `A ${op.data[0]} ${op.data[1]}, ${op.data[2]}, ${op.data[3]}, ${op.data[4]}, ${op.data[5]} ${op.data[6]} `;
+       break;
+      case 'close':
+       currentPath += 'Z ';
+       break;
+     }
+    });
 
-                const pathData = paths.map(obj => obj.path.map(segment => segment.join(' ')).join(' ')).join(' ');
-                const roughSvgPath = roughCanvas.generator.path(pathData, roughOptions);
+    console.log(`Set ${setIndex} path:`, currentPath);
 
-                const roughSvgPathData = roughPath2FabrcPath(roughSvgPath);
+    if (isStrokeSet) {
+     strokePath = currentPath;
+    } else {
+     fillPath = currentPath;
+    }
+   });
 
-                currentRoughSvgFabricPath = new fabric.Path(roughSvgPathData, {
-                    left: 100,
-                    top: 100,
-                    scaleX: 10,
-                    scaleY: 10,
-                    isPanel: true,
+   return strokePath + fillPath;
+  }
 
-                    stroke: roughOptions.stroke,
-                    strokeWidth: roughOptions.strokeWidth,
-                    fill: roughOptions.fill
-                });
+  const fabricCanvas = new fabric.Canvas('myCanvas');
+  const roughCanvas = rough.canvas(document.createElement('canvas'));
 
-                fabricCanvas.add(currentRoughSvgFabricPath);
-                fabricCanvas.renderAll();
-            });
-        }
+  const svgData = `
+   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#5f6368">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/>
+   </svg>
+  `;
 
-        document.querySelectorAll('.control-panel input, .control-panel select').forEach(input => {
-            input.addEventListener('input', drawRoughIconSvg);
-        });
+  let currentRoughSvgFabricPath;
+  let fillPathObject;
+  let strokePathObject;
 
-        drawRoughIconSvg();
-    </script>
+  function drawRoughIconSvg() {
+   if (currentRoughSvgFabricPath) {
+    fabricCanvas.remove(currentRoughSvgFabricPath);
+   }
+
+   if (fillPathObject) {
+    fabricCanvas.remove(fillPathObject);
+   }
+
+   if (strokePathObject) {
+    fabricCanvas.remove(strokePathObject);
+   }
+
+   const roughOptions = getRoughValue();
+   setRoughValueText(roughOptions);
+
+   console.log("svgData:", svgData);
+   fabric.loadSVGFromString(svgData, (objects, options) => {
+    const paths = objects.filter(obj => {
+     const isTransparent = (obj.fill === 'none' || obj.fill === '') && !obj.stroke;
+     return !isTransparent;
+    });
+
+    console.log("paths:", paths);
+
+    const pathData = paths.map(obj => obj.path.map(segment => segment.join(' ')).join(' ')).join(' ');
+    const roughSvgPath = roughCanvas.generator.path(pathData, roughOptions);
+
+    console.log("pathData:", pathData);
+    console.log("roughSvgPath:", roughSvgPath);
+    console.log("roughSvgPath.sets:", roughSvgPath.sets);
+
+    if (roughSvgPath.sets.length >= 2) {
+     const strokeSet = roughSvgPath.sets[0];
+     let strokePathData = '';
+     strokeSet.ops.forEach(op => {
+      switch (op.op) {
+       case 'move':
+        strokePathData += `M ${op.data[0]} ${op.data[1]} `;
+        break;
+       case 'lineTo':
+        strokePathData += `L ${op.data[0]} ${op.data[1]} `;
+        break;
+       case 'bcurveTo':
+        strokePathData += `C ${op.data[0]} ${op.data[1]}, ${op.data[2]} ${op.data[3]}, ${op.data[4]} ${op.data[5]} `;
+        break;
+       case 'qcurveTo':
+        strokePathData += `Q ${op.data[0]} ${op.data[1]}, ${op.data[2]} ${op.data[3]} `;
+        break;
+       case 'close':
+        strokePathData += 'Z ';
+        break;
+      }
+     });
+
+     const fillSet = roughSvgPath.sets[1];
+     let fillPathData = '';
+     fillSet.ops.forEach(op => {
+      switch (op.op) {
+       case 'move':
+        fillPathData += `M ${op.data[0]} ${op.data[1]} `;
+        break;
+       case 'lineTo':
+        fillPathData += `L ${op.data[0]} ${op.data[1]} `;
+        break;
+       case 'bcurveTo':
+        fillPathData += `C ${op.data[0]} ${op.data[1]}, ${op.data[2]} ${op.data[3]}, ${op.data[4]} ${op.data[5]} `;
+        break;
+       case 'qcurveTo':
+        fillPathData += `Q ${op.data[0]} ${op.data[1]}, ${op.data[2]} ${op.data[3]} `;
+        break;
+       case 'close':
+        fillPathData += 'Z ';
+        break;
+      }
+     });
+
+     console.log("Stroke path data:", strokePathData);
+     console.log("Fill path data:", fillPathData);
+
+     strokePathObject = new fabric.Path(strokePathData, {
+      left: 0,
+      top: 0,
+      scaleX: 10,
+      scaleY: 10,
+      stroke: roughOptions.stroke,
+      strokeWidth: roughOptions.strokeWidth,
+      fill: 'transparent'
+     });
+
+     fillPathObject = new fabric.Path(fillPathData, {
+      left: 0,
+      top: 0,
+      scaleX: 10,
+      scaleY: 10,
+      stroke: 'transparent',
+      fill: roughOptions.fill
+     });
+
+     const group = new fabric.Group([strokePathObject, fillPathObject], {
+      left: 100,
+      top: 100
+     });
+     
+     fabricCanvas.add(group);
+    } else {
+     const roughSvgPathData = roughPath2FabrcPath(roughSvgPath);
+     console.log("roughSvgPathData:", roughSvgPathData);
+
+     currentRoughSvgFabricPath = new fabric.Path(roughSvgPathData, {
+      left: 100,
+      top: 100,
+      scaleX: 10,
+      scaleY: 10,
+      isPanel: true,
+      stroke: roughOptions.stroke,
+      strokeWidth: roughOptions.strokeWidth,
+      fill: roughOptions.fill
+     });
+
+     fabricCanvas.add(currentRoughSvgFabricPath);
+    }
+
+    fabricCanvas.renderAll();
+   });
+  }
+
+  document.querySelectorAll('.control-panel input, .control-panel select').forEach(input => {
+   input.addEventListener('input', drawRoughIconSvg);
+  });
+
+  drawRoughIconSvg();
+ </script>
 </body>
 
 </html>

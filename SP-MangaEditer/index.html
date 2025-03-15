@@ -199,7 +199,7 @@ function getElementClasses(element) {
 <link rel="stylesheet" href="css/components.css?v=7.2">
 <link rel="stylesheet" href="css/layout.css?v=7.2">
 <link rel="stylesheet" href="css/image-controle-manager.css?v=7.2">
-<link rel="stylesheet" href="css/anime.css?v=7.2">
+<!-- <link rel="stylesheet" href="css/anime.css?v=7.2"> -->
 <link rel="stylesheet" href="css/layout-layer.css?v=7.2">
 <link rel="stylesheet" href="css/toast.css?v=7.2">
 <link rel="stylesheet" href="css/ui/mode-change.css?v=7.2">
@@ -640,10 +640,17 @@ function getElementClasses(element) {
                 </div>
                 <hr>
                 <div class="icon-wrapper">
-                 <i class="material-icons" id="intro_prompt-manager-area" onclick="toggleVisibility('prompt-manager-area')">edit_note</i>
-                 <span class="icon-label" data-i18n="side-label-auto-page" onclick="toggleVisibility('prompt-manager-area')">自動ページ</span>
+                 <i class="material-icons" id="intro_auto-generate-area" onclick="toggleVisibility('auto-generate-area')">smart_toy</i>
+                 <span class="icon-label" data-i18n="auto_generate" onclick="toggleVisibility('auto-generate-area')">自動生成</span>
                 </div>
                 <hr>
+
+                <div class="icon-wrapper">
+                 <i class="material-icons" id="intro_prompt-manager-area" onclick="toggleVisibility('prompt-manager-area')">assignment</i>
+                 <span class="icon-label" data-i18n="prompt" onclick="toggleVisibility('prompt-manager-area')">プロンプト</span>
+                 </div>
+                <hr>
+  
                 <div class="icon-wrapper">
                  <i class="material-icons" id="intro_speech-bubble-area1" onclick="toggleVisibility('speech-bubble-area1')">chat_bubble</i>
                  <span class="icon-label" data-i18n="side-label-template-bubble" onclick="toggleVisibility('speech-bubble-area1')">ひな形💭</span>
@@ -679,6 +686,14 @@ function getElementClasses(element) {
                  <span class="icon-label" data-i18n="side-label-effect" onclick="toggleVisibility('manga-effect-area')">効果</span>
                 </div>
                 <hr>
+                <div class="icon-wrapper">
+                 <i class="material-icons" id="intro_rough-manager-area" onclick="toggleVisibility('rough-manager-area')">stairs</i>
+                 <span class="icon-label" data-i18n="side_label_rough" onclick="toggleVisibility('rough-manager-area')">ラフ</span>
+                </div>
+                <hr>
+
+
+                
                 <div class="icon-wrapper">
                  <i class="material-icons" id="intro_controle-area" onclick="toggleVisibility('controle-area')">videogame_asset</i>
                  <span class="icon-label" data-i18n="side-label-control" onclick="toggleVisibility('controle-area')">操作</span>
@@ -929,8 +944,8 @@ function getElementClasses(element) {
 
 
 <!-- Category:PromptManager -->
-            <div class="left_area" id="prompt-manager-area" style="display: none;">
-                <div class="area-header" data-i18n="promptManager">Prompt Manager</div>
+            <div class="left_area" id="auto-generate-area" style="display: none;">
+                <div class="area-header" data-i18n="auto_generate">Auto Generate</div>
                 <div id="prompt-manager-items">
                     <div class="input-group">
                         <button id="panelRandamCutButton">
@@ -1003,6 +1018,29 @@ function getElementClasses(element) {
                 </div>
             </div>
 
+
+
+<!-- Category:PromptManager -->
+<div class="left_area" id="prompt-manager-area" style="display: none;">
+    <div class="area-header" data-i18n="prompt"></div>
+    <div id="prompt-manager-items">
+     <div class="input-group">
+      <button onclick="createImagePromptHelperFlotingWindow()">
+       <span data-i18n="prompt_gallery">Prompt Gallery</span>
+      </button>
+     </div>
+     <div class="input-group">
+      <button onclick="createToast('Pod Program', 'Normal Toast Test', 4000)">
+        Normal Toast
+      </button>
+     </div>
+     <div class="input-group">
+      <button onclick="createToastError('Trial Result', 'Error Toast Test', 4000)">
+        Error Toast
+      </button>
+     </div>
+    </div>
+   </div>
 
 
 
@@ -1345,6 +1383,118 @@ function getElementClasses(element) {
                 <hr>
                 <div id="manga-effect-settings"></div>
             </div>
+
+
+
+
+<!-- Category:PromptManager -->
+<div class="left_area" id="rough-manager-area" style="display: none;">
+    <div class="area-header" data-i18n="Rough"></div>
+    <div id="prompt-manager-items">
+
+        <button id="toggle-rough" data-i18n="rough_on">ラフ化ON/OFF</button>
+
+        <div class="param-group" style="border-left:3px solid #FF9800;">
+            <div style="font-weight:bold;margin-bottom:5px;color:#FF9800;font-size:12px;" data-i18n-label="fill_style">塗りスタイル</div>
+            <div class="input-group">
+                <label data-i18n="fillStyle"></label>
+            </div>
+            <div class="input-group">
+                <select id="fillStyle">
+                    <option value="cross-hatch">cross-hatch</option>
+                    <option value="hachure">hachure</option>
+                    <option value="solid">solid</option>
+                    <option value="zigzag">zigzag</option>
+                    <option value="dots">dots</option>
+                    <option value="dashed">dashed</option>
+                    <option value="zigzag-line">zigzag-line</option>
+                </select>
+            </div>
+
+
+            <div style="margin-bottom:5px;">
+             <label for="fillColor" data-i18n="fill" style="display:block;margin-bottom:2px;font-size:12px;">fillColor:</label>
+             <input id="fillColor" class="jscolor-color-picker" data-jscolor="{value:'rgba(0,0,0,1.0)', position:'bottom', height:80, backgroundColor:'#333', 
+             palette:'rgba(0,0,0,0) #fff #808080 #000 #996e36 #f55525 #ffe438 #88dd20 #22e0cd #269aff #bb1cd4', paletteCols:11, hideOnPaletteClick:true}">
+
+            </div>
+
+            <div class="input-container-leftSpace" data-i18n-label="fillWeight">
+                <input type="range" id="fillWeight"  min="0" max="5" step="0.1" value="1">
+            </div>
+        </div>
+           
+        <div class="param-group" style="border-left:3px solid #2196F3;">
+            <div style="font-weight:bold;margin-bottom:5px;color:#2196F3;font-size:12px;" data-i18n-label="rough_style">基本スタイル</div>
+ 
+            <div class="input-container-leftSpace" data-i18n-label="roughness">
+                <input type="range" id="roughness" min="0" max="10" step="0.1" value="0.4" >
+            </div>
+            <div class="input-container-leftSpace" data-i18n-label="bowing">
+                <input type="range" id="bowing" min="0" max="10" step="0.1" value="1" >
+            </div>
+            <div class="input-container-leftSpace" data-i18n-label="strokeWidth">
+                <input type="range" id="strokeWidth" min="0.1" max="10" step="0.1" value="0.5">
+            </div>
+
+            <div style="margin-bottom:5px;">
+             <label for="strokeColor" data-i18n="strokeColor" style="display:block;margin-bottom:2px;font-size:12px;">strokeColor:</label>
+             <input id="strokeColor" class="jscolor-color-picker" data-jscolor="{value:'rgba(255,0,0,1.0)', position:'bottom', height:80, backgroundColor:'#333', 
+             palette:'rgba(0,0,0,0) #fff #808080 #000 #996e36 #f55525 #ffe438 #88dd20 #22e0cd #269aff #bb1cd4', paletteCols:11, hideOnPaletteClick:true}">
+
+            </div>
+            <div style="display:none">
+             <input type="number" id="seed" min="1" max="10000" value="1">
+            </div>
+
+            <div class="input-group" style="display: none;">
+                <label>
+                    <input type="checkbox" id="disableMultiStroke" checked>
+                    Multi
+                </label>
+            </div>
+
+        </div>
+           
+        <div id="hachureParams" class="param-group" style="border-left:3px solid #9C27B0;">
+            <div style="font-weight:bold;margin-bottom:5px;color:#9C27B0;font-size:12px;" data-i18n-label="rough_hachure">ハッチング設定</div>
+
+            <div class="input-container-leftSpace" data-i18n-label="hachureAngle">
+                <input type="range" id="hachureAngle" min="-180" max="180" step="1" value="-41">
+            </div>
+            <div class="input-container-leftSpace" data-i18n-label="hachureGap">
+                <input type="range" id="hachureGap" min="0" max="20" step="0.1" value="0.8" >
+            </div>
+            
+            <div class="input-group" style="display: none;">
+                <label>
+                    <input type="checkbox" id="disableMultiStrokeFill" checked>
+                    MultiFill
+                </label>
+            </div>
+
+        </div>
+           
+        <div class="param-group" style="border-left:3px solid #795548;">
+            <div style="font-weight:bold;margin-bottom:5px;color:#795548;font-size:12px;" data-i18n-label="rough_curve">曲線</div>
+
+            <div class="input-container-leftSpace" data-i18n-label="curveStepCount">
+                <input type="range" id="curveStepCount" min="1" max="20" value="9" >
+            </div>
+            <div class="input-container-leftSpace" data-i18n-label="curveFitting">
+                <input type="range" id="curveFitting" min="0" max="1" step="0.01" value="0.95" >
+            </div>
+            <div class="input-container-leftSpace" data-i18n-label="simplification">
+                <input type="range" id="simplification" min="0" max="1" step="0.01" value="0">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
 
 
             <div class="left_area" id="tool-area" style="display: none;">
@@ -2022,6 +2172,12 @@ function getElementClasses(element) {
     <script src="js/ai/comfyui/v2/comfyui-workflow-editor-tab.js"></script>
     <script src="js/ai/comfyui/v2/comfyui-workflow-editor.js"></script>
     <script src="js/ai/comfyui/v2/comfyui-workflow-interact.js"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/roughjs@4.5.2/bundled/rough.js"></script> -->
+    <script src="js/sidebar/rough/rough_manager.js?v=7.2"></script>
+    <script src="js/sidebar/rough/rough.js?v=7.2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
+
 
 <script>
 function autoResize(event) {
