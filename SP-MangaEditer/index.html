@@ -399,7 +399,8 @@ function getElementClasses(element) {
                             <a class="dropdown-item">
                                 <i class="material-icons">format_color_fill</i>
                                 <span data-i18n="canvasBG">Canvas BG</span>
-                                <input type="color" id="bg-color" value="#ffffff">
+                                <!-- <input type="color" id="bg-color" value="#ffffff"> -->
+                                <input id="bg-color" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" >
                             </a>
 
                             <a class="dropdown-item">
@@ -823,13 +824,13 @@ function getElementClasses(element) {
                 <div class="area-header" data-i18n="panelManager">Panel Manager</div>
                 <div id="custom-panel-manager-items">
 
-                    <div class="input-group-multi">
+                    <div class="input-group">
                         <label for="panelStrokeColor" data-i18n="line">Line:</label>
-                        <input type="color" id="panelStrokeColor" name="panelStrokeColor" value="#000000"
-                            oninput="changePanelStrokeColor(this.value)">
+                        <input id="panelStrokeColor" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)" oninput="changePanelStrokeColor(this.value)">
+                    </div>
+                    <div class="input-group">
                         <label for="panelFillColor" data-i18n="fill">Fill:</label>
-                        <input type="color" id="panelFillColor" name="panelFillColor" value="#FFFFFF"
-                            oninput="changePanelFillColor(this.value)">
+                        <input id="panelFillColor" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" oninput="changePanelStrokeColor(this.value)">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="lineWidth">
@@ -1065,11 +1066,13 @@ function getElementClasses(element) {
             <div class="left_area" id="speech-bubble-area1" style="display: none;">
                 <div class="area-header" data-i18n="bubble">Bubble</div>
                 <div id="speech-bubble-svg-preview-area1">
-                    <div class="input-group-multi">
-                        <label data-i18n="background">Background</label>
-                        <input type="color" id="bubbleFillColor" value="#FFFFFF" oninput="changeSpeechBubble()">
+                    <div class="input-group">
                         <label data-i18n="line">Line</label>
-                        <input type="color" id="bubbleStrokeColor" value="#000000" oninput="changeSpeechBubble()">
+                        <input id="bubbleStrokeColor" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)" oninput="changeSpeechBubble()">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n="background">Background</label>
+                        <input id="bubbleFillColor" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)"  oninput="changeSpeechBubble()">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="opacity">
@@ -1119,12 +1122,15 @@ function getElementClasses(element) {
                         <button id="sbDeleteButton" data-i18n="sbDeleteMode">Delete Point</button>
                     </div>
                     <hr>
-                    <div class="input-group-multi">
+                    <div class="input-group">
                         <label for="sbStrokeColor" data-i18n="line">Line</label>
-                        <input type="color" id="sbStrokeColor" value="#000000">
-                        <label for="sbFillColor" data-i18n="fill">Fill</label>
-                        <input type="color" id="sbFillColor" value="#FFFFFF">
+                        <input id="sbStrokeColor" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)" oninput="changePanelStrokeColor(this.value)">
                     </div>
+                    <div class="input-group">
+                        <label for="sbFillColor" data-i18n="fill">Fill</label>
+                        <input id="sbFillColor" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" oninput="changePanelStrokeColor(this.value)">
+
+                    </div>                    
                     <div class="input-group">
                         <label for="sbSmoothing" data-i18n="smooth">Smooth</label>
                         <input type="checkbox" id="sbSmoothing" checked>
@@ -1188,12 +1194,13 @@ function getElementClasses(element) {
                     <div class="input-group">
                         <div id="fontSelector"></div>
                     </div>
-                    <div class="input-group-multi">
+                    <div class="input-group">
                         <label data-i18n="textColor">Text</label>
-                        <input type="color" id="textColorPicker" value="#000000" oninput="changeTextColor(this.value)">
+                        <input id="textColorPicker" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)" oninput="changeTextColor(this.value)">
+                    </div>
+                    <div class="input-group">
                         <label data-i18n="outlineColor">Outline</label>
-                        <input type="color" id="textOutlineColorPicker" value="#123123"
-                            oninput="changeOutlineTextColor(this.value)">
+                        <input id="textOutlineColorPicker" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" oninput="changeOutlineTextColor(this.value)">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="fontSize">
@@ -1233,14 +1240,13 @@ function getElementClasses(element) {
                     <label data-i18n="effects">Effects</label>
                     <div class="input-group">
                         <label data-i18n="firstColor">First Color:</label>
-                        <input type="color" id="firstTextEffectColorPicker" value="#F58220"
-                            oninput="changeNeonColor(this.value)">
+                        <input id="firstTextEffectColorPicker" class="jscolor-color-picker" data-initial-color="rgba(0,255,0,1)"  oninput="changeNeonColor(this.value)">
+
                     </div>
                     <div class="input-group">
                         <label data-i18n="secondColor">Second Color:</label>
-                        <input type="color" id="secondTextEffectColorPicker" value="#ff8080"
-                            oninput="changeNeonColor(this.value)">
-                    </div>
+                        <input id="secondTextEffectColorPicker" class="jscolor-color-picker" data-initial-color="rgba(0,0,255,1)"  oninput="changeNeonColor(this.value)">
+                        </div>
                     <hr>
                     <button onclick="applyCSSTextEffect()">
                         <i class="material-icons">deblur</i>
@@ -1395,7 +1401,7 @@ function getElementClasses(element) {
         <button id="toggle-rough" data-i18n="rough_on">ラフ化ON/OFF</button>
 
         <div class="param-group" style="border-left:3px solid #FF9800;">
-            <div style="font-weight:bold;margin-bottom:5px;color:#FF9800;font-size:12px;" data-i18n-label="fill_style">塗りスタイル</div>
+            <div style="font-weight:bold;margin-bottom:5px;color:#FF9800;font-size:12px;" data-i18n="fill_style"></div>
             <div class="input-group">
                 <label data-i18n="fillStyle"></label>
             </div>
@@ -1413,10 +1419,11 @@ function getElementClasses(element) {
 
 
             <div style="margin-bottom:5px;">
-             <label for="fillColor" data-i18n="fill" style="display:block;margin-bottom:2px;font-size:12px;">fillColor:</label>
-             <input id="fillColor" class="jscolor-color-picker" data-jscolor="{value:'rgba(0,0,0,1.0)', position:'bottom', height:80, backgroundColor:'#333', 
-             palette:'rgba(0,0,0,0) #fff #808080 #000 #996e36 #f55525 #ffe438 #88dd20 #22e0cd #269aff #bb1cd4', paletteCols:11, hideOnPaletteClick:true}">
-
+             <label for="fillColor" data-i18n="fill" 
+                    style="display:block;margin-bottom:2px;font-size:12px;">
+                    fillColor:
+             </label>
+             <input id="fillColor" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)"/>
             </div>
 
             <div class="input-container-leftSpace" data-i18n-label="fillWeight">
@@ -1425,7 +1432,7 @@ function getElementClasses(element) {
         </div>
            
         <div class="param-group" style="border-left:3px solid #2196F3;">
-            <div style="font-weight:bold;margin-bottom:5px;color:#2196F3;font-size:12px;" data-i18n-label="rough_style">基本スタイル</div>
+            <div style="font-weight:bold;margin-bottom:5px;color:#2196F3;font-size:12px;" data-i18n="rough_style"></div>
  
             <div class="input-container-leftSpace" data-i18n-label="roughness">
                 <input type="range" id="roughness" min="0" max="10" step="0.1" value="0.4" >
@@ -1439,8 +1446,7 @@ function getElementClasses(element) {
 
             <div style="margin-bottom:5px;">
              <label for="strokeColor" data-i18n="strokeColor" style="display:block;margin-bottom:2px;font-size:12px;">strokeColor:</label>
-             <input id="strokeColor" class="jscolor-color-picker" data-jscolor="{value:'rgba(255,0,0,1.0)', position:'bottom', height:80, backgroundColor:'#333', 
-             palette:'rgba(0,0,0,0) #fff #808080 #000 #996e36 #f55525 #ffe438 #88dd20 #22e0cd #269aff #bb1cd4', paletteCols:11, hideOnPaletteClick:true}">
+             <input id="strokeColor" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" >
 
             </div>
             <div style="display:none">
@@ -1457,7 +1463,7 @@ function getElementClasses(element) {
         </div>
            
         <div id="hachureParams" class="param-group" style="border-left:3px solid #9C27B0;">
-            <div style="font-weight:bold;margin-bottom:5px;color:#9C27B0;font-size:12px;" data-i18n-label="rough_hachure">ハッチング設定</div>
+            <div style="font-weight:bold;margin-bottom:5px;color:#9C27B0;font-size:12px;" data-i18n="rough_hachure"></div>
 
             <div class="input-container-leftSpace" data-i18n-label="hachureAngle">
                 <input type="range" id="hachureAngle" min="-180" max="180" step="1" value="-41">
@@ -1476,7 +1482,7 @@ function getElementClasses(element) {
         </div>
            
         <div class="param-group" style="border-left:3px solid #795548;">
-            <div style="font-weight:bold;margin-bottom:5px;color:#795548;font-size:12px;" data-i18n-label="rough_curve">曲線</div>
+            <div style="font-weight:bold;margin-bottom:5px;color:#795548;font-size:12px;" data-i18n="rough_curve"></div>
 
             <div class="input-container-leftSpace" data-i18n-label="curveStepCount">
                 <input type="range" id="curveStepCount" min="1" max="20" value="9" >
@@ -1659,11 +1665,13 @@ function getElementClasses(element) {
                     </div>
 
 
-                    <div class="input-group-multi">
+                    <div class="input-group">
                         <label for="svg_icon_lineColor" data-i18n="svg_icon_line_color">Line</label>
-                        <input type="color" id="svg_icon_lineColor" value="#000000" onchange="updateSVGStyles()">
+                        <input id="svg_icon_lineColor" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)"  oninput="updateSVGStyles()">
+                    </div>
+                    <div class="input-group">
                         <label for="svg_icon_fillColor" data-i18n="svg_icon_fill_color">Fill</label>
-                        <input type="color" id="svg_icon_fillColor" value="#EEEEEE" onchange="updateSVGStyles()">
+                        <input id="svg_icon_fillColor" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" oninput="updateSVGStyles()">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="svg_icon_line_width">
@@ -1677,7 +1685,7 @@ function getElementClasses(element) {
                     <label>Shadow</label>
                     <div class="input-group">
                         <label for="svg_icon_shadowColor" data-i18n="svg_icon_shadow_color">Color</label>
-                        <input type="color" id="svg_icon_shadowColor" value="#FFFFFF" onchange="updateSVGStyles()">
+                        <input id="svg_icon_shadowColor" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" oninput="updateSVGStyles(this.value)">
                     </div>
 
                     <div class="input-container-leftSpace" data-i18n-label="svg_icon_shadow_blur">

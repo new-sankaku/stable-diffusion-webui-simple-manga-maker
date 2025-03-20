@@ -97,3 +97,23 @@ const commonProperties = [
 ,"speechBubbleGrid","speechBubbleScale","speechBubbleViewBoxWidth","speechBubbleViewBoxHeight","speechBubbleRectX","speechBubbleRectY","speechBubbleRectWidth","speechBubbleRectHeight"
 ,"baseScaleX","baseScaleY","lastLeft", "lastTop", "targetObject", "originalSvg"
 ];
+
+let jscolorOptions = {
+  value: 'rgba(0,0,0,1)',
+  position: 'bottom',
+  height: 80,
+  backgroundColor: '#333',
+  palette: 'rgba(0,0,0,0) #fff #808080 #000 #996e36 #f55525 #ffe438 #88dd20 #22e0cd #269aff #bb1cd4',
+  paletteCols: 11,
+  hideOnPaletteClick: true
+ };
+
+document.addEventListener('DOMContentLoaded', function() {
+  const colorPickers = document.querySelectorAll('.jscolor-color-picker');
+  colorPickers.forEach(picker => {
+   const initialValue = picker.getAttribute('data-initial-color') || 'rgba(0,0,0,1)';
+   jscolorOptions.value = initialValue;
+   picker.setAttribute('data-jscolor', JSON.stringify(jscolorOptions));
+  });
+  jscolor.install();
+ });

@@ -81,9 +81,7 @@ input[type="range"] {
 
 
 .jscolor-color-picker {
-  color: transparent;
-  width: 20px;
-  height: 25px;
+
   margin-left: 10px;
   border: 0;
   cursor: pointer;
