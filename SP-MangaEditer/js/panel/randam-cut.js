@@ -68,31 +68,43 @@ function createCuts(vRandomCount, hRandomCount) {
 
 
 async function generateMultipage(){
-  const pageCount = $("pageCount").value;
-  var newPage = false;
-  const selectedValue = getSelectedValueByGroup("multiPageType");
-  for (let page = 1; page <= pageCount; page++) {
-    console.log("----- " + page + " -----")
-    if( selectedValue === 'mA4H' ){
-      await loadBookSize(210,297,true,newPage);
-      rundomPanelCut();
-    }
-    if( selectedValue === 'mA4V' ){
-      await loadBookSize(297,210,true,newPage);
-      rundomPanelCut();
-    }
-    if( selectedValue === 'mB4H' ){
-      await loadBookSize(257,364,true,newPage);
-      rundomPanelCut();
-    }
-    if( selectedValue === 'mB4H' ){
-      await loadBookSize(364,257,true,newPage);
-      rundomPanelCut();
-    }
-    newPage = true;
-  }
-  await btmSaveProjectFile();
+  const loading = OP_showLoading({icon: 'process',step: 'Step1',substep: 'Multi Page',progress: 0});
+  await new Promise(requestAnimationFrame);
 
+  try{
+    const pageCount = $("pageCount").value;
+    var newPage = false;
+    const selectedValue = getSelectedValueByGroup("multiPageType");
+    for (let page = 1; page <= pageCount; page++) {
+
+      OP_updateLoadingState(loading, {
+        icon: 'process',step: 'Step2',substep: 'Page:'+page, progress: 50
+      });
+      await new Promise(requestAnimationFrame);
+
+      console.log("----- " + page + " -----")
+      if( selectedValue === 'mA4H' ){
+        await loadBookSize(210,297,true,newPage);
+        rundomPanelCut();
+      }
+      if( selectedValue === 'mA4V' ){
+        await loadBookSize(297,210,true,newPage);
+        rundomPanelCut();
+      }
+      if( selectedValue === 'mB4H' ){
+        await loadBookSize(257,364,true,newPage);
+        rundomPanelCut();
+      }
+      if( selectedValue === 'mB4H' ){
+        await loadBookSize(364,257,true,newPage);
+        rundomPanelCut();
+      }
+      newPage = true;
+    }
+    await btmSaveProjectFile();
+  } finally {
+    OP_hideLoading(loading);
+  }
 }
 $on($("panelRandamCutButton"), "click", () => rundomPanelCut());
 $on($("multiPageGenerate"), "click", () => generateMultipage());

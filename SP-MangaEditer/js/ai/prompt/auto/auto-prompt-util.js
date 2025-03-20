@@ -141,7 +141,7 @@ function generatePageList() {
           currentPage++;
       }
   });
-  console.log("pageList 100", JSON.stringify(pageList));
+  // console.log("pageList 100", JSON.stringify(pageList));
   
   return pageList;
 }
@@ -172,7 +172,7 @@ async function autoMultiPromptSet(){
       if(randomSenario){
         panel.text2img_prompt   = panel.text2img_prompt   + "," + randomSenario.positive;
         panel.text2img_negative = panel.text2img_negative + "," + randomSenario.negative;
-        console.log("guid index:", index, ":", guid, " panelSize:", panelList.length, " positive:", randomSenario.positive);
+        // console.log("guid index:", index, ":", guid, " panelSize:", panelList.length, " positive:", randomSenario.positive);
       }
     });
 
@@ -228,7 +228,7 @@ function getRandomSenario(index, scenarioName, type){
       break;
   }
   const result = promptMultiKeyMap.getRandomByStoryOrders(promptNumbers);
-  console.log("index:",index, " promptNumbers:",JSON.stringify(promptNumbers), " randomPromptNumber:",result.positive);
+  // console.log("index:",index, " promptNumbers:",JSON.stringify(promptNumbers), " randomPromptNumber:",result.positive);
 
   return result;
 }

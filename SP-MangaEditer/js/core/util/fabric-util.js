@@ -81,7 +81,6 @@ function saveInitialState(obj) {
     canvasHeight: canvas.getHeight(),
   };
 
-  console.log("saveInitialState start");
   if (obj.clipPath) {
     obj.clipPath.initial = {
       left: obj.clipPath.left,
