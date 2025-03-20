@@ -61,7 +61,7 @@ function addColor(id, label, value) {
   return `
       <div class="pen-input-2group">
           <label for="${id}" data-i18n="${label}">${transLavel}</label>
-          <input type="color" id="${id}" value="${value}">
+          <input id="${id}" value="${value}" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)">
       </div>
   `;
 }

@@ -109,11 +109,28 @@ let jscolorOptions = {
  };
 
 document.addEventListener('DOMContentLoaded', function() {
+  jsColorSet();
+});
+
+function jsColorSet(){
   const colorPickers = document.querySelectorAll('.jscolor-color-picker');
   colorPickers.forEach(picker => {
-   const initialValue = picker.getAttribute('data-initial-color') || 'rgba(0,0,0,1)';
-   jscolorOptions.value = initialValue;
-   picker.setAttribute('data-jscolor', JSON.stringify(jscolorOptions));
+    if (picker.hasAttribute('data-jscolor')) return;
+
+    const initialValue = picker.getAttribute('data-initial-color') || 'rgba(0,0,0,1)';
+    jscolorOptions.value = initialValue;
+    picker.setAttribute('data-jscolor', JSON.stringify(jscolorOptions));
   });
   jscolor.install();
- });
+}
+
+function jsColorSetById(id){
+  const picker = document.getElementById(id);
+  if (!picker) return;
+
+  const initialValue = picker.getAttribute('data-initial-color') || 'rgba(0,0,0,1)';
+  jscolorOptions.value = initialValue;
+  picker.setAttribute('data-jscolor', JSON.stringify(jscolorOptions));
+  jscolor.install();
+}
+

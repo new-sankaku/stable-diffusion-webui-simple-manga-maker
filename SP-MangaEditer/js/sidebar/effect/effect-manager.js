@@ -131,6 +131,9 @@ function switchMangaEffectUi(type) {
       $('manga-effect-settings').innerHTML = settingsHTML;
       return;
   }
+
+  jsColorSet();
+
   const sliders2 = document.querySelectorAll('.input-container-leftSpace input[type="range"]');
   sliders2.forEach(slider => {
     setupSlider(slider, '.input-container-leftSpace')

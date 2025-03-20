@@ -125,7 +125,8 @@ function switchText2Ui(type) {
   }
 
   $('text-area2-settings').innerHTML = settingsHTML;
-
+  jsColorSet();
+  
   t2_text             = $(type + '-' + "Text");
   t2_fontSize         = $(type + '-' + "FontSize");
   t2_fillColor        = $(type + '-' + "TextColor");

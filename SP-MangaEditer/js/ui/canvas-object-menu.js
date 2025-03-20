@@ -199,10 +199,10 @@ function showObjectMenu(clickType) {
         menuContent += `
           <div class="input-group-multi" >
             <label for="${item.options.id}">${labelColor}</label>
-            <input type="color"
-              id=   "${item.options.id}"
+            <input id=   "${item.options.id}"
               name= "${item.options.id}"
-              value="${item.options.value}">
+              value="${item.options.value}"
+              class="jscolor-color-picker" data-initial-color="rgba(0, 0, 0, 1.0)">
           </div>`;
         break;
       case 'button':
@@ -212,6 +212,7 @@ function showObjectMenu(clickType) {
   });
 
   objectMenu.innerHTML = menuContent;
+  jsColorSet();
   objectMenu.classList.add('active');
   objectMenu.style.display = 'flex';
   updateObjectMenuPosition();

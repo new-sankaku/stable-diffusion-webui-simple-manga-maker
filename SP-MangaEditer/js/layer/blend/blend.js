@@ -56,7 +56,7 @@ function createFloatingWindow() {
 }
 
 function recreateFloatingWindow() {
-  const existingWindow = document.getElementById("blendFloatingWindow");
+  const existingWindow = $("blendFloatingWindow");
   if (existingWindow) {
     existingWindow.remove();
   }
@@ -279,7 +279,7 @@ async function handleReblend() {
 function handleSubmit(blendedCanvas, quality = 0.98) {
   sendHtmlCanvas2FabricCanvas(blendedCanvas);
   removeAdditionalLayers();
-  document.getElementById("blendFloatingWindow").style.display = "none";
+  $("blendFloatingWindow").style.display = "none";
 }
 
 
@@ -322,19 +322,20 @@ function showFillLayerEditor() {
   const editor = createLayerEditor('fill');
   editor.innerHTML = `
     <h3>${getText("fillLayer")}</h3>
-    <input type="color" id="fillColor" value="#000000">
+    <input id="blendFillColor" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)">
     <button onclick="addFillLayer()">${getText("addLayer")}</button>
     <button onclick="closeLayerEditor('fill')">${getText("cancel")}</button>
   `;
   document.body.appendChild(editor);
+  jsColorSetById("gradientStart");
 }
 
 function showGradientLayerEditor() {
   const editor = createLayerEditor('gradient');
   editor.innerHTML = `
     <h3>${getText("gradientLayer")}</h3>
-    <input type="color" id="gradientStart" value="#000000">
-    <input type="color" id="gradientEnd" value="#ffffff">
+    <input id="gradientStart" class="jscolor-color-picker" data-initial-color="rgba(0,0,0,1)" >
+    <input id="gradientEnd" class="jscolor-color-picker" data-initial-color="rgba(255,255,255,1)" >
     <canvas id="gradientDirection" width="200" height="200" style="border: 1px solid black;">
       ${getText("dragToSetDirection")}
     </canvas>
@@ -342,6 +343,9 @@ function showGradientLayerEditor() {
     <button onclick="closeLayerEditor('gradient')">${getText("cancel")}</button>
   `;
   document.body.appendChild(editor);
+
+  jsColorSetById("gradientStart");
+  jsColorSetById("gradientEnd");
   setupGradientDirectionDrag();
 }
 
@@ -363,7 +367,7 @@ function createLayerEditor(type) {
 let startX, startY, endX, endY;
 
 function setupGradientDirectionDrag() {
-  const directionElement = document.getElementById('gradientDirection');
+  const directionElement = $('gradientDirection');
   
   directionElement.onmousedown = (e) => {
     startX = e.offsetX;
@@ -384,15 +388,17 @@ function setupGradientDirectionDrag() {
   
   endX = directionElement.width;
   endY = directionElement.height;
-  drawGradientPreview();
+  // drawGradientPreview();
 }
 
 function drawGradientPreview() {
-  const directionElement = document.getElementById('gradientDirection');
+  const directionElement = $('gradientDirection');
   const ctx = directionElement.getContext('2d');
   const gradient = ctx.createLinearGradient(startX, startY, endX, endY);
-  gradient.addColorStop(0, document.getElementById('gradientStart').value);
-  gradient.addColorStop(1, document.getElementById('gradientEnd').value);
+
+  console.log("$('gradientStart').value:",$('gradientStart').value);
+  gradient.addColorStop(0, $('gradientStart').value);
+  gradient.addColorStop(1, $('gradientEnd').value);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, directionElement.width, directionElement.height);
 }
@@ -402,7 +408,7 @@ function drawGradientPreview() {
 
 let additionalLayers = [];
 function addFillLayer() {
-  const color = document.getElementById('fillColor').value;
+  const color = $('blendFillColor').value;
   const fillLayer = new fabric.Rect({
     width: canvas.width,
     height: canvas.height,
@@ -418,8 +424,8 @@ function addFillLayer() {
 }
 
 function addGradientLayer() {
-  const startColor = document.getElementById('gradientStart').value;
-  const endColor = document.getElementById('gradientEnd').value;
+  const startColor = $('gradientStart').value;
+  const endColor = $('gradientEnd').value;
   const angle = Math.atan2(endY - startY, endX - startX);
   
   const gradientLayer = new fabric.Rect({
@@ -452,7 +458,7 @@ function addGradientLayer() {
 
 
 function closeLayerEditor(type) {
-  const editor = document.getElementById(`${type}LayerEditor`);
+  const editor = $(`${type}LayerEditor`);
   editor.remove();
 }
 

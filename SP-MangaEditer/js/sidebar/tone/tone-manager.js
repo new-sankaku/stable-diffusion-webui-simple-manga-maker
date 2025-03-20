@@ -177,7 +177,8 @@ function switchMangaToneUi(type) {
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-start',  'grad-start', 0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-start',0));   //grad-start-y
         settingsHTML += addSlider(MODE_SPEED_LINE + '-grad-end',    'grad-end',   0, 100, effectValueMap.getOrDefault( MODE_SPEED_LINE + '-grad-end',100));   //grad-end-y
         $('manga-tone-settings').innerHTML = settingsHTML;
-
+        jsColorSet();
+        
         mangaToneColor     = $(MODE_TONE_NOISE + '-color');
         mangaToneDensity   = $(MODE_TONE_NOISE + '-density');
         mangaToneGradStart = $(MODE_TONE_NOISE + '-grad-start');
