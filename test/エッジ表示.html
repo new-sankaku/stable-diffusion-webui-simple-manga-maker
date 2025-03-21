@@ -26,6 +26,12 @@ label{margin-bottom:3px;font-size:12px;color:#555}
 h1{margin:0;padding:10px 0;font-size:20px;color:#2c3e50}
 h3{margin:5px 0;font-size:14px}
 .status{font-size:12px;color:#777;text-align:center;margin:5px 0}
+.color-picker-container{display:flex;align-items:center;margin-bottom:8px}
+.color-picker-container label{margin-right:8px;min-width:100px}
+.color-picker-container input[type="color"]{cursor:pointer}
+.download-btn{padding:8px 15px;background:#27ae60;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;margin-left:auto}
+.download-btn:hover{background:#219653}
+.download-container{display:flex;justify-content:flex-end;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -34,6 +40,9 @@ h3{margin:5px 0;font-size:14px}
 <div class="upload-section" id="upload-area">
 <p>ここに画像をドラッグ＆ドロップまたはクリックしてファイルを選択</p>
 <input type="file" id="file-input" accept="image/*" style="display:none;">
+</div>
+<div class="download-container">
+<button class="download-btn" id="download-all-btn">すべての画像をダウンロード</button>
 </div>
 <div class="controls">
 <div class="settings-group">
@@ -124,6 +133,38 @@ h3{margin:5px 0;font-size:14px}
 </div>
 </div>
 </div>
+<div class="controls">
+<div class="settings-group">
+<h3>エッジ色設定</h3>
+<div class="color-picker-container">
+<label for="canny-color">Cannyエッジの色:</label>
+<input type="color" id="canny-color" value="#00ff00">
+</div>
+<div class="color-picker-container">
+<label for="sobel-color">Sobelフィルタの色:</label>
+<input type="color" id="sobel-color" value="#ff00ff">
+</div>
+<div class="color-picker-container">
+<label for="scharr-color">Scharrフィルタの色:</label>
+<input type="color" id="scharr-color" value="#ffff00">
+</div>
+</div>
+<div class="settings-group">
+<h3>エッジ色設定</h3>
+<div class="color-picker-container">
+<label for="laplacian-color">Laplacianフィルタの色:</label>
+<input type="color" id="laplacian-color" value="#00ffff">
+</div>
+<div class="color-picker-container">
+<label for="contour-color">輪郭検出の色:</label>
+<input type="color" id="contour-color" value="#ff0000">
+</div>
+<div class="color-picker-container">
+<label for="dog-color">DoGエッジ検出の色:</label>
+<input type="color" id="dog-color" value="#ff8000">
+</div>
+</div>
+</div>
 <div class="image-container" id="image-container">
 <div class="image-box">
 <h3>元の画像</h3>
@@ -133,6 +174,7 @@ h3{margin:5px 0;font-size:14px}
 </div>
 </div>
 <script src="https://docs.opencv.org/4.5.5/opencv.js" onload="onOpenCVReady();" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 let originalImage=null;
 let inputElement=document.getElementById('file-input');
@@ -156,6 +198,7 @@ let useMultiScaleCheckbox=document.getElementById('use-multi-scale');
 let useAdvancedEdgeCheckbox=document.getElementById('use-advanced-edge');
 let processBtn=document.getElementById('process-btn');
 let resetBtn=document.getElementById('reset-btn');
+let downloadAllBtn=document.getElementById('download-all-btn');
 let threshold1Value=document.getElementById('threshold1-value');
 let threshold2Value=document.getElementById('threshold2-value');
 let contourThresholdValue=document.getElementById('contour-threshold-value');
@@ -169,12 +212,12 @@ let advancedThresholdValue=document.getElementById('advanced-threshold-value');
 let opacityValue=document.getElementById('opacity-value');
 let cvReady=false;
 let processingMethods=[
-{id:'canny',name:'Cannyエッジ検出',color:'0,255,0'},
-{id:'sobel',name:'Sobelフィルタ',color:'255,0,255'},
-{id:'scharr',name:'Scharrフィルタ',color:'255,255,0'},
-{id:'laplacian',name:'Laplacianフィルタ',color:'0,255,255'},
-{id:'contour',name:'輪郭検出',color:'255,0,0'},
-{id:'dog',name:'DoGエッジ検出',color:'255,128,0'}
+{id:'canny',name:'Cannyエッジ検出',colorPicker:'canny-color'},
+{id:'sobel',name:'Sobelフィルタ',colorPicker:'sobel-color'},
+{id:'scharr',name:'Scharrフィルタ',colorPicker:'scharr-color'},
+{id:'laplacian',name:'Laplacianフィルタ',colorPicker:'laplacian-color'},
+{id:'contour',name:'輪郭検出',colorPicker:'contour-color'},
+{id:'dog',name:'DoGエッジ検出',colorPicker:'dog-color'}
 ];
 let contourModes=['外側','リスト','2レベル階層','すべて'];
 
@@ -215,6 +258,14 @@ handleFiles();
 inputElement.addEventListener('change',handleFiles);
 processBtn.addEventListener('click',processImage);
 resetBtn.addEventListener('click',resetParameters);
+downloadAllBtn.addEventListener('click',downloadAllImages);
+
+processingMethods.forEach(method => {
+let colorPicker = document.getElementById(method.colorPicker);
+if(colorPicker) {
+colorPicker.addEventListener('change', processImage);
+}
+});
 
 threshold1Slider.addEventListener('input',updateSliderValue);
 threshold2Slider.addEventListener('input',updateSliderValue);
@@ -258,6 +309,12 @@ useBilateralCheckbox.checked=true;
 usePostProcessCheckbox.checked=true;
 useMultiScaleCheckbox.checked=false;
 useAdvancedEdgeCheckbox.checked=false;
+document.getElementById('canny-color').value='#00ff00';
+document.getElementById('sobel-color').value='#ff00ff';
+document.getElementById('scharr-color').value='#ffff00';
+document.getElementById('laplacian-color').value='#00ffff';
+document.getElementById('contour-color').value='#ff0000';
+document.getElementById('dog-color').value='#ff8000';
 updateSliderValue();
 if(originalImage){
 processImage();
@@ -287,6 +344,40 @@ img.src=e.target.result;
 };
 reader.readAsDataURL(file);
 }
+}
+
+function downloadAllImages() {
+if(!originalImage||!cvReady) {
+alert('画像を処理してから一括ダウンロードを行ってください。');
+return;
+}
+
+const zip = new JSZip();
+const imageName = inputElement.files && inputElement.files[0] ? inputElement.files[0].name.split('.')[0] : 'image';
+let canvasCollection = document.querySelectorAll('canvas');
+let promises = [];
+
+canvasCollection.forEach((canvas, index) => {
+if(canvas.id === 'original-canvas') {
+canvas.toBlob(function(blob) {
+zip.file(`${imageName}_original.png`, blob);
+});
+} else {
+let methodName = canvas.id.replace('-canvas', '').replace('-overlay', '_overlay');
+canvas.toBlob(function(blob) {
+zip.file(`${imageName}_${methodName}.png`, blob);
+});
+}
+});
+
+setTimeout(() => {
+zip.generateAsync({type:"blob"}).then(function(content) {
+const link = document.createElement('a');
+link.href = URL.createObjectURL(content);
+link.download = `${imageName}_processed_images.zip`;
+link.click();
+});
+}, 500);
 }
 
 function processImage(){
@@ -558,10 +649,12 @@ let processedData=processedCanvas.getContext('2d').getImageData(0,0,src.cols,src
 let processedPixels=processedData.data;
 let overlayImageData=ctx.getImageData(0,0,src.cols,src.rows);
 let overlayPixels=overlayImageData.data;
-const rgb=method.color.split(',');
-const r=parseInt(rgb[0]);
-const g=parseInt(rgb[1]);
-const b=parseInt(rgb[2]);
+
+let colorPicker = document.getElementById(method.colorPicker);
+let color = colorPicker.value;
+let r = parseInt(color.substr(1,2), 16);
+let g = parseInt(color.substr(3,2), 16);
+let b = parseInt(color.substr(5,2), 16);
 
 for(let i=0;i<processedPixels.length;i+=4){
 if(processedPixels[i]>100||processedPixels[i+1]>100||processedPixels[i+2]>100){
