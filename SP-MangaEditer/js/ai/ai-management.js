@@ -43,12 +43,17 @@ function I2I( layer, spinner ){
   if (API_mode == apis.A1111) {
     sdwebui_I2IProcessQueue(layer, spinner.id);
   }else if (API_mode == apis.COMFYUI){
-    var isI2I = false;
-    Comfyui_handle_process_queue(layer, spinner.id, isI2I);
+    Comfyui_handle_process_queue(layer, spinner.id, 'I2I');
   }
 }
 
-  
+async function ai_rembg( layer, spinner ){
+  if (API_mode == apis.A1111) {
+    sdWebUI_RembgProcessQueue(layer, spinner.id);
+  }else if (API_mode == apis.COMFYUI){
+    return Comfyui_handle_process_queue(layer, spinner.id, 'Rembg');
+  }
+}
 
 
 function getDiffusionInfomation() {
@@ -73,6 +78,9 @@ function getDiffusionInfomation() {
 
 
 function apiHeartbeat(){
+
+console.log("apiHeartbeat");
+
   const pingCheck = $('apiHeartbeatCheckbox');
   if (pingCheck.checked) {
   } else {

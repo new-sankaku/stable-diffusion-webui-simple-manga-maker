@@ -52,6 +52,7 @@ async function comfyui_apiHeartbeat_v2() {
 
 let isOnline = false;
 async function comfyui_monitorConnection_v2() {
+  console.log("comfyui_monitorConnection_v2");
   while (true) {
     const currentStatus = await comfyui_apiHeartbeat_v2();
     if (currentStatus !== isOnline) {

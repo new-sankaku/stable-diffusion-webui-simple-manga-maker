@@ -342,7 +342,7 @@ function handleMenuClick(e) {
 
     case 'rembg':
       var spinner = createSpinner(canvasMenuIndex);
-      sdWebUI_RembgProcessQueue(activeObject, spinner.id);
+      ai_rembg(activeObject, spinner);
       break;
     case 'generate':
       if (isPanel(activeObject)) {

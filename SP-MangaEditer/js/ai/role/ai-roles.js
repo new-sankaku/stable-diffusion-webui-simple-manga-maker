@@ -33,6 +33,7 @@ const roles = {
   ],
   COMFYUI: [
     AI_ROLES.Text2Image,
+    AI_ROLES.RemoveBG,
     AI_ROLES.Image2Image
   ]
 };

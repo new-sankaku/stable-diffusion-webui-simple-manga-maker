@@ -71,7 +71,7 @@ function Comfyui_isError(response) {
   
   
   
-  function Comfyui_replace_placeholders(workflow, requestData, isT2I=true) {
+  function Comfyui_replace_placeholders(workflow, requestData, Type = 'T2I') {
     const builder = createWorkflowBuilder(workflow);
 
     builder.updateNodesByInputName({
@@ -81,7 +81,7 @@ function Comfyui_isError(response) {
         height:     requestData["height"]
     });
 
-    if( !isT2I ){
+    if( Type == 'I2I' || Type == 'Rembg' ){
         builder.updateNodesByInputName({
             image: requestData["uploadFileName"]
         });

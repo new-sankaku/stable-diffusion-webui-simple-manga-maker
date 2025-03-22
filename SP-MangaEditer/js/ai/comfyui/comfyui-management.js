@@ -252,18 +252,22 @@ async function Comfyui_track_prompt_progress(prompt_id) {
   });
 }
 
-async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
-  console.log("Comfyui_handle_process_queue");
+async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
   if (!socket) Comfyui_connect();
   var requestData = baseRequestData(layer);
   if (basePrompt.text2img_model != ""){
     requestData["model"] = basePrompt.text2img_model;
   }
 
-  if (isT2I) {
+  if (Type == 'T2I') {
     selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("T2I");
-  } else {
+  } else if(Type == 'I2I') {
     selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("I2I");
+  } else if(Type == 'Rembg') {
+    selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("REMBG");
+  }else{
+    removeSpinner(spinnerId);
+    return;
   }
   
   var classTypeLists = getClassTypeOnlyByJson(selected_workflow);
@@ -274,13 +278,13 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
   }
     
 
-  if (!isT2I) {
+  if (Type == 'I2I' || Type == 'Rembg') {
     var uploadFilename = generateFilename();
     await Comfyui_uploadImage(layer, uploadFilename);
     requestData["uploadFileName"] = uploadFilename;
   }
 
-  var workflow = Comfyui_replace_placeholders(selected_workflow, requestData, isT2I);
+  var workflow = Comfyui_replace_placeholders(selected_workflow, requestData, Type);
 
   console.log("comfyuiQueue Workflow", JSON.stringify(workflow));
 
@@ -290,8 +294,14 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
         createToastError("Generation Error", result.message);
         throw new Error(result.message);
       } else if (result) {
-        var center = calculateCenter(layer);
-        putImageInFrame(result, center.centerX, center.centerY);
+        layer.visible = false;
+
+        if(layer.clipPath){
+          var center = calculateCenter(layer);
+          putImageInFrame(result, center.centerX, center.centerY);
+        }else{
+          replaceImageObject(layer, result);
+        }
       } else {
         throw new Error("Unexpected error: No result returned from Comfyui_put_queue");
       }
@@ -299,10 +309,9 @@ async function Comfyui_handle_process_queue(layer, spinnerId, isT2I = true) {
     .catch((error) => {
       let help = getText("comfyUI_workflowErrorHelp");
       createToastError( "Generation Error", [error.message, help], 8000 );
-      console.error("エラー:", error);
+      console.error("Error:", error);
     })
     .finally(() => {
-      console.log("スピナーを削除します。スピナーID:", spinnerId);
       removeSpinner(spinnerId);
     });
 }

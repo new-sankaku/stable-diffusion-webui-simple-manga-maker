@@ -399,21 +399,36 @@ function getHeight(fabricImage) {
   }
 }
 
+function imageObject2Base64ImageEffectKeep(layer, scaleFactor = 1) {
+  if (layer.type === 'image' && layer._element) {
+   const imgElement = layer._element;
+   const originalWidth = imgElement.naturalWidth || imgElement.width;
+   const originalHeight = imgElement.naturalHeight || imgElement.height;
+   
+   const offscreenCanvas = createOffscreenCanvas(originalWidth, originalHeight);
+   const ctx = offscreenCanvas.getContext('2d');
+   
+   ctx.drawImage(imgElement, 0, 0, originalWidth, originalHeight);
+   return offscreenCanvas.toDataURL('image/png');
+  } else {
+   const { width, height, scaleX, scaleY, clipPath, left, top } = layer;
+   const pixelRatio = window.devicePixelRatio || 1;
+   const enhancedScaleFactor = scaleFactor * 2 * pixelRatio;
+   const offscreenCanvas = createOffscreenCanvas(
+    Math.ceil(width * scaleX * enhancedScaleFactor),
+    Math.ceil(height * scaleY * enhancedScaleFactor)
+   );
+   renderLayerToCanvas(offscreenCanvas, layer, enhancedScaleFactor, left, top);
+   return offscreenCanvas.toDataURL('image/png');
+  }
+ }
 
-
-function imageObject2Base64ImageEffectKeep(layer, scaleFactor = layer.img2imgScale) {
-  const { width, height, scaleX, scaleY, clipPath, left, top } = layer;
-  const offscreenCanvas = createOffscreenCanvas(width * scaleX * scaleFactor, height * scaleY * scaleFactor);
-  renderLayerToCanvas(offscreenCanvas, layer, scaleFactor, left, top);
-  return offscreenCanvas.toDataURL('image/png');
-}
-
-function createOffscreenCanvas(width, height) {
+ function createOffscreenCanvas(width, height) {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   return canvas;
-}
+ }
 
 function renderLayerToCanvas(canvas, layer, scaleFactor, left, top) {
   const ctx = canvas.getContext('2d');

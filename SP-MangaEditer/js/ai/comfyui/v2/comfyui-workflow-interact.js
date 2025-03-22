@@ -126,6 +126,8 @@ class ComfyUIWorkflowWindow {
       const tab = comfyUIWorkflowEditor.tabs.get(tabId);
       if (!tab) return;
 
+      // console.log("comfyuiQueue Workflow", JSON.stringify(tab.workflow));
+
       const img = await comfyui_put_queue_v2(tab.workflow);
       if (!img) return;
 

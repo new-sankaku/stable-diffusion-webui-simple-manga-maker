@@ -1,5 +1,12 @@
 const comfyuiDefaultWorkflows = [
   {
+    name: "inspyrenet.json",
+    type: "REMBG",
+    workflow: ComfyUI_Rembg_ByInspyrenet,
+    enabled: true
+  },
+
+  {
     name: "SDXL.json",
     type: "T2I",
     workflow: ComfyUI_T2I_BySDXL,

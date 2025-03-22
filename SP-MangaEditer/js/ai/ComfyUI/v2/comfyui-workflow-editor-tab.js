@@ -1,5 +1,5 @@
 // "Upscaler"
-const comfyuiTypes = ["T2I", "I2I"];
+const comfyuiTypes = ["T2I", "I2I", "REMBG"];
 
 class ComfyUIWorkflowTab {
   constructor(file, workflow, editor, id, type, enabled) {
@@ -62,7 +62,7 @@ class ComfyUIWorkflowTab {
       <div class="comfui-tab-actions">
         <span class="comfui-tab-save" title="Save">Save</span>
         <span class="comfui-tab-download" title="Download">↓</span>
-        <span class="comfui-tab-close" title="Close">×</span>
+        <span class="comfui-tab-close" title="Close">Delete</span>
       </div>
     `;
 

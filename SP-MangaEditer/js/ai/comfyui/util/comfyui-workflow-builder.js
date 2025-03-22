@@ -50,13 +50,18 @@ class ComfyUIWorkflowBuilder {
                 validInputs[key] = value;
             }
         });
-
+    
         if (Object.keys(validInputs).length > 0) {
             Object.entries(this.workflowCopy).forEach(([id, node]) => {
                 if (node.inputs) {
                     Object.keys(node.inputs).forEach(inputKey => {
                         if (validInputs.hasOwnProperty(inputKey)) {
-                            node.inputs[inputKey] = validInputs[inputKey];
+                            const originalType = typeof node.inputs[inputKey];
+                            const newType = typeof validInputs[inputKey];
+                            
+                            if (originalType === newType) {
+                                node.inputs[inputKey] = validInputs[inputKey];
+                            }
                         }
                     });
                 }

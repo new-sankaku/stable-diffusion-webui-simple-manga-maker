@@ -98,6 +98,20 @@ function initialPutImage(img) {
   return img;
 }
 
+function replaceImageObject(oldImageObject, newImageObject){
+  oldImageObject.visible;
+  newImageObject.set({
+    left: oldImageObject.left,
+    top: oldImageObject.top,
+    scaleX: oldImageObject.scaleX,
+    scaleY: oldImageObject.scaleY,
+  });
+  saveInitialState(newImageObject);
+  canvas.add(newImageObject);
+  updateLayerPanel();
+}
+
+
 function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false, isFit=true) {
   let obj;
   

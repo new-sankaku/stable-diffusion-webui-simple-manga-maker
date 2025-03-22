@@ -35,7 +35,7 @@ function putRembgButton(buttonsDiv, layer, index) {
   button.onclick = function (e) {
     e.stopPropagation();
     var spinner = createSpinner(index);
-    sdWebUI_RembgProcessQueue(layer, spinner.id);
+    ai_rembg(layer, spinner);
   };
 
   addTooltipByElement(button, "rembg");
