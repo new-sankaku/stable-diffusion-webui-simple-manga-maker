@@ -44,10 +44,10 @@ class ComfyUIWorkflowEditor {
   
   async initialize() {
     this.nodeTypes = await objectInfoRepository.getObjectInfo();
-    if (!this.nodeTypes) {
-      console.info("set default ObjectInfo");
-      this.nodeTypes = defaultObjectInfo;
-    }
+    // if (!this.nodeTypes) {
+    //   console.info("set default ObjectInfo");
+    //   this.nodeTypes = defaultObjectInfo;
+    // }
 
     this.setupFileInput();
     this.setupTabEvents();

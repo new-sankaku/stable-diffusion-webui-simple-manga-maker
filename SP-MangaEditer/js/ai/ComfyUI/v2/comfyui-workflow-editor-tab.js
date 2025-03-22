@@ -205,6 +205,14 @@ class ComfyUIWorkflowTab {
     ).length;
   }
 
+  createMissingInput() {
+
+    let missingNode = getText('missingNode');
+    let missingDescription = getText('missingDescription');
+
+    return `<div class="comfui-input-container"> <label class="comfui-input-label" >${missingNode}</label> <textarea rows="4" oninput="this.style.height = ''; if(this.value.length > 100) { this.rows = 5; } else { this.rows = 4; } this.style.height = Math.min(this.scrollHeight, 120) + 'px'" style="resize: none; overflow-y: auto; font-size: 12px; padding: 2px;"> ${missingDescription} </textarea> </div>`;
+  }
+
   createInput(nodeId, inputName, inputDef, apiNode) {
     if (inputDef[0] === "MODEL") return "";
 
@@ -372,6 +380,7 @@ class ComfyUIWorkflowTab {
       .filter(([_, node]) => !this.hiddenNodeTypes.includes(node.class_type))
       .map(([id, node]) => {
         const apiNode = this.editor.getNodeType(node.class_type);
+        const class_type = node.class_type;
         const inputCount = apiNode
           ? this.getDisplayableInputCount(id, apiNode)
           : 0;
@@ -381,16 +390,23 @@ class ComfyUIWorkflowTab {
           node,
           apiNode,
           inputCount,
+          class_type
         };
       })
       .sort((a, b) => b.inputCount - a.inputCount);
 
 
-    nodes.forEach(({ id, node, apiNode }) => {
+    nodes.forEach(({ id, node, apiNode, class_type }) => {
       const nodeElement = document.createElement("div");
       nodeElement.className = "comfui-node-wrapper";
+      
       const nodeTitle = node._meta?.title || node.class_type;
-      const nodeTypeDisplay = `<div class="comfui-node-title">${id}: ${nodeTitle}</div>`;
+      let nodeTypeDisplay = '';
+      if( notExistsWorkflowNodeVsComfyUI(class_type) ){
+        nodeTypeDisplay = `<div class="comfui-node-title comfui-node-title-warning">${id}: ${nodeTitle}</div>` + this.createMissingInput();
+      }else{
+        nodeTypeDisplay = `<div class="comfui-node-title comfui-node-title-normal">${id}: ${nodeTitle}</div>`;
+      }
 
       let inputsDisplay = "";
       if (apiNode?.input?.required) {

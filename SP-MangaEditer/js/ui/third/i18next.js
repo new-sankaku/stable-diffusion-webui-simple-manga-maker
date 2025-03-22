@@ -1,5 +1,5 @@
 // ja en ko fr zh ru es pt th de
-// "2025xxxx": {
+// "20250322": {
 //   ja: {},
 //   en: {},
 //   ko: {},
@@ -15,7 +15,19 @@
 
 //マージされるので日付単位で分けて入れたらOK
 const resources = {
-"2025xxxx": {
+"20250322": {
+ja: {missingNode:"ノード情報無し", missingDescription:"ComfyUI接続未経験かノード無し。WorkflowをダウンロードしてComfyUIに適用してComfyUI ManagerからInstall Missing Custom Nodesを実行してください"},
+en: {missingNode:"No node info", missingDescription:"No ComfyUI connection experience or no nodes. Download Workflow, apply to ComfyUI and run Install Missing Custom Nodes from ComfyUI Manager"},
+ko: {missingNode:"노드 정보 없음", missingDescription:"ComfyUI 연결 경험이 없거나 노드가 없습니다. 워크플로우를 다운로드하여 ComfyUI에 적용하고 ComfyUI Manager에서 누락된 사용자 정의 노드 설치를 실행하세요"},
+fr: {missingNode:"Aucune info de nœud", missingDescription:"Pas d'expérience de connexion ComfyUI ou nœuds manquants. Téléchargez le workflow, appliquez-le à ComfyUI et exécutez Installer les nœuds personnalisés manquants depuis le gestionnaire ComfyUI"},
+zh: {missingNode:"无节点信息", missingDescription:"未连接ComfyUI或节点缺失。下载工作流，应用到ComfyUI并从ComfyUI管理器运行安装缺失的自定义节点"},
+ru: {missingNode:"Нет информации о узле", missingDescription:"Нет опыта подключения к ComfyUI или отсутствуют узлы. Загрузите рабочий процесс, примените его к ComfyUI и запустите установку отсутствующих пользовательских узлов из менеджера ComfyUI"},
+es: {missingNode:"Sin información de nodo", missingDescription:"Sin experiencia de conexión a ComfyUI o nodos ausentes. Descargue el flujo de trabajo, aplíquelo a ComfyUI y ejecute Instalar nodos personalizados faltantes desde el Administrador de ComfyUI"},
+pt: {missingNode:"Sem informação de nó", missingDescription:"Sem experiência de conexão ComfyUI ou nós ausentes. Baixe o fluxo de trabalho, aplique ao ComfyUI e execute Instalar nós personalizados ausentes do Gerenciador ComfyUI"},
+th: {missingNode:"ไม่มีข้อมูลโหนด", missingDescription:"ไม่มีประสบการณ์การเชื่อมต่อ ComfyUI หรือไม่มีโหนด ดาวน์โหลดเวิร์กโฟลว์ ใช้กับ ComfyUI และเรียกใช้การติดตั้งโหนดที่ขาดหายไปจาก ComfyUI Manager"},
+de: {missingNode:"Keine Knoteninfo", missingDescription:"Keine ComfyUI-Verbindungserfahrung oder keine Knoten. Workflow herunterladen, auf ComfyUI anwenden und Fehlende benutzerdefinierte Knoten installieren vom ComfyUI Manager ausführen"}
+},
+"20250321": {
  ja: {
    rought_error:"不明なエラー",
    rough_target:"ラフ対象が選択されていません",

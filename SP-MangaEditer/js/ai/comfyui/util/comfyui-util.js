@@ -145,6 +145,15 @@ function checkWorkflowNodeVsComfyUI(workflowClassTypes) {
         createToastError('Check ComfyUI Node! Not Exists!', result, 1000*10);
         return false;
     }else{
-        return true
+        return true;
+    }
+}
+
+function notExistsWorkflowNodeVsComfyUI(workflowClassType) {
+    const setB = new Set(comfyObjectInfoList);
+    if (!setB.has(workflowClassType)) {
+        return true;
+    }else{
+        return false;
     }
 }
