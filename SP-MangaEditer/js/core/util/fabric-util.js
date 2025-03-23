@@ -62,6 +62,10 @@ function isLayerPreview(activeObject) {
 
 
 function saveInitialState(obj) {
+  logger.traceWithStack('saveInitialState:obj.name:' + obj.name );
+  if(!obj.name){
+    logger.trace('saveInitialState:obj.name:' + obj.name, "obj:", obj);
+  }
 
   if (isImage(obj) && (!obj.initial)) {
     setImage2ImageInitPrompt(obj);
@@ -70,6 +74,8 @@ function saveInitialState(obj) {
   if (isPanel(obj) && (!obj.initial)) {
     setText2ImageInitPrompt(obj);
   }
+
+  logger.trace('saveInitialState:obj.name:' + obj.name,"obj.initial", obj.initial);
 
   obj.initial = {
     left: obj.left,
@@ -82,6 +88,8 @@ function saveInitialState(obj) {
   };
 
   if (obj.clipPath) {
+    logger.trace('saveInitialState:obj.name:' + obj.name,"obj.clipPath", obj.clipPath);
+
     obj.clipPath.initial = {
       left: obj.clipPath.left,
       top: obj.clipPath.top,
@@ -301,84 +309,379 @@ function getObjectByGUID(searchGuid) {
   return matchingObject;
 }
 
+
+
+
+
+
+
 function removeClipPath(activeObject, action) {
-  // let clipPath = activeObject.clipPath;
-  // if (!clipPath || !clipPath.points) {
-  //   console.error('ClipPath or clipPath.points not found');
-  //   return;
-  // }
+  let canvas = activeObject.canvas;
 
-  // const canvas = activeObject.canvas;
-  // const canvasWidth = canvas.getWidth();
-  // const canvasHeight = canvas.getHeight();
+  logger.trace("BEFORE", `Starting ${action} process for shape "${activeObject.name}"`, activeObject.name);
 
-  // function calculatePoint(point) {
-  //   return {
-  //     x: clipPath.left + point.x * clipPath.scaleX,
-  //     y: clipPath.top + point.y * clipPath.scaleY
-  //   };
-  // }
-
-  // let points = [];
-  // for (let i = 0; i < clipPath.points.length; i++) {
-  //   points.push(calculatePoint(clipPath.points[i]));
-  // }
-
-  // let minX = points[0].x, maxX = points[0].x;
-  // let minY = points[0].y, maxY = points[0].y;
-  // for (let i = 1; i < points.length; i++) {
-  //   minX = Math.min(minX, points[i].x);
-  //   maxX = Math.max(maxX, points[i].x);
-  //   minY = Math.min(minY, points[i].y);
-  //   maxY = Math.max(maxY, points[i].y);
-  // }
-
-  // let leftTop = { x: minX, y: minY };
-  // let rightTop = { x: maxX, y: minY };
-  // let rightBottom = { x: maxX, y: maxY };
-  // let leftBottom = { x: minX, y: maxY };
-  // var nextPoints = [];
-
-  switch (action) {
-    case 'clearAllClipPaths':
-      activeObject.clipPath = undefined;
-      activeObject.removeSettings();
-      break;
-    // case 'clearTopClipPath':
-    //   leftTop.y  = 0;
-    //   rightTop.y = 0;
-    //   break;
-    // case 'clearBottomClipPath':
-    //   leftTop.y  = canvas.getHeight();
-    //   rightTop.y = canvas.getHeight();
-    //   break;
-    // case 'clearLeftClipPath':
-    //   leftTop.x  = 0;
-    //   rightTop.x = 0;
-    //   break;
-    // case 'clearRightClipPath':
-    //   leftTop.x  = canvas.getWidth();;
-    //   rightTop.x = canvas.getWidth();;
-    //   break;
-    default:
-      console.error(`[removeClipPath] Error: Unknown action "${action}"`);
-      return;
+  let clipPath = activeObject.clipPath;
+  if (!clipPath || !clipPath.points) {
+   logger.trace("ERROR", `ClipPath or clipPath.points not found for shape "${activeObject.name}"`);
+   console.error('ClipPath or clipPath.points not found');
+   return;
   }
-
-  if (activeObject.clipPath) {
-    activeObject.clipPath.initial = {
-      left: clipPath.left,
-      top: clipPath.top,
-      scaleX: clipPath.scaleX,
-      scaleY: clipPath.scaleY,
-      canvasWidth: canvasWidth,
-      canvasHeight: canvasHeight,
+ 
+  const canvasWidth = canvas.getWidth();
+  const canvasHeight = canvas.getHeight();
+ 
+  logger.trace("BEFORE", `${action} process for shape "${activeObject.name}" - ClipPath Before`, {
+    left: clipPath.left,
+    top: clipPath.top,
+    scaleX: clipPath.scaleX,
+    scaleY: clipPath.scaleY,
+    points: clipPath.points
+  });
+ 
+  function calculatePoint(point) {
+   return {
+    x: clipPath.left + point.x * clipPath.scaleX,
+    y: clipPath.top + point.y * clipPath.scaleY
+   };
+  }
+ 
+  let points = [];
+  for (let i = 0; i < clipPath.points.length; i++) {
+   points.push(calculatePoint(clipPath.points[i]));
+  }
+  
+  logger.trace("INFO", `Calculated absolute coordinate points for shape "${activeObject.name}":`, points);
+ 
+  let minX = points[0].x, maxX = points[0].x;
+  let minY = points[0].y, maxY = points[0].y;
+  for (let i = 1; i < points.length; i++) {
+   minX = Math.min(minX, points[i].x);
+   maxX = Math.max(maxX, points[i].x);
+   minY = Math.min(minY, points[i].y);
+   maxY = Math.max(maxY, points[i].y);
+  }
+  
+  logger.trace("INFO", `Bounding box for shape "${activeObject.name}": X(${minX}~${maxX}), Y(${minY}~${maxY})`);
+ 
+  function detectEdgesWithJSTS(points) {
+    logger.trace("INFO", `Starting edge detection using JSTS for shape "${activeObject.name}"`);
+    
+    const sortedByX = [...points].sort((a, b) => a.x - b.x);
+    const leftMost = sortedByX[0].x;
+    const rightMost = sortedByX[sortedByX.length - 1].x;
+    
+    const geometryFactory = new jsts.geom.GeometryFactory();
+    const coordinates = points.map(p => new jsts.geom.Coordinate(p.x, p.y));
+    coordinates.push(coordinates[0]);
+    
+    const shell = geometryFactory.createLinearRing(coordinates);
+    const polygon = geometryFactory.createPolygon(shell);
+    const convexHull = polygon.convexHull();
+    const hullCoordinates = convexHull.getCoordinates();
+    
+    logger.trace("INFO", `Left edge X: ${leftMost}, Right edge X: ${rightMost} for shape "${activeObject.name}"`);
+    
+    const tolerance = 1;
+    
+    const topEdgePoints = [];
+    const bottomEdgePoints = [];
+    const leftEdgePoints = [];
+    const rightEdgePoints = [];
+    
+    for (let i = 0; i < hullCoordinates.length - 1; i++) {
+      const p1 = hullCoordinates[i];
+      const p2 = hullCoordinates[i + 1];
+      
+      const dx = p2.x - p1.x;
+      const dy = p2.y - p1.y;
+      const length = Math.sqrt(dx * dx + dy * dy);
+      
+      if (length < 0.001) continue;
+      
+      const nx = -dy / length;
+      const ny = dx / length;
+      
+      if (Math.abs(ny) > Math.abs(nx)) {
+        if (ny < 0) {
+          topEdgePoints.push({ p1: { x: p1.x, y: p1.y }, p2: { x: p2.x, y: p2.y } });
+          logger.trace("INFO", `Added to top edge for shape "${activeObject.name}": (${p1.x},${p1.y}) → (${p2.x},${p2.y})`);
+        } else {
+          bottomEdgePoints.push({ p1: { x: p1.x, y: p1.y }, p2: { x: p2.x, y: p2.y } });
+          logger.trace("INFO", `Added to bottom edge for shape "${activeObject.name}": (${p1.x},${p1.y}) → (${p2.x},${p2.y})`);
+        }
+      } else {
+        logger.trace("INFO", `Edge detection for shape "${activeObject.name}": (${p1.x},${p1.y}) → (${p2.x},${p2.y}), nx=${nx}, ny=${ny}`);
+        if (nx > 0) {
+          rightEdgePoints.push({ p1: { x: p1.x, y: p1.y }, p2: { x: p2.x, y: p2.y } });
+          logger.trace("INFO", `Added to right edge for shape "${activeObject.name}": (${p1.x},${p1.y}) → (${p2.x},${p2.y})`);
+        } else {
+          leftEdgePoints.push({ p1: { x: p1.x, y: p1.y }, p2: { x: p2.x, y: p2.y } });
+          logger.trace("INFO", `Added to left edge for shape "${activeObject.name}": (${p1.x},${p1.y}) → (${p2.x},${p2.y})`);
+        }
+      }
+    }
+    
+    const result = {
+      top: topEdgePoints,
+      bottom: bottomEdgePoints,
+      left: leftEdgePoints,
+      right: rightEdgePoints
     };
+    
+    logger.trace("INFO", `Edge detection results for shape "${activeObject.name}"`, {
+      top: topEdgePoints.length,
+      bottom: bottomEdgePoints.length,
+      left: leftEdgePoints.length,
+      right: rightEdgePoints.length
+    });
+    
+    return result;
   }
+  
+  function getPointsFromEdge(edgePoints) {
+    logger.trace("INFO", `Starting point detection from edges for shape "${activeObject.name}"`);
+    const indices = [];
+    const tolerance = 1;
+    
+    for (const edge of edgePoints) {
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        const distToEdge = pointToLineDistance(point, edge.p1, edge.p2);
+        if (distToEdge < tolerance) {
+          indices.push(i);
+          logger.trace("INFO", `Point ${i} (${point.x}, ${point.y}) for shape "${activeObject.name}" is included in the edge, distance: ${distToEdge}`);
+        }
+      }
+    }
+    
+    const uniqueIndices = [...new Set(indices)];
+    logger.trace("INFO", `Detected edge points for shape "${activeObject.name}": ${uniqueIndices.length} points`, uniqueIndices);
+    
+    return uniqueIndices;
+  }
+  
+  function pointToLineDistance(point, lineStart, lineEnd) {
+    const A = point.x - lineStart.x;
+    const B = point.y - lineStart.y;
+    const C = lineEnd.x - lineStart.x;
+    const D = lineEnd.y - lineStart.y;
+    
+    const dot = A * C + B * D;
+    const lenSq = C * C + D * D;
+    let param = -1;
+    
+    if (lenSq !== 0) {
+      param = dot / lenSq;
+    }
+    
+    let xx, yy;
+    
+    if (param < 0) {
+      xx = lineStart.x;
+      yy = lineStart.y;
+    } else if (param > 1) {
+      xx = lineEnd.x;
+      yy = lineEnd.y;
+    } else {
+      xx = lineStart.x + param * C;
+      yy = lineStart.y + param * D;
+    }
+    
+    const dx = point.x - xx;
+    const dy = point.y - yy;
+    
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  let newPoints = [];
+  let newLeft = clipPath.left;
+  let newTop = clipPath.top;
+  
+  logger.trace("BEFORE", `Starting ${action} process for shape "${activeObject.name}": newLeft=${newLeft}, newTop=${newTop}`);
+  
+  switch (action) {
+   case 'clearAllClipPaths':
+    logger.trace("INFO", `Clearing all ClipPaths for shape "${activeObject.name}"`);
+    activeObject.clipPath = undefined;
+    break;
+   case 'clearTopClipPath':
+    logger.trace("INFO", `Starting top edge ClipPath clearing process for shape "${activeObject.name}"`);
+    const edges = detectEdgesWithJSTS(points);
+    const topIndices = getPointsFromEdge(edges.top);
+    
+    for (let i = 0; i < clipPath.points.length; i++) {
+     let point = {};
+     point.x = clipPath.points[i].x;
+     if (topIndices.includes(i)) {
+       point.y = 0;
+       logger.trace("INFO", `Point ${i} for shape "${activeObject.name}" is on top edge: Setting Y coordinate to 0`);
+     } else {
+       point.y = clipPath.points[i].y;
+     }
+     newPoints.push(point);
+    }
+    
+    newTop = 0;
+    logger.trace("INFO", `Top edge clearing process completed for shape "${activeObject.name}"`, newPoints);
+    
+    reconstructClipPath(activeObject, newPoints, clipPath, newLeft, newTop);
+    break;
+   case 'clearBottomClipPath':
+    logger.trace("INFO", `Starting bottom edge ClipPath clearing process for shape "${activeObject.name}"`);
+    const edgesBottom = detectEdgesWithJSTS(points);
+    const bottomIndices = getPointsFromEdge(edgesBottom.bottom);
+    
+    for (let i = 0; i < clipPath.points.length; i++) {
+     let point = {};
+     point.x = clipPath.points[i].x;
+     if (bottomIndices.includes(i)) {
+       point.y = canvasHeight;
+       logger.trace("INFO", `Point ${i} for shape "${activeObject.name}" is on bottom edge: Setting Y coordinate to ${point.y}`);
+     } else {
+       point.y = clipPath.points[i].y;
+     }
+     newPoints.push(point);
+    }
+    
+    logger.trace("INFO", `Bottom edge clearing process completed for shape "${activeObject.name}"`, newPoints);
+    
+    reconstructClipPath(activeObject, newPoints, clipPath, newLeft, newTop);
+    break;
+   case 'clearLeftClipPath':
+    logger.trace("INFO", `Starting left edge ClipPath clearing process for shape "${activeObject.name}"`);
+    const edgesLeft = detectEdgesWithJSTS(points);
+    const leftIndices = getPointsFromEdge(edgesLeft.left);
+    
+    for (let i = 0; i < clipPath.points.length; i++) {
+     let point = {};
+     point.y = clipPath.points[i].y;
+     if (leftIndices.includes(i)) {
+       point.x = 0;
+       logger.trace("INFO", `Point ${i} for shape "${activeObject.name}" is on left edge: Setting X coordinate to 0`);
+     } else {
+       point.x = clipPath.points[i].x;
+     }
+     newPoints.push(point);
+    }
+    newLeft = 0;
+    
+    logger.trace("INFO", `Left edge clearing process completed for shape "${activeObject.name}"`, newPoints);
+    
+    reconstructClipPath(activeObject, newPoints, clipPath, newLeft, newTop);
+    break;
+   case 'clearRightClipPath':
+    logger.trace("INFO", `Starting right edge ClipPath clearing process for shape "${activeObject.name}"`);
+    const edgesRight = detectEdgesWithJSTS(points);
+    const rightIndices = getPointsFromEdge(edgesRight.right);
+    
+    for (let i = 0; i < clipPath.points.length; i++) {
+     let point = {};
+     if (rightIndices.includes(i)) {
+       point.x = canvasWidth;
+       logger.trace("INFO", `Point ${i} for shape "${activeObject.name}" is on right edge: Setting X coordinate to ${point.x}`);
+     } else {
+       point.x = clipPath.points[i].x;
+     }
+     point.y = clipPath.points[i].y;
+     newPoints.push(point);
+    }
+    
+    logger.trace("INFO", `Right edge clearing process completed for shape "${activeObject.name}"`, newPoints);
+    
+    reconstructClipPath(activeObject, newPoints, clipPath, newLeft, newTop);
+    break;
+   default:
+    logger.trace("ERROR", `Unknown action "${action}" for shape "${activeObject.name}"`);
+    console.error(`[removeClipPath] Error: Unknown action "${action}"`);
+    return;
+  }
+  if(activeObject.removeSettings){
+    activeObject.removeSettings();
+  }
+ 
   if (canvas) {
-    canvas.requestRenderAll();
+   canvas.requestRenderAll();
   }
+  
+  logger.trace("AFTER", `${action} process completed for shape "${activeObject.name}"`);
 }
+
+function reconstructClipPath(activeObject, points, oldClipPath, newLeft, newTop) {
+  logger.trace("BEFORE", `Starting ClipPath reconstruction for shape "${activeObject.name}"`, {
+    ObjectName: activeObject.name,
+    PointCount: points.length,
+    OldLeft: oldClipPath.left,
+    OldTop: oldClipPath.top,
+    NewLeft: newLeft,
+    NewTop: newTop
+  });
+
+  let canvas = activeObject.canvas;
+  newLeft = newLeft !== undefined ? 
+    newLeft + activeObject.strokeWidth - (activeObject.strokeWidth*0.5) : 
+    oldClipPath.left;
+
+  newTop = newTop !== undefined ? 
+    newTop + activeObject.strokeWidth - (activeObject.strokeWidth*0.5) : 
+    oldClipPath.top;
+    
+  logger.trace("INFO", `Adjusted coordinates for shape "${activeObject.name}"`, {
+    AdjustedLeft: newLeft,
+    AdjustedTop: newTop
+  });
+
+  let newClipPath = new fabric.Polygon(points, {
+    left: newLeft,
+    top:  newTop,
+    objectCaching: false,
+    absolutePositioned: true,
+    name: activeObject.name+'_clipPath'
+  });
+
+  newClipPath.scaleX = 1 - (oldClipPath.strokeWidth) / (newClipPath.width);
+  newClipPath.scaleY = 1 - (oldClipPath.strokeWidth) / (newClipPath.height);
+  
+  logger.trace("INFO", `New ClipPath details for shape "${activeObject.name}"`, {
+    Width: newClipPath.width,
+    Height: newClipPath.height,
+    ScaleX: newClipPath.scaleX,
+    ScaleY: newClipPath.scaleY
+  });
+
+  activeObject.clipPath = newClipPath;
+
+  activeObject.initial = {
+    left: activeObject.left,
+    top: activeObject.top,
+    scaleX: activeObject.scaleX,
+    scaleY: activeObject.scaleY,
+    strokeWidth: activeObject.strokeWidth,
+    canvasWidth: activeObject.canvas.getWidth(),
+    canvasHeight: activeObject.canvas.getHeight(),
+  };
+
+  activeObject.clipPath.initial = {
+    left: activeObject.clipPath.left,
+    top: activeObject.clipPath.top,
+    scaleX: activeObject.clipPath.scaleX,
+    scaleY: activeObject.clipPath.scaleY,
+    canvasWidth: activeObject.canvas.getWidth(),
+    canvasHeight: activeObject.canvas.getHeight(),
+  };
+
+  if(activeObject.clipPath.initial ){
+    logger.trace("INFO", `activeObject.clipPath.initial has been set for shape "${activeObject.name}"`);
+  }
+  
+  logger.trace("AFTER", `ClipPath reconstruction completed for shape "${activeObject.name}"`, {
+    Name: newClipPath.name,
+    Left: newClipPath.left,
+    Top: newClipPath.top,
+    ScaleX: newClipPath.scaleX,
+    ScaleY: newClipPath.scaleY
+  });
+}
+
 
 
 
@@ -498,17 +801,6 @@ function getPanelCoordinates(panel) {
     };
   });
  
-//   console.log(`
-//  実際の座標情報:
-//   点1: x1=${coords[0].x.toFixed(2)}, y1=${coords[0].y.toFixed(2)}
-//   点2: x2=${coords[1].x.toFixed(2)}, y2=${coords[1].y.toFixed(2)}
-//   点3: x3=${coords[2].x.toFixed(2)}, y3=${coords[2].y.toFixed(2)}
-//   点4: x4=${coords[3].x.toFixed(2)}, y4=${coords[3].y.toFixed(2)}
-  
-//   left=${panel.left}, top=${panel.top}
-//   scaleX=${panel.scaleX}, scaleY=${panel.scaleY}
-//   angle=${panel.angle}度
-//  `);
  
   return coords;
  }

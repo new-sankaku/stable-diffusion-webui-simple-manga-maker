@@ -98,6 +98,11 @@ function showObjectMenu(clickType) {
   var rembg               = createObjectMenuButton('rembg');
   var clearAllClipPaths   = createObjectMenuButton('clearAllClipPaths');
 
+  var clearTopClipPath   = createObjectMenuButton('clearTopClipPath');
+  var clearBottomClipPath   = createObjectMenuButton('clearBottomClipPath');
+  var clearRightClipPath   = createObjectMenuButton('clearRightClipPath');
+  var clearLeftClipPath   = createObjectMenuButton('clearLeftClipPath');
+
   var flipHorizontal      = createObjectMenuButton('flipHorizontal');
   var flipVertical        = createObjectMenuButton('flipVertical');
 
@@ -144,6 +149,12 @@ function showObjectMenu(clickType) {
       
       if (haveClipPath(activeObject)) {
         menuItems.push(clearAllClipPaths);
+
+        menuItems.push(clearTopClipPath);
+        menuItems.push(clearBottomClipPath);
+        menuItems.push(clearRightClipPath);
+        menuItems.push(clearLeftClipPath);
+      
       } else {
         menuItems.push(panelIn);
         menuItems.push(canvasFit);
@@ -428,13 +439,6 @@ function closeMenu() {
   }
 }
 
-canvas.on('selection:created', () => {
-  closeMenu();
-});
-canvas.on('selection:updated', () => {
-  closeMenu();
-});
-
 canvas.wrapperEl.addEventListener('contextmenu', function (e) {
   e.preventDefault();
   const pointer = canvas.getPointer(e);
@@ -456,12 +460,4 @@ canvas.wrapperEl.addEventListener('mousedown', function (e) {
   }
 });
 
-canvas.on('selection:cleared', function () {
-  closeMenu();
-});
-
-// canvas.on('object:moving', updateObjectMenuPosition);
-// canvas.on('object:scaling', updateObjectMenuPosition);
-// canvas.on('object:rotating', updateObjectMenuPosition);
-// canvas.on('after:render', updateObjectMenuPosition);
 createObjectMenu();

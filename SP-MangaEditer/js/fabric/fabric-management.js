@@ -1,17 +1,23 @@
-
 var lastActiveObjectState = null;
+
 canvas.on('selection:created', function(event) {
+  logger.trace('1: selection:created');
   lastActiveObjectState = canvas.getActiveObject();
 });
 canvas.on('selection:updated', function(event) {
+  logger.trace('2: selection:updated');
   glfxReset();
   lastActiveObjectState = canvas.getActiveObject();
 });
+
+
+
 canvas.on('selection:cleared', function() {
+  logger.trace('3: selection:cleared');
   glfxReset();
 });
-
 canvas.on("object:added", (e) => {
+  logger.trace('4: object:added');
   const obj = e.target;
   if (!obj.initial) {
     saveInitialState(obj);
@@ -28,24 +34,26 @@ canvas.on("object:added", (e) => {
       selectable: false
     });
   }
-
 });
 
 canvas.on("object:modified", (e) => {
+  logger.trace('5: object:modified');
   const obj = e.target;
   saveInitialState(obj);
 });
 
 
-// Layer History.
-canvas.on('object:added',     function(e) { saveStateByListener(e, 'object:added'); });
-canvas.on('object:modified',  function(e) { saveStateByListener(e, 'object:modified'); });
-canvas.on('object:removed',   function(e) { saveStateByListener(e, 'object:removed'); });
-canvas.on('path:created',     function(e) { saveStateByListener(e, 'path:created'); });
-canvas.on('canvas:cleared',   function(e) { saveStateByListener(e, 'canvas:cleared'); });
+canvas.on('object:added',     function(e) { logger.trace('6: object:added'); saveStateByListener(e, 'object:added'); });
+canvas.on('object:modified',  function(e) { logger.trace('7: object:modified'); saveStateByListener(e, 'object:modified'); });
+canvas.on('object:removed',   function(e) { logger.trace('8: object:removed'); saveStateByListener(e, 'object:removed'); });
+canvas.on('path:created',     function(e) { logger.trace('9: path:created'); saveStateByListener(e, 'path:created'); });
+canvas.on('canvas:cleared',   function(e) { logger.trace('10: canvas:cleared'); saveStateByListener(e, 'canvas:cleared'); });
 
-//End Crop Mode
+
+
+//Crop Mode from start
 canvas.on('selection:cleared', function() {
+  logger.trace('11: selection:cleared');
   if (cropFrame) {
       canvas.remove(cropFrame);
       cropFrame = null;
@@ -53,54 +61,52 @@ canvas.on('selection:cleared', function() {
   }
 });
 canvas.on('selection:updated', function() {
+  logger.trace('12: selection:updated');
   if (cropFrame && canvas.getActiveObject() !== cropFrame) {
     canvas.remove(cropFrame);
     cropFrame = null;
     $('crop').style.display = 'none';
   }
 });
+//Crop Mode from finish
 
-//Object選択時にLeyerパネルをハイライトする。
-canvas.on('selection:created',  highlightActiveLayerByCanvas);
-canvas.on('selection:updated',  highlightActiveLayerByCanvas);
-canvas.on('object:added',       highlightActiveLayerByCanvas);
-// canvas.on('object:removed',  highlightActiveLayerByCanvas);
-canvas.on('object:modified',    highlightActiveLayerByCanvas);
-// canvas.on('object:scaling',  highlightActiveLayerByCanvas);
-// canvas.on('object:moving',   highlightActiveLayerByCanvas);
-// canvas.on('object:rotating', highlightActiveLayerByCanvas);
 
-//Object選択時にLeyerパネルをハイライトを終了する。
-canvas.on('selection:cleared', function() {
-  highlightClear();
-});
 
-//Object移動時にGrid線にスナップする。
+//highligh from start
+canvas.on('selection:created', function(event)  { logger.trace('50: selection:created');  highlightActiveLayerByCanvas(event); });
+canvas.on('selection:updated', function(event)  { logger.trace('51: selection:updated');  highlightActiveLayerByCanvas(event); });
+canvas.on('object:added',      function(event)  { logger.trace('52: object:added');       highlightActiveLayerByCanvas(event); });
+canvas.on('object:modified',   function(event)  { logger.trace('53: object:modified');    highlightActiveLayerByCanvas(event); });
+canvas.on('selection:cleared', function() {       logger.trace('13: selection:cleared');  highlightClear();});
+//highligh from finish
+
+
+
 canvas.on("object:moving", function (e) {
   if (isGridVisible) {
+    logger.trace('14: object:moving');
+
     debounceSnapToGrid(e.target);
   }
 });
 
-//CommonControl, ImageControlの更新処理
-// canvas.on("selection:created", handleSelection);
-// canvas.on("selection:updated", handleSelection);
-
-//Textの更新処理
 canvas.on('selection:created', function(event) {
+  logger.trace('15: selection:created');
   if (event.selected && event.selected[0]) {
     updateTextControls(event.selected[0]);
   }
 });
 canvas.on('selection:updated', function(event) {
+  logger.trace('16: selection:updated');
   if (event.selected && event.selected[0]) {
     updateTextControls(event.selected[0]);
   }
 });
 
 function moveSettings(img, poly) {
-
-  // console.log("moveSettings", img, poly);
+  logger.trace('moveSettings');
+  logger.traceWithStack('moveSettings');
+  
   updateClipPath(img, poly);
 
   function updateOnModification() {
@@ -201,6 +207,7 @@ function updatePathClipPath(imageObj, pathObj) {
 
 
 canvas.on("object:added", (e) => {
+  logger.trace('17: object:added');
   if(canvas.isDrawingMode){
     return;
   }
@@ -217,6 +224,7 @@ canvas.on("object:added", (e) => {
 
 let lastCheckObject = null;
 canvas.on('mouse:down', function(e) {
+  logger.trace('18: mouse:down');
   if(canvas.isDrawingMode){
     return;
   }
@@ -230,60 +238,291 @@ canvas.on('mouse:down', function(e) {
 });
 
 canvas.on('mouse:up', function(e) {
+  logger.trace('19: mouse:up');
   if (e.target && e.target.originalOpacity !== undefined) {
       e.target.opacity = e.target.originalOpacity;
       delete e.target.originalOpacity;
       canvas.renderAll();
       changeDoSaveHistory();
-      saveStateByManual();
       highlightActiveLayerByCanvas(e.target);
   }
 });
 
+canvas.on("mouse:down", function (options) {
+  logger.trace('20: mouse:down');
+  if (!isKnifeMode) return;
 
-// // Mouse events
-// canvas.on('mouse:down', e => console.log('mouse:down called'));
-// // canvas.on('mouse:move', e => console.log('mouse:move called'));
-// canvas.on('mouse:up', e => console.log('mouse:up called'));
-// // canvas.on('mouse:over', e => console.log('mouse:over called'));
-// // canvas.on('mouse:out', e => console.log('mouse:out called'));
-// canvas.on('mouse:wheel', e => console.log('mouse:wheel called'));
-// canvas.on('mouse:dblclick', e => console.log('mouse:dblclick called'));
+  var pointer = canvas.getPointer(options.e);
+  var selectedPolygon = getPolygonAtPoint(pointer);
 
-// // Selection events 
-// canvas.on('selection:created', e => console.log('selection:created called'));
-// canvas.on('selection:updated', e => console.log('selection:updated called'));
-// canvas.on('selection:cleared', e => console.log('selection:cleared called'));
+  if (selectedPolygon) {
+    isKnifeDrawing = true;
+    currentKnifeObject = selectedPolygon;
+    startKnifeX = pointer.x;
+    startKnifeY = pointer.y;
+    drawLine(startKnifeX, startKnifeY, startKnifeX, startKnifeY);
+  } else {
+    isKnifeDrawing = false;
+    canvas.discardActiveObject().renderAll();
+  }
+});
 
-// // Object manipulation events
-// canvas.on('object:added', e => console.log('object:added called'));
-// canvas.on('object:removed', e => console.log('object:removed called'));
-// canvas.on('object:modified', e => console.log('object:modified called'));
-// canvas.on('object:moving', e => console.log('object:moving called'));
-// canvas.on('object:scaling', e => console.log('object:scaling called'));
-// canvas.on('object:rotating', e => console.log('object:rotating called'));
-// canvas.on('object:skewing', e => console.log('object:skewing called'));
+canvas.on("mouse:up", function (options) {
+  logger.trace('21: mouse:up');
+  if (!isKnifeMode || !isKnifeDrawing) return;
 
-// // Text related events
-// canvas.on('text:changed', e => console.log('text:changed called'));
-// canvas.on('text:editing:entered', e => console.log('text:editing:entered called'));
-// canvas.on('text:editing:exited', e => console.log('text:editing:exited called'));
-// canvas.on('text:selection:changed', e => console.log('text:selection:changed called'));
+  isKnifeDrawing = false;
 
-// // Path related events
-// canvas.on('path:created', e => console.log('path:created called'));
+  if (currentKnifeLine) {
+    currentKnifeLine.bringToFront();
+    splitPolygon(currentKnifeObject);
+  }
+  currentKnifeObject = null;
+  currentKnifeLine = null;
+});
 
-// // Canvas related events
-// canvas.on('after:render', e => console.log('after:render called'));
-// canvas.on('before:render', e => console.log('before:render called'));
-// canvas.on('canvas:cleared', e => console.log('canvas:cleared called'));
+canvas.on("mouse:move", function (options) {
+  if (!isKnifeMode || !isKnifeDrawing) return;
+  logger.trace('22: mouse:move');
 
-// // Group related events
-// // canvas.on('group:made', e => console.log('group:made called'));
-// // canvas.on('group:unmade', e => console.log('group:unmade called'));
+  var pointer = canvas.getPointer(options.e);
+  var endX = pointer.x;
+  var endY = pointer.y;
 
-// // Drop events
-// canvas.on('drop', e => console.log('drop called'));
-// canvas.on('dragenter', e => console.log('dragenter called'));
-// canvas.on('dragover', e => console.log('dragover called'));
-// canvas.on('dragleave', e => console.log('dragleave called'));
+  var dx = endX - startKnifeX;
+  var dy = endY - startKnifeY;
+  var angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+
+  if (
+    (angle >= 0 - knifeAssistAngle && angle <= knifeAssistAngle) ||
+    angle <= -180 + knifeAssistAngle ||
+    angle >= 180 - knifeAssistAngle
+  ) {
+    endY = startKnifeY;
+  } else if (
+    (angle >= 90 - knifeAssistAngle && angle <= 90 + knifeAssistAngle) ||
+    (angle >= -90 - knifeAssistAngle && angle <= -90 + knifeAssistAngle)
+  ) {
+    endX = startKnifeX;
+  }
+
+  drawLine(startKnifeX, startKnifeY, endX, endY);
+});
+
+
+
+
+
+
+
+canvas.on('path:created', function (opt) {
+  logger.trace('23: path:created');
+  console.log("push");
+  currentPaths.push(opt.path);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  canvas.on('mouse:move', function (options) {
+      if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
+        logger.trace('24: mouse:move');
+        canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
+      }
+  });
+});
+
+
+
+
+
+
+canvas.on("mouse:down", event => {
+  logger.trace('25: mouse:down');
+  isDrawing = true;
+  const pointer = canvas.getPointer(event.e);
+  if (currentMode === "point") {
+    points.push({ x: pointer.x, y: pointer.y });
+    updateTemporaryShapes();
+  } else if (currentMode === "freehand") {
+    points = [{ x: pointer.x, y: pointer.y }];
+    updateTemporaryShapes();
+  } else if (currentMode === "movePoint" || currentMode === "deletePoint") {
+    if (event.target && event.target.isSpeechBubble) {
+      selectedObject = event.target;
+      createControlPoints(selectedObject);
+    } else if (currentMode === "deletePoint" && event.target && event.target.data && event.target.data.index !== undefined) {
+      deletePoint(selectedObject, event.target.data.index);
+    } else if (event.target && event.target.data) {
+      activePoint = event.target;
+    } else {
+      selectedObject = null;
+      createControlPoints(null);
+      activePoint = null;
+    }
+  }
+});
+
+canvas.on("mouse:move", event => {
+  const currentTime = Date.now();
+  if (currentTime - lastRenderTime < 16) return;
+  lastRenderTime = currentTime;
+
+  if (currentMode === "point") {
+    logger.trace('26: mouse:move');
+  } else if (currentMode === "freehand" && isDrawing) {
+    logger.trace('26: mouse:move');
+  } else if (currentMode === "movePoint" && isDrawing && activePoint) {
+    logger.trace('26: mouse:move');
+  }else{
+    return;
+  }
+
+  const pointer = canvas.getPointer(event.e);
+  if (currentMode === "point") {
+    mousePosition = { x: pointer.x, y: pointer.y };
+    updateTemporaryShapes();
+  } else if (currentMode === "freehand" && isDrawing) {
+    points.push({ x: pointer.x, y: pointer.y });
+    updateTemporaryShapes();
+  } else if (currentMode === "movePoint" && isDrawing && activePoint) {
+    updateShape(selectedObject, activePoint.data.index, pointer.x, pointer.y);
+    activePoint.set({ left: pointer.x, top: pointer.y });
+    requestAnimationFrame(() => canvas.renderAll());
+  }
+});
+
+canvas.on("mouse:up", event => {
+  logger.trace('27: mouse:up');
+  isDrawing = false;
+  activePoint = null;
+  const pointer = canvas.getPointer(event.e);
+  if (currentMode === "point" && points.length >= 4) {
+    if (isNearStartPoint(pointer.x, pointer.y, points[0])) {
+      points.pop();
+      points.push({ x: points[0].x, y: points[0].y });
+      points = processPoints(points);
+      const geometry = createJSTSPolygon(points);
+      if (geometry && geometry.isValid()) {
+        createSpeechBubble(mergeOverlappingShapes(geometry));
+      } else {
+        console.log("jsts up error");
+      }
+
+      points = [];
+      mousePosition = null;
+
+      updateObjectSelectability();
+
+    } else {
+      updateTemporaryShapes();
+    }
+  } else if (currentMode === "freehand" && points.length >= 4) {
+    points.push({ x: points[0].x, y: points[0].y });
+    points = processPoints(points);
+    const geometry = createJSTSPolygon(points);
+    if (geometry && geometry.isValid()) {
+      createSpeechBubble(mergeOverlappingShapes(geometry));
+      points = [];
+    } else {
+      console.log("jsts up error");
+    }
+    updateObjectSelectability();
+    requestAnimationFrame(() => canvas.renderAll());
+  }
+});
+
+canvas.on('object:moving', function(event)  { logger.trace('28: object:moving');  updateJSTSGeometry(event); });
+canvas.on('object:scaling', function(event) { logger.trace('29: object:scaling'); updateJSTSGeometry(event); });
+
+
+
+
+
+
+
+
+
+
+canvas.on("object:moving", function (event) {
+  if (isSpeechBubbleSVG(event.target)) {
+    logger.trace('30: object:moving');
+    updateObjectPositions(event.target);
+    canvas.requestRenderAll();
+  }
+});
+
+canvas.on("mouse:up", function (event) {
+  logger.trace('31: mouse:up');
+  if (isSpeechBubbleSVG(event.target)) {
+    updateObjectPositions(event.target, true);
+  }
+});
+canvas.on("text:changed", function (event) {
+  logger.trace('32: text:changed');
+  requestAnimationFrame(() => {
+    speechBubbleTextChaged(event.target);
+  });
+});
+
+canvas.on("object:scaling", function (event) {
+  logger.trace('33: object:scaling');
+  if (isSpeechBubbleSVG(event.target)) {
+    event.target.baseScaleX = event.target.scaleX;
+    event.target.baseScaleY = event.target.scaleY;
+    updateShapeMetrics(event.target);
+  }
+});
+
+canvas.on("object:rotating", function (event) {
+  logger.trace('34: object:rotating');
+  if (isSpeechBubbleSVG(event.target)) {
+    updateShapeMetrics(event.target);
+  }
+});
+canvas.on("object:removed", function(event) {
+  logger.trace('35: object:removed');
+  if (isSpeechBubbleSVG(event.target)) {
+    const rect = getSpeechBubbleRectBySVG(event.target);
+    const textbox = getSpeechBubbleTextBySVG(event.target);
+    canvas.remove(rect);
+    canvas.remove(textbox);
+    canvas.requestRenderAll();
+  }
+  if (isSpeechBubbleText(event.target)) {
+    const rect = getSpeechBubbleRectBySVG(event.target.targetObject);
+    canvas.remove(rect);
+    event.target.targetObject.customType = "";
+    canvas.requestRenderAll();
+  }
+});
+
+
+
+
+
+
+
+
+canvas.on('selection:created', () => {
+  logger.trace('36: selection:created');
+  closeMenu();
+});
+canvas.on('selection:updated', () => {
+  logger.trace('37: selection:updated');
+  closeMenu();
+});
+
+  canvas.on("mouse:move", function (options) {
+    if (coordCheckbox.checked) {
+      // logger.trace('38: mouse:move');
+      updateCoordinates(options);
+    }
+  });
+
+
+
+
+
+  canvas.on('selection:cleared', function () {
+    logger.trace('39: selection:cleared');
+    closeMenu();
+  });

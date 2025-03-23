@@ -317,7 +317,7 @@ function loadSVGPlusReset(svgString, isLand=false) {
           left: obj.left * scaleToFit + offsetX,
           stroke: obj.stroke,
           strokeWidth: strokeWidth,
-          selectable: true,
+          selectable: false,
           hasControls: true,
           lockMovementX: false,
           lockMovementY: false,
@@ -356,7 +356,7 @@ function loadSVGPlusReset(svgString, isLand=false) {
         obj.lockScalingY = false;
         obj.objectCaching = false;
         canvas.add(obj);
-        obj.selectable = true;
+        obj.selectable = false;
       }
     });
 

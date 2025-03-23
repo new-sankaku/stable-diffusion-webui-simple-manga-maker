@@ -379,89 +379,6 @@ sbDeleteButton.addEventListener("click", () => {
   changeCursor("deletePoint");
 });
 
-canvas.on("mouse:down", event => {
-  isDrawing = true;
-  const pointer = canvas.getPointer(event.e);
-  if (currentMode === "point") {
-    points.push({ x: pointer.x, y: pointer.y });
-    updateTemporaryShapes();
-  } else if (currentMode === "freehand") {
-    points = [{ x: pointer.x, y: pointer.y }];
-    updateTemporaryShapes();
-  } else if (currentMode === "movePoint" || currentMode === "deletePoint") {
-    if (event.target && event.target.isSpeechBubble) {
-      selectedObject = event.target;
-      createControlPoints(selectedObject);
-    } else if (currentMode === "deletePoint" && event.target && event.target.data && event.target.data.index !== undefined) {
-      deletePoint(selectedObject, event.target.data.index);
-    } else if (event.target && event.target.data) {
-      activePoint = event.target;
-    } else {
-      selectedObject = null;
-      createControlPoints(null);
-      activePoint = null;
-    }
-  }
-});
-
-canvas.on("mouse:move", event => {
-  const currentTime = Date.now();
-  if (currentTime - lastRenderTime < 16) return;
-  lastRenderTime = currentTime;
-
-  const pointer = canvas.getPointer(event.e);
-  if (currentMode === "point") {
-    mousePosition = { x: pointer.x, y: pointer.y };
-    updateTemporaryShapes();
-  } else if (currentMode === "freehand" && isDrawing) {
-    points.push({ x: pointer.x, y: pointer.y });
-    updateTemporaryShapes();
-  } else if (currentMode === "movePoint" && isDrawing && activePoint) {
-    updateShape(selectedObject, activePoint.data.index, pointer.x, pointer.y);
-    activePoint.set({ left: pointer.x, top: pointer.y });
-    requestAnimationFrame(() => canvas.renderAll());
-  }
-});
-
-canvas.on("mouse:up", event => {
-  isDrawing = false;
-  activePoint = null;
-  const pointer = canvas.getPointer(event.e);
-  if (currentMode === "point" && points.length >= 4) {
-    if (isNearStartPoint(pointer.x, pointer.y, points[0])) {
-      points.pop();
-      points.push({ x: points[0].x, y: points[0].y });
-      points = processPoints(points);
-      const geometry = createJSTSPolygon(points);
-      if (geometry && geometry.isValid()) {
-        createSpeechBubble(mergeOverlappingShapes(geometry));
-      } else {
-        console.log("jsts up error");
-      }
-
-      points = [];
-      mousePosition = null;
-
-      updateObjectSelectability();
-
-    } else {
-      updateTemporaryShapes();
-    }
-  } else if (currentMode === "freehand" && points.length >= 4) {
-    points.push({ x: points[0].x, y: points[0].y });
-    points = processPoints(points);
-    const geometry = createJSTSPolygon(points);
-    if (geometry && geometry.isValid()) {
-      createSpeechBubble(mergeOverlappingShapes(geometry));
-      points = [];
-    } else {
-      console.log("jsts up error");
-    }
-    updateObjectSelectability();
-    requestAnimationFrame(() => canvas.renderAll());
-  }
-});
-
 function sbClear(){
   removeByNotSave(temporaryLine);
   removeByNotSave(temporaryShape);
@@ -520,16 +437,12 @@ function setSelectionMode(button) {
 
 setSelectionMode(sbSelectButton);
 
-canvas.on('object:moving', updateJSTSGeometry);
-canvas.on('object:scaling', updateJSTSGeometry);
-
 function updateJSTSGeometry(event) {
   const obj = event.target;
   updateJSTSGeometryByObj(obj);
 }
 
 function updateJSTSGeometryByObj(obj) {
-
   if (obj.isSpeechBubble) {
     const scaleX = obj.scaleX;
     const scaleY = obj.scaleY;

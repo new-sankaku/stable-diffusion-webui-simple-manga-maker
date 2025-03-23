@@ -44,8 +44,6 @@ function resizeCanvas(newWidth, newHeight) {
 
     var scaleX = newWidth  / obj.initial.canvasWidth;
     var scaleY = newHeight / obj.initial.canvasHeight;
-                  
-    // console.log("resizeCanvas", obj.guid, Math.floor(obj.left), Math.floor(obj.initial.left), Math.floor(scaleX));
 
     obj.set({
       scaleX: obj.initial.scaleX * scaleX,

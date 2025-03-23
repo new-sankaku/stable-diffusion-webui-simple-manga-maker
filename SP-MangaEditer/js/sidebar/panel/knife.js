@@ -45,64 +45,6 @@ function changeMovement() {
   canvas.renderAll();
 }
 
-canvas.on("mouse:down", function (options) {
-  if (!isKnifeMode) return;
-
-  var pointer = canvas.getPointer(options.e);
-  var selectedPolygon = getPolygonAtPoint(pointer);
-
-  if (selectedPolygon) {
-    isKnifeDrawing = true;
-    currentKnifeObject = selectedPolygon;
-    startKnifeX = pointer.x;
-    startKnifeY = pointer.y;
-    drawLine(startKnifeX, startKnifeY, startKnifeX, startKnifeY);
-  } else {
-    isKnifeDrawing = false;
-    canvas.discardActiveObject().renderAll();
-  }
-});
-
-canvas.on("mouse:up", function (options) {
-  if (!isKnifeMode || !isKnifeDrawing) return;
-
-  isKnifeDrawing = false;
-
-  if (currentKnifeLine) {
-    currentKnifeLine.bringToFront();
-    splitPolygon(currentKnifeObject);
-  }
-  currentKnifeObject = null;
-  currentKnifeLine = null;
-});
-
-canvas.on("mouse:move", function (options) {
-  if (!isKnifeMode || !isKnifeDrawing) return;
-
-  var pointer = canvas.getPointer(options.e);
-  var endX = pointer.x;
-  var endY = pointer.y;
-
-  var dx = endX - startKnifeX;
-  var dy = endY - startKnifeY;
-  var angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-
-  if (
-    (angle >= 0 - knifeAssistAngle && angle <= knifeAssistAngle) ||
-    angle <= -180 + knifeAssistAngle ||
-    angle >= 180 - knifeAssistAngle
-  ) {
-    endY = startKnifeY;
-  } else if (
-    (angle >= 90 - knifeAssistAngle && angle <= 90 + knifeAssistAngle) ||
-    (angle >= -90 - knifeAssistAngle && angle <= -90 + knifeAssistAngle)
-  ) {
-    endX = startKnifeX;
-  }
-
-  drawLine(startKnifeX, startKnifeY, endX, endY);
-});
-
 function blindSplitPanel(panel, isVertical) {
   const canvasArea = canvas.width * canvas.height;
 

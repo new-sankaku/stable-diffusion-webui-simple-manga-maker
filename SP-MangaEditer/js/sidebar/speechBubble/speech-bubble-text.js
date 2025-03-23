@@ -425,17 +425,6 @@ function mainSpeechBubbleObjectResize(textObj) {
   return newSettings;
 }
 
-canvas.on("object:moving", function (event) {
-  if (isSpeechBubbleSVG(event.target)) {
-    updateObjectPositions(event.target);
-    canvas.requestRenderAll();
-  }
-});
-canvas.on("mouse:up", function (event) {
-  if (isSpeechBubbleSVG(event.target)) {
-    updateObjectPositions(event.target, true);
-  }
-});
 
 function speechBubbleTextChaged(textObj){
   if (isSpeechBubbleText(textObj)) {
@@ -454,41 +443,6 @@ function customSpeechBubbleAllRelocation(){
     speechBubbleTextChaged(obj);
   });
 }
-
-canvas.on("text:changed", function (event) {
-  requestAnimationFrame(() => {
-    speechBubbleTextChaged(event.target);
-  });
-});
-
-canvas.on("object:scaling", function (event) {
-  if (isSpeechBubbleSVG(event.target)) {
-    event.target.baseScaleX = event.target.scaleX;
-    event.target.baseScaleY = event.target.scaleY;
-    updateShapeMetrics(event.target);
-  }
-});
-
-canvas.on("object:rotating", function (event) {
-  if (isSpeechBubbleSVG(event.target)) {
-    updateShapeMetrics(event.target);
-  }
-});
-canvas.on("object:removed", function(event) {
-  if (isSpeechBubbleSVG(event.target)) {
-    const rect = getSpeechBubbleRectBySVG(event.target);
-    const textbox = getSpeechBubbleTextBySVG(event.target);
-    canvas.remove(rect);
-    canvas.remove(textbox);
-    canvas.requestRenderAll();
-  }
-  if (isSpeechBubbleText(event.target)) {
-    const rect = getSpeechBubbleRectBySVG(event.target.targetObject);
-    canvas.remove(rect);
-    event.target.targetObject.customType = "";
-    canvas.requestRenderAll();
-  }
-});
 
 function getSpeechBubbleRectBySVG(svgObject){
   return canvas.getObjects().find((obj) => obj.type === "rect" && obj.targetObject === svgObject);

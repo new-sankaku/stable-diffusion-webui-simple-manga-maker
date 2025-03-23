@@ -133,4 +133,3 @@ function jsColorSetById(id){
   picker.setAttribute('data-jscolor', JSON.stringify(jscolorOptions));
   jscolor.install();
 }
-

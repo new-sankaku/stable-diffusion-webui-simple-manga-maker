@@ -53,9 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  canvas.on("mouse:move", function (options) {
-    updateCoordinates(options);
-  });
+  
+
 
   updateFPS();
 });

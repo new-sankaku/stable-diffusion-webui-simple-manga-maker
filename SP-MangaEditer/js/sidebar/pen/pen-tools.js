@@ -434,11 +434,6 @@ function finalizeGroup() {
     }
 }
 
-canvas.on('path:created', function (opt) {
-    console.log("push");
-    currentPaths.push(opt.path);
-});
-
 
 function getMosaicBrush() {
     const mosaicBrush = new fabric.MosaicBrush(canvas);
@@ -487,13 +482,7 @@ function updatePreview() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    canvas.on('mouse:move', function (options) {
-        if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
-            canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
-        }
-    });
-});
+
 
 
 
