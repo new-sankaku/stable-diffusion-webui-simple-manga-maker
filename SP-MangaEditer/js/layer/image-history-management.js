@@ -82,7 +82,6 @@ function addByNotSave(obj){
 }
 
 function saveStateByListener(event, eventType) {
-    return;
     if(!event){
         return;
     }
