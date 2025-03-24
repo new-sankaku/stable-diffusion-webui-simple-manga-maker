@@ -60,6 +60,7 @@
             <button type="button" class="btn btn-secondary" onclick="changeLanguage('ja')">日本語</button>
             <button type="button" class="btn btn-secondary" onclick="changeLanguage('ko')">한국어</button>
             <button type="button" class="btn btn-secondary" onclick="changeLanguage('zh')">中文</button>
+            <button type="button" class="btn btn-secondary" onclick="changeLanguage('tw')">繁體中文</button>
             <button type="button" class="btn btn-secondary" onclick="changeLanguage('fr')">Français</button>
         </div>
         <h1 data-i18n="title">Shortcut Function Introduction</h1>
@@ -221,6 +222,29 @@
                     "toggleControls": "切换控件显示"
                 }
             },
+            tw: {
+                translation: {
+                    "Ctril8": "放大畫布。",
+                    "Ctril9": "縮小畫布。",
+                    "Ctril0": "重置畫布縮放。",
+
+                    "title": "快捷鍵功能介紹",
+                    "description": "本頁面介紹了畫布上可用的快捷鍵功能。",
+                    "shortcutListTitle": "快捷鍵列表",
+                    "shortcutKeys": "快捷鍵",
+                    "function": "功能",
+                    "toggleGrid": "切換網格顯示",
+                    "undo": "撤銷",
+                    "redo": "重做",
+                    "copy": "複製( When Image is selected )",
+                    "paste": "如果選擇了面板：複製圖像並將其放置在面板內。 如果選擇面板以外的其他內容：複製圖像並將其放置在畫布內。",
+                    "deleteLayer": "刪除選定的圖層",
+                    "arrowKeys": "方向鍵",
+                    "moveObject": "移動選定的對象",
+                    "toggleLayerPanel": "切換圖層面板顯示",
+                    "toggleControls": "切換控件顯示"
+                }
+            },
             fr: {
                 translation: {
                     "Ctril8": "Agrandir le canevas.",
@@ -251,7 +275,7 @@
             debug: true,
             resources: resources
         }, function(err, t) {
-            // 初期化完了後にコンテンツを更新
+            // updates content after initialization
             updateContent();
         });
 
@@ -262,7 +286,7 @@
             });
         }
 
-        // 言語切り替え機能
+        // language switch function
         function changeLanguage(lng) {
             i18next.changeLanguage(lng, function(err, t) {
                 updateContent();

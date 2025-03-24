@@ -233,6 +233,8 @@ function getSampleTextByLanguageCode() {
       return 'ABC';
     case 'zh':
       return '示例 ABC';
+    case 'tw':
+      return '示例 ABC';
     case 'ru':
       return 'Пример ABC';
     case 'es':

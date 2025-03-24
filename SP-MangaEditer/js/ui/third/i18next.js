@@ -14,6 +14,7 @@
 
 
 //マージされるので日付単位で分けて入れたらOK
+//merge by date, so if you put it in by date, it's ok
 const resources = {
 "20250322": {
 ja: {missingNode:"ノード情報無し", missingDescription:"ComfyUI接続未経験かノード無し。WorkflowをダウンロードしてComfyUIに適用してComfyUI ManagerからInstall Missing Custom Nodesを実行してください"},
@@ -187,6 +188,38 @@ de: {missingNode:"Keine Knoteninfo", missingDescription:"Keine ComfyUI-Verbindun
    prompt_gallery:"提示画廊", 
    loading_image:"加载中", 
    image_load_error:"没有图像"
+ },
+ tw : {
+  rought_error:"未知錯誤",
+  rough_target:"未選擇粗糙目標",
+  rough_target_message:"粗糙效果可應用於形狀、圖標和自由氣泡。",
+  "Rough":"粗糙(β)",
+  "strokeColor":"線條顏色",
+  "fillStyle":"填充樣式",
+  "fill_style":"填充樣式",
+  "fillWeight":"填充厚度",
+  "rough_style":"基本樣式",
+  "roughness":"粗糙度",
+  "bowing":"彎曲度",
+  "strokeWidth":"線條寬度",
+  "rough_hachure":"陰影設置",
+  "hachureAngle":"陰影角度",
+  "hachureGap":"陰影間距",
+  "rough_curve":"曲線",
+  "curveStepCount":"曲線步數",
+  "curveFitting":"曲線擬合",
+  "simplification":"簡化",
+  "rough_on_off":"粗糙開/關",
+  "rough_on":"粗糙開",
+  "rough_off":"粗糙關",
+  "Multi":"多重線條",
+  "MultiFill":"多重填充",
+  side_label_rough:"粗糙",
+  auto_generate:"自動生成",
+  prompt:"提示(β)",
+  prompt_gallery:"提示畫廊",
+  loading_image:"加載中",
+  image_load_error:"沒有圖像"
  },
  ru: {
    rought_error:"Неизвестная ошибка",
@@ -374,7 +407,7 @@ de: {missingNode:"Keine Knoteninfo", missingDescription:"Keine ComfyUI-Verbindun
   de: {terms_of_service:"Nutzungsbedingungen"}
 },
   "base": {
-    ja: base_ja,en: base_en,ko: base_ko,fr: base_fr,zh: base_zh,ru: base_ru,es: base_es,pt: base_pt,th: base_th,de: base_de
+    ja: base_ja, en: base_en, ko: base_ko, fr: base_fr, zh: base_zh, ru: base_ru, es: base_es, pt: base_pt, th: base_th, de: base_de, tw: base_tw,
   }
 };
 
@@ -443,6 +476,11 @@ function updateContent() {
 }
 
 function changeLanguage(lng, event) {
+  const validLangs = ['en', 'ja', 'ko', 'zh', 'tw', 'fr', 'ru', 'es', 'pt', 'th', 'de'];
+  if (!validLangs.includes(lng)) {
+    console.error(`Invalid language code: ${lng}`);
+    return;
+  }
   if (event) {
     event.preventDefault();
   }

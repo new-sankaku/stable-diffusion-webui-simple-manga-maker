@@ -23,6 +23,7 @@
     <meta property="og:locale:alternate" content="ko_KR" />
     <meta property="og:locale:alternate" content="fr_FR" />
     <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="tw_TW" />
     <meta property="og:locale:alternate" content="ru_RU" />
     <meta property="og:locale:alternate" content="es_ES" />
     <meta property="og:locale:alternate" content="pt_BR" />
@@ -479,9 +480,16 @@ function getElementClasses(element) {
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('en', event)">
                                 <span class="flag-icon flag-icon-us"></span> <span data-i18n="english">English</span>
                             </a>
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('tw', event)">
+                                <span class="flag-icon flag-icon-tw"></span> <span data-i18n="traditionalChinese">繁體中文</span>
+                            </a>
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('ja', event)">
-                                <span class="flag-icon flag-icon-jp"></span>
-                                <span data-i18n="japanese">日本語</span>
+                                <span class="flag-icon flag-icon-jp"></span> <span data-i18n="japanese">日本語</span>
+                            </a>
+
+                            <!-- Add debug language entry -->
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('debug', event)">
+                                <span class="flag-icon flag-icon-css"></span> <span data-i18n="debug">DEBUG</span>
                             </a>
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('ko', event)">
                                 <span class="flag-icon flag-icon-kr"></span> <span data-i18n="korean">한국어</span>
@@ -2049,6 +2057,7 @@ function getElementClasses(element) {
     <script src="js/ui/third/base-translation/base-ru.js?v=7.2" defer></script>
     <script src="js/ui/third/base-translation/base-th.js?v=7.2" defer></script>
     <script src="js/ui/third/base-translation/base-zh.js?v=7.2" defer></script>
+    <script src="js/ui/third/base-translation/base-tw.js?v=7.2" defer></script>
     <script src="js/ui/third/i18next.js?v=7.2" defer></script>
 
     <script src="js/ui/util/mode-change.js?v=7.2" defer></script>

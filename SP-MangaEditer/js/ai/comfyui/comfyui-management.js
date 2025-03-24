@@ -123,40 +123,21 @@ async function Comfyui_apiHeartbeat() {
 }
 
 async function Comfyui_queue_prompt(prompt) {
-  try {
-    const p = { prompt: prompt, client_id: comfyUIuuid };
-    const response = await fetch(comfyUIUrls.prompt, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        accept: "application/json",
-      },
-      body: JSON.stringify(p),
-    });
+  const p = { prompt: prompt, client_id: comfyUIuuid };
+  const response = await fetch(comfyUIUrls.prompt, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(p),
+  });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      createToastError(`HTTP error! status: ${response.status}, message: ${errorText}`);
-      return null;
-    }
-
-    const response_data = await response.json();
-    return response_data;
-
-  } catch (error) {
-    let errorMessage = "Error. ";
-    if (error.name === 'TypeError') {
-      errorMessage += "Network error or COMFYUI server is down.";
-    } else if (error.message.includes('HTTP error!')) {
-      errorMessage += error.message;
-    } else {
-      errorMessage += "check COMFYUI!";
-    }
-
-    console.error('Error details:', error);
-    createToastError(errorMessage);
+  if (!response.ok) {
+    const errorText = await response.text();
+    createToastError(`HTTP error! status: ${response.status}, message: ${errorText}`);
     return null;
   }
+
+  const response_data = await response.json();
+  return response_data;
 }
 
 
@@ -412,10 +393,10 @@ async function Comfyui_FetchUpscaler() {
 async function Comfyui_FetchModels() {
   try {
     const data = await Comfyui_FetchObjectInfo("CheckpointLoaderSimple");
-    // console.log("Comfyui_FetchModels CheckpointLoaderSimple:", data);
     const models = data.CheckpointLoaderSimple.input.required.ckpt_name[0].map(
       (name) => ({ title: name, model_name: name })
     );
+    updateModelDropdown([...models, {title: "new_model.safetensors", model_name: "new_model"}]);
 
     const dataUnet = await Comfyui_FetchObjectInfo("UNETLoader");
     // console.log("Comfyui_FetchModels UNETLoader:", dataUnet);
@@ -423,7 +404,12 @@ async function Comfyui_FetchModels() {
       (name) => ({ title: name, model_name: name })
     );
 
-    const allModels = [...models, ...modelsUnet].sort((a, b) => {
+    const dataNewLoader = await Comfyui_FetchObjectInfo("NewModelLoader");
+    const newModels = dataNewLoader.input.required.model_name[0].map(
+      (name) => ({ name: name })
+    );
+
+    const allModels = [...models, ...modelsUnet, ...newModels].sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
 

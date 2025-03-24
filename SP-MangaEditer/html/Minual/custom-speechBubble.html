@@ -57,6 +57,7 @@
       <button onclick="cL('en')">English</button>
       <button onclick="cL('ja')">日本語</button>
       <button onclick="cL('zh')">中文</button>
+      <button onclick="cL('tw')">繁體中文</button>
     </div>
     <div id="c">
       <h1 data-i18n="title"></h1>
@@ -144,6 +145,27 @@
         sampleImages: "示例图像",
         coordinateMode: "坐标模式",
         freehandMode: "自由手绘模式"
+      },
+    },
+    tw: {
+      translation: {
+        title: "氣泡繪圖工具",
+        features: "功能特點",
+        feature1: "可以通過指定座標來繪製氣泡。",
+        feature2: "可以自由手繪氣泡。",
+        feature3: "通過重疊線條來連接繪製的氣泡。",
+        feature4: "可以連接多個氣泡或後續添加氣泡尾部。",
+        feature5: "可以移動或刪除任意座標點。",
+        parameters: "參數說明",
+        smooth: "平滑",
+        smoothDescription: "略微平滑線條。通常可以一直保持開啟狀態。",
+        cornerRoundness: "圓角度（次數）",
+        cornerRoundnessDescription: "主要用於座標模式。表示對角應用圓角處理的次數。在自由手繪模式下，這使得座標之間的線條更加平滑。",
+        coordinateInterval: "座標間隔（像素）",
+        coordinateIntervalDescription: "主要用於自由手繪模式。刪除自由手繪中座標之間的點。這進一步減少了線條的抖動。如果想故意畫出顫抖的線條，請使用較小的值。",
+        sampleImages: "示例圖像",
+        coordinateMode: "座標模式",
+        freehandMode: "自由手繪模式"
       },
     },
   };
