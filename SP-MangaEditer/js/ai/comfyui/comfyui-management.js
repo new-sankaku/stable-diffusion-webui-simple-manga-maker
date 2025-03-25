@@ -57,7 +57,7 @@ function Comfyui_connect() {
   try {
     socket = new WebSocket(comfyUIUrls.ws + '?clientId=' + comfyUIuuid);
     socket.addEventListener("open", (event) => {
-      console.log("ComfyUIへの接続に成功しました。");
+      console.log("ComfyUI has benn connected");
     });
     socket.addEventListener("close", (event) => {
       socket = null;
@@ -143,7 +143,7 @@ async function Comfyui_queue_prompt(prompt) {
 
 async function Comfyui_get_history(prompt_id) {
   console.log(
-    "Comfyui_get_history関数が呼び出されました。プロンプトID:",
+    "Comfyui_get_history function has been called. Prompt ID:",
     prompt_id
   );
   try {
@@ -155,12 +155,12 @@ async function Comfyui_get_history(prompt_id) {
         },
       }
     );
-    console.log("サーバーに履歴データをリクエストしました。");
+    console.log("Requested history data from the server.");
     const data = await response.json();
-    console.log("履歴データ:", data);
+    console.log("history data:", data);
     return data;
   } catch (error) {
-    console.log("Text2Imageエラー:", error);
+    console.log("Text2Image error:", error);
     createToastError("Text2Image Error.", "check COMFYUI!");
     return null;
   }
@@ -179,10 +179,10 @@ async function Comfyui_get_image(image_data_to_recieve) {
     });
     // console.log("リクエストパラメータ:", params.toString());
     const response = await fetch(comfyUIUrls.view + '?' + params.toString());
-    console.log("画像データをサーバーから取得しました。");
+    console.log("Image data has been retrieved from the server.");
 
     if (!response.ok) {
-      throw new Error(`HTTPエラー! ステータス: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const blob = await response.blob();
@@ -191,16 +191,16 @@ async function Comfyui_get_image(image_data_to_recieve) {
     return new Promise((resolve, reject) => {
       fabric.Image.fromURL(image_src, (img) => {
         if (img) {
-          console.log("fabric.Imageオブジェクトの作成に成功しました。");
+          console.log("fabric.Image object has been created.");
           resolve(img);
         } else {
-          console.log("fabric.Imageオブジェクトの作成に失敗しました。");
+          console.log("fabric.Image object creation failed");
           reject(new Error("Failed to create a fabric.Image object"));
         }
       });
     });
   } catch (error) {
-    console.error("画像取得エラー:", error);
+    console.error("failed to get image:", error);
     return null;
   }
 }

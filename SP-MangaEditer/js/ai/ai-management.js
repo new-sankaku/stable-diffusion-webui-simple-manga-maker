@@ -7,7 +7,7 @@ var firstComfyConnection = true;
 $('sdWebUIPageUrlDefaultUrl').addEventListener('click', (event) => {
   event.stopPropagation();
   const defaultUrl = 'http://127.0.0.1:7860';
-  $('sdWebUIPageUrl').value = defaultUrl;
+  $('sdWebUIPageUrl').value = defaultUrl; 
 });
 
 $('comfyUIPageUrlDefaultUrl').addEventListener('click', (event) => {
