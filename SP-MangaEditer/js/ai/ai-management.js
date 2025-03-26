@@ -16,8 +16,11 @@ $('comfyUIPageUrlDefaultUrl').addEventListener('click', (event) => {
   $('comfyUIPageUrl').value = defaultUrl;
 });
 
+// let API_mode = localStorage.getItem('API_mode') || apis.COMFYUI;
 
-
+// if (!localStorage.getItem('API_mode')) {
+//     localStorage.setItem('API_mode', apis.COMFYUI);
+// }
 
 function existsWaitQueue() {
   const sdQueueStatus = sdQueue.getStatus();

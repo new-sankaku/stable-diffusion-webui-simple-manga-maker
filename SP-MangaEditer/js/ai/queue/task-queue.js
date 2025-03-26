@@ -21,7 +21,7 @@ class TaskQueue {
     this.activeCount++;
 
     try {
-      console.log("task is run.");
+      console.log("task is running.");
       await task();
     } catch (error) {
       console.error("Task error:", error);

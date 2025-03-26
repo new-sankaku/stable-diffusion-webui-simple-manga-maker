@@ -371,6 +371,39 @@ function cropAndDownload() {
 	}
 }
 
+async function clipAndDownload() {
+	removeGrid();
+	const link = getCropAndDownloadLink();
+	const response = await fetch(link.href);
+	const blob = await response.blob();
+	const arrayBuffer = await blob.arrayBuffer();
+	const uint8Array = new Uint8Array(arrayBuffer);
+
+	const gif = new GIF({
+		workers: 2,
+		quality: 10
+	});
+
+	gif.addFrame(uint8Array, { delay: 200 });
+
+	gif.on('finished', function(blob) {
+		const gifLink = document.createElement('a');
+		gifLink.href = URL.createObjectURL(blob);
+		gifLink.download = 'selected-image.gif';
+		document.body.appendChild(gifLink);
+		gifLink.click();
+		document.body.removeChild(gifLink);
+	});
+
+	gif.render();
+
+	if (isGridVisible) {
+		drawGrid();
+		isGridVisible = true;
+	}
+}
+
+
 
 function getLink(dataURL) {
 	const link = document.createElement('a');

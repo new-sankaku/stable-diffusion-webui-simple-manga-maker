@@ -123,6 +123,8 @@ async function Comfyui_apiHeartbeat() {
 }
 
 async function Comfyui_queue_prompt(prompt) {
+  console.log("Sending prompt to ComfyUI:", prompt);
+
   const p = { prompt: prompt, client_id: comfyUIuuid };
   const response = await fetch(comfyUIUrls.prompt, {
     method: "POST",
@@ -132,11 +134,13 @@ async function Comfyui_queue_prompt(prompt) {
 
   if (!response.ok) {
     const errorText = await response.text();
+    console.error("ComfyUI API Error:", errorText);
     createToastError(`HTTP error! status: ${response.status}, message: ${errorText}`);
     return null;
   }
 
   const response_data = await response.json();
+  console.log("ComfyUI Response:", response_data);
   return response_data;
 }
 

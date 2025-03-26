@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Manga Editor Desu! Pro Edition: The Premier Standalone Manga Editing Platform</title>
+    <title>FYP tbd</title>
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121111">
@@ -10,15 +10,16 @@
     <link rel="icon" href="03_images/icon/icon_full_192_192.png">
     <link rel="shortcut icon" href="03_images/icon/icon_full_192_192.png">
 
-    <meta property="og:title" content="Manga Editor DESU!" />
+    <meta property="og:title" content="Pedro's FYP" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://new-sankaku.github.io/SP-MangaEditer/" />
+    <meta property="og:url" content="" />
     <meta property="og:image" content="https://raw.githubusercontent.com/new-sankaku/SP-MangaEditer/main/03_images/PagePreview/Git/Preview.png" />
     <meta property="og:description" content="Manga Editor : SD WebUI, Forge, ComfyUI" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@hypersankaku2" />
     <meta property="og:site_name" content="Manga Editor" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content="debug" />
     <meta property="og:locale:alternate" content="ja_JP" />
     <meta property="og:locale:alternate" content="ko_KR" />
     <meta property="og:locale:alternate" content="fr_FR" />
@@ -77,7 +78,7 @@ const b = `<svg viewBox="0 0 100 100" width="100%" height="100%" style="position
             const c = document.createElement("div");
             c.style.cssText = "padding:20px;";
             const d = document.createElement("div");
-            d.textContent = "DESU", d.style.cssText = "color:orange; font-size:220px;font-weight:700;", c.appendChild(d), a.appendChild(c);
+            d.textContent = "Loading !", d.style.cssText = "color:blue; font-size:220px;font-weight:700;", c.appendChild(d), a.appendChild(c);
             const e = document.createElement("div");
             e.id = "h", e.style.cssText = "flex-grow:1;padding:20px;", f.forEach(() => { const a = document.createElement("div"); a.style.cssText = "margin:8px 0;height:1em;opacity:.9;", e.appendChild(a) }), a.appendChild(e);
             const g = `<svg width="100%" height="40" style="position:absolute;bottom:0;left:0;opacity:.5;"><defs><g id="i"><path d="M1 13L5 17L17 5L13 1L1 13Z M15 3L13 1L16 4M1 13L4 16" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="j"><path d="M3 17L7 13L15 5L13 3L5 11L1 15L3 17Z M14 4L12 2L16 6" stroke="#aaa" stroke-width="1" fill="none"/></g><g id="k"><path d="M3 15C3 17 5 17 5 15C5 13 7 11 9 9C11 7 13 5 15 3M15 3L13 5M15 3L17 5" stroke="#aaa" stroke-width="1" fill="none"/></g></defs></svg>`, h = document.createElement("div");
@@ -233,16 +234,16 @@ function getElementClasses(element) {
 <body>
 
     <div itemscope itemtype="http://schema.org/SoftwareApplication">
-        <meta itemprop="name" content="Manga Editor Desu">
+        <meta itemprop="name" content="">
         <meta itemprop="description"
-            content="Discover Manga Editor Desu! Pro Edition, your ultimate online manga editing tool. Customize and enhance your manga with user-friendly panels, speech bubbles, and dynamic text effects.">
+            content="My Final year project, forked from manga-maker Desu!, which also a half way through on ControlNet settings">
         <meta itemprop="applicationCategory" content="Multimedia">
 
 
 <!-- Category:Menu -->
         <nav id="desu-nav" class="navbar navbar-expand custom-navbar" style="display: none;">
             <a class="navbar-brand" href="#">
-                <img src="02_images_svg/Logo/icon_full_192_192.png" alt="Manga Editor Desu! Pro Edition Official Logo"
+                <img src="02_images_svg/Logo/icon_full_192_192.png" alt="Manga Editor Desu! Pro Edition Official Logo tbd"
                     class="navbar-logo" id="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
@@ -287,6 +288,13 @@ function getElementClasses(element) {
                                         data-i18n="imageDownload">Image Download</span>
                                 </a>
                             </li>
+                            <li>
+                                <a class="dropdown-item" href="#" id="gifDownload" onclick="clipAndDownload()">
+                                    <span class="material-symbols-outlined">gif</span> <span
+                                        data-i18n="imageDownload">Gif Download</span>
+                                </a>
+                            </li>
+
                             <li>
                                 <a class="dropdown-item" href="#" id="imageCopy" onclick="clipCopy()">
                                     <i class="material-icons">content_copy</i> <span data-i18n="imageCopy">Image
@@ -336,31 +344,8 @@ function getElementClasses(element) {
                             <span id="intro_sdWebUI" data-i18n="externalServices"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <!--A1111-->
-                            <div class="A1111_api_content">
-                                <li>
-                                    <label>
-                                        <h5 data-i18n="">WebUI(A1111/Forge)</h5>
-                                    </label>
-                                    <label for="sdWebUIPageUrl">
-                                        <span data-i18n="apiUrl">API Page URL:</span>
-                                        <input type="text" id="sdWebUIPageUrl" value="http://127.0.0.1:7860">
-                                    </label>
-                                </li>
-                                <li>
-                                    <a href="html/API_Help/sd-api-guide.html" target="_blank">
-                                        <i class="material-icons">help_outline</i>
-                                        <span data-i18n="help_api_connect_settings">
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <button id="sdWebUIPageUrlDefaultUrl">
-                                        <span data-i18n="DEFAULT">DEFAULT</span>
-                                    </button>
-                                </li>
-                            </div>
-                            <hr>
+                            <!--ComfyUI-->
+                            
                             <div class="Comfyui_api_content">
                                 <li>
                                     <label>
@@ -387,7 +372,32 @@ function getElementClasses(element) {
                                     </button>
                                 </li>
 
-                        </div>
+                        </div><hr>
+                            <!--A1111-->
+                            <div class="A1111_api_content">
+                                <li>
+                                    <label>
+                                        <h5 data-i18n="">WebUI(A1111/Forge)</h5>
+                                    </label>
+                                    <label for="sdWebUIPageUrl">
+                                        <span data-i18n="apiUrl">API Page URL:</span>
+                                        <input type="text" id="sdWebUIPageUrl" value="http://127.0.0.1:7860">
+                                    </label>
+                                </li>
+                                <li>
+                                    <a href="html/API_Help/sd-api-guide.html" target="_blank">
+                                        <i class="material-icons">help_outline</i>
+                                        <span data-i18n="help_api_connect_settings">
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <button id="sdWebUIPageUrlDefaultUrl">
+                                        <span data-i18n="DEFAULT">DEFAULT</span>
+                                    </button>
+                                </li>
+                            </div>
+
                         </ul>
                     </li>
                 </ul>
@@ -477,6 +487,11 @@ function getElementClasses(element) {
                                 <span data-i18n="Tutorial">Tutorial</span>
                             </a>
 
+
+                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('debug', event)">
+                                <span class="flag-icon flag-icon-css"></span> <span data-i18n="debug">DEBUG tbd</span>
+                            </a>
+
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('en', event)">
                                 <span class="flag-icon flag-icon-us"></span> <span data-i18n="english">English</span>
                             </a>
@@ -487,10 +502,7 @@ function getElementClasses(element) {
                                 <span class="flag-icon flag-icon-jp"></span> <span data-i18n="japanese">日本語</span>
                             </a>
 
-                            <!-- Add debug language entry -->
-                            <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('debug', event)">
-                                <span class="flag-icon flag-icon-css"></span> <span data-i18n="debug">DEBUG</span>
-                            </a>
+
                             <a class="dropdown-item" href="#" target="_blank" onclick="changeLanguage('ko', event)">
                                 <span class="flag-icon flag-icon-kr"></span> <span data-i18n="korean">한국어</span>
                             </a>
@@ -530,8 +542,9 @@ function getElementClasses(element) {
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="https://new-sankaku.github.io/SP-MangaEditer/"
                                 target="_blank">
-                                <i class="material-icons">emoji_people</i>
-                                <span>MANGA EDITOR DESU!(Web)</span>
+                                <i class="fab fa-github"></i>
+                                <span data-i18n=""></span>
+                                <span>Github Page</span>
                             </a>
                             <a class="dropdown-item" href="https://new-sankaku.github.io/ImageTagSearcher/"
                                 target="_blank">
@@ -543,19 +556,6 @@ function getElementClasses(element) {
                             target="_blank">
                             <i class="material-icons">emoji_people</i>
                             <span>Project File Viewer</span>
-                        </a>
-
-                            
-
-                            <a class="dropdown-item" href="https://discord.gg/zuU96TqNUb" target="_blank">
-                                <i class="fab fa-discord"></i>
-                                <span data-i18n="discord">Discord</span>
-                            </a>
-                            <a class="dropdown-item"
-                                href="https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker"
-                                target="_blank">
-                                <i class="fab fa-github"></i>
-                                <span data-i18n="github">GitHub</span>
                             </a>
 
                             <a class="dropdown-item" href="html/PrivacyPolicy/i18n-privacy-dark-complete.html" target="_blank">
@@ -569,23 +569,7 @@ function getElementClasses(element) {
                                 <span data-i18n="terms_of_service">Terms of Service</span>
                             </a>
 
-                            <label data-i18n="DevelopmentDonations"></label>
-                            <a class="dropdown-item"
-                                href="https://github.com/sponsors/new-sankaku"
-                                target="_blank">
-                                <i class="fab fa-github"></i>
-                                <span>GitHub Sponsors</span>
-                            </a>
-                            <a class="dropdown-item"
-                                href="https://sankaku-desu.booth.pm/items/6399546"
-                                target="_blank">
-                                <span>[Japan] Booth</span>
-                            </a>
-                            <a class="dropdown-item"
-                                href="https://note.com/vivid_walrus6061/n/n40e38122c45b?from=notice"
-                                target="_blank">
-                                <span>[Japan] Note</span>
-                            </a>
+                            
                         </ul>
                     </li>
                 </ul>
@@ -1398,8 +1382,8 @@ function getElementClasses(element) {
 
         <button id="toggle-rough" data-i18n="rough_on">ラフ化ON/OFF</button>
 
-        <div class="param-group" style="border-left:3px solid #FF9800;">
-            <div style="font-weight:bold;margin-bottom:5px;color:#FF9800;font-size:12px;" data-i18n="fill_style"></div>
+        <div class="param-group" style="border-left:3px solid #594a8a;">
+            <div style="font-weight:bold;margin-bottom:5px;color:#594a8a;font-size:12px;" data-i18n="fill_style"></div>
             <div class="input-group">
                 <label data-i18n="fillStyle"></label>
             </div>
@@ -1583,7 +1567,7 @@ function getElementClasses(element) {
 
 
             <div class="left_area" id="controle-area" style="display: none;">
-                <div class="area-header" data-i18n="Controle">Controle</div>
+                <div class="area-header" data-i18n="Controle">Position</div>
                 <div id="controle-preview-area">
                     <div class="input-group">
                         <label>
@@ -1796,12 +1780,13 @@ function getElementClasses(element) {
                     </div>
                     <div id="esApi-controls-mini" class="controls-mini">
                         <div class="input-group" data-group="externalApiGroup">
+                            <button id="comfyUIButton" data-value="comfyUIButton" onclick="changeExternalAPI(this)">
+                                ComfyUI
+                            </button>
                             <button id="sdWebUIButton" data-value="sdWebUIButton" onclick='changeExternalAPI(this)' class="selected" >
                                 WebUI or Forge
                             </button>
-                            <button id="comfyUIButton" data-value="comfyUIButton" onclick="changeExternalAPI(this)">
-                                ComfyUI(β ver)
-                            </button>
+
 
                             <div id="apiSettingsUrlHelpe">
                             </div>

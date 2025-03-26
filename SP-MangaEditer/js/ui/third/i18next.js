@@ -476,7 +476,7 @@ function updateContent() {
 }
 
 function changeLanguage(lng, event) {
-  const validLangs = ['en', 'ja', 'ko', 'zh', 'tw', 'fr', 'ru', 'es', 'pt', 'th', 'de'];
+  const validLangs = ['en', 'ja', 'ko', 'zh', 'tw', 'fr', 'ru', 'es', 'pt', 'th', 'de', 'debug'];
   if (!validLangs.includes(lng)) {
     console.error(`Invalid language code: ${lng}`);
     return;
