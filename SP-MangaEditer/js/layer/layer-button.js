@@ -191,7 +191,7 @@ function putRunI2IButton(buttonsDiv, layer, index) {
 
   var runButton = document.createElement("button");
   runButton.id = "runButton-" + index;
-  runButton.innerHTML = '<i class="material-icons">directions_run</i>';
+  runButton.innerHTML = '<i class="material-icons">collections</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
     var spinner = createSpinner(index);
@@ -241,7 +241,7 @@ function putRunT2IButton(buttonsDiv, layer, index) {
   
   var runButton = document.createElement("button");
   runButton.id = "runButton-" + index;
-  runButton.innerHTML = '<i class="material-icons">directions_run</i>';
+  runButton.innerHTML = '<i class="material-icons">play_arrow</i>';
   runButton.onclick = function (e) {
     e.stopPropagation();
     var spinner = createSpinner(index);

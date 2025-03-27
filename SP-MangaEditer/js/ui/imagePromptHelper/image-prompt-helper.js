@@ -11,6 +11,7 @@ function loadJsResource(language, namespace, callback) {
      const resources = window[`trans_${language}`];
     callback(null, resources);
    })
+   
    .catch(error => {
      console.error(`Error loading language file for ${language}:`, error);
      callback(error, null);

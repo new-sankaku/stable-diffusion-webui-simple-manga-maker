@@ -279,9 +279,9 @@ async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
         createToastError("Generation Error", result.message);
         throw new Error(result.message);
       } else if (result) {
-        layer.visible = false;
+        // layer.visible = false;
 
-        if(layer.clipPath){
+        if(!layer.clipPath){
           var center = calculateCenter(layer);
           putImageInFrame(result, center.centerX, center.centerY);
         }else{
