@@ -305,10 +305,12 @@ async function Comfyui_put_queue(workflow) {
 
   var response = await Comfyui_queue_prompt(workflow);
   if (!response) return null;
+  // console.log("Comfyui_put_queue response:", JSON.stringify(response));
   processing_prompt = true;
   var prompt_id = response.prompt_id;
-  await Comfyui_track_prompt_progress(prompt_id);
+  // console.log("Comfyui_put_queue prompt_id:", prompt_id);
 
+  await Comfyui_track_prompt_progress(prompt_id);
   response = await Comfyui_get_history(prompt_id);
   if (!response) return { error: true, message: "Unknown error", details: "Please check ComfyUI console.",};
 

@@ -1,3 +1,4 @@
+var random = Math.floor(Math.random() * 537388471760656)
 const ComfyUI_T2I_ByFluxDiffusion = {
     "6": {
       "inputs": {
@@ -141,7 +142,7 @@ const ComfyUI_T2I_ByFluxDiffusion = {
     },
     "25": {
       "inputs": {
-        "noise_seed": "100"
+        "noise_seed": "%random%"
       },
       "class_type": "RandomNoise",
       "_meta": {
@@ -246,7 +247,7 @@ const ComfyUI_T2I_ByFluxNF4 = {
     },
     "31": {
       "inputs": {
-        "seed":"100",
+        "seed":"%random%",
         "steps":"25",
         "cfg":"5.0",
         "sampler_name":"%sampler%",
@@ -374,7 +375,7 @@ const ComfyUI_T2I_ByFluxSimple = {
     },
     "31": {
       "inputs": {
-        "seed":"100",
+        "seed":"%random%",
         "steps":"25",
         "cfg":"5.0",
         "sampler_name":"%sampler%",

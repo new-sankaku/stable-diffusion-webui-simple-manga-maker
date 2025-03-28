@@ -1,7 +1,9 @@
+
+var random = Math.floor(Math.random() * 537388471760656)
 const ComfyUI_T2I_BySDXL = {
   3: {
     inputs: {
-      seed: 2,
+      seed: random,
       steps: 25,
       cfg: 6.5,
       sampler_name: "dpmpp_2m_sde",
@@ -95,7 +97,7 @@ const ComfyUI_T2I_BySDXL = {
 const ComfyUI_T2I_BySDXL_Lora = {
   3: {
     inputs: {
-      seed: 663922647965408,
+      seed: random,
       steps: 20,
       cfg: 6.5,
       sampler_name: "euler",
@@ -263,7 +265,7 @@ const ComfyUI_T2I_BySDXL_Refiner = {
   36: {
     inputs: {
       add_noise: "enable",
-      noise_seed: 319547470435720,
+      noise_seed:  Math.floor(Math.random() * 537388471760656),
       steps: 30,
       cfg: 6.5,
       sampler_name: "dpmpp_2m_sde",
@@ -293,7 +295,7 @@ const ComfyUI_T2I_BySDXL_Refiner = {
   38: {
     inputs: {
       add_noise: "disable",
-      noise_seed: 98488767295677,
+      noise_seed:  Math.floor(Math.random() * 537388471760656),
       steps: 30,
       cfg: 6.5,
       sampler_name: "dpmpp_2m_sde",
@@ -350,7 +352,7 @@ const ComfyUI_T2I_BySDXL_Refiner = {
 const ComfyUI_T2I_BySD15 = {
   3: {
     inputs: {
-      seed: 8,
+      seed: random,
       steps: 25,
       cfg: 6.5,
       sampler_name: "dpmpp_2m",
@@ -430,7 +432,7 @@ const ComfyUI_T2I_BySD15 = {
 const ComfyUI_T2I_BySD15_VAE = {
   3: {
     inputs: {
-      seed: 8,
+      seed: random,
       steps: 25,
       cfg: 6.5,
       sampler_name: "dpmpp_2m",

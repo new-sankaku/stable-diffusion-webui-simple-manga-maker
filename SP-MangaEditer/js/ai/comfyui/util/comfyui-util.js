@@ -73,10 +73,10 @@ function Comfyui_isError(response) {
   
   function Comfyui_replace_placeholders(workflow, requestData, Type = 'T2I') {
     const builder = createWorkflowBuilder(workflow);
-
+    console.log("requestData:", requestData["seed"]);
     builder.updateNodesByInputName({
-        seed:       requestData["seed"]=="-1" || requestData["seed"]=="0" ? Math.floor(Math.random() * 50000000) :        requestData["seed"],
-        noise_seed: requestData["seed"]=="-1" || requestData["seed"]=="0" ? Math.floor(Math.random() * 537388471760656) : requestData["seed"],
+        seed:       (requestData["seed"]==="-1" || requestData["seed"]==="0" || requestData["seed"]===1 || requestData["seed"]===0) ? Math.floor(Math.random() * 50000000) :        requestData["seed"],
+        noise_seed: (requestData["seed"]==="-1" || requestData["seed"]==="0" || requestData["seed"]===1 || requestData["seed"]===0) ? Math.floor(Math.random() * 537388471760656) : requestData["seed"],
         width:      requestData["width"],
         height:     requestData["height"]
     });
@@ -86,11 +86,13 @@ function Comfyui_isError(response) {
             image: requestData["uploadFileName"]
         });
     }
-    
+
     builder.updateValueByTargetValue("%prompt%", requestData["prompt"]);
     builder.updateValueByTargetValue("%negative%", requestData["negative_prompt"]);
 
     const newWorkflow = builder.build();
+    console.log("newWorkflow: ", newWorkflow);
+    console.log("builder:",builder);
     return newWorkflow;
   }
   

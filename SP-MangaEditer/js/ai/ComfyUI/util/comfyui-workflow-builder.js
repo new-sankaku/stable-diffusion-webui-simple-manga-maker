@@ -101,6 +101,7 @@ class ComfyUIWorkflowBuilder {
         }
         return this.workflowCopy;
     }
+    
 }
 
 function createWorkflowBuilder(workflow) {
