@@ -50,7 +50,7 @@ class ComfyUIWorkflowBuilder {
                 validInputs[key] = value;
             }
         });
-        console.log("validInputs, " ,validInputs);
+        logger.trace("validInputs, " ,validInputs);
     
         if (Object.keys(validInputs).length > 0) {
             Object.entries(this.workflowCopy).forEach(([id, node]) => {
@@ -60,7 +60,8 @@ class ComfyUIWorkflowBuilder {
                             const originalValue = typeof node.inputs[inputKey];
                             const newValue = typeof validInputs[inputKey];
                             
-                            if (typeof originalValue === typeof newValue || (isNumericType(originalValue) && isNumericType(newValue))) {
+                            if ( originalValue === newValue || 
+                                (isNumericType(originalValue) && isNumericType(newValue))) {
                                 node.inputs[inputKey] = validInputs[inputKey];
                             }
                         }
