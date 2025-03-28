@@ -1,0 +1,122 @@
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 10px;
+ }
+ 
+ .main-container {
+  display: flex;
+  gap: 10px;
+ }
+ 
+ .control-panel {
+  width: 300px;
+  padding-right: 10px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 10px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+ }
+ 
+ .right-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+ }
+ 
+ .canvas-container {
+  width: 100%;
+ }
+ 
+ .control-item {
+  margin-bottom: 5px;
+ }
+ 
+ .value-display {
+  display: inline-block;
+  width: 40px;
+  text-align: right;
+  font-size: 0.9em;
+ }
+ 
+ #drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+ }
+ 
+ #drop-area.highlight {
+  border-color: #666;
+  background-color: #f0f0f0;
+ }
+ 
+ #canvas {
+  border: 1px solid #000;
+  max-width: 100%;
+  height: auto;
+ }
+ 
+ #preview-container {
+  gap: 10px;
+  width: 100%;
+ }
+ 
+ .preview-item {
+  margin-bottom: 5px;
+ }
+ 
+ .preview-canvas {
+  margin: 2px;
+  border: 1px solid #aaa;
+  background-color: #f5f5f5;
+  width: 150%;
+  height: auto;
+ }
+ 
+ .preview-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+  font-size: 0.9em;
+ }
+ 
+ #log-container {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-top: 10px;
+  height: 150px;
+  overflow-y: auto;
+  font-family: monospace;
+  white-space: pre-wrap;
+  font-size: 0.8em;
+ }
+ 
+ #opencv-status {
+  padding: 5px;
+  background-color: #ffeb3b;
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  display: none;
+ }
+ 
+ label {
+  font-size: 0.9em;
+  display: block;
+ }
+ 
+ input[type="range"] {
+  width: 180px;
+  vertical-align: middle;
+ }
