@@ -82,7 +82,7 @@ function Comfyui_isError(response) {
         : seedValue;
     
     console.log("neo_seed:", neo_seed);
-    
+        console.log("requestData:", requestData["seed"]);
     builder.updateNodesByInputName({
         seed:       neo_seed,
         noise_seed: neo_seed,
@@ -98,11 +98,14 @@ function Comfyui_isError(response) {
         });
     }
 
+
     builder.updateValueByTargetValue("%prompt%", requestData["prompt"]);
     builder.updateValueByTargetValue("%negative%", requestData["negative_prompt"]);
 
     const newWorkflow = builder.build();
     console.log("newWorkflow: ", newWorkflow);
+    console.log("newWorkflow: ", newWorkflow);
+    console.log("builder:",builder);
     return newWorkflow;
   }
   
