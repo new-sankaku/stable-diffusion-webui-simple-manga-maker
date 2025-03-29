@@ -67,7 +67,25 @@ class ComfyUIWorkflowBuilder {
                 }
             });
         }
-        
+        if (Object.keys(validInputs).lenght > 0) {
+            Object.entries(this.originalWorkflow).forEach(([id, node]) => {
+                if (node.inputs) {
+                    Object.keys(node.inputs).forEach(inputKey => {
+                        if (validInputs.hasOwnProperty(inputKey)) {
+                            const originalType = typeof node.inputs[inputKey];
+                            const newType = typeof validInputs[inputKey];
+                            
+                            if (originalType === newType) {
+                                node.inputs[inputKey] = validInputs[inputKey];
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+
+
         return this;
     }
 

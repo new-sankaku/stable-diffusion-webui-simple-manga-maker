@@ -74,6 +74,7 @@ function Comfyui_isError(response) {
   function Comfyui_replace_placeholders(workflow, requestData, Type = 'T2I') {
     const builder = createWorkflowBuilder(workflow);
     console.log("requestData:", requestData["seed"]);
+    var neo_seed = requestData["seed"]=="-1" || requestData["seed"]=="0" ? Math.floor(Math.random() * 50000000) : requestData["seed"];
     builder.updateNodesByInputName({
         seed:       neo_seed,
         noise_seed: neo_seed,
