@@ -1,3 +1,4 @@
+
 class ComfyUIWorkflowBuilder {
     constructor(workflow) {
         this.originalWorkflow = workflow;
@@ -50,16 +51,18 @@ class ComfyUIWorkflowBuilder {
                 validInputs[key] = value;
             }
         });
+        logger.trace("validInputs, " ,validInputs);
     
         if (Object.keys(validInputs).length > 0) {
             Object.entries(this.workflowCopy).forEach(([id, node]) => {
                 if (node.inputs) {
                     Object.keys(node.inputs).forEach(inputKey => {
                         if (validInputs.hasOwnProperty(inputKey)) {
-                            const originalType = typeof node.inputs[inputKey];
-                            const newType = typeof validInputs[inputKey];
+                            const originalValue = typeof node.inputs[inputKey];
+                            const newValue = typeof validInputs[inputKey];
                             
-                            if (originalType === newType) {
+                            if ( originalValue === newValue || 
+                                (isNumericType(originalValue) && isNumericType(newValue))) {
                                 node.inputs[inputKey] = validInputs[inputKey];
                             }
                         }
@@ -67,25 +70,7 @@ class ComfyUIWorkflowBuilder {
                 }
             });
         }
-        if (Object.keys(validInputs).lenght > 0) {
-            Object.entries(this.originalWorkflow).forEach(([id, node]) => {
-                if (node.inputs) {
-                    Object.keys(node.inputs).forEach(inputKey => {
-                        if (validInputs.hasOwnProperty(inputKey)) {
-                            const originalType = typeof node.inputs[inputKey];
-                            const newType = typeof validInputs[inputKey];
-                            
-                            if (originalType === newType) {
-                                node.inputs[inputKey] = validInputs[inputKey];
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-
-
+        
         return this;
     }
 
@@ -119,9 +104,15 @@ class ComfyUIWorkflowBuilder {
         }
         return this.workflowCopy;
     }
-    
+}
+
+function isNumericType(value) {
+    if (typeof value === 'number') return true;
+    if (typeof value === 'string' && !isNaN(value) && value.trim() !== '') return true;
+    return false;
 }
 
 function createWorkflowBuilder(workflow) {
     return new ComfyUIWorkflowBuilder(workflow);
+
 }
