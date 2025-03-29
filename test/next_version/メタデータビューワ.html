@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8">
+ <title>画像メタデータビューア</title>
+ <style>
+  body {
+   font-family: sans-serif;
+   margin: 0;
+   padding: 20px;
+   background-color: #f5f5f5;
+  }
+  
+  .container {
+   max-width: 800px;
+   margin: 0 auto;
+   background-color: white;
+   padding: 20px;
+   border-radius: 8px;
+   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+   text-align: center;
+   color: #333;
+  }
+  
+  #canvas-container {
+   width: 100%;
+   height: 400px;
+   border: 2px dashed #ccc;
+   margin-bottom: 20px;
+   position: relative;
+   overflow: hidden;
+  }
+  
+  #canvas {
+   width: 100%;
+   height: 100%;
+  }
+  
+  #drop-text {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   color: #999;
+   font-size: 18px;
+   pointer-events: none;
+  }
+  
+  #metadata {
+   background-color: #f9f9f9;
+   padding: 15px;
+   border-radius: 5px;
+   border-left: 4px solid #4CAF50;
+   font-family: monospace;
+   white-space: pre-wrap;
+   overflow-x: auto;
+  }
+  
+  .hidden {
+   display: none;
+  }
+  
+  .metadata-section {
+   margin-bottom: 15px;
+  }
+  
+  .metadata-title {
+   font-weight: bold;
+   margin-bottom: 5px;
+  }
+ </style>
+</head>
+<body>
+ <div class="container">
+  <h1>画像メタデータビューア</h1>
+  <div id="canvas-container">
+   <canvas id="canvas"></canvas>
+   <div id="drop-text">PNGまたはWebP画像をここにドロップしてください</div>
+  </div>
+  
+  <div class="metadata-section">
+   <div class="metadata-title">基本情報</div>
+   <div id="basic-info">ここに基本情報が表示されます</div>
+  </div>
+  
+  <div class="metadata-section">
+   <div class="metadata-title">メタデータチャンク一覧</div>
+   <div id="chunks-list">ここにメタデータチャンク一覧が表示されます</div>
+  </div>
+  
+  <div class="metadata-section">
+   <div class="metadata-title">詳細メタデータ</div>
+   <div id="metadata">ここに詳細メタデータが表示されます</div>
+  </div>
+ </div>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+ <script>
+  document.addEventListener('DOMContentLoaded', function() {
+   const canvasContainer = document.getElementById('canvas-container');
+   const canvas = new fabric.Canvas('canvas', {
+    width: canvasContainer.offsetWidth,
+    height: canvasContainer.offsetHeight,
+    backgroundColor: '#f8f8f8'
+   });
+   
+   const dropText = document.getElementById('drop-text');
+   const metadataElement = document.getElementById('metadata');
+   const basicInfoElement = document.getElementById('basic-info');
+   const chunksListElement = document.getElementById('chunks-list');
+   
+   function handleDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    canvasContainer.style.borderColor = '#4CAF50';
+    canvasContainer.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+   }
+   
+   function handleDragLeave(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    canvasContainer.style.borderColor = '#ccc';
+    canvasContainer.style.backgroundColor = '';
+   }
+   
+   function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    canvasContainer.style.borderColor = '#ccc';
+    canvasContainer.style.backgroundColor = '';
+    
+    if (e.dataTransfer.files.length > 0) {
+     const file = e.dataTransfer.files[0];
+     
+     if (file.type === 'image/png' || file.type === 'image/webp') {
+      const reader = new FileReader();
+      
+      reader.onload = function(event) {
+       const imgUrl = event.target.result;
+       
+       fabric.Image.fromURL(imgUrl, function(img) {
+        canvas.clear();
+        
+        const canvasRatio = canvas.width / canvas.height;
+        const imgRatio = img.width / img.height;
+        
+        let newWidth, newHeight;
+        
+        if (imgRatio > canvasRatio) {
+         newWidth = canvas.width;
+         newHeight = canvas.width / imgRatio;
+        } else {
+         newHeight = canvas.height;
+         newWidth = canvas.height * imgRatio;
+        }
+        
+        img.set({
+         scaleX: newWidth / img.width,
+         scaleY: newHeight / img.height,
+         originX: 'center',
+         originY: 'center',
+         left: canvas.width / 2,
+         top: canvas.height / 2
+        });
+        
+        canvas.add(img);
+        canvas.renderAll();
+        
+        dropText.classList.add('hidden');
+        displayMetadata(file, img);
+       });
+      };
+      
+      reader.readAsDataURL(file);
+     } else {
+      alert('PNG または WebP 画像のみ対応しています。');
+     }
+    }
+   }
+   
+   function displayMetadata(file, fabricImage) {
+    const basicInfo = `
+ファイル名: ${file.name}
+ファイルサイズ: ${formatFileSize(file.size)}
+MIME タイプ: ${file.type}
+最終更新: ${new Date(file.lastModified).toLocaleString()}
+画像サイズ: ${fabricImage.width} x ${fabricImage.height} ピクセル
+    `;
+    
+    basicInfoElement.textContent = basicInfo;
+    
+    extractDetailedMetadata(file).then(metadata => {
+     formatMetadata(metadata);
+     
+     if (metadata.chunks && metadata.chunks.length > 0) {
+      displayChunksList(metadata.chunks);
+     }
+    });
+   }
+   
+   function displayChunksList(chunks) {
+    let html = '<table style="width:100%; border-collapse: collapse;">';
+    html += '<tr><th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">チャンクタイプ</th><th style="text-align:right; border-bottom:1px solid #ddd; padding:8px;">サイズ (バイト)</th></tr>';
+    
+    // メタデータチャンクのみをフィルタリング
+    const metadataChunks = chunks.filter(chunk => 
+      chunk.type === 'tEXt' || 
+      chunk.type === 'iTXt' || 
+      chunk.type === 'eXIf' || 
+      chunk.type === 'XMP ' || 
+      chunk.type === 'zTXt'
+    );
+    
+    if (metadataChunks.length === 0) {
+      html += '<tr><td colspan="2" style="padding:8px; text-align:center;">メタデータチャンクが見つかりませんでした</td></tr>';
+    } else {
+      metadataChunks.forEach((chunk, index) => {
+        const rowStyle = index % 2 === 0 ? 'background-color:#f9f9f9;' : '';
+        html += `<tr style="${rowStyle}">`;
+        html += `<td style="padding:8px; border-bottom:1px solid #eee;">${chunk.type}</td>`;
+        html += `<td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">${chunk.length.toLocaleString()}</td>`;
+        html += '</tr>';
+      });
+    }
+    
+    html += '</table>';
+    chunksListElement.innerHTML = html;
+   }
+   
+   function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+   }
+   
+   function extractDetailedMetadata(file) {
+    return new Promise((resolve) => {
+     const reader = new FileReader();
+     
+     reader.onload = function(e) {
+      const arrayBuffer = e.target.result;
+      const metadata = {};
+      
+      if (file.type === 'image/png') {
+       extractPngMetadata(new Uint8Array(arrayBuffer), metadata);
+      } else if (file.type === 'image/webp') {
+       extractWebPMetadata(new Uint8Array(arrayBuffer), metadata);
+      }
+      
+      resolve(metadata);
+     };
+     
+     reader.readAsArrayBuffer(file);
+    });
+   }
+   
+   function extractPngMetadata(data, metadata) {
+    metadata.format = 'PNG';
+    metadata.chunks = [];
+    
+    let index = 8; // Skip PNG signature
+    
+    while (index < data.length) {
+     const chunkLength = readUint32(data, index);
+     index += 4;
+     
+     const chunkType = String.fromCharCode(
+      data[index],
+      data[index + 1],
+      data[index + 2],
+      data[index + 3]
+     );
+     
+     metadata.chunks.push({
+      type: chunkType,
+      length: chunkLength
+     });
+     
+     index += 4;
+     
+     if (chunkType === 'IHDR') {
+      metadata.width = readUint32(data, index);
+      metadata.height = readUint32(data, index + 4);
+      metadata.bitDepth = data[index + 8];
+      metadata.colorType = data[index + 9];
+      metadata.compression = data[index + 10];
+      metadata.filter = data[index + 11];
+      metadata.interlace = data[index + 12];
+      
+      switch (metadata.colorType) {
+       case 0: metadata.colorTypeDesc = 'グレースケール'; break;
+       case 2: metadata.colorTypeDesc = 'トゥルーカラー'; break;
+       case 3: metadata.colorTypeDesc = 'インデックスカラー'; break;
+       case 4: metadata.colorTypeDesc = 'グレースケール+アルファ'; break;
+       case 6: metadata.colorTypeDesc = 'トゥルーカラー+アルファ'; break;
+       default: metadata.colorTypeDesc = '不明';
+      }
+     } else if (chunkType === 'tEXt') {
+      const textData = data.slice(index, index + chunkLength);
+      let textEnd = 0;
+      while (textEnd < textData.length && textData[textEnd] !== 0) textEnd++;
+      
+      if (textEnd < textData.length) {
+       const keyword = String.fromCharCode.apply(null, textData.slice(0, textEnd));
+       const text = String.fromCharCode.apply(null, textData.slice(textEnd + 1));
+       
+       if (!metadata.textChunks) metadata.textChunks = {};
+       metadata.textChunks[keyword] = text;
+      }
+     } else if (chunkType === 'iTXt') {
+      const textData = data.slice(index, index + chunkLength);
+      let keywordEnd = 0;
+      while (keywordEnd < textData.length && textData[keywordEnd] !== 0) keywordEnd++;
+      
+      if (keywordEnd < textData.length) {
+       const keyword = String.fromCharCode.apply(null, textData.slice(0, keywordEnd));
+       
+       const compressionFlag = textData[keywordEnd + 1];
+       const compressionMethod = textData[keywordEnd + 2];
+       
+       let langEnd = keywordEnd + 3;
+       while (langEnd < textData.length && textData[langEnd] !== 0) langEnd++;
+       
+       const language = String.fromCharCode.apply(null, textData.slice(keywordEnd + 3, langEnd));
+       
+       let transKeywordEnd = langEnd + 1;
+       while (transKeywordEnd < textData.length && textData[transKeywordEnd] !== 0) transKeywordEnd++;
+       
+       const translatedKeyword = decodeUTF8(textData.slice(langEnd + 1, transKeywordEnd));
+       
+       let text;
+       if (compressionFlag === 0) {
+        text = decodeUTF8(textData.slice(transKeywordEnd + 1));
+       } else if (compressionFlag === 1 && compressionMethod === 0) {
+        try {
+         const inflated = pako.inflate(textData.slice(transKeywordEnd + 1));
+         text = decodeUTF8(inflated);
+        } catch (e) {
+         text = '圧縮データの展開に失敗しました';
+        }
+       } else {
+        text = '未サポートの圧縮方式です';
+       }
+       
+       if (!metadata.textChunks) metadata.textChunks = {};
+       metadata.textChunks[keyword] = {
+        language: language,
+        translatedKeyword: translatedKeyword,
+        text: text
+       };
+      }
+     } else if (chunkType === 'pHYs') {
+      metadata.pHYs = {
+       pixelsPerUnitX: readUint32(data, index),
+       pixelsPerUnitY: readUint32(data, index + 4),
+       unitSpecifier: data[index + 8]
+      };
+     } else if (chunkType === 'gAMA') {
+      metadata.gamma = readUint32(data, index) / 100000;
+     } else if (chunkType === 'iCCP') {
+      metadata.iCCP = 'ICCプロファイルが含まれています';
+     }
+     
+     index += chunkLength + 4; // Skip chunk data and CRC
+    }
+   }
+   
+   function extractWebPMetadata(data, metadata) {
+    metadata.format = 'WebP';
+    metadata.chunks = [];
+    
+    if (data.length < 12) return;
+    
+    const isRIFF = String.fromCharCode(data[0], data[1], data[2], data[3]) === 'RIFF';
+    const isWEBP = String.fromCharCode(data[8], data[9], data[10], data[11]) === 'WEBP';
+    
+    if (!isRIFF || !isWEBP) return;
+    
+    const fileSize = readUint32(data, 4) + 8;
+    metadata.fileSize = fileSize;
+    
+    let index = 12;
+    
+    while (index < data.length) {
+     if (index + 8 > data.length) break;
+     
+     const chunkFourCC = String.fromCharCode(
+      data[index],
+      data[index + 1],
+      data[index + 2],
+      data[index + 3]
+     );
+     
+     const chunkSize = readUint32(data, index + 4);
+     
+     metadata.chunks.push({
+      type: chunkFourCC,
+      length: chunkSize
+     });
+     
+     index += 8;
+     
+     if (index + chunkSize > data.length) break;
+     
+     if (chunkFourCC === 'VP8 ') {
+      metadata.type = 'Lossy WebP';
+      
+      if (chunkSize >= 10) {
+       const width = (data[index + 6] | (data[index + 7] << 8)) & 0x3FFF;
+       const height = (data[index + 8] | (data[index + 9] << 8)) & 0x3FFF;
+       metadata.width = width;
+       metadata.height = height;
+      }
+     } else if (chunkFourCC === 'VP8L') {
+      metadata.type = 'Lossless WebP';
+      
+      if (chunkSize >= 5) {
+       const bits = (data[index + 1] | (data[index + 2] << 8) | (data[index + 3] << 16) | (data[index + 4] << 24));
+       const width = (bits & 0x3FFF) + 1;
+       const height = ((bits >> 14) & 0x3FFF) + 1;
+       metadata.width = width;
+       metadata.height = height;
+       metadata.hasAlpha = ((bits >> 28) & 0x1) !== 0;
+      }
+     } else if (chunkFourCC === 'VP8X') {
+      metadata.type = 'Extended WebP';
+      
+      if (chunkSize >= 10) {
+       const features = data[index];
+       const width = 1 + (data[index + 4] | (data[index + 5] << 8) | (data[index + 6] << 16));
+       const height = 1 + (data[index + 7] | (data[index + 8] << 8) | (data[index + 9] << 16));
+       
+       metadata.width = width;
+       metadata.height = height;
+       metadata.hasAnimation = (features & 0x2) !== 0;
+       metadata.hasAlpha = (features & 0x10) !== 0;
+       metadata.hasExif = (features & 0x8) !== 0;
+       metadata.hasXMP = (features & 0x4) !== 0;
+      }
+     } else if (chunkFourCC === 'EXIF') {
+      metadata.exif = 'EXIFデータが含まれています';
+     } else if (chunkFourCC === 'XMP ') {
+      metadata.xmp = 'XMPデータが含まれています';
+     } else if (chunkFourCC === 'ANIM') {
+      metadata.animation = {
+       backgroundColor: readUint32(data, index),
+       loopCount: readUint16(data, index + 4)
+      };
+     }
+     
+     index += chunkSize;
+     
+     if (index & 1) index++; // Padding to even byte boundary
+    }
+   }
+   
+   function readUint32(data, offset) {
+    return (data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3];
+   }
+   
+   function readUint16(data, offset) {
+    return (data[offset] << 8) | data[offset + 1];
+   }
+   
+   function decodeUTF8(data) {
+    if (typeof TextDecoder !== 'undefined') {
+     return new TextDecoder('utf-8').decode(data);
+    }
+    
+    let result = '';
+    let i = 0;
+    while (i < data.length) {
+     let c = data[i++];
+     if (c < 128) {
+      result += String.fromCharCode(c);
+     } else if (c > 191 && c < 224) {
+      const c2 = data[i++];
+      result += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+     } else if (c > 223 && c < 240) {
+      const c2 = data[i++];
+      const c3 = data[i++];
+      result += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+     } else {
+      const c2 = data[i++];
+      const c3 = data[i++];
+      const c4 = data[i++];
+      const codepoint = ((c & 7) << 18) | ((c2 & 63) << 12) | ((c3 & 63) << 6) | (c4 & 63);
+      if (codepoint > 0xFFFF) {
+       const highSurrogate = (codepoint - 0x10000) >>> 10 | 0xD800;
+       const lowSurrogate = (codepoint - 0x10000) & 0x3FF | 0xDC00;
+       result += String.fromCharCode(highSurrogate, lowSurrogate);
+      } else {
+       result += String.fromCharCode(codepoint);
+      }
+     }
+    }
+    return result;
+   }
+   
+   function formatMetadata(metadata) {
+    // メタデータチャンクのみを表示用に抽出
+    const displayMetadata = {};
+    
+    if (metadata.textChunks) {
+      // ディープコピーを作成して元のオブジェクトを変更しないようにする
+      const textChunks = JSON.parse(JSON.stringify(metadata.textChunks));
+      
+      // tEXtの場合
+      if (textChunks.parameters && typeof textChunks.parameters === 'string') {
+        textChunks.parameters = formatParametersText(textChunks.parameters);
+      } 
+      // iTXtの場合
+      else if (textChunks.parameters && textChunks.parameters.text) {
+        textChunks.parameters.text = formatParametersText(textChunks.parameters.text);
+      }
+      
+      displayMetadata.textChunks = textChunks;
+    }
+    
+    if (metadata.exif) {
+      displayMetadata.exif = metadata.exif;
+    }
+    
+    if (metadata.xmp) {
+      displayMetadata.xmp = metadata.xmp;
+    }
+    
+    // 他のメタデータは追加しない
+    const jsonString = JSON.stringify(displayMetadata, null, 2);
+    
+    // 改行をHTMLの改行タグに変換
+    metadataElement.innerHTML = jsonString
+      .replace(/\\n/g, '<br>')
+      .replace(/\n/g, '<br>')
+      .replace(/  /g, '&nbsp;&nbsp;');
+    
+    return '';
+   }
+   
+   function formatParametersText(text) {
+     // 改行を維持して特定のキーワードの前に改行を追加
+     const keywords = [
+       "Negative prompt:", 
+       "Steps:", 
+       "Sampler:", 
+       "Schedule type:", 
+       "CFG scale:", 
+       "Seed:", 
+       "Size:", 
+       "Model hash:", 
+       "Model:", 
+       "Version:",
+       "Denoising strength:",
+       "Hires upscale:",
+       "Hires upscaler:"
+     ];
+     
+     let formattedText = text;
+     
+     keywords.forEach(keyword => {
+       formattedText = formattedText.replace(new RegExp(keyword, 'g'), `\n\n${keyword}`);
+     });
+     
+     return formattedText;
+   }
+   
+   canvasContainer.addEventListener('dragover', handleDragOver, false);
+   canvasContainer.addEventListener('dragleave', handleDragLeave, false);
+   canvasContainer.addEventListener('drop', handleDrop, false);
+   
+   window.addEventListener('resize', function() {
+    canvas.setWidth(canvasContainer.offsetWidth);
+    canvas.setHeight(canvasContainer.offsetHeight);
+    canvas.renderAll();
+   });
+  });
+ </script>
+</body>
+</html>

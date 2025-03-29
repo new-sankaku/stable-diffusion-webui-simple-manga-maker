@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C2PA情報確認ツール</title>
+<style>
+body {
+ font-family: 'Helvetica Neue', Arial, sans-serif;
+ max-width: 800px;
+ margin: 0 auto;
+ padding: 20px;
+ background-color: #f7f9fc;
+}
+.container {
+ background-color: white;
+ border-radius: 8px;
+ padding: 20px;
+ box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+ color: #333;
+ text-align: center;
+}
+.dropzone {
+ border: 2px dashed #ccc;
+ border-radius: 8px;
+ padding: 40px;
+ text-align: center;
+ margin: 20px 0;
+ transition: all 0.3s;
+ background-color: #fafafa;
+}
+.dropzone.active {
+ border-color: #4a90e2;
+ background-color: #f0f7ff;
+}
+.btn {
+ background-color: #4a90e2;
+ color: white;
+ border: none;
+ padding: 10px 15px;
+ border-radius: 4px;
+ cursor: pointer;
+ font-size: 16px;
+ margin-top: 10px;
+}
+.btn:hover {
+ background-color: #3a80d2;
+}
+.result {
+ margin-top: 20px;
+ display: none;
+}
+.result h2 {
+ margin-top: 0;
+ color: #444;
+}
+.c2pa-data {
+ background-color: #f5f5f5;
+ border-radius: 4px;
+ padding: 15px;
+ font-family: monospace;
+ white-space: pre-wrap;
+ max-height: 400px;
+ overflow-y: auto;
+}
+.image-preview {
+ max-width: 100%;
+ max-height: 300px;
+ display: block;
+ margin: 20px auto;
+ border-radius: 4px;
+}
+.has-c2pa {
+ color: #2e7d32;
+ font-weight: bold;
+}
+.no-c2pa {
+ color: #c62828;
+ font-weight: bold;
+}
+.loading {
+ display: none;
+ text-align: center;
+ margin: 20px 0;
+}
+.spinner {
+ border: 4px solid rgba(0, 0, 0, 0.1);
+ width: 36px;
+ height: 36px;
+ border-radius: 50%;
+ border-left-color: #4a90e2;
+ animation: spin 1s linear infinite;
+ margin: 0 auto 10px;
+}
+@keyframes spin {
+ 0% { transform: rotate(0deg); }
+ 100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+ <h1>C2PA情報確認ツール</h1>
+ 
+ <div class="dropzone" id="dropzone">
+  <p>ここに画像ファイルをドラッグ＆ドロップするか、クリックして選択してください</p>
+  <input type="file" id="fileInput" accept="image/*" style="display: none;">
+  <button class="btn" id="selectButton">ファイルを選択</button>
+ </div>
+ 
+ <div class="loading" id="loading">
+  <div class="spinner"></div>
+  <p>C2PA情報を解析中...</p>
+ </div>
+ 
+ <div class="result" id="result">
+  <h2>画像プレビュー</h2>
+  <img id="imagePreview" class="image-preview">
+  
+  <h2>C2PA検証結果</h2>
+  <div id="statusContainer"></div>
+  
+  <h2>詳細情報</h2>
+  <pre class="c2pa-data" id="c2paData"></pre>
+ </div>
+</div>
+
+<script type="module">
+// 正しいC2PAライブラリをインポートします
+import { createC2pa } from 'https://cdn.jsdelivr.net/npm/c2pa@0.28.2/dist/c2pa.esm.min.js';
+
+window.addEventListener('load', async () => {
+ const dropzone = document.getElementById('dropzone');
+ const fileInput = document.getElementById('fileInput');
+ const selectButton = document.getElementById('selectButton');
+ const result = document.getElementById('result');
+ const imagePreview = document.getElementById('imagePreview');
+ const c2paData = document.getElementById('c2paData');
+ const statusContainer = document.getElementById('statusContainer');
+ const loading = document.getElementById('loading');
+ 
+ // C2PAインスタンスを作成
+ const c2pa = await createC2pa({
+   wasmSrc: 'https://cdn.jsdelivr.net/npm/c2pa@0.28.2/dist/assets/wasm/toolkit_bg.wasm',
+   workerSrc: 'https://cdn.jsdelivr.net/npm/c2pa@0.28.2/dist/c2pa.worker.min.js'
+ });
+ 
+ selectButton.addEventListener('click', () => {
+  fileInput.click();
+ });
+ 
+ fileInput.addEventListener('change', handleFiles);
+ 
+ dropzone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropzone.classList.add('active');
+ });
+ 
+ dropzone.addEventListener('dragenter', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropzone.classList.add('active');
+ });
+ 
+ dropzone.addEventListener('dragleave', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropzone.classList.remove('active');
+ });
+ 
+ document.addEventListener('drop', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  return false;
+ }, false);
+ 
+ dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropzone.classList.remove('active');
+  
+  const dt = e.dataTransfer;
+  if (dt.files && dt.files.length) {
+   fileInput.files = dt.files;
+   handleFiles();
+  }
+ }, false);
+ 
+ async function handleFiles() {
+  const file = fileInput.files[0];
+  if (!file) return;
+  
+  if (!file.type.startsWith('image/')) {
+   alert('画像ファイルを選択してください。');
+   return;
+  }
+  
+  result.style.display = 'none';
+  loading.style.display = 'block';
+  
+  const objectURL = URL.createObjectURL(file);
+  imagePreview.src = objectURL;
+  
+  try {
+   // C2PAライブラリを使用して画像を読み込み
+   const result = await c2pa.read(file);
+   
+   if (result && result.manifestStore) {
+    statusContainer.innerHTML = '<p class="has-c2pa">✅ この画像にはC2PA情報が含まれています</p>';
+    c2paData.textContent = JSON.stringify(result.manifestStore, null, 2);
+   } else {
+    statusContainer.innerHTML = '<p class="no-c2pa">❌ この画像にはC2PA情報が含まれていません</p>';
+    c2paData.textContent = 'C2PA情報なし';
+   }
+  } catch (error) {
+   console.error('C2PA読み取りエラー:', error);
+   statusContainer.innerHTML = `<p class="no-c2pa">❌ エラーが発生しました: ${error.message}</p>`;
+   c2paData.textContent = `エラー詳細: ${error.stack || error}`;
+  }
+  
+  loading.style.display = 'none';
+  result.style.display = 'block';
+ }
+});
+</script>
+</body>
+</html>
