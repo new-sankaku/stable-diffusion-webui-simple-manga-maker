@@ -1,3 +1,4 @@
+var random = Math.floor(Math.random() * 537388471760656)
 const defaultObjectInfo = {
 KSampler: {
 input: {
@@ -9,7 +10,7 @@ model: [
 seed: [
 "INT",
 {
-default: 0,
+default: random,
 min: 0,
 max: 18446744073709551615,
 tooltip: "The random seed used for creating the noise.",

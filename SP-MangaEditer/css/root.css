@@ -3,17 +3,17 @@
   --color-base:              #212121;
   --color-secondary:         #333333;
   --color-tertiary:          #505050;
-  --color-accent:            #810000;
+  --color-accent:            #7c67c2;
   --color-accent-hover:      #8d8b8b;
   --color-text-primary:      #ffffff;
   --color-text-secondary:    #dedede;
-  --color-component-minitext:#ff7c7c;
-  --color-hr:                #ff9532;
-  --color-scllor:            #480000;
+  --color-component-minitext:#7c67c2;
+  --color-hr:                #7c67c2;
+  --color-scllor:            #8d8b8b;
   
 
   --odd-layer:            #0d0249;
-  --even-layer:          #450202;
+  --even-layer:          #594a8a;
 
 
   --color-scrollbar-track:                var(--color-base);

@@ -1,0 +1,20 @@
+var trans_tw = {
+    "PromptHelper": "提示助手",
+    "name": "名稱",
+    "save": "保存",
+    "category": "類別",
+    "subcategory": "子類別",
+    "selected": "已選擇",
+    "download": "下載",
+    "copy": "複製",
+    "freeInput": "自由輸入區",
+    "alerts.nameMissing": "請輸入名稱。",
+    "Tutorial": "教學指南",
+    "english": "英文",
+    "traditionalChinese": "繁體中文",
+    "japanese": "日語",
+    "korean": "韓語",
+    "chinese": "簡體中文",
+    "french": "法語",
+    "language": "語言"
+}

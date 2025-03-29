@@ -7,7 +7,7 @@ var firstComfyConnection = true;
 $('sdWebUIPageUrlDefaultUrl').addEventListener('click', (event) => {
   event.stopPropagation();
   const defaultUrl = 'http://127.0.0.1:7860';
-  $('sdWebUIPageUrl').value = defaultUrl;
+  $('sdWebUIPageUrl').value = defaultUrl; 
 });
 
 $('comfyUIPageUrlDefaultUrl').addEventListener('click', (event) => {
@@ -16,8 +16,11 @@ $('comfyUIPageUrlDefaultUrl').addEventListener('click', (event) => {
   $('comfyUIPageUrl').value = defaultUrl;
 });
 
+// let API_mode = localStorage.getItem('API_mode') || apis.COMFYUI;
 
-
+// if (!localStorage.getItem('API_mode')) {
+//     localStorage.setItem('API_mode', apis.COMFYUI);
+// }
 
 function existsWaitQueue() {
   const sdQueueStatus = sdQueue.getStatus();

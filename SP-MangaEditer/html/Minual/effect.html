@@ -77,6 +77,7 @@ img {
     <button onclick="cL('en')">English</button>
     <button onclick="cL('ja')">日本語</button>
     <button onclick="cL('zh')">中文</button>
+    <button onclick="cL('tw')">繁體中文</button>
 </div>
 <div id="c">
     <h1 data-i18n="title"></h1>
@@ -183,6 +184,30 @@ const r = {
                 usage: "在混合界面中，您可以从混合目标中排除图像。混合后可以将图像添加到主画布。要将图像重新添加到面板中，请右键单击图像并选择'放置在面板中'。图像的中心点需要在面板内。"
             }
         },
+    },
+    tw: {
+        translation: {
+            title: "圖像處理選單",
+            menu: {
+                c2bw: "彩色轉黑白",
+                blend: "25種混合模式"
+            },
+            c2bw: {
+                title: "彩色轉黑白",
+                description: "將彩色圖像轉換為黑白調圖像。",
+                process: "轉換過程涉及以下3個GLFX處理：",
+                ink: "Ink：首先，加粗線條。",
+                brightnessContrast: "Brightness Contrast：增加亮度和對比度，以消除調子化時的過度表現。",
+                dotScreen: "Dot Screen：進行調子化。",
+                sampleImages: "原始、黑白和調色圖像的樣本。"
+            },
+            blend: {
+                title: "25種混合模式",
+                description: "這些是類似於Photoshop等軟件中的混合模式。詳細信息請參考在線資源。",
+                requirements: "混合需要兩張或更多圖像。此外，圖層面板圖像中的兩個或更多圓形圖標必須被選中。",
+                usage: "在混合界面中，您可以從混合目標中排除圖像。混合後可以將圖像添加到主畫布。要將圖像重新添加到面板中，請右鍵單擊圖像並選擇'放置在面板中'。圖像的中心點需要在面板內。"
+            }
+        }
     }
 };
 
@@ -209,7 +234,7 @@ i18next.init(
     function (e, t) {
         if (e) return console.error("i18next init error", e);
         uC();
-        showSection('c2bw'); // デフォルトでColor2BlackWhiteセクションを表示
+        showSection('c2bw'); // Default to Color2BlackWhite section
     }
 );
 </script>

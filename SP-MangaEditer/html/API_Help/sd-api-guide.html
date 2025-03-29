@@ -38,6 +38,7 @@ pre{white-space:pre-wrap;word-wrap:break-word;font-size:14px;line-height:1.6}
 <button class="lang-btn" data-lang="ko">한국어</button>
 <button class="lang-btn" data-lang="fr">Français</button>
 <button class="lang-btn" data-lang="zh">中文</button>
+<button class="lang-btn" data-lang="tw">繁體中文</button>
 <button class="lang-btn" data-lang="ru">Русский</button>
 <button class="lang-btn" data-lang="es">Español</button>
 <button class="lang-btn" data-lang="pt">Português</button>
@@ -218,6 +219,32 @@ filepath:"Stable Diffusion WebUI Forge\\modules\\initialize_util.py",
 before:"修改前",
 after:"修改后",
 note:"*1: 一旦修复提交被合并到Forge中，将不再需要此源代码修改。"
+}
+}},
+tw:{translation:{
+title:"Stable Diffusion WebUI API 設定指南",
+intro:"本指南說明如何配置Stable Diffusion WebUI(或Forge)的API。",
+setup:{
+title:"API 設定步驟",
+description:"編輯Stable Diffusion WebUI(或Forge)文件夾中的'webui-user.bat'文件，設置COMMANDLINE_ARGS環境變量。",
+image_alt:"設定文件示例",
+variables:"設置環境變量：",
+recommended:{title:"Extension、Web網站和本地HTML用（推薦）"},
+extension:{title:"僅用於Extension"}
+},
+matrix:{
+title:"Stability Matrix",
+note:"注意：從Stability Matrix啟動時，請在Extra Launch Arguments中設置。",
+image_alt:"Stability Matrix配置示例"
+},
+forge:{
+title:"Forge源代碼修改（Web版本）",
+description:"僅Forge需要源代碼修改（截至2024年11月25日）。",
+warning:"如果您使用擴展或本地運行index.html，則不需要此步驟。",
+filepath:"Stable Diffusion WebUI Forge\\modules\\initialize_util.py",
+before:"修改前",
+after:"修改後",
+note:"*1: 一旦修復提交被合併到Forge中，將不再需要此源代碼修改。"
 }
 }},
 ru:{translation:{

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>LZ4 ファイル圧縮</title>
+<title>LZ4 檔案壓縮</title>
 <style>
 body {
  font-family: Arial, sans-serif;
@@ -81,26 +81,26 @@ body {
 </head>
 <body>
 <div class="container">
- <h1>LZ4 ファイル圧縮</h1>
+ <h1>LZ4 檔案壓縮</h1>
  
  <div class="compression-settings">
-  <label>圧縮レベル: <span id="compressionLevel">9</span></label>
+  <label>壓縮等級: <span id="compressionLevel">9</span></label>
   <input type="range" min="0" max="16" value="9" id="compressionSlider" style="width: 100%">
   <div style="display: flex; justify-content: space-between">
-   <small>高速 (低圧縮)</small>
-   <small>高圧縮 (低速)</small>
+   <small>高速 (低壓縮)</small>
+   <small>高壓縮 (低速)</small>
   </div>
  </div>
 
  <div id="dropZone" class="drop-zone">
-  <p>ファイルをドラッグ&ドロップするか、クリックして選択してください</p>
-  <p><small>複数ファイルを選択できます</small></p>
+  <p>請拖放檔案或點擊選擇檔案</p>
+  <p><small>可選擇多個檔案</small></p>
   <input type="file" id="fileInput" style="display: none" multiple>
  </div>
 
  <div id="selectedFiles" class="selected-files"></div>
  
- <button id="compressButton" class="button" disabled>圧縮してダウンロード</button>
+ <button id="compressButton" class="button" disabled>壓縮並下載</button>
  <div class="progress" id="progress">
   <div class="progress-bar">
    <div class="progress-bar-fill" id="progressBar"></div>
@@ -134,13 +134,13 @@ async function initLZ4() {
   lz4module = await initResult;
   
   if (lz4module && lz4module.lz4js) {
-   document.getElementById('status').textContent = 'LZ4モジュールの読み込みが完了しました';
+   document.getElementById('status').textContent = 'LZ4模組載入完成';
    document.getElementById('compressButton').disabled = !selectedFiles.length;
   } else {
-   throw new Error('lz4jsが見つかりません');
+   throw new Error('找不到lz4js');
   }
  } catch (error) {
-  document.getElementById('status').textContent = `LZ4モジュールの読み込みに失敗: ${error.message}`;
+  document.getElementById('status').textContent = `LZ4模組載入失敗: ${error.message}`;
  }
 }
 
@@ -223,7 +223,7 @@ document.getElementById('compressButton').addEventListener('click', async () => 
 
  const compressionLevel = document.getElementById('compressionSlider').value;
  document.getElementById('progress').style.display = 'block';
- document.getElementById('status').textContent = '圧縮中...';
+ document.getElementById('status').textContent = '壓縮中...';
  document.getElementById('compressButton').disabled = true;
 
  try {
@@ -243,7 +243,7 @@ document.getElementById('compressButton').addEventListener('click', async () => 
    for (let i = 0; i < selectedFiles.length; i++) {
     const progress = ((i + 1) / selectedFiles.length * 100).toFixed(1);
     document.getElementById('progressBar').style.width = `${progress}%`;
-    document.getElementById('status').textContent = `圧縮中... ${i + 1}/${selectedFiles.length} ファイル`;
+    document.getElementById('status').textContent = `壓縮中... ${i + 1}/${selectedFiles.length} 檔案`;
     
     const result = await compressFile(selectedFiles[i], compressionLevel);
     compressedFiles.push(result);
@@ -266,10 +266,10 @@ document.getElementById('compressButton').addEventListener('click', async () => 
    URL.revokeObjectURL(url);
   }
 
-  document.getElementById('status').textContent = '圧縮完了！';
+  document.getElementById('status').textContent = '壓縮完成！';
   document.getElementById('progressBar').style.width = '100%';
  } catch (error) {
-  document.getElementById('status').textContent = `エラーが発生しました: ${error.message}`;
+  document.getElementById('status').textContent = `發生錯誤: ${error.message}`;
  } finally {
   document.getElementById('compressButton').disabled = false;
   setTimeout(() => {

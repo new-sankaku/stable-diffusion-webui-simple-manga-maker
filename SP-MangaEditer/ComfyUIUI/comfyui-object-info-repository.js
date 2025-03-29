@@ -10,7 +10,7 @@ const objectInfoRepository = {
 
   async saveObjectInfo(objectInfo) {
     if (!objectInfo || Object.keys(objectInfo).length === 0) {
-      console.error("No valid ObjectInfo specified");
+      console.error("有効なObjectInfoが指定されていません");
       return false;
     }
 
@@ -21,7 +21,7 @@ const objectInfoRepository = {
       });
       return true;
     } catch (error) {
-      console.error("Failed to save ObjectInfo:", error);
+      console.error("ObjectInfoの保存に失敗しました:", error);
       return false;
     }
   },
@@ -31,7 +31,7 @@ const objectInfoRepository = {
       const result = await this.store.getItem("latestObjectInfo");
       return result ? result.data : null;
     } catch (error) {
-      console.error("Failed to retrieve ObjectInfo:", error);
+      console.error("ObjectInfoの取得に失敗しました:", error);
       return null;
     }
   },
@@ -41,7 +41,7 @@ const objectInfoRepository = {
       const result = await this.store.getItem("latestObjectInfo");
       return result ? result.updatedAt : null;
     } catch (error) {
-      console.error("Failed to get last update time:", error);
+      console.error("最終更新日時の取得に失敗しました:", error);
       return null;
     }
   },

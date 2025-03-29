@@ -9,8 +9,9 @@ function loadJsResource(language, namespace, callback) {
  loadJS(`json_js/01_trans_${language}.js`, 'head')
    .then(() => {
      const resources = window[`trans_${language}`];
-     callback(null, resources);
+    callback(null, resources);
    })
+   
    .catch(error => {
      console.error(`Error loading language file for ${language}:`, error);
      callback(error, null);
