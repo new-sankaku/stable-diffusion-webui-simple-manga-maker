@@ -222,14 +222,20 @@ function loadSettingsLocalStrage() {
       changeExternalAPI( $("comfyUIButton") );
     }
 
-    basePrompt.text2img_prompt          = $('basePrompt_prompt').value;
-    basePrompt.text2img_negative        = $('basePrompt_negative').value;
+    if(localSettings.basePrompt_text2img_prompt) {
+      basePrompt.text2img_prompt = localSettings.basePrompt_text2img_prompt;
+    }
+    if(localSettings.basePrompt_text2img_negative) {
+      basePrompt.text2img_negative = localSettings.basePrompt_text2img_negative;
+    }
+    if(localSettings.basePrompt_text2img_seed) {
+      basePrompt.text2img_seed = localSettings.basePrompt_text2img_seed;
+    }
     basePrompt.text2img_model           = $('basePrompt_model').value;
     basePrompt.text2img_samplingSteps   = $('basePrompt_samplingSteps').value;
     basePrompt.text2img_samplingMethod  = $('basePrompt_samplingMethod').value;
     basePrompt.text2img_width           = $('basePrompt_width').value;
     basePrompt.text2img_height          = $('basePrompt_height').value;
-    basePrompt.text2img_seed            = $('basePrompt_seed').value;
     basePrompt.text2img_cfg_scale       = $('basePrompt_cfg_scale').value;
     basePrompt.text2img_hr_upscaler     = $('text2img_hr_upscaler').value;
     basePrompt.text2img_hr_step         = $('text2img_hr_step').value;
@@ -305,4 +311,20 @@ function svgDownload(filename, content) {
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
+}
+
+function resetBasePromptToDefaults() {
+  localStorage.removeItem('localSettingsData');
+  Object.assign(basePrompt, {
+    text2img_prompt: "masterpiece, best quality, 1 girl, simple background, ",
+    text2img_negative: "low quality, worst quality, jpeg, normal quality, bad fingers",
+    text2img_seed: Math.floor(Math.random() * 537388471760656),
+    // ... other default values from settings.js ...
+  });
+  // Update UI elements
+  $('basePrompt_prompt').value = basePrompt.text2img_prompt;
+  $('basePrompt_negative').value = basePrompt.text2img_negative;
+  $('basePrompt_seed').value = basePrompt.text2img_seed;
+  // ... update other fields ...
+  createToast('Base Prompt Reset', ['All base prompts reset to defaults'], 2000);
 }

@@ -43,9 +43,9 @@ var comfyuiPort = 8188;
 var comfyuiHost = "127.0.0.1";
 
 const basePrompt = {
-  text2img_prompt         :"masterpiece, best quality, 1girl, simple background, ",
-  text2img_negative       :"low quality, worst quality, jpeg, normal quality, ",
-  text2img_seed           :-1,
+  text2img_prompt         :"masterpiece, best quality, 1 girl, simple background, ",
+  text2img_negative       :"low quality, worst quality, jpeg, normal quality, bad fingers",
+  text2img_seed           :Math.floor(Math.random() * 537388471760656),
   text2img_cfg_scale      :7,
   text2img_width          :1024,
   text2img_height         :1024,
@@ -64,6 +64,7 @@ const t2i_init = {
   t2i_prompt         : "",
   t2i_negativePrompt : "",
   t2i_seed           : -2,
+  // t2i_seed           : Math.floor(Math.random() * 537388471760656), tbd
   t2i_width          : -1,
   t2i_height         : -1,
 };
@@ -72,6 +73,7 @@ const i2i_init = {
   i2i_prompt         : "",
   i2i_negativePrompt : "",
   i2i_seed           : -2,
+  // i2i_seed           : Math.floor(Math.random() * 537388471760656), tbd
   i2i_width          : -1,
   i2i_height         : -1,
   i2i_samplingSteps : 20,
