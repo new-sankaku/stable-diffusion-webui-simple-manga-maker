@@ -72,26 +72,14 @@ function Comfyui_isError(response) {
   
   
   function Comfyui_replace_placeholders(workflow, requestData, Type = 'T2I') {
-    console.log("you used version 1.0.0. tbd")
-    console.log("you used version 1.0.0. tbd")
     const builder = createWorkflowBuilder(workflow);
     console.log("requestData:", requestData["seed"]);
-    
-    const seedValue = parseInt(requestData["seed"]);
-    var neo_seed = [-1, 0, 1].includes(seedValue) 
-        ? Math.floor(Math.random() * 50000000)
-        : seedValue;
-    
-    console.log("neo_seed:", neo_seed);
-        console.log("requestData:", requestData["seed"]);
     builder.updateNodesByInputName({
         seed:       neo_seed,
         noise_seed: neo_seed,
         width:      requestData["width"],
         height:     requestData["height"]
     });
-
-    builder.updateValueByTargetValue("%random%", neo_seed.toString());
 
     if( Type == 'I2I' || Type == 'Rembg' ){
         builder.updateNodesByInputName({
@@ -105,7 +93,7 @@ function Comfyui_isError(response) {
 
     const newWorkflow = builder.build();
     console.log("newWorkflow: ", newWorkflow);
-    console.log("newWorkflow: ", newWorkflow);
+    console.log("builder:",builder);
     return newWorkflow;
   }
   
