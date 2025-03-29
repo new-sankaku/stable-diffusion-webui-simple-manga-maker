@@ -73,6 +73,7 @@ function Comfyui_isError(response) {
   
   function Comfyui_replace_placeholders(workflow, requestData, Type = 'T2I') {
     console.log("you used version 1.0.0. tbd")
+    console.log("you used version 1.0.0. tbd")
     const builder = createWorkflowBuilder(workflow);
     console.log("requestData:", requestData["seed"]);
     
@@ -105,7 +106,6 @@ function Comfyui_isError(response) {
     const newWorkflow = builder.build();
     console.log("newWorkflow: ", newWorkflow);
     console.log("newWorkflow: ", newWorkflow);
-    console.log("builder:",builder);
     return newWorkflow;
   }
   
