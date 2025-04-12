@@ -310,5 +310,6 @@ function SimpleLogger(moduleName, defaultLevel = LogLevel.INFO) {
   };
 }
 
-const logger = SimpleLogger('main', LogLevel.DEBUG);
-const eventLogger = SimpleLogger('event', LogLevel.INFO);
+const logger          = SimpleLogger('main',     LogLevel.INFO);
+const workflowlLogger = SimpleLogger('workflow', LogLevel.INFO);
+const eventLogger     = SimpleLogger('event',    LogLevel.INFO);

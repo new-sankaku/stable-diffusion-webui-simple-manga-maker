@@ -284,9 +284,10 @@ async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
     requestData["uploadFileName"] = uploadFilename;
   }
 
-  var workflow = Comfyui_replace_placeholders(selected_workflow, requestData, Type);
 
-  logger.trace("comfyuiQueue Workflow", JSON.stringify(workflow));
+  workflowlLogger.trace("comfyuiQueue Before Workflow", JSON.stringify(workflow));
+  var workflow = Comfyui_replace_placeholders(selected_workflow, requestData, Type);
+  workflowlLogger.trace("comfyuiQueue After Workflow", JSON.stringify(workflow));
 
   return comfyuiQueue.add(async () => Comfyui_put_queue(workflow))
     .then(async (result) => {
@@ -294,15 +295,16 @@ async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
         createToastError("Generation Error", result.message);
         throw new Error(result.message);
       } else if (result) {
-        layer.visible = false;
 
         if(isPanel(layer)){
           var center = calculateCenter(layer);
           putImageInFrame(result, center.centerX, center.centerY);
         }else if(layer.clipPath){
+          layer.visible = false;
           var center = calculateCenter(layer);
           putImageInFrame(result, center.centerX, center.centerY);
         }else{
+          layer.visible = false;
           replaceImageObject(layer, result);
         }
       } else {
@@ -330,7 +332,7 @@ async function Comfyui_put_queue(workflow) {
   response = await Comfyui_get_history(prompt_id);
   if (!response) return { error: true, message: "Unknown error", details: "Please check ComfyUI console.",};
 
-  console.log("Comfyui_put_queue response:", JSON.stringify(response));
+  workflowlLogger.trace("Comfyui_put_queue response:", JSON.stringify(response));
 
   if (Comfyui_isError(response)) {
     const errorMessage = Comfyui_getErrorMessage(response);

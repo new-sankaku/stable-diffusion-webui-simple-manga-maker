@@ -50,7 +50,7 @@ class ComfyUIWorkflowBuilder {
                 validInputs[key] = value;
             }
         });
-        logger.trace("validInputs, " ,validInputs);
+        workflowlLogger.trace("validInputs, " ,validInputs);
     
         if (Object.keys(validInputs).length > 0) {
             Object.entries(this.workflowCopy).forEach(([id, node]) => {
@@ -58,11 +58,16 @@ class ComfyUIWorkflowBuilder {
                     Object.keys(node.inputs).forEach(inputKey => {
                         if (validInputs.hasOwnProperty(inputKey)) {
                             const originalValue = typeof node.inputs[inputKey];
-                            const newValue = typeof validInputs[inputKey];
+                            const newValue      = typeof validInputs[inputKey];
                             
-                            if ( originalValue === newValue || 
-                                (isNumericType(originalValue) && isNumericType(newValue))) {
+                            if ( originalValue === newValue){
+                                workflowlLogger.trace("validInputs, replase1 " , originalValue, newValue);
                                 node.inputs[inputKey] = validInputs[inputKey];
+                            
+                            }else if ( (isNumericType(node.inputs[inputKey]) && isNumericType(validInputs[inputKey]))){
+                                workflowlLogger.trace("validInputs, replase2 " , originalValue, newValue);
+                                node.inputs[inputKey] = validInputs[inputKey];   
+                            
                             }
                         }
                     });

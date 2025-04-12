@@ -146,9 +146,7 @@ function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false, is
       var scaleToFitX = (targetFrame.width * targetFrame.scaleX) / obj.width;
       var scaleToFitY = (targetFrame.height * targetFrame.scaleY) / obj.height;
       var scaleToFit = Math.max(scaleToFitX, scaleToFitY);
-
       moveSettings(obj, targetFrame);
-
       if(isFit){
         obj.set({
           left: frameCenterX - (obj.width * scaleToFit) / 2,
@@ -162,7 +160,6 @@ function putImageInFrame(imgOrSvg, x, y, isNotActive=false, notReplace=false, is
       } else {
         obj.name = targetFrame.name + " In Image";
       }
-
       setGUID(targetFrame, obj);
     } else {
       if(isFit){
