@@ -253,19 +253,6 @@ function putRunT2IButton(buttonsDiv, layer, index) {
 
 
 
-function putAiAllButtons(){
-  var allDiv = $("layer-all-buttons");
-  var allRun = getText("T2I_AllRun");
-
-  allDiv.innerHTML = 
-`<button onclick="AllRun()">
- <i class="material-icons">collections</i>
- <span data-i18n="${allRun}">All Run</span>
- </button>`;
-}
-putAiAllButtons();
-
-
 var indexAllRunDummy = 10000;
 function AllRun(){
   var objescts = getPanelObjectList();

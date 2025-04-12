@@ -1711,10 +1711,21 @@ function getElementClasses(element) {
 
             <div id="canvas-area">
                 <div class="area-header">
+
+
                     <button id="inputImageFile" onclick="inputImageFile()">
                         <span class="material-symbols-outlined">image</span>
                         <input type="file" id="imageInput" multiple style="display: none;" accept="image/*">
                     </button>
+
+                    <button id="cropMode">
+                        <i class="material-icons">crop_free</i>
+                    </button>
+                    <button id="crop" anim="glow">
+                        <i class="material-icons">crop</i>
+                    </button>
+
+
                     <button id="zoomIn" onclick="zoomIn()">
                         <span class="material-symbols-outlined">zoom_in</span>
                     </button>
@@ -1738,6 +1749,7 @@ function getElementClasses(element) {
                     </label>
                     <input type="checkbox" id="view_controles_checkbox" checked
                         style="margin-top: 0px; margin-bottom: 0px;">
+                        
                 </div>
 
                 <div id="intro_content" class="content">
@@ -1751,32 +1763,29 @@ function getElementClasses(element) {
 
 
             <div id="layer-panel">
-                <div class="area-header" data-i18n="layers">Layers</div>
+                <div class="area-header" >
+                        <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
+                        <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
+                        <button id="undo" onclick="undo()"><i class="material-icons">undo</i></button>
+                        <button id="redo" onclick="redo()"><i class="material-icons">redo</i></button>
+                        <label data-i18n="layers">
+                            Layers
+                        </label>
+                </div>
                 <div id="layer-content"></div>
-                <div id="layer-buttons">
-                    <button onclick="LayersUp()"><i class="material-icons">arrow_upward</i></button>
-                    <button onclick="LayersDown()"><i class="material-icons">arrow_downward</i></button>
-                    <button onclick="View()">
-                        <i class="material-icons">document_scanner</i>
-                        <span data-i18n="promptView">View</span>
-                    </button>
-                </div>
-                <div id="layer-all-buttons">
-                </div>
-                <div id="canvas-buttons">
-                    <button id="undo" onclick="undo()">
-                        <i class="material-icons">undo</i>
-                    </button>
-                    <button id="redo" onclick="redo()">
-                        <i class="material-icons">redo</i>
-                    </button>
-                    <button id="cropMode">
-                        <i class="material-icons">crop_free</i>
-                    </button>
-                    <button id="crop" anim="glow">
-                        <i class="material-icons">crop</i>
-                    </button>
 
+                <div id="canvas-buttons">
+    
+                    <div id="layer-buttons">
+                        <button onclick="AllRun()">
+                            <i class="material-icons">collections</i>
+                            <span data-i18n="T2I_AllRun">All Run</span>
+                        </button>
+                        <button onclick="View()">
+                            <i class="material-icons">document_scanner</i>
+                            <span data-i18n="promptView">View</span>
+                        </button>
+                    </div>                    
                 </div>
             </div>
 
