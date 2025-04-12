@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<div id="opencv-status">OpenCV.js 読み込み中...</div>
+<div id="drop-area"><p>透過画像をドラッグ＆ドロップまたは<input type="file" id="imageInput" accept="image/*"></p></div>
+</header>
+<main>
+<div class="container">
+<div class="params-panel">
+<div class="control-item">
+<label for="cannyThresh1">Cannyエッジ下限:<span id="cannyThresh1Value">50</span></label>
+<input type="range" id="cannyThresh1" min="10" max="200" value="50">
+</div>
+<div class="control-item">
+<label for="cannyThresh2">Cannyエッジ上限:<span id="cannyThresh2Value">150</span></label>
+<input type="range" id="cannyThresh2" min="50" max="300" value="150">
+</div>
+<div class="control-item">
+<label for="houghThreshold">Hough変換閾値:<span id="houghThresholdValue">50</span></label>
+<input type="range" id="houghThreshold" min="10" max="150" value="50">
+</div>
+<div class="control-item">
+<label for="thinningIterations">骨格化反復回数:<span id="thinningIterationsValue">5</span></label>
+<input type="range" id="thinningIterations" min="1" max="10" value="5">
+</div>
+<div class="control-item">
+<label for="strokeWidthDelta">線幅検出デルタ:<span id="strokeWidthDeltaValue">5</span></label>
+<input type="range" id="strokeWidthDelta" min="1" max="20" value="5">
+</div>
+<div class="control-item">
+<label for="brushPressureStrength">筆圧強度:<span id="brushPressureStrengthValue">3</span></label>
+<input type="range" id="brushPressureStrength" min="1" max="10" value="3">
+</div>
+<div class="control-item">
+<label for="strokeOrderSmoothing">筆順平滑化:<span id="strokeOrderSmoothingValue">5</span></label>
+<input type="range" id="strokeOrderSmoothing" min="1" max="10" value="5">
+</div>
+<div class="control-item">
+<label for="textureDirections">テクスチャ方向数:<span id="textureDirectionsValue">8</span></label>
+<input type="range" id="textureDirections" min="4" max="16" value="8" step="2">
+</div>
+<div class="control-item">
+<label for="densityKernelSize">密度カーネルサイズ:<span id="densityKernelSizeValue">15</span></label>
+<input type="range" id="densityKernelSize" min="3" max="31" value="15" step="2">
+</div>
+<div class="control-item">
+<label for="charSeparationThresh">文字分離閾値:<span id="charSeparationThreshValue">240</span></label>
+<input type="range" id="charSeparationThresh" min="200" max="254" value="240">
+</div>
+</div>
+<div class="content-panel">
+<div class="original-image">
+<h4>元画像</h4>
+<canvas id="originalCanvas"></canvas>
+</div>
+<div class="results-panel">
+<div id="resultsView"></div>
+</div>
+</div>
+<div class="log-panel">
+<h4>処理ログ</h4>
+<div id="logContainer"></div>
+</div>
+</div>
+</main>
+<script>
+function onOpenCvReady(){
+window.isOpenCvReady=true;
+const opencvStatus=document.getElementById('opencv-status');
+opencvStatus.textContent='OpenCV.js 読み込み完了！';
+opencvStatus.classList.add('ready');
+}
+</script>
+<script src="main.js"></script>
+<script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+</body>
+</html>

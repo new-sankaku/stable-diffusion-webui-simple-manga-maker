@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>カリグラフィブラシシミュレーション</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.toolbar {
+  width: 250px;
+  padding: 10px;
+  background: #f0f0f0;
+  border-right: 1px solid #ddd;
+}
+
+.canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+
+.status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5px 10px;
+  background: #f0f0f0;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tool-section {
+  margin-bottom: 20px;
+}
+
+.tool-button {
+  padding: 5px 10px;
+  margin: 2px;
+  background: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.tool-button.active {
+  background: #c0c0c0;
+  border-color: #999;
+}
+
+.compact-controls label {
+  display: block;
+  margin: 5px 0;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+/* デバッグ用スタイル */
+canvas {
+  border: 1px dashed red !important;
+}
+#drawing-canvas {
+  z-index: 10 !important;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+<body>
+<div class="app-container">
+<div class="toolbar">
+<div class="tool-section">
+<h3>ブラシ</h3>
+<button id="brush-type-ink" class="tool-button active">インクブラシ</button>
+<button id="brush-type-calligraphy" class="tool-button">カリグラフィ</button>
+</div>
+<div class="tool-section">
+<h3>ブラシ設定</h3>
+<div class="compact-controls">
+<label>サイズ:<span id="brush-size-value">20</span></label>
+<input type="range" id="brush-size" min="1" max="100" value="20">
+<label>筆圧:<span id="pressure-value">70%</span></label>
+<input type="range" id="pressure-sensitivity" min="0" max="100" value="70">
+<label>速度:<span id="velocity-value">50%</span></label>
+<input type="range" id="velocity-effect" min="0" max="100" value="50">
+<label>角度:<span id="angle-value">45°</span></label>
+<input type="range" id="angle" min="0" max="359" value="45">
+</div>
+</div>
+<div class="tool-section">
+<h3>カラー</h3>
+<input type="color" id="brush-color" value="#000000">
+</div>
+<div class="tool-section">
+<h3>操作</h3>
+<div class="btn-group">
+<button id="clear-canvas" class="tool-button">クリア</button>
+<button id="undo" class="tool-button">元に戻す</button>
+<button id="save-image" class="tool-button">保存</button>
+</div>
+</div>
+</div>
+<div class="canvas-container">
+<canvas id="drawing-canvas"></canvas>
+<div id="debug-info" style="position:absolute; top:10px; left:10px; background:rgba(255,255,255,0.8); padding:10px; z-index:100; pointer-events:none;"></div>
+</div>
+</div>
+<div class="status-bar">
+<span id="pressure-status">筆圧: 0.00</span>
+<span id="velocity-status">速度: 0.00</span>
+<span id="coordinates-status">座標: 0, 0</span>
+</div>
+
+<!-- デバッグ用のスクリプトを最初に読み込む -->
+<script>
+// デバッグ情報表示用の関数
+function updateDebugInfo() {
+  const debugEl = document.getElementById('debug-info');
+  if (!debugEl) return;
+  
+  const canvasContainer = document.querySelector('.canvas-container');
+  const canvases = canvasContainer.querySelectorAll('canvas');
+  
+  let html = '<strong>デバッグ情報</strong><br>';
+  html += `キャンバス数: ${canvases.length}<br><br>`;
+  
+  canvases.forEach((canvas, i) => {
+    html += `<strong>キャンバス ${i}</strong><br>`;
+    html += `ID: ${canvas.id || 'なし'}<br>`;
+    html += `サイズ: ${canvas.width}x${canvas.height}<br>`;
+    html += `位置: ${canvas.style.position}<br>`;
+    html += `z-index: ${canvas.style.zIndex || 'auto'}<br>`;
+    html += `表示: ${canvas.style.visibility || 'visible'}<br>`;
+    html += `透明度: ${canvas.style.opacity || '1'}<br><br>`;
+  });
+  
+  debugEl.innerHTML = html;
+}
+
+// 定期的に更新
+setInterval(updateDebugInfo, 1000);
+
+// Canvasの描画関数をモンキーパッチして描画操作を監視
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const canvas = document.getElementById('drawing-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      const originalFill = ctx.fill;
+      
+      ctx.fill = function() {
+        console.log('★★★ ctx.fill が呼び出されました ★★★');
+        return originalFill.apply(this, arguments);
+      };
+      
+      console.log('キャンバス描画関数を監視中...');
+    }
+  }, 2000);
+});
+</script>
+
+<script src="js/utils/math.js"></script>
+<script src="js/utils/color.js"></script>
+<script src="js/core/textureManager.js"></script>
+<script src="js/core/path.js"></script>
+<script src="js/core/stroke.js"></script>
+<script src="js/core/inkEffects.js"></script>
+<script src="js/core/blendModes.js"></script>
+<script src="js/engine/brush.js"></script>
+<script src="js/engine/inkBrush.js"></script>
+<script src="js/engine/calligraphyBrush.js"></script>
+<script src="js/system/layer.js"></script>
+<script src="js/system/history.js"></script>
+<script src="js/ui/controls.js"></script>
+<script src="js/app.js"></script>
+<script src="js/fabric-integration.js"></script>
+</body>
+</html>

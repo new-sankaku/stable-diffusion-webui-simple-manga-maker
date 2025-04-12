@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<script>
+function onOpenCvReady(){
+window.isOpenCvReady=true;
+const opencvStatus=document.getElementById('opencv-status');
+opencvStatus.textContent='OpenCV.js 読み込み完了！';
+opencvStatus.classList.add('ready');
+setupEventListeners();
+initializeResultCanvases();
+}
+function initializeResultCanvases(){
+resultsView.innerHTML='';
+createResultCanvas('1. エッジ検出','edges');
+createResultCanvas('2. 輪郭検出','contours');
+createResultCanvas('3. 骨格化','skeleton');
+createResultCanvas('4. 線分検出','lines');
+createResultCanvas('5. 曲線検出','curves');
+createResultCanvas('9. 筆圧シミュレーション','brush');
+createResultCanvas('13. 密度マップ','density');
+createResultCanvas('14. 文字分割','separation');
+}
+</script>
+<style>
+.param-group{margin-bottom:8px;border:1px solid #ddd;border-radius:3px;padding:2px}
+.param-group-title{font-size:11px;font-weight:bold;color:#1976d2;margin:0 0 2px 0;border-bottom:1px solid #eee;padding-bottom:2px}
+.param-group-advanced{background-color:#f5f8ff;border-top:1px dashed #ddd;margin-top:2px;padding-top:2px}
+select{width:100%;margin:1px 0;height:18px;font-size:9px}
+</style>
+</head>
+<body>
+<header>
+<div id="opencv-status">OpenCV.js 読み込み中...</div>
+<div id="drop-area"><p>透過画像をドラッグ＆ドロップまたは<input type="file" id="imageInput" accept="image/*"></p></div>
+</header>
+<main>
+<div class="container">
+<div class="params-panel">
+<div class="param-group">
+<div class="param-group-title">1. エッジ検出</div>
+<div class="control-item">
+<label for="cannyThresh1">Cannyエッジ下限:<span id="cannyThresh1Value">50</span></label>
+<input type="range" id="cannyThresh1" min="10" max="200" value="50">
+</div>
+<div class="control-item">
+<label for="cannyThresh2">Cannyエッジ上限:<span id="cannyThresh2Value">150</span></label>
+<input type="range" id="cannyThresh2" min="50" max="300" value="150">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="gaussianBlurSize">ガウスぼかしサイズ:<span id="gaussianBlurSizeValue">3</span></label>
+<input type="range" id="gaussianBlurSize" min="1" max="11" value="3" step="2">
+</div>
+<div class="control-item">
+<label for="edgeDilateIter">エッジ膨張反復:<span id="edgeDilateIterValue">1</span></label>
+<input type="range" id="edgeDilateIter" min="0" max="5" value="1">
+</div>
+</div>
+</div>
+<div class="param-group">
+<div class="param-group-title">2. 輪郭検出</div>
+<div class="control-item">
+<label for="contourThreshold">輪郭検出閾値:<span id="contourThresholdValue">127</span></label>
+<input type="range" id="contourThreshold" min="1" max="254" value="127">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="minContourArea">最小輪郭面積:<span id="minContourAreaValue">10</span></label>
+<input type="range" id="minContourArea" min="0" max="100" value="10">
+</div>
+<div class="control-item">
+<label for="contourMode">輪郭抽出モード:</label>
+<select id="contourMode">
+<option value="0">EXTERNAL</option>
+<option value="1">LIST</option>
+<option value="2">CCOMP</option>
+<option value="3">TREE</option>
+</select>
+</div>
+</div>
+</div>
+<div class="param-group">
+<div class="param-group-title">3. 骨格化</div>
+<div class="control-item">
+<label for="thinningIterations">骨格化反復回数:<span id="thinningIterationsValue">5</span></label>
+<input type="range" id="thinningIterations" min="1" max="10" value="5">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="structElementSize">構造要素サイズ:<span id="structElementSizeValue">3</span></label>
+<input type="range" id="structElementSize" min="1" max="7" value="3" step="2">
+</div>
+<div class="control-item">
+<label for="structElementShape">構造要素形状:</label>
+<select id="structElementShape">
+<option value="0">RECT</option>
+<option value="1">CROSS (推奨)</option>
+<option value="2">ELLIPSE</option>
+</select>
+</div>
+</div>
+</div>
+<div class="param-group">
+<div class="param-group-title">4. 線分検出</div>
+<div class="control-item">
+<label for="houghThreshold">Hough変換閾値:<span id="houghThresholdValue">50</span></label>
+<input type="range" id="houghThreshold" min="10" max="150" value="50">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="minLineLength">最小線分長:<span id="minLineLengthValue">20</span></label>
+<input type="range" id="minLineLength" min="5" max="50" value="20">
+</div>
+<div class="control-item">
+<label for="maxLineGap">最大線分ギャップ:<span id="maxLineGapValue">5</span></label>
+<input type="range" id="maxLineGap" min="1" max="20" value="5">
+</div>
+</div>
+</div>
+<div class="param-group">
+<div class="param-group-title">5. 曲線検出</div>
+<div class="control-item">
+<label for="curveEpsilon">曲線近似精度:<span id="curveEpsilonValue">10</span></label>
+<input type="range" id="curveEpsilon" min="1" max="50" value="10">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="minCurveLength">最小曲線長:<span id="minCurveLengthValue">5</span></label>
+<input type="range" id="minCurveLength" min="0" max="50" value="5">
+</div>
+<div class="control-item">
+<label for="curveFitMethod">曲線近似方法:</label>
+<select id="curveFitMethod">
+<option value="true">閉曲線</option>
+<option value="false">開曲線</option>
+</select>
+</div>
+</div>
+</div>
+<div class="param-group">
+<div class="param-group-title">9. 筆圧シミュレーション</div>
+<div class="control-item">
+<label for="brushPressureStrength">筆圧強度:<span id="brushPressureStrengthValue">3</span></label>
+<input type="range" id="brushPressureStrength" min="1" max="10" value="3">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="arrowDensity">方向矢印密度:<span id="arrowDensityValue">10</span></label>
+<input type="range" id="arrowDensity" min="5" max="30" value="10">
+</div>
+<div class="control-item">
+<label for="gradientThreshold">勾配閾値:<span id="gradientThresholdValue">5</span></label>
+<input type="range" id="gradientThreshold" min="1" max="10" value="5" step="1">
+</div>
+</div>
+</div>
+<div class="param-group">
+<div class="param-group-title">13. 密度マップ</div>
+<div class="control-item">
+<label for="densityKernelSize">密度カーネルサイズ:<span id="densityKernelSizeValue">15</span></label>
+<input type="range" id="densityKernelSize" min="3" max="31" value="15" step="2">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="densityFilterType">フィルタ種類:</label>
+<select id="densityFilterType">
+<option value="0">RECT</option>
+<option value="1">CROSS</option>
+<option value="2">ELLIPSE</option>
+</select>
+</div>
+<div class="control-item">
+<label for="colorMapType">カラーマップ:</label>
+<select id="colorMapType">
+<option value="0">BLUE-GREEN (標準)</option>
+<option value="1">JET</option>
+<option value="2">HOT</option>
+<option value="3">COOL</option>
+</select>
+</div>
+</div>
+</div>
+<div class="param-group">
+<div class="param-group-title">14. 文字分離</div>
+<div class="control-item">
+<label for="charSeparationThresh">文字分離閾値:<span id="charSeparationThreshValue">240</span></label>
+<input type="range" id="charSeparationThresh" min="200" max="254" value="240">
+</div>
+<div class="param-group-advanced">
+<div class="control-item">
+<label for="distTransformMethod">距離変換方法:</label>
+<select id="distTransformMethod">
+<option value="1">L1 (マンハッタン)</option>
+<option value="2">L2 (ユークリッド)</option>
+</select>
+</div>
+<div class="control-item">
+<label for="separationDilateSize">境界膨張サイズ:<span id="separationDilateSizeValue">3</span></label>
+<input type="range" id="separationDilateSize" min="1" max="7" value="3" step="2">
+</div>
+</div>
+</div>
+</div>
+<div class="content-panel">
+<div class="original-image">
+<h4>元画像</h4>
+<canvas id="originalCanvas"></canvas>
+</div>
+<div class="results-panel">
+<div id="resultsView"></div>
+</div>
+</div>
+</div>
+</main>
+<script src="globals-js.js"></script>
+<script src="uiUtils-js.js"></script>
+<script src="eventHandlers-js.js"></script>
+<script src="imageUtils-js.js"></script>
+<script src="edgeProcessor-js.js"></script>
+<script src="skeletonProcessor-js.js"></script>
+<script src="strokeAnalyzer-js.js"></script>
+<script src="characterAnalyzer-js.js"></script>
+<script src="main-js.js"></script>
+<script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+</body>
+</html>
