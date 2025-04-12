@@ -1,11 +1,11 @@
 var lastActiveObjectState = null;
 
 canvas.on('selection:created', function(event) {
-  logger.trace('1: selection:created');
+  eventLogger.trace('1: selection:created');
   lastActiveObjectState = canvas.getActiveObject();
 });
 canvas.on('selection:updated', function(event) {
-  logger.trace('2: selection:updated');
+  eventLogger.trace('2: selection:updated');
   glfxReset();
   lastActiveObjectState = canvas.getActiveObject();
 });
@@ -13,11 +13,11 @@ canvas.on('selection:updated', function(event) {
 
 
 canvas.on('selection:cleared', function() {
-  logger.trace('3: selection:cleared');
+  eventLogger.trace('3: selection:cleared');
   glfxReset();
 });
 canvas.on("object:added", (e) => {
-  logger.trace('4: object:added');
+  eventLogger.trace('4: object:added');
   const obj = e.target;
   if (!obj.initial) {
     saveInitialState(obj);
@@ -37,23 +37,23 @@ canvas.on("object:added", (e) => {
 });
 
 canvas.on("object:modified", (e) => {
-  logger.trace('5: object:modified');
+  eventLogger.trace('5: object:modified');
   const obj = e.target;
   saveInitialState(obj);
 });
 
 
-canvas.on('object:added',     function(e) { logger.trace('6: object:added'); saveStateByListener(e, 'object:added'); });
-canvas.on('object:modified',  function(e) { logger.trace('7: object:modified'); saveStateByListener(e, 'object:modified'); });
-canvas.on('object:removed',   function(e) { logger.trace('8: object:removed'); saveStateByListener(e, 'object:removed'); });
-canvas.on('path:created',     function(e) { logger.trace('9: path:created'); saveStateByListener(e, 'path:created'); });
-canvas.on('canvas:cleared',   function(e) { logger.trace('10: canvas:cleared'); saveStateByListener(e, 'canvas:cleared'); });
+canvas.on('object:added',     function(e) { eventLogger.trace('6: object:added'); saveStateByListener(e, 'object:added'); });
+canvas.on('object:modified',  function(e) { eventLogger.trace('7: object:modified'); saveStateByListener(e, 'object:modified'); });
+canvas.on('object:removed',   function(e) { eventLogger.trace('8: object:removed'); saveStateByListener(e, 'object:removed'); });
+canvas.on('path:created',     function(e) { eventLogger.trace('9: path:created'); saveStateByListener(e, 'path:created'); });
+canvas.on('canvas:cleared',   function(e) { eventLogger.trace('10: canvas:cleared'); saveStateByListener(e, 'canvas:cleared'); });
 
 
 
 //Crop Mode from start
 canvas.on('selection:cleared', function() {
-  logger.trace('11: selection:cleared');
+  eventLogger.trace('11: selection:cleared');
   if (cropFrame) {
       canvas.remove(cropFrame);
       cropFrame = null;
@@ -61,7 +61,7 @@ canvas.on('selection:cleared', function() {
   }
 });
 canvas.on('selection:updated', function() {
-  logger.trace('12: selection:updated');
+  eventLogger.trace('12: selection:updated');
   if (cropFrame && canvas.getActiveObject() !== cropFrame) {
     canvas.remove(cropFrame);
     cropFrame = null;
@@ -73,39 +73,39 @@ canvas.on('selection:updated', function() {
 
 
 //highligh from start
-canvas.on('selection:created', function(event)  { logger.trace('50: selection:created');  highlightActiveLayerByCanvas(event); });
-canvas.on('selection:updated', function(event)  { logger.trace('51: selection:updated');  highlightActiveLayerByCanvas(event); });
-canvas.on('object:added',      function(event)  { logger.trace('52: object:added');       highlightActiveLayerByCanvas(event); });
-canvas.on('object:modified',   function(event)  { logger.trace('53: object:modified');    highlightActiveLayerByCanvas(event); });
-canvas.on('selection:cleared', function() {       logger.trace('13: selection:cleared');  highlightClear();});
+canvas.on('selection:created', function(event)  { eventLogger.trace('50: selection:created');  highlightActiveLayerByCanvas(event); });
+canvas.on('selection:updated', function(event)  { eventLogger.trace('51: selection:updated');  highlightActiveLayerByCanvas(event); });
+canvas.on('object:added',      function(event)  { eventLogger.trace('52: object:added');       highlightActiveLayerByCanvas(event); });
+canvas.on('object:modified',   function(event)  { eventLogger.trace('53: object:modified');    highlightActiveLayerByCanvas(event); });
+canvas.on('selection:cleared', function() {       eventLogger.trace('13: selection:cleared');  highlightClear();});
 //highligh from finish
 
 
 
 canvas.on("object:moving", function (e) {
   if (isGridVisible) {
-    logger.trace('14: object:moving');
+    eventLogger.trace('14: object:moving');
 
     debounceSnapToGrid(e.target);
   }
 });
 
 canvas.on('selection:created', function(event) {
-  logger.trace('15: selection:created');
+  eventLogger.trace('15: selection:created');
   if (event.selected && event.selected[0]) {
     updateTextControls(event.selected[0]);
   }
 });
 canvas.on('selection:updated', function(event) {
-  logger.trace('16: selection:updated');
+  eventLogger.trace('16: selection:updated');
   if (event.selected && event.selected[0]) {
     updateTextControls(event.selected[0]);
   }
 });
 
 function moveSettings(img, poly) {
-  logger.trace('moveSettings');
-  logger.traceWithStack('moveSettings');
+  eventLogger.trace('moveSettings');
+  eventLogger.traceWithStack('moveSettings');
   
   updateClipPath(img, poly);
 
@@ -207,7 +207,7 @@ function updatePathClipPath(imageObj, pathObj) {
 
 
 canvas.on("object:added", (e) => {
-  logger.trace('17: object:added');
+  eventLogger.trace('17: object:added');
   if(canvas.isDrawingMode){
     return;
   }
@@ -224,7 +224,7 @@ canvas.on("object:added", (e) => {
 
 let lastCheckObject = null;
 canvas.on('mouse:down', function(e) {
-  logger.trace('18: mouse:down');
+  eventLogger.trace('18: mouse:down');
   if(canvas.isDrawingMode){
     return;
   }
@@ -238,7 +238,7 @@ canvas.on('mouse:down', function(e) {
 });
 
 canvas.on('mouse:up', function(e) {
-  logger.trace('19: mouse:up');
+  eventLogger.trace('19: mouse:up');
   if (e.target && e.target.originalOpacity !== undefined) {
       e.target.opacity = e.target.originalOpacity;
       delete e.target.originalOpacity;
@@ -249,7 +249,7 @@ canvas.on('mouse:up', function(e) {
 });
 
 canvas.on("mouse:down", function (options) {
-  logger.trace('20: mouse:down');
+  eventLogger.trace('20: mouse:down');
   if (!isKnifeMode) return;
 
   var pointer = canvas.getPointer(options.e);
@@ -268,7 +268,7 @@ canvas.on("mouse:down", function (options) {
 });
 
 canvas.on("mouse:up", function (options) {
-  logger.trace('21: mouse:up');
+  eventLogger.trace('21: mouse:up');
   if (!isKnifeMode || !isKnifeDrawing) return;
 
   isKnifeDrawing = false;
@@ -283,7 +283,7 @@ canvas.on("mouse:up", function (options) {
 
 canvas.on("mouse:move", function (options) {
   if (!isKnifeMode || !isKnifeDrawing) return;
-  logger.trace('22: mouse:move');
+  eventLogger.trace('22: mouse:move');
 
   var pointer = canvas.getPointer(options.e);
   var endX = pointer.x;
@@ -316,7 +316,7 @@ canvas.on("mouse:move", function (options) {
 
 
 canvas.on('path:created', function (opt) {
-  logger.trace('23: path:created');
+  eventLogger.trace('23: path:created');
   console.log("push");
   currentPaths.push(opt.path);
 });
@@ -324,7 +324,7 @@ canvas.on('path:created', function (opt) {
 document.addEventListener('DOMContentLoaded', function () {
   canvas.on('mouse:move', function (options) {
       if (isMosaicBrushActive && canvas.freeDrawingBrush && !canvas.freeDrawingBrush.isDrawing) {
-        logger.trace('24: mouse:move');
+        eventLogger.trace('24: mouse:move');
         canvas.freeDrawingBrush.drawPreviewCircle(canvas.getPointer(options.e));
       }
   });
@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 canvas.on("mouse:down", event => {
-  logger.trace('25: mouse:down');
+  eventLogger.trace('25: mouse:down');
   isDrawing = true;
   const pointer = canvas.getPointer(event.e);
   if (currentMode === "point") {
@@ -367,11 +367,11 @@ canvas.on("mouse:move", event => {
   lastRenderTime = currentTime;
 
   if (currentMode === "point") {
-    logger.trace('26: mouse:move');
+    eventLogger.trace('26: mouse:move');
   } else if (currentMode === "freehand" && isDrawing) {
-    logger.trace('26: mouse:move');
+    eventLogger.trace('26: mouse:move');
   } else if (currentMode === "movePoint" && isDrawing && activePoint) {
-    logger.trace('26: mouse:move');
+    eventLogger.trace('26: mouse:move');
   }else{
     return;
   }
@@ -391,7 +391,7 @@ canvas.on("mouse:move", event => {
 });
 
 canvas.on("mouse:up", event => {
-  logger.trace('27: mouse:up');
+  eventLogger.trace('27: mouse:up');
   isDrawing = false;
   activePoint = null;
   const pointer = canvas.getPointer(event.e);
@@ -430,8 +430,8 @@ canvas.on("mouse:up", event => {
   }
 });
 
-canvas.on('object:moving', function(event)  { logger.trace('28: object:moving');  updateJSTSGeometry(event); });
-canvas.on('object:scaling', function(event) { logger.trace('29: object:scaling'); updateJSTSGeometry(event); });
+canvas.on('object:moving', function(event)  { eventLogger.trace('28: object:moving');  updateJSTSGeometry(event); });
+canvas.on('object:scaling', function(event) { eventLogger.trace('29: object:scaling'); updateJSTSGeometry(event); });
 
 
 
@@ -444,27 +444,27 @@ canvas.on('object:scaling', function(event) { logger.trace('29: object:scaling')
 
 canvas.on("object:moving", function (event) {
   if (isSpeechBubbleSVG(event.target)) {
-    logger.trace('30: object:moving');
+    eventLogger.trace('30: object:moving');
     updateObjectPositions(event.target);
     canvas.requestRenderAll();
   }
 });
 
 canvas.on("mouse:up", function (event) {
-  logger.trace('31: mouse:up');
+  eventLogger.trace('31: mouse:up');
   if (isSpeechBubbleSVG(event.target)) {
     updateObjectPositions(event.target, true);
   }
 });
 canvas.on("text:changed", function (event) {
-  logger.trace('32: text:changed');
+  eventLogger.trace('32: text:changed');
   requestAnimationFrame(() => {
     speechBubbleTextChaged(event.target);
   });
 });
 
 canvas.on("object:scaling", function (event) {
-  logger.trace('33: object:scaling');
+  eventLogger.trace('33: object:scaling');
   if (isSpeechBubbleSVG(event.target)) {
     event.target.baseScaleX = event.target.scaleX;
     event.target.baseScaleY = event.target.scaleY;
@@ -473,13 +473,13 @@ canvas.on("object:scaling", function (event) {
 });
 
 canvas.on("object:rotating", function (event) {
-  logger.trace('34: object:rotating');
+  eventLogger.trace('34: object:rotating');
   if (isSpeechBubbleSVG(event.target)) {
     updateShapeMetrics(event.target);
   }
 });
 canvas.on("object:removed", function(event) {
-  logger.trace('35: object:removed');
+  eventLogger.trace('35: object:removed');
   if (isSpeechBubbleSVG(event.target)) {
     const rect = getSpeechBubbleRectBySVG(event.target);
     const textbox = getSpeechBubbleTextBySVG(event.target);
@@ -503,17 +503,17 @@ canvas.on("object:removed", function(event) {
 
 
 canvas.on('selection:created', () => {
-  logger.trace('36: selection:created');
+  eventLogger.trace('36: selection:created');
   closeMenu();
 });
 canvas.on('selection:updated', () => {
-  logger.trace('37: selection:updated');
+  eventLogger.trace('37: selection:updated');
   closeMenu();
 });
 
   canvas.on("mouse:move", function (options) {
     if (coordCheckbox.checked) {
-      // logger.trace('38: mouse:move');
+      // eventLogger.trace('38: mouse:move');
       updateCoordinates(options);
     }
   });
@@ -523,6 +523,6 @@ canvas.on('selection:updated', () => {
 
 
   canvas.on('selection:cleared', function () {
-    logger.trace('39: selection:cleared');
+    eventLogger.trace('39: selection:cleared');
     closeMenu();
   });

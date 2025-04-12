@@ -20,7 +20,10 @@ function SimpleLogger(moduleName, defaultLevel = LogLevel.INFO) {
         
         if (!fileName.includes('stacktrace') && !fileName.includes('logger.js')) {
           const functionName = frame.getFunctionName() || frame.getMethodName() || 'anonymous';
-          const fileNameShort = fileName ? fileName.split('/').pop() : 'unknown';
+          
+          let fileNameShort = fileName ? fileName.split('/').pop() : 'unknown';
+          fileNameShort = fileNameShort.split('?')[0];
+          
           const lineNumber = frame.getLineNumber() || '';
           return `${fileNameShort}:${lineNumber} ${functionName}`;
         }
@@ -57,7 +60,25 @@ function SimpleLogger(moduleName, defaultLevel = LogLevel.INFO) {
   function formatMessage(level, message, methodName) {
     const caller = methodName || getCallerMethodName();
     const time = new Date().toTimeString().split(' ')[0];
-    return `${time} ${level} [${moduleName}] [${caller}] ${message}`;
+    
+    let emoji = '⬛ ';
+    let colorCode = '';
+    
+    switch(level) {
+      case 'WARN':
+        emoji = '🟧 ';
+        colorCode = '\x1b[33m';
+        break;
+      case 'ERROR':
+        emoji = '🟥 ';
+        colorCode = '\x1b[31m';
+        break;
+      default:
+        colorCode = '\x1b[0m';
+    }
+    
+    const resetCode = '\x1b[0m';
+    return `${colorCode}${emoji}${time} ${level} [${moduleName}] [${caller}] ${message}${resetCode}`;
   }
   
   function isValidMethodName(str) {
@@ -290,3 +311,4 @@ function SimpleLogger(moduleName, defaultLevel = LogLevel.INFO) {
 }
 
 const logger = SimpleLogger('main', LogLevel.DEBUG);
+const eventLogger = SimpleLogger('event', LogLevel.INFO);

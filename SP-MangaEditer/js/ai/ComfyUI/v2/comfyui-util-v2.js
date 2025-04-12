@@ -172,7 +172,7 @@ async function comfyui_view_image_v2(filename, type = "input") {
 
 
 async function comfyui_put_queue_v2(workflow) {
-  console.log("comfyui_put_queue_v2 workflow", workflow);
+  logger.trace("comfyui_put_queue_v2 workflow", workflow);
 
   var response = await comfyui_queue_prompt_v2(workflow);
   if (!response) return null;

@@ -1,9 +1,37 @@
 let finalLayerOrder = [];
 let lastHighlightGuid = null;
 
-function updateLayerPanel() {
-  console.time('updateLayerPanel');
+let lastUpdateTime = 0;
+let updateLayerPanelTimer = null;
+let pendingUpdate = false;
+let isExecuting = false;
 
+function updateLayerPanel() {
+  if (isExecuting) {
+    pendingUpdate = true;
+    return;
+  }
+
+  const now = Date.now();
+  const timeSinceLastUpdate = now - lastUpdateTime;
+
+  if (updateLayerPanelTimer) {
+    clearTimeout(updateLayerPanelTimer);
+    updateLayerPanelTimer = null;
+  }
+
+  if (timeSinceLastUpdate >= 60) {
+    executeUpdate();
+  } else {
+    updateLayerPanelTimer = setTimeout(() => {
+      executeUpdate();
+    }, 60 - timeSinceLastUpdate);
+  }
+}
+
+function executeUpdate() {
+  isExecuting = true;
+  console.time('updateLayerPanel');
 
   var layers = canvas.getObjects().slice().reverse();
   var layerContent = $("layer-content");
@@ -128,7 +156,6 @@ function updateLayerPanel() {
 
       layerDiv.setAttribute("data-guid", layer.guid);
 
-
       if (isLayerPreview(layer)) {
         layerDiv.appendChild(previewDiv);
       }
@@ -170,6 +197,14 @@ function updateLayerPanel() {
   });
 
   console.timeEnd('updateLayerPanel');
+  
+  lastUpdateTime = Date.now();
+  isExecuting = false;
+  
+  if (pendingUpdate) {
+    pendingUpdate = false;
+    setTimeout(updateLayerPanel, 0);
+  }
 }
 
 function setNameTextAreaProperties(layer, nameTextArea, index) {

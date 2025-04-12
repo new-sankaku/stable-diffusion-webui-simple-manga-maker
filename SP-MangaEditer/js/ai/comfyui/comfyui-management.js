@@ -286,7 +286,7 @@ async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
 
   var workflow = Comfyui_replace_placeholders(selected_workflow, requestData, Type);
 
-  console.log("comfyuiQueue Workflow", JSON.stringify(workflow));
+  logger.trace("comfyuiQueue Workflow", JSON.stringify(workflow));
 
   return comfyuiQueue.add(async () => Comfyui_put_queue(workflow))
     .then(async (result) => {
