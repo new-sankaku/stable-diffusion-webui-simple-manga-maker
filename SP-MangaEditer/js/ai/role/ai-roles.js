@@ -13,7 +13,6 @@ const AI_ROLES = {
   RemoveBG: "RemoveBG",
   ADetailer: "ADetailer",
   Upscaler: "Upscaler",
-  Upscaler: "Upscaler",
   PutPrompt: "PutPrompt",
   PutSeed: "PutSeed",
   Temp: "Temp",
@@ -27,13 +26,13 @@ const roles = {
     AI_ROLES.Image2Prompt_CLIP,
     AI_ROLES.RemoveBG,
     AI_ROLES.ADetailer,
-    AI_ROLES.Upscaler,
     AI_ROLES.PutPrompt,
     AI_ROLES.PutSeed
   ],
   COMFYUI: [
     AI_ROLES.Text2Image,
     AI_ROLES.RemoveBG,
+    AI_ROLES.Upscaler,
     AI_ROLES.Image2Image
   ]
 };

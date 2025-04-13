@@ -133,6 +133,23 @@ function putPromptButton(buttonsDiv, layer, index) {
 }
 
 
+function putUpscalerButton(buttonsDiv, layer, index) {
+  if( hasNotRole( AI_ROLES.Upscaler )){return;}
+
+  var button = document.createElement("button");
+  button.innerHTML = '<i class="material-icons">photo_size_select_large</i>';
+  button.onclick = function (e) {
+    e.stopPropagation();
+    var spinner = createSpinner(index);
+    ai_upscale(layer, spinner);
+  };
+
+  addTooltipByElement(button, "upscaleButton");
+  buttonsDiv.appendChild(button);
+}
+
+
+
 function putCheckButton(buttonsDiv, layer, index) {
   var btn = document.createElement("button");
   btn.id = "checkButton-" + index;

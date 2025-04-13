@@ -1,28 +1,3 @@
-function getComfyUI_T2I(){
-
-    const selectedValue = getSelectedValueByGroup("generateModelGroup");
-
-    if ( selectedValue === "SD" ) {
-        return getComfyUI_T2I_BySDXL();
-
-    } else if ( selectedValue === "Flux" ) {
-        var generateWorkflow = getSelectedValueByGroup("generateWorkflow");
-        if("Simple" === generateWorkflow)    return getComfyUI_T2I_ByFluxSimple();
-        if("Diffution" === generateWorkflow) return getComfyUI_T2I_ByFluxDiffusion();
-        if("NF4" === generateWorkflow)       return getComfyUI_T2I_ByFluxNF4();
-
-    }
-    console.error("getComfyUI_T2I workflow is unknow.");
-    return null;
-}
-function getComfyUI_I2I(){
-    var generateWorkflow = getSelectedValueByGroup("generateWorkflow");
-    if("Simple" === generateWorkflow)    return getComfyUI_I2I_BySDXL();
-    if("Diffution" === generateWorkflow) return getComfyUI_I2I_BySDXL();
-    if("NF4" === generateWorkflow)       return getComfyUI_I2I_BySDXL();
-    return null;
-    
-}
 
 function Comfyui_isError(response) {
     if (response && typeof response === 'object') {

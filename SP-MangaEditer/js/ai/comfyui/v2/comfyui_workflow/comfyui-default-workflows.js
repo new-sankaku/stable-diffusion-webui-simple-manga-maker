@@ -67,4 +67,12 @@ const comfyuiDefaultWorkflows = [
     workflow: ComfyUI_I2I_BySD15SDXL,
     enabled: true
   },
+
+  {
+    name: "Upscaler.json",
+    type: "Upscaler",
+    workflow: ComfyUI_Upscaler,
+    enabled: true
+  },
+  
 ];

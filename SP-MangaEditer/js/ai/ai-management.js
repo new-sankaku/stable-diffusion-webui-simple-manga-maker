@@ -55,6 +55,14 @@ async function ai_rembg( layer, spinner ){
   }
 }
 
+async function ai_upscale( layer, spinner ){
+  if (API_mode == apis.A1111) {
+    //TODO
+  }else if (API_mode == apis.COMFYUI){
+    return Comfyui_handle_process_queue(layer, spinner.id, 'Upscaler');
+  }
+}
+
 
 function getDiffusionInfomation() {
   if (API_mode == apis.A1111) {

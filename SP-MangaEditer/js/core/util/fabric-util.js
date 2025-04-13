@@ -1,3 +1,15 @@
+function avtive(object) {
+  canvas.setActiveObject(object).requestRenderAll();
+}
+
+function notAvtive(object) {
+  canvas.discardActiveObject().requestRenderAll();
+}
+
+
+
+
+
 function isPanel(activeObject) {
   return (activeObject && activeObject.isPanel);
 }

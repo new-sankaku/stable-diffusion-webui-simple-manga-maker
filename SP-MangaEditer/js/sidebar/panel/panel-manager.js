@@ -98,16 +98,33 @@ function initialPutImage(img) {
   return img;
 }
 
-function replaceImageObject(oldImageObject, newImageObject){
+function replaceImageObject(oldImageObject, newImageObject, Type){
   oldImageObject.visible;
-  newImageObject.set({
+
+  if (Type == 'Upscaler') {
+    const oldDisplayWidth = oldImageObject.width * oldImageObject.scaleX;
+    const oldDisplayHeight = oldImageObject.height * oldImageObject.scaleY;
+    
+    newImageObject.set({
     left: oldImageObject.left,
     top: oldImageObject.top,
-    scaleX: oldImageObject.scaleX,
-    scaleY: oldImageObject.scaleY,
-  });
+    scaleX: oldDisplayWidth / newImageObject.width,
+    scaleY: oldDisplayHeight / newImageObject.height,
+    });
+
+    console.log("newImageObject,", newImageObject);
+  }else{
+    newImageObject.set({
+      left: oldImageObject.left,
+      top: oldImageObject.top,
+      scaleX: oldImageObject.scaleX,
+      scaleY: oldImageObject.scaleY,
+    });  
+  }
+
   saveInitialState(newImageObject);
   canvas.add(newImageObject);
+  avtive(newImageObject);
   updateLayerPanel();
 }
 

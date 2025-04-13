@@ -186,19 +186,14 @@ async function Comfyui_get_history(prompt_id) {
 }
 
 async function Comfyui_get_image(image_data_to_recieve) {
-  // console.log(
-  //   "Comfyui_get_image関数が呼び出されました。画像データ:",
-  //   image_data_to_recieve
-  // );
   try {
     const params = new URLSearchParams({
       filename: image_data_to_recieve.filename,
       subfolder: image_data_to_recieve.subfolder,
       type: image_data_to_recieve.type,
     });
-    // console.log("リクエストパラメータ:", params.toString());
     const response = await fetch(comfyUIUrls.view + '?' + params.toString());
-    console.log("画像データをサーバーから取得しました。");
+    console.log("画像データをサーバーから取得しました。v1");
 
     if (!response.ok) {
       throw new Error(`HTTPエラー! ステータス: ${response.status}`);
@@ -210,16 +205,16 @@ async function Comfyui_get_image(image_data_to_recieve) {
     return new Promise((resolve, reject) => {
       fabric.Image.fromURL(image_src, (img) => {
         if (img) {
-          console.log("fabric.Imageオブジェクトの作成に成功しました。");
+          console.log("fabric.Imageオブジェクトの作成に成功しました。v1");
           resolve(img);
         } else {
-          console.log("fabric.Imageオブジェクトの作成に失敗しました。");
-          reject(new Error("Failed to create a fabric.Image object"));
+          console.log("fabric.Imageオブジェクトの作成に失敗しました。v1");
+          reject(new Error("Failed to create a fabric.Image object　v1"));
         }
       });
     });
   } catch (error) {
-    console.error("画像取得エラー:", error);
+    console.error("画像取得エラー　v1:", error);
     return null;
   }
 }
@@ -265,7 +260,9 @@ async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
     selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("I2I");
   } else if(Type == 'Rembg') {
     selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("REMBG");
-  }else{
+  } else if(Type == 'Upscaler') {
+    selected_workflow = await comfyUIWorkflowRepository.getEnabledWorkflowByType("Upscaler");
+  } else{
     removeSpinner(spinnerId);
     return;
   }
@@ -278,7 +275,7 @@ async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
   }
     
 
-  if (Type == 'I2I' || Type == 'Rembg') {
+  if (Type == 'I2I' || Type == 'Rembg' || Type == 'Upscaler') {
     var uploadFilename = generateFilename();
     await Comfyui_uploadImage(layer, uploadFilename);
     requestData["uploadFileName"] = uploadFilename;
@@ -305,7 +302,7 @@ async function Comfyui_handle_process_queue(layer, spinnerId, Type = 'T2I') {
           putImageInFrame(result, center.centerX, center.centerY);
         }else{
           layer.visible = false;
-          replaceImageObject(layer, result);
+          replaceImageObject(layer, result, Type);
         }
       } else {
         throw new Error("Unexpected error: No result returned from Comfyui_put_queue");

@@ -139,14 +139,15 @@ function executeUpdate() {
         putCheckButton(buttonsDiv, layer, index);
       }
 
-      if (layer.isPanel) {
+      if (isPanel(layer)) {
         putRunT2IButton(buttonsDiv, layer, index);
         putSeedButton(buttonsDiv, layer, index);
         putCropImageDownloadButton(buttonsDiv, layer, index);
       }
-      if (layer.type == "image") {
+      if (isImage(layer)) {
         putRunI2IButton(buttonsDiv, layer, index);
         putPromptButton(buttonsDiv, layer, index);
+        putUpscalerButton(buttonsDiv, layer, index);
         putInterrogateDanbooruButtons(buttonsDiv, layer, index);
         putInterrogateClipButtons(buttonsDiv, layer, index);
         putImageDownloadButton(buttonsDiv, layer, index);

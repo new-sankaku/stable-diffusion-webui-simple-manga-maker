@@ -15,6 +15,19 @@
 
 //マージされるので日付単位で分けて入れたらOK
 const resources = {
+"20250413": {
+  ja: {upscaleButton:"画像を高解像度化します"},
+  en: {},
+  ko: {},
+  fr: {},
+  zh: {},
+  ru: {},
+  es: {},
+  pt: {},
+  th: {},
+  de: {}
+},
+
 "20250322": {
 ja: {missingNode:"ノード情報無し", missingDescription:"ComfyUI接続未経験かノード無し。WorkflowをダウンロードしてComfyUIに適用してComfyUI ManagerからInstall Missing Custom Nodesを実行してください"},
 en: {missingNode:"No node info", missingDescription:"No ComfyUI connection experience or no nodes. Download Workflow, apply to ComfyUI and run Install Missing Custom Nodes from ComfyUI Manager"},
