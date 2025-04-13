@@ -58,7 +58,7 @@ function Comfyui_isError(response) {
         height:     requestData["height"]
     });
 
-    if( Type == 'I2I' || Type == 'Rembg' ){
+    if( Type == 'I2I' || Type == 'Rembg' || Type == 'Upscaler' ){
         builder.updateNodesByInputName({
             image: requestData["uploadFileName"]
         });
