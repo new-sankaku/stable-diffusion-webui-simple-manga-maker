@@ -5,18 +5,18 @@ A web application for manga creation that connects with WebUI, Forge, and ComfyU
 You can either use the demo site or add it as an extension to WebUI. It runs in your browser.
 
 ## Support Status
-- WebUI: SD1.5, SDXL, Pony
-- Forge: SD1.5, SDXL, Pony, Flux1
 - ComfyUI: SD1.5, SDXL, Pony, Flux1  
+- WebUI  : SD1.5, SDXL, Pony
+- Forge  : SD1.5, SDXL, Pony, Flux1
 *Note: Image generation is performed through WebUI, Forge, or ComfyUI API.
 
 All features are available through the demo site alone.
 
-[Web Site: Desu!](https://new-sankaku.github.io/SP-MangaEditer/)
+[Web Site: Desu!](https://new-sankaku.github.io/manga-editor-desu/)
 
 If you prefer to download files locally instead of using the extension (faster method):
 
-git clone https://github.com/new-sankaku/SP-MangaEditer.git
+git clone https://github.com/new-sankaku/manga-editor-desu.git
 cd SP-MangaEditer
 start index.html
 
@@ -116,7 +116,7 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 
 ## Installation
 
-git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git
+git clone https://github.com/new-sankaku/manga-editor-desu.git
 
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="700">
 
@@ -126,7 +126,7 @@ git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-mak
 - **Documentation**: Submit pull requests with corrections or improvements
 
 ## Community
-- Questions or discussions? Post in [Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)
+- Questions or discussions? Post in [Issues](https://github.com/new-sankaku/manga-editor-desu/issues)
 - Join our [Discord](https://discord.gg/XCp7dyHj3N) server
 
 Thank you for your interest in Manga Editor Desu! Pro Edition!

@@ -5,18 +5,18 @@ WebUI, Forge, ComfyUIに接続する漫画制作用のWebアプリケーショ�
 デモサイトを使用するか、WebUIに拡張機能として追加できます。ブラウザで動きます。  
   
 サポート状況  
-WebUI:SD1.5, SDXL, Pony  
-Forge:SD1.5, SDXL, Pony, Flux1  
-ComfyUI:SD1.5, SDXL, Pony, Flux1  
+- ComfyUI: SD1.5, SDXL, Pony, Flux1  
+- WebUI  : SD1.5, SDXL, Pony
+- Forge  : SD1.5, SDXL, Pony, Flux1
 *:画像生成自体はWebUI or Forgeか、ComfyUIのAPIで行います。  
 
 デモサイトのみでもすべての機能を利用できます。
 
-[Web Site:Desu!](https://new-sankaku.github.io/SP-MangaEditer/)
+[Web Site:Desu!](https://new-sankaku.github.io/manga-editor-desu/)
 
 
 拡張機能ではなくローカル上にファイルを落としたい場合はこちらです。こっちのが早い。
-git clone https://github.com/new-sankaku/SP-MangaEditer.git
+git clone https://github.com/new-sankaku/manga-editor-desu.git
 cd SP-MangaEditer
 start index.html
 
@@ -109,15 +109,15 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 - **キャンバスのズームイン/ズームアウト**: 基本的なペンと消しゴムツール、線の幅、色、線のスタイル、影の変更。線や画像の一部を消去。
 
 # インストール
-https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git  
+https://github.com/new-sankaku/manga-editor-desu.git  
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="700">
 
 ## 貢献方法
-- **バグ報告**: バグを発見した場合は、[Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)に新しい問題を作成し、タイトルに**[Bug]**を含めてください。
-- **機能提案**: 新しい機能のアイデアがある場合は、[Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)に新しい問題を作成し、タイトルに**[Feature Request]**を含めてください。
-- **ドキュメント改善**: ドキュメントに誤字やエラーがある場合は、可能な修正を含むプルリクエストを送信してください。また、必要に応じて[Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)に追加することもできます。
+- **バグ報告**: バグを発見した場合は、[Issues](https://github.com/new-sankaku/manga-editor-desu/issues)に新しい問題を作成し、タイトルに**[Bug]**を含めてください。
+- **機能提案**: 新しい機能のアイデアがある場合は、[Issues](https://github.com/new-sankaku/manga-editor-desu/issues)に新しい問題を作成し、タイトルに**[Feature Request]**を含めてください。
+- **ドキュメント改善**: ドキュメントに誤字やエラーがある場合は、可能な修正を含むプルリクエストを送信してください。また、必要に応じて[Issues](https://github.com/new-sankaku/manga-editor-desu/issues)に追加することもできます。
 
 ## コミュニケーション
-プロジェクトに関する質問や議論がある場合は、[Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)に投稿するか、[Discord](https://discord.gg/XCp7dyHj3N)サーバーに参加してください。
+プロジェクトに関する質問や議論がある場合は、[Issues](https://github.com/new-sankaku/manga-editor-desu/issues)に投稿するか、[Discord](https://discord.gg/XCp7dyHj3N)サーバーに参加してください。
 
 ありがとうございます！

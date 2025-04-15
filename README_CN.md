@@ -5,18 +5,18 @@
 您可以使用演示网站，或将其作为WebUI的扩展程序。它在浏览器中运行。
 
 ## 支持状态
-- WebUI: SD1.5, SDXL, Pony
-- Forge: SD1.5, SDXL, Pony, Flux1
-- ComfyUI: SD1.5, SDXL, Pony, Flux1
+- ComfyUI: SD1.5, SDXL, Pony, Flux1  
+- WebUI  : SD1.5, SDXL, Pony
+- Forge  : SD1.5, SDXL, Pony, Flux1
 *注：图像生成通过WebUI、Forge或ComfyUI API进行。
 
 所有功能都可以通过演示网站使用。
 
-[网站：Desu!](https://new-sankaku.github.io/SP-MangaEditer/)
+[网站：Desu!](https://new-sankaku.github.io/manga-editor-desu/)
 
 如果您更喜欢本地下载文件而不是使用扩展程序（更快的方法）：
 
-git clone https://github.com/new-sankaku/SP-MangaEditer.git
+git clone https://github.com/new-sankaku/manga-editor-desu.git
 cd SP-MangaEditer
 start index.html
 
@@ -116,7 +116,7 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 
 ## 安装
 
-git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker.git
+git clone https://github.com/new-sankaku/manga-editor-desu.git
 
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="700">
 
@@ -126,7 +126,7 @@ git clone https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-mak
 - **文档**: 提交包含更正或改进的拉取请求
 
 ## 社区
-- 有问题或讨论？请在[Issues](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/issues)中发帖
+- 有问题或讨论？请在[Issues](https://github.com/new-sankaku/manga-editor-desu/issues)中发帖
 - 加入我们的[Discord](https://discord.gg/XCp7dyHj3N)服务器
 
 感谢您对Manga Editor Desu! Pro Edition的关注！
