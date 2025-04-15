@@ -126,12 +126,13 @@ function flipVertically() {
 }
 
 
-
 document.addEventListener("DOMContentLoaded", function () {
   $("crop").style.display = "none";
+  $("cropMode").style.display = "inline";
 
   $("crop").addEventListener("click", function (event) {
     $("crop").style.display = "none";
+    $("cropMode").style.display = "inline";
   
     var left = cropFrame.left - cropActiveObject.left;
     var top = cropFrame.top - cropActiveObject.top;
@@ -156,8 +157,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   $("cropMode").addEventListener("click", function () {
     $("crop").style.display = "inline";
+    $("cropMode").style.display = "none";
+    $("crop").classList.add("toggled");
+
     if (canvas.getActiveObject()) {
-  
       if (cropModeClear()) {
         return true;
       }
@@ -167,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }else{
           createToast("Select Image!", canvas.getActiveObject().type);
           $("crop").style.display = "none";
+          $("cropMode").style.display = "inline";
           return;
       }
   
@@ -196,10 +200,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       createToast("Select Image!", "");
       $("crop").style.display = "none";
+      $("cropMode").style.display = "inline";
     }
   });
-  
-
 });
 
 

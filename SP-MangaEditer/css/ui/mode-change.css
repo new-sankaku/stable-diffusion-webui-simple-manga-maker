@@ -42,3 +42,10 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(16px);
 }
+
+
+.toggled {
+  box-shadow: 0 0 5px 2px rgba(255, 132, 0, 0.4);
+  background-color: #b19400;
+  transition: all 0.2s ease;
+}

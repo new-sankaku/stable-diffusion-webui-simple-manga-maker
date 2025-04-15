@@ -68,6 +68,7 @@ function isImageBrush(type){
 function cropModeClear(){
   if (cropFrame) {
     $("crop").style.display = "none";
+    $("cropMode").style.display = "inline";
     canvas.remove(cropFrame);
     cropFrame = null;
     if( cropActiveObject ){
