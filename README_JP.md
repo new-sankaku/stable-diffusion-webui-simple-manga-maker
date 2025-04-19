@@ -61,14 +61,14 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 
 ## Effect
 <div style="display: flex; align-items: flex-start;">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="350">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="350">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" height="350">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" height="350">
 </div>
 
 ## Text, Speech Bubbles, Pen
 <div style="display: flex; align-items: flex-start;">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="350">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" height="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" height="350">
 </div>
 
 
