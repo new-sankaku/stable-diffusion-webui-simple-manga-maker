@@ -1,23 +1,25 @@
-[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) | [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) | [中文](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CN.md)
+[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) | 
+[日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) | 
+[中文](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CN.md)
 
 # Manga Editor Desu! Pro Edition  
-WebUI, Forge, ComfyUIに接続する漫画制作用のWebアプリケーションサイトです。  
-デモサイトを使用するか、WebUIに拡張機能として追加できます。ブラウザで動きます。  
-  
+ComfyUI・A1111 WebUI・Forgeに接続する漫画制作Webアプリケーションです。  
+デモWebサイトを使用するかダウンロードしてブラウザで動きます。  
+*:ただし、A1111/Forgeの開発が不透明なため今後はComfyUIのみをサポートする予定です。
+
 サポート状況  
-- ComfyUI: SD1.5, SDXL, Pony, Flux1  
+- ComfyUI: SD1.5, SDXL, Pony, Flux1 (独自のWorkflowも使えます)
 - WebUI  : SD1.5, SDXL, Pony
 - Forge  : SD1.5, SDXL, Pony, Flux1
-*:画像生成自体はWebUI or Forgeか、ComfyUIのAPIで行います。  
+*:画像生成はComfyUIかA1111 WebUI or ForgeのAPIで行います。
 
-デモサイトのみでもすべての機能を利用できます。
-
+デモWebサイトのみでもすべての機能を利用できます。
 [Web Site:Desu!](https://new-sankaku.github.io/manga-editor-desu/)
 
 
-拡張機能ではなくローカル上にファイルを落としたい場合はこちらです。こっちのが早い。
+ローカル上にファイルを落としたい場合はこちらです。こっちのが動作は早い。
 git clone https://github.com/new-sankaku/manga-editor-desu.git
-cd SP-MangaEditer
+cd manga-editor-desu
 start index.html
 
 
@@ -46,10 +48,9 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/06_knifemode.webp" height="350">
 </div>
 
-## Dark Mode / Light Mode
+## Dark Mode
 <div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
 </div>
 
 ## Blend Mode

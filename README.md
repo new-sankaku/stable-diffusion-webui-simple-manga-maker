@@ -1,30 +1,34 @@
-[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) | [日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) | [中文](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CN.md)
+[English](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker) | 
+[日本語](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_JP.md) | 
+[中文](https://github.com/new-sankaku/stable-diffusion-webui-simple-manga-maker/blob/main/README_CN.md)
 
 # Manga Editor Desu! Pro Edition
-A web application for manga creation that connects with WebUI, Forge, and ComfyUI.
-You can either use the demo site or add it as an extension to WebUI. It runs in your browser.
 
-## Support Status
-- ComfyUI: SD1.5, SDXL, Pony, Flux1  
-- WebUI  : SD1.5, SDXL, Pony
-- Forge  : SD1.5, SDXL, Pony, Flux1
-*Note: Image generation is performed through WebUI, Forge, or ComfyUI API.
+A manga creation web application that connects to ComfyUI, A1111 WebUI, and Forge.  
+You can use the demo website or download it to run in your browser.  
+*Note: As the development of A1111/Forge is uncertain, we plan to only support ComfyUI in the future.
 
-All features are available through the demo site alone.
+Support Status:
+- ComfyUI: SD1.5, SDXL, Pony, Flux1 (You can also use your own Workflows)
+- WebUI: SD1.5, SDXL, Pony
+- Forge: SD1.5, SDXL, Pony, Flux1
+*Image generation is done via ComfyUI or A1111 WebUI or Forge API.
 
+All features can be used with just the demo website.
 [Web Site: Desu!](https://new-sankaku.github.io/manga-editor-desu/)
 
-If you prefer to download files locally instead of using the extension (faster method):
 
+If you want to download the files locally (which runs faster), use:
 git clone https://github.com/new-sankaku/manga-editor-desu.git
-cd SP-MangaEditer
+cd manga-editor-desu
 start index.html
 
-The application supports various features including image drag-and-drop, file selection import, Text2Image functionality, and Image2Image capabilities. It comes with pre-built panel layouts for beginners to easily create manga, as well as a professional knife tool for custom panel cutting. The features continue to evolve, and regular updates are recommended.
 
-## Interface Previews
+The application supports various features such as image drag and drop, file selection import, Text2Image function, Image2Image function, and more.
+For beginners, standard panel layouts are pre-installed, making it easy to create manga.
+It also includes a knife tool for professional panel cutting, allowing you to freely cut panels. The functionality continues to evolve, and regular updates are recommended.
 
-### Main Page
+## Main Page
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/01_mainpage.webp" width="700">
 
 ### Image Drop
@@ -36,97 +40,86 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 ### Image Prompt Helper
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/03_prompthelper.webp" width="700">
 
-### Language Support
+## Support Language
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_trans.webp" height="400">
 
-### Grid Line / Knife Mode
+## Grid Line / Knife Mode
 <div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/05_gridline.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/06_knifemode.webp" height="350">
 </div>
 
-### Dark Mode / Light Mode
+## Dark Mode
 <div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_lightmode.webp" height="350">
 </div>
 
-### Blend Mode and Samples
+## Blend Mode
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/11_blendmode.webp" height="800">
 
+## Blend Mode Sample
 <div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/12_blend.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/13_blend.webp" height="350">
 </div>
 
-### Drag and Drop
+## Drag on Drop
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="700">
 
-### Effects
+## Effect
 <div style="display: flex; align-items: flex-start;">
     <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="400">
     <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="400">
 </div>
 
-### Text, Speech Bubbles, Pen
+## Text, Speech Bubbles, Pen
 <div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="400">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="400">
 </div>
 
+
+
 ## Features
-
-### Core Features
 - **Multilingual Support**: English, Japanese, Korean, French, Chinese, Russian, Spanish, Portuguese
-- **Page Presets**: Pre-configured comic panel layouts
-- **Panel Management**: Create and customize panels with adjustable shapes, colors, and line widths
-- **Speech Bubbles**: Over 40 bubble styles with customizable background colors, line colors, and transparency
-- **Custom Bubbles**: Create bubbles using coordinate specification or freehand drawing with 7 line types and smoothing
-- **Random Cut**: Generate random panel layouts with specified vertical/horizontal cuts, tilt angles, and line start positions
-- **Multi-page Creation**: Create multiple pages using random cut information
+- **Page Presets**: Preset comic panel layouts.
+- **Panels**: Create and customize panels. Adjust shape, color, line width, etc.
+- **Speech Bubbles**: Over 40 speech bubble styles, each style can be configured with background color, line color, and transparency.
+- **Custom Speech Bubbles**: Create speech bubbles by specifying coordinates or freehand. 7 types of lines available. Smoothing processing also available.
+- **Random Cut**: Random panel cutting function that specifies the number of vertical and horizontal cuts, tilt angle, and line start position
+- **Multiple Page Creation**: Function to cut multiple pages at once using random cut information
+- **Auto Fit**: Generated images or dropped images in comic panels are automatically scaled and trimmed appropriately.
+- **Overlay**: Display images dropped outside the frame as overlays.
+- **Layers**: Manage images, text, and panels as layers familiar to graphic designers and artists.
+- **Image Editing Functions**: Adjust angle, position, scale, changes along X and Y axes, horizontal flip, vertical flip.
+- **Image Effects**: Sepia, grayscale, gamma, blur, vibrance, pixelation.
+- **Image Effects (Glfx)**: Unsharp mask, zoom blur, dot screen, hex pixelate, ink, hue/saturation.
+- **Text**: Vertical writing, horizontal writing, bold, shadow, outline, neon, various fonts suitable for comics.
+- **Image Text**: Preset image text.
+- **Tone Function**: Tone function common in manga backgrounds.
+- **Effect 1**: One-click color image to black and white tone processing.
+- **Effect 2**: 25 types of blend modes similar to those in Adobe Photoshop.
+- **Effect 3**: Glow (blurred outline light) to image contours.
+- **Undo/Redo Function**: Freely undo or redo changes during editing.
+- **Project Save/Load**: Save and load work in progress, continue working from where you left off.
+- **Settings Save/Load**: Save and load settings changed in extensions, enabling a consistent, hassle-free workflow.
+- **Image Export**: Export completed pages in formats suitable for printing or digital distribution.
+- **Text2Image**: Generate images directly in panels via WebUI, Forge, ComfyUI.
+- **Image2Image**: Generate images directly in panels via WebUI.
+- **Prompt Queue**: Batch queue prompts to easily generate different character versions in the same page or panel.
+- **Pen/Eraser Tool**: Basic pen and eraser tools, change line width, color, line style, shadow. Erase lines or parts of images.
+- **Canvas Zoom In/Zoom Out**: Basic pen and eraser tools, change line width, color, line style, shadow. Erase lines or parts of images.
 
-### Image Handling
-- **Auto-fit**: Generated or dropped images automatically scale and crop to fit comic panels
-- **Overlay**: Display images dropped outside frames as overlays
-- **Layer Management**: Manage images, text, and panels as layers familiar to graphic designers
-- **Image Editing**: Adjust angle, position, scale, X/Y axis changes, horizontal/vertical flips
-- **Image Effects**: Sepia, grayscale, gamma, blur, vibrance, pixelation
-- **Glfx Effects**: Unsharp mask, zoom blur, dot screen, hex pixelate, ink, hue/saturation
-
-### Text and Design
-- **Text Features**: Vertical/horizontal writing, bold, shadow, outline, neon, various comic-suitable fonts
-- **Image Text**: Preset image-based text
-- **Tone Features**: Manga-style background tones
-- **Effects**: 
-  - One-click color to B&W tone conversion
-  - 25 blend modes similar to Adobe Photoshop
-  - Glow effects for image outlines
-
-### Workflow Tools
-- **Undo/Redo**: Freely revert or redo changes during editing
-- **Project Management**: Save and load projects to continue work later
-- **Settings Management**: Save and load extension settings for consistent workflows
-- **Export Options**: Export completed pages in formats suitable for print or digital distribution
-- **AI Integration**: 
-  - Text2Image via WebUI, Forge, ComfyUI
-  - Image2Image via WebUI
-  - Prompt queue for batch character version generation
-- **Drawing Tools**: Basic pen and eraser with adjustable width, color, style, and shadow
-- **Canvas Control**: Zoom in/out functionality
-
-## Installation
-
-git clone https://github.com/new-sankaku/manga-editor-desu.git
-
+# Installation
+https://github.com/new-sankaku/manga-editor-desu.git  
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/02_.webp" width="700">
 
 ## How to Contribute
-- **Bug Reports**: Create a new issue with **[Bug]** in the title
-- **Feature Requests**: Create a new issue with **[Feature Request]** in the title
-- **Documentation**: Submit pull requests with corrections or improvements
+- **Bug Reports**: If you find a bug, please create a new issue in [Issues](https://github.com/new-sankaku/manga-editor-desu/issues) and include **[Bug]** in the title.
+- **Feature Suggestions**: If you have ideas for new features, please create a new issue in [Issues](https://github.com/new-sankaku/manga-editor-desu/issues) and include **[Feature Request]** in the title.
+- **Documentation Improvements**: If there are typos or errors in the documentation, please submit a pull request with possible corrections. You can also add it to [Issues](https://github.com/new-sankaku/manga-editor-desu/issues) if necessary.
 
-## Community
-- Questions or discussions? Post in [Issues](https://github.com/new-sankaku/manga-editor-desu/issues)
-- Join our [Discord](https://discord.gg/XCp7dyHj3N) server
+## Communication
+If you have questions or discussions about the project, please post in [Issues](https://github.com/new-sankaku/manga-editor-desu/issues) or join the [Discord](https://discord.gg/XCp7dyHj3N) server.
 
-Thank you for your interest in Manga Editor Desu! Pro Edition!
+Thank you!
