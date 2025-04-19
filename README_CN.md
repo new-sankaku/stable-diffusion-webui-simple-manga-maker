@@ -49,13 +49,10 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/06_knifemode.webp" height="350">
 </div>
 
-## 暗模式 / 亮模式
+## 暗模式
 <div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
 </div>
-
-## 混合模式
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/11_blendmode.webp" height="800">
 
 ## 混合模式示例
 <div style="display: flex; align-items: flex-start;">
@@ -63,19 +60,16 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/13_blend.webp" height="350">
 </div>
 
-## 拖放功能
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="700">
-
 ## 特效
 <div style="display: flex; align-items: flex-start;">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="400">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="400">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="350">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="350">
 </div>
 
 ## 文本、对话气泡、笔工具
 <div style="display: flex; align-items: flex-start;">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="400">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="400">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="350">
 </div>
 
 

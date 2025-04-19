@@ -54,28 +54,22 @@ https://github.com/user-attachments/assets/6f1dae5f-b50f-4b04-8875-f0b07111f2ab
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/09_darkmode.webp" height="350">
 </div>
 
-## Blend Mode
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/11_blendmode.webp" height="800">
-
 ## Blend Mode Sample
 <div style="display: flex; align-items: flex-start;">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/12_blend.webp" height="350">
 <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/13_blend.webp" height="350">
 </div>
 
-## Drag on Drop
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/14_Drag on drop.webp" width="700">
-
 ## Effect
 <div style="display: flex; align-items: flex-start;">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="400">
-    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="400">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix01.webp" width="350">
+    <img src="https://new-sankaku.github.io/SP-MangaEditer-docs/04_gpix02.webp" width="350">
 </div>
 
 ## Text, Speech Bubbles, Pen
 <div style="display: flex; align-items: flex-start;">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="400">
-<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="400">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/08_speechbubble.webp" width="350">
+<img src="https://new-sankaku.github.io/SP-MangaEditer-docs/07_font.webp" width="350">
 </div>
 
 
