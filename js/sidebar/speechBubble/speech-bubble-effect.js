@@ -105,10 +105,10 @@ function getSpeechBubbleTextFill(activeObject, type){
     }
 
     if(type == 'fill'){
-        return "rgba(255, 255, 255, 0)";
+        return "rgba(255, 255, 255, 1.0)";
     }
     if(type == 'stroke'){
-        return "rgba(0, 0, 0, 0)";
+        return "rgba(0, 0, 0, 1.0)";
     }
     if(type == 'strokeWidth'){
         return 10;

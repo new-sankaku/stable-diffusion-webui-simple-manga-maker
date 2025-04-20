@@ -67,10 +67,13 @@ function createObjectMenuSlider(itemValue,min,max,step,value){
   return {type: 'slider',label: itemValue,
           options: {id:itemValue,min: min,max:max,step:step,value:value}};
 }
-function createObjectMenuColor(itemValue, defaultColor) {
+function createObjectMenuColor(itemValue, defaultColor, rgba) {
   return {
     type: 'colorpicker', label: itemValue,
-    options: {id: itemValue,value: defaultColor || '#000000'}
+    options: {id: itemValue,
+              value: defaultColor || '#000000',
+              rgba:rgba
+            }
   };
 }
 
@@ -131,8 +134,10 @@ function showObjectMenu(clickType) {
   min=7, max=150, step=1, value=activeObject.fontSize, labelAndId='com-fontSize';
   let fontSize = createObjectMenuSlider(labelAndId,min,max,step,value);
 
-  let fillColor   = createObjectMenuColor("com-fill", rgbaToHex(fillTemp));
-  let strokeColor = createObjectMenuColor("com-strokeColor", rgbaToHex(strokeTemp));
+  console.log("fillTemp", fillTemp);
+  let fillColor   = createObjectMenuColor("com-fill",        rgbaToHex(fillTemp), fillTemp);
+  console.log("fillColor", fillColor);
+  let strokeColor = createObjectMenuColor("com-strokeColor", rgbaToHex(strokeTemp), strokeTemp);
 
   if (isPanel(activeObject)) {
     if (clickType !== 'left') {
@@ -213,8 +218,9 @@ function showObjectMenu(clickType) {
             <input id=   "${item.options.id}"
               name= "${item.options.id}"
               value="${item.options.value}"
-              class="jscolor-color-picker" data-initial-color="rgba(0, 0, 0, 1.0)">
+              class="jscolor-color-picker" data-initial-color="${item.options.rgba}">
           </div>`;
+          console.log("menuContent",menuContent);
         break;
       case 'button':
         menuContent += `<button id="fabricjs-${item.value}-btn">${getText(item.value)}</button>`;
