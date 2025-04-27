@@ -53,8 +53,8 @@
   min-width: var(--min-width-base);
   box-sizing: border-box;
   overflow: hidden;
-  height: var(--main-height);
-  max-height: var(--main-height);
+  height: var(--left_area-height);
+  max-height: var(--left_area-height);
   overflow-y: auto;
   overflow-x: hidden;
   border: var(--boader-color-1px-solid-A);

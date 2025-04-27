@@ -26,20 +26,36 @@ function changeSpeechBubbleSVG(bubbleStrokewidht, fillColor, strokeColor, opacit
                 });
             }else{
                 activeObject.forEachObject((obj) => {
-                    if( obj.data?.originalId === "fillArea"){
+
+                    if( obj.data?.originalId === "fillArea" || obj.id === "fillArea"){
                         isExistsFillArea = true;
                         return;
                     }
                 });
+
+                console.log( "isExistsFillArea:", isExistsFillArea)
+
                 activeObject.forEachObject((obj) => {
                     if( isExistsFillArea ){
-                        if( obj.data?.originalId === "fillArea"){
-                            obj.set({ stroke: "rgba(0,0,0,0)", fill:fillColorRgba, strokeWidth:0});
+                        if( obj.data?.originalId === "fillArea" || obj.id === "fillArea"){
+                            obj.set({ 
+                                      stroke: strokeColorRgba, 
+                                      fill:fillColorRgba, 
+                                      strokeWidth:bubbleStrokewidht
+                                    });
                         }else{
-                            obj.set({ stroke: strokeColorRgba , fill:"rgba(0,0,0,0)", strokeWidth:bubbleStrokewidht});
+                            obj.set({ 
+                                      stroke: strokeColorRgba , 
+                                      fill:strokeColorRgba, 
+                                      strokeWidth:bubbleStrokewidht
+                                    });
+                            console.log("obj.fill:", obj.fill);
+
                         }
                     }else{
-                        obj.set({ stroke: strokeColorRgba , fill:fillColorRgba, strokeWidth:bubbleStrokewidht});
+                        obj.set({ stroke: strokeColorRgba , 
+                                  fill:fillColorRgba, 
+                                  strokeWidth:bubbleStrokewidht});
                     }
                 });    
             }
@@ -147,7 +163,7 @@ function loadSpeechBubbleSVGReadOnly(svgString, name) {
             canvas.add(svgObject);
         }else{
             changeDoNotSaveHistory();
-                canvas.add(svgObject);
+              canvas.add(svgObject);
             changeDoSaveHistory();
             createSpeechBubbleMetrics(svgObject, svgData);
         }
@@ -160,15 +176,9 @@ function loadSpeechBubbleSVGReadOnly(svgString, name) {
 }
 
 /** load svg. */
-const previewAreaVertical = $(
-    "svg-preview-area-vertical"
-);
-const previewAreaLandscape = $(
-    "svg-preview-area-landscape"
-);
-const speechBubbleArea = $(
-    "speech-bubble-preview"
-);
+const previewAreaVertical = $("svg-preview-area-vertical");
+const previewAreaLandscape = $("svg-preview-area-landscape");
+const speechBubbleArea = $("speech-bubble-preview");
 
 window.onload = function () {
     previewAreaVertical.innerHTML = "";

@@ -133,6 +133,7 @@
   
   --nav-height:                           calc(100vh - 96vh);
   --main-height:                          calc(100vh - 4vh);
+  --left_area-height:                     calc(100vh - 5vh);
 
   --fjm-padding:                          2px;
   --fjm-z-index:                          1000;

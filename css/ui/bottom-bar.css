@@ -9,19 +9,22 @@ transform:rotate(360deg)
 }
 
 .btm-drawer {
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background-color:rgba(0, 0, 0, 0.8);
-transition:transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-z-index:1000;
-/* box-shadow:0 0 20px rgba(0, 255, 255, 0.5); */
+  position: fixed;
+  bottom: 0;
+  left: 40%;
+  width: 20%;
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: transform 0.1s ease-in-out, width 0.1s ease-in-out, left 0.1s ease-in-out;
+  z-index: 1000;
 }
 
 .btm-drawer.btm-closed {
-transform:translateY(calc(100% - 20px));
-/* box-shadow:0 0 10px rgba(0, 255, 255, 0.3); */
+  transform: translateY(calc(100% - 20px));
+}
+
+.btm-drawer:not(.btm-closed) {
+  width: 100%;
+  left: 0;
 }
 
 .btm-drawer-handle {

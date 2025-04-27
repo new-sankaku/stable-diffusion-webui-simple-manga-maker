@@ -220,7 +220,7 @@ function showObjectMenu(clickType) {
               value="${item.options.value}"
               class="jscolor-color-picker" data-initial-color="${item.options.rgba}">
           </div>`;
-          console.log("menuContent",menuContent);
+          // console.log("menuContent",menuContent);
         break;
       case 'button':
         menuContent += `<button id="fabricjs-${item.value}-btn">${getText(item.value)}</button>`;
